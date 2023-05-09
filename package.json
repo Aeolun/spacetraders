@@ -1,0 +1,20 @@
+{
+  "name": "spacetraders",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nestjs/common": "^8",
+    "@openapitools/openapi-generator-cli": "^2.6.0",
+    "openapi-typescript": "^6.2.4",
+    "openapi-typescript-codegen": "^0.24.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  }
+}
