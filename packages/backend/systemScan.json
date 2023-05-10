@@ -1,0 +1,1668 @@
+{
+  "data": {
+    "cooldown": {
+      "shipSymbol": "PHANTASM-1",
+      "totalSeconds": 70,
+      "remainingSeconds": 69,
+      "expiration": "2023-05-09T16:30:29.951Z"
+    },
+    "systems": [
+      {
+        "symbol": "X1-FS18",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3891,
+        "y": -4034,
+        "distance": 177
+      },
+      {
+        "symbol": "X1-FR87",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3640,
+        "y": -3801,
+        "distance": 253
+      },
+      {
+        "symbol": "X1-CC28",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3912,
+        "y": -3583,
+        "distance": 275
+      },
+      {
+        "symbol": "X1-DS50",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3892,
+        "y": -4158,
+        "distance": 301
+      },
+      {
+        "symbol": "X1-YY25",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4199,
+        "y": -3892,
+        "distance": 314
+      },
+      {
+        "symbol": "X1-DF37",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4291,
+        "y": -3809,
+        "distance": 407
+      },
+      {
+        "symbol": "X1-AT46",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4288,
+        "y": -3944,
+        "distance": 410
+      },
+      {
+        "symbol": "X1-T92",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4281,
+        "y": -4080,
+        "distance": 453
+      },
+      {
+        "symbol": "X1-GY51",
+        "sectorSymbol": "X1",
+        "type": "UNSTABLE",
+        "x": -3763,
+        "y": -3400,
+        "distance": 474
+      },
+      {
+        "symbol": "X1-GN17",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4281,
+        "y": -3411,
+        "distance": 595
+      },
+      {
+        "symbol": "X1-AA92",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3757,
+        "y": -3275,
+        "distance": 596
+      },
+      {
+        "symbol": "X1-DC20",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3696,
+        "y": -4438,
+        "distance": 612
+      },
+      {
+        "symbol": "X1-VJ86",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3283,
+        "y": -4017,
+        "distance": 625
+      },
+      {
+        "symbol": "X1-BN70",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3248,
+        "y": -3830,
+        "distance": 640
+      },
+      {
+        "symbol": "X1-ZG22",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3235,
+        "y": -3955,
+        "distance": 659
+      },
+      {
+        "symbol": "X1-HX3",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4219,
+        "y": -3287,
+        "distance": 660
+      },
+      {
+        "symbol": "X1-US58",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -4206,
+        "y": -4456,
+        "distance": 679
+      },
+      {
+        "symbol": "X1-SJ56",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3608,
+        "y": -3236,
+        "distance": 681
+      },
+      {
+        "symbol": "X1-FY33",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3892,
+        "y": -4576,
+        "distance": 719
+      },
+      {
+        "symbol": "X1-AD69",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -4240,
+        "y": -4493,
+        "distance": 727
+      },
+      {
+        "symbol": "X1-TU21",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3785,
+        "y": -3129,
+        "distance": 735
+      },
+      {
+        "symbol": "X1-JQ84",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4591,
+        "y": -4206,
+        "distance": 786
+      },
+      {
+        "symbol": "X1-XH83",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3261,
+        "y": -3380,
+        "distance": 787
+      },
+      {
+        "symbol": "X1-HU21",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4258,
+        "y": -3153,
+        "distance": 796
+      },
+      {
+        "symbol": "X1-PA89",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4488,
+        "y": -3321,
+        "distance": 805
+      },
+      {
+        "symbol": "X1-NG26",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3265,
+        "y": -3339,
+        "distance": 809
+      },
+      {
+        "symbol": "X1-RN62",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3806,
+        "y": -3034,
+        "distance": 827
+      },
+      {
+        "symbol": "X1-YQ16",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4696,
+        "y": -4127,
+        "distance": 853
+      },
+      {
+        "symbol": "X1-QQ46",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3011,
+        "y": -3720,
+        "distance": 887
+      },
+      {
+        "symbol": "X1-KH26",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3281,
+        "y": -4510,
+        "distance": 891
+      },
+      {
+        "symbol": "X1-VG62",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2987,
+        "y": -3875,
+        "distance": 900
+      },
+      {
+        "symbol": "X1-JU39",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3864,
+        "y": -2953,
+        "distance": 904
+      },
+      {
+        "symbol": "X1-AF60",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2988,
+        "y": -4030,
+        "distance": 915
+      },
+      {
+        "symbol": "X1-ZP17",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4475,
+        "y": -3132,
+        "distance": 933
+      },
+      {
+        "symbol": "X1-TX68",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3065,
+        "y": -3367,
+        "distance": 957
+      },
+      {
+        "symbol": "X1-CC7",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4832,
+        "y": -3645,
+        "distance": 968
+      },
+      {
+        "symbol": "X1-KB52",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2911,
+        "y": -3787,
+        "distance": 979
+      },
+      {
+        "symbol": "X1-KM5",
+        "sectorSymbol": "X1",
+        "type": "HYPERGIANT",
+        "x": -4893,
+        "y": -3966,
+        "distance": 1012
+      },
+      {
+        "symbol": "X1-ZJ56",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3840,
+        "y": -2845,
+        "distance": 1013
+      },
+      {
+        "symbol": "X1-BD72",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4788,
+        "y": -3391,
+        "distance": 1014
+      },
+      {
+        "symbol": "X1-DR35",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3577,
+        "y": -4824,
+        "distance": 1015
+      },
+      {
+        "symbol": "X1-KX31",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3239,
+        "y": -3072,
+        "distance": 1018
+      },
+      {
+        "symbol": "X1-Q15",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3276,
+        "y": -4676,
+        "distance": 1022
+      },
+      {
+        "symbol": "X1-NH71",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4463,
+        "y": -2989,
+        "distance": 1042
+      },
+      {
+        "symbol": "X1-SJ79",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3146,
+        "y": -3106,
+        "distance": 1055
+      },
+      {
+        "symbol": "X1-ZG32",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3121,
+        "y": -4590,
+        "distance": 1060
+      },
+      {
+        "symbol": "X1-HN8",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2806,
+        "y": -3853,
+        "distance": 1081
+      },
+      {
+        "symbol": "X1-JS62",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2803,
+        "y": -3971,
+        "distance": 1090
+      },
+      {
+        "symbol": "X1-VB59",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -3854,
+        "y": -2751,
+        "distance": 1106
+      },
+      {
+        "symbol": "X1-HF37",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4803,
+        "y": -4497,
+        "distance": 1117
+      },
+      {
+        "symbol": "X1-TU74",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2732,
+        "y": -3942,
+        "distance": 1158
+      },
+      {
+        "symbol": "X1-UX38",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3087,
+        "y": -4718,
+        "distance": 1175
+      },
+      {
+        "symbol": "X1-VT38",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -2698,
+        "y": -3851,
+        "distance": 1189
+      },
+      {
+        "symbol": "X1-PH44",
+        "sectorSymbol": "X1",
+        "type": "UNSTABLE",
+        "x": -2710,
+        "y": -4063,
+        "distance": 1195
+      },
+      {
+        "symbol": "X1-RB86",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3805,
+        "y": -2663,
+        "distance": 1197
+      },
+      {
+        "symbol": "X1-HP58",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2696,
+        "y": -3705,
+        "distance": 1201
+      },
+      {
+        "symbol": "X1-MD10",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3676,
+        "y": -2672,
+        "distance": 1204
+      },
+      {
+        "symbol": "X1-JZ31",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -4173,
+        "y": -2655,
+        "distance": 1236
+      },
+      {
+        "symbol": "X1-FA86",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4761,
+        "y": -2970,
+        "distance": 1245
+      },
+      {
+        "symbol": "X1-HT39",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2692,
+        "y": -3476,
+        "distance": 1254
+      },
+      {
+        "symbol": "X1-QY34",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2701,
+        "y": -3423,
+        "distance": 1263
+      },
+      {
+        "symbol": "X1-HC98",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2656,
+        "y": -3558,
+        "distance": 1267
+      },
+      {
+        "symbol": "X1-HM77",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4765,
+        "y": -4789,
+        "distance": 1280
+      },
+      {
+        "symbol": "X1-FH49",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2618,
+        "y": -3640,
+        "distance": 1287
+      },
+      {
+        "symbol": "X1-ZC56",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3213,
+        "y": -2751,
+        "distance": 1295
+      },
+      {
+        "symbol": "X1-HF14",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4605,
+        "y": -2765,
+        "distance": 1307
+      },
+      {
+        "symbol": "X1-SF24",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2578,
+        "y": -3722,
+        "distance": 1316
+      },
+      {
+        "symbol": "X1-SZ82",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3650,
+        "y": -2556,
+        "distance": 1322
+      },
+      {
+        "symbol": "X1-MG81",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2691,
+        "y": -4447,
+        "distance": 1334
+      },
+      {
+        "symbol": "X1-MZ29",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4144,
+        "y": -2535,
+        "distance": 1347
+      },
+      {
+        "symbol": "X1-QQ4",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4195,
+        "y": -2516,
+        "distance": 1376
+      },
+      {
+        "symbol": "X1-QD28",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3883,
+        "y": -2471,
+        "distance": 1386
+      },
+      {
+        "symbol": "X1-JS43",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2883,
+        "y": -2898,
+        "distance": 1388
+      },
+      {
+        "symbol": "X1-PU8",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4187,
+        "y": -5227,
+        "distance": 1402
+      },
+      {
+        "symbol": "X1-XM19",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4095,
+        "y": -2465,
+        "distance": 1407
+      },
+      {
+        "symbol": "X1-TC29",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -4711,
+        "y": -2712,
+        "distance": 1411
+      },
+      {
+        "symbol": "X1-AS18",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2685,
+        "y": -4599,
+        "distance": 1413
+      },
+      {
+        "symbol": "X1-PK30",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3480,
+        "y": -2504,
+        "distance": 1413
+      },
+      {
+        "symbol": "X1-HN62",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3009,
+        "y": -4975,
+        "distance": 1422
+      },
+      {
+        "symbol": "X1-RP37",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3866,
+        "y": -5314,
+        "distance": 1457
+      },
+      {
+        "symbol": "X1-MA87",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -5084,
+        "y": -2998,
+        "distance": 1473
+      },
+      {
+        "symbol": "X1-B3",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2774,
+        "y": -2888,
+        "distance": 1476
+      },
+      {
+        "symbol": "X1-VV50",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -5317,
+        "y": -4226,
+        "distance": 1477
+      },
+      {
+        "symbol": "X1-DT30",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -4712,
+        "y": -5084,
+        "distance": 1479
+      },
+      {
+        "symbol": "X1-VA50",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2920,
+        "y": -2734,
+        "distance": 1482
+      },
+      {
+        "symbol": "X1-VZ60",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2417,
+        "y": -4066,
+        "distance": 1485
+      },
+      {
+        "symbol": "X1-XU6",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -4681,
+        "y": -2586,
+        "distance": 1499
+      },
+      {
+        "symbol": "X1-ST81",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -4194,
+        "y": -2386,
+        "distance": 1503
+      },
+      {
+        "symbol": "X1-KQ71",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2413,
+        "y": -4209,
+        "distance": 1515
+      },
+      {
+        "symbol": "X1-FG65",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2412,
+        "y": -3507,
+        "distance": 1516
+      },
+      {
+        "symbol": "X1-UR44",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -5383,
+        "y": -3560,
+        "distance": 1525
+      },
+      {
+        "symbol": "X1-FN6",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5397,
+        "y": -4147,
+        "distance": 1538
+      },
+      {
+        "symbol": "X1-HS31",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2478,
+        "y": -4486,
+        "distance": 1543
+      },
+      {
+        "symbol": "X1-HQ11",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2810,
+        "y": -2744,
+        "distance": 1549
+      },
+      {
+        "symbol": "X1-JD91",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5418,
+        "y": -4142,
+        "distance": 1557
+      },
+      {
+        "symbol": "X1-ZS32",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -2407,
+        "y": -3370,
+        "distance": 1558
+      },
+      {
+        "symbol": "X1-TA39",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2408,
+        "y": -4352,
+        "distance": 1560
+      },
+      {
+        "symbol": "X1-DV85",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2622,
+        "y": -2935,
+        "distance": 1565
+      },
+      {
+        "symbol": "X1-YK22",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5356,
+        "y": -3276,
+        "distance": 1580
+      },
+      {
+        "symbol": "X1-RS37",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2645,
+        "y": -2861,
+        "distance": 1592
+      },
+      {
+        "symbol": "X1-DP81",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2281,
+        "y": -3625,
+        "distance": 1623
+      },
+      {
+        "symbol": "X1-FU13",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3238,
+        "y": -5352,
+        "distance": 1630
+      },
+      {
+        "symbol": "X1-KS53",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4741,
+        "y": -2468,
+        "distance": 1631
+      },
+      {
+        "symbol": "X1-SF10",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5514,
+        "y": -4057,
+        "distance": 1639
+      },
+      {
+        "symbol": "X1-MT24",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2402,
+        "y": -3124,
+        "distance": 1656
+      },
+      {
+        "symbol": "X1-FN67",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4613,
+        "y": -2339,
+        "distance": 1683
+      },
+      {
+        "symbol": "X1-SB11",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2338,
+        "y": -3189,
+        "distance": 1687
+      },
+      {
+        "symbol": "X1-PT74",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3156,
+        "y": -2335,
+        "distance": 1688
+      },
+      {
+        "symbol": "X1-QH4",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2227,
+        "y": -4175,
+        "distance": 1690
+      },
+      {
+        "symbol": "X1-BK25",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2241,
+        "y": -4285,
+        "distance": 1701
+      },
+      {
+        "symbol": "X1-AS98",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2321,
+        "y": -3186,
+        "distance": 1704
+      },
+      {
+        "symbol": "X1-XG58",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -5214,
+        "y": -2763,
+        "distance": 1720
+      },
+      {
+        "symbol": "X1-YP82",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2730,
+        "y": -2556,
+        "distance": 1741
+      },
+      {
+        "symbol": "X1-QR26",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -3894,
+        "y": -2107,
+        "distance": 1750
+      },
+      {
+        "symbol": "X1-MB48",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2163,
+        "y": -4224,
+        "distance": 1763
+      },
+      {
+        "symbol": "X1-AS80",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3734,
+        "y": -2087,
+        "distance": 1777
+      },
+      {
+        "symbol": "X1-BD30",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -5261,
+        "y": -2727,
+        "distance": 1779
+      },
+      {
+        "symbol": "X1-NM29",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3151,
+        "y": -2231,
+        "distance": 1785
+      },
+      {
+        "symbol": "X1-JX10",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2101,
+        "y": -3802,
+        "distance": 1787
+      },
+      {
+        "symbol": "X1-FB88",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -3284,
+        "y": -2172,
+        "distance": 1790
+      },
+      {
+        "symbol": "X1-UZ5",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -3224,
+        "y": -5523,
+        "distance": 1793
+      },
+      {
+        "symbol": "X1-SC96",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5250,
+        "y": -2685,
+        "distance": 1798
+      },
+      {
+        "symbol": "X1-BZ4",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5572,
+        "y": -3228,
+        "distance": 1799
+      },
+      {
+        "symbol": "X1-YU74",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2101,
+        "y": -4237,
+        "distance": 1826
+      },
+      {
+        "symbol": "X1-GT63",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2369,
+        "y": -2840,
+        "distance": 1827
+      },
+      {
+        "symbol": "X1-DN97",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2710,
+        "y": -2448,
+        "distance": 1836
+      },
+      {
+        "symbol": "X1-KT2",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2052,
+        "y": -4008,
+        "distance": 1841
+      },
+      {
+        "symbol": "X1-QZ33",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3747,
+        "y": -2021,
+        "distance": 1841
+      },
+      {
+        "symbol": "X1-YQ6",
+        "sectorSymbol": "X1",
+        "type": "WHITE_DWARF",
+        "x": -5230,
+        "y": -2594,
+        "distance": 1844
+      },
+      {
+        "symbol": "X1-GH59",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2982,
+        "y": -2250,
+        "distance": 1844
+      },
+      {
+        "symbol": "X1-VK38",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2200,
+        "y": -4613,
+        "distance": 1849
+      },
+      {
+        "symbol": "X1-JT40",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2204,
+        "y": -3064,
+        "distance": 1860
+      },
+      {
+        "symbol": "X1-HQ93",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -2666,
+        "y": -2453,
+        "distance": 1861
+      },
+      {
+        "symbol": "X1-JU52",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2257,
+        "y": -2914,
+        "distance": 1883
+      },
+      {
+        "symbol": "X1-YK11",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5777,
+        "y": -3800,
+        "distance": 1891
+      },
+      {
+        "symbol": "X1-KS12",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2281,
+        "y": -2840,
+        "distance": 1901
+      },
+      {
+        "symbol": "X1-AT47",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3757,
+        "y": -1956,
+        "distance": 1905
+      },
+      {
+        "symbol": "X1-GY84",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -3919,
+        "y": -5764,
+        "distance": 1907
+      },
+      {
+        "symbol": "X1-ZU87",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -1997,
+        "y": -3510,
+        "distance": 1922
+      },
+      {
+        "symbol": "X1-GR89",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -3219,
+        "y": -2041,
+        "distance": 1935
+      },
+      {
+        "symbol": "X1-GU21",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2066,
+        "y": -4518,
+        "distance": 1937
+      },
+      {
+        "symbol": "X1-TQ46",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2109,
+        "y": -4633,
+        "distance": 1940
+      },
+      {
+        "symbol": "X1-UH6",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5309,
+        "y": -2530,
+        "distance": 1945
+      },
+      {
+        "symbol": "X1-HB53",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -5281,
+        "y": -5215,
+        "distance": 1946
+      },
+      {
+        "symbol": "X1-NV67",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -4489,
+        "y": -1984,
+        "distance": 1967
+      },
+      {
+        "symbol": "X1-KN63",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -1961,
+        "y": -3430,
+        "distance": 1973
+      },
+      {
+        "symbol": "X1-QU33",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2988,
+        "y": -2093,
+        "distance": 1980
+      },
+      {
+        "symbol": "X1-CN54",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -2414,
+        "y": -2520,
+        "distance": 1989
+      },
+      {
+        "symbol": "X1-SX63",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3694,
+        "y": -1872,
+        "distance": 1994
+      },
+      {
+        "symbol": "X1-SM35",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2509,
+        "y": -2398,
+        "distance": 2007
+      },
+      {
+        "symbol": "X1-VQ37",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -4514,
+        "y": -1949,
+        "distance": 2008
+      },
+      {
+        "symbol": "X1-GA21",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2111,
+        "y": -2900,
+        "distance": 2017
+      },
+      {
+        "symbol": "X1-TF94",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -3292,
+        "y": -5785,
+        "distance": 2018
+      },
+      {
+        "symbol": "X1-YB16",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2660,
+        "y": -2237,
+        "distance": 2032
+      },
+      {
+        "symbol": "X1-JU88",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -1997,
+        "y": -4691,
+        "distance": 2066
+      },
+      {
+        "symbol": "X1-ZY77",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2340,
+        "y": -5232,
+        "distance": 2070
+      },
+      {
+        "symbol": "X1-J5",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -2625,
+        "y": -2214,
+        "distance": 2072
+      },
+      {
+        "symbol": "X1-MD96",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2696,
+        "y": -2148,
+        "distance": 2083
+      },
+      {
+        "symbol": "X1-RX68",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -5353,
+        "y": -2376,
+        "distance": 2084
+      },
+      {
+        "symbol": "X1-DA2",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2042,
+        "y": -2882,
+        "distance": 2087
+      },
+      {
+        "symbol": "X1-JN96",
+        "sectorSymbol": "X1",
+        "type": "WHITE_DWARF",
+        "x": -2099,
+        "y": -2777,
+        "distance": 2089
+      },
+      {
+        "symbol": "X1-GR93",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -1901,
+        "y": -3207,
+        "distance": 2090
+      },
+      {
+        "symbol": "X1-HA2",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2083,
+        "y": -4914,
+        "distance": 2091
+      },
+      {
+        "symbol": "X1-HN54",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2324,
+        "y": -2461,
+        "distance": 2096
+      },
+      {
+        "symbol": "X1-NC74",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -1912,
+        "y": -3098,
+        "distance": 2116
+      },
+      {
+        "symbol": "X1-CX13",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -2559,
+        "y": -2208,
+        "distance": 2117
+      },
+      {
+        "symbol": "X1-DC65",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -4836,
+        "y": -1962,
+        "distance": 2119
+      },
+      {
+        "symbol": "X1-RS74",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -1968,
+        "y": -2942,
+        "distance": 2126
+      },
+      {
+        "symbol": "X1-TZ49",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2304,
+        "y": -5283,
+        "distance": 2131
+      },
+      {
+        "symbol": "X1-QC61",
+        "sectorSymbol": "X1",
+        "type": "BLACK_HOLE",
+        "x": -2631,
+        "y": -2134,
+        "distance": 2132
+      },
+      {
+        "symbol": "X1-CV74",
+        "sectorSymbol": "X1",
+        "type": "HYPERGIANT",
+        "x": -2686,
+        "y": -2092,
+        "distance": 2135
+      },
+      {
+        "symbol": "X1-C21",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2393,
+        "y": -2321,
+        "distance": 2143
+      },
+      {
+        "symbol": "X1-GZ29",
+        "sectorSymbol": "X1",
+        "type": "WHITE_DWARF",
+        "x": -1903,
+        "y": -3024,
+        "distance": 2152
+      },
+      {
+        "symbol": "X1-QP72",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5805,
+        "y": -2816,
+        "distance": 2182
+      },
+      {
+        "symbol": "X1-US22",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2322,
+        "y": -5381,
+        "distance": 2184
+      },
+      {
+        "symbol": "X1-ZS86",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2030,
+        "y": -2669,
+        "distance": 2204
+      },
+      {
+        "symbol": "X1-PX3",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2699,
+        "y": -1999,
+        "distance": 2205
+      },
+      {
+        "symbol": "X1-HG18",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -5852,
+        "y": -2838,
+        "distance": 2214
+      },
+      {
+        "symbol": "X1-ZN37",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2537,
+        "y": -2084,
+        "distance": 2228
+      },
+      {
+        "symbol": "X1-AZ25",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -5175,
+        "y": -5683,
+        "distance": 2235
+      },
+      {
+        "symbol": "X1-CR26",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2750,
+        "y": -1911,
+        "distance": 2254
+      },
+      {
+        "symbol": "X1-FA81",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2067,
+        "y": -2527,
+        "distance": 2254
+      },
+      {
+        "symbol": "X1-ZR35",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2049,
+        "y": -5196,
+        "distance": 2274
+      },
+      {
+        "symbol": "X1-SH33",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2250,
+        "y": -2221,
+        "distance": 2314
+      },
+      {
+        "symbol": "X1-CR32",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5870,
+        "y": -2652,
+        "distance": 2320
+      },
+      {
+        "symbol": "X1-TD92",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2056,
+        "y": -2416,
+        "distance": 2330
+      },
+      {
+        "symbol": "X1-HN58",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2514,
+        "y": -1962,
+        "distance": 2340
+      },
+      {
+        "symbol": "X1-UK26",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -5751,
+        "y": -2421,
+        "distance": 2353
+      },
+      {
+        "symbol": "X1-TA86",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2566,
+        "y": -5840,
+        "distance": 2383
+      },
+      {
+        "symbol": "X1-QN57",
+        "sectorSymbol": "X1",
+        "type": "UNSTABLE",
+        "x": -2180,
+        "y": -5525,
+        "distance": 2387
+      },
+      {
+        "symbol": "X1-ZJ35",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2044,
+        "y": -2287,
+        "distance": 2421
+      },
+      {
+        "symbol": "X1-FZ72",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -1906,
+        "y": -2460,
+        "distance": 2424
+      },
+      {
+        "symbol": "X1-AJ89",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -1946,
+        "y": -2403,
+        "distance": 2425
+      },
+      {
+        "symbol": "X1-AV88",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2087,
+        "y": -2229,
+        "distance": 2427
+      },
+      {
+        "symbol": "X1-NN2",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2129,
+        "y": -2177,
+        "distance": 2432
+      },
+      {
+        "symbol": "X1-KT56",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -1893,
+        "y": -2461,
+        "distance": 2434
+      },
+      {
+        "symbol": "X1-TQ50",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2418,
+        "y": -1892,
+        "distance": 2453
+      },
+      {
+        "symbol": "X1-D77",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -5669,
+        "y": -2154,
+        "distance": 2465
+      },
+      {
+        "symbol": "X1-BM83",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2136,
+        "y": -2108,
+        "distance": 2475
+      },
+      {
+        "symbol": "X1-HB45",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2008,
+        "y": -5480,
+        "distance": 2483
+      },
+      {
+        "symbol": "X1-BX40",
+        "sectorSymbol": "X1",
+        "type": "ORANGE_STAR",
+        "x": -2198,
+        "y": -2021,
+        "distance": 2495
+      },
+      {
+        "symbol": "X1-FQ50",
+        "sectorSymbol": "X1",
+        "type": "RED_STAR",
+        "x": -2020,
+        "y": -2185,
+        "distance": 2506
+      },
+      {
+        "symbol": "X1-VB20",
+        "sectorSymbol": "X1",
+        "type": "NEUTRON_STAR",
+        "x": -2274,
+        "y": -1880,
+        "distance": 2552
+      },
+      {
+        "symbol": "X1-PP26",
+        "sectorSymbol": "X1",
+        "type": "BLUE_STAR",
+        "x": -2168,
+        "y": -1923,
+        "distance": 2588
+      },
+      {
+        "symbol": "X1-ZC25",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -2221,
+        "y": -1870,
+        "distance": 2593
+      },
+      {
+        "symbol": "X1-RS67",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -1985,
+        "y": -5622,
+        "distance": 2595
+      },
+      {
+        "symbol": "X1-NX88",
+        "sectorSymbol": "X1",
+        "type": "YOUNG_STAR",
+        "x": -1979,
+        "y": -1963,
+        "distance": 2688
+      }
+    ]
+  }
+}

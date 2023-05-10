@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noEmit": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "target": "esnext",
+    "lib": ["ES2021"],
+    "paths": {
+      "@app/*": ["src/*"]
+    }
+  },
+}

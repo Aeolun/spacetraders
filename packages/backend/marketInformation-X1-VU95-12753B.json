@@ -1,0 +1,96 @@
+{
+  "symbol": "X1-VU95-12753B",
+  "imports": [
+    {
+      "symbol": "SILVER_ORE",
+      "name": "Silver Ore",
+      "description": "A raw, unprocessed form of silver, often found in mines and underground deposits on planets and moons."
+    },
+    {
+      "symbol": "GOLD_ORE",
+      "name": "Gold Ore",
+      "description": "A valuable ore used in the production of gold and other precious metals. Gold ore is often used in the production of jewelry, coins, and other decorative items, as well as in the production of electronics and other high-tech applications."
+    },
+    {
+      "symbol": "PLATINUM_ORE",
+      "name": "Platinum Ore",
+      "description": "A valuable ore used in the production of platinum and other precious metals. Platinum ore is often used in the production of catalysts and other industrial applications."
+    }
+  ],
+  "exports": [
+    {
+      "symbol": "SILVER",
+      "name": "Silver",
+      "description": "A shiny, metallic element used in the production of coins, jewelry, and other high-value items."
+    },
+    {
+      "symbol": "GOLD",
+      "name": "Gold",
+      "description": "Gold is often used in the production of jewelry, coins, and other decorative items, as well as in the production of electronics and other high-tech applications."
+    },
+    {
+      "symbol": "PLATINUM",
+      "name": "Platinum",
+      "description": "Platinum is often used in the production of catalysts and other industrial applications."
+    }
+  ],
+  "exchange": [
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    }
+  ],
+  "transactions": [],
+  "tradeGoods": [
+    {
+      "symbol": "SILVER_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 92,
+      "sellPrice": 61
+    },
+    {
+      "symbol": "GOLD_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 107,
+      "sellPrice": 71
+    },
+    {
+      "symbol": "PLATINUM_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 114,
+      "sellPrice": 76
+    },
+    {
+      "symbol": "SILVER",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 192,
+      "sellPrice": 96
+    },
+    {
+      "symbol": "GOLD",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 376,
+      "sellPrice": 188
+    },
+    {
+      "symbol": "PLATINUM",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 394,
+      "sellPrice": 197
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 248,
+      "sellPrice": 224
+    }
+  ]
+}

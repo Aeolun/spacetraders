@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "app": "https://github.com/pencil-js/spritesheet",
+    "version": "1.5.1",
+    "image": "stars.png",
+    "size": {
+      "w": 256,
+      "h": 256
+    },
+    "scale": 1
+  },
+  "frames": {
+    "planets/tile/area8446.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/BLACK_HOLE.png": {
+      "frame": {
+        "x": 64,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/BLUE_STAR.png": {
+      "frame": {
+        "x": 0,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/GREEN_NEBULA.png": {
+      "frame": {
+        "x": 64,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/HYPERGIANT.png": {
+      "frame": {
+        "x": 128,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/large_white.png": {
+      "frame": {
+        "x": 128,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/NEUTRON_STAR.png": {
+      "frame": {
+        "x": 0,
+        "y": 128,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/ORANGE_STAR.png": {
+      "frame": {
+        "x": 64,
+        "y": 128,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/PURPLE_NEBULA.png": {
+      "frame": {
+        "x": 128,
+        "y": 128,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/RED_NEBULA.png": {
+      "frame": {
+        "x": 192,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/RED_STAR.png": {
+      "frame": {
+        "x": 192,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/redstar.png": {
+      "frame": {
+        "x": 192,
+        "y": 128,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/UNSTABLE.png": {
+      "frame": {
+        "x": 0,
+        "y": 192,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/WHITE_DWARF.png": {
+      "frame": {
+        "x": 64,
+        "y": 192,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/yellowstar.png": {
+      "frame": {
+        "x": 128,
+        "y": 192,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planets/tile/YOUNG_STAR.png": {
+      "frame": {
+        "x": 192,
+        "y": 192,
+        "w": 64,
+        "h": 64
+      }
+    }
+  },
+  "animations": {}
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@spacetraders/backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.11.5",
+    "tsx": "^3.12.7",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/client": "4.14.0",
+    "@trpc/server": "^10.25.1",
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "prisma": "^4.14.0",
+    "spacetraders-sdk": "workspace:^2",
+    "throttled-queue": "^2.1.4",
+    "zod": "^3.21.4"
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "symbol": "X1-VU95-76575B",
+  "imports": [],
+  "exports": [],
+  "exchange": [
+    {
+      "symbol": "IRON_ORE",
+      "name": "Iron Ore",
+      "description": "A common and valuable ore used in the production of steel and other alloys."
+    },
+    {
+      "symbol": "COPPER_ORE",
+      "name": "Copper Ore",
+      "description": "A valuable ore used in the production of copper and other alloys. Copper ore is an essential component in the production of electronic components and wiring."
+    },
+    {
+      "symbol": "ALUMINUM_ORE",
+      "name": "Aluminum Ore",
+      "description": "A valuable ore used in the production of aluminum and other alloys. Aluminum ore is an essential component in the construction of ship hulls and other structural components."
+    },
+    {
+      "symbol": "SILVER_ORE",
+      "name": "Silver Ore",
+      "description": "A raw, unprocessed form of silver, often found in mines and underground deposits on planets and moons."
+    },
+    {
+      "symbol": "GOLD_ORE",
+      "name": "Gold Ore",
+      "description": "A valuable ore used in the production of gold and other precious metals. Gold ore is often used in the production of jewelry, coins, and other decorative items, as well as in the production of electronics and other high-tech applications."
+    },
+    {
+      "symbol": "PLATINUM_ORE",
+      "name": "Platinum Ore",
+      "description": "A valuable ore used in the production of platinum and other precious metals. Platinum ore is often used in the production of catalysts and other industrial applications."
+    },
+    {
+      "symbol": "SILICON_CRYSTALS",
+      "name": "Silicon Crystals",
+      "description": "High-quality silicon crystals used in the production of advanced electronic components and solar panels."
+    },
+    {
+      "symbol": "ICE_WATER",
+      "name": "Fresh Water",
+      "description": "High-quality fresh water, essential for life support and hydroponic agriculture."
+    },
+    {
+      "symbol": "AMMONIA_ICE",
+      "name": "Ammonia Ice",
+      "description": "A valuable substance used in the production of fertilizers and other chemical products."
+    },
+    {
+      "symbol": "DIAMONDS",
+      "name": "Diamonds",
+      "description": "Rare and valuable crystals used in the production of high-end jewelry and other luxury goods."
+    },
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    },
+    {
+      "symbol": "QUARTZ_SAND",
+      "name": "Quartz Sand",
+      "description": "High-purity quartz sand used in the production of glass and ceramics."
+    }
+  ],
+  "transactions": [
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "IRON_ORE",
+      "type": "SELL",
+      "units": 7,
+      "pricePerUnit": 41,
+      "totalPrice": 287,
+      "timestamp": "2023-05-10T00:17:15.466Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "COPPER_ORE",
+      "type": "SELL",
+      "units": 5,
+      "pricePerUnit": 46,
+      "totalPrice": 230,
+      "timestamp": "2023-05-10T00:10:58.981Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "SILVER_ORE",
+      "type": "SELL",
+      "units": 3,
+      "pricePerUnit": 48,
+      "totalPrice": 144,
+      "timestamp": "2023-05-10T00:10:46.734Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "AMMONIA_ICE",
+      "type": "SELL",
+      "units": 9,
+      "pricePerUnit": 42,
+      "totalPrice": 378,
+      "timestamp": "2023-05-10T00:10:29.356Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "SILICON_CRYSTALS",
+      "type": "SELL",
+      "units": 6,
+      "pricePerUnit": 38,
+      "totalPrice": 228,
+      "timestamp": "2023-05-09T23:54:11.975Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "QUARTZ_SAND",
+      "type": "SELL",
+      "units": 1,
+      "pricePerUnit": 21,
+      "totalPrice": 21,
+      "timestamp": "2023-05-09T23:54:01.127Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "COPPER_ORE",
+      "type": "SELL",
+      "units": 4,
+      "pricePerUnit": 46,
+      "totalPrice": 184,
+      "timestamp": "2023-05-09T23:53:48.934Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-76575B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "SILVER_ORE",
+      "type": "SELL",
+      "units": 4,
+      "pricePerUnit": 48,
+      "totalPrice": 192,
+      "timestamp": "2023-05-09T23:52:14.402Z"
+    }
+  ],
+  "tradeGoods": [
+    {
+      "symbol": "IRON_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 44,
+      "sellPrice": 40
+    },
+    {
+      "symbol": "COPPER_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 50,
+      "sellPrice": 46
+    },
+    {
+      "symbol": "ALUMINUM_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 51,
+      "sellPrice": 47
+    },
+    {
+      "symbol": "SILVER_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 54,
+      "sellPrice": 48
+    },
+    {
+      "symbol": "GOLD_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 71,
+      "sellPrice": 65
+    },
+    {
+      "symbol": "PLATINUM_ORE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 71,
+      "sellPrice": 65
+    },
+    {
+      "symbol": "SILICON_CRYSTALS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 42,
+      "sellPrice": 38
+    },
+    {
+      "symbol": "ICE_WATER",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 14,
+      "sellPrice": 12
+    },
+    {
+      "symbol": "AMMONIA_ICE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 46,
+      "sellPrice": 42
+    },
+    {
+      "symbol": "DIAMONDS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 4007,
+      "sellPrice": 3625
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 202,
+      "sellPrice": 182
+    },
+    {
+      "symbol": "QUARTZ_SAND",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 23,
+      "sellPrice": 21
+    }
+  ]
+}

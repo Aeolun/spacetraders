@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Faction {
+  symbol             String         @id
+  name               String
+  description        String @db.Text
+  headquartersSymbol String
+  headquarters       Waypoint         @relation("headquarters", fields: [headquartersSymbol], references: [symbol])
+  traits             FactionTrait[]
+
+  systems   System[]
+  waypoints Waypoint[]
+}
+
+model FactionTrait {
+  symbol      String    @id
+  name        String
+  description String @db.Text
+  factions    Faction[]
+}
+
+model Sector {
+  symbol  String   @id
+  systems System[]
+}
+
+enum SystemType {
+  NEUTRON_STAR
+  RED_STAR
+  ORANGE_STAR
+  BLUE_STAR
+  YOUNG_STAR
+  WHITE_DWARF
+  BLACK_HOLE
+  HYPERGIANT
+  NEBULA
+  UNSTABLE
+}
+
+model System {
+  symbol String     @id
+  sectorSymbol             String
+  sector Sector     @relation(fields: [sectorSymbol], references: [symbol])
+  type   SystemType
+  x      Float
+  y      Float
+
+  waypoints     Waypoint[]
+  shipsInSystem Ship[]     @relation("currentSystem")
+
+  factions                 Faction[]
+}
+
+enum WaypointType {
+  PLANET
+  GAS_GIANT
+  MOON
+  ORBITAL_STATION
+  JUMP_GATE
+  ASTEROID_FIELD
+  NEBULA
+  DEBRIS_FIELD
+  GRAVITY_WELL
+}
+
+model Waypoint {
+  symbol        String          @id
+  type          WaypointType
+  systemSymbol  String
+  system        System          @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
+  x             Float
+  y             Float
+  factionSymbol String?
+  faction       Faction?         @relation(fields: [factionSymbol], references: [symbol])
+  traits        WaypointTrait[]
+
+  orbitsSymbol String?
+  orbits Waypoint? @relation("orbits", fields: [orbitsSymbol], references: [symbol])
+  orbitals Waypoint[] @relation("orbits")
+
+  chartSymbol      String?
+  chartSubmittedBy String?
+  chartSubmittedOn DateTime?
+
+  shipsAtWaypoint Ship[] @relation("currentWaypoint")
+  shipsEnroute    Ship[] @relation("destinationWaypoint")
+
+  factionsWithHeadquarters Faction[] @relation("headquarters")
+}
+
+model WaypointTrait {
+  symbol      String     @id
+  name        String
+  description String @db.Text
+  waypoints   Waypoint[]
+}
+
+enum ShipRole {
+  FABRICATOR
+  HARVESTER
+  HAULER
+  INTERCEPTOR
+  EXCAVATOR
+  TRANSPORT
+  REPAIR
+  SURVEYOR
+  COMMAND
+  CARRIER
+  PATROL
+  SATELLITE
+  EXPLORER
+  REFINERY
+}
+
+enum ShipNavStatus {
+  IN_TRANSIT
+  IN_ORBIT
+  DOCKED
+}
+
+enum ShipNavFlightMode {
+  DRIFT
+  STEALTH
+  CRUISE
+  BURN
+}
+
+model TradeGood {
+  symbol      String @id
+  name        String
+  description String @db.Text
+
+  cargo ShipCargo[]
+}
+
+model ShipCargo {
+  shipSymbol      String
+  ship            Ship      @relation(fields: [shipSymbol], references: [symbol], onDelete: Cascade)
+  tradeGoodSymbol String
+  tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
+  units           Int
+
+  @@id([shipSymbol, tradeGoodSymbol])
+}
+
+model Ship {
+  symbol        String   @id
+  name          String
+  factionSymbol String
+  role          ShipRole
+
+  currentSystemSymbol   String
+  currentSystem         System   @relation("currentSystem", fields: [currentSystemSymbol], references: [symbol])
+  currentWaypointSymbol String
+  currentWaypoint       Waypoint @relation("currentWaypoint", fields: [currentWaypointSymbol], references: [symbol])
+
+  destinationWaypointSymbol String?
+  destinationWaypoint       Waypoint? @relation("destinationWaypoint", fields: [destinationWaypointSymbol], references: [symbol])
+  departureOn               DateTime?
+  arrivalOn                 DateTime?
+
+  navStatus  ShipNavStatus
+  flightMode ShipNavFlightMode
+
+  cargoCapacity Int
+  cargoUsed     Int
+  cargo         ShipCargo[]
+
+  //    crew ShipCrew
+  //    frame ShipFrame
+  //    reactor ShipReactor
+  //    engine ShipEngine
+  //    modules ShipModule[]
+  //    mounts ShipMount[]
+  //    cargo ShipCargo
+  //    fuel ShipFuel
+}

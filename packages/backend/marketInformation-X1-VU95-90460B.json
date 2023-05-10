@@ -1,0 +1,188 @@
+{
+  "symbol": "X1-VU95-90460B",
+  "imports": [
+    {
+      "symbol": "FOOD",
+      "name": "Galactic Cuisine",
+      "description": "A diverse range of foods from different planets, including fresh produce, meats, and prepared meals."
+    },
+    {
+      "symbol": "PLASTICS",
+      "name": "Plastics",
+      "description": "A wide range of plastic materials used in various applications, including packaging, construction, and manufacturing."
+    },
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    },
+    {
+      "symbol": "MEDICINE",
+      "name": "Medicine",
+      "description": "Medical products, including drugs, treatments, and medical equipment."
+    },
+    {
+      "symbol": "DRUGS",
+      "name": "Pharmaceuticals",
+      "description": "A wide range of drugs and other medical treatments used to treat various conditions and illnesses."
+    },
+    {
+      "symbol": "EQUIPMENT",
+      "name": "Equipment",
+      "description": "Tools and equipment used in various industries and applications."
+    },
+    {
+      "symbol": "LAB_INSTRUMENTS",
+      "name": "Lab Instruments",
+      "description": "A wide range of scientific instruments and equipment used in research and development."
+    },
+    {
+      "symbol": "ICE_WATER",
+      "name": "Fresh Water",
+      "description": "High-quality fresh water, essential for life support and hydroponic agriculture."
+    },
+    {
+      "symbol": "FABRICS",
+      "name": "Synthetic Fabrics",
+      "description": "High-tech fabrics used in the production of clothing and other products for everyday use."
+    },
+    {
+      "symbol": "ELECTRONICS",
+      "name": "Electronic Components",
+      "description": "Advanced electronic components used in the construction of advanced technologies."
+    },
+    {
+      "symbol": "MACHINERY",
+      "name": "Machinery",
+      "description": "A variety of mechanical devices and equipment, used for industrial, construction, and other practical purposes."
+    },
+    {
+      "symbol": "CLOTHING",
+      "name": "Clothing",
+      "description": "A wide range of clothing and fashion items, including garments, accessories, and textiles."
+    }
+  ],
+  "exports": [
+    {
+      "symbol": "ANTIMATTER",
+      "name": "Antimatter",
+      "description": "A highly valuable and dangerous substance used for advanced propulsion and weapons systems."
+    }
+  ],
+  "exchange": [],
+  "transactions": [
+    {
+      "waypointSymbol": "X1-VU95-90460B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "ICE_WATER",
+      "type": "SELL",
+      "units": 9,
+      "pricePerUnit": 15,
+      "totalPrice": 135,
+      "timestamp": "2023-05-09T23:42:49.956Z"
+    },
+    {
+      "waypointSymbol": "X1-VU95-90460B",
+      "shipSymbol": "CRANK_DEVIT-2",
+      "tradeSymbol": "ICE_WATER",
+      "type": "SELL",
+      "units": 6,
+      "pricePerUnit": 15,
+      "totalPrice": 90,
+      "timestamp": "2023-05-09T23:42:02.588Z"
+    }
+  ],
+  "tradeGoods": [
+    {
+      "symbol": "FOOD",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 366,
+      "sellPrice": 244
+    },
+    {
+      "symbol": "PLASTICS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 408,
+      "sellPrice": 272
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 356,
+      "sellPrice": 237
+    },
+    {
+      "symbol": "MEDICINE",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 848,
+      "sellPrice": 565
+    },
+    {
+      "symbol": "DRUGS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 519,
+      "sellPrice": 346
+    },
+    {
+      "symbol": "EQUIPMENT",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 798,
+      "sellPrice": 532
+    },
+    {
+      "symbol": "LAB_INSTRUMENTS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 978,
+      "sellPrice": 652
+    },
+    {
+      "symbol": "ICE_WATER",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 23,
+      "sellPrice": 15
+    },
+    {
+      "symbol": "FABRICS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 116,
+      "sellPrice": 77
+    },
+    {
+      "symbol": "ANTIMATTER",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 705,
+      "sellPrice": 353
+    },
+    {
+      "symbol": "ELECTRONICS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 770,
+      "sellPrice": 513
+    },
+    {
+      "symbol": "MACHINERY",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 831,
+      "sellPrice": 554
+    },
+    {
+      "symbol": "CLOTHING",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 459,
+      "sellPrice": 306
+    }
+  ]
+}
