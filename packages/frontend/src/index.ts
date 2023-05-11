@@ -8,7 +8,7 @@ import {
     Text,
     BitmapText,
     Spritesheet,
-    DisplayObject
+    DisplayObject, Graphics
 } from 'pixi.js';
 import { GlowFilter } from '@pixi/filter-glow'
 import {Rectangle} from "@pixi/core";
@@ -40,6 +40,7 @@ const app = new Application({
 // can then insert into the DOM
 document.body.appendChild(app.view);
 const totalSize = 500000
+const systemScale = 12
 const universeView = new Viewport({
     screenWidth: window.innerWidth,
     screenHeight: window.innerHeight,
@@ -52,13 +53,13 @@ const universeView = new Viewport({
 const systemView = new Viewport({
     screenWidth: window.innerWidth,
     screenHeight: window.innerHeight,
-    worldWidth: 500,
-    worldHeight: 500,
+    worldWidth: 2000,
+    worldHeight: 2000,
     events: app.renderer.events // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
 })
 systemView.visible = false
 
-systemView.moveCenter(250, 250)
+systemView.moveCenter(1000, 1000)
 
 universeView.moveCenter(totalSize/2, totalSize/2)
 
@@ -80,6 +81,7 @@ const planetsheet: Spritesheet = await Assets.load('planets.json');
 const font = await Assets.load('font.fnt');
 const bgTexture = await Assets.load('starfield.png');
 const starTexture: Texture = await Assets.load('stars.png');
+const spaceshipTexture: Texture = await Assets.load('spaceship.png');
 starTexture.frame = new Rectangle(0,0,64,64)
 const starTexture2 = starTexture.clone()
 starTexture2.frame = new Rectangle(0, 64, 64, 64)
@@ -103,7 +105,10 @@ for(const starData of systems) {
 
 const references = {}
 
-function makeInteractiveAndGlowy(item: Container<DisplayObject>) {
+function makeInteractiveAndGlowy(item: Container<DisplayObject>, options?: {
+    onMouseOver?: () => void,
+    onMouseOut?: () => void,
+}) {
     item.interactive = true;
 
     // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
@@ -111,10 +116,12 @@ function makeInteractiveAndGlowy(item: Container<DisplayObject>) {
     item.on('mouseover', () => {
         //star.alpha = 0.5
         item.filters = [new GlowFilter()]
+        options?.onMouseOver?.()
     })
     item.on('mouseout', () => {
         //star.alpha = 1
         item.filters = []
+        options?.onMouseOut?.()
     })
 }
 
@@ -142,7 +149,25 @@ for(const starData of systems) {
             universeView.visible = false
             systemView.visible = true
 
+            let minX = 0, minY = 0
+            result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+                if (item.x < minX) {
+                    minX = item.x
+                }
+                if (item.y < minY) {
+                    minY = item.y
+                }
+            })
+            minX = Math.abs(minX * systemScale)
+            minY = Math.abs(minY * systemScale)
+
             const star = new Sprite(texture)
+            star.x = minX
+            star.y = minY
+            star.pivot = {
+                x: 32,
+                y: 32
+            }
             systemView.addChild(star)
 
             const backButton = new BitmapText('Back', {
@@ -160,13 +185,70 @@ for(const starData of systems) {
             })
             uiOverlay.addChild(backButton)
 
-            result.filter(item => !item.orbitsSymbol).forEach(item => {
+
+
+            const waypointShips: Record<string, number> = {}
+            result.ships.forEach(ship => {
+                const shipGroup = new Container()
+
+                if (waypointShips[ship.currentWaypoint.symbol] === undefined) {
+                    waypointShips[ship.currentWaypoint.symbol] = 0
+                } else {
+                    waypointShips[ship.currentWaypoint.symbol]++
+                }
+
+                const itemSprite = new Sprite(spaceshipTexture)
+                itemSprite.pivot = {
+                    x: 32,
+                    y: 32
+                }
+                itemSprite.scale = { x: 0.5, y: 0.5 }
+                console.log(waypointShips[ship.currentWaypoint.symbol]);
+                shipGroup.x = ship.currentWaypoint.x * systemScale + (32 * waypointShips[ship.currentWaypoint.symbol]) + minX
+                shipGroup.y = ship.currentWaypoint.y * systemScale + 80 + minY
+                shipGroup.addChild(itemSprite)
+
+                const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
+                    fontName: 'sans-serif',
+                    fontSize: 16,
+                    align: 'right',
+                })
+                text.visible = false
+                text.x = 0
+                text.y = 32
+                shipGroup.addChild(text);
+
+                makeInteractiveAndGlowy(shipGroup, {
+                    onMouseOver: () => {
+                        text.visible = true
+                    },
+                    onMouseOut: () => {
+                        text.visible = false
+                    }
+                })
+
+                systemView.addChild(shipGroup)
+            })
+
+            result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+                const orbit = new Graphics()
+                orbit.lineStyle({
+                    width: 2,
+                    color: 0x444444
+                })
+                orbit.drawCircle(minX, minY, Math.sqrt(Math.pow(item.x*systemScale, 2) + Math.pow(item.y*systemScale, 2)))
+                systemView.addChild(orbit)
+
                 const itemGroup = new Container()
                 makeInteractiveAndGlowy(itemGroup)
 
                 const itemSprite = new Sprite(planetsheet.textures[`planets/tile/${item.type}.png`])
-                itemGroup.x = item.x * 8
-                itemGroup.y = item.y * 8
+                itemSprite.pivot = {
+                    x: 32,
+                    y: 32
+                }
+                itemGroup.x = item.x * systemScale + minX
+                itemGroup.y = item.y * systemScale + minY
                 itemGroup.addChild(itemSprite)
 
                 const text = new BitmapText(item.symbol.replace(starData.symbol+'-', '') + ' - ' + item.type, {
@@ -174,19 +256,23 @@ for(const starData of systems) {
                     fontSize: 16,
                     align: 'right',
                 })
-                text.x = 0
-                text.y = 70
+                text.x = 40
+                text.y = -8
                 itemGroup.addChild(text);
 
 
-                result.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
+                result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
                     const orbitingGroup = new Container()
                     makeInteractiveAndGlowy(orbitingGroup)
 
                     const orbitingSprite = new Sprite(planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])
+                    orbitingSprite.pivot = {
+                        x: 32,
+                        y: 32
+                    }
                     orbitingSprite.scale = {x: 0.75, y: 0.75}
-                    orbitingGroup.x = item.x * 8 + 32
-                    orbitingGroup.y = item.y * 8 + 80 + 64*index
+                    orbitingGroup.x = item.x * systemScale + 32 + minX
+                    orbitingGroup.y = item.y * systemScale + 48 + 64*index + minY
                     orbitingGroup.addChild(orbitingSprite)
 
                     const orbitingText = new BitmapText(orbitingThing.symbol.replace(starData.symbol+'-', '') + ' - ' + orbitingThing.type, {
@@ -194,8 +280,8 @@ for(const starData of systems) {
                         fontSize: 16,
                         align: 'right',
                     })
-                    orbitingText.x = 60
-                    orbitingText.y = 16
+                    orbitingText.x = 24
+                    orbitingText.y = -8
                     orbitingGroup.addChild(orbitingText)
 
                     systemView.addChild(orbitingGroup)
@@ -203,6 +289,8 @@ for(const starData of systems) {
 
                 systemView.addChild(itemGroup)
             })
+
+            systemView.fit(true)
         })
     })
 

@@ -6,11 +6,25 @@ export const appRouter = router({
     dataForDisplay: publicProcedure.input(z.object({
         system: z.string()
     })).query(async ({input}) => {
-        return prisma.waypoint.findMany({
+        const waypoints = await prisma.waypoint.findMany({
             where: {
                 systemSymbol: input.system
             }
         })
+        const ships = await prisma.ship.findMany({
+            where: {
+                currentSystemSymbol: input.system
+            },
+            include: {
+                currentWaypoint: true,
+                destinationWaypoint: true
+            }
+        })
+
+        return {
+            waypoints,
+            ships
+        }
     })
 });
 
