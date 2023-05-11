@@ -1,0 +1,190 @@
+# 88 true constellation names
+Andromeda
+Antlia
+Apus
+Aquarius
+Aquila
+Ara
+Aries
+Auriga
+Bootes
+Caelum
+Camelopardalis
+Cancer
+Canes Venatici
+Canis Major
+Canis Minor
+Capricornus
+Carina
+Cassiopeia
+Centaurus
+Cepheus
+Cetus
+Chamaeleon
+Circinus
+Columba
+Coma Berenices
+Corona Australis
+Corona Borealis
+Corvus
+Crater
+Crux
+Cygnus
+Delphinus
+Dorado
+Draco
+Equuleus
+Eridanus
+Fornax
+Gemini
+Grus
+Hercules
+Horologium
+Hydra
+Hydrus
+Indus
+Lacerta
+Leo
+Leo Minor
+Lepus
+Libra
+Lupus
+Lynx
+Lyra
+Mensa
+Microscopium
+Monoceros
+Musca
+Norma
+Octans
+Ophiuchus
+Orion
+Pavo
+Pegasus
+Perseus
+Phoenix
+Pictor
+Pisces
+Piscis Austrinus
+Puppis
+Pyxis
+Reticulum
+Sagitta
+Sagittarius
+Scorpius
+Sculptor
+Scutum
+Serpens
+Sextans
+Taurus
+Telescopium
+Triangulum
+Triangulum Australe
+Tucana
+Ursa Major
+Ursa Minor
+Vela
+Virgo
+Volans
+Vulpecula
+# Chinese asterisms
+Jiao
+Kang
+Di
+Fang
+Xin
+Ji
+Dou
+Niu
+Nuu
+Xuu
+Wei
+Shi
+Bi
+Kui
+Lou
+Mao
+Zi
+Shen
+Jing
+Gui
+Liu
+Xing
+Zhang
+Yi
+Zhen
+# Chinese southern asterism
+Hai Shan
+Shi Zi Jia
+Ma Wei
+Ma Fu
+Mi Feng
+San Jiao Xing
+Yi Que
+Kong Que
+Bo Si
+She Wei
+She Fu
+She Shou
+Niao Hui
+He
+Huo Niao
+Shui Wei
+Fu Bai
+Jia Bai
+Jin Yu
+Hai Dan
+Fei Yu
+Nan Chuan
+Xiao Dou
+# hindu Nakshatra
+Ashvini
+Bharani
+Krttika
+Rohini
+Mrigashirsha
+Ardra
+Punarvasu
+Pushiya
+Aslesha
+Magha
+Purva
+Uttara Phalguni
+Hasta
+Chitra
+Svati
+Vishakha
+Anuradha
+Jyeshtha
+Mula
+Purva Ashadha
+Uttara Ashadha
+Shravana
+Dhanishta
+Satabhishak
+Purva Bhadrapada
+Uttara Bhadrapada
+Revati
+# Polynesian
+Ke Ka o Makali'i
+Iwikuamo'o
+Manaiakalani
+Ka Lupe O Kawelo
+# fictitious CHATGPT
+Aurorae
+Caelum
+Draco
+Vesanus
+Bellator
+Umbrarum
+Stellae
+Harmoniae
+Nova
+Fortuna
+Lux
+Aeternum
+Bellum
+Serpens
+Arbor
+Somnium
+Fulguris

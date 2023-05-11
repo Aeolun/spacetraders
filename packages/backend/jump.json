@@ -1,0 +1,1917 @@
+{
+  "jumpRange": 5000,
+  "factionSymbol": "GALACTIC",
+  "connectedSystems": [
+    {
+      "symbol": "X1-FS18",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3891,
+      "y": -4034,
+      "distance": 177
+    },
+    {
+      "symbol": "X1-AA92",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3757,
+      "y": -3275,
+      "distance": 596
+    },
+    {
+      "symbol": "X1-JQ84",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -4591,
+      "y": -4206,
+      "distance": 786
+    },
+    {
+      "symbol": "X1-NG26",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -3265,
+      "y": -3339,
+      "distance": 809
+    },
+    {
+      "symbol": "X1-YQ16",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -4696,
+      "y": -4127,
+      "distance": 853
+    },
+    {
+      "symbol": "X1-TX68",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3065,
+      "y": -3367,
+      "distance": 957
+    },
+    {
+      "symbol": "X1-DR35",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3577,
+      "y": -4824,
+      "distance": 1015
+    },
+    {
+      "symbol": "X1-KX31",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3239,
+      "y": -3072,
+      "distance": 1018
+    },
+    {
+      "symbol": "X1-TU74",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2732,
+      "y": -3942,
+      "distance": 1158
+    },
+    {
+      "symbol": "X1-UX38",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3087,
+      "y": -4718,
+      "distance": 1175
+    },
+    {
+      "symbol": "X1-MD10",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3676,
+      "y": -2672,
+      "distance": 1204
+    },
+    {
+      "symbol": "X1-HF14",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -4605,
+      "y": -2765,
+      "distance": 1307
+    },
+    {
+      "symbol": "X1-MT24",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2402,
+      "y": -3124,
+      "distance": 1656
+    },
+    {
+      "symbol": "X1-PT74",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -3156,
+      "y": -2335,
+      "distance": 1688
+    },
+    {
+      "symbol": "X1-AS98",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2321,
+      "y": -3186,
+      "distance": 1704
+    },
+    {
+      "symbol": "X1-XG58",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -5214,
+      "y": -2763,
+      "distance": 1720
+    },
+    {
+      "symbol": "X1-UZ5",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3224,
+      "y": -5523,
+      "distance": 1793
+    },
+    {
+      "symbol": "X1-GT63",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -2369,
+      "y": -2840,
+      "distance": 1827
+    },
+    {
+      "symbol": "X1-QZ33",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3747,
+      "y": -2021,
+      "distance": 1841
+    },
+    {
+      "symbol": "X1-QU33",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2988,
+      "y": -2093,
+      "distance": 1980
+    },
+    {
+      "symbol": "X1-JU88",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -1997,
+      "y": -4691,
+      "distance": 2066
+    },
+    {
+      "symbol": "X1-FG75",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -3503,
+      "y": -5895,
+      "distance": 2074
+    },
+    {
+      "symbol": "X1-XD40",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4507,
+      "y": -1852,
+      "distance": 2099
+    },
+    {
+      "symbol": "X1-C21",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2393,
+      "y": -2321,
+      "distance": 2143
+    },
+    {
+      "symbol": "X1-ZC9",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4306,
+      "y": -1701,
+      "distance": 2196
+    },
+    {
+      "symbol": "X1-DK54",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -4174,
+      "y": -1671,
+      "distance": 2205
+    },
+    {
+      "symbol": "X1-PX3",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2699,
+      "y": -1999,
+      "distance": 2205
+    },
+    {
+      "symbol": "X1-QH5",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -3972,
+      "y": -1642,
+      "distance": 2217
+    },
+    {
+      "symbol": "X1-ZR35",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -2049,
+      "y": -5196,
+      "distance": 2274
+    },
+    {
+      "symbol": "X1-YA74",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1601,
+      "y": -3584,
+      "distance": 2302
+    },
+    {
+      "symbol": "X1-SH33",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -2250,
+      "y": -2221,
+      "distance": 2314
+    },
+    {
+      "symbol": "X1-HZ11",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2971,
+      "y": -1710,
+      "distance": 2334
+    },
+    {
+      "symbol": "X1-SB62",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1646,
+      "y": -4521,
+      "distance": 2337
+    },
+    {
+      "symbol": "X1-M83",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1789,
+      "y": -4974,
+      "distance": 2377
+    },
+    {
+      "symbol": "X1-TA86",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2566,
+      "y": -5840,
+      "distance": 2383
+    },
+    {
+      "symbol": "X1-UP32",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1568,
+      "y": -4426,
+      "distance": 2388
+    },
+    {
+      "symbol": "X1-SS95",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -3706,
+      "y": -1445,
+      "distance": 2419
+    },
+    {
+      "symbol": "X1-AS95",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1580,
+      "y": -4591,
+      "distance": 2421
+    },
+    {
+      "symbol": "X1-NN2",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2129,
+      "y": -2177,
+      "distance": 2432
+    },
+    {
+      "symbol": "X1-MK10",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1749,
+      "y": -2622,
+      "distance": 2469
+    },
+    {
+      "symbol": "X1-FQ50",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "GALACTIC",
+      "x": -2020,
+      "y": -2185,
+      "distance": 2506
+    },
+    {
+      "symbol": "X1-NY41",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2940,
+      "y": -1491,
+      "distance": 2548
+    },
+    {
+      "symbol": "X1-JR5",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2668,
+      "y": -1568,
+      "distance": 2593
+    },
+    {
+      "symbol": "X1-XG32",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2657,
+      "y": -1499,
+      "distance": 2660
+    },
+    {
+      "symbol": "X1-G38",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -6539,
+      "y": -3537,
+      "distance": 2671
+    },
+    {
+      "symbol": "X1-CS89",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -1209,
+      "y": -3615,
+      "distance": 2689
+    },
+    {
+      "symbol": "X1-TZ44",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1482,
+      "y": -5103,
+      "distance": 2709
+    },
+    {
+      "symbol": "X1-UV14",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1158,
+      "y": -3678,
+      "distance": 2735
+    },
+    {
+      "symbol": "X1-GX40",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -3545,
+      "y": -1141,
+      "distance": 2737
+    },
+    {
+      "symbol": "X1-RD97",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1113,
+      "y": -3991,
+      "distance": 2777
+    },
+    {
+      "symbol": "X1-TZ2",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -1138,
+      "y": -3451,
+      "distance": 2779
+    },
+    {
+      "symbol": "X1-BY71",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4636,
+      "y": -1174,
+      "distance": 2786
+    },
+    {
+      "symbol": "X1-JD55",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1098,
+      "y": -4108,
+      "distance": 2800
+    },
+    {
+      "symbol": "X1-KA8",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1138,
+      "y": -2883,
+      "distance": 2916
+    },
+    {
+      "symbol": "X1-PX31",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2302,
+      "y": -1380,
+      "distance": 2941
+    },
+    {
+      "symbol": "X1-FV10",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -2459,
+      "y": -6468,
+      "distance": 2976
+    },
+    {
+      "symbol": "X1-CD84",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -931,
+      "y": -3489,
+      "distance": 2979
+    },
+    {
+      "symbol": "X1-AK52",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -2757,
+      "y": -6621,
+      "distance": 2986
+    },
+    {
+      "symbol": "X1-VX94",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2579,
+      "y": -1167,
+      "distance": 2991
+    },
+    {
+      "symbol": "X1-J55",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1498,
+      "y": -2044,
+      "distance": 2999
+    },
+    {
+      "symbol": "X1-PB85",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -1187,
+      "y": -2478,
+      "distance": 3032
+    },
+    {
+      "symbol": "X1-BV6",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1295,
+      "y": -2275,
+      "distance": 3037
+    },
+    {
+      "symbol": "X1-RP55",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -3347,
+      "y": -848,
+      "distance": 3057
+    },
+    {
+      "symbol": "X1-BF59",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -945,
+      "y": -3001,
+      "distance": 3064
+    },
+    {
+      "symbol": "X1-DR52",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1329,
+      "y": -2153,
+      "distance": 3074
+    },
+    {
+      "symbol": "X1-VG43",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -3639,
+      "y": -786,
+      "distance": 3081
+    },
+    {
+      "symbol": "X1-NS14",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -2510,
+      "y": -1083,
+      "distance": 3097
+    },
+    {
+      "symbol": "X1-TV19",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -787,
+      "y": -3901,
+      "distance": 3100
+    },
+    {
+      "symbol": "X1-GG44",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -3943,
+      "y": -743,
+      "distance": 3115
+    },
+    {
+      "symbol": "X1-HQ29",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -3774,
+      "y": -740,
+      "distance": 3119
+    },
+    {
+      "symbol": "X1-QK86",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -772,
+      "y": -3663,
+      "distance": 3121
+    },
+    {
+      "symbol": "X1-VD87",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4816,
+      "y": -859,
+      "distance": 3139
+    },
+    {
+      "symbol": "X1-KT57",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2272,
+      "y": -1162,
+      "distance": 3142
+    },
+    {
+      "symbol": "X1-GX4",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -1344,
+      "y": -5744,
+      "distance": 3167
+    },
+    {
+      "symbol": "X1-HB76",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1467,
+      "y": -1794,
+      "distance": 3180
+    },
+    {
+      "symbol": "X1-AK5",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1630,
+      "y": -1610,
+      "distance": 3185
+    },
+    {
+      "symbol": "X1-QG67",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2490,
+      "y": -921,
+      "distance": 3251
+    },
+    {
+      "symbol": "X1-JP30",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -758,
+      "y": -2960,
+      "distance": 3255
+    },
+    {
+      "symbol": "X1-CY54",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -7172,
+      "y": -4130,
+      "distance": 3296
+    },
+    {
+      "symbol": "X1-NX10",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4917,
+      "y": -703,
+      "distance": 3318
+    },
+    {
+      "symbol": "X1-NA86",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -5450,
+      "y": -6786,
+      "distance": 3320
+    },
+    {
+      "symbol": "X1-DF51",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -720,
+      "y": -4909,
+      "distance": 3337
+    },
+    {
+      "symbol": "X1-B5",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -625,
+      "y": -2968,
+      "distance": 3381
+    },
+    {
+      "symbol": "X1-AX53",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -6919,
+      "y": -2353,
+      "distance": 3385
+    },
+    {
+      "symbol": "X1-ZF16",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4570,
+      "y": -536,
+      "distance": 3391
+    },
+    {
+      "symbol": "X1-XR34",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -5524,
+      "y": -885,
+      "distance": 3393
+    },
+    {
+      "symbol": "X1-TN97",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2216,
+      "y": -875,
+      "distance": 3418
+    },
+    {
+      "symbol": "X1-PK21",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -881,
+      "y": -2174,
+      "distance": 3445
+    },
+    {
+      "symbol": "X1-MF77",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -5413,
+      "y": -762,
+      "distance": 3451
+    },
+    {
+      "symbol": "X1-PQ92",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -3825,
+      "y": -7312,
+      "distance": 3456
+    },
+    {
+      "symbol": "X1-DR90",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1778,
+      "y": -1109,
+      "distance": 3464
+    },
+    {
+      "symbol": "X1-KN86",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -418,
+      "y": -3801,
+      "distance": 3469
+    },
+    {
+      "symbol": "X1-MX19",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -1841,
+      "y": -1028,
+      "distance": 3491
+    },
+    {
+      "symbol": "X1-ZX13",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -640,
+      "y": -2487,
+      "distance": 3524
+    },
+    {
+      "symbol": "X1-DQ71",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4211,
+      "y": -301,
+      "distance": 3571
+    },
+    {
+      "symbol": "X1-QM14",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -334,
+      "y": -3280,
+      "distance": 3600
+    },
+    {
+      "symbol": "X1-JR61",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -1728,
+      "y": -6753,
+      "distance": 3612
+    },
+    {
+      "symbol": "X1-A80",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4700,
+      "y": -337,
+      "distance": 3613
+    },
+    {
+      "symbol": "X1-CU49",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -7164,
+      "y": -2324,
+      "distance": 3618
+    },
+    {
+      "symbol": "X1-TJ81",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -2107,
+      "y": -654,
+      "distance": 3664
+    },
+    {
+      "symbol": "X1-NT30",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -3615,
+      "y": -194,
+      "distance": 3673
+    },
+    {
+      "symbol": "X1-GS57",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -709,
+      "y": -5717,
+      "distance": 3682
+    },
+    {
+      "symbol": "X1-UT86",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2680,
+      "y": -377,
+      "distance": 3683
+    },
+    {
+      "symbol": "X1-UJ21",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -4740,
+      "y": -254,
+      "distance": 3703
+    },
+    {
+      "symbol": "X1-GN52",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -6123,
+      "y": -892,
+      "distance": 3714
+    },
+    {
+      "symbol": "X1-UK8",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -3948,
+      "y": -142,
+      "distance": 3716
+    },
+    {
+      "symbol": "X1-AR7",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -2139,
+      "y": -566,
+      "distance": 3726
+    },
+    {
+      "symbol": "X1-XG33",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -187,
+      "y": -3259,
+      "distance": 3748
+    },
+    {
+      "symbol": "X1-SQ24",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -510,
+      "y": -2221,
+      "distance": 3752
+    },
+    {
+      "symbol": "X1-CQ64",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -636,
+      "y": -1958,
+      "distance": 3765
+    },
+    {
+      "symbol": "X1-XQ27",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -5953,
+      "y": -698,
+      "distance": 3775
+    },
+    {
+      "symbol": "X1-BZ12",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2023,
+      "y": -570,
+      "distance": 3779
+    },
+    {
+      "symbol": "X1-HF97",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -6967,
+      "y": -6076,
+      "distance": 3796
+    },
+    {
+      "symbol": "X1-DR4",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -692,
+      "y": -1799,
+      "distance": 3800
+    },
+    {
+      "symbol": "X1-MJ64",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -1347,
+      "y": -6686,
+      "distance": 3802
+    },
+    {
+      "symbol": "X1-QY61",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -5826,
+      "y": -575,
+      "distance": 3812
+    },
+    {
+      "symbol": "X1-U67",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -143,
+      "y": -3075,
+      "distance": 3825
+    },
+    {
+      "symbol": "X1-S58",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -354,
+      "y": -5338,
+      "distance": 3831
+    },
+    {
+      "symbol": "X1-BM10",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -63,
+      "y": -4104,
+      "distance": 3832
+    },
+    {
+      "symbol": "X1-UV56",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1098,
+      "y": -1212,
+      "distance": 3844
+    },
+    {
+      "symbol": "X1-SN36",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -32,
+      "y": -3894,
+      "distance": 3855
+    },
+    {
+      "symbol": "X1-AJ70",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1411,
+      "y": -832,
+      "distance": 3909
+    },
+    {
+      "symbol": "X1-MP78",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -3461,
+      "y": 30,
+      "distance": 3910
+    },
+    {
+      "symbol": "X1-DV20",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -7788,
+      "y": -4394,
+      "distance": 3938
+    },
+    {
+      "symbol": "X1-CG23",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -19,
+      "y": -4604,
+      "distance": 3939
+    },
+    {
+      "symbol": "X1-CN26",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 49,
+      "y": -3616,
+      "distance": 3943
+    },
+    {
+      "symbol": "X1-VH17",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -5931,
+      "y": -7254,
+      "distance": 3965
+    },
+    {
+      "symbol": "X1-QX34",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -3944,
+      "y": 122,
+      "distance": 3979
+    },
+    {
+      "symbol": "X1-PH84",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -367,
+      "y": -2001,
+      "distance": 3979
+    },
+    {
+      "symbol": "X1-QQ9",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -1987,
+      "y": -353,
+      "distance": 3986
+    },
+    {
+      "symbol": "X1-HC13",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -37,
+      "y": -2807,
+      "distance": 3991
+    },
+    {
+      "symbol": "X1-BJ81",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -277,
+      "y": -2148,
+      "distance": 3994
+    },
+    {
+      "symbol": "X1-VH41",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1414,
+      "y": -701,
+      "distance": 4009
+    },
+    {
+      "symbol": "X1-GS32",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -3852,
+      "y": 153,
+      "distance": 4010
+    },
+    {
+      "symbol": "X1-KQ47",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -4203,
+      "y": -7865,
+      "distance": 4020
+    },
+    {
+      "symbol": "X1-FD64",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": -172,
+      "y": -2292,
+      "distance": 4031
+    },
+    {
+      "symbol": "X1-FD98",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -1305,
+      "y": -6976,
+      "distance": 4049
+    },
+    {
+      "symbol": "X1-GP56",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -260,
+      "y": -1961,
+      "distance": 4093
+    },
+    {
+      "symbol": "X1-US67",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -4512,
+      "y": 200,
+      "distance": 4105
+    },
+    {
+      "symbol": "X1-H43",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2218,
+      "y": -39,
+      "distance": 4167
+    },
+    {
+      "symbol": "X1-AQ55",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4049,
+      "y": 322,
+      "distance": 4182
+    },
+    {
+      "symbol": "X1-XV70",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -3671,
+      "y": 325,
+      "distance": 4188
+    },
+    {
+      "symbol": "X1-PN38",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1979,
+      "y": -114,
+      "distance": 4201
+    },
+    {
+      "symbol": "X1-ZN31",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1479,
+      "y": -383,
+      "distance": 4227
+    },
+    {
+      "symbol": "X1-AK48",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 338,
+      "y": -3680,
+      "distance": 4229
+    },
+    {
+      "symbol": "X1-TG47",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1403,
+      "y": -400,
+      "distance": 4257
+    },
+    {
+      "symbol": "X1-QX56",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2108,
+      "y": 37,
+      "distance": 4281
+    },
+    {
+      "symbol": "X1-VG22",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -3725,
+      "y": 436,
+      "distance": 4296
+    },
+    {
+      "symbol": "X1-UN87",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 345,
+      "y": -3096,
+      "distance": 4300
+    },
+    {
+      "symbol": "X1-HG51",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -6642,
+      "y": -7168,
+      "distance": 4307
+    },
+    {
+      "symbol": "X1-MB75",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -3999,
+      "y": -8167,
+      "distance": 4311
+    },
+    {
+      "symbol": "X1-BR84",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -3570,
+      "y": 443,
+      "distance": 4312
+    },
+    {
+      "symbol": "X1-XK45",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1481,
+      "y": -265,
+      "distance": 4323
+    },
+    {
+      "symbol": "X1-AA30",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -5455,
+      "y": 240,
+      "distance": 4387
+    },
+    {
+      "symbol": "X1-BA55",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -3140,
+      "y": 475,
+      "distance": 4396
+    },
+    {
+      "symbol": "X1-FG26",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "x": -15,
+      "y": -1764,
+      "distance": 4401
+    },
+    {
+      "symbol": "X1-KZ66",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1638,
+      "y": -73,
+      "distance": 4402
+    },
+    {
+      "symbol": "X1-KH13",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -915,
+      "y": -605,
+      "distance": 4405
+    },
+    {
+      "symbol": "X1-MC60",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 465,
+      "y": -4730,
+      "distance": 4439
+    },
+    {
+      "symbol": "X1-BD51",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "x": -6645,
+      "y": -355,
+      "distance": 4458
+    },
+    {
+      "symbol": "X1-CB30",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -7674,
+      "y": -1497,
+      "distance": 4462
+    },
+    {
+      "symbol": "X1-SS74",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4049,
+      "y": 608,
+      "distance": 4468
+    },
+    {
+      "symbol": "X1-KS52",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 582,
+      "y": -4206,
+      "distance": 4483
+    },
+    {
+      "symbol": "X1-NC92",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -8323,
+      "y": -3163,
+      "distance": 4490
+    },
+    {
+      "symbol": "X1-VR91",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 247,
+      "y": -2057,
+      "distance": 4509
+    },
+    {
+      "symbol": "X1-DZ47",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": 349,
+      "y": -2310,
+      "distance": 4510
+    },
+    {
+      "symbol": "X1-ZF8",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 571,
+      "y": -3058,
+      "distance": 4529
+    },
+    {
+      "symbol": "X1-VM63",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -3730,
+      "y": 670,
+      "distance": 4530
+    },
+    {
+      "symbol": "X1-FA19",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -237,
+      "y": -1161,
+      "distance": 4538
+    },
+    {
+      "symbol": "X1-RG48",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "VOID",
+      "x": -5172,
+      "y": 504,
+      "distance": 4546
+    },
+    {
+      "symbol": "X1-VP97",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -3357,
+      "y": 661,
+      "distance": 4549
+    },
+    {
+      "symbol": "X1-XS73",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 319,
+      "y": -2089,
+      "distance": 4562
+    },
+    {
+      "symbol": "X1-DU56",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1595,
+      "y": 113,
+      "distance": 4584
+    },
+    {
+      "symbol": "X1-JT6",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -2607,
+      "y": 562,
+      "distance": 4601
+    },
+    {
+      "symbol": "X1-VS35",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1784,
+      "y": 238,
+      "distance": 4603
+    },
+    {
+      "symbol": "X1-XD58",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 654,
+      "y": -3096,
+      "distance": 4604
+    },
+    {
+      "symbol": "X1-PN49",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 674,
+      "y": -4574,
+      "distance": 4617
+    },
+    {
+      "symbol": "X1-M80",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -3304,
+      "y": 729,
+      "distance": 4623
+    },
+    {
+      "symbol": "X1-AP20",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -689,
+      "y": -501,
+      "distance": 4636
+    },
+    {
+      "symbol": "X1-YY40",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 740,
+      "y": -3231,
+      "distance": 4669
+    },
+    {
+      "symbol": "X1-VQ85",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": 180,
+      "y": -1560,
+      "distance": 4671
+    },
+    {
+      "symbol": "X1-AV49",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1073,
+      "y": -121,
+      "distance": 4677
+    },
+    {
+      "symbol": "X1-PP78",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -662,
+      "y": -463,
+      "distance": 4682
+    },
+    {
+      "symbol": "X1-UN7",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1145,
+      "y": -51,
+      "distance": 4691
+    },
+    {
+      "symbol": "X1-CA33",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": 44,
+      "y": -6455,
+      "distance": 4712
+    },
+    {
+      "symbol": "X1-SX58",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1199,
+      "y": 27,
+      "distance": 4723
+    },
+    {
+      "symbol": "X1-FY53",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -534,
+      "y": -510,
+      "distance": 4738
+    },
+    {
+      "symbol": "X1-SX32",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 830,
+      "y": -4299,
+      "distance": 4738
+    },
+    {
+      "symbol": "X1-VX72",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -219,
+      "y": -848,
+      "distance": 4744
+    },
+    {
+      "symbol": "X1-QD98",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "VOID",
+      "x": -4776,
+      "y": 810,
+      "distance": 4751
+    },
+    {
+      "symbol": "X1-G21",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "x": -3664,
+      "y": -8611,
+      "distance": 4759
+    },
+    {
+      "symbol": "X1-CX17",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1814,
+      "y": 440,
+      "distance": 4771
+    },
+    {
+      "symbol": "X1-NZ49",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 501,
+      "y": -5741,
+      "distance": 4775
+    },
+    {
+      "symbol": "X1-VJ21",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -166,
+      "y": -6850,
+      "distance": 4775
+    },
+    {
+      "symbol": "X1-HB90",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1065,
+      "y": 0,
+      "distance": 4779
+    },
+    {
+      "symbol": "X1-VX92",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1812,
+      "y": 458,
+      "distance": 4788
+    },
+    {
+      "symbol": "X1-TK26",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -823,
+      "y": -162,
+      "distance": 4800
+    },
+    {
+      "symbol": "X1-BF76",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -377,
+      "y": -576,
+      "distance": 4805
+    },
+    {
+      "symbol": "X1-XG5",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "VOID",
+      "x": -2570,
+      "y": 770,
+      "distance": 4811
+    },
+    {
+      "symbol": "X1-RQ60",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -1069,
+      "y": -7765,
+      "distance": 4818
+    },
+    {
+      "symbol": "X1-QC39",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1761,
+      "y": 479,
+      "distance": 4829
+    },
+    {
+      "symbol": "X1-A36",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -741,
+      "y": -180,
+      "distance": 4839
+    },
+    {
+      "symbol": "X1-ZM91",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -4313,
+      "y": 968,
+      "distance": 4844
+    },
+    {
+      "symbol": "X1-CF19",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 606,
+      "y": -2047,
+      "distance": 4844
+    },
+    {
+      "symbol": "X1-SK3",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 734,
+      "y": -2402,
+      "distance": 4845
+    },
+    {
+      "symbol": "X1-BK95",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1127,
+      "y": 130,
+      "distance": 4849
+    },
+    {
+      "symbol": "X1-UK92",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -475,
+      "y": -378,
+      "distance": 4873
+    },
+    {
+      "symbol": "X1-CS91",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -1219,
+      "y": 263,
+      "distance": 4908
+    },
+    {
+      "symbol": "X1-FJ75",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -2591,
+      "y": 879,
+      "distance": 4910
+    },
+    {
+      "symbol": "X1-NJ15",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "VOID",
+      "x": -5067,
+      "y": 910,
+      "distance": 4911
+    },
+    {
+      "symbol": "X1-NH30",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 1023,
+      "y": -3990,
+      "distance": 4912
+    },
+    {
+      "symbol": "X1-JN9",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -197,
+      "y": -608,
+      "distance": 4917
+    },
+    {
+      "symbol": "X1-CF69",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "x": -4720,
+      "y": 992,
+      "distance": 4920
+    },
+    {
+      "symbol": "X1-BP78",
+      "sectorSymbol": "X1",
+      "type": "RED_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -454,
+      "y": -317,
+      "distance": 4931
+    },
+    {
+      "symbol": "X1-DA29",
+      "sectorSymbol": "X1",
+      "type": "YOUNG_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 1042,
+      "y": -3510,
+      "distance": 4941
+    },
+    {
+      "symbol": "X1-CV34",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 808,
+      "y": -5456,
+      "distance": 4960
+    },
+    {
+      "symbol": "X1-SJ65",
+      "sectorSymbol": "X1",
+      "type": "ORANGE_STAR",
+      "factionSymbol": "COSMIC",
+      "x": -440,
+      "y": -258,
+      "distance": 4983
+    },
+    {
+      "symbol": "X1-RH18",
+      "sectorSymbol": "X1",
+      "type": "BLUE_STAR",
+      "factionSymbol": "QUANTUM",
+      "x": 1083,
+      "y": -3432,
+      "distance": 4988
+    }
+  ]
+}

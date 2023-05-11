@@ -25,6 +25,9 @@ export const appRouter = router({
             waypoints,
             ships
         }
+    }),
+    getSystems: publicProcedure.query(async () => {
+        return prisma.system.findMany()
     })
 });
 

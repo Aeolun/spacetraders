@@ -11,9 +11,8 @@ import {
     DisplayObject, Graphics
 } from 'pixi.js';
 import { GlowFilter } from '@pixi/filter-glow'
-import {Rectangle} from "@pixi/core";
+import {IPointData, Rectangle} from "@pixi/core";
 import { Viewport } from 'pixi-viewport'
-import systems from '@spacetraders/backend/systems.json'
 
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '@spacetraders/backend';
@@ -75,6 +74,8 @@ systemView
     .wheel()
     .decelerate()
 
+const references = {}
+
 // load the texture we need
 const sheet: Spritesheet = await Assets.load('stars.json');
 const planetsheet: Spritesheet = await Assets.load('planets.json');
@@ -93,17 +94,14 @@ app.stage.hitArea = app.screen;
 
 const uiOverlay = new Container()
 
-const bgContainer = new TilingSprite(bgTexture, 4096, 4096);
-
-let minX = 0, minY = 0, maxX = 0, maxY = 0
-for(const starData of systems) {
-    if (starData.x < minX) minX = starData.x
-    if (starData.x > maxX) maxX = starData.x
-    if (starData.y < minY) minY = starData.y
-    if (starData.y > maxY) maxY = starData.y
-}
-
-const references = {}
+const currentCoordinate = new BitmapText('0, 0', {
+    fontName: 'sans-serif',
+    fontSize: 18,
+    align: 'right',
+})
+currentCoordinate.x = 32
+currentCoordinate.y = 64
+uiOverlay.addChild(currentCoordinate)
 
 function makeInteractiveAndGlowy(item: Container<DisplayObject>, options?: {
     onMouseOver?: () => void,
@@ -125,185 +123,231 @@ function makeInteractiveAndGlowy(item: Container<DisplayObject>, options?: {
     })
 }
 
-for(const starData of systems) {
-    let texture = sheet.textures[`planets/tile/${starData.type}.png`]
+const bgContainer = new TilingSprite(bgTexture, 4096, 4096);
 
-    const star = new Sprite(texture)
-    const text = new BitmapText(starData.symbol, {
-        fontName: 'sans-serif',
-        fontSize: 18,
-        align: 'right',
-    })
+let minX = 0, minY = 0, maxX = 0, maxY = 0
+const loadSystems = async () => {
+    const systems = await trpc.getSystems.query()
 
-    const starContainer = new Container();
-    starContainer.addChild(star)
-    starContainer.addChild(text)
+    for(const starData of systems) {
+        if (starData.x < minX) minX = starData.x
+        if (starData.x > maxX) maxX = starData.x
+        if (starData.y < minY) minY = starData.y
+        if (starData.y > maxY) maxY = starData.y
+    }
 
-    makeInteractiveAndGlowy(starContainer)
+    for(const starData of systems) {
+        let texture = sheet.textures[`planets/tile/${starData.type}.png`]
 
-    starContainer.on('click', () => {
-        trpc.dataForDisplay.query({
-            system: starData.symbol,
-        }).then(result => {
-            console.log('result from query', result)
-            universeView.visible = false
-            systemView.visible = true
+        const star = new Sprite(texture)
+        star.pivot = {
+            x: 32,
+            y: 32
+        }
+        const text = new BitmapText(starData.name+'\n('+starData.symbol+')', {
+            fontName: 'sans-serif',
+            fontSize: 18,
+            align: 'right',
+        })
 
-            let minX = 0, minY = 0
-            result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
-                if (item.x < minX) {
-                    minX = item.x
-                }
-                if (item.y < minY) {
-                    minY = item.y
-                }
-            })
-            minX = Math.abs(minX * systemScale)
-            minY = Math.abs(minY * systemScale)
+        const starContainer = new Container();
+        starContainer.addChild(star)
+        starContainer.addChild(text)
 
-            const star = new Sprite(texture)
-            star.x = minX
-            star.y = minY
-            star.pivot = {
-                x: 32,
-                y: 32
-            }
-            systemView.addChild(star)
+        makeInteractiveAndGlowy(starContainer)
 
-            const backButton = new BitmapText('Back', {
-                fontName: 'sans-serif',
-                fontSize: 32,
-                align: 'right',
-            })
-            makeInteractiveAndGlowy(backButton)
-            backButton.x = 32
-            backButton.y = 32
-            backButton.on('click', () => {
-                universeView.visible = true
-                systemView.visible = false
-                systemView.removeChildren()
-            })
-            uiOverlay.addChild(backButton)
+        starContainer.on('click', () => {
+            trpc.dataForDisplay.query({
+                system: starData.symbol,
+            }).then(result => {
+                console.log('result from query', result)
+                universeView.visible = false
+                systemView.visible = true
 
-
-
-            const waypointShips: Record<string, number> = {}
-            result.ships.forEach(ship => {
-                const shipGroup = new Container()
-
-                if (waypointShips[ship.currentWaypoint.symbol] === undefined) {
-                    waypointShips[ship.currentWaypoint.symbol] = 0
-                } else {
-                    waypointShips[ship.currentWaypoint.symbol]++
-                }
-
-                const itemSprite = new Sprite(spaceshipTexture)
-                itemSprite.pivot = {
-                    x: 32,
-                    y: 32
-                }
-                itemSprite.scale = { x: 0.5, y: 0.5 }
-                console.log(waypointShips[ship.currentWaypoint.symbol]);
-                shipGroup.x = ship.currentWaypoint.x * systemScale + (32 * waypointShips[ship.currentWaypoint.symbol]) + minX
-                shipGroup.y = ship.currentWaypoint.y * systemScale + 80 + minY
-                shipGroup.addChild(itemSprite)
-
-                const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
-                    fontName: 'sans-serif',
-                    fontSize: 16,
-                    align: 'right',
-                })
-                text.visible = false
-                text.x = 0
-                text.y = 32
-                shipGroup.addChild(text);
-
-                makeInteractiveAndGlowy(shipGroup, {
-                    onMouseOver: () => {
-                        text.visible = true
-                    },
-                    onMouseOut: () => {
-                        text.visible = false
+                let minX = 0, minY = 0
+                result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+                    if (item.x < minX) {
+                        minX = item.x
+                    }
+                    if (item.y < minY) {
+                        minY = item.y
                     }
                 })
+                minX = Math.abs(minX * systemScale)
+                minY = Math.abs(minY * systemScale)
 
-                systemView.addChild(shipGroup)
-            })
-
-            result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
-                const orbit = new Graphics()
-                orbit.lineStyle({
-                    width: 2,
-                    color: 0x444444
-                })
-                orbit.drawCircle(minX, minY, Math.sqrt(Math.pow(item.x*systemScale, 2) + Math.pow(item.y*systemScale, 2)))
-                systemView.addChild(orbit)
-
-                const itemGroup = new Container()
-                makeInteractiveAndGlowy(itemGroup)
-
-                const itemSprite = new Sprite(planetsheet.textures[`planets/tile/${item.type}.png`])
-                itemSprite.pivot = {
+                const star = new Sprite(texture)
+                star.x = minX
+                star.y = minY
+                star.pivot = {
                     x: 32,
                     y: 32
                 }
-                itemGroup.x = item.x * systemScale + minX
-                itemGroup.y = item.y * systemScale + minY
-                itemGroup.addChild(itemSprite)
+                systemView.addChild(star)
 
-                const text = new BitmapText(item.symbol.replace(starData.symbol+'-', '') + ' - ' + item.type, {
+                const backButton = new BitmapText('Back', {
                     fontName: 'sans-serif',
-                    fontSize: 16,
+                    fontSize: 32,
                     align: 'right',
                 })
-                text.x = 40
-                text.y = -8
-                itemGroup.addChild(text);
+                makeInteractiveAndGlowy(backButton)
+                backButton.x = 32
+                backButton.y = 32
+                backButton.on('click', () => {
+                    universeView.visible = true
+                    systemView.visible = false
+                    systemView.removeChildren()
+                })
+                uiOverlay.addChild(backButton)
 
 
-                result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
-                    const orbitingGroup = new Container()
-                    makeInteractiveAndGlowy(orbitingGroup)
 
-                    const orbitingSprite = new Sprite(planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])
-                    orbitingSprite.pivot = {
+                const waypointShips: Record<string, number> = {}
+                result.ships.forEach(ship => {
+                    const shipGroup = new Container()
+
+                    if (waypointShips[ship.currentWaypoint.symbol] === undefined) {
+                        waypointShips[ship.currentWaypoint.symbol] = 0
+                    } else {
+                        waypointShips[ship.currentWaypoint.symbol]++
+                    }
+
+                    const itemSprite = new Sprite(spaceshipTexture)
+                    itemSprite.pivot = {
                         x: 32,
                         y: 32
                     }
-                    orbitingSprite.scale = {x: 0.75, y: 0.75}
-                    orbitingGroup.x = item.x * systemScale + 32 + minX
-                    orbitingGroup.y = item.y * systemScale + 48 + 64*index + minY
-                    orbitingGroup.addChild(orbitingSprite)
+                    itemSprite.scale = { x: 0.5, y: 0.5 }
+                    console.log(waypointShips[ship.currentWaypoint.symbol]);
+                    shipGroup.x = ship.currentWaypoint.x * systemScale + (32 * waypointShips[ship.currentWaypoint.symbol]) + minX
+                    shipGroup.y = ship.currentWaypoint.y * systemScale + 80 + minY
+                    shipGroup.addChild(itemSprite)
 
-                    const orbitingText = new BitmapText(orbitingThing.symbol.replace(starData.symbol+'-', '') + ' - ' + orbitingThing.type, {
+                    const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
                         fontName: 'sans-serif',
                         fontSize: 16,
                         align: 'right',
                     })
-                    orbitingText.x = 24
-                    orbitingText.y = -8
-                    orbitingGroup.addChild(orbitingText)
+                    text.visible = false
+                    text.x = 0
+                    text.y = 32
+                    shipGroup.addChild(text);
 
-                    systemView.addChild(orbitingGroup)
+                    makeInteractiveAndGlowy(shipGroup, {
+                        onMouseOver: () => {
+                            text.visible = true
+                        },
+                        onMouseOut: () => {
+                            text.visible = false
+                        }
+                    })
+
+                    systemView.addChild(shipGroup)
                 })
 
-                systemView.addChild(itemGroup)
+                result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+                    const orbit = new Graphics()
+                    orbit.lineStyle({
+                        width: 2,
+                        color: 0x444444
+                    })
+                    orbit.drawCircle(minX, minY, Math.sqrt(Math.pow(item.x*systemScale, 2) + Math.pow(item.y*systemScale, 2)))
+                    systemView.addChild(orbit)
+
+                    const itemGroup = new Container()
+                    makeInteractiveAndGlowy(itemGroup)
+
+                    const itemSprite = new Sprite(planetsheet.textures[`planets/tile/${item.type}.png`])
+                    itemSprite.pivot = {
+                        x: 32,
+                        y: 32
+                    }
+                    itemGroup.x = item.x * systemScale + minX
+                    itemGroup.y = item.y * systemScale + minY
+                    itemGroup.addChild(itemSprite)
+
+                    const text = new BitmapText(item.symbol.replace(starData.symbol+'-', '') + ' - ' + item.type, {
+                        fontName: 'sans-serif',
+                        fontSize: 16,
+                        align: 'right',
+                    })
+                    text.x = 40
+                    text.y = -8
+                    itemGroup.addChild(text);
+
+
+                    result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
+                        const orbitingGroup = new Container()
+                        makeInteractiveAndGlowy(orbitingGroup)
+
+                        const orbitingSprite = new Sprite(planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])
+                        orbitingSprite.pivot = {
+                            x: 32,
+                            y: 32
+                        }
+                        orbitingSprite.scale = {x: 0.75, y: 0.75}
+                        orbitingGroup.x = item.x * systemScale + 32 + minX
+                        orbitingGroup.y = item.y * systemScale + 48 + 64*index + minY
+                        orbitingGroup.addChild(orbitingSprite)
+
+                        const orbitingText = new BitmapText(orbitingThing.symbol.replace(starData.symbol+'-', '') + ' - ' + orbitingThing.type, {
+                            fontName: 'sans-serif',
+                            fontSize: 16,
+                            align: 'right',
+                        })
+                        orbitingText.x = 24
+                        orbitingText.y = -8
+                        orbitingGroup.addChild(orbitingText)
+
+                        systemView.addChild(orbitingGroup)
+                    })
+
+                    systemView.addChild(itemGroup)
+                })
+
+                systemView.fit(true)
             })
-
-            systemView.fit(true)
         })
+
+        starContainer.x = (starData.x+Math.abs(minX))/(maxX-minX)*totalSize
+        starContainer.y = (starData.y+Math.abs(minY))/(maxY-minY)*totalSize
+
+        text.x = 0
+        text.y = 70
+        universeView.addChild(starContainer)
+        references[starData.symbol] = starContainer
+    }
+
+    const graphics = new Graphics()
+    graphics.lineStyle({
+        width: 15,
+        color: 0x0077FF
     })
+    const multiFactor = 5000 / (maxX-minX) * totalSize
+    graphics.drawCircle(references['X1-VU95'].x, references['X1-VU95'].y, multiFactor)
+    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    graphics.lineTo(references['X1-FS18'].x, references['X1-FS18'].y)
+    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    graphics.lineTo(references['X1-AA92'].x, references['X1-AA92'].y)
+    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    graphics.lineTo(references['X1-JQ84'].x, references['X1-JQ84'].y)
 
-    starContainer.x = (starData.x+Math.abs(minX))/(maxX-minX)*totalSize
-    starContainer.y = (starData.y+Math.abs(minY))/(maxY-minY)*totalSize
 
-    text.x = 0
-    text.y = 70
-    universeView.addChild(starContainer)
-    references[starData.symbol] = starContainer
+    universeView.addChild(graphics)
+
+    universeView.moveCenter(references['X1-VU95'].x, references['X1-VU95'].y)
 }
 
-universeView.moveCenter(references['X1-VU95'].x, references['X1-VU95'].y)
+const worldCoordinateToOriginal = (point: IPointData) => {
+    const multiFactor = (maxX-minX) / totalSize
+    return {
+        x: Math.round(minX + (point.x * multiFactor)),
+        y: Math.round(minY + (point.y * multiFactor))
+    }
+}
+
+loadSystems()
+
 app.stage.addChild(bgContainer)
 // Add the bunny to the scene we are building
 app.stage.addChild(universeView);
@@ -312,6 +356,9 @@ app.stage.addChild(uiOverlay);
 
 // Listen for frame updates
 app.ticker.add(() => {
+    const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset))
+    currentCoordinate.text = worldCoordinates.x + ', ' + worldCoordinates.y
+
     // each frame we spin the bunny around a bit
     const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
     Object.values(references).forEach(ref => {

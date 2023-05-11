@@ -9,7 +9,9 @@ import api from '@app/lib/apis'
 
 import { config } from 'dotenv'
 import fs from "fs";
+import { generateName } from "@app/lib/generate-name";
 import {updateShips} from "@app/ship/updateShips";
+import {prisma} from "@app/prisma";
 
 config();
 
@@ -23,13 +25,28 @@ const init = async () => {
     // } catch(error) {
     //     console.error(error.response.data)
     // }
-
     try {
         await updateShips()
     } catch(error) {
         console.log(error?.response?.data ? JSON.stringify(error.response.data, null, 2) : error.toString())
         throw error
     }
+
+    const jumpData = await api.systems.getJumpGate('X1-VU95', 'X1-VU95-02039Z')
+    fs.writeFileSync('jump.json', JSON.stringify(jumpData.data.data))
+
+    // const allSystems = await prisma.system.findMany({})
+    // await Promise.all(allSystems.map(async (s) => {
+    //     await prisma.system.update({
+    //         data: {
+    //             name: generateName()
+    //         },
+    //         where: {
+    //             symbol: s.symbol
+    //         }
+    //     })
+    // }))
+    // console.log("Generated names for all systems")
     // await seedSystems()
 
     // const navigate = await fleet.navigateShip('PHANTASM-1', {
@@ -105,8 +122,8 @@ const httpServer = createHTTPServer({
 })
 httpServer.listen(4001)
 init()
-// doStuff('PHANTASM-1')
-// doStuff('PHANTASM-2')
-// doStuff('PHANTASM-3')
-// doStuff('PHANTASM-4')
-// doStuff('PHANTASM-5')
+doStuff('PHANTASM-1')
+doStuff('PHANTASM-2')
+doStuff('PHANTASM-3')
+doStuff('PHANTASM-4')
+doStuff('PHANTASM-5')

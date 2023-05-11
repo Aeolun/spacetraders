@@ -50,6 +50,7 @@ enum SystemType {
 model System {
   symbol String     @id
   sectorSymbol             String
+  name String?
   sector Sector     @relation(fields: [sectorSymbol], references: [symbol])
   type   SystemType
   x      Float
