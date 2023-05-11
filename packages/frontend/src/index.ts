@@ -152,7 +152,7 @@ for(const starData of systems) {
             })
             makeInteractiveAndGlowy(backButton)
             backButton.x = 32
-            backButton.y = 1200
+            backButton.y = 32
             backButton.on('click', () => {
                 universeView.visible = true
                 systemView.visible = false

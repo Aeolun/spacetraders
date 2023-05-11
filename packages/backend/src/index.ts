@@ -5,14 +5,15 @@ export type { AppRouter } from '@app/server'
 import { appRouter } from '@app/server'
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import cors from 'cors'
+import api from '@app/lib/apis'
 
 import { config } from 'dotenv'
+import fs from "fs";
+import {updateShips} from "@app/ship/updateShips";
 
 config();
 
-
-const doStuff = async () => {
-
+const init = async () => {
     // try {
     //     const result = await def.register({
     //         symbol: "PHANTASM",
@@ -23,7 +24,12 @@ const doStuff = async () => {
     //     console.error(error.response.data)
     // }
 
-
+    try {
+        await updateShips()
+    } catch(error) {
+        console.log(error?.response?.data ? JSON.stringify(error.response.data, null, 2) : error.toString())
+        throw error
+    }
     // await seedSystems()
 
     // const navigate = await fleet.navigateShip('PHANTASM-1', {
@@ -33,7 +39,15 @@ const doStuff = async () => {
 
     //await waypointScanAndRecord("PHANTASM-1")
 
-    const ship = new Ship('PHANTASM-1')
+    // const newShip = await api.fleet.purchaseShip({
+    //     shipType: "SHIP_ORE_HOUND",
+    //     waypointSymbol: "X1-VU95-02777Z"
+    // })
+    // fs.writeFileSync(`./newship${newShip.data.data.ship.symbol}.json`, JSON.stringify(newShip.data.data, null, 2))
+}
+
+const doStuff = async (shipReg: string) => {
+    const ship = new Ship(shipReg)
     let started = false
 
     while(true) {
@@ -47,7 +61,8 @@ const doStuff = async () => {
             let extractResult: ExtractResources201Response | undefined;
             let diamondSurvey: Survey | undefined = undefined
             do {
-                if (!diamondSurvey) {
+                await ship.orbit()
+                if (!diamondSurvey && shipReg !== 'PHANTASM-2') {
                     const survey = await ship.survey();
                     diamondSurvey = survey.data.data.surveys.find(sur => {
                         const goodOnes = sur.deposits.filter(d => d.symbol === 'DIAMONDS' || d.symbol === 'GOLD_ORE' || d.symbol === 'PLATINUM_ORE' || d.symbol === 'SILVER_ORE' || d.symbol === 'ALUMINUM_ORE').length
@@ -62,7 +77,7 @@ const doStuff = async () => {
                 extractResult = (await ship.extract(diamondSurvey))
                 await ship.dock()
                 await ship.sellAllCargo()
-                await ship.orbit()
+
             } while (extractResult && extractResult.data.cargo.units < extractResult.data.cargo.capacity)
 
             // for (const market of ['X1-VU95-44008F', 'X1-VU95-02777Z', 'X1-VU95-76575B', 'X1-VU95-12753B', 'X1-VU95-79922E', 'X1-VU95-25701D', 'X1-VU95-90460B']) {
@@ -75,7 +90,7 @@ const doStuff = async () => {
             // }
             // break;
         } catch(error) {
-            console.log("Unexpected issue in agent, restarting")
+            console.log("Unexpected issue in agent, restarting: ",error?.response?.data ? error?.response?.data : error.toString())
             started = false
         }
     }
@@ -89,5 +104,9 @@ const httpServer = createHTTPServer({
 
 })
 httpServer.listen(4001)
-
-doStuff()
+init()
+doStuff('PHANTASM-1')
+doStuff('PHANTASM-2')
+doStuff('PHANTASM-3')
+doStuff('PHANTASM-4')
+doStuff('PHANTASM-5')
