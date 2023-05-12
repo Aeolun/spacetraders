@@ -95,6 +95,7 @@ model Waypoint {
 
   shipsAtWaypoint Ship[] @relation("currentWaypoint")
   shipsEnroute    Ship[] @relation("destinationWaypoint")
+  shipsDeparted    Ship[] @relation("departureWaypoint")
 
   factionsWithHeadquarters Faction[] @relation("headquarters")
 }
@@ -156,6 +157,7 @@ model ShipCargo {
 
 model Ship {
   symbol        String   @id
+  agent         String @default("PHANTASM")
   name          String
   factionSymbol String
   role          ShipRole
@@ -167,6 +169,8 @@ model Ship {
 
   destinationWaypointSymbol String?
   destinationWaypoint       Waypoint? @relation("destinationWaypoint", fields: [destinationWaypointSymbol], references: [symbol])
+  departureWaypointSymbol String?
+  departureWaypoint       Waypoint? @relation("departureWaypoint", fields: [departureWaypointSymbol], references: [symbol])
   departureOn               DateTime?
   arrivalOn                 DateTime?
 

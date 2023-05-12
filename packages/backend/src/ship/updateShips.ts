@@ -16,6 +16,7 @@ export async function updateShips() {
             currentWaypointSymbol: ship.nav.waypointSymbol,
 
             destinationWaypointSymbol: ship.nav.route.destination.symbol,
+            departureWaypointSymbol: ship.nav.route.departure.symbol,
             departureOn: ship.nav.route.departureTime,
             arrivalOn: ship.nav.route.arrival,
 
@@ -42,15 +43,21 @@ export async function processNav(shipSymbol: string, nav: ShipNav) {
         currentWaypointSymbol: nav.waypointSymbol,
 
         destinationWaypointSymbol: nav.route.destination.symbol,
+        departureWaypointSymbol: nav.route.departure.symbol,
         departureOn: nav.route.departureTime,
         arrivalOn: nav.route.arrival,
 
         navStatus: nav.status,
         flightMode: nav.flightMode,
     }
-    await prisma.ship.update({
+    return await prisma.ship.update({
         where: {
             symbol: shipSymbol,
+        },
+        include: {
+            currentWaypoint: true,
+            destinationWaypoint: true,
+            departureWaypoint: true,
         },
         data: shipData
     })

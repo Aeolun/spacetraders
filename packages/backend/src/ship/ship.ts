@@ -4,6 +4,7 @@ import api from "@app/lib/apis";
 import {storeWaypointScan} from "@app/ship/storeResults";
 import fs from "fs";
 import {ExtractResources201Response, ExtractResources201ResponseData, Survey} from "spacetraders-sdk";
+import {processNav} from "@app/ship/updateShips";
 
 type CooldownKind = 'reactor'
 
@@ -54,7 +55,7 @@ export class Ship {
         }
     }
 
-    async navigate(waypoint: string) {
+    async navigate(waypoint: string, waitForTimeout = true) {
         try {
             const res = await throttle(() => {
                 this.log(`Navigating ship to ${waypoint}`)
@@ -66,14 +67,22 @@ export class Ship {
             this.currentSystemSymbol = res.data.data.nav.route.destination.systemSymbol;
             this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol
 
-            this.log(`Fuel used ${res.data.data.fuel.consumed.amount}, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
+            this.log(`Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
 
-            const arrivalTime = new Date(res.data.data.nav.route.arrival)
-            const waitTime = arrivalTime.getTime() - Date.now() + 200
-            this.log(`Waiting ${waitTime} ms until arrival`)
-            return new Promise((resolve, reject) => {
-                setTimeout(resolve, waitTime)
-            })
+            const navResult = await processNav(this.symbol, res.data.data.nav)
+
+            if (waitForTimeout) {
+                const arrivalTime = new Date(res.data.data.nav.route.arrival)
+                const waitTime = arrivalTime.getTime() - Date.now() + 200
+                this.log(`Waiting ${waitTime} ms until arrival`)
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(navResult)
+                    }, waitTime)
+                })
+            } else {
+                return navResult
+            }
         } catch(error) {
             if (error.response?.data?.error?.code === 4204) {
                 this.log(`Already at ${waypoint}`)

@@ -8,7 +8,8 @@
     "target": "esnext",
     "lib": ["ES2021"],
     "paths": {
-      "@app/*": ["src/*"]
+      "@app/*": ["src/*"],
     }
   },
+  "include": ["**/*"]
 }

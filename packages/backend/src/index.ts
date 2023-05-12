@@ -12,8 +12,10 @@ import fs from "fs";
 import { generateName } from "@app/lib/generate-name";
 import {updateShips} from "@app/ship/updateShips";
 import {prisma} from "@app/prisma";
+import {defaultShipStore, ShipStore} from "@app/ship/shipStore";
 
 config();
+
 
 const init = async () => {
     // try {
@@ -27,6 +29,15 @@ const init = async () => {
     // }
     try {
         await updateShips()
+        const allShips = await prisma.ship.findMany({
+            where: {
+                agent: 'PHANTASM'
+            }
+        })
+        allShips.forEach(ship => {
+            defaultShipStore.addShip(ship.symbol)
+        })
+        console.log("All ships updated")
     } catch(error) {
         console.log(error?.response?.data ? JSON.stringify(error.response.data, null, 2) : error.toString())
         throw error
@@ -63,7 +74,7 @@ const init = async () => {
     // fs.writeFileSync(`./newship${newShip.data.data.ship.symbol}.json`, JSON.stringify(newShip.data.data, null, 2))
 }
 
-const doStuff = async (shipReg: string) => {
+const mineLogic = async (shipReg: string) => {
     const ship = new Ship(shipReg)
     let started = false
 
@@ -122,8 +133,8 @@ const httpServer = createHTTPServer({
 })
 httpServer.listen(4001)
 init()
-doStuff('PHANTASM-1')
-doStuff('PHANTASM-2')
-doStuff('PHANTASM-3')
-doStuff('PHANTASM-4')
-doStuff('PHANTASM-5')
+// doStuff('PHANTASM-1')
+// doStuff('PHANTASM-2')
+// doStuff('PHANTASM-3')
+// doStuff('PHANTASM-4')
+// doStuff('PHANTASM-5')

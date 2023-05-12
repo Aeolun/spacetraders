@@ -1,6 +1,7 @@
 import {publicProcedure, router} from './trpc';
 import z from 'zod'
 import {prisma} from "@app/prisma";
+import {defaultShipStore} from "@app/ship/shipStore";
 
 export const appRouter = router({
     dataForDisplay: publicProcedure.input(z.object({
@@ -17,7 +18,8 @@ export const appRouter = router({
             },
             include: {
                 currentWaypoint: true,
-                destinationWaypoint: true
+                destinationWaypoint: true,
+                departureWaypoint: true,
             }
         })
 
@@ -28,6 +30,13 @@ export const appRouter = router({
     }),
     getSystems: publicProcedure.query(async () => {
         return prisma.system.findMany()
+    }),
+    instructNavigate: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        waypointSymbol: z.string()
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.navigate(input.waypointSymbol, false)
     })
 });
 

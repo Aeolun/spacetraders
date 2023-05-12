@@ -221,28 +221,28 @@ var require_earcut = __commonJS({
       var hasHoles = holeIndices && holeIndices.length, outerLen = hasHoles ? holeIndices[0] * dim : data.length, outerNode = linkedList(data, 0, outerLen, dim, true), triangles = [];
       if (!outerNode || outerNode.next === outerNode.prev)
         return triangles;
-      var minX2, minY2, maxX2, maxY2, x2, y2, invSize;
+      var minX, minY, maxX, maxY, x2, y2, invSize;
       if (hasHoles)
         outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
       if (data.length > 80 * dim) {
-        minX2 = maxX2 = data[0];
-        minY2 = maxY2 = data[1];
+        minX = maxX = data[0];
+        minY = maxY = data[1];
         for (var i2 = dim; i2 < outerLen; i2 += dim) {
           x2 = data[i2];
           y2 = data[i2 + 1];
-          if (x2 < minX2)
-            minX2 = x2;
-          if (y2 < minY2)
-            minY2 = y2;
-          if (x2 > maxX2)
-            maxX2 = x2;
-          if (y2 > maxY2)
-            maxY2 = y2;
+          if (x2 < minX)
+            minX = x2;
+          if (y2 < minY)
+            minY = y2;
+          if (x2 > maxX)
+            maxX = x2;
+          if (y2 > maxY)
+            maxY = y2;
         }
-        invSize = Math.max(maxX2 - minX2, maxY2 - minY2);
+        invSize = Math.max(maxX - minX, maxY - minY);
         invSize = invSize !== 0 ? 32767 / invSize : 0;
       }
-      earcutLinked(outerNode, triangles, dim, minX2, minY2, invSize, 0);
+      earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
       return triangles;
     }
     function linkedList(data, start, end, dim, clockwise) {
@@ -280,16 +280,16 @@ var require_earcut = __commonJS({
       } while (again || p3 !== end);
       return end;
     }
-    function earcutLinked(ear, triangles, dim, minX2, minY2, invSize, pass) {
+    function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
       if (!ear)
         return;
       if (!pass && invSize)
-        indexCurve(ear, minX2, minY2, invSize);
+        indexCurve(ear, minX, minY, invSize);
       var stop = ear, prev, next;
       while (ear.prev !== ear.next) {
         prev = ear.prev;
         next = ear.next;
-        if (invSize ? isEarHashed(ear, minX2, minY2, invSize) : isEar(ear)) {
+        if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
           triangles.push(prev.i / dim | 0);
           triangles.push(ear.i / dim | 0);
           triangles.push(next.i / dim | 0);
@@ -301,12 +301,12 @@ var require_earcut = __commonJS({
         ear = next;
         if (ear === stop) {
           if (!pass) {
-            earcutLinked(filterPoints(ear), triangles, dim, minX2, minY2, invSize, 1);
+            earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
           } else if (pass === 1) {
             ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
-            earcutLinked(ear, triangles, dim, minX2, minY2, invSize, 2);
+            earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
           } else if (pass === 2) {
-            splitEarcut(ear, triangles, dim, minX2, minY2, invSize);
+            splitEarcut(ear, triangles, dim, minX, minY, invSize);
           }
           break;
         }
@@ -326,13 +326,13 @@ var require_earcut = __commonJS({
       }
       return true;
     }
-    function isEarHashed(ear, minX2, minY2, invSize) {
+    function isEarHashed(ear, minX, minY, invSize) {
       var a2 = ear.prev, b3 = ear, c2 = ear.next;
       if (area(a2, b3, c2) >= 0)
         return false;
       var ax = a2.x, bx = b3.x, cx = c2.x, ay = a2.y, by = b3.y, cy = c2.y;
       var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx, y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy, x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx, y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
-      var minZ = zOrder(x0, y0, minX2, minY2, invSize), maxZ = zOrder(x1, y1, minX2, minY2, invSize);
+      var minZ = zOrder(x0, y0, minX, minY, invSize), maxZ = zOrder(x1, y1, minX, minY, invSize);
       var p3 = ear.prevZ, n2 = ear.nextZ;
       while (p3 && p3.z >= minZ && n2 && n2.z <= maxZ) {
         if (p3.x >= x0 && p3.x <= x1 && p3.y >= y0 && p3.y <= y1 && p3 !== a2 && p3 !== c2 && pointInTriangle(ax, ay, bx, by, cx, cy, p3.x, p3.y) && area(p3.prev, p3, p3.next) >= 0)
@@ -370,7 +370,7 @@ var require_earcut = __commonJS({
       } while (p3 !== start);
       return filterPoints(p3);
     }
-    function splitEarcut(start, triangles, dim, minX2, minY2, invSize) {
+    function splitEarcut(start, triangles, dim, minX, minY, invSize) {
       var a2 = start;
       do {
         var b3 = a2.next.next;
@@ -379,8 +379,8 @@ var require_earcut = __commonJS({
             var c2 = splitPolygon(a2, b3);
             a2 = filterPoints(a2, a2.next);
             c2 = filterPoints(c2, c2.next);
-            earcutLinked(a2, triangles, dim, minX2, minY2, invSize, 0);
-            earcutLinked(c2, triangles, dim, minX2, minY2, invSize, 0);
+            earcutLinked(a2, triangles, dim, minX, minY, invSize, 0);
+            earcutLinked(c2, triangles, dim, minX, minY, invSize, 0);
             return;
           }
           b3 = b3.next;
@@ -449,11 +449,11 @@ var require_earcut = __commonJS({
     function sectorContainsSector(m2, p3) {
       return area(m2.prev, m2, p3.prev) < 0 && area(p3.next, m2, m2.next) < 0;
     }
-    function indexCurve(start, minX2, minY2, invSize) {
+    function indexCurve(start, minX, minY, invSize) {
       var p3 = start;
       do {
         if (p3.z === 0)
-          p3.z = zOrder(p3.x, p3.y, minX2, minY2, invSize);
+          p3.z = zOrder(p3.x, p3.y, minX, minY, invSize);
         p3.prevZ = p3.prev;
         p3.nextZ = p3.next;
         p3 = p3.next;
@@ -504,9 +504,9 @@ var require_earcut = __commonJS({
       } while (numMerges > 1);
       return list;
     }
-    function zOrder(x2, y2, minX2, minY2, invSize) {
-      x2 = (x2 - minX2) * invSize | 0;
-      y2 = (y2 - minY2) * invSize | 0;
+    function zOrder(x2, y2, minX, minY, invSize) {
+      x2 = (x2 - minX) * invSize | 0;
+      y2 = (y2 - minY) * invSize | 0;
       x2 = (x2 | x2 << 8) & 16711935;
       x2 = (x2 | x2 << 4) & 252645135;
       x2 = (x2 | x2 << 2) & 858993459;
@@ -11969,38 +11969,38 @@ var Bounds = class {
     this.maxY = Math.max(this.maxY, y2);
   }
   addQuad(vertices) {
-    let minX2 = this.minX;
-    let minY2 = this.minY;
-    let maxX2 = this.maxX;
-    let maxY2 = this.maxY;
+    let minX = this.minX;
+    let minY = this.minY;
+    let maxX = this.maxX;
+    let maxY = this.maxY;
     let x2 = vertices[0];
     let y2 = vertices[1];
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = vertices[2];
     y2 = vertices[3];
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = vertices[4];
     y2 = vertices[5];
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = vertices[6];
     y2 = vertices[7];
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
-    this.minX = minX2;
-    this.minY = minY2;
-    this.maxX = maxX2;
-    this.maxY = maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
+    this.minX = minX;
+    this.minY = minY;
+    this.maxX = maxX;
+    this.maxY = maxY;
   }
   addFrame(transform, x0, y0, x1, y1) {
     this.addFrameMatrix(transform.worldTransform, x0, y0, x1, y1);
@@ -12012,56 +12012,56 @@ var Bounds = class {
     const d2 = matrix.d;
     const tx = matrix.tx;
     const ty = matrix.ty;
-    let minX2 = this.minX;
-    let minY2 = this.minY;
-    let maxX2 = this.maxX;
-    let maxY2 = this.maxY;
+    let minX = this.minX;
+    let minY = this.minY;
+    let maxX = this.maxX;
+    let maxY = this.maxY;
     let x2 = a2 * x0 + c2 * y0 + tx;
     let y2 = b3 * x0 + d2 * y0 + ty;
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = a2 * x1 + c2 * y0 + tx;
     y2 = b3 * x1 + d2 * y0 + ty;
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = a2 * x0 + c2 * y1 + tx;
     y2 = b3 * x0 + d2 * y1 + ty;
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
     x2 = a2 * x1 + c2 * y1 + tx;
     y2 = b3 * x1 + d2 * y1 + ty;
-    minX2 = x2 < minX2 ? x2 : minX2;
-    minY2 = y2 < minY2 ? y2 : minY2;
-    maxX2 = x2 > maxX2 ? x2 : maxX2;
-    maxY2 = y2 > maxY2 ? y2 : maxY2;
-    this.minX = minX2;
-    this.minY = minY2;
-    this.maxX = maxX2;
-    this.maxY = maxY2;
+    minX = x2 < minX ? x2 : minX;
+    minY = y2 < minY ? y2 : minY;
+    maxX = x2 > maxX ? x2 : maxX;
+    maxY = y2 > maxY ? y2 : maxY;
+    this.minX = minX;
+    this.minY = minY;
+    this.maxX = maxX;
+    this.maxY = maxY;
   }
   addVertexData(vertexData, beginOffset, endOffset) {
-    let minX2 = this.minX;
-    let minY2 = this.minY;
-    let maxX2 = this.maxX;
-    let maxY2 = this.maxY;
+    let minX = this.minX;
+    let minY = this.minY;
+    let maxX = this.maxX;
+    let maxY = this.maxY;
     for (let i2 = beginOffset; i2 < endOffset; i2 += 2) {
       const x2 = vertexData[i2];
       const y2 = vertexData[i2 + 1];
-      minX2 = x2 < minX2 ? x2 : minX2;
-      minY2 = y2 < minY2 ? y2 : minY2;
-      maxX2 = x2 > maxX2 ? x2 : maxX2;
-      maxY2 = y2 > maxY2 ? y2 : maxY2;
+      minX = x2 < minX ? x2 : minX;
+      minY = y2 < minY ? y2 : minY;
+      maxX = x2 > maxX ? x2 : maxX;
+      maxY = y2 > maxY ? y2 : maxY;
     }
-    this.minX = minX2;
-    this.minY = minY2;
-    this.maxX = maxX2;
-    this.maxY = maxY2;
+    this.minX = minX;
+    this.minY = minY;
+    this.maxX = maxX;
+    this.maxY = maxY;
   }
   addVertices(transform, vertices, beginOffset, endOffset) {
     this.addVerticesMatrix(transform.worldTransform, vertices, beginOffset, endOffset);
@@ -12073,34 +12073,34 @@ var Bounds = class {
     const d2 = matrix.d;
     const tx = matrix.tx;
     const ty = matrix.ty;
-    let minX2 = this.minX;
-    let minY2 = this.minY;
-    let maxX2 = this.maxX;
-    let maxY2 = this.maxY;
+    let minX = this.minX;
+    let minY = this.minY;
+    let maxX = this.maxX;
+    let maxY = this.maxY;
     for (let i2 = beginOffset; i2 < endOffset; i2 += 2) {
       const rawX = vertices[i2];
       const rawY = vertices[i2 + 1];
       const x2 = a2 * rawX + c2 * rawY + tx;
       const y2 = d2 * rawY + b3 * rawX + ty;
-      minX2 = Math.min(minX2, x2 - padX);
-      maxX2 = Math.max(maxX2, x2 + padX);
-      minY2 = Math.min(minY2, y2 - padY);
-      maxY2 = Math.max(maxY2, y2 + padY);
+      minX = Math.min(minX, x2 - padX);
+      maxX = Math.max(maxX, x2 + padX);
+      minY = Math.min(minY, y2 - padY);
+      maxY = Math.max(maxY, y2 + padY);
     }
-    this.minX = minX2;
-    this.minY = minY2;
-    this.maxX = maxX2;
-    this.maxY = maxY2;
+    this.minX = minX;
+    this.minY = minY;
+    this.maxX = maxX;
+    this.maxY = maxY;
   }
   addBounds(bounds) {
-    const minX2 = this.minX;
-    const minY2 = this.minY;
-    const maxX2 = this.maxX;
-    const maxY2 = this.maxY;
-    this.minX = bounds.minX < minX2 ? bounds.minX : minX2;
-    this.minY = bounds.minY < minY2 ? bounds.minY : minY2;
-    this.maxX = bounds.maxX > maxX2 ? bounds.maxX : maxX2;
-    this.maxY = bounds.maxY > maxY2 ? bounds.maxY : maxY2;
+    const minX = this.minX;
+    const minY = this.minY;
+    const maxX = this.maxX;
+    const maxY = this.maxY;
+    this.minX = bounds.minX < minX ? bounds.minX : minX;
+    this.minY = bounds.minY < minY ? bounds.minY : minY;
+    this.maxX = bounds.maxX > maxX ? bounds.maxX : maxX;
+    this.maxY = bounds.maxY > maxY ? bounds.maxY : maxY;
   }
   addBoundsMask(bounds, mask) {
     const _minX = bounds.minX > mask.minX ? bounds.minX : mask.minX;
@@ -12108,14 +12108,14 @@ var Bounds = class {
     const _maxX = bounds.maxX < mask.maxX ? bounds.maxX : mask.maxX;
     const _maxY = bounds.maxY < mask.maxY ? bounds.maxY : mask.maxY;
     if (_minX <= _maxX && _minY <= _maxY) {
-      const minX2 = this.minX;
-      const minY2 = this.minY;
-      const maxX2 = this.maxX;
-      const maxY2 = this.maxY;
-      this.minX = _minX < minX2 ? _minX : minX2;
-      this.minY = _minY < minY2 ? _minY : minY2;
-      this.maxX = _maxX > maxX2 ? _maxX : maxX2;
-      this.maxY = _maxY > maxY2 ? _maxY : maxY2;
+      const minX = this.minX;
+      const minY = this.minY;
+      const maxX = this.maxX;
+      const maxY = this.maxY;
+      this.minX = _minX < minX ? _minX : minX;
+      this.minY = _minY < minY ? _minY : minY;
+      this.maxX = _maxX > maxX ? _maxX : maxX;
+      this.maxY = _maxY > maxY ? _maxY : maxY;
     }
   }
   addBoundsMatrix(bounds, matrix) {
@@ -12127,14 +12127,14 @@ var Bounds = class {
     const _maxX = bounds.maxX < area.x + area.width ? bounds.maxX : area.x + area.width;
     const _maxY = bounds.maxY < area.y + area.height ? bounds.maxY : area.y + area.height;
     if (_minX <= _maxX && _minY <= _maxY) {
-      const minX2 = this.minX;
-      const minY2 = this.minY;
-      const maxX2 = this.maxX;
-      const maxY2 = this.maxY;
-      this.minX = _minX < minX2 ? _minX : minX2;
-      this.minY = _minY < minY2 ? _minY : minY2;
-      this.maxX = _maxX > maxX2 ? _maxX : maxX2;
-      this.maxY = _maxY > maxY2 ? _maxY : maxY2;
+      const minX = this.minX;
+      const minY = this.minY;
+      const maxX = this.maxX;
+      const maxY = this.maxY;
+      this.minX = _minX < minX ? _minX : minX;
+      this.minY = _minY < minY ? _minY : minY;
+      this.maxX = _maxX > maxX ? _maxX : maxX;
+      this.maxY = _maxY > maxY ? _maxY : maxY;
     }
   }
   pad(paddingX = 0, paddingY = paddingX) {
@@ -16629,21 +16629,21 @@ var loadWebFont = {
       const data = options.data ?? {};
       for (let i2 = 0; i2 < weights.length; i2++) {
         const weight = weights[i2];
-        const font2 = new FontFace(name, `url(${encodeURI(url2)})`, {
+        const font = new FontFace(name, `url(${encodeURI(url2)})`, {
           ...data,
           weight
         });
-        await font2.load();
-        fonts.add(font2);
-        fontFaces.push(font2);
+        await font.load();
+        fonts.add(font);
+        fontFaces.push(font);
       }
       return fontFaces.length === 1 ? fontFaces[0] : fontFaces;
     }
     console.warn("[loadWebFont] FontFace API is not supported. Skipping loading font");
     return null;
   },
-  unload(font2) {
-    (Array.isArray(font2) ? font2 : [font2]).forEach((t2) => settings.ADAPTER.getFontFaceSet().delete(t2));
+  unload(font) {
+    (Array.isArray(font) ? font : [font]).forEach((t2) => settings.ADAPTER.getFontFaceSet().delete(t2));
   }
 };
 extensions.add(loadWebFont);
@@ -17310,11 +17310,11 @@ var AssetsClass = class {
     const resolveArray = Object.values(resolveResults);
     const resolveKeys = Object.keys(resolveResults);
     this._backgroundLoader.active = false;
-    const loadedAssets = await this.loader.load(resolveArray, onProgress);
+    const loadedAssets3 = await this.loader.load(resolveArray, onProgress);
     this._backgroundLoader.active = true;
     const out = {};
     resolveArray.forEach((resolveResult, i2) => {
-      const asset = loadedAssets[resolveResult.src];
+      const asset = loadedAssets3[resolveResult.src];
       const keys = [resolveResult.src];
       if (resolveResult.alias) {
         keys.push(...resolveResult.alias);
@@ -19614,14 +19614,14 @@ var _GraphicsGeometry = class extends BatchGeometry {
     const scaleY = frame.height / baseTexture.height;
     let offsetX = frame.x / frame.width;
     let offsetY = frame.y / frame.height;
-    let minX2 = Math.floor(uvs[start] + eps);
-    let minY2 = Math.floor(uvs[start + 1] + eps);
+    let minX = Math.floor(uvs[start] + eps);
+    let minY = Math.floor(uvs[start + 1] + eps);
     for (let i2 = start + 2; i2 < finish; i2 += 2) {
-      minX2 = Math.min(minX2, Math.floor(uvs[i2] + eps));
-      minY2 = Math.min(minY2, Math.floor(uvs[i2 + 1] + eps));
+      minX = Math.min(minX, Math.floor(uvs[i2] + eps));
+      minY = Math.min(minY, Math.floor(uvs[i2 + 1] + eps));
     }
-    offsetX -= minX2;
-    offsetY -= minY2;
+    offsetX -= minX;
+    offsetY -= minY;
     for (let i2 = start; i2 < finish; i2 += 2) {
       uvs[i2] = (uvs[i2] + offsetX) * scaleX;
       uvs[i2 + 1] = (uvs[i2 + 1] + offsetY) * scaleY;
@@ -20082,8 +20082,8 @@ var _Graphics = class extends Container {
     if (!geometry.graphicsData.length) {
       return;
     }
-    const { minX: minX2, minY: minY2, maxX: maxX2, maxY: maxY2 } = geometry.bounds;
-    this._bounds.addFrame(this.transform, minX2, minY2, maxX2, maxY2);
+    const { minX, minY, maxX, maxY } = geometry.bounds;
+    this._bounds.addFrame(this.transform, minX, minY, maxX, maxY);
   }
   containsPoint(point) {
     this.worldTransform.applyInverse(point, _Graphics._TEMP_POINT);
@@ -20498,6 +20498,207 @@ var MeshMaterial = class extends Shader {
   }
 };
 
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/geometry/PlaneGeometry.mjs
+var PlaneGeometry = class extends MeshGeometry {
+  constructor(width = 100, height = 100, segWidth = 10, segHeight = 10) {
+    super();
+    this.segWidth = segWidth;
+    this.segHeight = segHeight;
+    this.width = width;
+    this.height = height;
+    this.build();
+  }
+  build() {
+    const total = this.segWidth * this.segHeight;
+    const verts = [];
+    const uvs = [];
+    const indices2 = [];
+    const segmentsX = this.segWidth - 1;
+    const segmentsY = this.segHeight - 1;
+    const sizeX = this.width / segmentsX;
+    const sizeY = this.height / segmentsY;
+    for (let i2 = 0; i2 < total; i2++) {
+      const x2 = i2 % this.segWidth;
+      const y2 = i2 / this.segWidth | 0;
+      verts.push(x2 * sizeX, y2 * sizeY);
+      uvs.push(x2 / segmentsX, y2 / segmentsY);
+    }
+    const totalSub = segmentsX * segmentsY;
+    for (let i2 = 0; i2 < totalSub; i2++) {
+      const xpos = i2 % segmentsX;
+      const ypos = i2 / segmentsX | 0;
+      const value = ypos * this.segWidth + xpos;
+      const value2 = ypos * this.segWidth + xpos + 1;
+      const value3 = (ypos + 1) * this.segWidth + xpos;
+      const value4 = (ypos + 1) * this.segWidth + xpos + 1;
+      indices2.push(value, value2, value3, value2, value4, value3);
+    }
+    this.buffers[0].data = new Float32Array(verts);
+    this.buffers[1].data = new Float32Array(uvs);
+    this.indexBuffer.data = new Uint16Array(indices2);
+    this.buffers[0].update();
+    this.buffers[1].update();
+    this.indexBuffer.update();
+  }
+};
+
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/SimplePlane.mjs
+var SimplePlane = class extends Mesh {
+  constructor(texture, verticesX, verticesY) {
+    const planeGeometry = new PlaneGeometry(texture.width, texture.height, verticesX, verticesY);
+    const meshMaterial = new MeshMaterial(Texture.WHITE);
+    super(planeGeometry, meshMaterial);
+    this.texture = texture;
+    this.autoResize = true;
+  }
+  textureUpdated() {
+    this._textureID = this.shader.texture._updateID;
+    const geometry = this.geometry;
+    const { width, height } = this.shader.texture;
+    if (this.autoResize && (geometry.width !== width || geometry.height !== height)) {
+      geometry.width = this.shader.texture.width;
+      geometry.height = this.shader.texture.height;
+      geometry.build();
+    }
+  }
+  set texture(value) {
+    if (this.shader.texture === value) {
+      return;
+    }
+    this.shader.texture = value;
+    this._textureID = -1;
+    if (value.baseTexture.valid) {
+      this.textureUpdated();
+    } else {
+      value.once("update", this.textureUpdated, this);
+    }
+  }
+  get texture() {
+    return this.shader.texture;
+  }
+  _render(renderer) {
+    if (this._textureID !== this.shader.texture._updateID) {
+      this.textureUpdated();
+    }
+    super._render(renderer);
+  }
+  destroy(options) {
+    this.shader.texture.off("update", this.textureUpdated, this);
+    super.destroy(options);
+  }
+};
+
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/NineSlicePlane.mjs
+var DEFAULT_BORDER_SIZE = 10;
+var NineSlicePlane = class extends SimplePlane {
+  constructor(texture, leftWidth, topHeight, rightWidth, bottomHeight) {
+    super(Texture.WHITE, 4, 4);
+    this._origWidth = texture.orig.width;
+    this._origHeight = texture.orig.height;
+    this._width = this._origWidth;
+    this._height = this._origHeight;
+    this._leftWidth = leftWidth ?? texture.defaultBorders?.left ?? DEFAULT_BORDER_SIZE;
+    this._rightWidth = rightWidth ?? texture.defaultBorders?.right ?? DEFAULT_BORDER_SIZE;
+    this._topHeight = topHeight ?? texture.defaultBorders?.top ?? DEFAULT_BORDER_SIZE;
+    this._bottomHeight = bottomHeight ?? texture.defaultBorders?.bottom ?? DEFAULT_BORDER_SIZE;
+    this.texture = texture;
+  }
+  textureUpdated() {
+    this._textureID = this.shader.texture._updateID;
+    this._refresh();
+  }
+  get vertices() {
+    return this.geometry.getBuffer("aVertexPosition").data;
+  }
+  set vertices(value) {
+    this.geometry.getBuffer("aVertexPosition").data = value;
+  }
+  updateHorizontalVertices() {
+    const vertices = this.vertices;
+    const scale = this._getMinScale();
+    vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale;
+    vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - this._bottomHeight * scale;
+    vertices[25] = vertices[27] = vertices[29] = vertices[31] = this._height;
+  }
+  updateVerticalVertices() {
+    const vertices = this.vertices;
+    const scale = this._getMinScale();
+    vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale;
+    vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - this._rightWidth * scale;
+    vertices[6] = vertices[14] = vertices[22] = vertices[30] = this._width;
+  }
+  _getMinScale() {
+    const w3 = this._leftWidth + this._rightWidth;
+    const scaleW = this._width > w3 ? 1 : this._width / w3;
+    const h2 = this._topHeight + this._bottomHeight;
+    const scaleH = this._height > h2 ? 1 : this._height / h2;
+    const scale = Math.min(scaleW, scaleH);
+    return scale;
+  }
+  get width() {
+    return this._width;
+  }
+  set width(value) {
+    this._width = value;
+    this._refresh();
+  }
+  get height() {
+    return this._height;
+  }
+  set height(value) {
+    this._height = value;
+    this._refresh();
+  }
+  get leftWidth() {
+    return this._leftWidth;
+  }
+  set leftWidth(value) {
+    this._leftWidth = value;
+    this._refresh();
+  }
+  get rightWidth() {
+    return this._rightWidth;
+  }
+  set rightWidth(value) {
+    this._rightWidth = value;
+    this._refresh();
+  }
+  get topHeight() {
+    return this._topHeight;
+  }
+  set topHeight(value) {
+    this._topHeight = value;
+    this._refresh();
+  }
+  get bottomHeight() {
+    return this._bottomHeight;
+  }
+  set bottomHeight(value) {
+    this._bottomHeight = value;
+    this._refresh();
+  }
+  _refresh() {
+    const texture = this.texture;
+    const uvs = this.geometry.buffers[1].data;
+    this._origWidth = texture.orig.width;
+    this._origHeight = texture.orig.height;
+    const _uvw = 1 / this._origWidth;
+    const _uvh = 1 / this._origHeight;
+    uvs[0] = uvs[8] = uvs[16] = uvs[24] = 0;
+    uvs[1] = uvs[3] = uvs[5] = uvs[7] = 0;
+    uvs[6] = uvs[14] = uvs[22] = uvs[30] = 1;
+    uvs[25] = uvs[27] = uvs[29] = uvs[31] = 1;
+    uvs[2] = uvs[10] = uvs[18] = uvs[26] = _uvw * this._leftWidth;
+    uvs[4] = uvs[12] = uvs[20] = uvs[28] = 1 - _uvw * this._rightWidth;
+    uvs[9] = uvs[11] = uvs[13] = uvs[15] = _uvh * this._topHeight;
+    uvs[17] = uvs[19] = uvs[21] = uvs[23] = 1 - _uvh * this._bottomHeight;
+    this.updateHorizontalVertices();
+    this.updateVerticalVertices();
+    this.geometry.buffers[0].update();
+    this.geometry.buffers[1].update();
+  }
+};
+
 // ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/ParticleBuffer.mjs
 var ParticleBuffer = class {
   constructor(properties, dynamicPropertyFlags, size) {
@@ -20851,14 +21052,14 @@ var _TextMetrics = class {
   }
   static measureText(text, style, wordWrap, canvas = _TextMetrics._canvas) {
     wordWrap = wordWrap === void 0 || wordWrap === null ? style.wordWrap : wordWrap;
-    const font2 = style.toFontString();
-    const fontProperties = _TextMetrics.measureFont(font2);
+    const font = style.toFontString();
+    const fontProperties = _TextMetrics.measureFont(font);
     if (fontProperties.fontSize === 0) {
       fontProperties.fontSize = style.fontSize;
       fontProperties.ascent = style.fontSize;
     }
     const context2 = canvas.getContext("2d", contextSettings);
-    context2.font = font2;
+    context2.font = font;
     const outputText = wordWrap ? _TextMetrics.wordWrap(text, style, canvas) : text;
     const lines = outputText.split(/(?:\r\n|\r|\n)/);
     const lineWidths = new Array(lines.length);
@@ -21072,9 +21273,9 @@ var _TextMetrics = class {
   static wordWrapSplit(token) {
     return _TextMetrics.graphemeSegmenter(token);
   }
-  static measureFont(font2) {
-    if (_TextMetrics._fonts[font2]) {
-      return _TextMetrics._fonts[font2];
+  static measureFont(font) {
+    if (_TextMetrics._fonts[font]) {
+      return _TextMetrics._fonts[font];
     }
     const properties = {
       ascent: 0,
@@ -21083,21 +21284,21 @@ var _TextMetrics = class {
     };
     const canvas = _TextMetrics._canvas;
     const context2 = _TextMetrics._context;
-    context2.font = font2;
+    context2.font = font;
     const metricsString = _TextMetrics.METRICS_STRING + _TextMetrics.BASELINE_SYMBOL;
     const width = Math.ceil(context2.measureText(metricsString).width);
     let baseline = Math.ceil(context2.measureText(_TextMetrics.BASELINE_SYMBOL).width);
     const height = Math.ceil(_TextMetrics.HEIGHT_MULTIPLIER * baseline);
     baseline = baseline * _TextMetrics.BASELINE_MULTIPLIER | 0;
     if (width === 0 || height === 0) {
-      _TextMetrics._fonts[font2] = properties;
+      _TextMetrics._fonts[font] = properties;
       return properties;
     }
     canvas.width = width;
     canvas.height = height;
     context2.fillStyle = "#f00";
     context2.fillRect(0, 0, width, height);
-    context2.font = font2;
+    context2.font = font;
     context2.textBaseline = "alphabetic";
     context2.fillStyle = "#000";
     context2.fillText(metricsString, 0, baseline);
@@ -21138,12 +21339,12 @@ var _TextMetrics = class {
     }
     properties.descent = i2 - baseline;
     properties.fontSize = properties.ascent + properties.descent;
-    _TextMetrics._fonts[font2] = properties;
+    _TextMetrics._fonts[font] = properties;
     return properties;
   }
-  static clearMetrics(font2 = "") {
-    if (font2) {
-      delete _TextMetrics._fonts[font2];
+  static clearMetrics(font = "") {
+    if (font) {
+      delete _TextMetrics._fonts[font];
     } else {
       _TextMetrics._fonts = {};
     }
@@ -21987,8 +22188,8 @@ function drawText(_helper, item) {
 }
 function calculateTextStyle(_helper, item) {
   if (item instanceof TextStyle) {
-    const font2 = item.toFontString();
-    TextMetrics.measureFont(font2);
+    const font = item.toFontString();
+    TextMetrics.measureFont(font);
     return true;
   }
   return false;
@@ -22244,11 +22445,11 @@ var TilingSprite = class extends Sprite {
     renderer.plugins[this.pluginName].render(this);
   }
   _calculateBounds() {
-    const minX2 = this._width * -this._anchor._x;
-    const minY2 = this._height * -this._anchor._y;
-    const maxX2 = this._width * (1 - this._anchor._x);
-    const maxY2 = this._height * (1 - this._anchor._y);
-    this._bounds.addFrame(this.transform, minX2, minY2, maxX2, maxY2);
+    const minX = this._width * -this._anchor._x;
+    const minY = this._height * -this._anchor._y;
+    const maxX = this._width * (1 - this._anchor._x);
+    const maxY = this._height * (1 - this._anchor._y);
+    this._bounds.addFrame(this.transform, minX, minY, maxX, maxY);
   }
   getLocalBounds(rect) {
     if (this.children.length === 0) {
@@ -22647,19 +22848,19 @@ var TextFormat = class {
       }
       rawData[name].push(itemData);
     }
-    const font2 = new BitmapFontData();
-    rawData.info.forEach((info) => font2.info.push({
+    const font = new BitmapFontData();
+    rawData.info.forEach((info) => font.info.push({
       face: info.face,
       size: parseInt(info.size, 10)
     }));
-    rawData.common.forEach((common) => font2.common.push({
+    rawData.common.forEach((common) => font.common.push({
       lineHeight: parseInt(common.lineHeight, 10)
     }));
-    rawData.page.forEach((page) => font2.page.push({
+    rawData.page.forEach((page) => font.page.push({
       id: parseInt(page.id, 10),
       file: page.file
     }));
-    rawData.char.forEach((char) => font2.char.push({
+    rawData.char.forEach((char) => font.char.push({
       id: parseInt(char.id, 10),
       page: parseInt(char.page, 10),
       x: parseInt(char.x, 10),
@@ -22670,16 +22871,16 @@ var TextFormat = class {
       yoffset: parseInt(char.yoffset, 10),
       xadvance: parseInt(char.xadvance, 10)
     }));
-    rawData.kerning.forEach((kerning) => font2.kerning.push({
+    rawData.kerning.forEach((kerning) => font.kerning.push({
       first: parseInt(kerning.first, 10),
       second: parseInt(kerning.second, 10),
       amount: parseInt(kerning.amount, 10)
     }));
-    rawData.distanceField.forEach((df) => font2.distanceField.push({
+    rawData.distanceField.forEach((df) => font.distanceField.push({
       distanceRange: parseInt(df.distanceRange, 10),
       fieldType: df.fieldType
     }));
-    return font2;
+    return font;
   }
 };
 
@@ -22999,16 +23200,16 @@ var _BitmapFont = class {
     if (textures instanceof Texture) {
       textures = [textures];
     }
-    const font2 = new _BitmapFont(fontData, textures, ownsTextures);
-    _BitmapFont.available[font2.font] = font2;
-    return font2;
+    const font = new _BitmapFont(fontData, textures, ownsTextures);
+    _BitmapFont.available[font.font] = font;
+    return font;
   }
   static uninstall(name) {
-    const font2 = _BitmapFont.available[name];
-    if (!font2) {
+    const font = _BitmapFont.available[name];
+    if (!font) {
       throw new Error(`No font found named '${name}'`);
     }
-    font2.destroy();
+    font.destroy();
     delete _BitmapFont.available[name];
   }
   static from(name, textStyle, options) {
@@ -23119,12 +23320,12 @@ var _BitmapFont = class {
         }
       }
     }
-    const font2 = new _BitmapFont(fontData, textures, true);
+    const font = new _BitmapFont(fontData, textures, true);
     if (_BitmapFont.available[name] !== void 0) {
       _BitmapFont.uninstall(name);
     }
-    _BitmapFont.available[name] = font2;
-    return font2;
+    _BitmapFont.available[name] = font;
+    return font;
   }
 };
 var BitmapFont = _BitmapFont;
@@ -23457,11 +23658,11 @@ var _BitmapText = class extends Container {
     return super.getLocalBounds();
   }
   validate() {
-    const font2 = BitmapFont.available[this._fontName];
-    if (!font2) {
+    const font = BitmapFont.available[this._fontName];
+    if (!font) {
       throw new Error(`Missing BitmapFont "${this._fontName}"`);
     }
-    if (this._font !== font2) {
+    if (this._font !== font) {
       this.dirty = true;
     }
     if (this.dirty) {
@@ -23665,14 +23866,14 @@ var _HTMLTextStyle = class extends TextStyle {
   }
   cleanFonts() {
     if (this._fonts.length > 0) {
-      this._fonts.forEach((font2) => {
-        URL.revokeObjectURL(font2.src);
-        font2.refs--;
-        if (font2.refs === 0) {
-          if (font2.fontFace) {
-            document.fonts.delete(font2.fontFace);
+      this._fonts.forEach((font) => {
+        URL.revokeObjectURL(font.src);
+        font.refs--;
+        if (font.refs === 0) {
+          if (font.fontFace) {
+            document.fonts.delete(font.fontFace);
           }
-          delete _HTMLTextStyle.availableFonts[font2.originalUrl];
+          delete _HTMLTextStyle.availableFonts[font.originalUrl];
         }
       });
       this.fontFamily = "Arial";
@@ -23684,9 +23885,9 @@ var _HTMLTextStyle = class extends TextStyle {
   loadFont(url2, options = {}) {
     const { availableFonts } = _HTMLTextStyle;
     if (availableFonts[url2]) {
-      const font2 = availableFonts[url2];
-      this._fonts.push(font2);
-      font2.refs++;
+      const font = availableFonts[url2];
+      this._fonts.push(font);
+      font.refs++;
       this.styleID++;
       this.fontsDirty = true;
       return Promise.resolve();
@@ -23698,7 +23899,7 @@ var _HTMLTextStyle = class extends TextStyle {
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     })).then(async ([src, dataSrc]) => {
-      const font2 = Object.assign({
+      const font = Object.assign({
         family: lib_exports.path.basename(url2, lib_exports.path.extname(url2)),
         weight: "normal",
         style: "normal",
@@ -23708,14 +23909,14 @@ var _HTMLTextStyle = class extends TextStyle {
         originalUrl: url2,
         fontFace: null
       }, options);
-      availableFonts[url2] = font2;
-      this._fonts.push(font2);
+      availableFonts[url2] = font;
+      this._fonts.push(font);
       this.styleID++;
-      const fontFace = new FontFace(font2.family, `url(${font2.src})`, {
-        weight: font2.weight,
-        style: font2.style
+      const fontFace = new FontFace(font.family, `url(${font.src})`, {
+        weight: font.weight,
+        style: font.style
       });
-      font2.fontFace = fontFace;
+      font.fontFace = fontFace;
       await fontFace.load();
       document.fonts.add(fontFace);
       await document.fonts.ready;
@@ -23769,12 +23970,12 @@ var _HTMLTextStyle = class extends TextStyle {
     ].join(";");
   }
   toGlobalCSS() {
-    return this._fonts.reduce((result, font2) => `${result}
+    return this._fonts.reduce((result, font) => `${result}
             @font-face {
-                font-family: "${font2.family}";
-                src: url('${font2.dataSrc}');
-                font-weight: ${font2.weight};
-                font-style: ${font2.style}; 
+                font-family: "${font.family}";
+                src: url('${font.dataSrc}');
+                font-weight: ${font.weight};
+                font-style: ${font.style}; 
             }`, this._stylesheet);
   }
   get stylesheet() {
@@ -24148,6 +24349,872 @@ HTMLText.defaultMaxWidth = 2024;
 HTMLText.defaultMaxHeight = 2024;
 HTMLText.defaultAutoResolution = true;
 
+// src/lib/assets.ts
+var loadedAssets = {};
+async function loadAssets() {
+  const sheet = await Assets.load("stars.json");
+  const planetsheet = await Assets.load("planets.json");
+  const uisheet = await Assets.load("uisheet.json");
+  const font = await Assets.load("font.fnt");
+  const bgTexture = await Assets.load("starfield.png");
+  const navArrow = await Assets.load("navarrow.png");
+  const starTexture = await Assets.load("stars.png");
+  const spaceshipTexture = await Assets.load("spaceship.png");
+  loadedAssets = {
+    sheet,
+    planetsheet,
+    uisheet,
+    font,
+    bgTexture,
+    navArrow,
+    starTexture,
+    spaceshipTexture
+  };
+}
+
+// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
+function identity(x2) {
+  return x2;
+}
+function pipeFromArray(fns) {
+  if (fns.length === 0) {
+    return identity;
+  }
+  if (fns.length === 1) {
+    return fns[0];
+  }
+  return function piped(input) {
+    return fns.reduce((prev, fn) => fn(prev), input);
+  };
+}
+function observable(subscribe) {
+  const self2 = {
+    subscribe(observer) {
+      let teardownRef = null;
+      let isDone = false;
+      let unsubscribed = false;
+      let teardownImmediately = false;
+      function unsubscribe() {
+        if (teardownRef === null) {
+          teardownImmediately = true;
+          return;
+        }
+        if (unsubscribed) {
+          return;
+        }
+        unsubscribed = true;
+        if (typeof teardownRef === "function") {
+          teardownRef();
+        } else if (teardownRef) {
+          teardownRef.unsubscribe();
+        }
+      }
+      teardownRef = subscribe({
+        next(value) {
+          if (isDone) {
+            return;
+          }
+          observer.next?.(value);
+        },
+        error(err) {
+          if (isDone) {
+            return;
+          }
+          isDone = true;
+          observer.error?.(err);
+          unsubscribe();
+        },
+        complete() {
+          if (isDone) {
+            return;
+          }
+          isDone = true;
+          observer.complete?.();
+          unsubscribe();
+        }
+      });
+      if (teardownImmediately) {
+        unsubscribe();
+      }
+      return {
+        unsubscribe
+      };
+    },
+    pipe(...operations) {
+      return pipeFromArray(operations)(self2);
+    }
+  };
+  return self2;
+}
+
+// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable/index.mjs
+function share(_opts) {
+  return (originalObserver) => {
+    let refCount = 0;
+    let subscription = null;
+    const observers = [];
+    function startIfNeeded() {
+      if (subscription) {
+        return;
+      }
+      subscription = originalObserver.subscribe({
+        next(value) {
+          for (const observer of observers) {
+            observer.next?.(value);
+          }
+        },
+        error(error) {
+          for (const observer of observers) {
+            observer.error?.(error);
+          }
+        },
+        complete() {
+          for (const observer of observers) {
+            observer.complete?.();
+          }
+        }
+      });
+    }
+    function resetIfNeeded() {
+      if (refCount === 0 && subscription) {
+        const _sub = subscription;
+        subscription = null;
+        _sub.unsubscribe();
+      }
+    }
+    return {
+      subscribe(observer) {
+        refCount++;
+        observers.push(observer);
+        startIfNeeded();
+        return {
+          unsubscribe() {
+            refCount--;
+            resetIfNeeded();
+            const index = observers.findIndex((v2) => v2 === observer);
+            if (index > -1) {
+              observers.splice(index, 1);
+            }
+          }
+        };
+      }
+    };
+  };
+}
+var ObservableAbortError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ObservableAbortError";
+    Object.setPrototypeOf(this, ObservableAbortError.prototype);
+  }
+};
+function observableToPromise(observable2) {
+  let abort;
+  const promise = new Promise((resolve2, reject) => {
+    let isDone = false;
+    function onDone() {
+      if (isDone) {
+        return;
+      }
+      isDone = true;
+      reject(new ObservableAbortError("This operation was aborted."));
+      obs$.unsubscribe();
+    }
+    const obs$ = observable2.subscribe({
+      next(data) {
+        isDone = true;
+        resolve2(data);
+        onDone();
+      },
+      error(data) {
+        isDone = true;
+        reject(data);
+        onDone();
+      },
+      complete() {
+        isDone = true;
+        onDone();
+      }
+    });
+    abort = onDone;
+  });
+  return {
+    promise,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    abort
+  };
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/transformResult-a4d3dad0.mjs
+var TRPCClientError = class extends Error {
+  static from(cause, opts = {}) {
+    if (!(cause instanceof Error)) {
+      return new TRPCClientError(cause.error.message ?? "", {
+        ...opts,
+        cause: void 0,
+        result: cause
+      });
+    }
+    if (cause.name === "TRPCClientError") {
+      return cause;
+    }
+    return new TRPCClientError(cause.message, {
+      ...opts,
+      cause,
+      result: null
+    });
+  }
+  constructor(message, opts) {
+    const cause = opts?.cause;
+    super(message, {
+      cause
+    });
+    this.meta = opts?.meta;
+    this.cause = cause;
+    this.shape = opts?.result?.error;
+    this.data = opts?.result?.error.data;
+    this.name = "TRPCClientError";
+    Object.setPrototypeOf(this, TRPCClientError.prototype);
+  }
+};
+function isObject(value) {
+  return !!value && !Array.isArray(value) && typeof value === "object";
+}
+function transformResultInner(response, runtime) {
+  if ("error" in response) {
+    const error = runtime.transformer.deserialize(response.error);
+    return {
+      ok: false,
+      error: {
+        ...response,
+        error
+      }
+    };
+  }
+  const result = {
+    ...response.result,
+    ...(!response.result.type || response.result.type === "data") && {
+      type: "data",
+      data: runtime.transformer.deserialize(response.result.data)
+    }
+  };
+  return {
+    ok: true,
+    result
+  };
+}
+function transformResult(response, runtime) {
+  let result;
+  try {
+    result = transformResultInner(response, runtime);
+  } catch (err) {
+    throw new TRPCClientError("Unable to transform response from server");
+  }
+  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
+    throw new TRPCClientError("Badly formatted response from server");
+  }
+  if (result.ok && !isObject(result.result)) {
+    throw new TRPCClientError("Badly formatted response from server");
+  }
+  return result;
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
+function createChain(opts) {
+  return observable((observer) => {
+    function execute(index = 0, op = opts.op) {
+      const next = opts.links[index];
+      if (!next) {
+        throw new Error("No more links to execute - did you forget to add an ending link?");
+      }
+      const subscription = next({
+        op,
+        next(nextOp) {
+          const nextObserver = execute(index + 1, nextOp);
+          return nextObserver;
+        }
+      });
+      return subscription;
+    }
+    const obs$ = execute();
+    return obs$.subscribe(observer);
+  });
+}
+
+// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/index-972002da.mjs
+var noop = () => {
+};
+function createInnerProxy(callback, path2) {
+  const proxy = new Proxy(noop, {
+    get(_obj, key) {
+      if (typeof key !== "string" || key === "then") {
+        return void 0;
+      }
+      return createInnerProxy(callback, [
+        ...path2,
+        key
+      ]);
+    },
+    apply(_1, _2, args) {
+      return callback({
+        args,
+        path: path2
+      });
+    }
+  });
+  return proxy;
+}
+var createRecursiveProxy = (callback) => createInnerProxy(callback, []);
+var createFlatProxy = (callback) => {
+  return new Proxy(noop, {
+    get(_obj, name) {
+      if (typeof name !== "string" || name === "then") {
+        return void 0;
+      }
+      return callback(name);
+    }
+  });
+};
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/httpUtils-8a5c637a.mjs
+var isFunction = (fn) => typeof fn === "function";
+function _bind(fn, thisArg) {
+  return isFunction(fn.bind) ? fn.bind(thisArg) : fn;
+}
+function getFetch(customFetchImpl) {
+  if (customFetchImpl) {
+    return customFetchImpl;
+  }
+  if (typeof window !== "undefined" && isFunction(window.fetch)) {
+    return _bind(window.fetch, window);
+  }
+  if (typeof globalThis !== "undefined" && isFunction(globalThis.fetch)) {
+    return _bind(globalThis.fetch, globalThis);
+  }
+  throw new Error("No fetch implementation found");
+}
+function getAbortController(customAbortControllerImpl) {
+  if (customAbortControllerImpl) {
+    return customAbortControllerImpl;
+  }
+  if (typeof window !== "undefined" && window.AbortController) {
+    return window.AbortController;
+  }
+  if (typeof globalThis !== "undefined" && globalThis.AbortController) {
+    return globalThis.AbortController;
+  }
+  return null;
+}
+function resolveHTTPLinkOptions(opts) {
+  return {
+    url: opts.url,
+    fetch: getFetch(opts.fetch),
+    AbortController: getAbortController(opts.AbortController)
+  };
+}
+function arrayToDict(array) {
+  const dict = {};
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    dict[index] = element;
+  }
+  return dict;
+}
+var METHOD = {
+  query: "GET",
+  mutation: "POST"
+};
+function getInput(opts) {
+  return "input" in opts ? opts.runtime.transformer.serialize(opts.input) : arrayToDict(opts.inputs.map((_input) => opts.runtime.transformer.serialize(_input)));
+}
+var getUrl = (opts) => {
+  let url2 = opts.url + "/" + opts.path;
+  const queryParts = [];
+  if ("inputs" in opts) {
+    queryParts.push("batch=1");
+  }
+  if (opts.type === "query") {
+    const input = getInput(opts);
+    if (input !== void 0) {
+      queryParts.push(`input=${encodeURIComponent(JSON.stringify(input))}`);
+    }
+  }
+  if (queryParts.length) {
+    url2 += "?" + queryParts.join("&");
+  }
+  return url2;
+};
+var getBody = (opts) => {
+  if (opts.type === "query") {
+    return void 0;
+  }
+  const input = getInput(opts);
+  return input !== void 0 ? JSON.stringify(input) : void 0;
+};
+var jsonHttpRequester = (opts) => {
+  return httpRequest({
+    ...opts,
+    contentTypeHeader: "application/json",
+    getUrl,
+    getBody
+  });
+};
+function httpRequest(opts) {
+  const { type } = opts;
+  const ac = opts.AbortController ? new opts.AbortController() : null;
+  const promise = new Promise((resolve2, reject) => {
+    const url2 = opts.getUrl(opts);
+    const body = opts.getBody(opts);
+    const meta = {};
+    Promise.resolve(opts.headers()).then((headers) => {
+      if (type === "subscription") {
+        throw new Error("Subscriptions should use wsLink");
+      }
+      return opts.fetch(url2, {
+        method: METHOD[type],
+        signal: ac?.signal,
+        body,
+        headers: {
+          ...opts.contentTypeHeader ? {
+            "content-type": opts.contentTypeHeader
+          } : {},
+          ...headers
+        }
+      });
+    }).then((_res) => {
+      meta.response = _res;
+      return _res.json();
+    }).then((json) => {
+      resolve2({
+        json,
+        meta
+      });
+    }).catch(reject);
+  });
+  const cancel = () => {
+    ac?.abort();
+  };
+  return {
+    promise,
+    cancel
+  };
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpBatchLink.mjs
+var throwFatalError = () => {
+  throw new Error("Something went wrong. Please submit an issue at https://github.com/trpc/trpc/issues/new");
+};
+function dataLoader(batchLoader) {
+  let pendingItems = null;
+  let dispatchTimer = null;
+  const destroyTimerAndPendingItems = () => {
+    clearTimeout(dispatchTimer);
+    dispatchTimer = null;
+    pendingItems = null;
+  };
+  function groupItems(items) {
+    const groupedItems = [
+      []
+    ];
+    let index = 0;
+    while (true) {
+      const item = items[index];
+      if (!item) {
+        break;
+      }
+      const lastGroup = groupedItems[groupedItems.length - 1];
+      if (item.aborted) {
+        item.reject(new Error("Aborted"));
+        index++;
+        continue;
+      }
+      const isValid = batchLoader.validate(lastGroup.concat(item).map((it) => it.key));
+      if (isValid) {
+        lastGroup.push(item);
+        index++;
+        continue;
+      }
+      if (lastGroup.length === 0) {
+        item.reject(new Error("Input is too big for a single dispatch"));
+        index++;
+        continue;
+      }
+      groupedItems.push([]);
+    }
+    return groupedItems;
+  }
+  function dispatch() {
+    const groupedItems = groupItems(pendingItems);
+    destroyTimerAndPendingItems();
+    for (const items of groupedItems) {
+      if (!items.length) {
+        continue;
+      }
+      const batch = {
+        items,
+        cancel: throwFatalError
+      };
+      for (const item of items) {
+        item.batch = batch;
+      }
+      const { promise, cancel } = batchLoader.fetch(batch.items.map((_item) => _item.key));
+      batch.cancel = cancel;
+      promise.then((result) => {
+        for (let i2 = 0; i2 < result.length; i2++) {
+          const value = result[i2];
+          const item = batch.items[i2];
+          item.resolve(value);
+          item.batch = null;
+        }
+      }).catch((cause) => {
+        for (const item of batch.items) {
+          item.reject(cause);
+          item.batch = null;
+        }
+      });
+    }
+  }
+  function load(key) {
+    const item = {
+      aborted: false,
+      key,
+      batch: null,
+      resolve: throwFatalError,
+      reject: throwFatalError
+    };
+    const promise = new Promise((resolve2, reject) => {
+      item.reject = reject;
+      item.resolve = resolve2;
+      if (!pendingItems) {
+        pendingItems = [];
+      }
+      pendingItems.push(item);
+    });
+    if (!dispatchTimer) {
+      dispatchTimer = setTimeout(dispatch);
+    }
+    const cancel = () => {
+      item.aborted = true;
+      if (item.batch?.items.every((item2) => item2.aborted)) {
+        item.batch.cancel();
+        item.batch = null;
+      }
+    };
+    return {
+      promise,
+      cancel
+    };
+  }
+  return {
+    load
+  };
+}
+function httpBatchLink(opts) {
+  const resolvedOpts = resolveHTTPLinkOptions(opts);
+  return (runtime) => {
+    const maxURLLength = opts.maxURLLength || Infinity;
+    const batchLoader = (type) => {
+      const validate2 = (batchOps) => {
+        if (maxURLLength === Infinity) {
+          return true;
+        }
+        const path2 = batchOps.map((op) => op.path).join(",");
+        const inputs = batchOps.map((op) => op.input);
+        const url2 = getUrl({
+          ...resolvedOpts,
+          runtime,
+          type,
+          path: path2,
+          inputs
+        });
+        return url2.length <= maxURLLength;
+      };
+      const fetch2 = (batchOps) => {
+        const path2 = batchOps.map((op) => op.path).join(",");
+        const inputs = batchOps.map((op) => op.input);
+        const { promise, cancel } = jsonHttpRequester({
+          ...resolvedOpts,
+          runtime,
+          type,
+          path: path2,
+          inputs,
+          headers() {
+            if (!opts.headers) {
+              return {};
+            }
+            if (typeof opts.headers === "function") {
+              return opts.headers({
+                opList: batchOps
+              });
+            }
+            return opts.headers;
+          }
+        });
+        return {
+          promise: promise.then((res) => {
+            const resJSON = Array.isArray(res.json) ? res.json : batchOps.map(() => res.json);
+            const result = resJSON.map((item) => ({
+              meta: res.meta,
+              json: item
+            }));
+            return result;
+          }),
+          cancel
+        };
+      };
+      return {
+        validate: validate2,
+        fetch: fetch2
+      };
+    };
+    const query = dataLoader(batchLoader("query"));
+    const mutation = dataLoader(batchLoader("mutation"));
+    const subscription = dataLoader(batchLoader("subscription"));
+    const loaders = {
+      query,
+      subscription,
+      mutation
+    };
+    return ({ op }) => {
+      return observable((observer) => {
+        const loader = loaders[op.type];
+        const { promise, cancel } = loader.load(op);
+        promise.then((res) => {
+          const transformed = transformResult(res.json, runtime);
+          if (!transformed.ok) {
+            observer.error(TRPCClientError.from(transformed.error, {
+              meta: res.meta
+            }));
+            return;
+          }
+          observer.next({
+            context: res.meta,
+            result: transformed.result
+          });
+          observer.complete();
+        }).catch((err) => observer.error(TRPCClientError.from(err)));
+        return () => {
+          cancel();
+        };
+      });
+    };
+  };
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpLink.mjs
+function httpLinkFactory(factoryOpts) {
+  return (opts) => {
+    const resolvedOpts = resolveHTTPLinkOptions(opts);
+    return (runtime) => ({ op }) => observable((observer) => {
+      const { path: path2, input, type } = op;
+      const { promise, cancel } = factoryOpts.requester({
+        ...resolvedOpts,
+        runtime,
+        type,
+        path: path2,
+        input,
+        headers() {
+          if (!opts.headers) {
+            return {};
+          }
+          if (typeof opts.headers === "function") {
+            return opts.headers({
+              op
+            });
+          }
+          return opts.headers;
+        }
+      });
+      promise.then((res) => {
+        const transformed = transformResult(res.json, runtime);
+        if (!transformed.ok) {
+          observer.error(TRPCClientError.from(transformed.error, {
+            meta: res.meta
+          }));
+          return;
+        }
+        observer.next({
+          context: res.meta,
+          result: transformed.result
+        });
+        observer.complete();
+      }).catch((cause) => observer.error(TRPCClientError.from(cause)));
+      return () => {
+        cancel();
+      };
+    });
+  };
+}
+var httpLink = httpLinkFactory({
+  requester: jsonHttpRequester
+});
+
+// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/index.mjs
+var TRPCUntypedClient = class {
+  $request({ type, input, path: path2, context: context2 = {} }) {
+    const chain$ = createChain({
+      links: this.links,
+      op: {
+        id: ++this.requestId,
+        type,
+        path: path2,
+        input,
+        context: context2
+      }
+    });
+    return chain$.pipe(share());
+  }
+  requestAsPromise(opts) {
+    const req$ = this.$request(opts);
+    const { promise, abort } = observableToPromise(req$);
+    const abortablePromise = new Promise((resolve2, reject) => {
+      opts.signal?.addEventListener("abort", abort);
+      promise.then((envelope) => {
+        resolve2(envelope.result.data);
+      }).catch((err) => {
+        reject(TRPCClientError.from(err));
+      });
+    });
+    return abortablePromise;
+  }
+  query(path2, input, opts) {
+    return this.requestAsPromise({
+      type: "query",
+      path: path2,
+      input,
+      context: opts?.context,
+      signal: opts?.signal
+    });
+  }
+  mutation(path2, input, opts) {
+    return this.requestAsPromise({
+      type: "mutation",
+      path: path2,
+      input,
+      context: opts?.context,
+      signal: opts?.signal
+    });
+  }
+  subscription(path2, input, opts) {
+    const observable$ = this.$request({
+      type: "subscription",
+      path: path2,
+      input,
+      context: opts?.context
+    });
+    return observable$.subscribe({
+      next(envelope) {
+        if (envelope.result.type === "started") {
+          opts.onStarted?.();
+        } else if (envelope.result.type === "stopped") {
+          opts.onStopped?.();
+        } else {
+          opts.onData?.(envelope.result.data);
+        }
+      },
+      error(err) {
+        opts.onError?.(err);
+      },
+      complete() {
+        opts.onComplete?.();
+      }
+    });
+  }
+  constructor(opts) {
+    this.requestId = 0;
+    const combinedTransformer = (() => {
+      const transformer = opts.transformer;
+      if (!transformer) {
+        return {
+          input: {
+            serialize: (data) => data,
+            deserialize: (data) => data
+          },
+          output: {
+            serialize: (data) => data,
+            deserialize: (data) => data
+          }
+        };
+      }
+      if ("input" in transformer) {
+        return opts.transformer;
+      }
+      return {
+        input: transformer,
+        output: transformer
+      };
+    })();
+    this.runtime = {
+      transformer: {
+        serialize: (data) => combinedTransformer.input.serialize(data),
+        deserialize: (data) => combinedTransformer.output.deserialize(data)
+      },
+      combinedTransformer
+    };
+    this.links = opts.links.map((link) => link(this.runtime));
+  }
+};
+var clientCallTypeMap = {
+  query: "query",
+  mutate: "mutation",
+  subscribe: "subscription"
+};
+function createTRPCClientProxy(client) {
+  return createFlatProxy((key) => {
+    if (client.hasOwnProperty(key)) {
+      return client[key];
+    }
+    return createRecursiveProxy(({ path: path2, args }) => {
+      const pathCopy = [
+        key,
+        ...path2
+      ];
+      const clientCallType = pathCopy.pop();
+      const procedureType = clientCallTypeMap[clientCallType];
+      const fullPath = pathCopy.join(".");
+      return client[procedureType](fullPath, ...args);
+    });
+  });
+}
+function createTRPCProxyClient(opts) {
+  const client = new TRPCUntypedClient(opts);
+  const proxy = createTRPCClientProxy(client);
+  return proxy;
+}
+var getBody2 = (opts) => {
+  if (!("input" in opts)) {
+    return void 0;
+  }
+  if (!(opts.input instanceof FormData)) {
+    throw new Error("Input is not FormData");
+  }
+  return opts.input;
+};
+var formDataRequester = (opts) => {
+  if (opts.type !== "mutation") {
+    throw new Error("We only handle mutations with formdata");
+  }
+  return httpRequest({
+    ...opts,
+    getUrl() {
+      return `${opts.url}/${opts.path}`;
+    },
+    getBody: getBody2
+  });
+};
+var experimental_formDataLink = httpLinkFactory({
+  requester: formDataRequester
+});
+
+// src/lib/trpc.ts
+var trpc = createTRPCProxyClient({
+  links: [
+    httpBatchLink({
+      url: "http://localhost:4001"
+    })
+  ]
+});
+
 // ../../node_modules/.pnpm/@pixi+filter-glow@5.2.1_@pixi+core@7.2.4/node_modules/@pixi/filter-glow/dist/filter-glow.mjs
 var f2 = `attribute vec2 aVertexPosition;
 attribute vec2 aTextureCoord;
@@ -24266,6 +25333,75 @@ var e2 = class extends Filter {
 };
 var l2 = e2;
 l2.defaults = { distance: 10, outerStrength: 4, innerStrength: 0, color: 16777215, quality: 0.1, knockout: false, alpha: 1 };
+
+// src/lib/game-state.ts
+var GameState = {
+  currentView: "universe",
+  selectedSymbol: void 0,
+  visibleShips: []
+};
+
+// src/lib/makeInteractiveAndSelectable.ts
+var deselectListeners = new import_eventemitter3.default();
+function makeInteractiveAndSelectable(item, options) {
+  item.interactive = true;
+  item.cursor = "pointer";
+  item.on("mouseover", () => {
+    item.filters = [new l2()];
+    options?.onMouseOver?.();
+  });
+  const removeGlow = () => {
+    item.filters = [];
+  };
+  item.on("mouseout", removeGlow);
+  item.on("mouseout", () => {
+    options?.onMouseOut?.();
+  });
+  if (options?.onOrder) {
+    item.on("rightclick", (event) => {
+      event.stopPropagation();
+      const validCommands = options.onOrder.filter((c2) => {
+        if (c2.withSelection && (!GameState.selected || GameState.selected.type !== c2.withSelection)) {
+          return false;
+        }
+        return true;
+      });
+      if (validCommands.length == 0) {
+      } else if (validCommands.length === 1) {
+        validCommands[0].action(GameState.selected.symbol);
+      } else {
+        console.log("not yet implemented");
+      }
+    });
+  }
+  if (options?.onSelect) {
+    item.on("click", (event) => {
+      deselectListeners.emit("deselect");
+      event.stopPropagation();
+      deselectListeners.once("deselect", () => {
+        removeGlow();
+        GameState.selected = false;
+        item.on("mouseout", removeGlow);
+      });
+      item.off("mouseout", removeGlow);
+      GameState.selected = options.onSelect;
+    });
+  }
+}
+
+// src/lib/consts.ts
+var totalSize = 5e5;
+var systemScale = 12;
+var universeCoordinates = {
+  minX: 0,
+  minY: 0,
+  maxX: 0,
+  maxY: 0
+};
+var systemCoordinates = {
+  minX: 0,
+  minY: 0
+};
 
 // ../../node_modules/.pnpm/pixi-viewport@5.0.1/node_modules/pixi-viewport/dist/pixi_viewport.js
 var S2 = Object.defineProperty;
@@ -25843,929 +26979,158 @@ var ht = class extends Container {
   }
 };
 
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
-function identity(x2) {
-  return x2;
-}
-function pipeFromArray(fns) {
-  if (fns.length === 0) {
-    return identity;
-  }
-  if (fns.length === 1) {
-    return fns[0];
-  }
-  return function piped(input) {
-    return fns.reduce((prev, fn) => fn(prev), input);
-  };
-}
-function observable(subscribe) {
-  const self2 = {
-    subscribe(observer) {
-      let teardownRef = null;
-      let isDone = false;
-      let unsubscribed = false;
-      let teardownImmediately = false;
-      function unsubscribe() {
-        if (teardownRef === null) {
-          teardownImmediately = true;
-          return;
-        }
-        if (unsubscribed) {
-          return;
-        }
-        unsubscribed = true;
-        if (typeof teardownRef === "function") {
-          teardownRef();
-        } else if (teardownRef) {
-          teardownRef.unsubscribe();
-        }
-      }
-      teardownRef = subscribe({
-        next(value) {
-          if (isDone) {
-            return;
-          }
-          observer.next?.(value);
-        },
-        error(err) {
-          if (isDone) {
-            return;
-          }
-          isDone = true;
-          observer.error?.(err);
-          unsubscribe();
-        },
-        complete() {
-          if (isDone) {
-            return;
-          }
-          isDone = true;
-          observer.complete?.();
-          unsubscribe();
-        }
-      });
-      if (teardownImmediately) {
-        unsubscribe();
-      }
-      return {
-        unsubscribe
-      };
-    },
-    pipe(...operations) {
-      return pipeFromArray(operations)(self2);
-    }
-  };
-  return self2;
-}
-
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable/index.mjs
-function share(_opts) {
-  return (originalObserver) => {
-    let refCount = 0;
-    let subscription = null;
-    const observers = [];
-    function startIfNeeded() {
-      if (subscription) {
-        return;
-      }
-      subscription = originalObserver.subscribe({
-        next(value) {
-          for (const observer of observers) {
-            observer.next?.(value);
-          }
-        },
-        error(error) {
-          for (const observer of observers) {
-            observer.error?.(error);
-          }
-        },
-        complete() {
-          for (const observer of observers) {
-            observer.complete?.();
-          }
-        }
-      });
-    }
-    function resetIfNeeded() {
-      if (refCount === 0 && subscription) {
-        const _sub = subscription;
-        subscription = null;
-        _sub.unsubscribe();
-      }
-    }
-    return {
-      subscribe(observer) {
-        refCount++;
-        observers.push(observer);
-        startIfNeeded();
-        return {
-          unsubscribe() {
-            refCount--;
-            resetIfNeeded();
-            const index = observers.findIndex((v2) => v2 === observer);
-            if (index > -1) {
-              observers.splice(index, 1);
-            }
-          }
-        };
-      }
-    };
-  };
-}
-var ObservableAbortError = class extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ObservableAbortError";
-    Object.setPrototypeOf(this, ObservableAbortError.prototype);
+// src/lib/button.tsx
+var Button = class extends Container {
+  buttonSprite;
+  constructor(name, dimensions) {
+    super();
+    this.interactive = true;
+    this.buttonSprite = new NineSlicePlane(loadedAssets.uisheet.textures["uisheet/tile/button_inactive.png"], 15, 15, 15, 15);
+    this.buttonSprite.width = dimensions.width;
+    this.buttonSprite.height = dimensions.height;
+    this.addChild(this.buttonSprite);
+    this.cursor = "pointer";
+    this.on("mouseover", () => {
+      this.buttonSprite.texture = loadedAssets.uisheet.textures["uisheet/tile/button_active.png"];
+    });
+    this.on("mouseout", () => {
+      this.buttonSprite.texture = loadedAssets.uisheet.textures["uisheet/tile/button_inactive.png"];
+    });
+    const text = new BitmapText(name, {
+      fontName: "sans-serif",
+      fontSize: 32,
+      align: "right"
+    });
+    text.x = (dimensions.height - 32) / 2;
+    text.y = (dimensions.height - 32) / 2;
+    this.addChild(text);
   }
 };
-function observableToPromise(observable2) {
-  let abort;
-  const promise = new Promise((resolve2, reject) => {
-    let isDone = false;
-    function onDone() {
-      if (isDone) {
-        return;
-      }
-      isDone = true;
-      reject(new ObservableAbortError("This operation was aborted."));
-      obs$.unsubscribe();
-    }
-    const obs$ = observable2.subscribe({
-      next(data) {
-        isDone = true;
-        resolve2(data);
-        onDone();
-      },
-      error(data) {
-        isDone = true;
-        reject(data);
-        onDone();
-      },
-      complete() {
-        isDone = true;
-        onDone();
-      }
-    });
-    abort = onDone;
+
+// src/lib/UIElements.ts
+var universeView;
+var systemView;
+var uiOverlay;
+var currentCoordinate;
+var currentSelected;
+var backButton;
+var createUIElements = (app2) => {
+  systemView = new ht({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: 2e3,
+    worldHeight: 2e3,
+    events: app2.renderer.events
+    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
   });
+  systemView.drag().pinch().wheel().decelerate();
+  systemView.visible = false;
+  systemView.moveCenter(1e3, 1e3);
+  universeView = new ht({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: totalSize,
+    worldHeight: totalSize,
+    events: app2.renderer.events
+    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+  });
+  universeView.drag().pinch().wheel().decelerate();
+  universeView.moveCenter(totalSize / 2, totalSize / 2);
+  uiOverlay = new Container();
+  const panelBg = new NineSlicePlane(loadedAssets.uisheet.textures["uisheet/tile/frame.png"], 15, 15, 15, 15);
+  panelBg.x = 0;
+  panelBg.y = 0;
+  panelBg.width = 400;
+  panelBg.height = window.innerHeight;
+  backButton = new Button("Back", {
+    height: 64,
+    width: 368
+  });
+  backButton.y = 16;
+  backButton.x = 16;
+  backButton.visible = false;
+  panelBg.addChild(backButton);
+  backButton.on("click", () => {
+    universeView.visible = true;
+    systemView.visible = false;
+    GameState.currentView = "universe";
+    systemView.removeChildren();
+    backButton.visible = false;
+  });
+  uiOverlay.addChild(panelBg);
+  currentCoordinate = new BitmapText("0, 0", {
+    fontName: "sans-serif",
+    fontSize: 18,
+    align: "right"
+  });
+  currentCoordinate.x = 16;
+  currentCoordinate.y = 80;
+  uiOverlay.addChild(currentCoordinate);
+  currentSelected = new BitmapText("Selected: ", {
+    fontName: "sans-serif",
+    fontSize: 18,
+    align: "right"
+  });
+  currentSelected.x = 16;
+  currentSelected.y = 104;
+  uiOverlay.addChild(currentSelected);
+  const bgContainer = new TilingSprite(loadedAssets.bgTexture, 4096, 4096);
+  app2.stage.addChild(bgContainer);
+  app2.stage.addChild(universeView);
+  app2.stage.addChild(systemView);
+  app2.stage.addChild(uiOverlay);
+};
+
+// src/lib/positionShips.ts
+var waypointShips = {};
+function resetShipWaypoints() {
+  waypointShips = {};
+}
+function positionShip(ship) {
+  let serverX, serverY, navRot, xOffset = 0, yOffset = 0;
+  const arrivalOn = new Date(ship.arrivalOn);
+  const departureOn = new Date(ship.departureOn);
+  if (ship.destinationWaypoint.symbol !== ship.departureWaypoint.symbol && Date.now() < arrivalOn.getTime()) {
+    const positionAlongPath = (Date.now() - departureOn.getTime()) / (arrivalOn.getTime() - departureOn.getTime());
+    serverX = ship.departureWaypoint.x + (ship.destinationWaypoint.x - ship.departureWaypoint.x) * positionAlongPath;
+    serverY = ship.departureWaypoint.y + (ship.destinationWaypoint.y - ship.departureWaypoint.y) * positionAlongPath;
+    navRot = Math.atan2(ship.destinationWaypoint.y - ship.departureWaypoint.y, ship.destinationWaypoint.x - ship.departureWaypoint.x) + Math.PI / 2;
+  } else {
+    if (waypointShips[ship.currentWaypoint.symbol] === void 0) {
+      waypointShips[ship.currentWaypoint.symbol] = 0;
+    } else {
+      waypointShips[ship.currentWaypoint.symbol]++;
+    }
+    serverX = ship.currentWaypoint.x;
+    serverY = ship.currentWaypoint.y;
+    xOffset = 32 * waypointShips[ship.currentWaypoint.symbol];
+    yOffset = 80;
+  }
+  const x2 = serverX * systemScale + xOffset + Math.abs(systemCoordinates.minX) * systemScale;
+  const y2 = serverY * systemScale + yOffset + Math.abs(systemCoordinates.minY) * systemScale;
   return {
-    promise,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    abort
+    x: x2,
+    y: y2,
+    navRot
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/transformResult-a4d3dad0.mjs
-var TRPCClientError = class extends Error {
-  static from(cause, opts = {}) {
-    if (!(cause instanceof Error)) {
-      return new TRPCClientError(cause.error.message ?? "", {
-        ...opts,
-        cause: void 0,
-        result: cause
-      });
-    }
-    if (cause.name === "TRPCClientError") {
-      return cause;
-    }
-    return new TRPCClientError(cause.message, {
-      ...opts,
-      cause,
-      result: null
-    });
-  }
-  constructor(message, opts) {
-    const cause = opts?.cause;
-    super(message, {
-      cause
-    });
-    this.meta = opts?.meta;
-    this.cause = cause;
-    this.shape = opts?.result?.error;
-    this.data = opts?.result?.error.data;
-    this.name = "TRPCClientError";
-    Object.setPrototypeOf(this, TRPCClientError.prototype);
-  }
-};
-function isObject(value) {
-  return !!value && !Array.isArray(value) && typeof value === "object";
-}
-function transformResultInner(response, runtime) {
-  if ("error" in response) {
-    const error = runtime.transformer.deserialize(response.error);
-    return {
-      ok: false,
-      error: {
-        ...response,
-        error
-      }
-    };
-  }
-  const result = {
-    ...response.result,
-    ...(!response.result.type || response.result.type === "data") && {
-      type: "data",
-      data: runtime.transformer.deserialize(response.result.data)
-    }
-  };
-  return {
-    ok: true,
-    result
-  };
-}
-function transformResult(response, runtime) {
-  let result;
-  try {
-    result = transformResultInner(response, runtime);
-  } catch (err) {
-    throw new TRPCClientError("Unable to transform response from server");
-  }
-  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
-    throw new TRPCClientError("Badly formatted response from server");
-  }
-  if (result.ok && !isObject(result.result)) {
-    throw new TRPCClientError("Badly formatted response from server");
-  }
-  return result;
-}
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
-function createChain(opts) {
-  return observable((observer) => {
-    function execute(index = 0, op = opts.op) {
-      const next = opts.links[index];
-      if (!next) {
-        throw new Error("No more links to execute - did you forget to add an ending link?");
-      }
-      const subscription = next({
-        op,
-        next(nextOp) {
-          const nextObserver = execute(index + 1, nextOp);
-          return nextObserver;
-        }
-      });
-      return subscription;
-    }
-    const obs$ = execute();
-    return obs$.subscribe(observer);
-  });
-}
-
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/index-972002da.mjs
-var noop = () => {
-};
-function createInnerProxy(callback, path2) {
-  const proxy = new Proxy(noop, {
-    get(_obj, key) {
-      if (typeof key !== "string" || key === "then") {
-        return void 0;
-      }
-      return createInnerProxy(callback, [
-        ...path2,
-        key
-      ]);
-    },
-    apply(_1, _2, args) {
-      return callback({
-        args,
-        path: path2
-      });
-    }
-  });
-  return proxy;
-}
-var createRecursiveProxy = (callback) => createInnerProxy(callback, []);
-var createFlatProxy = (callback) => {
-  return new Proxy(noop, {
-    get(_obj, name) {
-      if (typeof name !== "string" || name === "then") {
-        return void 0;
-      }
-      return callback(name);
-    }
-  });
-};
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/httpUtils-8a5c637a.mjs
-var isFunction = (fn) => typeof fn === "function";
-function _bind(fn, thisArg) {
-  return isFunction(fn.bind) ? fn.bind(thisArg) : fn;
-}
-function getFetch(customFetchImpl) {
-  if (customFetchImpl) {
-    return customFetchImpl;
-  }
-  if (typeof window !== "undefined" && isFunction(window.fetch)) {
-    return _bind(window.fetch, window);
-  }
-  if (typeof globalThis !== "undefined" && isFunction(globalThis.fetch)) {
-    return _bind(globalThis.fetch, globalThis);
-  }
-  throw new Error("No fetch implementation found");
-}
-function getAbortController(customAbortControllerImpl) {
-  if (customAbortControllerImpl) {
-    return customAbortControllerImpl;
-  }
-  if (typeof window !== "undefined" && window.AbortController) {
-    return window.AbortController;
-  }
-  if (typeof globalThis !== "undefined" && globalThis.AbortController) {
-    return globalThis.AbortController;
-  }
-  return null;
-}
-function resolveHTTPLinkOptions(opts) {
-  return {
-    url: opts.url,
-    fetch: getFetch(opts.fetch),
-    AbortController: getAbortController(opts.AbortController)
-  };
-}
-function arrayToDict(array) {
-  const dict = {};
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-    dict[index] = element;
-  }
-  return dict;
-}
-var METHOD = {
-  query: "GET",
-  mutation: "POST"
-};
-function getInput(opts) {
-  return "input" in opts ? opts.runtime.transformer.serialize(opts.input) : arrayToDict(opts.inputs.map((_input) => opts.runtime.transformer.serialize(_input)));
-}
-var getUrl = (opts) => {
-  let url2 = opts.url + "/" + opts.path;
-  const queryParts = [];
-  if ("inputs" in opts) {
-    queryParts.push("batch=1");
-  }
-  if (opts.type === "query") {
-    const input = getInput(opts);
-    if (input !== void 0) {
-      queryParts.push(`input=${encodeURIComponent(JSON.stringify(input))}`);
-    }
-  }
-  if (queryParts.length) {
-    url2 += "?" + queryParts.join("&");
-  }
-  return url2;
-};
-var getBody = (opts) => {
-  if (opts.type === "query") {
-    return void 0;
-  }
-  const input = getInput(opts);
-  return input !== void 0 ? JSON.stringify(input) : void 0;
-};
-var jsonHttpRequester = (opts) => {
-  return httpRequest({
-    ...opts,
-    contentTypeHeader: "application/json",
-    getUrl,
-    getBody
-  });
-};
-function httpRequest(opts) {
-  const { type } = opts;
-  const ac = opts.AbortController ? new opts.AbortController() : null;
-  const promise = new Promise((resolve2, reject) => {
-    const url2 = opts.getUrl(opts);
-    const body = opts.getBody(opts);
-    const meta = {};
-    Promise.resolve(opts.headers()).then((headers) => {
-      if (type === "subscription") {
-        throw new Error("Subscriptions should use wsLink");
-      }
-      return opts.fetch(url2, {
-        method: METHOD[type],
-        signal: ac?.signal,
-        body,
-        headers: {
-          ...opts.contentTypeHeader ? {
-            "content-type": opts.contentTypeHeader
-          } : {},
-          ...headers
-        }
-      });
-    }).then((_res) => {
-      meta.response = _res;
-      return _res.json();
-    }).then((json) => {
-      resolve2({
-        json,
-        meta
-      });
-    }).catch(reject);
-  });
-  const cancel = () => {
-    ac?.abort();
-  };
-  return {
-    promise,
-    cancel
-  };
-}
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpBatchLink.mjs
-var throwFatalError = () => {
-  throw new Error("Something went wrong. Please submit an issue at https://github.com/trpc/trpc/issues/new");
-};
-function dataLoader(batchLoader) {
-  let pendingItems = null;
-  let dispatchTimer = null;
-  const destroyTimerAndPendingItems = () => {
-    clearTimeout(dispatchTimer);
-    dispatchTimer = null;
-    pendingItems = null;
-  };
-  function groupItems(items) {
-    const groupedItems = [
-      []
-    ];
-    let index = 0;
-    while (true) {
-      const item = items[index];
-      if (!item) {
-        break;
-      }
-      const lastGroup = groupedItems[groupedItems.length - 1];
-      if (item.aborted) {
-        item.reject(new Error("Aborted"));
-        index++;
-        continue;
-      }
-      const isValid = batchLoader.validate(lastGroup.concat(item).map((it) => it.key));
-      if (isValid) {
-        lastGroup.push(item);
-        index++;
-        continue;
-      }
-      if (lastGroup.length === 0) {
-        item.reject(new Error("Input is too big for a single dispatch"));
-        index++;
-        continue;
-      }
-      groupedItems.push([]);
-    }
-    return groupedItems;
-  }
-  function dispatch() {
-    const groupedItems = groupItems(pendingItems);
-    destroyTimerAndPendingItems();
-    for (const items of groupedItems) {
-      if (!items.length) {
-        continue;
-      }
-      const batch = {
-        items,
-        cancel: throwFatalError
-      };
-      for (const item of items) {
-        item.batch = batch;
-      }
-      const { promise, cancel } = batchLoader.fetch(batch.items.map((_item) => _item.key));
-      batch.cancel = cancel;
-      promise.then((result) => {
-        for (let i2 = 0; i2 < result.length; i2++) {
-          const value = result[i2];
-          const item = batch.items[i2];
-          item.resolve(value);
-          item.batch = null;
-        }
-      }).catch((cause) => {
-        for (const item of batch.items) {
-          item.reject(cause);
-          item.batch = null;
-        }
-      });
-    }
-  }
-  function load(key) {
-    const item = {
-      aborted: false,
-      key,
-      batch: null,
-      resolve: throwFatalError,
-      reject: throwFatalError
-    };
-    const promise = new Promise((resolve2, reject) => {
-      item.reject = reject;
-      item.resolve = resolve2;
-      if (!pendingItems) {
-        pendingItems = [];
-      }
-      pendingItems.push(item);
-    });
-    if (!dispatchTimer) {
-      dispatchTimer = setTimeout(dispatch);
-    }
-    const cancel = () => {
-      item.aborted = true;
-      if (item.batch?.items.every((item2) => item2.aborted)) {
-        item.batch.cancel();
-        item.batch = null;
-      }
-    };
-    return {
-      promise,
-      cancel
-    };
-  }
-  return {
-    load
-  };
-}
-function httpBatchLink(opts) {
-  const resolvedOpts = resolveHTTPLinkOptions(opts);
-  return (runtime) => {
-    const maxURLLength = opts.maxURLLength || Infinity;
-    const batchLoader = (type) => {
-      const validate2 = (batchOps) => {
-        if (maxURLLength === Infinity) {
-          return true;
-        }
-        const path2 = batchOps.map((op) => op.path).join(",");
-        const inputs = batchOps.map((op) => op.input);
-        const url2 = getUrl({
-          ...resolvedOpts,
-          runtime,
-          type,
-          path: path2,
-          inputs
-        });
-        return url2.length <= maxURLLength;
-      };
-      const fetch2 = (batchOps) => {
-        const path2 = batchOps.map((op) => op.path).join(",");
-        const inputs = batchOps.map((op) => op.input);
-        const { promise, cancel } = jsonHttpRequester({
-          ...resolvedOpts,
-          runtime,
-          type,
-          path: path2,
-          inputs,
-          headers() {
-            if (!opts.headers) {
-              return {};
-            }
-            if (typeof opts.headers === "function") {
-              return opts.headers({
-                opList: batchOps
-              });
-            }
-            return opts.headers;
-          }
-        });
-        return {
-          promise: promise.then((res) => {
-            const resJSON = Array.isArray(res.json) ? res.json : batchOps.map(() => res.json);
-            const result = resJSON.map((item) => ({
-              meta: res.meta,
-              json: item
-            }));
-            return result;
-          }),
-          cancel
-        };
-      };
-      return {
-        validate: validate2,
-        fetch: fetch2
-      };
-    };
-    const query = dataLoader(batchLoader("query"));
-    const mutation = dataLoader(batchLoader("mutation"));
-    const subscription = dataLoader(batchLoader("subscription"));
-    const loaders = {
-      query,
-      subscription,
-      mutation
-    };
-    return ({ op }) => {
-      return observable((observer) => {
-        const loader = loaders[op.type];
-        const { promise, cancel } = loader.load(op);
-        promise.then((res) => {
-          const transformed = transformResult(res.json, runtime);
-          if (!transformed.ok) {
-            observer.error(TRPCClientError.from(transformed.error, {
-              meta: res.meta
-            }));
-            return;
-          }
-          observer.next({
-            context: res.meta,
-            result: transformed.result
-          });
-          observer.complete();
-        }).catch((err) => observer.error(TRPCClientError.from(err)));
-        return () => {
-          cancel();
-        };
-      });
-    };
-  };
-}
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpLink.mjs
-function httpLinkFactory(factoryOpts) {
-  return (opts) => {
-    const resolvedOpts = resolveHTTPLinkOptions(opts);
-    return (runtime) => ({ op }) => observable((observer) => {
-      const { path: path2, input, type } = op;
-      const { promise, cancel } = factoryOpts.requester({
-        ...resolvedOpts,
-        runtime,
-        type,
-        path: path2,
-        input,
-        headers() {
-          if (!opts.headers) {
-            return {};
-          }
-          if (typeof opts.headers === "function") {
-            return opts.headers({
-              op
-            });
-          }
-          return opts.headers;
-        }
-      });
-      promise.then((res) => {
-        const transformed = transformResult(res.json, runtime);
-        if (!transformed.ok) {
-          observer.error(TRPCClientError.from(transformed.error, {
-            meta: res.meta
-          }));
-          return;
-        }
-        observer.next({
-          context: res.meta,
-          result: transformed.result
-        });
-        observer.complete();
-      }).catch((cause) => observer.error(TRPCClientError.from(cause)));
-      return () => {
-        cancel();
-      };
-    });
-  };
-}
-var httpLink = httpLinkFactory({
-  requester: jsonHttpRequester
-});
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/index.mjs
-var TRPCUntypedClient = class {
-  $request({ type, input, path: path2, context: context2 = {} }) {
-    const chain$ = createChain({
-      links: this.links,
-      op: {
-        id: ++this.requestId,
-        type,
-        path: path2,
-        input,
-        context: context2
-      }
-    });
-    return chain$.pipe(share());
-  }
-  requestAsPromise(opts) {
-    const req$ = this.$request(opts);
-    const { promise, abort } = observableToPromise(req$);
-    const abortablePromise = new Promise((resolve2, reject) => {
-      opts.signal?.addEventListener("abort", abort);
-      promise.then((envelope) => {
-        resolve2(envelope.result.data);
-      }).catch((err) => {
-        reject(TRPCClientError.from(err));
-      });
-    });
-    return abortablePromise;
-  }
-  query(path2, input, opts) {
-    return this.requestAsPromise({
-      type: "query",
-      path: path2,
-      input,
-      context: opts?.context,
-      signal: opts?.signal
-    });
-  }
-  mutation(path2, input, opts) {
-    return this.requestAsPromise({
-      type: "mutation",
-      path: path2,
-      input,
-      context: opts?.context,
-      signal: opts?.signal
-    });
-  }
-  subscription(path2, input, opts) {
-    const observable$ = this.$request({
-      type: "subscription",
-      path: path2,
-      input,
-      context: opts?.context
-    });
-    return observable$.subscribe({
-      next(envelope) {
-        if (envelope.result.type === "started") {
-          opts.onStarted?.();
-        } else if (envelope.result.type === "stopped") {
-          opts.onStopped?.();
-        } else {
-          opts.onData?.(envelope.result.data);
-        }
-      },
-      error(err) {
-        opts.onError?.(err);
-      },
-      complete() {
-        opts.onComplete?.();
-      }
-    });
-  }
-  constructor(opts) {
-    this.requestId = 0;
-    const combinedTransformer = (() => {
-      const transformer = opts.transformer;
-      if (!transformer) {
-        return {
-          input: {
-            serialize: (data) => data,
-            deserialize: (data) => data
-          },
-          output: {
-            serialize: (data) => data,
-            deserialize: (data) => data
-          }
-        };
-      }
-      if ("input" in transformer) {
-        return opts.transformer;
-      }
-      return {
-        input: transformer,
-        output: transformer
-      };
-    })();
-    this.runtime = {
-      transformer: {
-        serialize: (data) => combinedTransformer.input.serialize(data),
-        deserialize: (data) => combinedTransformer.output.deserialize(data)
-      },
-      combinedTransformer
-    };
-    this.links = opts.links.map((link) => link(this.runtime));
-  }
-};
-var clientCallTypeMap = {
-  query: "query",
-  mutate: "mutation",
-  subscribe: "subscription"
-};
-function createTRPCClientProxy(client) {
-  return createFlatProxy((key) => {
-    if (client.hasOwnProperty(key)) {
-      return client[key];
-    }
-    return createRecursiveProxy(({ path: path2, args }) => {
-      const pathCopy = [
-        key,
-        ...path2
-      ];
-      const clientCallType = pathCopy.pop();
-      const procedureType = clientCallTypeMap[clientCallType];
-      const fullPath = pathCopy.join(".");
-      return client[procedureType](fullPath, ...args);
-    });
-  });
-}
-function createTRPCProxyClient(opts) {
-  const client = new TRPCUntypedClient(opts);
-  const proxy = createTRPCClientProxy(client);
-  return proxy;
-}
-var getBody2 = (opts) => {
-  if (!("input" in opts)) {
-    return void 0;
-  }
-  if (!(opts.input instanceof FormData)) {
-    throw new Error("Input is not FormData");
-  }
-  return opts.input;
-};
-var formDataRequester = (opts) => {
-  if (opts.type !== "mutation") {
-    throw new Error("We only handle mutations with formdata");
-  }
-  return httpRequest({
-    ...opts,
-    getUrl() {
-      return `${opts.url}/${opts.path}`;
-    },
-    getBody: getBody2
-  });
-};
-var experimental_formDataLink = httpLinkFactory({
-  requester: formDataRequester
-});
-
-// src/index.ts
-var trpc = createTRPCProxyClient({
-  links: [
-    httpBatchLink({
-      url: "http://localhost:4001"
-    })
-  ]
-});
-var app = new Application({
-  resizeTo: window
-});
-document.body.appendChild(app.view);
-var totalSize = 5e5;
-var systemScale = 12;
-var universeView = new ht({
-  screenWidth: window.innerWidth,
-  screenHeight: window.innerHeight,
-  worldWidth: totalSize,
-  worldHeight: totalSize,
-  events: app.renderer.events
-  // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-});
-var systemView = new ht({
-  screenWidth: window.innerWidth,
-  screenHeight: window.innerHeight,
-  worldWidth: 2e3,
-  worldHeight: 2e3,
-  events: app.renderer.events
-  // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-});
-systemView.visible = false;
-systemView.moveCenter(1e3, 1e3);
-universeView.moveCenter(totalSize / 2, totalSize / 2);
-universeView.drag().pinch().wheel().decelerate();
-systemView.drag().pinch().wheel().decelerate();
-var references = {};
-var sheet = await Assets.load("stars.json");
-var planetsheet = await Assets.load("planets.json");
-var font = await Assets.load("font.fnt");
-var bgTexture = await Assets.load("starfield.png");
-var starTexture = await Assets.load("stars.png");
-var spaceshipTexture = await Assets.load("spaceship.png");
-starTexture.frame = new Rectangle(0, 0, 64, 64);
-var starTexture2 = starTexture.clone();
-starTexture2.frame = new Rectangle(0, 64, 64, 64);
-var yellowStar = starTexture.clone();
-yellowStar.frame = new Rectangle(64, 0, 64, 64);
-app.stage.interactive = true;
-app.stage.hitArea = app.screen;
-var uiOverlay = new Container();
-var currentCoordinate = new BitmapText("0, 0", {
-  fontName: "sans-serif",
-  fontSize: 18,
-  align: "right"
-});
-currentCoordinate.x = 32;
-currentCoordinate.y = 64;
-uiOverlay.addChild(currentCoordinate);
-function makeInteractiveAndGlowy(item, options) {
-  item.interactive = true;
-  item.cursor = "pointer";
-  item.on("mouseover", () => {
-    item.filters = [new l2()];
-    options?.onMouseOver?.();
-  });
-  item.on("mouseout", () => {
-    item.filters = [];
-    options?.onMouseOut?.();
-  });
-}
-var bgContainer = new TilingSprite(bgTexture, 4096, 4096);
-var minX = 0;
-var minY = 0;
-var maxX = 0;
-var maxY = 0;
-var loadSystems = async () => {
+// src/lib/loadUniverse.ts
+var loadUniverse = async () => {
+  const references = {};
   const systems = await trpc.getSystems.query();
   for (const starData of systems) {
-    if (starData.x < minX)
-      minX = starData.x;
-    if (starData.x > maxX)
-      maxX = starData.x;
-    if (starData.y < minY)
-      minY = starData.y;
-    if (starData.y > maxY)
-      maxY = starData.y;
+    if (starData.x < universeCoordinates.minX)
+      universeCoordinates.minX = starData.x;
+    if (starData.x > universeCoordinates.maxX)
+      universeCoordinates.maxX = starData.x;
+    if (starData.y < universeCoordinates.minY)
+      universeCoordinates.minY = starData.y;
+    if (starData.y > universeCoordinates.maxY)
+      universeCoordinates.maxY = starData.y;
   }
   for (const starData of systems) {
-    let texture = sheet.textures[`planets/tile/${starData.type}.png`];
+    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`];
     const star = new Sprite(texture);
     star.pivot = {
       x: 32,
@@ -26774,12 +27139,14 @@ var loadSystems = async () => {
     const text = new BitmapText(starData.name + "\n(" + starData.symbol + ")", {
       fontName: "sans-serif",
       fontSize: 18,
-      align: "right"
+      align: "left"
     });
+    text.x = 0;
+    text.y = 40;
     const starContainer = new Container();
     starContainer.addChild(star);
     starContainer.addChild(text);
-    makeInteractiveAndGlowy(starContainer);
+    makeInteractiveAndSelectable(starContainer);
     starContainer.on("click", () => {
       trpc.dataForDisplay.query({
         system: starData.symbol
@@ -26787,56 +27154,47 @@ var loadSystems = async () => {
         console.log("result from query", result);
         universeView.visible = false;
         systemView.visible = true;
-        let minX2 = 0, minY2 = 0;
+        GameState.currentView = "system";
+        systemCoordinates.minX = 0;
+        systemCoordinates.minY = 0;
         result.waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
-          if (item.x < minX2) {
-            minX2 = item.x;
+          if (item.x < systemCoordinates.minX) {
+            systemCoordinates.minX = item.x;
           }
-          if (item.y < minY2) {
-            minY2 = item.y;
+          if (item.y < systemCoordinates.minY) {
+            systemCoordinates.minY = item.y;
           }
         });
-        minX2 = Math.abs(minX2 * systemScale);
-        minY2 = Math.abs(minY2 * systemScale);
         const star2 = new Sprite(texture);
-        star2.x = minX2;
-        star2.y = minY2;
+        star2.x = Math.abs(systemCoordinates.minX) * systemScale;
+        star2.y = Math.abs(systemCoordinates.minY) * systemScale;
         star2.pivot = {
           x: 32,
           y: 32
         };
         systemView.addChild(star2);
-        const backButton = new BitmapText("Back", {
-          fontName: "sans-serif",
-          fontSize: 32,
-          align: "right"
-        });
-        makeInteractiveAndGlowy(backButton);
-        backButton.x = 32;
-        backButton.y = 32;
-        backButton.on("click", () => {
-          universeView.visible = true;
-          systemView.visible = false;
-          systemView.removeChildren();
-        });
-        uiOverlay.addChild(backButton);
-        const waypointShips = {};
+        backButton.visible = true;
+        resetShipWaypoints();
+        GameState.visibleShips = [];
         result.ships.forEach((ship) => {
           const shipGroup = new Container();
-          if (waypointShips[ship.currentWaypoint.symbol] === void 0) {
-            waypointShips[ship.currentWaypoint.symbol] = 0;
-          } else {
-            waypointShips[ship.currentWaypoint.symbol]++;
-          }
-          const itemSprite = new Sprite(spaceshipTexture);
+          const itemSprite = new Sprite(loadedAssets.spaceshipTexture);
           itemSprite.pivot = {
             x: 32,
             y: 32
           };
+          const navSprite = new Sprite(loadedAssets.navArrow);
+          navSprite.pivot = {
+            x: navSprite.width / 2,
+            y: navSprite.height / 2
+          };
+          navSprite.name = "nav";
+          navSprite.visible = false;
+          shipGroup.addChild(navSprite);
           itemSprite.scale = { x: 0.5, y: 0.5 };
-          console.log(waypointShips[ship.currentWaypoint.symbol]);
-          shipGroup.x = ship.currentWaypoint.x * systemScale + 32 * waypointShips[ship.currentWaypoint.symbol] + minX2;
-          shipGroup.y = ship.currentWaypoint.y * systemScale + 80 + minY2;
+          const shipPosition = positionShip(ship);
+          shipGroup.x = shipPosition.x;
+          shipGroup.y = shipPosition.y;
           shipGroup.addChild(itemSprite);
           const text2 = new BitmapText(ship.symbol + " - " + ship.role, {
             fontName: "sans-serif",
@@ -26847,15 +27205,23 @@ var loadSystems = async () => {
           text2.x = 0;
           text2.y = 32;
           shipGroup.addChild(text2);
-          makeInteractiveAndGlowy(shipGroup, {
+          makeInteractiveAndSelectable(shipGroup, {
             onMouseOver: () => {
               text2.visible = true;
             },
             onMouseOut: () => {
               text2.visible = false;
+            },
+            onSelect: {
+              type: "ship",
+              symbol: ship.symbol
             }
           });
           systemView.addChild(shipGroup);
+          GameState.visibleShips.push({
+            shipData: ship,
+            container: shipGroup
+          });
         });
         result.waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
           const orbit = new Graphics();
@@ -26863,17 +27229,36 @@ var loadSystems = async () => {
             width: 2,
             color: 4473924
           });
-          orbit.drawCircle(minX2, minY2, Math.sqrt(Math.pow(item.x * systemScale, 2) + Math.pow(item.y * systemScale, 2)));
+          orbit.drawCircle(Math.abs(systemCoordinates.minX) * systemScale, Math.abs(systemCoordinates.minY) * systemScale, Math.sqrt(Math.pow(item.x * systemScale, 2) + Math.pow(item.y * systemScale, 2)));
           systemView.addChild(orbit);
           const itemGroup = new Container();
-          makeInteractiveAndGlowy(itemGroup);
-          const itemSprite = new Sprite(planetsheet.textures[`planets/tile/${item.type}.png`]);
+          makeInteractiveAndSelectable(itemGroup, {
+            onOrder: [
+              {
+                name: "navigate",
+                withSelection: "ship",
+                action: async (selectedSymbol) => {
+                  const res = await trpc.instructNavigate.mutate({
+                    shipSymbol: selectedSymbol,
+                    waypointSymbol: item.symbol
+                  });
+                  GameState.visibleShips.forEach((ship) => {
+                    if (ship.shipData.symbol === res.symbol) {
+                      ship.shipData = res;
+                      console.log("updated state for ship " + res.symbol);
+                    }
+                  });
+                }
+              }
+            ]
+          });
+          const itemSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${item.type}.png`]);
           itemSprite.pivot = {
             x: 32,
             y: 32
           };
-          itemGroup.x = item.x * systemScale + minX2;
-          itemGroup.y = item.y * systemScale + minY2;
+          itemGroup.x = (item.x + Math.abs(systemCoordinates.minX)) * systemScale;
+          itemGroup.y = (item.y + Math.abs(systemCoordinates.minY)) * systemScale;
           itemGroup.addChild(itemSprite);
           const text2 = new BitmapText(item.symbol.replace(starData.symbol + "-", "") + " - " + item.type, {
             fontName: "sans-serif",
@@ -26885,15 +27270,15 @@ var loadSystems = async () => {
           itemGroup.addChild(text2);
           result.waypoints.filter((orbitingThing) => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
             const orbitingGroup = new Container();
-            makeInteractiveAndGlowy(orbitingGroup);
-            const orbitingSprite = new Sprite(planetsheet.textures[`planets/tile/${orbitingThing.type}.png`]);
+            makeInteractiveAndSelectable(orbitingGroup);
+            const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`]);
             orbitingSprite.pivot = {
               x: 32,
               y: 32
             };
             orbitingSprite.scale = { x: 0.75, y: 0.75 };
-            orbitingGroup.x = item.x * systemScale + 32 + minX2;
-            orbitingGroup.y = item.y * systemScale + 48 + 64 * index + minY2;
+            orbitingGroup.x = item.x * systemScale + 32 + Math.abs(systemCoordinates.minX) * systemScale;
+            orbitingGroup.y = item.y * systemScale + 48 + 64 * index + Math.abs(systemCoordinates.minY) * systemScale;
             orbitingGroup.addChild(orbitingSprite);
             const orbitingText = new BitmapText(orbitingThing.symbol.replace(starData.symbol + "-", "") + " - " + orbitingThing.type, {
               fontName: "sans-serif",
@@ -26907,13 +27292,14 @@ var loadSystems = async () => {
           });
           systemView.addChild(itemGroup);
         });
-        systemView.fit(true);
+        systemView.moveCenter({
+          x: Math.abs(systemCoordinates.minX) * systemScale,
+          y: Math.abs(systemCoordinates.minY) * systemScale
+        });
       });
     });
-    starContainer.x = (starData.x + Math.abs(minX)) / (maxX - minX) * totalSize;
-    starContainer.y = (starData.y + Math.abs(minY)) / (maxY - minY) * totalSize;
-    text.x = 0;
-    text.y = 70;
+    starContainer.x = (starData.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
+    starContainer.y = (starData.y + Math.abs(universeCoordinates.minY)) / (universeCoordinates.maxY - universeCoordinates.minY) * totalSize;
     universeView.addChild(starContainer);
     references[starData.symbol] = starContainer;
   }
@@ -26922,7 +27308,7 @@ var loadSystems = async () => {
     width: 15,
     color: 30719
   });
-  const multiFactor = 5e3 / (maxX - minX) * totalSize;
+  const multiFactor = 5e3 / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
   graphics.drawCircle(references["X1-VU95"].x, references["X1-VU95"].y, multiFactor);
   graphics.moveTo(references["X1-VU95"].x, references["X1-VU95"].y);
   graphics.lineTo(references["X1-FS18"].x, references["X1-FS18"].y);
@@ -26932,31 +27318,85 @@ var loadSystems = async () => {
   graphics.lineTo(references["X1-JQ84"].x, references["X1-JQ84"].y);
   universeView.addChild(graphics);
   universeView.moveCenter(references["X1-VU95"].x, references["X1-VU95"].y);
-};
-var worldCoordinateToOriginal = (point) => {
-  const multiFactor = (maxX - minX) / totalSize;
   return {
-    x: Math.round(minX + point.x * multiFactor),
-    y: Math.round(minY + point.y * multiFactor)
+    systems: references
   };
 };
-loadSystems();
-app.stage.addChild(bgContainer);
-app.stage.addChild(universeView);
-app.stage.addChild(systemView);
-app.stage.addChild(uiOverlay);
+
+// src/lib/worldCoordinateToOriginal.ts
+var worldCoordinateToOriginal = (point) => {
+  const multiFactor = (universeCoordinates.maxX - universeCoordinates.minX) / totalSize;
+  return {
+    x: Math.round(universeCoordinates.minX + point.x * multiFactor),
+    y: Math.round(universeCoordinates.minY + point.y * multiFactor)
+  };
+};
+var systemCoordinateToOriginal = (point) => {
+  return {
+    x: Math.round(systemCoordinates.minX + point.x / systemScale),
+    y: Math.round(systemCoordinates.minY + point.y / systemScale)
+  };
+};
+
+// src/index.ts
+var app = new Application({
+  resizeTo: window
+});
+document.body.appendChild(app.view);
+app.view.addEventListener("contextmenu", (e3) => {
+  e3.preventDefault();
+});
+app.stage.interactive = true;
+app.stage.hitArea = app.screen;
+app.stage.on("click", (event) => {
+  console.log(event);
+  deselectListeners.emit("deselect");
+  GameState.selected = void 0;
+});
+await loadAssets();
+await createUIElements(app);
+var loadedUniverse = await loadUniverse();
 app.ticker.add(() => {
-  const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
-  currentCoordinate.text = worldCoordinates.x + ", " + worldCoordinates.y;
+  if (GameState.currentView == "universe") {
+    const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
+    currentCoordinate.text = worldCoordinates.x + ", " + worldCoordinates.y;
+  } else {
+    const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
+    currentCoordinate.text = systemCoordinate.x + ", " + systemCoordinate.y;
+    resetShipWaypoints();
+    GameState.visibleShips.forEach((shipState) => {
+      const shipPosition = positionShip(shipState.shipData);
+      shipState.container.x = shipPosition.x;
+      shipState.container.y = shipPosition.y;
+      const nav = shipState.container.getChildByName("nav");
+      if (shipPosition.navRot) {
+        nav.visible = true;
+        nav.rotation = shipPosition.navRot;
+      } else {
+        nav.visible = false;
+      }
+    });
+  }
   const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
-  Object.values(references).forEach((ref) => {
+  Object.values(loadedUniverse.systems).forEach((ref) => {
     ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
   });
+  if (GameState.selected) {
+    currentSelected.text = `Selected: ${GameState.selected.symbol} - ${GameState.selected.type}`;
+  } else {
+    currentSelected.text = `Selected:`;
+  }
 });
 /*! Bundled license information:
 
 punycode/punycode.js:
   (*! https://mths.be/punycode v1.3.2 by @mathias *)
+
+@trpc/client/dist/httpUtils-8a5c637a.mjs:
+  (* istanbul ignore if -- @preserve *)
+
+@trpc/client/dist/links/wsLink.mjs:
+  (* istanbul ignore next -- @preserve *)
 
 @pixi/filter-glow/dist/filter-glow.mjs:
   (*!
@@ -26966,10 +27406,4 @@ punycode/punycode.js:
    * @pixi/filter-glow is licensed under the MIT License.
    * http://www.opensource.org/licenses/mit-license
    *)
-
-@trpc/client/dist/httpUtils-8a5c637a.mjs:
-  (* istanbul ignore if -- @preserve *)
-
-@trpc/client/dist/links/wsLink.mjs:
-  (* istanbul ignore next -- @preserve *)
 */
