@@ -24356,19 +24356,28 @@ async function loadAssets() {
   const planetsheet = await Assets.load("planets.json");
   const uisheet = await Assets.load("uisheet.json");
   const font = await Assets.load("font.fnt");
+  const buttonText = await Assets.load("buttontext.fnt");
   const bgTexture = await Assets.load("starfield.png");
   const navArrow = await Assets.load("navarrow.png");
   const starTexture = await Assets.load("stars.png");
+  const shipyard = await Assets.load("shipyard.png");
+  const market = await Assets.load("money-bag-xxl.png");
   const spaceshipTexture = await Assets.load("spaceship.png");
   loadedAssets = {
     sheet,
     planetsheet,
     uisheet,
     font,
+    buttonText,
     bgTexture,
     navArrow,
     starTexture,
-    spaceshipTexture
+    spaceshipTexture,
+    shipyard,
+    market,
+    panel: await Assets.load("ui/panel.png"),
+    button: await Assets.load("ui/button.png"),
+    panelBg: await Assets.load("ui/panelbg.png")
   };
 }
 
@@ -25337,8 +25346,8 @@ l2.defaults = { distance: 10, outerStrength: 4, innerStrength: 0, color: 1677721
 // src/lib/game-state.ts
 var GameState = {
   currentView: "universe",
-  selectedSymbol: void 0,
-  visibleShips: []
+  selected: void 0,
+  visibleShips: {}
 };
 
 // src/lib/makeInteractiveAndSelectable.ts
@@ -26979,25 +26988,34 @@ var ht = class extends Container {
   }
 };
 
-// src/lib/button.tsx
+// src/lib/button.ts
 var Button = class extends Container {
-  buttonSprite;
-  constructor(name, dimensions) {
+  constructor(name, dimensions, clickAction) {
     super();
+    this.clickAction = clickAction;
     this.interactive = true;
-    this.buttonSprite = new NineSlicePlane(loadedAssets.uisheet.textures["uisheet/tile/button_inactive.png"], 15, 15, 15, 15);
+    this.buttonSprite = new NineSlicePlane(loadedAssets.button, 4, 4, 4, 4);
     this.buttonSprite.width = dimensions.width;
     this.buttonSprite.height = dimensions.height;
     this.addChild(this.buttonSprite);
     this.cursor = "pointer";
     this.on("mouseover", () => {
-      this.buttonSprite.texture = loadedAssets.uisheet.textures["uisheet/tile/button_active.png"];
+      this.buttonSprite.texture = loadedAssets.button;
+      if (!this.isDisabled) {
+        this.alpha = 1;
+      }
     });
     this.on("mouseout", () => {
-      this.buttonSprite.texture = loadedAssets.uisheet.textures["uisheet/tile/button_inactive.png"];
+      this.buttonSprite.texture = loadedAssets.button;
+      if (!this.isDisabled) {
+        this.alpha = 0.9;
+      }
     });
+    if (this.clickAction) {
+      this.on("click", this.clickAction);
+    }
     const text = new BitmapText(name, {
-      fontName: "sans-serif",
+      fontName: "buttontext",
       fontSize: 32,
       align: "right"
     });
@@ -27005,7 +27023,119 @@ var Button = class extends Container {
     text.y = (dimensions.height - 32) / 2;
     this.addChild(text);
   }
+  buttonSprite;
+  isDisabled = false;
+  set disabled(disabled) {
+    if (disabled && !this.isDisabled) {
+      console.log("flip disabled");
+      this.alpha = 0.5;
+      this.cursor = "default";
+      this.isDisabled = true;
+      this.off("click");
+    } else if (!disabled && this.isDisabled) {
+      console.log("flip enabled");
+      this.alpha = 0.9;
+      this.cursor = "pointer";
+      this.isDisabled = false;
+      if (this.clickAction) {
+        this.on("click", this.clickAction);
+      }
+    }
+  }
+  get disabled() {
+    return this.isDisabled;
+  }
 };
+
+// src/lib/availableActions.ts
+var availableActions = [{
+  name: "Refuel",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const refuel = await trpc.instructRefuel.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.visibleShips[refuel.symbol].shipData = refuel;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
+      return selectedShip.fuelAvailable < selectedShip.fuelCapacity && selectedShip.navStatus === "DOCKED";
+    }
+    return false;
+  }
+}, {
+  name: "Dock",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const dock = await trpc.instructDock.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      console.log("dockresult", dock);
+      GameState.visibleShips[dock.symbol].shipData = dock;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" || selectedShip.navStatus === "IN_TRANSIT" && new Date(selectedShip.arrivalOn).getTime() < Date.now();
+    }
+    return false;
+  }
+}, {
+  name: "Orbit",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const orbit = await trpc.instructOrbit.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.visibleShips[orbit.symbol].shipData = orbit;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "DOCKED";
+    }
+    return false;
+  }
+}, {
+  name: "Extract",
+  action: () => {
+  },
+  isAvailable: () => {
+    return false;
+  }
+}, {
+  name: "Scan Wpt",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const waypoints = await trpc.instructScanWaypoints.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.visibleShips[waypoints.symbol].shipData = waypoints;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime();
+    }
+    return false;
+  }
+}, {
+  name: "Scan Shp",
+  action: () => {
+  },
+  isAvailable: () => {
+    return false;
+  }
+}];
 
 // src/lib/UIElements.ts
 var universeView;
@@ -27014,6 +27144,8 @@ var uiOverlay;
 var currentCoordinate;
 var currentSelected;
 var backButton;
+var actionButton = {};
+var entityInfo;
 var createUIElements = (app2) => {
   systemView = new ht({
     screenWidth: window.innerWidth,
@@ -27037,7 +27169,13 @@ var createUIElements = (app2) => {
   universeView.drag().pinch().wheel().decelerate();
   universeView.moveCenter(totalSize / 2, totalSize / 2);
   uiOverlay = new Container();
-  const panelBg = new NineSlicePlane(loadedAssets.uisheet.textures["uisheet/tile/frame.png"], 15, 15, 15, 15);
+  const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208);
+  panelBack.height = window.innerHeight - 16;
+  panelBack.x = 8;
+  panelBack.width = 386;
+  panelBack.y = 8;
+  uiOverlay.addChild(panelBack);
+  const panelBg = new NineSlicePlane(loadedAssets.panel, 19, 19, 19, 19);
   panelBg.x = 0;
   panelBg.y = 0;
   panelBg.width = 400;
@@ -27046,7 +27184,8 @@ var createUIElements = (app2) => {
     height: 64,
     width: 368
   });
-  backButton.on("click", () => {
+  backButton.on("click", (event) => {
+    event.stopPropagation();
     universeView.visible = true;
     systemView.visible = false;
     GameState.currentView = "universe";
@@ -27057,28 +27196,38 @@ var createUIElements = (app2) => {
   backButton.x = 16;
   backButton.visible = false;
   panelBg.addChild(backButton);
-  backButton = new Button("Refuel", {
-    height: 64,
-    width: 368
+  const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64;
+  availableActions.forEach((action, index) => {
+    actionButton[action.name] = new Button(action.name, {
+      height: 64,
+      width: 368 / 2
+    }, action.action);
+    actionButton[action.name].y = actionPanelY + Math.floor(index / 2) * 64;
+    actionButton[action.name].x = index % 2 == 0 ? 200 : 16;
+    actionButton[action.name].disabled = true;
+    panelBg.addChild(actionButton[action.name]);
   });
-  backButton.on("click", async () => {
-    const refuel = await trpc.instructRefuel.mutate();
-  });
-  backButton.y = 16;
-  backButton.x = 16;
-  backButton.visible = false;
-  panelBg.addChild(backButton);
   uiOverlay.addChild(panelBg);
+  entityInfo = new BitmapText("Entity Information", {
+    fontName: "buttontext",
+    fontSize: 16,
+    align: "left",
+    maxWidth: 368
+  });
+  entityInfo.x = 16;
+  entityInfo.y = window.innerHeight - 500;
+  panelBg.addChild(entityInfo);
   currentCoordinate = new BitmapText("0, 0", {
     fontName: "sans-serif",
     fontSize: 18,
     align: "right"
   });
-  currentCoordinate.x = 16;
-  currentCoordinate.y = 80;
+  currentCoordinate.x = window.innerWidth - 166;
+  currentCoordinate.y = 16;
+  currentCoordinate.maxWidth = 150;
   uiOverlay.addChild(currentCoordinate);
   currentSelected = new BitmapText("Selected: ", {
-    fontName: "sans-serif",
+    fontName: "buttontext",
     fontSize: 18,
     align: "right"
   });
@@ -27157,7 +27306,32 @@ var loadUniverse = async () => {
     const starContainer = new Container();
     starContainer.addChild(star);
     starContainer.addChild(text);
-    makeInteractiveAndSelectable(starContainer);
+    makeInteractiveAndSelectable(starContainer, {
+      onOrder: [
+        {
+          name: "Warp",
+          withSelection: "ship",
+          action: async () => {
+            if (GameState.selected?.symbol) {
+              const system = await trpc.dataForDisplay.query({
+                system: starData.symbol
+              });
+              const bestWaypoint = system.waypoints.find((w3) => w3.traits.find((t2) => t2.symbol === "MARKETPLACE")).symbol ?? system.waypoints[0].symbol;
+              if (bestWaypoint) {
+                console.log("warping to first waypoint in", system);
+                const res = await trpc.instructWarp.mutate({
+                  shipSymbol: GameState.selected.symbol,
+                  waypointSymbol: bestWaypoint
+                });
+                GameState.visibleShips[res.symbol].shipData = res;
+              } else {
+                alert("Cannot warp to system without waypoints, nothing to target");
+              }
+            }
+          }
+        }
+      ]
+    });
     starContainer.on("click", () => {
       trpc.dataForDisplay.query({
         system: starData.symbol
@@ -27186,7 +27360,8 @@ var loadUniverse = async () => {
         systemView.addChild(star2);
         backButton.visible = true;
         resetShipWaypoints();
-        GameState.visibleShips = [];
+        GameState.visibleShips = {};
+        GameState.visibleWaypoints = {};
         result.ships.forEach((ship) => {
           const shipGroup = new Container();
           const itemSprite = new Sprite(loadedAssets.spaceshipTexture);
@@ -27229,11 +27404,40 @@ var loadUniverse = async () => {
             }
           });
           systemView.addChild(shipGroup);
-          GameState.visibleShips.push({
+          GameState.visibleShips[ship.symbol] = {
             shipData: ship,
             container: shipGroup
-          });
+          };
         });
+        const addTraitIcons = (item, container) => {
+          let xOffset = 0;
+          item.traits.forEach((trait) => {
+            if (trait.symbol === "MARKETPLACE") {
+              const sprite = new Sprite(loadedAssets.market);
+              sprite.pivot = {
+                x: 32,
+                y: 32
+              };
+              sprite.scale = { x: 0.25, y: 0.25 };
+              sprite.x = xOffset - 16;
+              sprite.y = 24;
+              container.addChild(sprite);
+              xOffset += 16;
+            }
+            if (trait.symbol === "SHIPYARD") {
+              const sprite = new Sprite(loadedAssets.shipyard);
+              sprite.pivot = {
+                x: 32,
+                y: 32
+              };
+              sprite.scale = { x: 0.25, y: 0.24 };
+              sprite.x = xOffset - 16;
+              sprite.y = 24;
+              container.addChild(sprite);
+              xOffset += 16;
+            }
+          });
+        };
         result.waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
           const orbit = new Graphics();
           orbit.lineStyle({
@@ -27257,12 +27461,8 @@ var loadUniverse = async () => {
                     shipSymbol: selectedSymbol,
                     waypointSymbol: item.symbol
                   });
-                  GameState.visibleShips.forEach((ship) => {
-                    if (ship.shipData.symbol === res.symbol) {
-                      ship.shipData = res;
-                      console.log("updated state for ship " + res.symbol);
-                    }
-                  });
+                  GameState.visibleShips[res.symbol].shipData = res;
+                  console.log("updated state for ship " + res.symbol);
                 }
               }
             ]
@@ -27283,6 +27483,7 @@ var loadUniverse = async () => {
           text2.x = 40;
           text2.y = -8;
           itemGroup.addChild(text2);
+          addTraitIcons(item, itemGroup);
           result.waypoints.filter((orbitingThing) => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
             const orbitingGroup = new Container();
             makeInteractiveAndSelectable(orbitingGroup, {
@@ -27308,8 +27509,17 @@ var loadUniverse = async () => {
             orbitingText.x = 24;
             orbitingText.y = -8;
             orbitingGroup.addChild(orbitingText);
+            addTraitIcons(orbitingThing, orbitingGroup);
+            GameState.visibleWaypoints[orbitingThing.symbol] = {
+              waypointData: orbitingThing,
+              container: orbitingGroup
+            };
             systemView.addChild(orbitingGroup);
           });
+          GameState.visibleWaypoints[item.symbol] = {
+            waypointData: item,
+            container: itemGroup
+          };
           systemView.addChild(itemGroup);
         });
         systemView.moveCenter({
@@ -27384,27 +27594,55 @@ app.ticker.add(() => {
     const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
     currentCoordinate.text = systemCoordinate.x + ", " + systemCoordinate.y;
     resetShipWaypoints();
-    GameState.visibleShips.forEach((shipState) => {
+    Object.values(GameState.visibleShips).forEach((shipState) => {
       const shipPosition = positionShip(shipState.shipData);
       shipState.container.x = shipPosition.x;
       shipState.container.y = shipPosition.y;
       const nav = shipState.container.getChildByName("nav");
-      if (shipPosition.navRot) {
-        nav.visible = true;
-        nav.rotation = shipPosition.navRot;
-      } else {
-        nav.visible = false;
+      if (nav) {
+        if (shipPosition.navRot) {
+          nav.visible = true;
+          shipState.container.rotation = shipPosition.navRot;
+        } else {
+          nav.visible = false;
+          shipState.container.rotation = 0;
+        }
+      }
+      if (shipState.shipData.navStatus === "IN_TRANSIT" && new Date(shipState.shipData.arrivalOn).getTime() < Date.now()) {
+        shipState.shipData.navStatus = "IN_ORBIT";
       }
     });
   }
+  availableActions.forEach((action) => {
+    const isAvailable = action.isAvailable();
+    actionButton[action.name].disabled = !isAvailable;
+  });
   const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   Object.values(loadedUniverse.systems).forEach((ref) => {
     ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
   });
   if (GameState.selected) {
     currentSelected.text = `Selected: ${GameState.selected.symbol} - ${GameState.selected.type}`;
+    if (GameState.selected.type === "ship") {
+      const shipInfo = GameState.visibleShips[GameState.selected.symbol].shipData;
+      const cooldownTime = new Date(shipInfo.reactorCooldownOn).getTime();
+      entityInfo.text = `Entity Information
+Symbol: ${shipInfo.symbol}
+Location: ${shipInfo.currentWaypoint.symbol}
+Fuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}
+Cargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}
+Nav Status: ${shipInfo.navStatus}
+Reactor Cooldown: ${cooldownTime > Date.now() ? Math.round((cooldownTime - Date.now()) / 1e3) + "s" : "Ready"}`;
+    } else if (GameState.selected.type === "waypoint") {
+      const waypointInfo = GameState.visibleWaypoints[GameState.selected.symbol].waypointData;
+      entityInfo.text = `Entity Information
+Symbol: ${GameState.selected.symbol}
+Kind: ${waypointInfo.type}
+Traits: ${waypointInfo.traits.length == 0 ? "UNKNOWN" : waypointInfo.traits.map((t2) => t2.name).join(", ")}`;
+    }
   } else {
     currentSelected.text = `Selected:`;
+    entityInfo.text = `Entity Information`;
   }
 });
 /*! Bundled license information:

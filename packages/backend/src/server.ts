@@ -10,6 +10,9 @@ export const appRouter = router({
         const waypoints = await prisma.waypoint.findMany({
             where: {
                 systemSymbol: input.system
+            },
+            include: {
+                traits: true
             }
         })
         const ships = await prisma.ship.findMany({
@@ -37,6 +40,37 @@ export const appRouter = router({
     })).mutation(async ({input}) => {
         const ship = defaultShipStore.getShip(input.shipSymbol)
         return ship.navigate(input.waypointSymbol, false)
+    }),
+    instructWarp: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        waypointSymbol: z.string()
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.warp(input.waypointSymbol, false)
+    }),
+    instructRefuel: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.refuel()
+    }),
+    instructOrbit: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.orbit()
+    }),
+    instructDock: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.dock()
+    }),
+    instructScanWaypoints: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.scanWaypoints()
     })
 });
 

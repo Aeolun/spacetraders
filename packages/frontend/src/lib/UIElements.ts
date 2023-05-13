@@ -5,6 +5,7 @@ import {loadedAssets} from "@app/lib/assets";
 import {Button} from "@app/lib/button";
 import {GameState} from "@app/lib/game-state";
 import {trpc} from "@app/lib/trpc";
+import {availableActions} from "@app/lib/availableActions";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -12,6 +13,8 @@ export let uiOverlay: Container
 export let currentCoordinate: BitmapText
 export let currentSelected: BitmapText
 export let backButton: Button
+export let actionButton: Record<string, Button> = {}
+export let entityInfo: BitmapText
 
 export const createUIElements = (app: Application) => {
     systemView = new Viewport({
@@ -45,17 +48,29 @@ export const createUIElements = (app: Application) => {
     universeView.moveCenter(totalSize/2, totalSize/2)
 
     uiOverlay = new Container()
-    const panelBg = new NineSlicePlane(loadedAssets.uisheet.textures['uisheet/tile/frame.png'], 15, 15, 15, 15);
+
+
+    const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208)
+    panelBack.height=window.innerHeight - 16
+    panelBack.x = 8
+    panelBack.width = 386
+    panelBack.y = 8
+    uiOverlay.addChild(panelBack)
+
+    const panelBg = new NineSlicePlane(loadedAssets.panel, 19, 19, 19, 19);
     panelBg.x = 0
     panelBg.y = 0
     panelBg.width=400
     panelBg.height = window.innerHeight
 
+
+
     backButton = new Button('Back', {
         height: 64,
         width: 368
     })
-    backButton.on('click', () => {
+    backButton.on('click', (event) => {
+        event.stopPropagation();
         universeView.visible = true
         systemView.visible = false
         GameState.currentView = 'universe'
@@ -67,32 +82,44 @@ export const createUIElements = (app: Application) => {
     backButton.visible = false
     panelBg.addChild(backButton)
 
-    backButton = new Button('Refuel', {
-        height: 64,
-        width: 368
-    })
-    backButton.on('click', async () => {
-        const refuel = await trpc.instructRefuel.mutate()
-    })
-    backButton.y = 16;
-    backButton.x = 16
-    backButton.visible = false
-    panelBg.addChild(backButton)
+    const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64
 
+    availableActions.forEach((action, index) => {
+        actionButton[action.name] = new Button(action.name, {
+            height: 64,
+            width: 368/2
+        }, action.action)
+        actionButton[action.name].y = actionPanelY + Math.floor(index / 2) * 64;
+        actionButton[action.name].x = index % 2 == 0 ? 200 : 16
+        actionButton[action.name].disabled = true
+        panelBg.addChild(actionButton[action.name])
+    })
 
     uiOverlay.addChild(panelBg);
+
+    entityInfo = new BitmapText('Entity Information', {
+        fontName: 'buttontext',
+        fontSize: 16,
+        align: 'left',
+        maxWidth: 368
+    })
+    entityInfo.x = 16
+    entityInfo.y = window.innerHeight - 500
+    panelBg.addChild(entityInfo)
 
     currentCoordinate = new BitmapText('0, 0', {
         fontName: 'sans-serif',
         fontSize: 18,
         align: 'right',
     })
-    currentCoordinate.x = 16
-    currentCoordinate.y = 80
+    currentCoordinate.x = window.innerWidth - 166
+    currentCoordinate.y = 16
+    currentCoordinate.maxWidth = 150
     uiOverlay.addChild(currentCoordinate)
 
+
     currentSelected = new BitmapText('Selected: ', {
-        fontName: 'sans-serif',
+        fontName: 'buttontext',
         fontSize: 18,
         align: 'right',
     })

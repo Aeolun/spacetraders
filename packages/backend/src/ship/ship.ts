@@ -4,7 +4,8 @@ import api from "@app/lib/apis";
 import {storeWaypointScan} from "@app/ship/storeResults";
 import fs from "fs";
 import {ExtractResources201Response, ExtractResources201ResponseData, Survey} from "spacetraders-sdk";
-import {processNav} from "@app/ship/updateShips";
+import {processCargo, processCooldown, processFuel, processNav, returnShipData} from "@app/ship/updateShips";
+import * as process from "process";
 
 type CooldownKind = 'reactor'
 
@@ -69,7 +70,49 @@ export class Ship {
 
             this.log(`Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
 
+            await processFuel(this.symbol, res.data.data.fuel);
             const navResult = await processNav(this.symbol, res.data.data.nav)
+
+            if (waitForTimeout) {
+                const arrivalTime = new Date(res.data.data.nav.route.arrival)
+                const waitTime = arrivalTime.getTime() - Date.now() + 200
+                this.log(`Waiting ${waitTime} ms until arrival`)
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(navResult)
+                    }, waitTime)
+                })
+            } else {
+                return navResult
+            }
+        } catch(error) {
+            if (error.response?.data?.error?.code === 4204) {
+                this.log(`Already at ${waypoint}`)
+                return;
+            } else {
+                console.error('went wrong', error.response.data)
+                throw error
+            }
+        }
+    }
+
+    async warp(waypoint: string, waitForTimeout = true) {
+        try {
+            const res = await throttle(() => {
+                this.log(`Navigating ship to ${waypoint}`)
+                return api.fleet.warpShip(this.symbol, {
+                    waypointSymbol: waypoint
+                })
+            })
+
+            this.currentSystemSymbol = res.data.data.nav.route.destination.systemSymbol;
+            this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol
+
+            this.log(`Navigating from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
+
+            await processFuel(this.symbol, res.data.data.fuel);
+            const navResult = await processNav(this.symbol, res.data.data.nav)
+
 
             if (waitForTimeout) {
                 const arrivalTime = new Date(res.data.data.nav.route.arrival)
@@ -148,30 +191,40 @@ export class Ship {
     }
 
     async refuel() {
-        const beforeDetails = await throttle(() => {
-            return api.agents.getMyAgent()
-        })
-        const res = await throttle(() => {
-            this.log(`Refueling ship`)
-            return api.fleet.refuelShip(this.symbol)
-        })
+        try {
+            const beforeDetails = await throttle(() => {
+                return api.agents.getMyAgent()
+            })
+            const res = await throttle(() => {
+                this.log(`Refueling ship`)
+                return api.fleet.refuelShip(this.symbol)
+            })
 
-        const cost = beforeDetails.data.data.credits - res.data.data.agent.credits
+            const cost = beforeDetails.data.data.credits - res.data.data.agent.credits
 
-        this.log(`New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`)
+            this.log(`New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`)
+
+            return processFuel(this.symbol, res.data.data.fuel)
+        } catch(error) {
+            console.log("error refueling", error.response.data)
+        }
     }
 
     async dock() {
-        return throttle(() => {
+        return throttle(async () => {
             this.log(`Docking ship`)
-            return api.fleet.dockShip(this.symbol)
+            const res = await api.fleet.dockShip(this.symbol)
+
+            return processNav(this.symbol, res.data.data.nav)
         })
     }
 
     async orbit() {
-        return throttle(() => {
+        return throttle(async () => {
             this.log(`Orbiting ship`)
-            return api.fleet.orbitShip(this.symbol)
+            const res = await api.fleet.orbitShip(this.symbol)
+
+            return processNav(this.symbol, res.data.data.nav)
         })
     }
 
@@ -183,6 +236,8 @@ export class Ship {
         cargo.data.data.inventory.forEach(item => {
             this.log(`Cargo: ${item.symbol} x${item.units}`)
         })
+
+        return processCargo(this.symbol, cargo.data.data)
     }
 
     async survey() {
@@ -200,7 +255,7 @@ export class Ship {
         const waitTime = expiry.getTime() - Date.now() + 200
         this.setCooldown('reactor', waitTime)
 
-        return survey
+        return processCooldown(this.symbol, survey.data.data.cooldown)
     }
 
     async sellAllCargo() {
@@ -230,20 +285,25 @@ export class Ship {
     }
 
     async scanWaypoints() {
-        await this.waitForCooldown('reactor')
+        try {
+            await this.waitForCooldown('reactor')
 
-        const res = await throttle(() => {
-            this.log(`Scanning waypoints`)
-            return api.fleet.createShipWaypointScan(this.symbol)
-        })
+            const res = await throttle(() => {
+                this.log(`Scanning waypoints`)
+                return api.fleet.createShipWaypointScan(this.symbol)
+            })
 
-        const expiry = new Date(res.data.data.cooldown.expiration)
-        const waitTime = expiry.getTime() - Date.now() + 200
-        this.setCooldown('reactor', waitTime)
+            const expiry = new Date(res.data.data.cooldown.expiration)
+            const waitTime = expiry.getTime() - Date.now() + 200
+            this.setCooldown('reactor', waitTime)
 
-        await storeWaypointScan(res.data.data)
+            await storeWaypointScan(res.data.data)
+            const cooldown = await processCooldown(this.symbol, res.data.data.cooldown)
 
-        return res
+            return cooldown
+        } catch(error) {
+            console.error(error.response.data)
+        }
     }
 
     async market() {

@@ -2,20 +2,41 @@ import {Container} from "pixi.js";
 
 export interface GameState {
     currentView: 'universe' | 'system';
-    selected: {
+    selected?: {
         symbol: string;
         type: 'ship' | 'waypoint';
     };
-    visibleShips: {
-        shipData: any
+    visibleShips: Record<string, {
+        shipData: ShipData
         container: Container
+    }>
+    visibleWaypoints: Record<string, {
+        waypointData: WaypointData
+        container: Container
+    }>
+}
+
+export interface WaypointData {
+    symbol: string
+    type: string
+    traits: {
+        symbol: string
+        name: string
+        description: string
     }[]
 }
 
-export interface PositionData {
+export interface ShipData {
     symbol: string,
     departureOn: string
     arrivalOn: string
+    fuelAvailable: number
+    fuelCapacity: number
+    cargoCapacity: number
+    cargoUsed: number
+    reactorCooldownOn: string
+    navStatus: 'IN_TRANSIT' | 'IN_ORBIT' | 'DOCKED'
+    flightMode: 'DRIFT' | 'STEALTH' | 'CRUISE' | 'BURN'
     currentWaypoint: {
         symbol: string,
         x: number,
@@ -33,8 +54,8 @@ export interface PositionData {
     }
 }
 
-export const GameState = {
+export const GameState: GameState = {
     currentView: 'universe',
-    selectedSymbol: undefined,
-    visibleShips: []
+    selected: undefined,
+    visibleShips: {}
 }

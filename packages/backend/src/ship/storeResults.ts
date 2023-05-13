@@ -4,9 +4,9 @@ import {CreateShipWaypointScan201ResponseData} from "spacetraders-sdk";
 export async function storeWaypointScan(data: CreateShipWaypointScan201ResponseData) {
     await Promise.all(data.waypoints.map(async waypoint => {
         const updateValues = {
-            factionSymbol: waypoint.faction.symbol,
-            chartSubmittedBy: waypoint.chart.submittedBy,
-            chartSubmittedOn: waypoint.chart.submittedOn,
+            factionSymbol: waypoint.faction?.symbol,
+            chartSubmittedBy: waypoint.chart?.submittedBy,
+            chartSubmittedOn: waypoint.chart?.submittedOn,
             traits: {
                 connectOrCreate: waypoint.traits.map(trait => {
                     return {

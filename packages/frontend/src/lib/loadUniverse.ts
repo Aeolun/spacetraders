@@ -4,7 +4,7 @@ import { makeInteractiveAndSelectable } from "@app/lib/makeInteractiveAndSelecta
 import {loadedAssets} from "@app/lib/assets";
 import {systemCoordinates, systemScale, totalSize, universeCoordinates} from "@app/lib/consts";
 import {backButton, systemView, uiOverlay, universeView} from "@app/lib/UIElements";
-import {GameState} from "@app/lib/game-state";
+import {GameState, WaypointData} from "@app/lib/game-state";
 import {positionShip, resetShipWaypoints} from "@app/lib/positionShips";
 
 export const loadUniverse = async () => {
@@ -39,7 +39,34 @@ export const loadUniverse = async () => {
         starContainer.addChild(star)
         starContainer.addChild(text)
 
-        makeInteractiveAndSelectable(starContainer)
+        makeInteractiveAndSelectable(starContainer, {
+            onOrder: [
+                {
+                    name: 'Warp',
+                    withSelection: 'ship',
+                    action: async () => {
+                        if (GameState.selected?.symbol) {
+
+                            const system = await trpc.dataForDisplay.query({
+                                system: starData.symbol
+                            });
+                            const bestWaypoint = system.waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE')).symbol ?? system.waypoints[0].symbol
+                            if (bestWaypoint) {
+                                console.log("warping to first waypoint in", system)
+                                const res = await trpc.instructWarp.mutate({
+                                    shipSymbol: GameState.selected.symbol,
+                                    waypointSymbol: bestWaypoint
+                                })
+
+                                GameState.visibleShips[res.symbol].shipData = res
+                            } else {
+                                alert("Cannot warp to system without waypoints, nothing to target")
+                            }
+                        }
+                    }
+                }
+            ]
+        })
 
         starContainer.on('click', () => {
             trpc.dataForDisplay.query({
@@ -73,7 +100,8 @@ export const loadUniverse = async () => {
                 backButton.visible = true
 
                 resetShipWaypoints()
-                GameState.visibleShips = []
+                GameState.visibleShips = {}
+                GameState.visibleWaypoints = {}
                 result.ships.forEach(ship => {
                     const shipGroup = new Container()
 
@@ -122,11 +150,41 @@ export const loadUniverse = async () => {
                     })
 
                     systemView.addChild(shipGroup)
-                    GameState.visibleShips.push({
+                    GameState.visibleShips[ship.symbol] = {
                         shipData: ship,
                         container: shipGroup
-                    })
+                    }
                 })
+
+                const addTraitIcons = (item: WaypointData, container: Container) => {
+                    let xOffset = 0
+                    item.traits.forEach(trait => {
+                        if (trait.symbol === 'MARKETPLACE') {
+                            const sprite = new Sprite(loadedAssets.market)
+                            sprite.pivot = {
+                                x: 32,
+                                y: 32
+                            }
+                            sprite.scale = {x: 0.25, y: 0.25}
+                            sprite.x = xOffset - 16
+                            sprite.y =  24
+                            container.addChild(sprite)
+                            xOffset += 16
+                        }
+                        if (trait.symbol === 'SHIPYARD') {
+                            const sprite = new Sprite(loadedAssets.shipyard)
+                            sprite.pivot = {
+                                x: 32,
+                                y: 32
+                            }
+                            sprite.scale = {x: 0.25, y: 0.24}
+                            sprite.x = xOffset - 16
+                            sprite.y = 24
+                            container.addChild(sprite)
+                            xOffset += 16
+                        }
+                    })
+                }
 
                 result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
                     const orbit = new Graphics()
@@ -152,12 +210,8 @@ export const loadUniverse = async () => {
                                         shipSymbol: selectedSymbol,
                                         waypointSymbol: item.symbol,
                                     })
-                                    GameState.visibleShips.forEach(ship => {
-                                        if (ship.shipData.symbol === res.symbol) {
-                                            ship.shipData = res
-                                            console.log("updated state for ship "+res.symbol)
-                                        }
-                                    })
+                                    GameState.visibleShips[res.symbol].shipData = res
+                                    console.log("updated state for ship "+res.symbol)
                                 }
                             }
                         ]
@@ -181,6 +235,7 @@ export const loadUniverse = async () => {
                     text.y = -8
                     itemGroup.addChild(text);
 
+                    addTraitIcons(item, itemGroup)
 
                     result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
                         const orbitingGroup = new Container()
@@ -210,8 +265,20 @@ export const loadUniverse = async () => {
                         orbitingText.y = -8
                         orbitingGroup.addChild(orbitingText)
 
+                        addTraitIcons(orbitingThing, orbitingGroup)
+
+                        GameState.visibleWaypoints[orbitingThing.symbol] = {
+                            waypointData: orbitingThing,
+                            container: orbitingGroup
+                        }
+
                         systemView.addChild(orbitingGroup)
                     })
+
+                    GameState.visibleWaypoints[item.symbol] = {
+                        waypointData: item,
+                        container: itemGroup
+                    }
 
                     systemView.addChild(itemGroup)
                 })

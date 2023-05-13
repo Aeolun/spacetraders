@@ -4,6 +4,7 @@
     "module": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "Node",
+    "strict": true,
     "resolveJsonModule": true,
     "rootDir": ".",
     "paths": {

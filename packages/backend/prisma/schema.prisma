@@ -22,6 +22,13 @@ model Faction {
   waypoints Waypoint[]
 }
 
+model Agent {
+    symbol String @id
+    credits Int
+    headquarters Waypoint @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol])
+    accountId String
+}
+
 model FactionTrait {
   symbol      String    @id
   name        String
@@ -98,6 +105,7 @@ model Waypoint {
   shipsDeparted    Ship[] @relation("departureWaypoint")
 
   factionsWithHeadquarters Faction[] @relation("headquarters")
+  agentsWithHeadquarters Faction[] @relation("agentHeadquarters")
 }
 
 model WaypointTrait {
@@ -177,7 +185,10 @@ model Ship {
   navStatus  ShipNavStatus
   flightMode ShipNavFlightMode
 
-  reactorCooldownOn DateTime
+  reactorCooldownOn DateTime?
+
+  fuelCapacity Int @default(0)
+  fuelAvailable Int @default(0)
 
   cargoCapacity Int
   cargoUsed     Int

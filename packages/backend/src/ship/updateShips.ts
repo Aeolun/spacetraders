@@ -1,6 +1,6 @@
 import api from '@app/lib/apis'
 import {prisma} from "@app/prisma";
-import {ShipCargo, ShipNav} from "spacetraders-sdk";
+import {Cooldown, ShipCargo, ShipFuel, ShipNav} from "spacetraders-sdk";
 
 export async function updateShips() {
     const ships = await api.fleet.getMyShips(1, 20)
@@ -22,6 +22,9 @@ export async function updateShips() {
 
             navStatus: ship.nav.status,
             flightMode: ship.nav.flightMode,
+
+            fuelCapacity: ship.fuel.capacity,
+            fuelAvailable: ship.fuel.current,
 
             cargoCapacity: ship.cargo.capacity,
             cargoUsed: ship.cargo.units,
@@ -63,8 +66,41 @@ export async function processNav(shipSymbol: string, nav: ShipNav) {
     })
 }
 
+export async function processFuel(shipSymbol: string, fuel: ShipFuel) {
+    return await prisma.ship.update({
+        where: {
+            symbol: shipSymbol
+        },
+        include: {
+            currentWaypoint: true,
+            destinationWaypoint: true,
+            departureWaypoint: true,
+        },
+        data: {
+            fuelCapacity: fuel.capacity,
+            fuelAvailable: fuel.current
+        }
+    })
+}
+
+export async function processCooldown(shipSymbol: string, cooldown: Cooldown) {
+    return await prisma.ship.update({
+        where: {
+            symbol: shipSymbol
+        },
+        include: {
+            currentWaypoint: true,
+            destinationWaypoint: true,
+            departureWaypoint: true,
+        },
+        data: {
+            reactorCooldownOn: cooldown.expiration,
+        }
+    })
+}
+
 export async function processCargo(shipSymbol: string, cargo: ShipCargo) {
-    return Promise.all(cargo.inventory.map(async c => {
+    await Promise.all(cargo.inventory.map(async c => {
         await prisma.tradeGood.upsert({
             where: {
                 symbol: c.symbol,
@@ -97,4 +133,19 @@ export async function processCargo(shipSymbol: string, cargo: ShipCargo) {
             }
         })
     }))
+
+    return returnShipData(shipSymbol)
+}
+
+export async function returnShipData(shipSymbol: string) {
+    return prisma.ship.findFirst({
+        where: {
+            symbol: shipSymbol
+        },
+        include: {
+            currentWaypoint: true,
+            destinationWaypoint: true,
+            departureWaypoint: true,
+        }
+    })
 }
