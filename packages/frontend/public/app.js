@@ -27046,10 +27046,6 @@ var createUIElements = (app2) => {
     height: 64,
     width: 368
   });
-  backButton.y = 16;
-  backButton.x = 16;
-  backButton.visible = false;
-  panelBg.addChild(backButton);
   backButton.on("click", () => {
     universeView.visible = true;
     systemView.visible = false;
@@ -27057,6 +27053,21 @@ var createUIElements = (app2) => {
     systemView.removeChildren();
     backButton.visible = false;
   });
+  backButton.y = 16;
+  backButton.x = 16;
+  backButton.visible = false;
+  panelBg.addChild(backButton);
+  backButton = new Button("Refuel", {
+    height: 64,
+    width: 368
+  });
+  backButton.on("click", async () => {
+    const refuel = await trpc.instructRefuel.mutate();
+  });
+  backButton.y = 16;
+  backButton.x = 16;
+  backButton.visible = false;
+  panelBg.addChild(backButton);
   uiOverlay.addChild(panelBg);
   currentCoordinate = new BitmapText("0, 0", {
     fontName: "sans-serif",
@@ -27233,6 +27244,10 @@ var loadUniverse = async () => {
           systemView.addChild(orbit);
           const itemGroup = new Container();
           makeInteractiveAndSelectable(itemGroup, {
+            onSelect: {
+              type: "waypoint",
+              symbol: item.symbol
+            },
             onOrder: [
               {
                 name: "navigate",
@@ -27270,7 +27285,12 @@ var loadUniverse = async () => {
           itemGroup.addChild(text2);
           result.waypoints.filter((orbitingThing) => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
             const orbitingGroup = new Container();
-            makeInteractiveAndSelectable(orbitingGroup);
+            makeInteractiveAndSelectable(orbitingGroup, {
+              onSelect: {
+                type: "waypoint",
+                symbol: orbitingThing.symbol
+              }
+            });
             const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`]);
             orbitingSprite.pivot = {
               x: 32,

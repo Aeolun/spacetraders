@@ -139,6 +139,10 @@ export const loadUniverse = async () => {
 
                     const itemGroup = new Container()
                     makeInteractiveAndSelectable(itemGroup, {
+                        onSelect: {
+                            type: 'waypoint',
+                            symbol: item.symbol,
+                        },
                         onOrder: [
                             {
                                 name: "navigate",
@@ -180,7 +184,12 @@ export const loadUniverse = async () => {
 
                     result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
                         const orbitingGroup = new Container()
-                        makeInteractiveAndSelectable(orbitingGroup)
+                        makeInteractiveAndSelectable(orbitingGroup, {
+                            onSelect: {
+                                type: 'waypoint',
+                                symbol: orbitingThing.symbol,
+                            },
+                        })
 
                         const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])
                         orbitingSprite.pivot = {

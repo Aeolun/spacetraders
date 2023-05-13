@@ -4,6 +4,7 @@ import {Application, BitmapText, Container, NineSlicePlane, TilingSprite} from "
 import {loadedAssets} from "@app/lib/assets";
 import {Button} from "@app/lib/button";
 import {GameState} from "@app/lib/game-state";
+import {trpc} from "@app/lib/trpc";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -54,11 +55,6 @@ export const createUIElements = (app: Application) => {
         height: 64,
         width: 368
     })
-    backButton.y = 16;
-    backButton.x = 16
-    backButton.visible = false
-    panelBg.addChild(backButton)
-
     backButton.on('click', () => {
         universeView.visible = true
         systemView.visible = false
@@ -66,6 +62,23 @@ export const createUIElements = (app: Application) => {
         systemView.removeChildren()
         backButton.visible = false
     })
+    backButton.y = 16;
+    backButton.x = 16
+    backButton.visible = false
+    panelBg.addChild(backButton)
+
+    backButton = new Button('Refuel', {
+        height: 64,
+        width: 368
+    })
+    backButton.on('click', async () => {
+        const refuel = await trpc.instructRefuel.mutate()
+    })
+    backButton.y = 16;
+    backButton.x = 16
+    backButton.visible = false
+    panelBg.addChild(backButton)
+
 
     uiOverlay.addChild(panelBg);
 

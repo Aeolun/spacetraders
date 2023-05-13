@@ -177,6 +177,8 @@ model Ship {
   navStatus  ShipNavStatus
   flightMode ShipNavFlightMode
 
+  reactorCooldownOn DateTime
+
   cargoCapacity Int
   cargoUsed     Int
   cargo         ShipCargo[]

@@ -88,6 +88,7 @@ export class Ship {
                 this.log(`Already at ${waypoint}`)
                 return;
             } else {
+                console.error('went wrong', error.response.data)
                 throw error
             }
         }

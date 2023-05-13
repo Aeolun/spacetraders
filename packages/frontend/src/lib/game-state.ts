@@ -4,7 +4,7 @@ export interface GameState {
     currentView: 'universe' | 'system';
     selected: {
         symbol: string;
-        type: 'ship' | 'planet';
+        type: 'ship' | 'waypoint';
     };
     visibleShips: {
         shipData: any
