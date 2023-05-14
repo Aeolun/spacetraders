@@ -6,6 +6,10 @@ export interface GameState {
         symbol: string;
         type: 'ship' | 'waypoint';
     };
+    myShips: Record<string, {
+        shipData: ShipData
+        container?: Container
+    }>
     visibleShips: Record<string, {
         shipData: ShipData
         container: Container

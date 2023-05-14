@@ -4,7 +4,7 @@ import {prisma} from "@app/prisma";
 import {defaultShipStore} from "@app/ship/shipStore";
 
 export const appRouter = router({
-    dataForDisplay: publicProcedure.input(z.object({
+    waypointsForSystem: publicProcedure.input(z.object({
         system: z.string()
     })).query(async ({input}) => {
         const waypoints = await prisma.waypoint.findMany({
@@ -15,21 +15,17 @@ export const appRouter = router({
                 traits: true
             }
         })
-        const ships = await prisma.ship.findMany({
-            where: {
-                currentSystemSymbol: input.system
-            },
-            include: {
-                currentWaypoint: true,
-                destinationWaypoint: true,
-                departureWaypoint: true,
-            }
-        })
 
-        return {
-            waypoints,
-            ships
-        }
+        return waypoints
+    }),
+    getMyShips: publicProcedure.query(async () => {
+       return prisma.ship.findMany({
+           include: {
+               currentWaypoint: true,
+               destinationWaypoint: true,
+               departureWaypoint: true,
+           }
+       })
     }),
     getSystems: publicProcedure.query(async () => {
         return prisma.system.findMany()

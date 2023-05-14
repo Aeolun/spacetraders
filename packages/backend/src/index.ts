@@ -61,7 +61,7 @@ const newServerStartup = async () => {
 }
 
 const init = async () => {
-    //await newServerStartup()
+    // await newServerStartup()
 
     try {
         await updateShips()

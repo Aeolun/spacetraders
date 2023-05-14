@@ -25,6 +25,7 @@ model Faction {
 model Agent {
     symbol String @id
     credits Int
+    headquartersSymbol String
     headquarters Waypoint @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol])
     accountId String
 }
@@ -105,7 +106,7 @@ model Waypoint {
   shipsDeparted    Ship[] @relation("departureWaypoint")
 
   factionsWithHeadquarters Faction[] @relation("headquarters")
-  agentsWithHeadquarters Faction[] @relation("agentHeadquarters")
+  agentsWithHeadquarters Agent[] @relation("agentHeadquarters")
 }
 
 model WaypointTrait {
