@@ -18,7 +18,6 @@ export const loadUniverse = async () => {
         if (starData.y < universeCoordinates.minY) universeCoordinates.minY = starData.y
         if (starData.y > universeCoordinates.maxY) universeCoordinates.maxY = starData.y
     }
-
     for(const starData of systems) {
         let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
 
@@ -303,18 +302,18 @@ export const loadUniverse = async () => {
         color: 0x0077FF
     })
     const multiFactor = 5000 / (universeCoordinates.maxX-universeCoordinates.minX) * totalSize
-    graphics.drawCircle(references['X1-VU95'].x, references['X1-VU95'].y, multiFactor)
-    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    graphics.lineTo(references['X1-FS18'].x, references['X1-FS18'].y)
-    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    graphics.lineTo(references['X1-AA92'].x, references['X1-AA92'].y)
-    graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    graphics.lineTo(references['X1-JQ84'].x, references['X1-JQ84'].y)
+    // graphics.drawCircle(references['X1-VU95'].x, references['X1-VU95'].y, multiFactor)
+    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    // graphics.lineTo(references['X1-FS18'].x, references['X1-FS18'].y)
+    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    // graphics.lineTo(references['X1-AA92'].x, references['X1-AA92'].y)
+    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
+    // graphics.lineTo(references['X1-JQ84'].x, references['X1-JQ84'].y)
 
 
     universeView.addChild(graphics)
 
-    universeView.moveCenter(references['X1-VU95'].x, references['X1-VU95'].y)
+    // universeView.moveCenter(references['X1-VU95'].x, references['X1-VU95'].y)
 
     return {
         systems: references

@@ -13,20 +13,56 @@ import { generateName } from "@app/lib/generate-name";
 import {updateShips} from "@app/ship/updateShips";
 import {prisma} from "@app/prisma";
 import {defaultShipStore, ShipStore} from "@app/ship/shipStore";
+import axios from "axios";
+import {agentToken} from "@app/configuration";
+import {seedGameData} from "@app/seed/seedGameData";
 
 config();
 
 
+const newServerStartup = async () => {
+    try {
+        let agentToken
+        if (!fs.existsSync('.agent-token') || fs.readFileSync('.agent-token').toString().trim() == '') {
+            const result = await api.default.register({
+                symbol: "PHANTASM",
+                email: "bart@serial-experiments.com",
+                faction: "GALACTIC"
+            })
+            fs.writeFileSync('registrationResult.json', JSON.stringify(result.data, null, 2))
+            fs.writeFileSync('.agent-token', result.data.data.token)
+            agentToken = result.data.data.token
+        } else {
+            agentToken = fs.readFileSync('.agent-token').toString().trim()
+        }
+
+        await seedGameData(agentToken)
+
+        const allSystems = await prisma.system.findMany({})
+        await Promise.all(allSystems.map(async (s) => {
+            await prisma.system.update({
+                data: {
+                    name: generateName()
+                },
+                where: {
+                    symbol: s.symbol
+                }
+            })
+        }))
+        console.log("Generated readable names for all systems")
+
+        console.log("System booted. Remove code and restart client.")
+        process.exit()
+
+
+    } catch(error) {
+        console.error(error.response.data)
+    }
+}
+
 const init = async () => {
-    // try {
-    //     const result = await def.register({
-    //         symbol: "PHANTASM",
-    //         faction: "GALACTIC"
-    //     })
-    //     fs.writeFileSync('registrationResult.json', JSON.stringify(result.data))
-    // } catch(error) {
-    //     console.error(error.response.data)
-    // }
+    //await newServerStartup()
+
     try {
         await updateShips()
         const allShips = await prisma.ship.findMany({
@@ -43,22 +79,8 @@ const init = async () => {
         throw error
     }
 
-    const jumpData = await api.systems.getJumpGate('X1-VU95', 'X1-VU95-02039Z')
-    fs.writeFileSync('jump.json', JSON.stringify(jumpData.data.data))
-
-    // const allSystems = await prisma.system.findMany({})
-    // await Promise.all(allSystems.map(async (s) => {
-    //     await prisma.system.update({
-    //         data: {
-    //             name: generateName()
-    //         },
-    //         where: {
-    //             symbol: s.symbol
-    //         }
-    //     })
-    // }))
-    // console.log("Generated names for all systems")
-    // await seedSystems()
+    // const jumpData = await api.systems.getJumpGate('X1-VU95', 'X1-VU95-02039Z')
+    // fs.writeFileSync('jump.json', JSON.stringify(jumpData.data.data))
 
     // const navigate = await fleet.navigateShip('PHANTASM-1', {
     //     waypointSymbol: "X1-VU95-02777Z"

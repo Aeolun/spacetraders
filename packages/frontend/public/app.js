@@ -27539,15 +27539,7 @@ var loadUniverse = async () => {
     color: 30719
   });
   const multiFactor = 5e3 / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
-  graphics.drawCircle(references["X1-VU95"].x, references["X1-VU95"].y, multiFactor);
-  graphics.moveTo(references["X1-VU95"].x, references["X1-VU95"].y);
-  graphics.lineTo(references["X1-FS18"].x, references["X1-FS18"].y);
-  graphics.moveTo(references["X1-VU95"].x, references["X1-VU95"].y);
-  graphics.lineTo(references["X1-AA92"].x, references["X1-AA92"].y);
-  graphics.moveTo(references["X1-VU95"].x, references["X1-VU95"].y);
-  graphics.lineTo(references["X1-JQ84"].x, references["X1-JQ84"].y);
   universeView.addChild(graphics);
-  universeView.moveCenter(references["X1-VU95"].x, references["X1-VU95"].y);
   return {
     systems: references
   };
