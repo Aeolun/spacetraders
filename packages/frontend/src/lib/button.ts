@@ -5,7 +5,7 @@ export class Button extends Container {
     buttonSprite: NineSlicePlane
     private isDisabled = false
 
-    constructor(name: string, dimensions: { width: number, height: number }, private clickAction?: (event: FederatedPointerEvent) => void) {
+    constructor(name: string, dimensions: { width: number, height: number, textSize?: number }, private clickAction?: (event: FederatedPointerEvent) => void) {
         super()
 
         this.interactive = true;
@@ -32,13 +32,14 @@ export class Button extends Container {
             this.on('click', this.clickAction)
         }
 
+        const textSize = dimensions.textSize ?? 32
         const text = new BitmapText(name, {
             fontName: 'buttontext',
-            fontSize: 32,
-            align: 'right',
+            fontSize: textSize,
+            align: 'center',
         })
-        text.x = (dimensions.height - 32) / 2
-        text.y = (dimensions.height - 32) / 2
+        text.x = (dimensions.height - textSize) / 2
+        text.y = (dimensions.height - textSize) / 2
         this.addChild(text)
     }
 

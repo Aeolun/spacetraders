@@ -1,10 +1,22 @@
 import {throttle} from "@app/lib/queue";
 import {logShipAction} from "@app/lib/log";
 import api from "@app/lib/apis";
-import {storeWaypointScan} from "@app/ship/storeResults";
+import {storeShipScan, storeWaypoint, storeWaypointScan} from "@app/ship/storeResults";
 import fs from "fs";
-import {ExtractResources201Response, ExtractResources201ResponseData, Survey} from "spacetraders-sdk";
-import {processCargo, processCooldown, processFuel, processNav, returnShipData} from "@app/ship/updateShips";
+import {
+    ExtractResources201Response,
+    ExtractResources201ResponseData,
+    ShipNavFlightMode,
+    Survey
+} from "spacetraders-sdk";
+import {
+    processAgent,
+    processCargo,
+    processCooldown,
+    processFuel,
+    processNav,
+    returnShipData
+} from "@app/ship/updateShips";
 import * as process from "process";
 
 type CooldownKind = 'reactor'
@@ -202,6 +214,8 @@ export class Ship {
 
             const cost = beforeDetails.data.data.credits - res.data.data.agent.credits
 
+            await processAgent(res.data.data.agent)
+
             this.log(`New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`)
 
             return processFuel(this.symbol, res.data.data.fuel)
@@ -225,6 +239,38 @@ export class Ship {
             const res = await api.fleet.orbitShip(this.symbol)
 
             return processNav(this.symbol, res.data.data.nav)
+        })
+    }
+
+    async chart() {
+        return throttle(async () => {
+            try {
+                this.log(`Charting current position`)
+                const res = await api.fleet.createChart(this.symbol)
+
+                await storeWaypoint(res.data.data.waypoint)
+
+                return returnShipData(this.symbol)
+            } catch(error) {
+                console.log(error.response?.data ? error.response.data : error.toString())
+            }
+        })
+    }
+
+    async navigateMode(mode: ShipNavFlightMode) {
+        return throttle(async () => {
+            try {
+                this.log(`Setting navigate mode to ${mode}`)
+                const res = await api.fleet.patchShipNav(this.symbol, {
+                    flightMode: mode
+                })
+
+                await processNav(this.symbol, res.data.data)
+
+                return returnShipData(this.symbol)
+            } catch(error) {
+                console.log(error.response?.data ? error.response.data : error.toString())
+            }
         })
     }
 
@@ -257,6 +303,8 @@ export class Ship {
 
         return processCooldown(this.symbol, survey.data.data.cooldown)
     }
+
+
 
     async sellAllCargo() {
         const cargo = await throttle(() => {
@@ -292,17 +340,41 @@ export class Ship {
                 this.log(`Scanning waypoints`)
                 return api.fleet.createShipWaypointScan(this.symbol)
             })
+            fs.writeFileSync(`scanresult${res.data.data.waypoints[0].systemSymbol}`, JSON.stringify(res.data.data.waypoints, null, 2))
+            const expiry = new Date(res.data.data.cooldown.expiration)
+            const waitTime = expiry.getTime() - Date.now() + 200
+            this.setCooldown('reactor', waitTime)
+
+            await storeWaypointScan(res.data.data.waypoints[0].systemSymbol, res.data.data)
+            const cooldown = await processCooldown(this.symbol, res.data.data.cooldown)
+
+            return cooldown
+        } catch(error) {
+            console.error(error?.response?.data ? error?.response?.data : error.toString())
+        }
+    }
+
+    async scanShips() {
+        try {
+            await this.waitForCooldown('reactor')
+
+            const res = await throttle(() => {
+                this.log(`Scanning ships`)
+                return api.fleet.createShipShipScan(this.symbol)
+            })
+
+            this.log(`Scanned for ships, found ${res.data.data.ships.length} ships in scan range.`)
 
             const expiry = new Date(res.data.data.cooldown.expiration)
             const waitTime = expiry.getTime() - Date.now() + 200
             this.setCooldown('reactor', waitTime)
 
-            await storeWaypointScan(res.data.data)
+            await storeShipScan(res.data.data)
             const cooldown = await processCooldown(this.symbol, res.data.data.cooldown)
 
             return cooldown
         } catch(error) {
-            console.error(error.response.data)
+            console.error(error?.response?.data ? error?.response?.data : error.toString())
         }
     }
 

@@ -12,10 +12,10 @@ datasource db {
 
 model Faction {
   symbol             String         @id
-  name               String
-  description        String @db.Text
-  headquartersSymbol String
-  headquarters       Waypoint         @relation("headquarters", fields: [headquartersSymbol], references: [symbol])
+  name               String?
+  description        String? @db.Text
+  headquartersSymbol String?
+  headquarters       Waypoint?         @relation("headquarters", fields: [headquartersSymbol], references: [symbol])
   traits             FactionTrait[]
 
   systems   System[]
@@ -25,8 +25,8 @@ model Faction {
 model Agent {
     symbol String @id
     credits Int
-    headquartersSymbol String
-    headquarters Waypoint @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol])
+    headquartersSymbol String?
+    headquarters Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol])
     accountId String
 }
 
@@ -65,6 +65,7 @@ model System {
   y      Float
 
   waypoints     Waypoint[]
+  waypointsRetrieved Boolean @default(false)
   shipsInSystem Ship[]     @relation("currentSystem")
 
   factions                 Faction[]
@@ -164,6 +165,75 @@ model ShipCargo {
   @@id([shipSymbol, tradeGoodSymbol])
 }
 
+model ShipFrame {
+    symbol String @id
+    name String?
+    description String? @db.Text
+    moduleSlots Int?
+    mountingPoints Int?
+    fuelCapacity Int?
+
+    crewRequirement Int?
+    powerRequirement Int?
+
+    ship Ship[]
+}
+
+model ShipReactor {
+    symbol String @id
+    name String?
+    description String? @db.Text
+
+    powerOutput Int?
+
+    crewRequirement Int?
+
+    ships Ship[]
+}
+
+model ShipEngine {
+    symbol String @id
+    name String?
+    description String? @db.Text
+
+    speed Int?
+    crewRequirement Int?
+    powerRequirement Int?
+
+    ships Ship[]
+}
+
+model ShipModule {
+    symbol String @id
+    name String
+    description String @db.Text
+
+    effectName String?
+    value Int?
+
+    crewRequirement Int?
+    powerRequirement Int?
+    slotRequirement Int?
+
+    ships Ship[]
+}
+
+model ShipMount {
+    symbol String @id
+    name String
+    description String @db.Text
+
+    effectName String?
+    value Int?
+    worksOn String? @db.Text
+
+    crewRequirement Int?
+    powerRequirement Int?
+    slotRequirement Int?
+
+    ships Ship[]
+}
+
 model Ship {
   symbol        String   @id
   agent         String @default("PHANTASM")
@@ -191,9 +261,19 @@ model Ship {
   fuelCapacity Int @default(0)
   fuelAvailable Int @default(0)
 
-  cargoCapacity Int
-  cargoUsed     Int
+  cargoCapacity Int?
+  cargoUsed     Int?
   cargo         ShipCargo[]
+
+  frame ShipFrame @relation(fields: [frameSymbol], references: [symbol])
+  frameSymbol String
+  reactor ShipReactor @relation(fields: [reactorSymbol], references: [symbol])
+  reactorSymbol String
+  engine ShipEngine @relation(fields: [engineSymbol], references: [symbol])
+  engineSymbol String
+
+  modules ShipModule[]
+  mounts ShipMount[]
 
   //    crew ShipCrew
   //    frame ShipFrame

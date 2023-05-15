@@ -2,6 +2,7 @@ import {publicProcedure, router} from './trpc';
 import z from 'zod'
 import {prisma} from "@app/prisma";
 import {defaultShipStore} from "@app/ship/shipStore";
+import {ShipNavFlightMode} from "spacetraders-sdk";
 
 export const appRouter = router({
     waypointsForSystem: publicProcedure.input(z.object({
@@ -18,17 +19,58 @@ export const appRouter = router({
 
         return waypoints
     }),
+    shipsForSystem: publicProcedure.input(z.object({
+        system: z.string()
+    })).query(async ({input}) => {
+        return prisma.ship.findMany({
+            where: {
+                currentSystemSymbol: input.system,
+                agent: {
+                    not: 'PHANTASM'
+                }
+            },
+            include: {
+                currentWaypoint: true,
+                destinationWaypoint: true,
+                departureWaypoint: true,
+                frame: true,
+                reactor: true,
+                engine: true,
+                mounts: true,
+                modules: true
+            }
+        })
+    }),
+    getAgentInfo: publicProcedure.query(async () => {
+        return prisma.agent.findFirst({})
+    }),
     getMyShips: publicProcedure.query(async () => {
        return prisma.ship.findMany({
+           where: {
+               agent: 'PHANTASM'
+           },
            include: {
                currentWaypoint: true,
                destinationWaypoint: true,
                departureWaypoint: true,
+               frame: true,
+               reactor: true,
+               engine: true,
+               mounts: true,
+               modules: true
            }
        })
     }),
     getSystems: publicProcedure.query(async () => {
-        return prisma.system.findMany()
+        return prisma.system.findMany({
+            include: {
+                waypoints: {
+                    include: {
+                        traits: true
+                    }
+                }
+            }
+        })
     }),
     instructNavigate: publicProcedure.input(z.object({
         shipSymbol: z.string(),
@@ -50,11 +92,24 @@ export const appRouter = router({
         const ship = defaultShipStore.getShip(input.shipSymbol)
         return ship.refuel()
     }),
+    instructPatchNavigate: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        navMode: z.string()
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.navigateMode(input.navMode as ShipNavFlightMode)
+    }),
     instructOrbit: publicProcedure.input(z.object({
         shipSymbol: z.string(),
     })).mutation(async ({input}) => {
         const ship = defaultShipStore.getShip(input.shipSymbol)
         return ship.orbit()
+    }),
+    instructChart: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.chart()
     }),
     instructDock: publicProcedure.input(z.object({
         shipSymbol: z.string(),
@@ -67,6 +122,18 @@ export const appRouter = router({
     })).mutation(async ({input}) => {
         const ship = defaultShipStore.getShip(input.shipSymbol)
         return ship.scanWaypoints()
+    }),
+    instructScanShips: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.scanShips()
+    }),
+    instructMarket: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+    })).mutation(async ({input}) => {
+        const ship = defaultShipStore.getShip(input.shipSymbol)
+        return ship.market()
     })
 });
 

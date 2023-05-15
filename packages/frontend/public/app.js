@@ -660,18 +660,18 @@ var require_earcut = __commonJS({
       return sum;
     }
     earcut.flatten = function(data) {
-      var dim = data[0][0].length, result2 = { vertices: [], holes: [], dimensions: dim }, holeIndex = 0;
+      var dim = data[0][0].length, result = { vertices: [], holes: [], dimensions: dim }, holeIndex = 0;
       for (var i2 = 0; i2 < data.length; i2++) {
         for (var j3 = 0; j3 < data[i2].length; j3++) {
           for (var d2 = 0; d2 < dim; d2++)
-            result2.vertices.push(data[i2][j3][d2]);
+            result.vertices.push(data[i2][j3][d2]);
         }
         if (i2 > 0) {
           holeIndex += data[i2 - 1].length;
-          result2.holes.push(holeIndex);
+          result.holes.push(holeIndex);
         }
       }
-      return result2;
+      return result;
     };
   }
 });
@@ -696,23 +696,23 @@ var require_punycode = __commonJS({
       }
       function map4(array, fn) {
         var length = array.length;
-        var result2 = [];
+        var result = [];
         while (length--) {
-          result2[length] = fn(array[length]);
+          result[length] = fn(array[length]);
         }
-        return result2;
+        return result;
       }
       function mapDomain(string, fn) {
         var parts = string.split("@");
-        var result2 = "";
+        var result = "";
         if (parts.length > 1) {
-          result2 = parts[0] + "@";
+          result = parts[0] + "@";
           string = parts[1];
         }
         string = string.replace(regexSeparators, ".");
         var labels = string.split(".");
         var encoded = map4(labels, fn).join(".");
-        return result2 + encoded;
+        return result + encoded;
       }
       function ucs2decode(string) {
         var output = [], counter = 0, length = string.length, value, extra;
@@ -1335,41 +1335,41 @@ var require_url = __commonJS({
         rel.parse(relative, false, true);
         relative = rel;
       }
-      var result2 = new Url();
+      var result = new Url();
       var tkeys = Object.keys(this);
       for (var tk = 0; tk < tkeys.length; tk++) {
         var tkey = tkeys[tk];
-        result2[tkey] = this[tkey];
+        result[tkey] = this[tkey];
       }
-      result2.hash = relative.hash;
+      result.hash = relative.hash;
       if (relative.href === "") {
-        result2.href = result2.format();
-        return result2;
+        result.href = result.format();
+        return result;
       }
       if (relative.slashes && !relative.protocol) {
         var rkeys = Object.keys(relative);
         for (var rk = 0; rk < rkeys.length; rk++) {
           var rkey = rkeys[rk];
           if (rkey !== "protocol")
-            result2[rkey] = relative[rkey];
+            result[rkey] = relative[rkey];
         }
-        if (slashedProtocol[result2.protocol] && result2.hostname && !result2.pathname) {
-          result2.path = result2.pathname = "/";
+        if (slashedProtocol[result.protocol] && result.hostname && !result.pathname) {
+          result.path = result.pathname = "/";
         }
-        result2.href = result2.format();
-        return result2;
+        result.href = result.format();
+        return result;
       }
-      if (relative.protocol && relative.protocol !== result2.protocol) {
+      if (relative.protocol && relative.protocol !== result.protocol) {
         if (!slashedProtocol[relative.protocol]) {
           var keys = Object.keys(relative);
           for (var v2 = 0; v2 < keys.length; v2++) {
             var k3 = keys[v2];
-            result2[k3] = relative[k3];
+            result[k3] = relative[k3];
           }
-          result2.href = result2.format();
-          return result2;
+          result.href = result.format();
+          return result;
         }
-        result2.protocol = relative.protocol;
+        result.protocol = relative.protocol;
         if (!relative.host && !hostlessProtocol[relative.protocol]) {
           var relPath = (relative.pathname || "").split("/");
           while (relPath.length && !(relative.host = relPath.shift()))
@@ -1382,36 +1382,36 @@ var require_url = __commonJS({
             relPath.unshift("");
           if (relPath.length < 2)
             relPath.unshift("");
-          result2.pathname = relPath.join("/");
+          result.pathname = relPath.join("/");
         } else {
-          result2.pathname = relative.pathname;
+          result.pathname = relative.pathname;
         }
-        result2.search = relative.search;
-        result2.query = relative.query;
-        result2.host = relative.host || "";
-        result2.auth = relative.auth;
-        result2.hostname = relative.hostname || relative.host;
-        result2.port = relative.port;
-        if (result2.pathname || result2.search) {
-          var p3 = result2.pathname || "";
-          var s2 = result2.search || "";
-          result2.path = p3 + s2;
+        result.search = relative.search;
+        result.query = relative.query;
+        result.host = relative.host || "";
+        result.auth = relative.auth;
+        result.hostname = relative.hostname || relative.host;
+        result.port = relative.port;
+        if (result.pathname || result.search) {
+          var p3 = result.pathname || "";
+          var s2 = result.search || "";
+          result.path = p3 + s2;
         }
-        result2.slashes = result2.slashes || relative.slashes;
-        result2.href = result2.format();
-        return result2;
+        result.slashes = result.slashes || relative.slashes;
+        result.href = result.format();
+        return result;
       }
-      var isSourceAbs = result2.pathname && result2.pathname.charAt(0) === "/", isRelAbs = relative.host || relative.pathname && relative.pathname.charAt(0) === "/", mustEndAbs = isRelAbs || isSourceAbs || result2.host && relative.pathname, removeAllDots = mustEndAbs, srcPath = result2.pathname && result2.pathname.split("/") || [], relPath = relative.pathname && relative.pathname.split("/") || [], psychotic = result2.protocol && !slashedProtocol[result2.protocol];
+      var isSourceAbs = result.pathname && result.pathname.charAt(0) === "/", isRelAbs = relative.host || relative.pathname && relative.pathname.charAt(0) === "/", mustEndAbs = isRelAbs || isSourceAbs || result.host && relative.pathname, removeAllDots = mustEndAbs, srcPath = result.pathname && result.pathname.split("/") || [], relPath = relative.pathname && relative.pathname.split("/") || [], psychotic = result.protocol && !slashedProtocol[result.protocol];
       if (psychotic) {
-        result2.hostname = "";
-        result2.port = null;
-        if (result2.host) {
+        result.hostname = "";
+        result.port = null;
+        if (result.host) {
           if (srcPath[0] === "")
-            srcPath[0] = result2.host;
+            srcPath[0] = result.host;
           else
-            srcPath.unshift(result2.host);
+            srcPath.unshift(result.host);
         }
-        result2.host = "";
+        result.host = "";
         if (relative.protocol) {
           relative.hostname = null;
           relative.port = null;
@@ -1426,47 +1426,47 @@ var require_url = __commonJS({
         mustEndAbs = mustEndAbs && (relPath[0] === "" || srcPath[0] === "");
       }
       if (isRelAbs) {
-        result2.host = relative.host || relative.host === "" ? relative.host : result2.host;
-        result2.hostname = relative.hostname || relative.hostname === "" ? relative.hostname : result2.hostname;
-        result2.search = relative.search;
-        result2.query = relative.query;
+        result.host = relative.host || relative.host === "" ? relative.host : result.host;
+        result.hostname = relative.hostname || relative.hostname === "" ? relative.hostname : result.hostname;
+        result.search = relative.search;
+        result.query = relative.query;
         srcPath = relPath;
       } else if (relPath.length) {
         if (!srcPath)
           srcPath = [];
         srcPath.pop();
         srcPath = srcPath.concat(relPath);
-        result2.search = relative.search;
-        result2.query = relative.query;
+        result.search = relative.search;
+        result.query = relative.query;
       } else if (!util.isNullOrUndefined(relative.search)) {
         if (psychotic) {
-          result2.hostname = result2.host = srcPath.shift();
-          var authInHost = result2.host && result2.host.indexOf("@") > 0 ? result2.host.split("@") : false;
+          result.hostname = result.host = srcPath.shift();
+          var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
           if (authInHost) {
-            result2.auth = authInHost.shift();
-            result2.host = result2.hostname = authInHost.shift();
+            result.auth = authInHost.shift();
+            result.host = result.hostname = authInHost.shift();
           }
         }
-        result2.search = relative.search;
-        result2.query = relative.query;
-        if (!util.isNull(result2.pathname) || !util.isNull(result2.search)) {
-          result2.path = (result2.pathname ? result2.pathname : "") + (result2.search ? result2.search : "");
+        result.search = relative.search;
+        result.query = relative.query;
+        if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+          result.path = (result.pathname ? result.pathname : "") + (result.search ? result.search : "");
         }
-        result2.href = result2.format();
-        return result2;
+        result.href = result.format();
+        return result;
       }
       if (!srcPath.length) {
-        result2.pathname = null;
-        if (result2.search) {
-          result2.path = "/" + result2.search;
+        result.pathname = null;
+        if (result.search) {
+          result.path = "/" + result.search;
         } else {
-          result2.path = null;
+          result.path = null;
         }
-        result2.href = result2.format();
-        return result2;
+        result.href = result.format();
+        return result;
       }
       var last = srcPath.slice(-1)[0];
-      var hasTrailingSlash = (result2.host || relative.host || srcPath.length > 1) && (last === "." || last === "..") || last === "";
+      var hasTrailingSlash = (result.host || relative.host || srcPath.length > 1) && (last === "." || last === "..") || last === "";
       var up = 0;
       for (var i2 = srcPath.length; i2 >= 0; i2--) {
         last = srcPath[i2];
@@ -1493,30 +1493,30 @@ var require_url = __commonJS({
       }
       var isAbsolute = srcPath[0] === "" || srcPath[0] && srcPath[0].charAt(0) === "/";
       if (psychotic) {
-        result2.hostname = result2.host = isAbsolute ? "" : srcPath.length ? srcPath.shift() : "";
-        var authInHost = result2.host && result2.host.indexOf("@") > 0 ? result2.host.split("@") : false;
+        result.hostname = result.host = isAbsolute ? "" : srcPath.length ? srcPath.shift() : "";
+        var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
         if (authInHost) {
-          result2.auth = authInHost.shift();
-          result2.host = result2.hostname = authInHost.shift();
+          result.auth = authInHost.shift();
+          result.host = result.hostname = authInHost.shift();
         }
       }
-      mustEndAbs = mustEndAbs || result2.host && srcPath.length;
+      mustEndAbs = mustEndAbs || result.host && srcPath.length;
       if (mustEndAbs && !isAbsolute) {
         srcPath.unshift("");
       }
       if (!srcPath.length) {
-        result2.pathname = null;
-        result2.path = null;
+        result.pathname = null;
+        result.path = null;
       } else {
-        result2.pathname = srcPath.join("/");
+        result.pathname = srcPath.join("/");
       }
-      if (!util.isNull(result2.pathname) || !util.isNull(result2.search)) {
-        result2.path = (result2.pathname ? result2.pathname : "") + (result2.search ? result2.search : "");
+      if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+        result.path = (result.pathname ? result.pathname : "") + (result.search ? result.search : "");
       }
-      result2.auth = relative.auth || result2.auth;
-      result2.slashes = result2.slashes || relative.slashes;
-      result2.href = result2.format();
-      return result2;
+      result.auth = relative.auth || result.auth;
+      result.slashes = result.slashes || relative.slashes;
+      result.href = result.format();
+      return result;
     };
     Url.prototype.parseHost = function() {
       var host = this.host;
@@ -1803,7 +1803,7 @@ function isMobile(param) {
     userAgent = tmp[0];
   }
   var match = createMatch(userAgent);
-  var result2 = {
+  var result = {
     apple: {
       phone: match(appleIphone) && !match(windowsPhone),
       ipod: match(appleIpod),
@@ -1838,10 +1838,10 @@ function isMobile(param) {
     phone: false,
     tablet: false
   };
-  result2.any = result2.apple.device || result2.android.device || result2.windows.device || result2.other.device;
-  result2.phone = result2.apple.phone || result2.android.phone || result2.windows.phone;
-  result2.tablet = result2.apple.tablet || result2.android.tablet || result2.windows.tablet;
-  return result2;
+  result.any = result.apple.device || result.android.device || result.windows.device || result.other.device;
+  result.phone = result.apple.phone || result.android.phone || result.windows.phone;
+  result.tablet = result.apple.tablet || result.android.tablet || result.windows.tablet;
+  return result;
 }
 
 // ../../node_modules/.pnpm/@pixi+settings@7.2.4/node_modules/@pixi/settings/lib/utils/isMobile.mjs
@@ -3493,9 +3493,9 @@ function autoDetectResource(source, options) {
   }
   let extension = "";
   if (typeof source === "string") {
-    const result2 = /\.(\w{3,4})(?:$|\?|#)/i.exec(source);
-    if (result2) {
-      extension = result2[1].toLowerCase();
+    const result = /\.(\w{3,4})(?:$|\?|#)/i.exec(source);
+    if (result) {
+      extension = result[1].toLowerCase();
     }
   }
   for (let i2 = INSTALLED.length - 1; i2 >= 0; --i2) {
@@ -6676,8 +6676,8 @@ var Framebuffer = class {
   get colorTexture() {
     return this.colorTextures[0];
   }
-  addColorTexture(index = 0, texture2) {
-    this.colorTextures[index] = texture2 || new BaseTexture(null, {
+  addColorTexture(index = 0, texture) {
+    this.colorTextures[index] = texture || new BaseTexture(null, {
       scaleMode: SCALE_MODES.NEAREST,
       resolution: 1,
       mipmap: MIPMAP_MODES.OFF,
@@ -6688,8 +6688,8 @@ var Framebuffer = class {
     this.dirtyFormat++;
     return this;
   }
-  addDepthTexture(texture2) {
-    this.depthTexture = texture2 || new BaseTexture(new DepthResource(null, { width: this.width, height: this.height }), {
+  addDepthTexture(texture) {
+    this.depthTexture = texture || new BaseTexture(new DepthResource(null, { width: this.width, height: this.height }), {
       scaleMode: SCALE_MODES.NEAREST,
       resolution: 1,
       width: this.width,
@@ -6724,9 +6724,9 @@ var Framebuffer = class {
     this.dirtyId++;
     this.dirtySize++;
     for (let i2 = 0; i2 < this.colorTextures.length; i2++) {
-      const texture2 = this.colorTextures[i2];
-      const resolution = texture2.resolution;
-      texture2.setSize(width / resolution, height / resolution);
+      const texture = this.colorTextures[i2];
+      const resolution = texture.resolution;
+      texture.setSize(width / resolution, height / resolution);
     }
     if (this.depthTexture) {
       const resolution = this.depthTexture.resolution;
@@ -7169,32 +7169,32 @@ var Texture = class extends import_eventemitter3.default {
       }
       cacheId = source._pixiId;
     }
-    let texture2 = TextureCache[cacheId];
-    if (isFrame && strict && !texture2) {
+    let texture = TextureCache[cacheId];
+    if (isFrame && strict && !texture) {
       throw new Error(`The cacheId "${cacheId}" does not exist in TextureCache.`);
     }
-    if (!texture2 && !(source instanceof BaseTexture)) {
+    if (!texture && !(source instanceof BaseTexture)) {
       if (!options.resolution) {
         options.resolution = getResolutionOfUrl(source);
       }
-      texture2 = new Texture(new BaseTexture(source, options));
-      texture2.baseTexture.cacheId = cacheId;
-      BaseTexture.addToCache(texture2.baseTexture, cacheId);
-      Texture.addToCache(texture2, cacheId);
-    } else if (!texture2 && source instanceof BaseTexture) {
-      texture2 = new Texture(source);
-      Texture.addToCache(texture2, cacheId);
+      texture = new Texture(new BaseTexture(source, options));
+      texture.baseTexture.cacheId = cacheId;
+      BaseTexture.addToCache(texture.baseTexture, cacheId);
+      Texture.addToCache(texture, cacheId);
+    } else if (!texture && source instanceof BaseTexture) {
+      texture = new Texture(source);
+      Texture.addToCache(texture, cacheId);
     }
-    return texture2;
+    return texture;
   }
   static fromURL(url2, options) {
     const resourceOptions = Object.assign({ autoLoad: false }, options?.resourceOptions);
-    const texture2 = Texture.from(url2, Object.assign({ resourceOptions }, options), false);
-    const resource = texture2.baseTexture.resource;
-    if (texture2.baseTexture.valid) {
-      return Promise.resolve(texture2);
+    const texture = Texture.from(url2, Object.assign({ resourceOptions }, options), false);
+    const resource = texture.baseTexture.resource;
+    if (texture.baseTexture.valid) {
+      return Promise.resolve(texture);
     }
-    return resource.load().then(() => Promise.resolve(texture2));
+    return resource.load().then(() => Promise.resolve(texture));
   }
   static fromBuffer(buffer, width, height, options) {
     return new Texture(BaseTexture.fromBuffer(buffer, width, height, options));
@@ -7208,53 +7208,53 @@ var Texture = class extends import_eventemitter3.default {
     if (resource instanceof ImageResource) {
       resource.url = imageUrl;
     }
-    const texture2 = new Texture(baseTexture);
+    const texture = new Texture(baseTexture);
     if (!name) {
       name = imageUrl;
     }
-    BaseTexture.addToCache(texture2.baseTexture, name);
-    Texture.addToCache(texture2, name);
+    BaseTexture.addToCache(texture.baseTexture, name);
+    Texture.addToCache(texture, name);
     if (name !== imageUrl) {
-      BaseTexture.addToCache(texture2.baseTexture, imageUrl);
-      Texture.addToCache(texture2, imageUrl);
+      BaseTexture.addToCache(texture.baseTexture, imageUrl);
+      Texture.addToCache(texture, imageUrl);
     }
-    if (texture2.baseTexture.valid) {
-      return Promise.resolve(texture2);
+    if (texture.baseTexture.valid) {
+      return Promise.resolve(texture);
     }
     return new Promise((resolve2) => {
-      texture2.baseTexture.once("loaded", () => resolve2(texture2));
+      texture.baseTexture.once("loaded", () => resolve2(texture));
     });
   }
-  static addToCache(texture2, id) {
+  static addToCache(texture, id) {
     if (id) {
-      if (!texture2.textureCacheIds.includes(id)) {
-        texture2.textureCacheIds.push(id);
+      if (!texture.textureCacheIds.includes(id)) {
+        texture.textureCacheIds.push(id);
       }
-      if (TextureCache[id] && TextureCache[id] !== texture2) {
+      if (TextureCache[id] && TextureCache[id] !== texture) {
         console.warn(`Texture added to the cache with an id [${id}] that already had an entry`);
       }
-      TextureCache[id] = texture2;
+      TextureCache[id] = texture;
     }
   }
-  static removeFromCache(texture2) {
-    if (typeof texture2 === "string") {
-      const textureFromCache = TextureCache[texture2];
+  static removeFromCache(texture) {
+    if (typeof texture === "string") {
+      const textureFromCache = TextureCache[texture];
       if (textureFromCache) {
-        const index = textureFromCache.textureCacheIds.indexOf(texture2);
+        const index = textureFromCache.textureCacheIds.indexOf(texture);
         if (index > -1) {
           textureFromCache.textureCacheIds.splice(index, 1);
         }
-        delete TextureCache[texture2];
+        delete TextureCache[texture];
         return textureFromCache;
       }
-    } else if (texture2?.textureCacheIds) {
-      for (let i2 = 0; i2 < texture2.textureCacheIds.length; ++i2) {
-        if (TextureCache[texture2.textureCacheIds[i2]] === texture2) {
-          delete TextureCache[texture2.textureCacheIds[i2]];
+    } else if (texture?.textureCacheIds) {
+      for (let i2 = 0; i2 < texture.textureCacheIds.length; ++i2) {
+        if (TextureCache[texture.textureCacheIds[i2]] === texture) {
+          delete TextureCache[texture.textureCacheIds[i2]];
         }
       }
-      texture2.textureCacheIds.length = 0;
-      return texture2;
+      texture.textureCacheIds.length = 0;
+      return texture;
     }
     return null;
   }
@@ -7924,8 +7924,8 @@ var FramebufferSystem = class {
       if (frame) {
         const mipWidth = frame.width >> mipLevel;
         const mipHeight = frame.height >> mipLevel;
-        const scale = mipWidth / frame.width;
-        this.setViewport(frame.x * scale, frame.y * scale, mipWidth, mipHeight);
+        const scale2 = mipWidth / frame.width;
+        this.setViewport(frame.x * scale2, frame.y * scale2, mipWidth, mipHeight);
       } else {
         const mipWidth = framebuffer.width >> mipLevel;
         const mipHeight = framebuffer.height >> mipLevel;
@@ -7994,8 +7994,8 @@ var FramebufferSystem = class {
       count = Math.min(count, 1);
     }
     for (let i2 = 0; i2 < count; i2++) {
-      const texture2 = colorTextures[i2];
-      const parentTexture = texture2.parentTextureArray || texture2;
+      const texture = colorTextures[i2];
+      const parentTexture = texture.parentTextureArray || texture;
       this.renderer.texture.bind(parentTexture, 0);
       if (i2 === 0 && fbo.msaaBuffer) {
         gl.bindRenderbuffer(gl.RENDERBUFFER, fbo.msaaBuffer);
@@ -8026,15 +8026,15 @@ var FramebufferSystem = class {
     }
     const activeTextures = [];
     for (let i2 = 0; i2 < count; i2++) {
-      const texture2 = colorTextures[i2];
-      const parentTexture = texture2.parentTextureArray || texture2;
+      const texture = colorTextures[i2];
+      const parentTexture = texture.parentTextureArray || texture;
       this.renderer.texture.bind(parentTexture, 0);
       if (i2 === 0 && fbo.msaaBuffer) {
         gl.bindRenderbuffer(gl.RENDERBUFFER, fbo.msaaBuffer);
         gl.renderbufferStorageMultisample(gl.RENDERBUFFER, fbo.multisample, parentTexture._glTextures[this.CONTEXT_UID].internalFormat, framebuffer.width, framebuffer.height);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, fbo.msaaBuffer);
       } else {
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i2, texture2.target, parentTexture._glTextures[this.CONTEXT_UID].texture, mipLevel);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i2, texture.target, parentTexture._glTextures[this.CONTEXT_UID].texture, mipLevel);
         activeTextures.push(gl.COLOR_ATTACHMENT0 + i2);
       }
     }
@@ -8480,8 +8480,8 @@ extensions.add(GeometrySystem);
 // ../../node_modules/.pnpm/@pixi+core@7.2.4/node_modules/@pixi/core/lib/textures/TextureMatrix.mjs
 var tempMat = new Matrix();
 var TextureMatrix = class {
-  constructor(texture2, clampMargin) {
-    this._texture = texture2;
+  constructor(texture, clampMargin) {
+    this._texture = texture;
     this.mapCoord = new Matrix();
     this.uClampFrame = new Float32Array(4);
     this.uClampOffset = new Float32Array(2);
@@ -9872,8 +9872,8 @@ var _StateSystem = class {
       gl.blendEquationSeparate(gl.FUNC_ADD, gl.FUNC_ADD);
     }
   }
-  setPolygonOffset(value, scale) {
-    this.gl.polygonOffset(value, scale);
+  setPolygonOffset(value, scale2) {
+    this.gl.polygonOffset(value, scale2);
   }
   reset() {
     this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, false);
@@ -9986,9 +9986,9 @@ var _TextureGCSystem = class {
     const managedTextures = tm.managedTextures;
     let wasRemoved = false;
     for (let i2 = 0; i2 < managedTextures.length; i2++) {
-      const texture2 = managedTextures[i2];
-      if (!texture2.framebuffer && this.count - texture2.touched > this.maxIdle) {
-        tm.destroyTexture(texture2, true);
+      const texture = managedTextures[i2];
+      if (!texture.framebuffer && this.count - texture.touched > this.maxIdle) {
+        tm.destroyTexture(texture, true);
         managedTextures[i2] = null;
         wasRemoved = true;
       }
@@ -10005,9 +10005,9 @@ var _TextureGCSystem = class {
   }
   unload(displayObject) {
     const tm = this.renderer.texture;
-    const texture2 = displayObject._texture;
-    if (texture2 && !texture2.framebuffer) {
-      tm.destroyTexture(texture2);
+    const texture = displayObject._texture;
+    if (texture && !texture.framebuffer) {
+      tm.destroyTexture(texture);
     }
     for (let i2 = displayObject.children.length - 1; i2 >= 0; i2--) {
       this.unload(displayObject.children[i2]);
@@ -10029,8 +10029,8 @@ extensions.add(TextureGCSystem);
 
 // ../../node_modules/.pnpm/@pixi+core@7.2.4/node_modules/@pixi/core/lib/textures/GLTexture.mjs
 var GLTexture = class {
-  constructor(texture2) {
-    this.texture = texture2;
+  constructor(texture) {
+    this.texture = texture;
     this.width = -1;
     this.height = -1;
     this.dirtyId = -1;
@@ -10196,29 +10196,29 @@ var TextureSystem = class {
       this.bind(null, i2);
     }
   }
-  bind(texture2, location = 0) {
+  bind(texture, location = 0) {
     const { gl } = this;
-    texture2 = texture2?.castToBaseTexture();
-    if (texture2?.valid && !texture2.parentTextureArray) {
-      texture2.touched = this.renderer.textureGC.count;
-      const glTexture = texture2._glTextures[this.CONTEXT_UID] || this.initTexture(texture2);
-      if (this.boundTextures[location] !== texture2) {
+    texture = texture?.castToBaseTexture();
+    if (texture?.valid && !texture.parentTextureArray) {
+      texture.touched = this.renderer.textureGC.count;
+      const glTexture = texture._glTextures[this.CONTEXT_UID] || this.initTexture(texture);
+      if (this.boundTextures[location] !== texture) {
         if (this.currentLocation !== location) {
           this.currentLocation = location;
           gl.activeTexture(gl.TEXTURE0 + location);
         }
-        gl.bindTexture(texture2.target, glTexture.texture);
+        gl.bindTexture(texture.target, glTexture.texture);
       }
-      if (glTexture.dirtyId !== texture2.dirtyId) {
+      if (glTexture.dirtyId !== texture.dirtyId) {
         if (this.currentLocation !== location) {
           this.currentLocation = location;
           gl.activeTexture(gl.TEXTURE0 + location);
         }
-        this.updateTexture(texture2);
-      } else if (glTexture.dirtyStyleId !== texture2.dirtyStyleId) {
-        this.updateTextureStyle(texture2);
+        this.updateTexture(texture);
+      } else if (glTexture.dirtyStyleId !== texture.dirtyStyleId) {
+        this.updateTextureStyle(texture);
       }
-      this.boundTextures[location] = texture2;
+      this.boundTextures[location] = texture;
     } else {
       if (this.currentLocation !== location) {
         this.currentLocation = location;
@@ -10236,7 +10236,7 @@ var TextureSystem = class {
       this.boundTextures[i2] = this.unknownTexture;
     }
   }
-  unbind(texture2) {
+  unbind(texture) {
     const { gl, boundTextures } = this;
     if (this._unknownBoundTextures) {
       this._unknownBoundTextures = false;
@@ -10247,12 +10247,12 @@ var TextureSystem = class {
       }
     }
     for (let i2 = 0; i2 < boundTextures.length; i2++) {
-      if (boundTextures[i2] === texture2) {
+      if (boundTextures[i2] === texture) {
         if (this.currentLocation !== i2) {
           gl.activeTexture(gl.TEXTURE0 + i2);
           this.currentLocation = i2;
         }
-        gl.bindTexture(texture2.target, this.emptyTextures[texture2.target].texture);
+        gl.bindTexture(texture.target, this.emptyTextures[texture.target].texture);
         boundTextures[i2] = null;
       }
     }
@@ -10272,103 +10272,103 @@ var TextureSystem = class {
       }
     }
   }
-  initTexture(texture2) {
+  initTexture(texture) {
     const glTexture = new GLTexture(this.gl.createTexture());
     glTexture.dirtyId = -1;
-    texture2._glTextures[this.CONTEXT_UID] = glTexture;
-    this.managedTextures.push(texture2);
-    texture2.on("dispose", this.destroyTexture, this);
+    texture._glTextures[this.CONTEXT_UID] = glTexture;
+    this.managedTextures.push(texture);
+    texture.on("dispose", this.destroyTexture, this);
     return glTexture;
   }
-  initTextureType(texture2, glTexture) {
-    glTexture.internalFormat = this.internalFormats[texture2.type]?.[texture2.format] ?? texture2.format;
-    if (this.webGLVersion === 2 && texture2.type === TYPES.HALF_FLOAT) {
+  initTextureType(texture, glTexture) {
+    glTexture.internalFormat = this.internalFormats[texture.type]?.[texture.format] ?? texture.format;
+    if (this.webGLVersion === 2 && texture.type === TYPES.HALF_FLOAT) {
       glTexture.type = this.gl.HALF_FLOAT;
     } else {
-      glTexture.type = texture2.type;
+      glTexture.type = texture.type;
     }
   }
-  updateTexture(texture2) {
-    const glTexture = texture2._glTextures[this.CONTEXT_UID];
+  updateTexture(texture) {
+    const glTexture = texture._glTextures[this.CONTEXT_UID];
     if (!glTexture) {
       return;
     }
     const renderer = this.renderer;
-    this.initTextureType(texture2, glTexture);
-    if (texture2.resource?.upload(renderer, texture2, glTexture)) {
+    this.initTextureType(texture, glTexture);
+    if (texture.resource?.upload(renderer, texture, glTexture)) {
       if (glTexture.samplerType !== SAMPLER_TYPES.FLOAT) {
         this.hasIntegerTextures = true;
       }
     } else {
-      const width = texture2.realWidth;
-      const height = texture2.realHeight;
+      const width = texture.realWidth;
+      const height = texture.realHeight;
       const gl = renderer.gl;
       if (glTexture.width !== width || glTexture.height !== height || glTexture.dirtyId < 0) {
         glTexture.width = width;
         glTexture.height = height;
-        gl.texImage2D(texture2.target, 0, glTexture.internalFormat, width, height, 0, texture2.format, glTexture.type, null);
+        gl.texImage2D(texture.target, 0, glTexture.internalFormat, width, height, 0, texture.format, glTexture.type, null);
       }
     }
-    if (texture2.dirtyStyleId !== glTexture.dirtyStyleId) {
-      this.updateTextureStyle(texture2);
+    if (texture.dirtyStyleId !== glTexture.dirtyStyleId) {
+      this.updateTextureStyle(texture);
     }
-    glTexture.dirtyId = texture2.dirtyId;
+    glTexture.dirtyId = texture.dirtyId;
   }
-  destroyTexture(texture2, skipRemove) {
+  destroyTexture(texture, skipRemove) {
     const { gl } = this;
-    texture2 = texture2.castToBaseTexture();
-    if (texture2._glTextures[this.CONTEXT_UID]) {
-      this.unbind(texture2);
-      gl.deleteTexture(texture2._glTextures[this.CONTEXT_UID].texture);
-      texture2.off("dispose", this.destroyTexture, this);
-      delete texture2._glTextures[this.CONTEXT_UID];
+    texture = texture.castToBaseTexture();
+    if (texture._glTextures[this.CONTEXT_UID]) {
+      this.unbind(texture);
+      gl.deleteTexture(texture._glTextures[this.CONTEXT_UID].texture);
+      texture.off("dispose", this.destroyTexture, this);
+      delete texture._glTextures[this.CONTEXT_UID];
       if (!skipRemove) {
-        const i2 = this.managedTextures.indexOf(texture2);
+        const i2 = this.managedTextures.indexOf(texture);
         if (i2 !== -1) {
           removeItems(this.managedTextures, i2, 1);
         }
       }
     }
   }
-  updateTextureStyle(texture2) {
-    const glTexture = texture2._glTextures[this.CONTEXT_UID];
+  updateTextureStyle(texture) {
+    const glTexture = texture._glTextures[this.CONTEXT_UID];
     if (!glTexture) {
       return;
     }
-    if ((texture2.mipmap === MIPMAP_MODES.POW2 || this.webGLVersion !== 2) && !texture2.isPowerOfTwo) {
+    if ((texture.mipmap === MIPMAP_MODES.POW2 || this.webGLVersion !== 2) && !texture.isPowerOfTwo) {
       glTexture.mipmap = false;
     } else {
-      glTexture.mipmap = texture2.mipmap >= 1;
+      glTexture.mipmap = texture.mipmap >= 1;
     }
-    if (this.webGLVersion !== 2 && !texture2.isPowerOfTwo) {
+    if (this.webGLVersion !== 2 && !texture.isPowerOfTwo) {
       glTexture.wrapMode = WRAP_MODES.CLAMP;
     } else {
-      glTexture.wrapMode = texture2.wrapMode;
+      glTexture.wrapMode = texture.wrapMode;
     }
-    if (texture2.resource?.style(this.renderer, texture2, glTexture)) {
+    if (texture.resource?.style(this.renderer, texture, glTexture)) {
     } else {
-      this.setStyle(texture2, glTexture);
+      this.setStyle(texture, glTexture);
     }
-    glTexture.dirtyStyleId = texture2.dirtyStyleId;
+    glTexture.dirtyStyleId = texture.dirtyStyleId;
   }
-  setStyle(texture2, glTexture) {
+  setStyle(texture, glTexture) {
     const gl = this.gl;
-    if (glTexture.mipmap && texture2.mipmap !== MIPMAP_MODES.ON_MANUAL) {
-      gl.generateMipmap(texture2.target);
+    if (glTexture.mipmap && texture.mipmap !== MIPMAP_MODES.ON_MANUAL) {
+      gl.generateMipmap(texture.target);
     }
-    gl.texParameteri(texture2.target, gl.TEXTURE_WRAP_S, glTexture.wrapMode);
-    gl.texParameteri(texture2.target, gl.TEXTURE_WRAP_T, glTexture.wrapMode);
+    gl.texParameteri(texture.target, gl.TEXTURE_WRAP_S, glTexture.wrapMode);
+    gl.texParameteri(texture.target, gl.TEXTURE_WRAP_T, glTexture.wrapMode);
     if (glTexture.mipmap) {
-      gl.texParameteri(texture2.target, gl.TEXTURE_MIN_FILTER, texture2.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR_MIPMAP_LINEAR : gl.NEAREST_MIPMAP_NEAREST);
+      gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR_MIPMAP_LINEAR : gl.NEAREST_MIPMAP_NEAREST);
       const anisotropicExt = this.renderer.context.extensions.anisotropicFiltering;
-      if (anisotropicExt && texture2.anisotropicLevel > 0 && texture2.scaleMode === SCALE_MODES.LINEAR) {
-        const level = Math.min(texture2.anisotropicLevel, gl.getParameter(anisotropicExt.MAX_TEXTURE_MAX_ANISOTROPY_EXT));
-        gl.texParameterf(texture2.target, anisotropicExt.TEXTURE_MAX_ANISOTROPY_EXT, level);
+      if (anisotropicExt && texture.anisotropicLevel > 0 && texture.scaleMode === SCALE_MODES.LINEAR) {
+        const level = Math.min(texture.anisotropicLevel, gl.getParameter(anisotropicExt.MAX_TEXTURE_MAX_ANISOTROPY_EXT));
+        gl.texParameterf(texture.target, anisotropicExt.TEXTURE_MAX_ANISOTROPY_EXT, level);
       }
     } else {
-      gl.texParameteri(texture2.target, gl.TEXTURE_MIN_FILTER, texture2.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
+      gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
     }
-    gl.texParameteri(texture2.target, gl.TEXTURE_MAG_FILTER, texture2.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
+    gl.texParameteri(texture.target, gl.TEXTURE_MAG_FILTER, texture.scaleMode === SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
   }
   destroy() {
     this.renderer = null;
@@ -10873,8 +10873,8 @@ var _Ticker = class {
   get minFPS() {
     return 1e3 / this._maxElapsedMS;
   }
-  set minFPS(fps) {
-    const minFPS = Math.min(this.maxFPS, fps);
+  set minFPS(fps2) {
+    const minFPS = Math.min(this.maxFPS, fps2);
     const minFPMS = Math.min(Math.max(0, minFPS) / 1e3, _Ticker.targetFPMS);
     this._maxElapsedMS = 1 / minFPMS;
   }
@@ -10884,11 +10884,11 @@ var _Ticker = class {
     }
     return 0;
   }
-  set maxFPS(fps) {
-    if (fps === 0) {
+  set maxFPS(fps2) {
+    if (fps2 === 0) {
       this._minElapsedMS = 0;
     } else {
-      const maxFPS = Math.max(this.minFPS, fps);
+      const maxFPS = Math.max(this.minFPS, fps2);
       this._minElapsedMS = 1 / (maxFPS / 1e3);
     }
   }
@@ -11467,18 +11467,18 @@ var ArrayResource = class extends AbstractMultiResource {
     super.bind(baseTexture);
     baseTexture.target = TARGETS.TEXTURE_2D_ARRAY;
   }
-  upload(renderer, texture2, glTexture) {
+  upload(renderer, texture, glTexture) {
     const { length, itemDirtyIds, items } = this;
     const { gl } = renderer;
     if (glTexture.dirtyId < 0) {
-      gl.texImage3D(gl.TEXTURE_2D_ARRAY, 0, glTexture.internalFormat, this._width, this._height, length, 0, texture2.format, glTexture.type, null);
+      gl.texImage3D(gl.TEXTURE_2D_ARRAY, 0, glTexture.internalFormat, this._width, this._height, length, 0, texture.format, glTexture.type, null);
     }
     for (let i2 = 0; i2 < length; i2++) {
       const item = items[i2];
       if (itemDirtyIds[i2] < item.dirtyId) {
         itemDirtyIds[i2] = item.dirtyId;
         if (item.valid) {
-          gl.texSubImage3D(gl.TEXTURE_2D_ARRAY, 0, 0, 0, i2, item.resource.width, item.resource.height, 1, texture2.format, glTexture.type, item.resource.source);
+          gl.texSubImage3D(gl.TEXTURE_2D_ARRAY, 0, 0, 0, i2, item.resource.width, item.resource.height, 1, texture.format, glTexture.type, item.resource.source);
         }
       }
     }
@@ -12645,7 +12645,7 @@ var _Container = class extends DisplayObject {
     this._bounds.updateID = this._boundsID;
   }
   getLocalBounds(rect, skipChildrenUpdate = false) {
-    const result2 = super.getLocalBounds(rect);
+    const result = super.getLocalBounds(rect);
     if (!skipChildrenUpdate) {
       for (let i2 = 0, j3 = this.children.length; i2 < j3; ++i2) {
         const child = this.children[i2];
@@ -12654,7 +12654,7 @@ var _Container = class extends DisplayObject {
         }
       }
     }
-    return result2;
+    return result;
   }
   _calculateBounds() {
   }
@@ -12805,13 +12805,13 @@ Object.defineProperties(settings, {
   }
 });
 
-// ../../node_modules/.pnpm/@pixi+sprite@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/sprite/lib/Sprite.mjs
+// ../../node_modules/.pnpm/@pixi+sprite@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/sprite/lib/Sprite.mjs
 var tempPoint = new Point();
 var indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
 var Sprite = class extends Container {
-  constructor(texture2) {
+  constructor(texture) {
     super();
-    this._anchor = new ObservablePoint(this._onAnchorUpdate, this, texture2 ? texture2.defaultAnchor.x : 0, texture2 ? texture2.defaultAnchor.y : 0);
+    this._anchor = new ObservablePoint(this._onAnchorUpdate, this, texture ? texture.defaultAnchor.x : 0, texture ? texture.defaultAnchor.y : 0);
     this._texture = null;
     this._width = 0;
     this._height = 0;
@@ -12821,7 +12821,7 @@ var Sprite = class extends Container {
     this.blendMode = BLEND_MODES.NORMAL;
     this._cachedTint = 16777215;
     this.uvs = null;
-    this.texture = texture2 || Texture.EMPTY;
+    this.texture = texture || Texture.EMPTY;
     this.vertexData = new Float32Array(8);
     this.vertexTrimmedData = null;
     this._transformID = -1;
@@ -12849,15 +12849,15 @@ var Sprite = class extends Container {
     this._transformTrimmedID = -1;
   }
   calculateVertices() {
-    const texture2 = this._texture;
-    if (this._transformID === this.transform._worldID && this._textureID === texture2._updateID) {
+    const texture = this._texture;
+    if (this._transformID === this.transform._worldID && this._textureID === texture._updateID) {
       return;
     }
-    if (this._textureID !== texture2._updateID) {
+    if (this._textureID !== texture._updateID) {
       this.uvs = this._texture._uvs.uvsFloat32;
     }
     this._transformID = this.transform._worldID;
-    this._textureID = texture2._updateID;
+    this._textureID = texture._updateID;
     const wt = this.transform.worldTransform;
     const a2 = wt.a;
     const b3 = wt.b;
@@ -12866,8 +12866,8 @@ var Sprite = class extends Container {
     const tx = wt.tx;
     const ty = wt.ty;
     const vertexData = this.vertexData;
-    const trim = texture2.trim;
-    const orig = texture2.orig;
+    const trim = texture.trim;
+    const orig = texture.orig;
     const anchor = this._anchor;
     let w0 = 0;
     let w1 = 0;
@@ -12907,9 +12907,9 @@ var Sprite = class extends Container {
     }
     this._transformTrimmedID = this.transform._worldID;
     this._textureTrimmedID = this._texture._updateID;
-    const texture2 = this._texture;
+    const texture = this._texture;
     const vertexData = this.vertexTrimmedData;
-    const orig = texture2.orig;
+    const orig = texture.orig;
     const anchor = this._anchor;
     const wt = this.transform.worldTransform;
     const a2 = wt.a;
@@ -12992,8 +12992,8 @@ var Sprite = class extends Container {
     this._texture = null;
   }
   static from(source, options) {
-    const texture2 = source instanceof Texture ? source : Texture.from(source, options);
-    return new Sprite(texture2);
+    const texture = source instanceof Texture ? source : Texture.from(source, options);
+    return new Sprite(texture);
   }
   set roundPixels(value) {
     if (this._roundPixels !== value) {
@@ -13060,7 +13060,7 @@ var Sprite = class extends Container {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mixin-cache-as-bitmap@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/mixin-cache-as-bitmap/lib/index.mjs
+// ../../node_modules/.pnpm/@pixi+mixin-cache-as-bitmap@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/mixin-cache-as-bitmap/lib/index.mjs
 var _tempMatrix = new Matrix();
 DisplayObject.prototype._cacheAsBitmap = false;
 DisplayObject.prototype._cacheData = null;
@@ -13323,7 +13323,7 @@ Container.prototype.getChildByName = function getChildByName(name, deep) {
   return null;
 };
 
-// ../../node_modules/.pnpm/@pixi+mixin-get-global-position@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mixin-get-global-position/lib/index.mjs
+// ../../node_modules/.pnpm/@pixi+mixin-get-global-position@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mixin-get-global-position/lib/index.mjs
 DisplayObject.prototype.getGlobalPosition = function getGlobalPosition(point = new Point(), skipUpdate = false) {
   if (this.parent) {
     this.parent.toGlobal(this.position, point, skipUpdate);
@@ -13710,21 +13710,21 @@ var ColorMatrixFilter = class extends Filter {
     ];
     this._loadMatrix(matrix, multiply);
   }
-  greyscale(scale, multiply) {
+  greyscale(scale2, multiply) {
     const matrix = [
-      scale,
-      scale,
-      scale,
+      scale2,
+      scale2,
+      scale2,
       0,
       0,
-      scale,
-      scale,
-      scale,
+      scale2,
+      scale2,
+      scale2,
       0,
       0,
-      scale,
-      scale,
-      scale,
+      scale2,
+      scale2,
+      scale2,
       0,
       0,
       0,
@@ -14213,7 +14213,7 @@ var vertex2 = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;
 
 // ../../node_modules/.pnpm/@pixi+filter-displacement@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/filter-displacement/lib/DisplacementFilter.mjs
 var DisplacementFilter = class extends Filter {
-  constructor(sprite, scale) {
+  constructor(sprite, scale2) {
     const maskMatrix = new Matrix();
     sprite.renderable = false;
     super(vertex2, fragment4, {
@@ -14224,10 +14224,10 @@ var DisplacementFilter = class extends Filter {
     });
     this.maskSprite = sprite;
     this.maskMatrix = maskMatrix;
-    if (scale === null || scale === void 0) {
-      scale = 20;
+    if (scale2 === null || scale2 === void 0) {
+      scale2 = 20;
     }
-    this.scale = new Point(scale, scale);
+    this.scale = new Point(scale2, scale2);
   }
   apply(filterManager, input, output, clearMode) {
     this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(this.maskMatrix, this.maskSprite);
@@ -14432,7 +14432,7 @@ Object.entries(filters).forEach(([key, FilterClass]) => {
   });
 });
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventTicker.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventTicker.mjs
 var EventsTickerClass = class {
   constructor() {
     this.interactionFrequency = 10;
@@ -14501,7 +14501,7 @@ var EventsTickerClass = class {
 };
 var EventsTicker = new EventsTickerClass();
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedEvent.mjs
 var FederatedEvent = class {
   constructor(manager) {
     this.bubbles = true;
@@ -14561,7 +14561,7 @@ var FederatedEvent = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedMouseEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedMouseEvent.mjs
 var FederatedMouseEvent = class extends FederatedEvent {
   constructor() {
     super(...arguments);
@@ -14618,7 +14618,7 @@ var FederatedMouseEvent = class extends FederatedEvent {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedPointerEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedPointerEvent.mjs
 var FederatedPointerEvent = class extends FederatedMouseEvent {
   constructor() {
     super(...arguments);
@@ -14637,7 +14637,7 @@ var FederatedPointerEvent = class extends FederatedMouseEvent {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedWheelEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedWheelEvent.mjs
 var FederatedWheelEvent = class extends FederatedMouseEvent {
   constructor() {
     super(...arguments);
@@ -14650,7 +14650,7 @@ FederatedWheelEvent.DOM_DELTA_PIXEL = 0;
 FederatedWheelEvent.DOM_DELTA_LINE = 1;
 FederatedWheelEvent.DOM_DELTA_PAGE = 2;
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventBoundary.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventBoundary.mjs
 var PROPAGATION_LIMIT = 2048;
 var tempHitLocation = new Point();
 var tempLocalMapping = new Point();
@@ -15290,7 +15290,7 @@ var EventBoundary = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventSystem.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventSystem.mjs
 var MOUSE_POINTER_ID = 1;
 var TOUCH_TO_POINTER = {
   touchstart: "pointerdown",
@@ -15698,7 +15698,7 @@ EventSystem.defaultEventFeatures = {
 };
 extensions.add(EventSystem);
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedEventTarget.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedEventTarget.mjs
 function convertEventModeToInteractiveMode(mode) {
   return mode === "dynamic" || mode === "static";
 }
@@ -15785,7 +15785,7 @@ var FederatedDisplayObject = {
 };
 DisplayObject.mixin(FederatedDisplayObject);
 
-// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+events@7.2.4/node_modules/@pixi/accessibility/lib/accessibleTarget.mjs
+// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_apmmhdndg7szcc4swgeztfmmb4/node_modules/@pixi/accessibility/lib/accessibleTarget.mjs
 var accessibleTarget = {
   accessible: false,
   accessibleTitle: null,
@@ -15799,7 +15799,7 @@ var accessibleTarget = {
   renderId: -1
 };
 
-// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+events@7.2.4/node_modules/@pixi/accessibility/lib/AccessibilityManager.mjs
+// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_apmmhdndg7szcc4swgeztfmmb4/node_modules/@pixi/accessibility/lib/AccessibilityManager.mjs
 DisplayObject.mixin(accessibleTarget);
 var KEY_CODE_TAB = 9;
 var DIV_TOUCH_SIZE = 100;
@@ -16084,7 +16084,7 @@ AccessibilityManager.extension = {
 };
 extensions.add(AccessibilityManager);
 
-// ../../node_modules/.pnpm/@pixi+app@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/app/lib/Application.mjs
+// ../../node_modules/.pnpm/@pixi+app@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/app/lib/Application.mjs
 var _Application = class {
   constructor(options) {
     this.stage = new Container();
@@ -16121,7 +16121,7 @@ var Application = _Application;
 Application._plugins = [];
 extensions.handleByList(ExtensionType.Application, Application._plugins);
 
-// ../../node_modules/.pnpm/@pixi+app@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/app/lib/ResizePlugin.mjs
+// ../../node_modules/.pnpm/@pixi+app@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/app/lib/ResizePlugin.mjs
 var ResizePlugin = class {
   static init(options) {
     Object.defineProperty(this, "resizeTo", {
@@ -16184,7 +16184,7 @@ var ResizePlugin = class {
 ResizePlugin.extension = ExtensionType.Application;
 extensions.add(ResizePlugin);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/AssetExtension.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/AssetExtension.mjs
 var assetKeyMap = {
   loader: ExtensionType.LoadParser,
   resolver: ExtensionType.ResolveParser,
@@ -16199,7 +16199,7 @@ extensions.handle(ExtensionType.Asset, (extension) => {
   Object.keys(assetKeyMap).filter((key) => !!ref[key]).forEach((key) => extensions.remove(ref[key]));
 });
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/BackgroundLoader.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/BackgroundLoader.mjs
 var BackgroundLoader = class {
   constructor(loader, verbose = false) {
     this._loader = loader;
@@ -16244,7 +16244,7 @@ var BackgroundLoader = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/checkDataUrl.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/checkDataUrl.mjs
 function checkDataUrl(url2, mimes) {
   if (Array.isArray(mimes)) {
     for (const mime of mimes) {
@@ -16256,7 +16256,7 @@ function checkDataUrl(url2, mimes) {
   return url2.startsWith(`data:${mimes}`);
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/checkExtension.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/checkExtension.mjs
 function checkExtension(url2, extension) {
   const tempURL = url2.split("?")[0];
   const ext = lib_exports.path.extname(tempURL).toLowerCase();
@@ -16266,7 +16266,7 @@ function checkExtension(url2, extension) {
   return ext === extension;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/convertToList.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/convertToList.mjs
 var convertToList = (input, transform) => {
   if (!Array.isArray(input)) {
     input = [input];
@@ -16282,7 +16282,7 @@ var convertToList = (input, transform) => {
   });
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/copySearchParams.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/copySearchParams.mjs
 var copySearchParams = (targetUrl, sourceUrl) => {
   const searchParams = sourceUrl.split("?")[1];
   if (searchParams) {
@@ -16291,39 +16291,39 @@ var copySearchParams = (targetUrl, sourceUrl) => {
   return targetUrl;
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/createStringVariations.mjs
-function processX(base, ids, depth, result2, tags) {
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/createStringVariations.mjs
+function processX(base, ids, depth, result, tags) {
   const id = ids[depth];
   for (let i2 = 0; i2 < id.length; i2++) {
     const value = id[i2];
     if (depth < ids.length - 1) {
-      processX(base.replace(result2[depth], value), ids, depth + 1, result2, tags);
+      processX(base.replace(result[depth], value), ids, depth + 1, result, tags);
     } else {
-      tags.push(base.replace(result2[depth], value));
+      tags.push(base.replace(result[depth], value));
     }
   }
 }
 function createStringVariations(string) {
   const regex = /\{(.*?)\}/g;
-  const result2 = string.match(regex);
+  const result = string.match(regex);
   const tags = [];
-  if (result2) {
+  if (result) {
     const ids = [];
-    result2.forEach((vars) => {
+    result.forEach((vars) => {
       const split = vars.substring(1, vars.length - 1).split(",");
       ids.push(split);
     });
-    processX(string, ids, 0, result2, tags);
+    processX(string, ids, 0, result, tags);
   } else {
     tags.push(string);
   }
   return tags;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/isSingleItem.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/isSingleItem.mjs
 var isSingleItem = (item) => !Array.isArray(item);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/cache/Cache.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/cache/Cache.mjs
 var CacheClass = class {
   constructor() {
     this._parsers = [];
@@ -16338,11 +16338,11 @@ var CacheClass = class {
     return this._cache.has(key);
   }
   get(key) {
-    const result2 = this._cache.get(key);
-    if (!result2) {
+    const result = this._cache.get(key);
+    if (!result) {
       console.warn(`[Assets] Asset id ${key} was not found in the Cache`);
     }
-    return result2;
+    return result;
   }
   set(key, value) {
     const keys = convertToList(key);
@@ -16375,12 +16375,12 @@ var CacheClass = class {
       this._cache.set(key2, cacheableAssets[key2]);
     });
     if (value instanceof Texture) {
-      const texture2 = value;
+      const texture = value;
       keys.forEach((key2) => {
-        if (texture2.baseTexture !== Texture.EMPTY.baseTexture) {
-          BaseTexture.addToCache(texture2.baseTexture, key2);
+        if (texture.baseTexture !== Texture.EMPTY.baseTexture) {
+          BaseTexture.addToCache(texture.baseTexture, key2);
         }
-        Texture.addToCache(texture2, key2);
+        Texture.addToCache(texture, key2);
       });
     }
   }
@@ -16405,7 +16405,7 @@ var CacheClass = class {
 };
 var Cache = new CacheClass();
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/Loader.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/Loader.mjs
 var Loader = class {
   constructor() {
     this._parsers = [];
@@ -16424,11 +16424,11 @@ var Loader = class {
     this.promiseCache = {};
   }
   _getLoadPromiseAndParser(url2, data) {
-    const result2 = {
+    const result = {
       promise: null,
       parser: null
     };
-    result2.promise = (async () => {
+    result.promise = (async () => {
       let asset = null;
       let parser = null;
       if (data.loadParser) {
@@ -16451,19 +16451,19 @@ var Loader = class {
         }
       }
       asset = await parser.load(url2, data, this);
-      result2.parser = parser;
+      result.parser = parser;
       for (let i2 = 0; i2 < this.parsers.length; i2++) {
         const parser2 = this.parsers[i2];
         if (parser2.parse) {
           if (parser2.parse && await parser2.testParse?.(asset, data, this)) {
             asset = await parser2.parse(asset, data, this) || asset;
-            result2.parser = parser2;
+            result.parser = parser2;
           }
         }
       }
       return asset;
     })();
-    return result2;
+    return result;
   }
   async load(assetsToLoadIn, onProgress) {
     if (!this._parsersValidated) {
@@ -16523,7 +16523,7 @@ ${e3}`);
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/LoaderParser.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/LoaderParser.mjs
 var LoaderParserPriority = /* @__PURE__ */ ((LoaderParserPriority2) => {
   LoaderParserPriority2[LoaderParserPriority2["Low"] = 0] = "Low";
   LoaderParserPriority2[LoaderParserPriority2["Normal"] = 1] = "Normal";
@@ -16531,7 +16531,7 @@ var LoaderParserPriority = /* @__PURE__ */ ((LoaderParserPriority2) => {
   return LoaderParserPriority2;
 })(LoaderParserPriority || {});
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadJson.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadJson.mjs
 var validJSONExtension = ".json";
 var validJSONMIME = "application/json";
 var loadJson = {
@@ -16551,7 +16551,7 @@ var loadJson = {
 };
 extensions.add(loadJson);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadTxt.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadTxt.mjs
 var validTXTExtension = ".txt";
 var validTXTMIME = "text/plain";
 var loadTxt = {
@@ -16571,7 +16571,7 @@ var loadTxt = {
 };
 extensions.add(loadTxt);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadWebFont.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadWebFont.mjs
 var validWeights = [
   "normal",
   "bold",
@@ -16648,7 +16648,7 @@ var loadWebFont = {
 };
 extensions.add(loadWebFont);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/WorkerManager.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/WorkerManager.mjs
 var UUID = 0;
 var MAX_WORKERS;
 var WHITE_PNG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=";
@@ -16803,16 +16803,16 @@ var WorkerManagerClass = class {
 };
 var WorkerManager = new WorkerManagerClass();
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/utils/createTexture.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/utils/createTexture.mjs
 function createTexture(base, loader, url2) {
-  const texture2 = new Texture(base);
-  texture2.baseTexture.on("dispose", () => {
+  const texture = new Texture(base);
+  texture.baseTexture.on("dispose", () => {
     delete loader.promiseCache[url2];
   });
-  return texture2;
+  return texture;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/loadTextures.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/loadTextures.mjs
 var validImageExtensions = [".jpeg", ".jpg", ".png", ".webp", ".avif"];
 var validImageMIMEs = [
   "image/jpeg",
@@ -16872,13 +16872,13 @@ var loadTextures = {
     base.resource.src = url2;
     return createTexture(base, loader, url2);
   },
-  unload(texture2) {
-    texture2.destroy(true);
+  unload(texture) {
+    texture.destroy(true);
   }
 };
 extensions.add(loadTextures);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/loadSVG.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/loadSVG.mjs
 var validSVGExtension = ".svg";
 var validSVGMIME = "image/svg+xml";
 var loadSVG = {
@@ -16901,8 +16901,8 @@ var loadSVG = {
       ...data?.data
     });
     base.resource.src = asset;
-    const texture2 = createTexture(base, loader, asset);
-    return texture2;
+    const texture = createTexture(base, loader, asset);
+    return texture;
   },
   async load(url2, _options) {
     const response = await settings.ADAPTER.fetch(url2);
@@ -16912,7 +16912,7 @@ var loadSVG = {
 };
 extensions.add(loadSVG);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/resolver/Resolver.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/resolver/Resolver.mjs
 var Resolver = class {
   constructor() {
     this._defaultBundleIdentifierOptions = {
@@ -17081,20 +17081,20 @@ var Resolver = class {
     return singleAsset ? out[bundleIds[0]] : out;
   }
   resolveUrl(key) {
-    const result2 = this.resolve(key);
+    const result = this.resolve(key);
     if (typeof key !== "string") {
       const out = {};
-      for (const i2 in result2) {
-        out[i2] = result2[i2].src;
+      for (const i2 in result) {
+        out[i2] = result[i2].src;
       }
       return out;
     }
-    return result2.src;
+    return result.src;
   }
   resolve(keys) {
     const singleAsset = isSingleItem(keys);
     keys = convertToList(keys);
-    const result2 = {};
+    const result = {};
     keys.forEach((key) => {
       if (!this._resolverHash[key]) {
         if (this._assetMap[key]) {
@@ -17126,9 +17126,9 @@ var Resolver = class {
           };
         }
       }
-      result2[key] = this._resolverHash[key];
+      result[key] = this._resolverHash[key];
     });
-    return singleAsset ? result2[keys[0]] : result2;
+    return singleAsset ? result[keys[0]] : result;
   }
   hasKey(key) {
     return !!this._assetMap[key];
@@ -17154,7 +17154,7 @@ var Resolver = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/Assets.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/Assets.mjs
 var AssetsClass = class {
   constructor() {
     this._detections = [];
@@ -17371,7 +17371,7 @@ var AssetsClass = class {
 var Assets = new AssetsClass();
 extensions.handleByList(ExtensionType.LoadParser, Assets.loader.parsers).handleByList(ExtensionType.ResolveParser, Assets.resolver.parsers).handleByList(ExtensionType.CacheParser, Assets.cache.parsers).handleByList(ExtensionType.DetectionParser, Assets.detections);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/cache/parsers/cacheTextureArray.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/cache/parsers/cacheTextureArray.mjs
 var cacheTextureArray = {
   extension: ExtensionType.CacheParser,
   test: (asset) => Array.isArray(asset) && asset.every((t2) => t2 instanceof Texture),
@@ -17387,7 +17387,7 @@ var cacheTextureArray = {
 };
 extensions.add(cacheTextureArray);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectAvif.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectAvif.mjs
 var detectAvif = {
   extension: {
     type: ExtensionType.DetectionParser,
@@ -17405,7 +17405,7 @@ var detectAvif = {
 };
 extensions.add(detectAvif);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectWebp.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectWebp.mjs
 var detectWebp = {
   extension: {
     type: ExtensionType.DetectionParser,
@@ -17423,7 +17423,7 @@ var detectWebp = {
 };
 extensions.add(detectWebp);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectDefaults.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectDefaults.mjs
 var imageFormats = ["png", "jpg", "jpeg"];
 var detectDefaults = {
   extension: {
@@ -17436,7 +17436,7 @@ var detectDefaults = {
 };
 extensions.add(detectDefaults);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/resolver/parsers/resolveTextureUrl.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/resolver/parsers/resolveTextureUrl.mjs
 var resolveTextureUrl = {
   extension: ExtensionType.ResolveParser,
   test: loadTextures.test,
@@ -17448,7 +17448,7 @@ var resolveTextureUrl = {
 };
 extensions.add(resolveTextureUrl);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/const.mjs
 var INTERNAL_FORMATS = /* @__PURE__ */ ((INTERNAL_FORMATS2) => {
   INTERNAL_FORMATS2[INTERNAL_FORMATS2["COMPRESSED_RGB_S3TC_DXT1_EXT"] = 33776] = "COMPRESSED_RGB_S3TC_DXT1_EXT";
   INTERNAL_FORMATS2[INTERNAL_FORMATS2["COMPRESSED_RGBA_S3TC_DXT1_EXT"] = 33777] = "COMPRESSED_RGBA_S3TC_DXT1_EXT";
@@ -17590,7 +17590,7 @@ var INTERNAL_FORMAT_TO_BYTES_PER_PIXEL = {
   ]: 1
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/detectCompressedTextures.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/detectCompressedTextures.mjs
 var storedGl;
 var extensions2;
 function getCompressedTextureExtensions() {
@@ -17640,7 +17640,7 @@ var detectCompressedTextures = {
 };
 extensions.add(detectCompressedTextures);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/resources/BlobResource.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/resources/BlobResource.mjs
 var BlobResource = class extends BufferResource {
   constructor(source, options = { width: 1, height: 1, autoLoad: true }) {
     let origin;
@@ -17684,7 +17684,7 @@ var BlobResource = class extends BufferResource {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/resources/CompressedTextureResource.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/resources/CompressedTextureResource.mjs
 var CompressedTextureResource = class extends BlobResource {
   constructor(source, options) {
     super(source, options);
@@ -17755,7 +17755,7 @@ var CompressedTextureResource = class extends BlobResource {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/parsers/parseDDS.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/parsers/parseDDS.mjs
 var DDS_MAGIC_SIZE = 4;
 var DDS_HEADER_SIZE = 124;
 var DDS_HEADER_PF_SIZE = 32;
@@ -17927,7 +17927,7 @@ function parseDDS(arrayBuffer) {
   throw new Error("DDSParser failed to load a texture file due to an unknown reason!");
 }
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/parsers/parseKTX.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/parsers/parseKTX.mjs
 var FILE_IDENTIFIER = [171, 75, 84, 88, 32, 49, 49, 187, 13, 10, 26, 10];
 var ENDIANNESS = 67305985;
 var KTX_FIELDS = {
@@ -18137,7 +18137,7 @@ function parseKvData(dataView, bytesOfKeyValueData, littleEndian) {
   return kvData;
 }
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/loadDDS.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/loadDDS.mjs
 var loadDDS = {
   extension: {
     type: ExtensionType.LoadParser,
@@ -18162,17 +18162,17 @@ var loadDDS = {
     });
     return textures.length === 1 ? textures[0] : textures;
   },
-  unload(texture2) {
-    if (Array.isArray(texture2)) {
-      texture2.forEach((t2) => t2.destroy(true));
+  unload(texture) {
+    if (Array.isArray(texture)) {
+      texture.forEach((t2) => t2.destroy(true));
     } else {
-      texture2.destroy(true);
+      texture.destroy(true);
     }
   }
 };
 extensions.add(loadDDS);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/loadKTX.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/loadKTX.mjs
 var loadKTX = {
   extension: {
     type: ExtensionType.LoadParser,
@@ -18206,17 +18206,17 @@ var loadKTX = {
     });
     return textures.length === 1 ? textures[0] : textures;
   },
-  unload(texture2) {
-    if (Array.isArray(texture2)) {
-      texture2.forEach((t2) => t2.destroy(true));
+  unload(texture) {
+    if (Array.isArray(texture)) {
+      texture.forEach((t2) => t2.destroy(true));
     } else {
-      texture2.destroy(true);
+      texture.destroy(true);
     }
   }
 };
 extensions.add(loadKTX);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/resolveCompressedTextureUrl.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/resolveCompressedTextureUrl.mjs
 var resolveCompressedTextureUrl = {
   extension: ExtensionType.ResolveParser,
   test: (value) => {
@@ -18404,7 +18404,7 @@ Extract.extension = {
 };
 extensions.add(Extract);
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildCircle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildCircle.mjs
 var buildCircle = {
   build(graphicsData) {
     const points = graphicsData.points;
@@ -18545,7 +18545,7 @@ var buildCircle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildPoly.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildPoly.mjs
 function fixOrientation(points, hole = false) {
   const m2 = points.length;
   if (m2 < 6) {
@@ -18606,7 +18606,7 @@ var buildPoly = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildRectangle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildRectangle.mjs
 var buildRectangle = {
   build(graphicsData) {
     const rectData = graphicsData.shape;
@@ -18633,7 +18633,7 @@ var buildRectangle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildRoundedRectangle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildRoundedRectangle.mjs
 var buildRoundedRectangle = {
   build(graphicsData) {
     buildCircle.build(graphicsData);
@@ -18643,7 +18643,7 @@ var buildRoundedRectangle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/const.mjs
 var LINE_JOIN = /* @__PURE__ */ ((LINE_JOIN2) => {
   LINE_JOIN2["MITER"] = "miter";
   LINE_JOIN2["BEVEL"] = "bevel";
@@ -18666,17 +18666,17 @@ var curves = {
     if (!this.adaptive || !length || isNaN(length)) {
       return defaultSegments;
     }
-    let result2 = Math.ceil(length / this.maxLength);
-    if (result2 < this.minSegments) {
-      result2 = this.minSegments;
-    } else if (result2 > this.maxSegments) {
-      result2 = this.maxSegments;
+    let result = Math.ceil(length / this.maxLength);
+    if (result < this.minSegments) {
+      result = this.minSegments;
+    } else if (result > this.maxSegments) {
+      result = this.maxSegments;
     }
-    return result2;
+    return result;
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/ArcUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/ArcUtils.mjs
 var ArcUtils = class {
   static curveTo(x1, y1, x2, y2, radius, points) {
     const fromX = points[points.length - 2];
@@ -18735,7 +18735,7 @@ var ArcUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/BatchPart.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/BatchPart.mjs
 var BatchPart = class {
   constructor() {
     this.reset();
@@ -18759,11 +18759,11 @@ var BatchPart = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/BezierUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/BezierUtils.mjs
 var BezierUtils = class {
   static curveLength(fromX, fromY, cpX, cpY, cpX2, cpY2, toX, toY) {
     const n2 = 10;
-    let result2 = 0;
+    let result = 0;
     let t2 = 0;
     let t22 = 0;
     let t3 = 0;
@@ -18789,9 +18789,9 @@ var BezierUtils = class {
       dy = prevY - y2;
       prevX = x2;
       prevY = y2;
-      result2 += Math.sqrt(dx * dx + dy * dy);
+      result += Math.sqrt(dx * dx + dy * dy);
     }
-    return result2;
+    return result;
   }
   static curveTo(cpX, cpY, cpX2, cpY2, toX, toY, points) {
     const fromX = points[points.length - 2];
@@ -18816,7 +18816,7 @@ var BezierUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildLine.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildLine.mjs
 function square(x2, y2, nx, ny, innerWeight, outerWeight, clockwise, verts) {
   const ix = x2 - nx * innerWeight;
   const iy = y2 - ny * innerWeight;
@@ -19101,7 +19101,7 @@ function buildLine(graphicsData, graphicsGeometry) {
   }
 }
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/QuadraticUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/QuadraticUtils.mjs
 var QuadraticUtils = class {
   static curveLength(fromX, fromY, cpX, cpY, toX, toY) {
     const ax = fromX - 2 * cpX + toX;
@@ -19133,7 +19133,7 @@ var QuadraticUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/index.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/index.mjs
 var FILL_COMMANDS = {
   [SHAPES.POLY]: buildPoly,
   [SHAPES.CIRC]: buildCircle,
@@ -19144,7 +19144,7 @@ var FILL_COMMANDS = {
 var BATCH_POOL = [];
 var DRAW_CALL_POOL = [];
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/GraphicsData.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/GraphicsData.mjs
 var GraphicsData = class {
   constructor(shape, fillStyle = null, lineStyle = null, matrix = null) {
     this.points = [];
@@ -19169,7 +19169,7 @@ var GraphicsData = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/GraphicsGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/GraphicsGeometry.mjs
 var tmpPoint = new Point();
 var _GraphicsGeometry = class extends BatchGeometry {
   constructor() {
@@ -19573,10 +19573,10 @@ var _GraphicsGeometry = class extends BatchGeometry {
   }
   addColors(colors, color, alpha, size, offset = 0) {
     const bgr = Color.shared.setValue(color).toLittleEndianNumber();
-    const result2 = Color.shared.setValue(bgr).toPremultiplied(alpha);
+    const result = Color.shared.setValue(bgr).toPremultiplied(alpha);
     colors.length = Math.max(colors.length, offset + size);
     for (let i2 = 0; i2 < size; i2++) {
-      colors[offset + i2] = result2;
+      colors[offset + i2] = result;
     }
   }
   addTextureIds(textureIds, id, size, offset = 0) {
@@ -19585,10 +19585,10 @@ var _GraphicsGeometry = class extends BatchGeometry {
       textureIds[offset + i2] = id;
     }
   }
-  addUvs(verts, uvs, texture2, start, size, matrix = null) {
+  addUvs(verts, uvs, texture, start, size, matrix = null) {
     let index = 0;
     const uvsStart = uvs.length;
-    const frame = texture2.frame;
+    const frame = texture.frame;
     while (index < size) {
       let x2 = verts[(start + index) * 2];
       let y2 = verts[(start + index) * 2 + 1];
@@ -19600,16 +19600,16 @@ var _GraphicsGeometry = class extends BatchGeometry {
       index++;
       uvs.push(x2 / frame.width, y2 / frame.height);
     }
-    const baseTexture = texture2.baseTexture;
+    const baseTexture = texture.baseTexture;
     if (frame.width < baseTexture.width || frame.height < baseTexture.height) {
-      this.adjustUvs(uvs, texture2, uvsStart, size);
+      this.adjustUvs(uvs, texture, uvsStart, size);
     }
   }
-  adjustUvs(uvs, texture2, start, size) {
-    const baseTexture = texture2.baseTexture;
+  adjustUvs(uvs, texture, start, size) {
+    const baseTexture = texture.baseTexture;
     const eps = 1e-6;
     const finish = start + size * 2;
-    const frame = texture2.frame;
+    const frame = texture.frame;
     const scaleX = frame.width / baseTexture.width;
     const scaleY = frame.height / baseTexture.height;
     let offsetX = frame.x / frame.width;
@@ -19631,7 +19631,7 @@ var _GraphicsGeometry = class extends BatchGeometry {
 var GraphicsGeometry = _GraphicsGeometry;
 GraphicsGeometry.BATCHABLE_SIZE = 100;
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/styles/FillStyle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/styles/FillStyle.mjs
 var FillStyle = class {
   constructor() {
     this.color = 16777215;
@@ -19663,7 +19663,7 @@ var FillStyle = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/styles/LineStyle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/styles/LineStyle.mjs
 var LineStyle = class extends FillStyle {
   constructor() {
     super(...arguments);
@@ -19698,7 +19698,7 @@ var LineStyle = class extends FillStyle {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/Graphics.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/Graphics.mjs
 var DEFAULT_SHADERS = {};
 var _Graphics = class extends Container {
   constructor(geometry = null) {
@@ -19850,9 +19850,9 @@ var _Graphics = class extends Container {
   arcTo(x1, y1, x2, y2, radius) {
     this._initCurve(x1, y1);
     const points = this.currentPath.points;
-    const result2 = ArcUtils.curveTo(x1, y1, x2, y2, radius, points);
-    if (result2) {
-      const { cx, cy, radius: radius2, startAngle, endAngle, anticlockwise } = result2;
+    const result = ArcUtils.curveTo(x1, y1, x2, y2, radius, points);
+    if (result) {
+      const { cx, cy, radius: radius2, startAngle, endAngle, anticlockwise } = result;
       this.arc(cx, cy, radius2, startAngle, endAngle, anticlockwise);
     }
     return this;
@@ -20166,7 +20166,7 @@ var Graphics = _Graphics;
 Graphics.curves = curves;
 Graphics._TEMP_POINT = new Point();
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshBatchUvs.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshBatchUvs.mjs
 var MeshBatchUvs = class {
   constructor(uvBuffer, uvMatrix) {
     this.uvBuffer = uvBuffer;
@@ -20191,7 +20191,7 @@ var MeshBatchUvs = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/Mesh.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/Mesh.mjs
 var tempPoint2 = new Point();
 var tempPolygon = new Polygon();
 var _Mesh = class extends Container {
@@ -20403,7 +20403,7 @@ var _Mesh = class extends Container {
 var Mesh = _Mesh;
 Mesh.BATCHABLE_SIZE = 100;
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshGeometry.mjs
 var MeshGeometry = class extends Geometry {
   constructor(vertices, uvs, index) {
     super();
@@ -20418,13 +20418,13 @@ var MeshGeometry = class extends Geometry {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/shader/mesh.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/shader/mesh.mjs
 var fragment7 = "varying vec2 vTextureCoord;\nuniform vec4 uColor;\n\nuniform sampler2D uSampler;\n\nvoid main(void)\n{\n    gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/shader/mesh2.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/shader/mesh2.mjs
 var vertex4 = "attribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTextureMatrix;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshMaterial.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshMaterial.mjs
 var MeshMaterial = class extends Shader {
   constructor(uSampler, options) {
     const uniforms = {
@@ -20498,7 +20498,7 @@ var MeshMaterial = class extends Shader {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/geometry/PlaneGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/geometry/PlaneGeometry.mjs
 var PlaneGeometry = class extends MeshGeometry {
   constructor(width = 100, height = 100, segWidth = 10, segHeight = 10) {
     super();
@@ -20542,13 +20542,13 @@ var PlaneGeometry = class extends MeshGeometry {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/SimplePlane.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/SimplePlane.mjs
 var SimplePlane = class extends Mesh {
-  constructor(texture2, verticesX, verticesY) {
-    const planeGeometry = new PlaneGeometry(texture2.width, texture2.height, verticesX, verticesY);
+  constructor(texture, verticesX, verticesY) {
+    const planeGeometry = new PlaneGeometry(texture.width, texture.height, verticesX, verticesY);
     const meshMaterial = new MeshMaterial(Texture.WHITE);
     super(planeGeometry, meshMaterial);
-    this.texture = texture2;
+    this.texture = texture;
     this.autoResize = true;
   }
   textureUpdated() {
@@ -20588,20 +20588,20 @@ var SimplePlane = class extends Mesh {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/NineSlicePlane.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/NineSlicePlane.mjs
 var DEFAULT_BORDER_SIZE = 10;
 var NineSlicePlane = class extends SimplePlane {
-  constructor(texture2, leftWidth, topHeight, rightWidth, bottomHeight) {
+  constructor(texture, leftWidth, topHeight, rightWidth, bottomHeight) {
     super(Texture.WHITE, 4, 4);
-    this._origWidth = texture2.orig.width;
-    this._origHeight = texture2.orig.height;
+    this._origWidth = texture.orig.width;
+    this._origHeight = texture.orig.height;
     this._width = this._origWidth;
     this._height = this._origHeight;
-    this._leftWidth = leftWidth ?? texture2.defaultBorders?.left ?? DEFAULT_BORDER_SIZE;
-    this._rightWidth = rightWidth ?? texture2.defaultBorders?.right ?? DEFAULT_BORDER_SIZE;
-    this._topHeight = topHeight ?? texture2.defaultBorders?.top ?? DEFAULT_BORDER_SIZE;
-    this._bottomHeight = bottomHeight ?? texture2.defaultBorders?.bottom ?? DEFAULT_BORDER_SIZE;
-    this.texture = texture2;
+    this._leftWidth = leftWidth ?? texture.defaultBorders?.left ?? DEFAULT_BORDER_SIZE;
+    this._rightWidth = rightWidth ?? texture.defaultBorders?.right ?? DEFAULT_BORDER_SIZE;
+    this._topHeight = topHeight ?? texture.defaultBorders?.top ?? DEFAULT_BORDER_SIZE;
+    this._bottomHeight = bottomHeight ?? texture.defaultBorders?.bottom ?? DEFAULT_BORDER_SIZE;
+    this.texture = texture;
   }
   textureUpdated() {
     this._textureID = this.shader.texture._updateID;
@@ -20615,16 +20615,16 @@ var NineSlicePlane = class extends SimplePlane {
   }
   updateHorizontalVertices() {
     const vertices = this.vertices;
-    const scale = this._getMinScale();
-    vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale;
-    vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - this._bottomHeight * scale;
+    const scale2 = this._getMinScale();
+    vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale2;
+    vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - this._bottomHeight * scale2;
     vertices[25] = vertices[27] = vertices[29] = vertices[31] = this._height;
   }
   updateVerticalVertices() {
     const vertices = this.vertices;
-    const scale = this._getMinScale();
-    vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale;
-    vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - this._rightWidth * scale;
+    const scale2 = this._getMinScale();
+    vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale2;
+    vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - this._rightWidth * scale2;
     vertices[6] = vertices[14] = vertices[22] = vertices[30] = this._width;
   }
   _getMinScale() {
@@ -20632,8 +20632,8 @@ var NineSlicePlane = class extends SimplePlane {
     const scaleW = this._width > w3 ? 1 : this._width / w3;
     const h2 = this._topHeight + this._bottomHeight;
     const scaleH = this._height > h2 ? 1 : this._height / h2;
-    const scale = Math.min(scaleW, scaleH);
-    return scale;
+    const scale2 = Math.min(scaleW, scaleH);
+    return scale2;
   }
   get width() {
     return this._width;
@@ -20678,10 +20678,10 @@ var NineSlicePlane = class extends SimplePlane {
     this._refresh();
   }
   _refresh() {
-    const texture2 = this.texture;
+    const texture = this.texture;
     const uvs = this.geometry.buffers[1].data;
-    this._origWidth = texture2.orig.width;
-    this._origHeight = texture2.orig.height;
+    this._origWidth = texture.orig.width;
+    this._origHeight = texture.orig.height;
     const _uvw = 1 / this._origWidth;
     const _uvh = 1 / this._origHeight;
     uvs[0] = uvs[8] = uvs[16] = uvs[24] = 0;
@@ -20699,7 +20699,7 @@ var NineSlicePlane = class extends SimplePlane {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/ParticleBuffer.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/ParticleBuffer.mjs
 var ParticleBuffer = class {
   constructor(properties, dynamicPropertyFlags, size) {
     this.geometry = new Geometry();
@@ -20798,13 +20798,13 @@ var ParticleBuffer = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/particles.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/particles.mjs
 var fragment8 = "varying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nuniform sampler2D uSampler;\n\nvoid main(void){\n    vec4 color = texture2D(uSampler, vTextureCoord) * vColor;\n    gl_FragColor = color;\n}";
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/particles2.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/particles2.mjs
 var vertex5 = "attribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\nattribute vec4 aColor;\n\nattribute vec2 aPositionCoord;\nattribute float aRotation;\n\nuniform mat3 translationMatrix;\nuniform vec4 uColor;\n\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nvoid main(void){\n    float x = (aVertexPosition.x) * cos(aRotation) - (aVertexPosition.y) * sin(aRotation);\n    float y = (aVertexPosition.x) * sin(aRotation) + (aVertexPosition.y) * cos(aRotation);\n\n    vec2 v = vec2(x, y);\n    v = v + aPositionCoord;\n\n    gl_Position = vec4((translationMatrix * vec3(v, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = aTextureCoord;\n    vColor = aColor * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/ParticleRenderer.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/ParticleRenderer.mjs
 var ParticleRenderer = class extends ObjectRenderer {
   constructor(renderer) {
     super(renderer);
@@ -20916,11 +20916,11 @@ var ParticleRenderer = class extends ObjectRenderer {
     let h1 = 0;
     for (let i2 = 0; i2 < amount; ++i2) {
       const sprite = children[startIndex + i2];
-      const texture2 = sprite._texture;
+      const texture = sprite._texture;
       const sx = sprite.scale.x;
       const sy = sprite.scale.y;
-      const trim = texture2.trim;
-      const orig = texture2.orig;
+      const trim = texture.trim;
+      const orig = texture.orig;
       if (trim) {
         w1 = trim.x - sprite.anchor.x * orig.width;
         w0 = w1 + trim.width;
@@ -20996,11 +20996,11 @@ var ParticleRenderer = class extends ObjectRenderer {
   uploadTint(children, startIndex, amount, array, stride, offset) {
     for (let i2 = 0; i2 < amount; ++i2) {
       const sprite = children[startIndex + i2];
-      const result2 = Color.shared.setValue(sprite._tintRGB).toPremultiplied(sprite.alpha, sprite.texture.baseTexture.alphaMode > 0);
-      array[offset] = result2;
-      array[offset + stride] = result2;
-      array[offset + stride * 2] = result2;
-      array[offset + stride * 3] = result2;
+      const result = Color.shared.setValue(sprite._tintRGB).toPremultiplied(sprite.alpha, sprite.texture.baseTexture.alphaMode > 0);
+      array[offset] = result;
+      array[offset + stride] = result;
+      array[offset + stride * 2] = result;
+      array[offset + stride * 3] = result;
       offset += stride * 4;
     }
   }
@@ -21019,25 +21019,25 @@ ParticleRenderer.extension = {
 };
 extensions.add(ParticleRenderer);
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/const.mjs
 var TEXT_GRADIENT = /* @__PURE__ */ ((TEXT_GRADIENT2) => {
   TEXT_GRADIENT2[TEXT_GRADIENT2["LINEAR_VERTICAL"] = 0] = "LINEAR_VERTICAL";
   TEXT_GRADIENT2[TEXT_GRADIENT2["LINEAR_HORIZONTAL"] = 1] = "LINEAR_HORIZONTAL";
   return TEXT_GRADIENT2;
 })(TEXT_GRADIENT || {});
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/TextMetrics.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/TextMetrics.mjs
 var contextSettings = {
   willReadFrequently: true
 };
 var _TextMetrics = class {
   static get experimentalLetterSpacingSupported() {
-    let result2 = _TextMetrics._experimentalLetterSpacingSupported;
-    if (result2 !== void 0) {
+    let result = _TextMetrics._experimentalLetterSpacingSupported;
+    if (result !== void 0) {
       const proto = settings.ADAPTER.getCanvasRenderingContext2D().prototype;
-      result2 = _TextMetrics._experimentalLetterSpacingSupported = "letterSpacing" in proto || "textLetterSpacing" in proto;
+      result = _TextMetrics._experimentalLetterSpacingSupported = "letterSpacing" in proto || "textLetterSpacing" in proto;
     }
-    return result2;
+    return result;
   }
   constructor(text, style, width, height, lines, lineWidths, lineHeight, maxLineWidth, fontProperties) {
     this.text = text;
@@ -21410,7 +21410,7 @@ TextMetrics._breakingSpaces = [
   12288
 ];
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/TextStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/TextStyle.mjs
 var genericFontFamilies = [
   "serif",
   "sans-serif",
@@ -21777,7 +21777,7 @@ function deepCopyProperties(target, source, propertyObj) {
   }
 }
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/Text.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/Text.mjs
 var defaultDestroyOptions = {
   texture: true,
   children: false,
@@ -21792,10 +21792,10 @@ var _Text = class extends Sprite {
     }
     canvas.width = 3;
     canvas.height = 3;
-    const texture2 = Texture.from(canvas);
-    texture2.orig = new Rectangle();
-    texture2.trim = new Rectangle();
-    super(texture2);
+    const texture = Texture.from(canvas);
+    texture.orig = new Rectangle();
+    texture.trim = new Rectangle();
+    super(texture);
     this._ownCanvas = ownCanvas;
     this.canvas = canvas;
     this.context = canvas.getContext("2d", {
@@ -21945,19 +21945,19 @@ var _Text = class extends Sprite {
         this.context.putImageData(trimmed.data, 0, 0);
       }
     }
-    const texture2 = this._texture;
+    const texture = this._texture;
     const style = this._style;
     const padding = style.trim ? 0 : style.padding;
-    const baseTexture = texture2.baseTexture;
-    texture2.trim.width = texture2._frame.width = canvas.width / this._resolution;
-    texture2.trim.height = texture2._frame.height = canvas.height / this._resolution;
-    texture2.trim.x = -padding;
-    texture2.trim.y = -padding;
-    texture2.orig.width = texture2._frame.width - padding * 2;
-    texture2.orig.height = texture2._frame.height - padding * 2;
+    const baseTexture = texture.baseTexture;
+    texture.trim.width = texture._frame.width = canvas.width / this._resolution;
+    texture.trim.height = texture._frame.height = canvas.height / this._resolution;
+    texture.trim.x = -padding;
+    texture.trim.y = -padding;
+    texture.orig.width = texture._frame.width - padding * 2;
+    texture.orig.height = texture._frame.height - padding * 2;
     this._onTextureUpdate();
     baseTexture.setRealSize(canvas.width, canvas.height, this._resolution);
-    texture2.updateUvs();
+    texture.updateUvs();
     this.dirty = false;
   }
   _render(renderer) {
@@ -22129,7 +22129,7 @@ var _Text = class extends Sprite {
 var Text = _Text;
 Text.defaultAutoResolution = true;
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/CountLimiter.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/CountLimiter.mjs
 var CountLimiter = class {
   constructor(maxItemsPerFrame) {
     this.maxItemsPerFrame = maxItemsPerFrame;
@@ -22143,27 +22143,27 @@ var CountLimiter = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/BasePrepare.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/BasePrepare.mjs
 function findMultipleBaseTextures(item, queue) {
-  let result2 = false;
+  let result = false;
   if (item?._textures?.length) {
     for (let i2 = 0; i2 < item._textures.length; i2++) {
       if (item._textures[i2] instanceof Texture) {
         const baseTexture = item._textures[i2].baseTexture;
         if (!queue.includes(baseTexture)) {
           queue.push(baseTexture);
-          result2 = true;
+          result = true;
         }
       }
     }
   }
-  return result2;
+  return result;
 }
 function findBaseTexture(item, queue) {
   if (item.baseTexture instanceof BaseTexture) {
-    const texture2 = item.baseTexture;
-    if (!queue.includes(texture2)) {
-      queue.push(texture2);
+    const texture = item.baseTexture;
+    if (!queue.includes(texture)) {
+      queue.push(texture);
     }
     return true;
   }
@@ -22171,9 +22171,9 @@ function findBaseTexture(item, queue) {
 }
 function findTexture(item, queue) {
   if (item._texture && item._texture instanceof Texture) {
-    const texture2 = item._texture.baseTexture;
-    if (!queue.includes(texture2)) {
-      queue.push(texture2);
+    const texture = item._texture.baseTexture;
+    if (!queue.includes(texture)) {
+      queue.push(texture);
     }
     return true;
   }
@@ -22202,9 +22202,9 @@ function findText(item, queue) {
     if (!queue.includes(item)) {
       queue.push(item);
     }
-    const texture2 = item._texture.baseTexture;
-    if (!queue.includes(texture2)) {
-      queue.push(texture2);
+    const texture = item._texture.baseTexture;
+    if (!queue.includes(texture)) {
+      queue.push(texture);
     }
     return true;
   }
@@ -22333,7 +22333,7 @@ var _BasePrepare = class {
 var BasePrepare = _BasePrepare;
 BasePrepare.uploadsPerFrame = 4;
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/settings.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/settings.mjs
 Object.defineProperties(settings, {
   UPLOADS_PER_FRAME: {
     get() {
@@ -22346,7 +22346,7 @@ Object.defineProperties(settings, {
   }
 });
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/Prepare.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/Prepare.mjs
 function uploadBaseTextures(renderer, item) {
   if (item instanceof BaseTexture) {
     if (!item._glTextures[renderer.CONTEXT_UID]) {
@@ -22365,9 +22365,9 @@ function uploadGraphics(renderer, item) {
   geometry.updateBatches();
   const { batches } = geometry;
   for (let i2 = 0; i2 < batches.length; i2++) {
-    const { texture: texture2 } = batches[i2].style;
-    if (texture2) {
-      uploadBaseTextures(renderer, texture2.baseTexture);
+    const { texture } = batches[i2].style;
+    if (texture) {
+      uploadBaseTextures(renderer, texture.baseTexture);
     }
   }
   if (!geometry.batchable) {
@@ -22397,15 +22397,15 @@ Prepare.extension = {
 };
 extensions.add(Prepare);
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
 var tempPoint3 = new Point();
 var TilingSprite = class extends Sprite {
-  constructor(texture2, width = 100, height = 100) {
-    super(texture2);
+  constructor(texture, width = 100, height = 100) {
+    super(texture);
     this.tileTransform = new Transform();
     this._width = width;
     this._height = height;
-    this.uvMatrix = this.texture.uvMatrix || new TextureMatrix(texture2);
+    this.uvMatrix = this.texture.uvMatrix || new TextureMatrix(texture);
     this.pluginName = "tilingSprite";
     this.uvRespectAnchor = false;
   }
@@ -22435,8 +22435,8 @@ var TilingSprite = class extends Sprite {
     this._cachedTint = 16777215;
   }
   _render(renderer) {
-    const texture2 = this._texture;
-    if (!texture2 || !texture2.valid) {
+    const texture = this._texture;
+    if (!texture || !texture.valid) {
       return;
     }
     this.tileTransform.updateLocalTransform();
@@ -22486,8 +22486,8 @@ var TilingSprite = class extends Sprite {
     this.uvMatrix = null;
   }
   static from(source, options) {
-    const texture2 = source instanceof Texture ? source : Texture.from(source, options);
-    return new TilingSprite(texture2, options.width, options.height);
+    const texture = source instanceof Texture ? source : Texture.from(source, options);
+    return new TilingSprite(texture, options.width, options.height);
   }
   get width() {
     return this._width;
@@ -22503,22 +22503,22 @@ var TilingSprite = class extends Sprite {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling.mjs
 var gl2FragmentSrc = "#version 300 es\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nin vec2 vTextureCoord;\n\nout vec4 fragmentColor;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord + ceil(uClampOffset - vTextureCoord);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    vec2 unclamped = coord;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    vec4 texSample = texture(uSampler, coord, unclamped == coord ? 0.0f : -32.0f);// lod-bias very negative to force lod 0\n\n    fragmentColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling2.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling2.mjs
 var gl2VertexSrc = "#version 300 es\n#define SHADER_NAME Tiling-Sprite-300\n\nprecision lowp float;\n\nin vec2 aVertexPosition;\nin vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nout vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback.mjs
 var gl1FragmentSrc = "#version 100\n#ifdef GL_EXT_shader_texture_lod\n    #extension GL_EXT_shader_texture_lod : enable\n#endif\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord + ceil(uClampOffset - vTextureCoord);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    vec2 unclamped = coord;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    #ifdef GL_EXT_shader_texture_lod\n        vec4 texSample = unclamped == coord\n            ? texture2D(uSampler, coord) \n            : texture2DLodEXT(uSampler, coord, 0);\n    #else\n        vec4 texSample = texture2D(uSampler, coord);\n    #endif\n\n    gl_FragColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback2.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback2.mjs
 var gl1VertexSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nattribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-simple.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-simple.mjs
 var fragmentSimpleSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-Simple-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\n\nvoid main(void)\n{\n    vec4 texSample = texture2D(uSampler, vTextureCoord);\n    gl_FragColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/TilingSpriteRenderer.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/TilingSpriteRenderer.mjs
 var tempMat2 = new Matrix();
 var TilingSpriteRenderer = class extends ObjectRenderer {
   constructor(renderer) {
@@ -22595,12 +22595,12 @@ TilingSpriteRenderer.extension = {
 };
 extensions.add(TilingSpriteRenderer);
 
-// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/spritesheet/lib/Spritesheet.mjs
+// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/spritesheet/lib/Spritesheet.mjs
 var _Spritesheet = class {
-  constructor(texture2, data, resolutionFilename = null) {
+  constructor(texture, data, resolutionFilename = null) {
     this.linkedSheets = [];
-    this._texture = texture2 instanceof Texture ? texture2 : null;
-    this.baseTexture = texture2 instanceof BaseTexture ? texture2 : this._texture.baseTexture;
+    this._texture = texture instanceof Texture ? texture : null;
+    this.baseTexture = texture instanceof BaseTexture ? texture : this._texture.baseTexture;
     this.textures = {};
     this.animations = {};
     this.data = data;
@@ -22612,10 +22612,10 @@ var _Spritesheet = class {
     this._callback = null;
   }
   _updateResolution(resolutionFilename = null) {
-    const { scale } = this.data.meta;
+    const { scale: scale2 } = this.data.meta;
     let resolution = lib_exports.getResolutionOfUrl(resolutionFilename, null);
     if (resolution === null) {
-      resolution = parseFloat(scale ?? "1");
+      resolution = parseFloat(scale2 ?? "1");
     }
     if (resolution !== 1) {
       this.baseTexture.setResolution(resolution);
@@ -22709,7 +22709,7 @@ var _Spritesheet = class {
 var Spritesheet = _Spritesheet;
 Spritesheet.BATCH_SIZE = 1e3;
 
-// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/spritesheet/lib/spritesheetAsset.mjs
+// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/spritesheet/lib/spritesheetAsset.mjs
 var validImages = ["jpg", "png", "jpeg", "avif", "webp"];
 function getCacheableAssets(keys, asset, ignoreMultiPack) {
   const out = {};
@@ -22768,8 +22768,8 @@ var spritesheetAsset = {
       let imagePath = basePath + asset.meta.image;
       imagePath = copySearchParams(imagePath, options.src);
       const assets = await loader.load([imagePath]);
-      const texture2 = assets[imagePath];
-      const spritesheet = new Spritesheet(texture2.baseTexture, asset, options.src);
+      const texture = assets[imagePath];
+      const spritesheet = new Spritesheet(texture.baseTexture, asset, options.src);
       await spritesheet.parse();
       const multiPacks = asset?.meta?.related_multi_packs;
       if (Array.isArray(multiPacks)) {
@@ -22805,7 +22805,7 @@ var spritesheetAsset = {
 };
 extensions.add(spritesheetAsset);
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapFontData.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapFontData.mjs
 var BitmapFontData = class {
   constructor() {
     this.info = [];
@@ -22817,7 +22817,7 @@ var BitmapFontData = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/TextFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/TextFormat.mjs
 var TextFormat = class {
   static test(data) {
     return typeof data === "string" && data.startsWith("info face=");
@@ -22884,7 +22884,7 @@ var TextFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/XMLFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/XMLFormat.mjs
 var XMLFormat = class {
   static test(data) {
     const xml = data;
@@ -22946,7 +22946,7 @@ var XMLFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/XMLStringFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/XMLStringFormat.mjs
 var XMLStringFormat = class {
   static test(data) {
     if (typeof data === "string" && data.includes("<font>")) {
@@ -22959,7 +22959,7 @@ var XMLStringFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/index.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/index.mjs
 var formats = [
   TextFormat,
   XMLFormat,
@@ -22974,7 +22974,7 @@ function autoDetectFormat(data) {
   return null;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/generateFillStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/generateFillStyle.mjs
 function generateFillStyle(canvas, context2, style, resolution, lines, metrics) {
   const fillStyle = style.fill;
   if (!Array.isArray(fillStyle)) {
@@ -23038,7 +23038,7 @@ function generateFillStyle(canvas, context2, style, resolution, lines, metrics) 
   return gradient;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/drawGlyph.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/drawGlyph.mjs
 function drawGlyph(canvas, context2, metrics, x2, y2, resolution, style) {
   const char = metrics.text;
   const fontProperties = metrics.fontProperties;
@@ -23077,22 +23077,22 @@ function drawGlyph(canvas, context2, metrics, x2, y2, resolution, style) {
   context2.fillStyle = "rgba(0, 0, 0, 0)";
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/extractCharCode.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/extractCharCode.mjs
 function extractCharCode(str) {
   return str.codePointAt ? str.codePointAt(0) : str.charCodeAt(0);
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/splitTextToCharacters.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/splitTextToCharacters.mjs
 function splitTextToCharacters(text) {
   return Array.from ? Array.from(text) : text.split("");
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/resolveCharacters.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/resolveCharacters.mjs
 function resolveCharacters(chars) {
   if (typeof chars === "string") {
     chars = [chars];
   }
-  const result2 = [];
+  const result = [];
   for (let i2 = 0, j3 = chars.length; i2 < j3; i2++) {
     const item = chars[i2];
     if (Array.isArray(item)) {
@@ -23105,19 +23105,19 @@ function resolveCharacters(chars) {
         throw new Error("[BitmapFont]: Invalid character range.");
       }
       for (let i22 = startCode, j22 = endCode; i22 <= j22; i22++) {
-        result2.push(String.fromCharCode(i22));
+        result.push(String.fromCharCode(i22));
       }
     } else {
-      result2.push(...splitTextToCharacters(item));
+      result.push(...splitTextToCharacters(item));
     }
   }
-  if (result2.length === 0) {
+  if (result.length === 0) {
     throw new Error("[BitmapFont]: Empty set when resolving characters.");
   }
-  return result2;
+  return result;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapFont.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapFont.mjs
 var _BitmapFont = class {
   constructor(data, textures, ownsTextures) {
     const [info] = data.info;
@@ -23342,13 +23342,13 @@ BitmapFont.defaultOptions = {
 };
 BitmapFont.available = {};
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/shader/msdf.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/shader/msdf.mjs
 var msdfFrag = "// Pixi texture info\r\nvarying vec2 vTextureCoord;\r\nuniform sampler2D uSampler;\r\n\r\n// Tint\r\nuniform vec4 uColor;\r\n\r\n// on 2D applications fwidth is screenScale / glyphAtlasScale * distanceFieldRange\r\nuniform float uFWidth;\r\n\r\nvoid main(void) {\r\n\r\n  // To stack MSDF and SDF we need a non-pre-multiplied-alpha texture.\r\n  vec4 texColor = texture2D(uSampler, vTextureCoord);\r\n\r\n  // MSDF\r\n  float median = texColor.r + texColor.g + texColor.b -\r\n                  min(texColor.r, min(texColor.g, texColor.b)) -\r\n                  max(texColor.r, max(texColor.g, texColor.b));\r\n  // SDF\r\n  median = min(median, texColor.a);\r\n\r\n  float screenPxDistance = uFWidth * (median - 0.5);\r\n  float alpha = clamp(screenPxDistance + 0.5, 0.0, 1.0);\r\n  if (median < 0.01) {\r\n    alpha = 0.0;\r\n  } else if (median > 0.99) {\r\n    alpha = 1.0;\r\n  }\r\n\r\n  // Gamma correction for coverage-like alpha\r\n  float luma = dot(uColor.rgb, vec3(0.299, 0.587, 0.114));\r\n  float gamma = mix(1.0, 1.0 / 2.2, luma);\r\n  float coverage = pow(uColor.a * alpha, gamma);  \r\n\r\n  // NPM Textures, NPM outputs\r\n  gl_FragColor = vec4(uColor.rgb, coverage);\r\n}\r\n";
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/shader/msdf2.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/shader/msdf2.mjs
 var msdfVert = "// Mesh material default fragment\r\nattribute vec2 aVertexPosition;\r\nattribute vec2 aTextureCoord;\r\n\r\nuniform mat3 projectionMatrix;\r\nuniform mat3 translationMatrix;\r\nuniform mat3 uTextureMatrix;\r\n\r\nvarying vec2 vTextureCoord;\r\n\r\nvoid main(void)\r\n{\r\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\r\n\r\n    vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\r\n}\r\n";
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapText.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapText.mjs
 var pageMeshDataDefaultPageMeshData = [];
 var pageMeshDataMSDFPageMeshData = [];
 var charRenderDataPool = [];
@@ -23383,7 +23383,7 @@ var _BitmapText = class extends Container {
   updateText() {
     const data = BitmapFont.available[this._fontName];
     const fontSize = this.fontSize;
-    const scale = fontSize / data.size;
+    const scale2 = fontSize / data.size;
     const pos = new Point();
     const chars = [];
     const lineWidths = [];
@@ -23488,8 +23488,8 @@ var _BitmapText = class extends Container {
     const activePagesMeshData = this._activePagesMeshData;
     pageMeshDataPool.push(...activePagesMeshData);
     for (let i2 = 0; i2 < lenChars; i2++) {
-      const texture2 = chars[i2].texture;
-      const baseTextureUid = texture2.baseTexture.uid;
+      const texture = chars[i2].texture;
+      const baseTextureUid = texture.baseTexture.uid;
       if (!pagesMeshData[baseTextureUid]) {
         let pageMeshData = pageMeshDataPool.pop();
         if (!pageMeshData) {
@@ -23523,7 +23523,7 @@ var _BitmapText = class extends Container {
         pageMeshData.uvsCount = 0;
         pageMeshData.total = 0;
         const { _textureCache } = this;
-        _textureCache[baseTextureUid] = _textureCache[baseTextureUid] || new Texture(texture2.baseTexture);
+        _textureCache[baseTextureUid] = _textureCache[baseTextureUid] || new Texture(texture.baseTexture);
         pageMeshData.mesh.texture = _textureCache[baseTextureUid];
         pageMeshData.mesh.tint = this._tintColor.value;
         newPagesMeshData.push(pageMeshData);
@@ -23564,12 +23564,12 @@ var _BitmapText = class extends Container {
       if (this._roundPixels) {
         offset = Math.round(offset);
       }
-      const xPos = offset * scale;
-      const yPos = char.position.y * scale;
-      const texture2 = char.texture;
-      const pageMesh = pagesMeshData[texture2.baseTexture.uid];
-      const textureFrame = texture2.frame;
-      const textureUvs = texture2._uvs;
+      const xPos = offset * scale2;
+      const yPos = char.position.y * scale2;
+      const texture = char.texture;
+      const pageMesh = pagesMeshData[texture.baseTexture.uid];
+      const textureFrame = texture.frame;
+      const textureUvs = texture._uvs;
       const index = pageMesh.index++;
       pageMesh.indices[index * 6 + 0] = 0 + index * 4;
       pageMesh.indices[index * 6 + 1] = 1 + index * 4;
@@ -23579,12 +23579,12 @@ var _BitmapText = class extends Container {
       pageMesh.indices[index * 6 + 5] = 3 + index * 4;
       pageMesh.vertices[index * 8 + 0] = xPos;
       pageMesh.vertices[index * 8 + 1] = yPos;
-      pageMesh.vertices[index * 8 + 2] = xPos + textureFrame.width * scale;
+      pageMesh.vertices[index * 8 + 2] = xPos + textureFrame.width * scale2;
       pageMesh.vertices[index * 8 + 3] = yPos;
-      pageMesh.vertices[index * 8 + 4] = xPos + textureFrame.width * scale;
-      pageMesh.vertices[index * 8 + 5] = yPos + textureFrame.height * scale;
+      pageMesh.vertices[index * 8 + 4] = xPos + textureFrame.width * scale2;
+      pageMesh.vertices[index * 8 + 5] = yPos + textureFrame.height * scale2;
       pageMesh.vertices[index * 8 + 6] = xPos;
-      pageMesh.vertices[index * 8 + 7] = yPos + textureFrame.height * scale;
+      pageMesh.vertices[index * 8 + 7] = yPos + textureFrame.height * scale2;
       pageMesh.uvs[index * 8 + 0] = textureUvs.x0;
       pageMesh.uvs[index * 8 + 1] = textureUvs.y0;
       pageMesh.uvs[index * 8 + 2] = textureUvs.x1;
@@ -23594,8 +23594,8 @@ var _BitmapText = class extends Container {
       pageMesh.uvs[index * 8 + 6] = textureUvs.x3;
       pageMesh.uvs[index * 8 + 7] = textureUvs.y3;
     }
-    this._textWidth = maxLineWidth * scale;
-    this._textHeight = (pos.y + data.lineHeight) * scale;
+    this._textWidth = maxLineWidth * scale2;
+    this._textHeight = (pos.y + data.lineHeight) * scale2;
     for (const i2 in pagesMeshData) {
       const pageMeshData = pagesMeshData[i2];
       if (this.anchor.x !== 0 || this.anchor.y !== 0) {
@@ -23613,7 +23613,7 @@ var _BitmapText = class extends Container {
           pageMeshData.vertices[vertexCount++] -= anchorOffsetY;
         }
       }
-      this._maxLineHeight = maxLineHeight * scale;
+      this._maxLineHeight = maxLineHeight * scale2;
       const vertexBuffer = pageMeshData.mesh.geometry.getBuffer("aVertexPosition");
       const textureBuffer = pageMeshData.mesh.geometry.getBuffer("aTextureCoord");
       const indexBuffer = pageMeshData.mesh.geometry.getIndex();
@@ -23795,8 +23795,8 @@ var _BitmapText = class extends Container {
       page.mesh.texture = Texture.EMPTY;
     });
     for (const id in _textureCache) {
-      const texture2 = _textureCache[id];
-      texture2.destroy();
+      const texture = _textureCache[id];
+      texture.destroy();
       delete _textureCache[id];
     }
     this._font = null;
@@ -23813,7 +23813,7 @@ BitmapText.styleDefaults = {
   letterSpacing: 0
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/loadBitmapFont.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/loadBitmapFont.mjs
 var validExtensions = [".xml", ".fnt"];
 var loadBitmapFont = {
   extension: {
@@ -23852,7 +23852,7 @@ var loadBitmapFont = {
 };
 extensions.add(loadBitmapFont);
 
-// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-html/lib/HTMLTextStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_pfkygx3sh74zn4sfwd3cwz7as4/node_modules/@pixi/text-html/lib/HTMLTextStyle.mjs
 var _HTMLTextStyle = class extends TextStyle {
   constructor() {
     super(...arguments);
@@ -23938,9 +23938,9 @@ var _HTMLTextStyle = class extends TextStyle {
       this.styleID++;
     }
   }
-  toCSS(scale) {
+  toCSS(scale2) {
     return [
-      `transform: scale(${scale})`,
+      `transform: scale(${scale2})`,
       `transform-origin: top left`,
       "display: inline-block",
       `color: ${this.normalizeColor(this.fill)}`,
@@ -23970,7 +23970,7 @@ var _HTMLTextStyle = class extends TextStyle {
     ].join(";");
   }
   toGlobalCSS() {
-    return this._fonts.reduce((result2, font) => `${result2}
+    return this._fonts.reduce((result, font) => `${result}
             @font-face {
                 font-family: "${font.family}";
                 src: url('${font.dataSrc}');
@@ -24095,7 +24095,7 @@ HTMLTextStyle.defaultOptions = {
   wordWrapWidth: 100
 };
 
-// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-html/lib/HTMLText.mjs
+// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_pfkygx3sh74zn4sfwd3cwz7as4/node_modules/@pixi/text-html/lib/HTMLText.mjs
 var _HTMLText = class extends Sprite {
   constructor(text = "", style = {}) {
     super(Texture.EMPTY);
@@ -24107,15 +24107,15 @@ var _HTMLText = class extends Sprite {
     this.dirty = false;
     this.ownsStyle = false;
     const image = new Image();
-    const texture2 = Texture.from(image, {
+    const texture = Texture.from(image, {
       scaleMode: settings.SCALE_MODE,
       resourceOptions: {
         autoLoad: false
       }
     });
-    texture2.orig = new Rectangle();
-    texture2.trim = new Rectangle();
-    this.texture = texture2;
+    texture.orig = new Rectangle();
+    texture.trim = new Rectangle();
+    this.texture = texture;
     const nssvg = "http://www.w3.org/2000/svg";
     const nsxhtml = "http://www.w3.org/1999/xhtml";
     const svgRoot = document.createElementNS(nssvg, "svg");
@@ -24204,15 +24204,15 @@ var _HTMLText = class extends Sprite {
     return this._image;
   }
   updateTexture() {
-    const { style, texture: texture2, _image: image, resolution } = this;
+    const { style, texture, _image: image, resolution } = this;
     const { padding } = style;
-    const { baseTexture } = texture2;
-    texture2.trim.width = texture2._frame.width = image.width / resolution;
-    texture2.trim.height = texture2._frame.height = image.height / resolution;
-    texture2.trim.x = -padding;
-    texture2.trim.y = -padding;
-    texture2.orig.width = texture2._frame.width - padding * 2;
-    texture2.orig.height = texture2._frame.height - padding * 2;
+    const { baseTexture } = texture;
+    texture.trim.width = texture._frame.width = image.width / resolution;
+    texture.trim.height = texture._frame.height = image.height / resolution;
+    texture.trim.x = -padding;
+    texture.trim.y = -padding;
+    texture.orig.width = texture._frame.width - padding * 2;
+    texture.orig.height = texture._frame.height - padding * 2;
     this._onTextureUpdate();
     baseTexture.setRealSize(image.width, image.height, resolution);
     this.dirty = false;
@@ -24361,6 +24361,7 @@ async function loadAssets() {
   const navArrow = await Assets.load("navarrow.png");
   const starTexture = await Assets.load("stars.png");
   const shipyard = await Assets.load("shipyard.png");
+  const asteroidBelt = await Assets.load("asteroid_belt.png");
   const market = await Assets.load("money-bag-xxl.png");
   const spaceshipTexture = await Assets.load("spaceship.png");
   loadedAssets = {
@@ -24373,6 +24374,7 @@ async function loadAssets() {
     navArrow,
     starTexture,
     spaceshipTexture,
+    asteroidBelt,
     shipyard,
     market,
     panel: await Assets.load("ui/panel.png"),
@@ -24600,7 +24602,7 @@ function transformResultInner(response, runtime) {
       }
     };
   }
-  const result2 = {
+  const result = {
     ...response.result,
     ...(!response.result.type || response.result.type === "data") && {
       type: "data",
@@ -24609,23 +24611,23 @@ function transformResultInner(response, runtime) {
   };
   return {
     ok: true,
-    result: result2
+    result
   };
 }
 function transformResult(response, runtime) {
-  let result2;
+  let result;
   try {
-    result2 = transformResultInner(response, runtime);
+    result = transformResultInner(response, runtime);
   } catch (err) {
     throw new TRPCClientError("Unable to transform response from server");
   }
-  if (!result2.ok && (!isObject(result2.error.error) || typeof result2.error.error.code !== "number")) {
+  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
     throw new TRPCClientError("Badly formatted response from server");
   }
-  if (result2.ok && !isObject(result2.result)) {
+  if (result.ok && !isObject(result.result)) {
     throw new TRPCClientError("Badly formatted response from server");
   }
-  return result2;
+  return result;
 }
 
 // ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
@@ -24868,9 +24870,9 @@ function dataLoader(batchLoader) {
       }
       const { promise, cancel } = batchLoader.fetch(batch.items.map((_item) => _item.key));
       batch.cancel = cancel;
-      promise.then((result2) => {
-        for (let i2 = 0; i2 < result2.length; i2++) {
-          const value = result2[i2];
+      promise.then((result) => {
+        for (let i2 = 0; i2 < result.length; i2++) {
+          const value = result[i2];
           const item = batch.items[i2];
           item.resolve(value);
           item.batch = null;
@@ -24962,11 +24964,11 @@ function httpBatchLink(opts) {
         return {
           promise: promise.then((res) => {
             const resJSON = Array.isArray(res.json) ? res.json : batchOps.map(() => res.json);
-            const result2 = resJSON.map((item) => ({
+            const result = resJSON.map((item) => ({
               meta: res.meta,
               json: item
             }));
-            return result2;
+            return result;
           }),
           cancel
         };
@@ -25346,8 +25348,10 @@ l2.defaults = { distance: 10, outerStrength: 4, innerStrength: 0, color: 1677721
 // src/lib/game-state.ts
 var GameState = {
   currentView: "universe",
+  currentSystem: void 0,
   selected: void 0,
-  visibleShips: {}
+  visibleShips: {},
+  myShips: {}
 };
 
 // src/lib/makeInteractiveAndSelectable.ts
@@ -25410,6 +25414,9 @@ var universeCoordinates = {
 var systemCoordinates = {
   minX: 0,
   minY: 0
+};
+var scale = {
+  universe: 1
 };
 
 // ../../node_modules/.pnpm/pixi-viewport@5.0.1/node_modules/pixi-viewport/dist/pixi_viewport.js
@@ -27014,13 +27021,14 @@ var Button = class extends Container {
     if (this.clickAction) {
       this.on("click", this.clickAction);
     }
+    const textSize = dimensions.textSize ?? 32;
     const text = new BitmapText(name, {
       fontName: "buttontext",
-      fontSize: 32,
-      align: "right"
+      fontSize: textSize,
+      align: "center"
     });
-    text.x = (dimensions.height - 32) / 2;
-    text.y = (dimensions.height - 32) / 2;
+    text.x = (dimensions.height - textSize) / 2;
+    text.y = (dimensions.height - textSize) / 2;
     this.addChild(text);
   }
   buttonSprite;
@@ -27045,200 +27053,6 @@ var Button = class extends Container {
   get disabled() {
     return this.isDisabled;
   }
-};
-
-// src/lib/availableActions.ts
-var availableActions = [{
-  name: "Refuel",
-  action: async (event) => {
-    event.stopPropagation();
-    if (GameState.selected) {
-      const refuel = await trpc.instructRefuel.mutate({
-        shipSymbol: GameState.selected.symbol
-      });
-      GameState.visibleShips[refuel.symbol].shipData = refuel;
-    }
-  },
-  isAvailable: () => {
-    if (GameState.selected?.type === "ship") {
-      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
-      return selectedShip.fuelAvailable < selectedShip.fuelCapacity && selectedShip.navStatus === "DOCKED";
-    }
-    return false;
-  }
-}, {
-  name: "Dock",
-  action: async (event) => {
-    event.stopPropagation();
-    if (GameState.selected) {
-      const dock = await trpc.instructDock.mutate({
-        shipSymbol: GameState.selected.symbol
-      });
-      console.log("dockresult", dock);
-      GameState.visibleShips[dock.symbol].shipData = dock;
-    }
-  },
-  isAvailable: () => {
-    if (GameState.selected?.type === "ship") {
-      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
-      return selectedShip.navStatus === "IN_ORBIT" || selectedShip.navStatus === "IN_TRANSIT" && new Date(selectedShip.arrivalOn).getTime() < Date.now();
-    }
-    return false;
-  }
-}, {
-  name: "Orbit",
-  action: async (event) => {
-    event.stopPropagation();
-    if (GameState.selected) {
-      const orbit = await trpc.instructOrbit.mutate({
-        shipSymbol: GameState.selected.symbol
-      });
-      GameState.visibleShips[orbit.symbol].shipData = orbit;
-    }
-  },
-  isAvailable: () => {
-    if (GameState.selected?.type === "ship") {
-      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
-      return selectedShip.navStatus === "DOCKED";
-    }
-    return false;
-  }
-}, {
-  name: "Extract",
-  action: () => {
-  },
-  isAvailable: () => {
-    return false;
-  }
-}, {
-  name: "Scan Wpt",
-  action: async (event) => {
-    event.stopPropagation();
-    if (GameState.selected) {
-      const waypoints = await trpc.instructScanWaypoints.mutate({
-        shipSymbol: GameState.selected.symbol
-      });
-      GameState.visibleShips[waypoints.symbol].shipData = waypoints;
-    }
-  },
-  isAvailable: () => {
-    if (GameState.selected?.type === "ship") {
-      const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData;
-      return selectedShip.navStatus === "IN_ORBIT" && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime();
-    }
-    return false;
-  }
-}, {
-  name: "Scan Shp",
-  action: () => {
-  },
-  isAvailable: () => {
-    return false;
-  }
-}];
-
-// src/lib/UIElements.ts
-var universeView;
-var systemView;
-var uiOverlay;
-var currentCoordinate;
-var currentSelected;
-var backButton;
-var actionButton = {};
-var entityInfo;
-var createUIElements = (app2) => {
-  systemView = new ht({
-    screenWidth: window.innerWidth,
-    screenHeight: window.innerHeight,
-    worldWidth: 2e3,
-    worldHeight: 2e3,
-    events: app2.renderer.events
-    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-  });
-  systemView.drag().pinch().wheel().decelerate();
-  systemView.visible = false;
-  systemView.moveCenter(1e3, 1e3);
-  universeView = new ht({
-    screenWidth: window.innerWidth,
-    screenHeight: window.innerHeight,
-    worldWidth: totalSize,
-    worldHeight: totalSize,
-    events: app2.renderer.events
-    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-  });
-  universeView.drag().pinch().wheel().decelerate();
-  universeView.moveCenter(totalSize / 2, totalSize / 2);
-  uiOverlay = new Container();
-  const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208);
-  panelBack.height = window.innerHeight - 16;
-  panelBack.x = 8;
-  panelBack.width = 386;
-  panelBack.y = 8;
-  uiOverlay.addChild(panelBack);
-  const panelBg = new NineSlicePlane(loadedAssets.panel, 19, 19, 19, 19);
-  panelBg.x = 0;
-  panelBg.y = 0;
-  panelBg.width = 400;
-  panelBg.height = window.innerHeight;
-  backButton = new Button("Back", {
-    height: 64,
-    width: 368
-  });
-  backButton.on("click", (event) => {
-    event.stopPropagation();
-    universeView.visible = true;
-    systemView.visible = false;
-    GameState.currentView = "universe";
-    systemView.removeChildren();
-    backButton.visible = false;
-  });
-  backButton.y = 16;
-  backButton.x = 16;
-  backButton.visible = false;
-  panelBg.addChild(backButton);
-  const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64;
-  availableActions.forEach((action, index) => {
-    actionButton[action.name] = new Button(action.name, {
-      height: 64,
-      width: 368 / 2
-    }, action.action);
-    actionButton[action.name].y = actionPanelY + Math.floor(index / 2) * 64;
-    actionButton[action.name].x = index % 2 == 0 ? 200 : 16;
-    actionButton[action.name].disabled = true;
-    panelBg.addChild(actionButton[action.name]);
-  });
-  uiOverlay.addChild(panelBg);
-  entityInfo = new BitmapText("Entity Information", {
-    fontName: "buttontext",
-    fontSize: 16,
-    align: "left",
-    maxWidth: 368
-  });
-  entityInfo.x = 16;
-  entityInfo.y = window.innerHeight - 500;
-  panelBg.addChild(entityInfo);
-  currentCoordinate = new BitmapText("0, 0", {
-    fontName: "sans-serif",
-    fontSize: 18,
-    align: "right"
-  });
-  currentCoordinate.x = window.innerWidth - 166;
-  currentCoordinate.y = 16;
-  currentCoordinate.maxWidth = 150;
-  uiOverlay.addChild(currentCoordinate);
-  currentSelected = new BitmapText("Selected: ", {
-    fontName: "buttontext",
-    fontSize: 18,
-    align: "right"
-  });
-  currentSelected.x = 16;
-  currentSelected.y = 104;
-  uiOverlay.addChild(currentSelected);
-  const bgContainer = new TilingSprite(loadedAssets.bgTexture, 4096, 4096);
-  app2.stage.addChild(bgContainer);
-  app2.stage.addChild(universeView);
-  app2.stage.addChild(systemView);
-  app2.stage.addChild(uiOverlay);
 };
 
 // src/lib/positionShips.ts
@@ -27276,17 +27090,22 @@ function positionShip(ship) {
 }
 
 // src/lib/loadSystem.ts
-async function loadSystem(systemSymbol) {
+async function loadSystem(starData) {
+  const systemSymbol = starData.symbol;
   trpc.waypointsForSystem.query({
     system: systemSymbol
   }).then((waypoints) => {
-    console.log("result from query", result);
+    console.log("result from query", waypoints);
+    GameState.currentSystem = starData;
     universeView.visible = false;
     systemView.visible = true;
     GameState.currentView = "system";
+    systemView.removeChildren();
+    systemView.addChild(systemGraphics);
+    systemView.addChild(systemGraphicsText);
     systemCoordinates.minX = 0;
     systemCoordinates.minY = 0;
-    result.waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
+    waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
       if (item.x < systemCoordinates.minX) {
         systemCoordinates.minX = item.x;
       }
@@ -27294,6 +27113,7 @@ async function loadSystem(systemSymbol) {
         systemCoordinates.minY = item.y;
       }
     });
+    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`];
     const star = new Sprite(texture);
     star.x = Math.abs(systemCoordinates.minX) * systemScale;
     star.y = Math.abs(systemCoordinates.minY) * systemScale;
@@ -27306,7 +27126,7 @@ async function loadSystem(systemSymbol) {
     resetShipWaypoints();
     GameState.visibleShips = {};
     GameState.visibleWaypoints = {};
-    Object.values(GameState.myShips).forEach((data) => {
+    Object.values(GameState.myShips).filter((ship) => ship.shipData.currentWaypoint.systemSymbol === starData.symbol).forEach((data) => {
       const ship = data.shipData;
       const shipGroup = new Container();
       const itemSprite = new Sprite(loadedAssets.spaceshipTexture);
@@ -27354,7 +27174,7 @@ async function loadSystem(systemSymbol) {
         container: shipGroup
       };
     });
-    const addTraitIcons = (item, container) => {
+    const addTraitIcons2 = (item, container) => {
       let xOffset = 0;
       item.traits.forEach((trait) => {
         if (trait.symbol === "MARKETPLACE") {
@@ -27383,7 +27203,7 @@ async function loadSystem(systemSymbol) {
         }
       });
     };
-    result.waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
+    waypoints.filter((item) => !item.orbitsSymbol && item.type !== "MOON" && item.type !== "ORBITAL_STATION").forEach((item) => {
       const orbit = new Graphics();
       orbit.lineStyle({
         width: 2,
@@ -27393,6 +27213,12 @@ async function loadSystem(systemSymbol) {
       systemView.addChild(orbit);
       const itemGroup = new Container();
       makeInteractiveAndSelectable(itemGroup, {
+        onMouseOver: () => {
+          GameState.hoveredWaypoint = item;
+        },
+        onMouseOut: () => {
+          GameState.hoveredWaypoint = void 0;
+        },
         onSelect: {
           type: "waypoint",
           symbol: item.symbol
@@ -27428,13 +27254,36 @@ async function loadSystem(systemSymbol) {
       text.x = 40;
       text.y = -8;
       itemGroup.addChild(text);
-      addTraitIcons(item, itemGroup);
-      result.waypoints.filter((orbitingThing) => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
+      addTraitIcons2(item, itemGroup);
+      waypoints.filter((orbitingThing) => orbitingThing.orbitsSymbol === item.symbol || orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y).forEach((orbitingThing, index) => {
         const orbitingGroup = new Container();
         makeInteractiveAndSelectable(orbitingGroup, {
+          onMouseOver: () => {
+            console.log("hovered", item);
+            GameState.hoveredWaypoint = orbitingThing;
+          },
+          onMouseOut: () => {
+            GameState.hoveredWaypoint = void 0;
+          },
           onSelect: {
             type: "waypoint",
             symbol: orbitingThing.symbol
+          },
+          onOrder: () => {
+            return [
+              {
+                name: "navigate",
+                withSelection: "ship",
+                action: async (selectedSymbol) => {
+                  const res = await trpc.instructNavigate.mutate({
+                    shipSymbol: selectedSymbol,
+                    waypointSymbol: item.symbol
+                  });
+                  GameState.visibleShips[res.symbol].shipData = res;
+                  console.log("updated state for ship " + res.symbol);
+                }
+              }
+            ];
           }
         });
         const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`]);
@@ -27454,7 +27303,7 @@ async function loadSystem(systemSymbol) {
         orbitingText.x = 24;
         orbitingText.y = -8;
         orbitingGroup.addChild(orbitingText);
-        addTraitIcons(orbitingThing, orbitingGroup);
+        addTraitIcons2(orbitingThing, orbitingGroup);
         GameState.visibleWaypoints[orbitingThing.symbol] = {
           waypointData: orbitingThing,
           container: orbitingGroup
@@ -27474,28 +27323,966 @@ async function loadSystem(systemSymbol) {
   });
 }
 
+// src/lib/loadPlayerData.ts
+async function loadPlayerData() {
+  const ships = await trpc.getMyShips.query();
+  console.log("my ships", ships);
+  ships.forEach((ship) => {
+    GameState.myShips[ship.symbol] = {
+      shipData: ship,
+      container: void 0
+    };
+  });
+  await updateCredits();
+}
+async function updateCredits() {
+  const agent = await trpc.getAgentInfo.query();
+  credits.text = `Credits: ${agent.credits}`;
+}
+
+// src/lib/availableActions.ts
+var availableActions = [{
+  name: "Refuel",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const refuel = await trpc.instructRefuel.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.myShips[refuel.symbol].shipData = refuel;
+      await updateCredits();
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.fuelAvailable < selectedShip.fuelCapacity && selectedShip.navStatus === "DOCKED";
+    }
+    return false;
+  }
+}, {
+  name: "Dock",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const dock = await trpc.instructDock.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      console.log("dockresult", dock);
+      GameState.myShips[dock.symbol].shipData = dock;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" || selectedShip.navStatus === "IN_TRANSIT" && new Date(selectedShip.arrivalOn).getTime() < Date.now();
+    }
+    return false;
+  }
+}, {
+  name: "Orbit",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const orbit = await trpc.instructOrbit.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.myShips[orbit.symbol].shipData = orbit;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "DOCKED";
+    }
+    return false;
+  }
+}, {
+  name: "Extract",
+  action: () => {
+  },
+  isAvailable: () => {
+    return false;
+  }
+}, {
+  name: "Chart",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected) {
+      const orbit = await trpc.instructChart.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.myShips[orbit.symbol].shipData = orbit;
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" && !GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.chartSubmittedBy;
+    }
+    return false;
+  }
+}, {
+  name: "Scan Wpt",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected && GameState.currentSystem) {
+      const waypoints = await trpc.instructScanWaypoints.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.myShips[waypoints.symbol].shipData = waypoints;
+      await loadSystem(GameState.currentSystem);
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime();
+    }
+    return false;
+  }
+}, {
+  name: "Scan Shp",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected && GameState.currentSystem) {
+      const waypoints = await trpc.instructScanShips.mutate({
+        shipSymbol: GameState.selected.symbol
+      });
+      GameState.myShips[waypoints.symbol].shipData = waypoints;
+      await loadSystem(GameState.currentSystem);
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship") {
+      const selectedShip = GameState.myShips[GameState.selected.symbol].shipData;
+      return selectedShip.navStatus === "IN_ORBIT" && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime() && selectedShip.mounts.filter((m2) => m2.effectName === "SENSOR_ARRAY").length > 0;
+    }
+    return false;
+  }
+}];
+
+// ../../node_modules/.pnpm/pixi-cull@2.2.0_pixi.js@7.2.4/node_modules/pixi-cull/dist/pixi-cull.es.js
+var __assign = function() {
+  __assign = Object.assign || function __assign2(t2) {
+    for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+      s2 = arguments[i2];
+      for (var p3 in s2)
+        if (Object.prototype.hasOwnProperty.call(s2, p3))
+          t2[p3] = s2[p3];
+    }
+    return t2;
+  };
+  return __assign.apply(this, arguments);
+};
+var defaultSimpleOptions = {
+  visible: "visible",
+  dirtyTest: false
+};
+var Simple = (
+  /** @class */
+  function() {
+    function Simple2(options) {
+      if (options === void 0) {
+        options = {};
+      }
+      options = __assign(__assign({}, defaultSimpleOptions), options);
+      this.dirtyTest = typeof options.dirtyTest !== "undefined" ? options.dirtyTest : true;
+      this.lists = [[]];
+    }
+    Simple2.prototype.addList = function(array, staticObject) {
+      this.lists.push(array);
+      if (staticObject) {
+        array.staticObject = true;
+      }
+      var length = array.length;
+      for (var i2 = 0; i2 < length; i2++) {
+        this.updateObject(array[i2]);
+      }
+      return array;
+    };
+    Simple2.prototype.removeList = function(array) {
+      var index = this.lists.indexOf(array);
+      if (index === -1) {
+        return array;
+      }
+      this.lists.splice(index, 1);
+      return array;
+    };
+    Simple2.prototype.add = function(object, staticObject) {
+      if (staticObject) {
+        object.staticObject = true;
+      }
+      if (this.dirtyTest || staticObject) {
+        this.updateObject(object);
+      }
+      this.lists[0].push(object);
+      return object;
+    };
+    Simple2.prototype.remove = function(object) {
+      var index = this.lists[0].indexOf(object);
+      if (index === -1) {
+        return object;
+      }
+      this.lists[0].splice(index, 1);
+      return object;
+    };
+    Simple2.prototype.cull = function(bounds, skipUpdate) {
+      if (!skipUpdate) {
+        this.updateObjects();
+      }
+      for (var _i = 0, _a = this.lists; _i < _a.length; _i++) {
+        var list = _a[_i];
+        var length_1 = list.length;
+        for (var i2 = 0; i2 < length_1; i2++) {
+          var object = list[i2];
+          var box = object.AABB;
+          object.visible = box.x + box.width > bounds.x && box.x < bounds.x + bounds.width && box.y + box.height > bounds.y && box.y < bounds.y + bounds.height;
+        }
+      }
+    };
+    Simple2.prototype.updateObjects = function() {
+      if (this.dirtyTest) {
+        for (var _i = 0, _a = this.lists; _i < _a.length; _i++) {
+          var list = _a[_i];
+          if (!list.staticObject) {
+            var length_2 = list.length;
+            for (var i2 = 0; i2 < length_2; i2++) {
+              var object = list[i2];
+              if (!object.staticObject && object.dirty) {
+                this.updateObject(object);
+                object.dirty = false;
+              }
+            }
+          }
+        }
+      } else {
+        for (var _b = 0, _c = this.lists; _b < _c.length; _b++) {
+          var list = _c[_b];
+          if (!list.staticObject) {
+            var length_3 = list.length;
+            for (var i2 = 0; i2 < length_3; i2++) {
+              var object = list[i2];
+              if (!object.staticObject) {
+                this.updateObject(object);
+              }
+            }
+          }
+        }
+      }
+    };
+    Simple2.prototype.updateObject = function(object) {
+      var box = object.getLocalBounds();
+      object.AABB = object.AABB || { x: 0, y: 0, width: 0, height: 0 };
+      object.AABB.x = object.x + (box.x - object.pivot.x) * Math.abs(object.scale.x);
+      object.AABB.y = object.y + (box.y - object.pivot.y) * Math.abs(object.scale.y);
+      object.AABB.width = box.width * Math.abs(object.scale.x);
+      object.AABB.height = box.height * Math.abs(object.scale.y);
+    };
+    Simple2.prototype.query = function(bounds) {
+      var results = [];
+      for (var _i = 0, _a = this.lists; _i < _a.length; _i++) {
+        var list = _a[_i];
+        for (var _b = 0, list_1 = list; _b < list_1.length; _b++) {
+          var object = list_1[_b];
+          var box = object.AABB;
+          if (box && box.x + box.width > bounds.x && box.x - box.width < bounds.x + bounds.width && box.y + box.height > bounds.y && box.y - box.height < bounds.y + bounds.height) {
+            results.push(object);
+          }
+        }
+      }
+      return results;
+    };
+    Simple2.prototype.queryCallback = function(bounds, callback) {
+      for (var _i = 0, _a = this.lists; _i < _a.length; _i++) {
+        var list = _a[_i];
+        for (var _b = 0, list_2 = list; _b < list_2.length; _b++) {
+          var object = list_2[_b];
+          var box = object.AABB;
+          if (box && box.x + box.width > bounds.x && box.x - box.width < bounds.x + bounds.width && box.y + box.height > bounds.y && box.y - box.height < bounds.y + bounds.height) {
+            if (callback(object)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    };
+    Simple2.prototype.stats = function() {
+      var visible = 0, count = 0;
+      for (var _i = 0, _a = this.lists; _i < _a.length; _i++) {
+        var list = _a[_i];
+        list.forEach(function(object) {
+          visible += object.visible ? 1 : 0;
+          count++;
+        });
+      }
+      return { total: count, visible, culled: count - visible };
+    };
+    return Simple2;
+  }()
+);
+var SpatialHashDefaultOptions = {
+  xSize: 1e3,
+  ySize: 1e3,
+  simpleTest: true,
+  dirtyTest: true
+};
+var SpatialHash = (
+  /** @class */
+  function() {
+    function SpatialHash3(options) {
+      this.xSize = 1e3;
+      this.ySize = 1e3;
+      this.simpleTest = true;
+      this.dirtyTest = true;
+      options = __assign(__assign({}, SpatialHashDefaultOptions), options);
+      if (options && typeof options.size !== "undefined") {
+        this.xSize = this.ySize = options.size;
+      } else {
+        this.xSize = options.xSize;
+        this.ySize = options.ySize;
+      }
+      this.simpleTest = options.simpleTest;
+      this.dirtyTest = options.dirtyTest;
+      this.width = this.height = 0;
+      this.hash = {};
+      this.containers = [];
+      this.elements = [];
+    }
+    SpatialHash3.prototype.add = function(object, staticObject) {
+      object.spatial = { hashes: [] };
+      if (this.dirtyTest) {
+        object.dirty = true;
+      }
+      if (staticObject) {
+        object.staticObject = true;
+      }
+      this.updateObject(object);
+      this.elements.push(object);
+      return object;
+    };
+    SpatialHash3.prototype.remove = function(object) {
+      this.elements.splice(this.elements.indexOf(object), 1);
+      this.removeFromHash(object);
+      return object;
+    };
+    SpatialHash3.prototype.addContainer = function(container, staticObject) {
+      var _this = this;
+      var added = function(object2) {
+        object2.spatial = { hashes: [] };
+        _this.updateObject(object2);
+      };
+      var removed = function(object2) {
+        _this.removeFromHash(object2);
+      };
+      var length = container.children.length;
+      for (var i2 = 0; i2 < length; i2++) {
+        var object = container.children[i2];
+        object.spatial = { hashes: [] };
+        this.updateObject(object);
+      }
+      container.cull = {};
+      this.containers.push(container);
+      container.on("childAdded", added);
+      container.on("childRemoved", removed);
+      container.cull.added = added;
+      container.cull.removed = removed;
+      if (staticObject) {
+        container.cull.static = true;
+      }
+    };
+    SpatialHash3.prototype.removeContainer = function(container) {
+      var _this = this;
+      this.containers.splice(this.containers.indexOf(container), 1);
+      container.children.forEach(function(object) {
+        return _this.removeFromHash(object);
+      });
+      container.off("childAdded", container.cull.added);
+      container.off("removedFrom", container.cull.removed);
+      delete container.cull;
+      return container;
+    };
+    SpatialHash3.prototype.cull = function(AABB, skipUpdate, callback) {
+      if (!skipUpdate) {
+        this.updateObjects();
+      }
+      this.invisible();
+      var objects;
+      if (callback) {
+        objects = this.queryCallbackAll(AABB, this.simpleTest, callback);
+      } else {
+        objects = this.query(AABB, this.simpleTest);
+      }
+      objects.forEach(function(object) {
+        return object.visible = true;
+      });
+      return this.lastBuckets;
+    };
+    SpatialHash3.prototype.invisible = function() {
+      var length = this.elements.length;
+      for (var i2 = 0; i2 < length; i2++) {
+        this.elements[i2].visible = false;
+      }
+      for (var _i = 0, _a = this.containers; _i < _a.length; _i++) {
+        var container = _a[_i];
+        var length_1 = container.children.length;
+        for (var i2 = 0; i2 < length_1; i2++) {
+          container.children[i2].visible = false;
+        }
+      }
+    };
+    SpatialHash3.prototype.updateObjects = function() {
+      if (this.dirtyTest) {
+        var length_2 = this.elements.length;
+        for (var i2 = 0; i2 < length_2; i2++) {
+          var object = this.elements[i2];
+          if (object.dirty) {
+            this.updateObject(object);
+            object.dirty = false;
+          }
+        }
+        for (var _i = 0, _a = this.containers; _i < _a.length; _i++) {
+          var container = _a[_i];
+          if (!container.cull.static) {
+            var length_3 = container.children.length;
+            for (var i2 = 0; i2 < length_3; i2++) {
+              var object = container.children[i2];
+              if (object.dirty) {
+                this.updateObject(object);
+                object.dirty = false;
+              }
+            }
+          }
+        }
+      } else {
+        var length_4 = this.elements.length;
+        for (var i2 = 0; i2 < length_4; i2++) {
+          var object = this.elements[i2];
+          if (!object.staticObject) {
+            this.updateObject(object);
+          }
+        }
+        for (var _b = 0, _c = this.containers; _b < _c.length; _b++) {
+          var container = _c[_b];
+          if (!container.cull.static) {
+            var length_5 = container.children.length;
+            for (var i2 = 0; i2 < length_5; i2++) {
+              this.updateObject(container.children[i2]);
+            }
+          }
+        }
+      }
+    };
+    SpatialHash3.prototype.updateObject = function(object) {
+      var AABB;
+      var box = object.getLocalBounds();
+      AABB = object.AABB = {
+        x: object.x + (box.x - object.pivot.x) * object.scale.x,
+        y: object.y + (box.y - object.pivot.y) * object.scale.y,
+        width: box.width * object.scale.x,
+        height: box.height * object.scale.y
+      };
+      var spatial = object.spatial;
+      if (!spatial) {
+        spatial = object.spatial = { hashes: [] };
+      }
+      var _a = this.getBounds(AABB), xStart = _a.xStart, yStart = _a.yStart, xEnd = _a.xEnd, yEnd = _a.yEnd;
+      if (spatial.xStart !== xStart || spatial.yStart !== yStart || spatial.xEnd !== xEnd || spatial.yEnd !== yEnd) {
+        if (spatial.hashes.length) {
+          this.removeFromHash(object);
+        }
+        for (var y2 = yStart; y2 <= yEnd; y2++) {
+          for (var x2 = xStart; x2 <= xEnd; x2++) {
+            var key = x2 + "," + y2;
+            this.insert(object, key);
+            spatial.hashes.push(key);
+          }
+        }
+        spatial.xStart = xStart;
+        spatial.yStart = yStart;
+        spatial.xEnd = xEnd;
+        spatial.yEnd = yEnd;
+      }
+    };
+    SpatialHash3.prototype.getBuckets = function(minimum) {
+      if (minimum === void 0) {
+        minimum = 1;
+      }
+      var hashes = [];
+      for (var key in this.hash) {
+        var hash = this.hash[key];
+        if (hash.length >= minimum) {
+          hashes.push(hash);
+        }
+      }
+      return hashes;
+    };
+    SpatialHash3.prototype.getBounds = function(AABB) {
+      var xStart = Math.floor(AABB.x / this.xSize);
+      var yStart = Math.floor(AABB.y / this.ySize);
+      var xEnd = Math.floor((AABB.x + AABB.width) / this.xSize);
+      var yEnd = Math.floor((AABB.y + AABB.height) / this.ySize);
+      return { xStart, yStart, xEnd, yEnd };
+    };
+    SpatialHash3.prototype.insert = function(object, key) {
+      if (!this.hash[key]) {
+        this.hash[key] = [object];
+      } else {
+        this.hash[key].push(object);
+      }
+    };
+    SpatialHash3.prototype.removeFromHash = function(object) {
+      var spatial = object.spatial;
+      while (spatial.hashes.length) {
+        var key = spatial.hashes.pop();
+        var list = this.hash[key];
+        list.splice(list.indexOf(object), 1);
+      }
+    };
+    SpatialHash3.prototype.neighbors = function(object) {
+      var _this = this;
+      var results = [];
+      object.spatial.hashes.forEach(function(key) {
+        return results = results.concat(_this.hash[key]);
+      });
+      return results;
+    };
+    SpatialHash3.prototype.query = function(AABB, simpleTest) {
+      if (simpleTest === void 0) {
+        simpleTest = true;
+      }
+      var buckets = 0;
+      var results = [];
+      var _a = this.getBounds(AABB), xStart = _a.xStart, yStart = _a.yStart, xEnd = _a.xEnd, yEnd = _a.yEnd;
+      for (var y2 = yStart; y2 <= yEnd; y2++) {
+        for (var x2 = xStart; x2 <= xEnd; x2++) {
+          var entry = this.hash[x2 + "," + y2];
+          if (entry) {
+            if (simpleTest) {
+              var length_6 = entry.length;
+              for (var i2 = 0; i2 < length_6; i2++) {
+                var object = entry[i2];
+                var box = object.AABB;
+                if (box.x + box.width > AABB.x && box.x < AABB.x + AABB.width && box.y + box.height > AABB.y && box.y < AABB.y + AABB.height) {
+                  results.push(object);
+                }
+              }
+            } else {
+              results = results.concat(entry);
+            }
+            buckets++;
+          }
+        }
+      }
+      this.lastBuckets = buckets;
+      return results;
+    };
+    SpatialHash3.prototype.queryCallbackAll = function(AABB, simpleTest, callback) {
+      if (simpleTest === void 0) {
+        simpleTest = true;
+      }
+      var buckets = 0;
+      var results = [];
+      var _a = this.getBounds(AABB), xStart = _a.xStart, yStart = _a.yStart, xEnd = _a.xEnd, yEnd = _a.yEnd;
+      for (var y2 = yStart; y2 <= yEnd; y2++) {
+        for (var x2 = xStart; x2 <= xEnd; x2++) {
+          var entry = this.hash[x2 + "," + y2];
+          if (entry) {
+            if (simpleTest) {
+              var length_7 = entry.length;
+              for (var i2 = 0; i2 < length_7; i2++) {
+                var object = entry[i2];
+                var box = object.AABB;
+                if (box.x + box.width > AABB.x && box.x < AABB.x + AABB.width && box.y + box.height > AABB.y && box.y < AABB.y + AABB.height) {
+                  results.push(object);
+                  callback(object);
+                }
+              }
+            } else {
+              results = results.concat(entry);
+              for (var _i = 0, entry_1 = entry; _i < entry_1.length; _i++) {
+                var object = entry_1[_i];
+                callback(object);
+              }
+            }
+            buckets++;
+          }
+        }
+      }
+      this.lastBuckets = buckets;
+      return results;
+    };
+    SpatialHash3.prototype.queryCallback = function(AABB, callback, simpleTest) {
+      if (simpleTest === void 0) {
+        simpleTest = true;
+      }
+      var _a = this.getBounds(AABB), xStart = _a.xStart, yStart = _a.yStart, xEnd = _a.xEnd, yEnd = _a.yEnd;
+      for (var y2 = yStart; y2 <= yEnd; y2++) {
+        for (var x2 = xStart; x2 <= xEnd; x2++) {
+          var entry = this.hash[x2 + "," + y2];
+          if (entry) {
+            for (var i2 = 0; i2 < entry.length; i2++) {
+              var object = entry[i2];
+              if (simpleTest) {
+                var AABB_1 = object.AABB;
+                if (AABB_1.x + AABB_1.width > AABB_1.x && AABB_1.x < AABB_1.x + AABB_1.width && AABB_1.y + AABB_1.height > AABB_1.y && AABB_1.y < AABB_1.y + AABB_1.height) {
+                  if (callback(object)) {
+                    return true;
+                  }
+                }
+              } else {
+                if (callback(object)) {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+      return false;
+    };
+    SpatialHash3.prototype.stats = function() {
+      var visible = 0, count = 0;
+      var length = this.elements.length;
+      for (var i2 = 0; i2 < length; i2++) {
+        var object = this.elements[i2];
+        visible += object.visible ? 1 : 0;
+        count++;
+      }
+      for (var _i = 0, _a = this.containers; _i < _a.length; _i++) {
+        var list = _a[_i];
+        var length_8 = list.children.length;
+        for (var i2 = 0; i2 < length_8; i2++) {
+          var object = list.children[i2];
+          visible += object.visible ? 1 : 0;
+          count++;
+        }
+      }
+      return {
+        buckets: this.lastBuckets,
+        total: count,
+        visible,
+        culled: count - visible
+      };
+    };
+    SpatialHash3.prototype.getNumberOfBuckets = function() {
+      return Object.keys(this.hash).length;
+    };
+    SpatialHash3.prototype.getAverageSize = function() {
+      var total = 0;
+      for (var key in this.hash) {
+        total += this.hash[key].length;
+      }
+      return total / this.getBuckets().length;
+    };
+    SpatialHash3.prototype.getLargest = function() {
+      var largest = 0;
+      for (var key in this.hash) {
+        if (this.hash[key].length > largest) {
+          largest = this.hash[key].length;
+        }
+      }
+      return largest;
+    };
+    SpatialHash3.prototype.getWorldBounds = function() {
+      var xStart = Infinity, yStart = Infinity, xEnd = 0, yEnd = 0;
+      for (var key in this.hash) {
+        var split = key.split(",");
+        var x2 = parseInt(split[0]);
+        var y2 = parseInt(split[1]);
+        xStart = x2 < xStart ? x2 : xStart;
+        yStart = y2 < yStart ? y2 : yStart;
+        xEnd = x2 > xEnd ? x2 : xEnd;
+        yEnd = y2 > yEnd ? y2 : yEnd;
+      }
+      return { xStart, yStart, xEnd, yEnd };
+    };
+    SpatialHash3.prototype.getSparseness = function(AABB) {
+      var count = 0, total = 0;
+      var _a = AABB ? this.getBounds(AABB) : this.getWorldBounds(), xStart = _a.xStart, yStart = _a.yStart, xEnd = _a.xEnd, yEnd = _a.yEnd;
+      for (var y2 = yStart; y2 < yEnd; y2++) {
+        for (var x2 = xStart; x2 < xEnd; x2++) {
+          count += this.hash[x2 + "," + y2] ? 1 : 0;
+          total++;
+        }
+      }
+      return count / total;
+    };
+    return SpatialHash3;
+  }()
+);
+
+// src/lib/UIElements.ts
+var universeView;
+var systemView;
+var uiOverlay;
+var currentCoordinate;
+var fps;
+var currentSelected;
+var credits;
+var backButton;
+var actionButton = {};
+var entityInfo;
+var universeCuller;
+var universeGraphics;
+var universeGraphicsText;
+var systemGraphics;
+var systemGraphicsText;
+var createUIElements = (app2) => {
+  let pointerDownPlace;
+  systemView = new ht({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: 2e3,
+    worldHeight: 2e3,
+    events: app2.renderer.events
+    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+  });
+  systemView.on("pointerdown", (event) => {
+    console.log("pointerdown");
+    pointerDownPlace = new Point(event.globalX, event.globalY);
+  });
+  systemView.on("click", (event) => {
+    console.log("click");
+    if (pointerDownPlace) {
+      const distance = Math.abs(pointerDownPlace.x - event.globalX) + Math.abs(pointerDownPlace.y - event.globalY);
+      if (distance > 2) {
+        console.log("cancelling drag event");
+        event.stopPropagation();
+      }
+    }
+  });
+  systemGraphics = new Graphics();
+  systemView.addChild(systemGraphics);
+  systemGraphicsText = new BitmapText("", {
+    fontName: "sans-serif",
+    fontSize: 16,
+    //tint: 0x0000FF,
+    align: "right"
+  });
+  systemView.addChild(systemGraphicsText);
+  systemView.drag().pinch().wheel().decelerate();
+  systemView.visible = false;
+  systemView.moveCenter(1e3, 1e3);
+  universeView = new ht({
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    worldWidth: totalSize,
+    worldHeight: totalSize,
+    events: app2.renderer.events
+    // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+  });
+  universeView.on("pointerdown", (event) => {
+    console.log("pointerdown");
+    pointerDownPlace = new Point(event.globalX, event.globalY);
+  });
+  universeView.on("click", (event) => {
+    console.log("click");
+    if (pointerDownPlace) {
+      const distance = Math.abs(pointerDownPlace.x - event.globalX) + Math.abs(pointerDownPlace.y - event.globalY);
+      if (distance > 2) {
+        console.log("cancelling drag event");
+        event.stopPropagation();
+      }
+    }
+  });
+  universeView.drag().pinch().wheel().decelerate();
+  universeView.moveCenter(totalSize / 2, totalSize / 2);
+  universeCuller = new Simple();
+  universeCuller.addList(universeView.children);
+  universeCuller.cull(universeView.getVisibleBounds());
+  universeGraphics = new Graphics();
+  universeView.addChild(universeGraphics);
+  universeGraphicsText = new BitmapText("", {
+    fontName: "sans-serif",
+    fontSize: 16,
+    //tint: 0x0000FF,
+    align: "right"
+  });
+  universeView.addChild(universeGraphicsText);
+  uiOverlay = new Container();
+  const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208);
+  panelBack.height = window.innerHeight - 16;
+  panelBack.x = 8;
+  panelBack.width = 386;
+  panelBack.y = 8;
+  uiOverlay.addChild(panelBack);
+  const panelBg = new NineSlicePlane(loadedAssets.panel, 19, 19, 19, 19);
+  panelBg.x = 0;
+  panelBg.y = 0;
+  panelBg.width = 400;
+  panelBg.height = window.innerHeight;
+  backButton = new Button("Back", {
+    height: 64,
+    width: 368
+  });
+  backButton.on("click", (event) => {
+    event.stopPropagation();
+    universeView.visible = true;
+    systemView.visible = false;
+    GameState.currentView = "universe";
+    systemView.removeChildren();
+    backButton.visible = false;
+  });
+  backButton.y = 16;
+  backButton.x = 16;
+  backButton.visible = false;
+  panelBg.addChild(backButton);
+  credits = new BitmapText("Credits: 0", {
+    fontName: "buttontext",
+    fontSize: 16,
+    align: "left"
+  });
+  credits.x = 16;
+  credits.y = 200;
+  panelBg.addChild(credits);
+  const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64;
+  availableActions.forEach((action, index) => {
+    actionButton[action.name] = new Button(action.name, {
+      height: 64,
+      width: 368 / 2
+    }, action.action);
+    actionButton[action.name].y = actionPanelY + Math.floor(index / 2) * 64;
+    actionButton[action.name].x = index % 2 == 0 ? 200 : 16;
+    actionButton[action.name].disabled = true;
+    panelBg.addChild(actionButton[action.name]);
+  });
+  const cruiseModeButtons = ["CRUISE", "DRIFT", "BURN", "STEALTH"];
+  cruiseModeButtons.forEach((button, index) => {
+    const but = new Button(button, {
+      textSize: 16,
+      height: 48,
+      width: 368 / 4
+    }, async () => {
+      await trpc.instructPatchNavigate.mutate({
+        shipSymbol: GameState.selected?.symbol,
+        navMode: button
+      });
+    });
+    but.y = actionPanelY - 64;
+    but.x = 16 + 368 / 4 * index;
+    panelBg.addChild(but);
+  });
+  uiOverlay.addChild(panelBg);
+  entityInfo = new BitmapText("Entity Information", {
+    fontName: "buttontext",
+    fontSize: 16,
+    align: "left",
+    maxWidth: 368
+  });
+  entityInfo.x = 16;
+  entityInfo.y = window.innerHeight - 500;
+  panelBg.addChild(entityInfo);
+  currentCoordinate = new BitmapText("0, 0", {
+    fontName: "sans-serif",
+    fontSize: 18,
+    align: "right"
+  });
+  currentCoordinate.x = window.innerWidth - 166;
+  currentCoordinate.y = 16;
+  currentCoordinate.maxWidth = 150;
+  uiOverlay.addChild(currentCoordinate);
+  fps = new BitmapText("FPS: 60", {
+    fontName: "sans-serif",
+    fontSize: 18,
+    align: "right"
+  });
+  fps.x = window.innerWidth - 166;
+  fps.y = 40;
+  fps.maxWidth = 150;
+  uiOverlay.addChild(fps);
+  currentSelected = new BitmapText("Selected: ", {
+    fontName: "buttontext",
+    fontSize: 18,
+    align: "right"
+  });
+  currentSelected.x = 16;
+  currentSelected.y = 104;
+  uiOverlay.addChild(currentSelected);
+  const bgContainer = new TilingSprite(loadedAssets.bgTexture, 4096, 4096);
+  app2.stage.addChild(bgContainer);
+  app2.stage.addChild(universeView);
+  app2.stage.addChild(systemView);
+  app2.stage.addChild(uiOverlay);
+};
+
 // src/lib/loadUniverse.ts
+var addTraitIcons = (item, container) => {
+  let xOffset = 0, hasMarket = false, hasShipyard = false, hasBelt = false;
+  item.waypoints.forEach((waypoint) => {
+    waypoint.traits.forEach((trait) => {
+      if (trait.symbol === "MARKETPLACE") {
+        hasMarket = true;
+      }
+      if (trait.symbol === "SHIPYARD") {
+        hasShipyard = true;
+      }
+      if (trait.symbol === "COMMON_METAL_DEPOSITS" || trait.symbol === "PRECIOUS_METAL_DEPOSITS" || trait.symbol === "MINERAL_DEPOSITS") {
+        hasBelt = true;
+      }
+    });
+  });
+  if (hasMarket) {
+    const sprite = new Sprite(loadedAssets.market);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.25 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (hasShipyard) {
+    const sprite = new Sprite(loadedAssets.shipyard);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (hasBelt) {
+    const sprite = new Sprite(loadedAssets.asteroidBelt);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+};
 var loadUniverse = async () => {
   const references = {};
-  const systems = await trpc.getSystems.query();
-  for (const starData2 of systems) {
-    if (starData2.x < universeCoordinates.minX)
-      universeCoordinates.minX = starData2.x;
-    if (starData2.x > universeCoordinates.maxX)
-      universeCoordinates.maxX = starData2.x;
-    if (starData2.y < universeCoordinates.minY)
-      universeCoordinates.minY = starData2.y;
-    if (starData2.y > universeCoordinates.maxY)
-      universeCoordinates.maxY = starData2.y;
+  const systems = await trpc.getSystems.query({});
+  for (const starData of systems) {
+    if (starData.x < universeCoordinates.minX)
+      universeCoordinates.minX = starData.x;
+    if (starData.x > universeCoordinates.maxX)
+      universeCoordinates.maxX = starData.x;
+    if (starData.y < universeCoordinates.minY)
+      universeCoordinates.minY = starData.y;
+    if (starData.y > universeCoordinates.maxY)
+      universeCoordinates.maxY = starData.y;
   }
-  for (const starData2 of systems) {
-    let texture2 = loadedAssets.sheet.textures[`planets/tile/${starData2.type}.png`];
-    const star = new Sprite(texture2);
+  GameState.visibleSystems = {};
+  scale.universe = totalSize / (universeCoordinates.maxX - universeCoordinates.minX);
+  for (const starData of systems) {
+    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`];
+    const star = new Sprite(texture);
     star.pivot = {
       x: 32,
       y: 32
     };
-    const text = new BitmapText(starData2.name + "\n(" + starData2.symbol + ")", {
+    const text = new BitmapText(starData.name + "\n(" + starData.symbol + ")", {
       fontName: "sans-serif",
       fontSize: 18,
       align: "left"
@@ -27505,24 +28292,36 @@ var loadUniverse = async () => {
     const starContainer = new Container();
     starContainer.addChild(star);
     starContainer.addChild(text);
+    addTraitIcons(starData, starContainer);
+    GameState.visibleSystems[starData.symbol] = {
+      systemData: starData,
+      container: starContainer
+    };
     makeInteractiveAndSelectable(starContainer, {
+      onMouseOut: () => {
+        GameState.hoveredSystem = void 0;
+      },
+      onMouseOver: () => {
+        GameState.hoveredSystem = starData;
+      },
       onOrder: [
         {
           name: "Warp",
           withSelection: "ship",
           action: async () => {
             if (GameState.selected?.symbol) {
-              const system = await trpc.dataForDisplay.query({
-                system: starData2.symbol
+              const waypoints = await trpc.waypointsForSystem.query({
+                system: starData.symbol
               });
-              const bestWaypoint = system.waypoints.find((w3) => w3.traits.find((t2) => t2.symbol === "MARKETPLACE")).symbol ?? system.waypoints[0].symbol;
+              console.log("waypoints", waypoints);
+              const bestWaypoint = waypoints.find((w3) => w3.traits.find((t2) => t2.symbol === "MARKETPLACE"))?.symbol ?? waypoints[0].symbol;
               if (bestWaypoint) {
-                console.log("warping to first waypoint in", system);
+                console.log("warping to ", bestWaypoint);
                 const res = await trpc.instructWarp.mutate({
                   shipSymbol: GameState.selected.symbol,
                   waypointSymbol: bestWaypoint
                 });
-                GameState.visibleShips[res.symbol].shipData = res;
+                GameState.myShips[res.symbol].shipData = res;
               } else {
                 alert("Cannot warp to system without waypoints, nothing to target");
               }
@@ -27532,12 +28331,12 @@ var loadUniverse = async () => {
       ]
     });
     starContainer.on("click", () => {
-      loadSystem(starData2.symbol);
+      loadSystem(starData);
     });
-    starContainer.x = (starData2.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
-    starContainer.y = (starData2.y + Math.abs(universeCoordinates.minY)) / (universeCoordinates.maxY - universeCoordinates.minY) * totalSize;
+    starContainer.x = (starData.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
+    starContainer.y = (starData.y + Math.abs(universeCoordinates.minY)) / (universeCoordinates.maxY - universeCoordinates.minY) * totalSize;
     universeView.addChild(starContainer);
-    references[starData2.symbol] = starContainer;
+    references[starData.symbol] = starContainer;
   }
   const graphics = new Graphics();
   graphics.lineStyle({
@@ -27545,7 +28344,12 @@ var loadUniverse = async () => {
     color: 30719
   });
   const multiFactor = 5e3 / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize;
+  const commandShip = Object.values(GameState.myShips).find((ship) => ship.shipData.role === "COMMAND");
+  const commandShipLocation = commandShip?.shipData.currentWaypoint.systemSymbol;
   universeView.addChild(graphics);
+  if (commandShipLocation) {
+    universeView.moveCenter(references[commandShipLocation].x, references[commandShipLocation].y);
+  }
   return {
     systems: references
   };
@@ -27566,6 +28370,92 @@ var systemCoordinateToOriginal = (point) => {
   };
 };
 
+// src/lib/targetingLine.ts
+var clearGraphics = () => {
+  universeGraphics.clear();
+  systemGraphics.clear();
+  universeGraphicsText.text = "";
+  systemGraphicsText.text = "";
+};
+var warpColor = 4491229;
+var jumpColor = 10066227;
+var universeTargetingLine = (sizeMultiplier) => {
+  if (GameState.hoveredSystem && GameState.currentView == "universe" && GameState.selected?.type === "ship") {
+    const warpRange = GameState.myShips[GameState.selected?.symbol].shipData.modules.find((m2) => m2.effectName === "WARP_DRIVE")?.value;
+    const jumpRange = GameState.myShips[GameState.selected?.symbol].shipData.modules.find((m2) => m2.effectName === "JUMP_DRIVE")?.value;
+    const currentSystemSymbol = GameState.myShips[GameState.selected.symbol].shipData.currentWaypoint.systemSymbol;
+    const hoveredSystemSymbol = GameState.hoveredSystem.symbol;
+    const fromContainer = GameState.visibleSystems[currentSystemSymbol].container;
+    const toContainer = GameState.visibleSystems[hoveredSystemSymbol].container;
+    const fromData = GameState.visibleSystems[currentSystemSymbol].systemData;
+    const toData = GameState.visibleSystems[hoveredSystemSymbol].systemData;
+    const distance = Math.round(Math.sqrt(Math.pow(fromData.x - toData.x, 2) + Math.pow(fromData.y - toData.y, 2)));
+    if (jumpRange && distance < jumpRange) {
+      universeGraphics.lineStyle({
+        color: jumpColor,
+        width: sizeMultiplier
+      });
+    } else if (warpRange && distance < warpRange) {
+      universeGraphics.lineStyle({
+        color: warpColor,
+        width: sizeMultiplier
+      });
+    } else {
+      universeGraphics.lineStyle({
+        color: 16711680,
+        width: sizeMultiplier
+      });
+    }
+    universeGraphics.moveTo(fromContainer.x, fromContainer.y);
+    universeGraphics.lineTo(toContainer.x, toContainer.y);
+    universeGraphicsText.x = (fromContainer.x + toContainer.x) / 2;
+    universeGraphicsText.y = (fromContainer.y + toContainer.y) / 2 + 120;
+    universeGraphicsText.text = `Distance ${distance}`;
+    universeGraphicsText.scale = { x: sizeMultiplier, y: sizeMultiplier };
+  }
+  if (GameState.currentView === "universe" && GameState.selected?.type === "ship") {
+    const currentSystemSymbol = GameState.myShips[GameState.selected.symbol].shipData.currentWaypoint.systemSymbol;
+    const fromContainer = GameState.visibleSystems[currentSystemSymbol].container;
+    const warpRange = GameState.myShips[GameState.selected?.symbol].shipData.modules.find((m2) => m2.effectName === "WARP_DRIVE")?.value;
+    const jumpRange = GameState.myShips[GameState.selected?.symbol].shipData.modules.find((m2) => m2.effectName === "JUMP_DRIVE")?.value;
+    if (warpRange) {
+      universeGraphics.lineStyle({
+        color: warpColor,
+        width: sizeMultiplier
+      });
+      universeGraphics.drawCircle(fromContainer.x, fromContainer.y, warpRange * scale.universe);
+    }
+    if (jumpRange) {
+      universeGraphics.lineStyle({
+        color: jumpColor,
+        width: sizeMultiplier
+      });
+      universeGraphics.drawCircle(fromContainer.x, fromContainer.y, jumpRange * scale.universe);
+    }
+  }
+};
+var systemTargetingLine = () => {
+  if (GameState.hoveredWaypoint && GameState.selected?.type === "ship" && GameState.hoveredWaypoint.symbol !== GameState.myShips[GameState.selected.symbol].shipData.currentWaypoint.symbol) {
+    console.log("shiptargeting");
+    systemGraphics.clear();
+    systemGraphics.lineStyle({
+      color: 5583871,
+      width: 10
+    });
+    const currentWaypointSymbol = GameState.myShips[GameState.selected.symbol].shipData.currentWaypoint.symbol;
+    const hoveredWaypointSymbol = GameState.hoveredWaypoint.symbol;
+    const fromContainer = GameState.visibleWaypoints[currentWaypointSymbol].container;
+    const toContainer = GameState.visibleWaypoints[hoveredWaypointSymbol].container;
+    systemGraphics.moveTo(fromContainer.x, fromContainer.y);
+    systemGraphics.lineTo(toContainer.x, toContainer.y);
+    const fromData = GameState.visibleWaypoints[currentWaypointSymbol].waypointData;
+    const toData = GameState.visibleWaypoints[hoveredWaypointSymbol].waypointData;
+    systemGraphicsText.x = (toContainer.x - fromContainer.x) / 2;
+    systemGraphicsText.y = (toContainer.y - fromContainer.y) / 2 + 120;
+    systemGraphicsText.text = `Distance ${Math.round(Math.sqrt(Math.pow(fromData.x - toData.x, 2) + Math.pow(fromData.y - toData.y, 2)))}`;
+  }
+};
+
 // src/index.ts
 var app = new Application({
   resizeTo: window
@@ -27583,8 +28473,10 @@ app.stage.on("click", (event) => {
 });
 await loadAssets();
 await createUIElements(app);
+await loadPlayerData();
 var loadedUniverse = await loadUniverse();
 app.ticker.add(() => {
+  const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   if (GameState.currentView == "universe") {
     const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
     currentCoordinate.text = worldCoordinates.x + ", " + worldCoordinates.y;
@@ -27611,11 +28503,13 @@ app.ticker.add(() => {
       }
     });
   }
+  clearGraphics();
+  universeTargetingLine(sizeMultiplier);
+  systemTargetingLine();
   availableActions.forEach((action) => {
     const isAvailable = action.isAvailable();
     actionButton[action.name].disabled = !isAvailable;
   });
-  const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   Object.values(loadedUniverse.systems).forEach((ref) => {
     ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
   });
@@ -27624,24 +28518,34 @@ app.ticker.add(() => {
     if (GameState.selected.type === "ship") {
       const shipInfo = GameState.visibleShips[GameState.selected.symbol].shipData;
       const cooldownTime = new Date(shipInfo.reactorCooldownOn).getTime();
+      const cooldownValue = cooldownTime > Date.now() ? Math.round((cooldownTime - Date.now()) / 1e3) + "s" : "Ready";
+      const navTime = new Date(shipInfo.arrivalOn).getTime();
+      const arrivalValue = navTime > Date.now() ? Math.round((navTime - Date.now()) / 1e3) + "s" : "Ready";
       entityInfo.text = `Entity Information
 Symbol: ${shipInfo.symbol}
 Location: ${shipInfo.currentWaypoint.symbol}
 Fuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}
 Cargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}
-Nav Status: ${shipInfo.navStatus}
-Reactor Cooldown: ${cooldownTime > Date.now() ? Math.round((cooldownTime - Date.now()) / 1e3) + "s" : "Ready"}`;
+Nav Status: ${shipInfo.navStatus} ${arrivalValue}
+Reactor Cooldown: ${cooldownValue}`;
     } else if (GameState.selected.type === "waypoint") {
       const waypointInfo = GameState.visibleWaypoints[GameState.selected.symbol].waypointData;
       entityInfo.text = `Entity Information
 Symbol: ${GameState.selected.symbol}
 Kind: ${waypointInfo.type}
-Traits: ${waypointInfo.traits.length == 0 ? "UNKNOWN" : waypointInfo.traits.map((t2) => t2.name).join(", ")}`;
+Traits: ${waypointInfo.traits.length == 0 ? "UNKNOWN" : waypointInfo.traits.map((t2) => t2.name).join(", ")}
+Faction: ${waypointInfo.factionSymbol}
+Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : "None"}`;
     }
   } else {
     currentSelected.text = `Selected:`;
     entityInfo.text = `Entity Information`;
   }
+  if (universeView.dirty) {
+    universeCuller.cull(universeView.getVisibleBounds());
+    universeView.dirty = false;
+  }
+  fps.text = `FPS: ${Math.round(app.ticker.FPS)}`;
 });
 /*! Bundled license information:
 
@@ -27662,4 +28566,20 @@ punycode/punycode.js:
    * @pixi/filter-glow is licensed under the MIT License.
    * http://www.opensource.org/licenses/mit-license
    *)
+
+pixi-cull/dist/pixi-cull.es.js:
+  (*! *****************************************************************************
+  Copyright (c) Microsoft Corporation.
+  
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+  
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** *)
 */

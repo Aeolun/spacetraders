@@ -2,16 +2,69 @@ import {BitmapText, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
 import { trpc } from '@app/lib/trpc'
 import { makeInteractiveAndSelectable } from "@app/lib/makeInteractiveAndSelectable";
 import {loadedAssets} from "@app/lib/assets";
-import {systemCoordinates, systemScale, totalSize, universeCoordinates} from "@app/lib/consts";
+import {scale, systemCoordinates, systemScale, totalSize, universeCoordinates, universeScale} from "@app/lib/consts";
 import {backButton, systemView, uiOverlay, universeView} from "@app/lib/UIElements";
-import {GameState, WaypointData} from "@app/lib/game-state";
+import {GameState, System, WaypointData} from "@app/lib/game-state";
 import {positionShip, resetShipWaypoints} from "@app/lib/positionShips";
 import {loadSystem} from "@app/lib/loadSystem";
 
+
+const addTraitIcons = (item: any, container: Container) => {
+    let xOffset = 0, hasMarket = false, hasShipyard = false, hasBelt = false
+    item.waypoints.forEach(waypoint => {
+        waypoint.traits.forEach(trait => {
+            if (trait.symbol === 'MARKETPLACE') {
+                hasMarket = true
+            }
+            if (trait.symbol === 'SHIPYARD') {
+                hasShipyard = true
+            }
+            if (trait.symbol === 'COMMON_METAL_DEPOSITS' || trait.symbol === 'PRECIOUS_METAL_DEPOSITS' || trait.symbol === 'MINERAL_DEPOSITS') {
+                hasBelt = true
+            }
+        })
+    })
+    if (hasMarket) {
+        const sprite = new Sprite(loadedAssets.market)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.25}
+        sprite.x = xOffset - 16
+        sprite.y =  24
+        container.addChild(sprite)
+        xOffset += 16
+    }
+    if (hasShipyard) {
+        const sprite = new Sprite(loadedAssets.shipyard)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.24}
+        sprite.x = xOffset - 16
+        sprite.y = 24
+        container.addChild(sprite)
+        xOffset += 16
+    }
+    if (hasBelt) {
+        const sprite = new Sprite(loadedAssets.asteroidBelt)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.24}
+        sprite.x = xOffset - 16
+        sprite.y = 24
+        container.addChild(sprite)
+        xOffset += 16
+    }
+}
 export const loadUniverse = async () => {
     const references: Record<string, Container<DisplayObject>> = {}
 
-    const systems = await trpc.getSystems.query()
+    const systems = await trpc.getSystems.query({})
 
     for(const starData of systems) {
         if (starData.x < universeCoordinates.minX) universeCoordinates.minX = starData.x
@@ -19,6 +72,10 @@ export const loadUniverse = async () => {
         if (starData.y < universeCoordinates.minY) universeCoordinates.minY = starData.y
         if (starData.y > universeCoordinates.maxY) universeCoordinates.maxY = starData.y
     }
+
+    GameState.visibleSystems = {}
+    scale.universe = totalSize/(universeCoordinates.maxX-universeCoordinates.minX)
+
     for(const starData of systems) {
         let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
 
@@ -39,7 +96,20 @@ export const loadUniverse = async () => {
         starContainer.addChild(star)
         starContainer.addChild(text)
 
+        addTraitIcons(starData, starContainer)
+
+        GameState.visibleSystems[starData.symbol] = {
+            systemData: starData,
+            container: starContainer
+        }
+
         makeInteractiveAndSelectable(starContainer, {
+            onMouseOut: () => {
+                GameState.hoveredSystem = undefined
+            },
+            onMouseOver: () => {
+                GameState.hoveredSystem = starData
+            },
             onOrder: [
                 {
                     name: 'Warp',
@@ -47,18 +117,19 @@ export const loadUniverse = async () => {
                     action: async () => {
                         if (GameState.selected?.symbol) {
 
-                            const system = await trpc.dataForDisplay.query({
+                            const waypoints: WaypointData[] = await trpc.waypointsForSystem.query({
                                 system: starData.symbol
                             });
-                            const bestWaypoint = system.waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE')).symbol ?? system.waypoints[0].symbol
+                            console.log('waypoints', waypoints)
+                            const bestWaypoint = waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE'))?.symbol ?? waypoints[0].symbol
                             if (bestWaypoint) {
-                                console.log("warping to first waypoint in", system)
+                                console.log("warping to ", bestWaypoint)
                                 const res = await trpc.instructWarp.mutate({
                                     shipSymbol: GameState.selected.symbol,
                                     waypointSymbol: bestWaypoint
                                 })
 
-                                GameState.visibleShips[res.symbol].shipData = res
+                                GameState.myShips[res.symbol].shipData = res
                             } else {
                                 alert("Cannot warp to system without waypoints, nothing to target")
                             }
@@ -69,7 +140,7 @@ export const loadUniverse = async () => {
         })
 
         starContainer.on('click', () => {
-            loadSystem(starData.symbol)
+            loadSystem(starData)
         })
 
         starContainer.x = (starData.x+Math.abs(universeCoordinates.minX))/(universeCoordinates.maxX-universeCoordinates.minX)*totalSize
@@ -93,10 +164,14 @@ export const loadUniverse = async () => {
     // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
     // graphics.lineTo(references['X1-JQ84'].x, references['X1-JQ84'].y)
 
+    const commandShip = Object.values(GameState.myShips).find(ship => ship.shipData.role === 'COMMAND')
+    const commandShipLocation = commandShip?.shipData.currentWaypoint.systemSymbol
 
     universeView.addChild(graphics)
 
-    // universeView.moveCenter(references['X1-VU95'].x, references['X1-VU95'].y)
+    if (commandShipLocation) {
+        universeView.moveCenter(references[commandShipLocation].x, references[commandShipLocation].y)
+    }
 
     return {
         systems: references

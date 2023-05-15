@@ -1,8 +1,49 @@
 import {prisma} from "@app/prisma";
-import {CreateShipWaypointScan201ResponseData} from "spacetraders-sdk";
+import {
+    CreateShipShipScan201Response,
+    CreateShipShipScan201ResponseData,
+    ScannedWaypoint,
+    Waypoint,
+    CreateShipWaypointScan201ResponseData, GetSystemWaypoints200Response
+} from "spacetraders-sdk";
+import {processShip} from "@app/ship/updateShips";
 
-export async function storeWaypointScan(data: CreateShipWaypointScan201ResponseData) {
-    await Promise.all(data.waypoints.map(async waypoint => {
+export async function storeWaypointScan(systemSymbol: string, data: CreateShipWaypointScan201ResponseData | GetSystemWaypoints200Response) {
+    const waypoints: (Waypoint | ScannedWaypoint)[] = 'waypoints' in data ? data.waypoints : data.data
+    await Promise.all(waypoints.map(async waypoint => {
+        return storeWaypoint(waypoint)
+    }))
+
+    await prisma.system.update({
+        where: {
+            symbol: systemSymbol
+        },
+        data: {
+            waypointsRetrieved: true
+        }
+    })
+
+}
+
+export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
+    if (waypoint.faction) {
+        try {
+            await prisma.faction.upsert({
+                where: {
+                    symbol: waypoint.faction.symbol
+                },
+                create: {
+                    symbol: waypoint.faction.symbol
+                },
+                update: {
+                    symbol: waypoint.faction.symbol
+                },
+            })
+        } catch(error) {
+            console.log("Error creating", waypoint.faction)
+        }
+    }
+    try {
         const updateValues = {
             factionSymbol: waypoint.faction?.symbol,
             chartSubmittedBy: waypoint.chart?.submittedBy,
@@ -43,5 +84,14 @@ export async function storeWaypointScan(data: CreateShipWaypointScan201ResponseD
             },
             update: updateValues
         })
+    } catch(error) {
+        console.error("Issue updating waypoint", error.toString())
+    }
+}
+
+
+export async function storeShipScan(data: CreateShipShipScan201ResponseData) {
+    await Promise.all(data.ships.map(async ship => {
+        return processShip(ship)
     }))
 }

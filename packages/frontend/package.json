@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@spacetraders/backend": "workspace:^1",
     "@pixi/accessibility": "7.2.4",
     "@pixi/app": "7.2.4",
     "@pixi/assets": "7.2.4",
@@ -47,8 +46,10 @@
     "@pixi/text-bitmap": "7.2.4",
     "@pixi/text-html": "7.2.4",
     "@pixi/utils": "^7.2.4",
+    "@spacetraders/backend": "workspace:^1",
     "@trpc/client": "^10.25.1",
     "@trpc/server": "^10.25.1",
+    "pixi-cull": "^2.2.0",
     "pixi-viewport": "^5.0.1",
     "pixi.js": "^7.2.4"
   },

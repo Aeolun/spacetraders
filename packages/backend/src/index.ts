@@ -10,12 +10,14 @@ import api from '@app/lib/apis'
 import { config } from 'dotenv'
 import fs from "fs";
 import { generateName } from "@app/lib/generate-name";
-import {updateShips} from "@app/ship/updateShips";
+import {processAgent, updateShips} from "@app/ship/updateShips";
 import {prisma} from "@app/prisma";
 import {defaultShipStore, ShipStore} from "@app/ship/shipStore";
 import axios from "axios";
 import {agentToken} from "@app/configuration";
 import {seedGameData} from "@app/seed/seedGameData";
+import {storeWaypointScan} from "@app/ship/storeResults";
+import {throttle} from "@app/lib/queue";
 
 config();
 
@@ -63,6 +65,9 @@ const newServerStartup = async () => {
 const init = async () => {
     // await newServerStartup()
 
+    const res = await api.agents.getMyAgent()
+    await processAgent(res.data.data)
+
     try {
         await updateShips()
         const allShips = await prisma.ship.findMany({
@@ -77,6 +82,25 @@ const init = async () => {
     } catch(error) {
         console.log(error?.response?.data ? JSON.stringify(error.response.data, null, 2) : error.toString())
         throw error
+    }
+
+    const waypoint = await api.systems.getWaypoint('X1-XK71', 'X1-XK71-02954F')
+    fs.writeFileSync('specialwaypoint', JSON.stringify(waypoint.data.data, null, 2))
+
+    const systems = await prisma.system.findMany({
+        where: {
+            waypointsRetrieved: false
+        }
+    })
+    let i = 0;
+    for(const system of systems) {
+        await throttle(async () => {
+            i++
+
+            const allWaypoints = await api.systems.getSystemWaypoints(system.symbol, 1, 20)
+            console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol})`)
+            await storeWaypointScan(system.symbol, allWaypoints.data)
+        })
     }
 
     // const jumpData = await api.systems.getJumpGate('X1-VU95', 'X1-VU95-02039Z')

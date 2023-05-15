@@ -1,24 +1,29 @@
 import {trpc} from "@app/lib/trpc";
-import {backButton, systemView, universeView} from "@app/lib/UIElements";
-import {GameState, WaypointData} from "@app/lib/game-state";
+import {backButton, systemGraphics, systemGraphicsText, systemView, universeView} from "@app/lib/UIElements";
+import {GameState, System, WaypointData} from "@app/lib/game-state";
 import {systemCoordinates, systemScale} from "@app/lib/consts";
 import {BitmapText, Container, Graphics, Sprite} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@app/lib/positionShips";
 import {loadedAssets} from "@app/lib/assets";
 import {makeInteractiveAndSelectable} from "@app/lib/makeInteractiveAndSelectable";
 
-export async function loadSystem(systemSymbol: string) {
+export async function loadSystem(starData: System) {
+  const systemSymbol = starData.symbol
   trpc.waypointsForSystem.query({
     system: systemSymbol,
   }).then(waypoints => {
-    console.log('result from query', result)
+    console.log('result from query', waypoints)
+    GameState.currentSystem = starData
     universeView.visible = false
     systemView.visible = true
     GameState.currentView = 'system'
+    systemView.removeChildren()
+    systemView.addChild(systemGraphics)
+    systemView.addChild(systemGraphicsText)
 
     systemCoordinates.minX = 0
     systemCoordinates.minY = 0
-    result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+    waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
       if (item.x < systemCoordinates.minX) {
         systemCoordinates.minX = item.x
       }
@@ -27,6 +32,7 @@ export async function loadSystem(systemSymbol: string) {
       }
     })
 
+    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
     const star = new Sprite(texture)
     star.x = Math.abs(systemCoordinates.minX) * systemScale
     star.y = Math.abs(systemCoordinates.minY) * systemScale
@@ -41,7 +47,7 @@ export async function loadSystem(systemSymbol: string) {
     resetShipWaypoints()
     GameState.visibleShips = {}
     GameState.visibleWaypoints = {}
-    Object.values(GameState.myShips).forEach(data => {
+    Object.values(GameState.myShips).filter(ship => ship.shipData.currentWaypoint.systemSymbol === starData.symbol).forEach(data => {
       const ship = data.shipData
 
       const shipGroup = new Container()
@@ -127,7 +133,7 @@ export async function loadSystem(systemSymbol: string) {
       })
     }
 
-    result.waypoints.filter(item => !item.orbitsSymbol).forEach(item => {
+    waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
       const orbit = new Graphics()
       orbit.lineStyle({
         width: 2,
@@ -138,6 +144,12 @@ export async function loadSystem(systemSymbol: string) {
 
       const itemGroup = new Container()
       makeInteractiveAndSelectable(itemGroup, {
+        onMouseOver: () => {
+          GameState.hoveredWaypoint = item
+        },
+        onMouseOut: () => {
+          GameState.hoveredWaypoint = undefined
+        },
         onSelect: {
           type: 'waypoint',
           symbol: item.symbol,
@@ -178,13 +190,36 @@ export async function loadSystem(systemSymbol: string) {
 
       addTraitIcons(item, itemGroup)
 
-      result.waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol).forEach((orbitingThing, index) => {
+      waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y)).forEach((orbitingThing, index) => {
         const orbitingGroup = new Container()
         makeInteractiveAndSelectable(orbitingGroup, {
+          onMouseOver: () => {
+            console.log('hovered', item)
+            GameState.hoveredWaypoint = orbitingThing
+          },
+          onMouseOut: () => {
+            GameState.hoveredWaypoint = undefined
+          },
           onSelect: {
             type: 'waypoint',
             symbol: orbitingThing.symbol,
           },
+          onOrder: () => {
+            return [
+              {
+                name: "navigate",
+                withSelection: 'ship',
+                action: async (selectedSymbol: string) => {
+                  const res = await trpc.instructNavigate.mutate({
+                    shipSymbol: selectedSymbol,
+                    waypointSymbol: item.symbol,
+                  })
+                  GameState.visibleShips[res.symbol].shipData = res
+                  console.log("updated state for ship "+res.symbol)
+                }
+              }
+            ]
+          }
         })
 
         const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])

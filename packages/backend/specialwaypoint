@@ -1,0 +1,15 @@
+{
+  "systemSymbol": "X1-XK71",
+  "symbol": "X1-XK71-02954F",
+  "type": "ASTEROID_FIELD",
+  "x": -66,
+  "y": -37,
+  "orbitals": [],
+  "traits": [
+    {
+      "symbol": "STRIPPED",
+      "name": "Stripped",
+      "description": "A waypoint that has been heavily exploited for its resources, leaving a scarred and depleted landscape with diminished opportunities for future development."
+    }
+  ]
+}

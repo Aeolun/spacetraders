@@ -1,6 +1,8 @@
 import {GameState} from "@app/lib/game-state";
 import {trpc} from "@app/lib/trpc";
 import {FederatedPointerEvent} from "pixi.js";
+import {loadSystem} from "@app/lib/loadSystem";
+import {updateCredits} from "@app/lib/loadPlayerData";
 
 export const availableActions: {
     name: string
@@ -14,12 +16,13 @@ export const availableActions: {
             const refuel = await trpc.instructRefuel.mutate({
                 shipSymbol: GameState.selected.symbol
             })
-            GameState.visibleShips[refuel.symbol].shipData = refuel
+            GameState.myShips[refuel.symbol].shipData = refuel
+            await updateCredits()
         }
     },
     isAvailable: () => {
         if (GameState.selected?.type === 'ship') {
-            const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
             return selectedShip.fuelAvailable < selectedShip.fuelCapacity && selectedShip.navStatus === 'DOCKED'
         }
         return false
@@ -33,12 +36,12 @@ export const availableActions: {
                 shipSymbol: GameState.selected.symbol
             })
             console.log('dockresult', dock)
-            GameState.visibleShips[dock.symbol].shipData = dock
+            GameState.myShips[dock.symbol].shipData = dock
         }
     },
     isAvailable: () => {
         if (GameState.selected?.type === 'ship') {
-            const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
             return selectedShip.navStatus === 'IN_ORBIT' || (selectedShip.navStatus === 'IN_TRANSIT' && new Date(selectedShip.arrivalOn).getTime() < Date.now())
         }
         return false
@@ -51,12 +54,12 @@ export const availableActions: {
             const orbit = await trpc.instructOrbit.mutate({
                 shipSymbol: GameState.selected.symbol
             })
-            GameState.visibleShips[orbit.symbol].shipData = orbit
+            GameState.myShips[orbit.symbol].shipData = orbit
         }
     },
     isAvailable: () => {
         if (GameState.selected?.type === 'ship') {
-            const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
             return selectedShip.navStatus === 'DOCKED'
         }
         return false
@@ -70,29 +73,59 @@ export const availableActions: {
         return false
     }
 }, {
-    name: 'Scan Wpt',
+    name: 'Chart',
     action: async (event) => {
         event.stopPropagation();
         if (GameState.selected) {
-            const waypoints = await trpc.instructScanWaypoints.mutate({
+            const orbit = await trpc.instructChart.mutate({
                 shipSymbol: GameState.selected.symbol
             })
-            GameState.visibleShips[waypoints.symbol].shipData = waypoints
+            GameState.myShips[orbit.symbol].shipData = orbit
         }
     },
     isAvailable: () => {
         if (GameState.selected?.type === 'ship') {
-            const selectedShip = GameState.visibleShips[GameState.selected.symbol].shipData
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
+            return selectedShip.navStatus === 'IN_ORBIT' && !GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.chartSubmittedBy
+        }
+        return false
+    }
+}, {
+    name: 'Scan Wpt',
+    action: async (event) => {
+        event.stopPropagation();
+        if (GameState.selected && GameState.currentSystem) {
+            const waypoints = await trpc.instructScanWaypoints.mutate({
+                shipSymbol: GameState.selected.symbol
+            })
+            GameState.myShips[waypoints.symbol].shipData = waypoints
+            await loadSystem(GameState.currentSystem)
+        }
+    },
+    isAvailable: () => {
+        if (GameState.selected?.type === 'ship') {
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
             return selectedShip.navStatus === 'IN_ORBIT' && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime()
         }
         return false
     }
 }, {
     name: 'Scan Shp',
-    action: () => {
-
+    action: async (event) => {
+        event.stopPropagation();
+        if (GameState.selected && GameState.currentSystem) {
+            const waypoints = await trpc.instructScanShips.mutate({
+                shipSymbol: GameState.selected.symbol
+            })
+            GameState.myShips[waypoints.symbol].shipData = waypoints
+            await loadSystem(GameState.currentSystem)
+        }
     },
     isAvailable: () => {
+        if (GameState.selected?.type === 'ship') {
+            const selectedShip = GameState.myShips[GameState.selected.symbol].shipData
+            return selectedShip.navStatus === 'IN_ORBIT' && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime() && selectedShip.mounts.filter(m => m.effectName === 'SENSOR_ARRAY').length > 0
+        }
         return false
     }
 }]

@@ -1,3 +1,3 @@
 import ThrottledQueue from 'throttled-queue'
 
-export const throttle = ThrottledQueue(1, 1000);
+export const throttle = ThrottledQueue(1, 600);

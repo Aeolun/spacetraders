@@ -1,7 +1,7 @@
 import {Container, DisplayObject} from "pixi.js";
 import {GlowFilter} from "@pixi/filter-glow";
 import {EventEmitter} from "@pixi/utils";
-import {GameState} from "@app/lib/game-state";
+import {GameState, SelectedType} from "@app/lib/game-state";
 
 export const deselectListeners = new EventEmitter()
 
@@ -11,9 +11,13 @@ export function makeInteractiveAndSelectable(item: DisplayObject, options?: {
     onSelect?: GameState['selected'],
     onOrder?: {
         name: string,
-        withSelection?: GameState["selected"]['type']
+        withSelection?: SelectedType
         action: (selectedSymbol: string) => void
-    }[]
+    }[] | (() => {
+        name: string,
+        withSelection?: SelectedType
+        action: (selectedSymbol: string) => void
+    }[])
     }) {
     item.interactive = true;
 

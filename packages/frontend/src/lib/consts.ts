@@ -10,3 +10,6 @@ export let systemCoordinates = {
     minX: 0,
     minY: 0
 }
+export const scale = {
+    universe: 1
+}

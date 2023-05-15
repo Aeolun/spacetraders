@@ -11,6 +11,7 @@ export let loadedAssets: {
     starTexture: Texture,
     spaceshipTexture: Texture,
     panel: Texture
+    asteroidBelt: Texture
     button: Texture
     panelBg: Texture
     shipyard: Texture
@@ -27,6 +28,7 @@ export async function loadAssets() {
     const navArrow = await Assets.load('navarrow.png');
     const starTexture: Texture = await Assets.load('stars.png');
     const shipyard: Texture = await Assets.load('shipyard.png');
+    const asteroidBelt: Texture = await Assets.load('asteroid_belt.png');
     const market: Texture = await Assets.load('money-bag-xxl.png');
     const spaceshipTexture: Texture = await Assets.load('spaceship.png');
 
@@ -40,6 +42,7 @@ export async function loadAssets() {
         navArrow,
         starTexture,
         spaceshipTexture,
+        asteroidBelt,
         shipyard,
         market,
         panel: await Assets.load("ui/panel.png"),
