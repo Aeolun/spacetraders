@@ -1,0 +1,180 @@
+{
+  "symbol": "X1-MS17-31513F",
+  "imports": [
+    {
+      "symbol": "IRON",
+      "name": "Iron",
+      "description": "A common and valuable metal often used in the construction of ship hulls and other structural components."
+    },
+    {
+      "symbol": "MACHINERY",
+      "name": "Machinery",
+      "description": "A variety of mechanical devices and equipment, used for industrial, construction, and other practical purposes."
+    },
+    {
+      "symbol": "FABRICS",
+      "name": "Synthetic Fabrics",
+      "description": "High-tech fabrics used in the production of clothing and other products for everyday use."
+    }
+  ],
+  "exports": [
+    {
+      "symbol": "MODULE_CARGO_HOLD_I",
+      "name": "Cargo Hold",
+      "description": "A module that increases a ship's cargo capacity."
+    },
+    {
+      "symbol": "MODULE_CREW_QUARTERS_I",
+      "name": "Crew Quarters",
+      "description": "A module that provides living space and amenities for the crew."
+    },
+    {
+      "symbol": "MODULE_ENVOY_QUARTERS_I",
+      "name": "Envoy Quarters",
+      "description": "A module that provides living space and amenities for VIP passengers or diplomatic envoys."
+    },
+    {
+      "symbol": "MODULE_MINERAL_PROCESSOR_I",
+      "name": "Mineral Processor",
+      "description": "Crushes and processes extracted minerals and ores into their component parts, filters out impurities, and containerizes them into raw storage units."
+    },
+    {
+      "symbol": "MODULE_PASSENGER_CABIN_I",
+      "name": "Passenger Cabin",
+      "description": "A module that provides living space and amenities for passengers."
+    },
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    }
+  ],
+  "exchange": [
+    {
+      "symbol": "SHIP_PLATING",
+      "name": "Ship Plating",
+      "description": "High-quality metal plating used in the construction of ship hulls and other structural components."
+    },
+    {
+      "symbol": "MODULE_ORE_REFINERY_I",
+      "name": "Ore Refinery",
+      "description": "A specialized module that can refine raw ores into usable metals and other materials."
+    },
+    {
+      "symbol": "MODULE_FUEL_REFINERY_I",
+      "name": "Fuel Refinery",
+      "description": "A specialized module that can process various fuels and raw materials into usable energy sources."
+    },
+    {
+      "symbol": "MODULE_WARP_DRIVE_I",
+      "name": "Warp Drive I",
+      "description": "A basic warp drive that allows for short-range interstellar travel."
+    },
+    {
+      "symbol": "MODULE_SHIELD_GENERATOR_I",
+      "name": "Shield Generator",
+      "description": "A basic shield generator that provides protection against incoming weapons fire and other hazards."
+    }
+  ],
+  "transactions": [],
+  "tradeGoods": [
+    {
+      "symbol": "SHIP_PLATING",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 385,
+      "sellPrice": 349
+    },
+    {
+      "symbol": "MODULE_CARGO_HOLD_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 5036,
+      "sellPrice": 2518
+    },
+    {
+      "symbol": "IRON",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 230,
+      "sellPrice": 153
+    },
+    {
+      "symbol": "MACHINERY",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 870,
+      "sellPrice": 580
+    },
+    {
+      "symbol": "MODULE_CREW_QUARTERS_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 10909,
+      "sellPrice": 5455
+    },
+    {
+      "symbol": "FABRICS",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 117,
+      "sellPrice": 78
+    },
+    {
+      "symbol": "MODULE_ENVOY_QUARTERS_I",
+      "tradeVolume": 10,
+      "supply": "ABUNDANT",
+      "purchasePrice": 14111,
+      "sellPrice": 7056
+    },
+    {
+      "symbol": "MODULE_MINERAL_PROCESSOR_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 4615,
+      "sellPrice": 2308
+    },
+    {
+      "symbol": "MODULE_PASSENGER_CABIN_I",
+      "tradeVolume": 10,
+      "supply": "ABUNDANT",
+      "purchasePrice": 12347,
+      "sellPrice": 6174
+    },
+    {
+      "symbol": "MODULE_ORE_REFINERY_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 25916,
+      "sellPrice": 23448
+    },
+    {
+      "symbol": "MODULE_FUEL_REFINERY_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 21329,
+      "sellPrice": 19297
+    },
+    {
+      "symbol": "MODULE_WARP_DRIVE_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 34832,
+      "sellPrice": 31514
+    },
+    {
+      "symbol": "MODULE_SHIELD_GENERATOR_I",
+      "tradeVolume": 10,
+      "supply": "MODERATE",
+      "purchasePrice": 28322,
+      "sellPrice": 25624
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 10000,
+      "supply": "MODERATE",
+      "purchasePrice": 205,
+      "sellPrice": 103
+    }
+  ]
+}

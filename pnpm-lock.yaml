@@ -2,36 +2,7 @@ lockfileVersion: 5.4
 
 importers:
 
-  packages/backend:
-    specifiers:
-      '@prisma/client': 4.14.0
-      '@trpc/server': ^10.25.1
-      '@types/node': ^12.11.5
-      axios: ^0.27.2
-      cors: ^2.8.5
-      dotenv: ^16.0.3
-      prisma: ^4.14.0
-      spacetraders-sdk: workspace:^2
-      throttled-queue: ^2.1.4
-      tsx: ^3.12.7
-      typescript: ^5
-      zod: ^3.21.4
-    dependencies:
-      '@prisma/client': 4.14.0_prisma@4.14.0
-      '@trpc/server': 10.25.1
-      axios: 0.27.2
-      cors: 2.8.5
-      dotenv: 16.0.3
-      prisma: 4.14.0
-      spacetraders-sdk: link:../spacetraders-sdk
-      throttled-queue: 2.1.4
-      zod: 3.21.4
-    devDependencies:
-      '@types/node': 12.20.55
-      tsx: 3.12.7
-      typescript: 5.0.4
-
-  packages/frontend:
+  packages/app:
     specifiers:
       '@pixi/accessibility': 7.2.4
       '@pixi/app': 7.2.4
@@ -66,15 +37,26 @@ importers:
       '@pixi/text-bitmap': 7.2.4
       '@pixi/text-html': 7.2.4
       '@pixi/utils': ^7.2.4
-      '@spacetraders/backend': workspace:^1
+      '@prisma/client': 4.14.0
       '@trpc/client': ^10.25.1
       '@trpc/server': ^10.25.1
+      '@types/node': ^12.11.5
+      axios: ^0.27.2
+      cors: ^2.8.5
+      dijkstra-calculator: ^1.0.8
+      dotenv: ^16.0.3
       esbuild: ^0.17.18
       npm-run-all: ^4.1.5
       pixi-cull: ^2.2.0
       pixi-viewport: ^5.0.1
       pixi.js: ^7.2.4
+      prisma: ^4.14.0
       serve: ^14.2.0
+      spacetraders-sdk: workspace:^2
+      throttled-queue: ^2.1.4
+      tsx: ^3.12.7
+      typescript: ^5
+      zod: ^3.21.4
     dependencies:
       '@pixi/accessibility': 7.2.4_apmmhdndg7szcc4swgeztfmmb4
       '@pixi/app': 7.2.4_itsaoqwq56fcz2brnb773dvv24
@@ -109,27 +91,38 @@ importers:
       '@pixi/text-bitmap': 7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq
       '@pixi/text-html': 7.2.4_pfkygx3sh74zn4sfwd3cwz7as4
       '@pixi/utils': 7.2.4
-      '@spacetraders/backend': link:../backend
+      '@prisma/client': 4.14.0_prisma@4.14.0
       '@trpc/client': 10.25.1_@trpc+server@10.25.1
       '@trpc/server': 10.25.1
+      axios: 0.27.2
+      cors: 2.8.5
+      dijkstra-calculator: 1.0.8
+      dotenv: 16.0.3
       pixi-cull: 2.2.0_pixi.js@7.2.4
       pixi-viewport: 5.0.1
       pixi.js: 7.2.4_@pixi+utils@7.2.4
+      prisma: 4.14.0
+      spacetraders-sdk: link:../spacetraders-sdk
+      throttled-queue: 2.1.4
+      zod: 3.21.4
     devDependencies:
+      '@types/node': 12.20.55
       esbuild: 0.17.18
       npm-run-all: 4.1.5
       serve: 14.2.0
+      tsx: 3.12.7
+      typescript: 5.0.4
 
   packages/spacetraders-sdk:
     specifiers:
       '@types/node': ^12.11.5
       axios: ^0.27.2
-      typescript: ^5
+      typescript: ^4.0
     dependencies:
       axios: 0.27.2
     devDependencies:
       '@types/node': 12.20.55
-      typescript: 5.0.4
+      typescript: 4.9.5
 
   packages/spacetraders-sdk-generator:
     specifiers:
@@ -1414,6 +1407,11 @@ packages:
   /delayed-stream/1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
+
+  /dijkstra-calculator/1.0.8:
+    resolution: {integrity: sha512-Szu3sB985R4bWsWK11Ce6phG1m6iNA64/Ce6jS8rn1RXGCiV8D9qfXCWpxWSU3VcNo7m0up7vzXrHUz8LEy/pg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
@@ -2905,6 +2903,12 @@ packages:
       call-bind: 1.0.2
       for-each: 0.3.3
       is-typed-array: 1.1.10
+    dev: true
+
+  /typescript/4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
     dev: true
 
   /typescript/5.0.4:

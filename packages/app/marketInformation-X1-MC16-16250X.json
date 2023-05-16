@@ -1,0 +1,60 @@
+{
+  "symbol": "X1-MC16-16250X",
+  "imports": [
+    {
+      "symbol": "SILICON_CRYSTALS",
+      "name": "Silicon Crystals",
+      "description": "High-quality silicon crystals used in the production of advanced electronic components and solar panels."
+    },
+    {
+      "symbol": "QUARTZ_SAND",
+      "name": "Quartz Sand",
+      "description": "High-purity quartz sand used in the production of glass and ceramics."
+    }
+  ],
+  "exports": [
+    {
+      "symbol": "MICROPROCESSORS",
+      "name": "Microprocessors",
+      "description": "High-powered and energy-efficient microprocessors used in advanced electronic devices and systems."
+    }
+  ],
+  "exchange": [
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    }
+  ],
+  "transactions": [],
+  "tradeGoods": [
+    {
+      "symbol": "MICROPROCESSORS",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 566,
+      "sellPrice": 283
+    },
+    {
+      "symbol": "SILICON_CRYSTALS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 54,
+      "sellPrice": 36
+    },
+    {
+      "symbol": "QUARTZ_SAND",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 32,
+      "sellPrice": 21
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 100,
+      "supply": "MODERATE",
+      "purchasePrice": 214,
+      "sellPrice": 194
+    }
+  ]
+}
