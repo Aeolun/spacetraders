@@ -3,8 +3,16 @@ import z from 'zod'
 import {prisma} from "@app/prisma";
 import {defaultShipStore} from "@app/ship/shipStore";
 import {ShipNavFlightMode} from "spacetraders-sdk";
+import {initAgent} from "@app/agent/init-agent";
 
 export const appRouter = router({
+    initUserData: publicProcedure.mutation(async ({input, ctx}) => {
+        await initAgent(ctx.token)
+
+        return {
+            success: true
+        }
+    }),
     waypointsForSystem: publicProcedure.input(z.object({
         system: z.string()
     })).query(async ({input}) => {
@@ -41,13 +49,25 @@ export const appRouter = router({
             }
         })
     }),
-    getAgentInfo: publicProcedure.query(async () => {
-        return prisma.agent.findFirst({})
+    updateAgentInfo: publicProcedure.mutation(async ({ctx}) => {
+        await initAgent(ctx.token)
+        return prisma.agent.findFirst({
+            where: {
+                symbol: ctx.payload.identifier
+            }
+        })
     }),
-    getMyShips: publicProcedure.query(async () => {
+    getAgentInfo: publicProcedure.query(async ({ctx}) => {
+        return prisma.agent.findFirst({
+            where: {
+                symbol: ctx.payload.identifier
+            }
+        })
+    }),
+    getMyShips: publicProcedure.query(async ({ctx}) => {
        return prisma.ship.findMany({
            where: {
-               agent: 'PHANTASM'
+               agent: ctx.payload.identifier
            },
            include: {
                currentWaypoint: true,
@@ -72,83 +92,112 @@ export const appRouter = router({
             }
         })
     }),
+    getMarketInfo: publicProcedure.input(z.object({
+        waypoint: z.string()
+    })).query(async ({input}) => {
+        return prisma.marketPrice.findMany({
+            where: {
+                waypointSymbol: input.waypoint
+            },
+            include: {
+                tradeGood: true
+            }
+        })
+    }),
     instructNavigate: publicProcedure.input(z.object({
         shipSymbol: z.string(),
         waypointSymbol: z.string()
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.navigate(input.waypointSymbol, false)
     }),
     instructWarp: publicProcedure.input(z.object({
         shipSymbol: z.string(),
         waypointSymbol: z.string()
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.warp(input.waypointSymbol, false)
+    }),
+    instructJump: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        systemSymbol: z.string()
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
+        return ship.jump(input.systemSymbol, false)
     }),
     instructRefuel: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.refuel()
     }),
     instructPatchNavigate: publicProcedure.input(z.object({
         shipSymbol: z.string(),
         navMode: z.string()
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.navigateMode(input.navMode as ShipNavFlightMode)
     }),
     instructOrbit: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.orbit()
     }),
     instructChart: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.chart()
     }),
     instructDock: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.dock()
     }),
     instructScanWaypoints: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.scanWaypoints()
     }),
     instructScanShips: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.scanShips()
     }),
     instructSellCargo: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.sellAllCargo()
     }),
     instructExtract: publicProcedure.input(z.object({
         shipSymbol: z.string(),
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         return ship.extract()
     }),
     instructMarket: publicProcedure.input(z.object({
         shipSymbol: z.string(),
         systemSymbol: z.string(),
         waypointSymbol: z.string()
-    })).mutation(async ({input}) => {
-        const ship = defaultShipStore.getShip(input.shipSymbol)
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
         ship.setCurrentLocation(input.systemSymbol, input.waypointSymbol)
         return ship.market()
+    }),
+
+    instructShipyard: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        systemSymbol: z.string(),
+        waypointSymbol: z.string()
+    })).mutation(async ({input, ctx}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
+        ship.setCurrentLocation(input.systemSymbol, input.waypointSymbol)
+        return ship.shipyard()
     })
 });
 

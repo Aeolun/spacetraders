@@ -9,6 +9,13 @@ import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelecta
 
 export async function loadSystem(starData: System) {
   const systemSymbol = starData.symbol
+  await trpc.shipsForSystem.query({
+    system: systemSymbol
+  }).then(ships => {
+    ships.forEach(ship => {
+      GameState.shipData[ship.symbol] = ship
+    })
+  })
   trpc.waypointsForSystem.query({
     system: systemSymbol,
   }).then(waypoints => {
@@ -47,12 +54,14 @@ export async function loadSystem(starData: System) {
     resetShipWaypoints()
     GameState.systemShips = {}
     GameState.visibleWaypoints = {}
+
     Object.values(GameState.shipData).filter(ship => ship.currentWaypoint.systemSymbol === starData.symbol).forEach(data => {
       const ship = data
 
       const shipGroup = new Container()
 
       const itemSprite = new Sprite(loadedAssets.spaceshipTexture)
+      itemSprite.name = 'ship'
       itemSprite.pivot = {
         x: 32,
         y: 32
@@ -70,6 +79,10 @@ export async function loadSystem(starData: System) {
       const shipPosition = positionShip(ship)
       shipGroup.x = shipPosition.x
       shipGroup.y = shipPosition.y
+
+      if (data.agent !== GameState.agent.symbol) {
+        itemSprite.tint = 0xDD9999
+      }
 
       shipGroup.addChild(itemSprite)
 

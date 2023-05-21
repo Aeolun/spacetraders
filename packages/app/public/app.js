@@ -3695,7 +3695,7 @@ var _BaseTexture = class extends import_eventemitter3.default {
       width,
       height,
       wrapMode,
-      format: format2,
+      format: format3,
       type,
       target,
       resolution,
@@ -3712,7 +3712,7 @@ var _BaseTexture = class extends import_eventemitter3.default {
     this.anisotropicLevel = anisotropicLevel;
     this._wrapMode = wrapMode;
     this._scaleMode = scaleMode;
-    this.format = format2;
+    this.format = format3;
     this.type = type;
     this.target = target;
     this.alphaMode = alphaMode;
@@ -17715,28 +17715,28 @@ var CompressedTextureResource = class extends BlobResource {
   onBlobLoaded() {
     this._levelBuffers = CompressedTextureResource._createLevelBuffers(this.buffer.uint8View, this.format, this.levels, 4, 4, this.width, this.height);
   }
-  static _formatToExtension(format2) {
-    if (format2 >= 33776 && format2 <= 33779) {
+  static _formatToExtension(format3) {
+    if (format3 >= 33776 && format3 <= 33779) {
       return "s3tc";
-    } else if (format2 >= 37488 && format2 <= 37497) {
+    } else if (format3 >= 37488 && format3 <= 37497) {
       return "etc";
-    } else if (format2 >= 35840 && format2 <= 35843) {
+    } else if (format3 >= 35840 && format3 <= 35843) {
       return "pvrtc";
-    } else if (format2 >= 36196) {
+    } else if (format3 >= 36196) {
       return "etc1";
-    } else if (format2 >= 35986 && format2 <= 34798) {
+    } else if (format3 >= 35986 && format3 <= 34798) {
       return "atc";
     }
     throw new Error("Invalid (compressed) texture format given!");
   }
-  static _createLevelBuffers(buffer, format2, levels, blockWidth, blockHeight, imageWidth, imageHeight) {
+  static _createLevelBuffers(buffer, format3, levels, blockWidth, blockHeight, imageWidth, imageHeight) {
     const buffers = new Array(levels);
     let offset = buffer.byteOffset;
     let levelWidth = imageWidth;
     let levelHeight = imageHeight;
     let alignedLevelWidth = levelWidth + blockWidth - 1 & ~(blockWidth - 1);
     let alignedLevelHeight = levelHeight + blockHeight - 1 & ~(blockHeight - 1);
-    let levelSize = alignedLevelWidth * alignedLevelHeight * INTERNAL_FORMAT_TO_BYTES_PER_PIXEL[format2];
+    let levelSize = alignedLevelWidth * alignedLevelHeight * INTERNAL_FORMAT_TO_BYTES_PER_PIXEL[format3];
     for (let i2 = 0; i2 < levels; i2++) {
       buffers[i2] = {
         levelID: i2,
@@ -17749,7 +17749,7 @@ var CompressedTextureResource = class extends BlobResource {
       levelHeight = levelHeight >> 1 || 1;
       alignedLevelWidth = levelWidth + blockWidth - 1 & ~(blockWidth - 1);
       alignedLevelHeight = levelHeight + blockHeight - 1 & ~(blockHeight - 1);
-      levelSize = alignedLevelWidth * alignedLevelHeight * INTERNAL_FORMAT_TO_BYTES_PER_PIXEL[format2];
+      levelSize = alignedLevelWidth * alignedLevelHeight * INTERNAL_FORMAT_TO_BYTES_PER_PIXEL[format3];
     }
     return buffers;
   }
@@ -18094,8 +18094,8 @@ function validate(url2, dataView) {
   }
   return true;
 }
-function convertFormatToInteger(format2) {
-  switch (format2) {
+function convertFormatToInteger(format3) {
+  switch (format3) {
     case FORMATS.RGBA:
       return FORMATS.RGBA_INTEGER;
     case FORMATS.RGB:
@@ -18105,7 +18105,7 @@ function convertFormatToInteger(format2) {
     case FORMATS.RED:
       return FORMATS.RED_INTEGER;
     default:
-      return format2;
+      return format3;
   }
 }
 function parseKvData(dataView, bytesOfKeyValueData, littleEndian) {
@@ -18261,12 +18261,12 @@ var _Extract = class {
   constructor(renderer) {
     this.renderer = renderer;
   }
-  async image(target, format2, quality) {
+  async image(target, format3, quality) {
     const image = new Image();
-    image.src = await this.base64(target, format2, quality);
+    image.src = await this.base64(target, format3, quality);
     return image;
   }
-  async base64(target, format2, quality) {
+  async base64(target, format3, quality) {
     const canvas = this.canvas(target);
     if (canvas.toBlob !== void 0) {
       return new Promise((resolve2, reject) => {
@@ -18279,14 +18279,14 @@ var _Extract = class {
           reader.onload = () => resolve2(reader.result);
           reader.onerror = reject;
           reader.readAsDataURL(blob);
-        }, format2, quality);
+        }, format3, quality);
       });
     }
     if (canvas.toDataURL !== void 0) {
-      return canvas.toDataURL(format2, quality);
+      return canvas.toDataURL(format3, quality);
     }
     if (canvas.convertToBlob !== void 0) {
-      const blob = await canvas.convertToBlob({ type: format2, quality });
+      const blob = await canvas.convertToBlob({ type: format3, quality });
       return new Promise((resolve2, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve2(reader.result);
@@ -22739,8 +22739,8 @@ var spritesheetAsset = {
       const tempURL = value.split("?")[0];
       const split = tempURL.split(".");
       const extension = split.pop();
-      const format2 = split.pop();
-      return extension === "json" && validImages.includes(format2);
+      const format3 = split.pop();
+      return extension === "json" && validImages.includes(format3);
     },
     parse: (value) => {
       const split = value.split(".");
@@ -23191,11 +23191,11 @@ var _BitmapFont = class {
     if (data instanceof BitmapFontData) {
       fontData = data;
     } else {
-      const format2 = autoDetectFormat(data);
-      if (!format2) {
+      const format3 = autoDetectFormat(data);
+      if (!format3) {
         throw new Error("Unrecognized data format for font.");
       }
-      fontData = format2.parse(data);
+      fontData = format3.parse(data);
     }
     if (textures instanceof Texture) {
       textures = [textures];
@@ -25230,7 +25230,12 @@ var experimental_formDataLink = httpLinkFactory({
 var trpc = createTRPCProxyClient({
   links: [
     httpBatchLink({
-      url: "http://localhost:4001"
+      url: "http://localhost:4001",
+      async headers() {
+        return {
+          authorization: "Bearer " + localStorage.getItem("agent-token")
+        };
+      }
     })
   ]
 });
@@ -25356,11 +25361,19 @@ l2.defaults = { distance: 10, outerStrength: 4, innerStrength: 0, color: 1677721
 
 // src/frontend/lib/game-state.ts
 var GameState = {
+  agent: {
+    symbol: "",
+    credits: 0
+  },
   currentView: "universe",
   currentSystem: void 0,
   selected: void 0,
   systemShips: {},
-  shipData: {}
+  shipData: {},
+  visibleWaypoints: {},
+  visibleSystems: {},
+  universeShips: {},
+  currentMarket: void 0
 };
 
 // src/frontend/lib/makeInteractiveAndSelectable.ts
@@ -27079,14 +27092,15 @@ function positionShip(ship) {
     serverY = ship.departureWaypoint.y + (ship.destinationWaypoint.y - ship.departureWaypoint.y) * positionAlongPath;
     navRot = Math.atan2(ship.destinationWaypoint.y - ship.departureWaypoint.y, ship.destinationWaypoint.x - ship.departureWaypoint.x) + Math.PI / 2;
   } else {
-    if (waypointShips[ship.currentWaypoint.symbol] === void 0) {
-      waypointShips[ship.currentWaypoint.symbol] = 0;
+    const orbitSymbol = ship.currentWaypoint.orbitsSymbol ? ship.currentWaypoint.orbitsSymbol : ship.currentWaypoint.symbol;
+    if (waypointShips[orbitSymbol] === void 0) {
+      waypointShips[orbitSymbol] = 0;
     } else {
-      waypointShips[ship.currentWaypoint.symbol]++;
+      waypointShips[orbitSymbol]++;
     }
     serverX = ship.currentWaypoint.x;
     serverY = ship.currentWaypoint.y;
-    xOffset = 32 * waypointShips[ship.currentWaypoint.symbol];
+    xOffset = 32 * waypointShips[orbitSymbol];
     yOffset = 80;
   }
   const x2 = serverX * systemScale + xOffset + Math.abs(systemCoordinates.minX) * systemScale;
@@ -27133,6 +27147,13 @@ function positionUniverseShip(ship) {
 // src/frontend/lib/loadSystem.ts
 async function loadSystem(starData) {
   const systemSymbol = starData.symbol;
+  await trpc.shipsForSystem.query({
+    system: systemSymbol
+  }).then((ships) => {
+    ships.forEach((ship) => {
+      GameState.shipData[ship.symbol] = ship;
+    });
+  });
   trpc.waypointsForSystem.query({
     system: systemSymbol
   }).then((waypoints) => {
@@ -27171,6 +27192,7 @@ async function loadSystem(starData) {
       const ship = data;
       const shipGroup = new Container();
       const itemSprite = new Sprite(loadedAssets.spaceshipTexture);
+      itemSprite.name = "ship";
       itemSprite.pivot = {
         x: 32,
         y: 32
@@ -27187,6 +27209,9 @@ async function loadSystem(starData) {
       const shipPosition = positionShip(ship);
       shipGroup.x = shipPosition.x;
       shipGroup.y = shipPosition.y;
+      if (data.agent !== GameState.agent.symbol) {
+        itemSprite.tint = 14522777;
+      }
       shipGroup.addChild(itemSprite);
       const text = new BitmapText(ship.symbol + " - " + ship.role, {
         fontName: "sans-serif",
@@ -27361,6 +27386,7 @@ async function loadSystem(starData) {
 
 // src/frontend/lib/loadPlayerData.ts
 async function loadPlayerData() {
+  await trpc.updateAgentInfo.mutate();
   const ships = await trpc.getMyShips.query();
   console.log("my ships", ships);
   ships.forEach((ship) => {
@@ -27370,7 +27396,7 @@ async function loadPlayerData() {
 }
 async function updateCredits() {
   const agent = await trpc.getAgentInfo.query();
-  credits.text = `${agent.credits}`;
+  GameState.agent = agent;
 }
 
 // src/frontend/lib/availableActions.ts
@@ -27547,6 +27573,28 @@ var availableActions = [{
       const selectedShip = GameState.shipData[GameState.selected.symbol];
       if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
         return selectedShip.navStatus === "DOCKED" && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter((t2) => t2.symbol === "MARKETPLACE").length > 0;
+      }
+    }
+    return false;
+  }
+}, {
+  name: "Shipyard",
+  action: async (event) => {
+    event.stopPropagation();
+    if (GameState.selected && GameState.currentSystem) {
+      const market = await trpc.instructShipyard.mutate({
+        shipSymbol: GameState.selected.symbol,
+        systemSymbol: GameState.currentSystem.symbol,
+        waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+      });
+      console.log(market);
+    }
+  },
+  isAvailable: () => {
+    if (GameState.selected?.type === "ship" && GameState.visibleWaypoints) {
+      const selectedShip = GameState.shipData[GameState.selected.symbol];
+      if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
+        return selectedShip.navStatus === "DOCKED" && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter((t2) => t2.symbol === "SHIPYARD").length > 0;
       }
     }
     return false;
@@ -28165,7 +28213,6 @@ var systemView;
 var uiOverlay;
 var currentCoordinate;
 var fps;
-var currentSelected;
 var credits;
 var backButton;
 var actionButton = {};
@@ -28276,13 +28323,19 @@ var createUIElements = (app2) => {
   backButton.x = 16;
   backButton.visible = false;
   panelBg.addChild(backButton);
+  const creditsBackground = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10);
+  creditsBackground.x = 8;
+  creditsBackground.width = 384;
+  creditsBackground.height = 80;
+  creditsBackground.y = 100;
+  panelBg.addChild(creditsBackground);
   const creditsLabel = new BitmapText("Credits", {
     fontName: "buttontext_white",
     tint: 65280,
     fontSize: 16
   });
   creditsLabel.x = 16;
-  creditsLabel.y = 180;
+  creditsLabel.y = 120;
   panelBg.addChild(creditsLabel);
   credits = new BitmapText("0", {
     fontName: "segment",
@@ -28291,7 +28344,7 @@ var createUIElements = (app2) => {
     tint: 65280
   });
   credits.x = 16;
-  credits.y = 200;
+  credits.y = 132;
   panelBg.addChild(credits);
   const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64;
   availableActions.forEach((action, index) => {
@@ -28319,7 +28372,7 @@ var createUIElements = (app2) => {
       GameState.shipData[GameState.selected.symbol].shipData = newShip;
     }
   });
-  cruiseModeSelect.visible = false;
+  cruiseModeSelect.visible = true;
   cruiseModeSelect.y = actionPanelY - 64;
   cruiseModeSelect.x = 16;
   panelBg.addChild(cruiseModeSelect);
@@ -28328,7 +28381,7 @@ var createUIElements = (app2) => {
   statsBlock.x = 8;
   statsBlock.width = 384;
   statsBlock.height = 200;
-  statsBlock.y = window.innerHeight - 556;
+  statsBlock.y = window.innerHeight - 656;
   panelBg.addChild(statsBlock);
   entityInfo = new BitmapText("Entity Information", {
     fontName: "buttontext_white",
@@ -28338,7 +28391,7 @@ var createUIElements = (app2) => {
     maxWidth: 368
   });
   entityInfo.x = 24;
-  entityInfo.y = window.innerHeight - 534;
+  entityInfo.y = window.innerHeight - 634;
   panelBg.addChild(entityInfo);
   currentCoordinate = new BitmapText("0, 0", {
     fontName: "sans-serif",
@@ -28358,14 +28411,6 @@ var createUIElements = (app2) => {
   fps.y = 40;
   fps.maxWidth = 150;
   uiOverlay.addChild(fps);
-  currentSelected = new BitmapText("Selected: ", {
-    fontName: "buttontext",
-    fontSize: 18,
-    align: "right"
-  });
-  currentSelected.x = 16;
-  currentSelected.y = 104;
-  uiOverlay.addChild(currentSelected);
   const bgContainer = new TilingSprite(loadedAssets.bgTexture, 4096, 4096);
   app2.stage.addChild(bgContainer);
   app2.stage.addChild(universeView);
@@ -28479,17 +28524,26 @@ var loadUniverse = async () => {
               const waypoints = await trpc.waypointsForSystem.query({
                 system: starData.symbol
               });
-              console.log("waypoints", waypoints);
-              const bestWaypoint = waypoints.find((w3) => w3.traits.find((t2) => t2.symbol === "MARKETPLACE"))?.symbol ?? waypoints[0].symbol;
-              if (bestWaypoint) {
-                console.log("warping to ", bestWaypoint);
-                const res = await trpc.instructWarp.mutate({
+              const shipData = GameState.shipData[GameState.selected.symbol];
+              if (GameState.visibleWaypoints[shipData.currentWaypoint.symbol].waypointData.type === "JUMP_GATE") {
+                const res = await trpc.instructJump.mutate({
                   shipSymbol: GameState.selected.symbol,
-                  waypointSymbol: bestWaypoint
+                  systemSymbol: starData.symbol
                 });
                 GameState.shipData[res.symbol] = res;
               } else {
-                alert("Cannot warp to system without waypoints, nothing to target");
+                console.log("waypoints", waypoints);
+                const bestWaypoint = waypoints.find((w3) => w3.traits.find((t2) => t2.symbol === "MARKETPLACE"))?.symbol ?? waypoints[0].symbol;
+                if (bestWaypoint) {
+                  console.log("warping to ", bestWaypoint);
+                  const res = await trpc.instructWarp.mutate({
+                    shipSymbol: GameState.selected.symbol,
+                    waypointSymbol: bestWaypoint
+                  });
+                  GameState.shipData[res.symbol] = res;
+                } else {
+                  alert("Cannot warp to system without waypoints, nothing to target");
+                }
               }
             }
           }
@@ -28509,6 +28563,7 @@ var loadUniverse = async () => {
   Object.values(GameState.shipData).forEach((ship) => {
     const shipGroup = new Container();
     const itemSprite = new Sprite(loadedAssets.spaceshipTexture);
+    itemSprite.name = "ship";
     itemSprite.pivot = {
       x: 32,
       y: 32
@@ -28669,6 +28724,10 @@ var systemTargetingLine = () => {
 };
 
 // src/frontend/index.ts
+if (!localStorage.getItem("agent-token")) {
+  const agentToken = prompt("Please enter your agent token");
+  localStorage.setItem("agent-token", agentToken);
+}
 var app = new Application({
   resizeTo: window
 });
@@ -28687,8 +28746,11 @@ await loadAssets();
 await createUIElements(app);
 await loadPlayerData();
 var loadedUniverse = await loadUniverse();
+var format2 = Intl.NumberFormat("en");
+var lastRefresh = Date.now();
 app.ticker.add(() => {
   const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
+  credits.text = `${format2.format(GameState.agent.credits)}`;
   if (GameState.currentView == "universe") {
     Object.values(loadedUniverse.systems).forEach((ref) => {
       ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
@@ -28707,10 +28769,12 @@ app.ticker.add(() => {
       if (nav) {
         if (shipPosition.navRot) {
           nav.visible = true;
-          shipContainer.rotation = shipPosition.navRot;
+          shipContainer.getChildByName("ship").rotation = shipPosition.navRot;
+          shipContainer.getChildByName("nav").rotation = shipPosition.navRot;
         } else {
           nav.visible = false;
-          shipContainer.rotation = 0;
+          shipContainer.getChildByName("ship").rotation = 0;
+          shipContainer.getChildByName("nav").rotation = 0;
         }
       }
       if (shipData.navStatus === "IN_TRANSIT" && new Date(shipData.arrivalOn).getTime() < Date.now()) {
@@ -28718,6 +28782,10 @@ app.ticker.add(() => {
       }
     });
   } else {
+    if (Date.now() - lastRefresh > 5e3) {
+      lastRefresh = Date.now();
+      loadPlayerData();
+    }
     const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
     currentCoordinate.text = systemCoordinate.x + ", " + systemCoordinate.y;
     resetShipWaypoints();
@@ -28731,10 +28799,12 @@ app.ticker.add(() => {
       if (nav) {
         if (shipPosition.navRot) {
           nav.visible = true;
-          shipContainer.rotation = shipPosition.navRot;
+          shipContainer.getChildByName("ship").rotation = shipPosition.navRot;
+          shipContainer.getChildByName("nav").rotation = shipPosition.navRot;
         } else {
           nav.visible = false;
-          shipContainer.rotation = 0;
+          shipContainer.getChildByName("ship").rotation = 0;
+          shipContainer.getChildByName("nav").rotation = 0;
         }
       }
       if (shipData.navStatus === "IN_TRANSIT" && new Date(shipData.arrivalOn).getTime() < Date.now()) {
@@ -28750,7 +28820,6 @@ app.ticker.add(() => {
     actionButton[action.name].disabled = !isAvailable;
   });
   if (GameState.selected) {
-    currentSelected.text = `Selected: ${GameState.selected.symbol} - ${GameState.selected.type}`;
     if (GameState.selected.type === "ship") {
       const shipInfo = GameState.shipData[GameState.selected.symbol];
       cruiseModeSelect.visible = true;
@@ -28761,13 +28830,22 @@ app.ticker.add(() => {
       const cooldownValue = cooldownTime > Date.now() ? Math.round((cooldownTime - Date.now()) / 1e3) + "s" : "Ready";
       const navTime = new Date(shipInfo.arrivalOn).getTime();
       const arrivalValue = navTime > Date.now() ? Math.round((navTime - Date.now()) / 1e3) + "s" : "Ready";
-      entityInfo.text = `Entity Information
+      if (GameState.agent.symbol === shipInfo.agent) {
+        entityInfo.text = `Entity Information
 Symbol: ${shipInfo.symbol}
 Location: ${shipInfo.currentWaypoint.symbol}
 Fuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}
 Cargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}
 Nav Status: ${shipInfo.navStatus} ${arrivalValue}
 Reactor Cooldown: ${cooldownValue}`;
+      } else {
+        entityInfo.text = `Entity Information
+Symbol: ${shipInfo.symbol}
+Location: ${shipInfo.currentWaypoint.symbol}
+Owner: ${shipInfo.agent}
+Nav Status: ${shipInfo.navStatus} ${arrivalValue}
+Last update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime()) / 1e3)}s ago`;
+      }
     } else if (GameState.selected.type === "waypoint") {
       const waypointInfo = GameState.visibleWaypoints[GameState.selected.symbol].waypointData;
       entityInfo.text = `Entity Information
@@ -28779,7 +28857,6 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
     }
   } else {
     cruiseModeSelect.visible = false;
-    currentSelected.text = `Selected:`;
     entityInfo.text = `Entity Information`;
   }
   if (universeView.dirty) {

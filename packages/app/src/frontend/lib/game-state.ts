@@ -23,10 +23,21 @@ export interface GameState {
         waypointData: WaypointData
         container: Container
     }>
+    currentMarket: TradeGood
+}
+
+export interface TradeGood {
+    symbol: string
+    kind: "EXPORT" | "IMPORT" | "EXCHANGE"
+    tradeVolume: number
+    supply: string
+    purchasePrice: number
+    sellPrice: number
 }
 
 export interface Agent {
-
+    symbol: string
+    credits: number
 }
 
 export interface WaypointData {
@@ -48,11 +59,13 @@ export interface Waypoint {
     symbol: string,
     x: number,
     y: number
+    orbitsSymbol: string
     systemSymbol: string
 }
 export interface ShipData {
     symbol: string,
     role: string;
+    agent: string;
     departureOn: string
     arrivalOn: string
     fuelAvailable: number
@@ -65,6 +78,7 @@ export interface ShipData {
     currentWaypoint: Waypoint,
     departureWaypoint: Waypoint,
     destinationWaypoint: Waypoint,
+    updatedAt: string
     modules: ShipModule[]
     mounts: ShipMount[]
 }
@@ -85,10 +99,20 @@ export interface System {
     y: number;
 }
 
+
+
 export const GameState: GameState = {
+    agent: {
+        symbol: '',
+        credits: 0
+    },
     currentView: 'universe',
     currentSystem: undefined,
     selected: undefined,
     systemShips: {},
     shipData: {},
+    visibleWaypoints: {},
+    visibleSystems: {},
+    universeShips: {},
+    currentMarket: undefined
 }

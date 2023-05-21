@@ -1,7 +1,8 @@
 import axios from "axios";
 import {prisma} from "../prisma";
+import createApi from "@app/lib/createApi";
 
-export const seedGameData = async (agentToken: string) => {
+export const seedSystems = async (agentToken: string) => {
     const data = await axios.get('https://api.spacetraders.io/v2/systems.json', {
         headers: {
             Authorization: 'Bearer '+ agentToken
@@ -16,6 +17,8 @@ export const seedGameData = async (agentToken: string) => {
     const existingSystems = {}
     systems.forEach(s => existingSystems[s.symbol] = true)
 
+    const createableSystems = []
+    const creatableWaypoints = {}
     for(const system of data.data) {
         if (!existingSectorIds[system.sectorSymbol]) {
             await prisma.sector.create({
@@ -27,34 +30,41 @@ export const seedGameData = async (agentToken: string) => {
         }
 
         if (!existingSystems[system.symbol]) {
-            await prisma.system.upsert({
-                where: {
-                    symbol: system.symbol,
-                },
-                update: {},
-                create: {
-                    symbol: system.symbol,
-                    sectorSymbol: system.sectorSymbol,
-                    type: system.type,
-                    x: system.x,
-                    y: system.y,
-                }
-            })
-
-            await prisma.waypoint.createMany({
-                data: system.waypoints.map(waypoint => {
-                    return {
-                        symbol: waypoint.symbol,
-                        type: waypoint.type,
-                        systemSymbol: system.symbol,
-                        x: waypoint.x,
-                        y: waypoint.y
-                    }
-                })
+            createableSystems.push({
+                symbol: system.symbol,
+                sectorSymbol: system.sectorSymbol,
+                type: system.type,
+                x: system.x,
+                y: system.y,
             })
         }
+
+        system.waypoints.forEach(waypoint => {
+            creatableWaypoints[waypoint.symbol] = {
+                symbol: waypoint.symbol,
+                type: waypoint.type,
+                systemSymbol: system.symbol,
+                x: waypoint.x,
+                y: waypoint.y
+            }
+        })
     }
 
+    console.log("creating systems")
+    await prisma.system.createMany({
+        data: createableSystems
+    })
+
+    const waypointList = Object.values(creatableWaypoints) as any
+    for(let i = 0; i < waypointList.length; i += 1000) {
+        console.log('creating waypoints', i, 'to '+(i+1000))
+        await prisma.waypoint.createMany({
+            data: waypointList.slice(i, i+1000)
+        })
+    }
+}
+
+export const seedFactions = async (agentToken) => {
     const factionData = await axios.get('https://api.spacetraders.io/v2/factions', {
         headers: {
             Authorization: 'Bearer '+agentToken

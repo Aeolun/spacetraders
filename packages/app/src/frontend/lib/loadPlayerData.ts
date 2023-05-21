@@ -3,6 +3,7 @@ import {GameState, ShipData} from "@front/lib/game-state";
 import {credits} from "@front/lib/UIElements";
 
 export async function loadPlayerData() {
+  await trpc.updateAgentInfo.mutate();
   const ships = await trpc.getMyShips.query()
 
   console.log('my ships', ships)
@@ -15,5 +16,5 @@ export async function loadPlayerData() {
 
 export async function updateCredits() {
   const agent = await trpc.getAgentInfo.query()
-  credits.text = `${agent.credits}`
+  GameState.agent = agent
 }

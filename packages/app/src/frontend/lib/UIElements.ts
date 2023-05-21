@@ -14,7 +14,6 @@ export let systemView: Viewport
 export let uiOverlay: Container
 export let currentCoordinate: BitmapText
 export let fps: BitmapText
-export let currentSelected: BitmapText
 export let credits: BitmapText
 export let backButton: Button
 export let actionButton: Record<string, Button> = {}
@@ -146,13 +145,20 @@ export const createUIElements = (app: Application) => {
     backButton.visible = false
     panelBg.addChild(backButton)
 
+
+    const creditsBackground = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10)
+    creditsBackground.x = 8
+    creditsBackground.width = 384
+    creditsBackground.height = 80
+    creditsBackground.y = 100
+    panelBg.addChild(creditsBackground)
     const creditsLabel = new BitmapText('Credits', {
         fontName: 'buttontext_white',
         tint: 0x00FF00,
         fontSize: 16
     })
     creditsLabel.x = 16
-    creditsLabel.y = 180
+    creditsLabel.y = 120
     panelBg.addChild(creditsLabel)
     credits = new BitmapText('0', {
         fontName: 'segment',
@@ -161,7 +167,7 @@ export const createUIElements = (app: Application) => {
         tint: 0x00FF00
     })
     credits.x = 16
-    credits.y = 200
+    credits.y = 132
     panelBg.addChild(credits)
 
     const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64
@@ -192,7 +198,7 @@ export const createUIElements = (app: Application) => {
             GameState.shipData[GameState.selected.symbol].shipData = newShip
         }
     })
-    cruiseModeSelect.visible = false
+    cruiseModeSelect.visible = true
     cruiseModeSelect.y = actionPanelY - 64
     cruiseModeSelect.x = 16
     panelBg.addChild(cruiseModeSelect)
@@ -217,7 +223,7 @@ export const createUIElements = (app: Application) => {
     statsBlock.x = 8
     statsBlock.width = 384
     statsBlock.height = 200
-    statsBlock.y = window.innerHeight - 556
+    statsBlock.y = window.innerHeight - 656
     panelBg.addChild(statsBlock)
 
     entityInfo = new BitmapText('Entity Information', {
@@ -228,7 +234,7 @@ export const createUIElements = (app: Application) => {
         maxWidth: 368
     })
     entityInfo.x = 24
-    entityInfo.y = window.innerHeight - 534
+    entityInfo.y = window.innerHeight - 634
     panelBg.addChild(entityInfo)
 
     currentCoordinate = new BitmapText('0, 0', {
@@ -250,16 +256,6 @@ export const createUIElements = (app: Application) => {
     fps.y = 40
     fps.maxWidth = 150
     uiOverlay.addChild(fps)
-
-
-    currentSelected = new BitmapText('Selected: ', {
-        fontName: 'buttontext',
-        fontSize: 18,
-        align: 'right',
-    })
-    currentSelected.x = 16
-    currentSelected.y = 104
-    uiOverlay.addChild(currentSelected)
 
     const bgContainer = new TilingSprite(loadedAssets.bgTexture, 4096, 4096);
 

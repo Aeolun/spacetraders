@@ -7,6 +7,11 @@ export const trpc = createTRPCProxyClient<AppRouter>({
     links: [
         httpBatchLink({
             url: 'http://localhost:4001',
+            async headers() {
+                return {
+                    authorization: 'Bearer '+localStorage.getItem('agent-token'),
+                };
+            },
         }),
     ],
 });

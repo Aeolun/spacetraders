@@ -120,18 +120,27 @@ export const loadUniverse = async () => {
                             const waypoints: WaypointData[] = await trpc.waypointsForSystem.query({
                                 system: starData.symbol
                             });
-                            console.log('waypoints', waypoints)
-                            const bestWaypoint = waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE'))?.symbol ?? waypoints[0].symbol
-                            if (bestWaypoint) {
-                                console.log("warping to ", bestWaypoint)
-                                const res = await trpc.instructWarp.mutate({
+                            const shipData = GameState.shipData[GameState.selected.symbol]
+                            if (GameState.visibleWaypoints[shipData.currentWaypoint.symbol].waypointData.type === 'JUMP_GATE') {
+                                const res = await trpc.instructJump.mutate({
                                     shipSymbol: GameState.selected.symbol,
-                                    waypointSymbol: bestWaypoint
+                                    systemSymbol: starData.symbol
                                 })
-
                                 GameState.shipData[res.symbol] = res
                             } else {
-                                alert("Cannot warp to system without waypoints, nothing to target")
+                                console.log('waypoints', waypoints)
+                                const bestWaypoint = waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE'))?.symbol ?? waypoints[0].symbol
+                                if (bestWaypoint) {
+                                    console.log("warping to ", bestWaypoint)
+                                    const res = await trpc.instructWarp.mutate({
+                                        shipSymbol: GameState.selected.symbol,
+                                        waypointSymbol: bestWaypoint
+                                    })
+
+                                    GameState.shipData[res.symbol] = res
+                                } else {
+                                    alert("Cannot warp to system without waypoints, nothing to target")
+                                }
                             }
                         }
                     }
@@ -157,6 +166,7 @@ export const loadUniverse = async () => {
         const shipGroup = new Container()
 
         const itemSprite = new Sprite(loadedAssets.spaceshipTexture)
+        itemSprite.name = 'ship'
         itemSprite.pivot = {
             x: 32,
             y: 32

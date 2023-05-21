@@ -1,10 +1,10 @@
-import {prisma} from "@app/prisma";
+import {prisma, MarketPrice} from "@app/prisma";
 import {
     CreateShipShipScan201Response,
     CreateShipShipScan201ResponseData,
     ScannedWaypoint,
     Waypoint,
-    CreateShipWaypointScan201ResponseData, GetSystemWaypoints200Response
+    CreateShipWaypointScan201ResponseData, GetSystemWaypoints200Response, GetMarket200Response, TradeSymbol
 } from "spacetraders-sdk";
 import {processShip} from "@app/ship/updateShips";
 
@@ -33,14 +33,13 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
                     symbol: waypoint.faction.symbol
                 },
                 create: {
-                    symbol: waypoint.faction.symbol
+                    symbol: waypoint.faction.symbol,
+                    headquartersSymbol: null,
                 },
-                update: {
-                    symbol: waypoint.faction.symbol
-                },
+                update: {},
             })
         } catch(error) {
-            console.log("Error creating", waypoint.faction)
+            console.log("Error creating", waypoint.faction, error)
         }
     }
     try {
@@ -87,6 +86,38 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
     } catch(error) {
         console.error("Issue updating waypoint", error.toString())
     }
+}
+
+export async function storeMarketInformation(data: GetMarket200Response) {
+    const importGoods = data.data.imports.map(i => i.symbol)
+    const exportGoods = data.data.exports.map(i => i.symbol)
+    //const exhangeGoods = data.data.exchange.map(i => i.symbol)
+
+    const marketData = []
+    data.data.tradeGoods.map(good => {
+        marketData.push({
+            tradeGoodSymbol: good.symbol,
+            kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
+            waypointSymbol: data.data.symbol,
+            sellPrice: good.sellPrice,
+            purchasePrice: good.purchasePrice,
+            tradeVolume: good.tradeVolume,
+            supply: good.supply
+        })
+    })
+
+    await Promise.all(marketData.map(data => {
+        return prisma.marketPrice.upsert({
+            where: {
+                waypointSymbol_tradeGoodSymbol: {
+                    waypointSymbol: data.waypointSymbol,
+                    tradeGoodSymbol: data.tradeGoodSymbol
+                }
+            },
+            create: data,
+            update: data
+        })
+    }))
 }
 
 

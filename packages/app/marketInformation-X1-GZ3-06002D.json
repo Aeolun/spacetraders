@@ -1,0 +1,96 @@
+{
+  "symbol": "X1-GZ3-06002D",
+  "imports": [
+    {
+      "symbol": "HYDROCARBON",
+      "name": "Hydrocarbons",
+      "description": "A highly-valued substance used in the production of fuels, plastics, and other industrial products."
+    },
+    {
+      "symbol": "LIQUID_NITROGEN",
+      "name": "Liquid Nitrogen",
+      "description": "A cryogenic fluid used in a variety of applications, including refrigeration and cryogenic freezing."
+    },
+    {
+      "symbol": "AMMONIA_ICE",
+      "name": "Ammonia Ice",
+      "description": "A valuable substance used in the production of fertilizers and other chemical products."
+    }
+  ],
+  "exports": [
+    {
+      "symbol": "EXPLOSIVES",
+      "name": "Explosives",
+      "description": "High-powered explosives used for mining, construction, and military operations."
+    },
+    {
+      "symbol": "PLASTICS",
+      "name": "Plastics",
+      "description": "A wide range of plastic materials used in various applications, including packaging, construction, and manufacturing."
+    },
+    {
+      "symbol": "FERTILIZERS",
+      "name": "Fertilizers",
+      "description": "Specialized chemicals used to enrich the soil and promote plant growth on newly-colonized planets."
+    }
+  ],
+  "exchange": [
+    {
+      "symbol": "FUEL",
+      "name": "Fuel",
+      "description": "High-energy fuel used in spacecraft propulsion systems to enable long-distance space travel."
+    }
+  ],
+  "transactions": [],
+  "tradeGoods": [
+    {
+      "symbol": "EXPLOSIVES",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 382,
+      "sellPrice": 191
+    },
+    {
+      "symbol": "HYDROCARBON",
+      "tradeVolume": 10000,
+      "supply": "MODERATE",
+      "purchasePrice": 123,
+      "sellPrice": 82
+    },
+    {
+      "symbol": "LIQUID_NITROGEN",
+      "tradeVolume": 10000,
+      "supply": "MODERATE",
+      "purchasePrice": 48,
+      "sellPrice": 32
+    },
+    {
+      "symbol": "AMMONIA_ICE",
+      "tradeVolume": 10000,
+      "supply": "MODERATE",
+      "purchasePrice": 65,
+      "sellPrice": 43
+    },
+    {
+      "symbol": "PLASTICS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 243,
+      "sellPrice": 122
+    },
+    {
+      "symbol": "FERTILIZERS",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 84,
+      "sellPrice": 42
+    },
+    {
+      "symbol": "FUEL",
+      "tradeVolume": 1000,
+      "supply": "MODERATE",
+      "purchasePrice": 267,
+      "sellPrice": 241
+    }
+  ]
+}

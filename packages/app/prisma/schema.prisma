@@ -6,34 +6,39 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Server {
+  resetDate String @id
 }
 
 model Faction {
   symbol             String         @id
   name               String?
-  description        String? @db.Text
+  description        String?        @db.Text
   headquartersSymbol String?
-  headquarters       Waypoint?         @relation("headquarters", fields: [headquartersSymbol], references: [symbol])
   traits             FactionTrait[]
 
-  systems   System[]
-  waypoints Waypoint[]
+  @@index([headquartersSymbol])
 }
 
 model Agent {
-    symbol String @id
-    credits Int
-    headquartersSymbol String?
-    headquarters Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol])
-    accountId String
+  symbol             String    @id
+  credits            Int
+  headquartersSymbol String?
+  headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
+  accountId          String
+
+  @@index([headquartersSymbol])
 }
 
 model FactionTrait {
   symbol      String    @id
   name        String
-  description String @db.Text
+  description String    @db.Text
   factions    Faction[]
 }
 
@@ -56,19 +61,19 @@ enum SystemType {
 }
 
 model System {
-  symbol String     @id
-  sectorSymbol             String
-  name String?
-  sector Sector     @relation(fields: [sectorSymbol], references: [symbol])
-  type   SystemType
-  x      Float
-  y      Float
+  symbol       String     @id
+  sectorSymbol String
+  name         String?
+  sector       Sector     @relation(fields: [sectorSymbol], references: [symbol], onDelete: Cascade)
+  type         SystemType
+  x            Float
+  y            Float
 
-  waypoints     Waypoint[]
-  waypointsRetrieved Boolean @default(false)
-  shipsInSystem Ship[]     @relation("currentSystem")
+  waypoints          Waypoint[]
+  waypointsRetrieved Boolean    @default(false)
+  shipsInSystem      Ship[]     @relation("currentSystem")
 
-  factions                 Faction[]
+  @@index([sectorSymbol])
 }
 
 enum WaypointType {
@@ -91,12 +96,11 @@ model Waypoint {
   x             Float
   y             Float
   factionSymbol String?
-  faction       Faction?         @relation(fields: [factionSymbol], references: [symbol])
   traits        WaypointTrait[]
 
   orbitsSymbol String?
-  orbits Waypoint? @relation("orbits", fields: [orbitsSymbol], references: [symbol])
-  orbitals Waypoint[] @relation("orbits")
+  orbits       Waypoint?  @relation("orbits", fields: [orbitsSymbol], references: [symbol], onDelete: NoAction, onUpdate: NoAction)
+  orbitals     Waypoint[] @relation("orbits")
 
   chartSymbol      String?
   chartSubmittedBy String?
@@ -104,18 +108,21 @@ model Waypoint {
 
   shipsAtWaypoint Ship[] @relation("currentWaypoint")
   shipsEnroute    Ship[] @relation("destinationWaypoint")
-  shipsDeparted    Ship[] @relation("departureWaypoint")
+  shipsDeparted   Ship[] @relation("departureWaypoint")
 
-  factionsWithHeadquarters Faction[] @relation("headquarters")
   agentsWithHeadquarters Agent[] @relation("agentHeadquarters")
 
   tradeGoods MarketPrice[]
+
+  @@index([orbitsSymbol])
+  @@index([systemSymbol])
+  @@index([factionSymbol])
 }
 
 model WaypointTrait {
   symbol      String     @id
   name        String
-  description String @db.Text
+  description String     @db.Text
   waypoints   Waypoint[]
 }
 
@@ -149,20 +156,29 @@ enum ShipNavFlightMode {
   BURN
 }
 
+enum MarketGoodKind {
+  IMPORT
+  EXPORT
+  EXCHANGE
+}
+
 model MarketPrice {
-    waypointSymbol String
-    waypoint Waypoint @relation(fields: [waypointSymbol], references: [symbol], onDelete: Cascade)
-    tradeGoodSymbol String
-    tradeGood TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
+  waypointSymbol  String
+  waypoint        Waypoint  @relation(fields: [waypointSymbol], references: [symbol], onDelete: Cascade)
+  tradeGoodSymbol String
+  tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
 
-    supply String
-    purchasePrice Int
-    sellPrice Int
-    tradeVolume Int
+  kind          MarketGoodKind
+  supply        String
+  purchasePrice Int
+  sellPrice     Int
+  tradeVolume   Int
 
-    updatedOn DateTime
+  updatedOn DateTime @updatedAt
 
-    @@id([waypointSymbol, tradeGoodSymbol])
+  @@id([waypointSymbol, tradeGoodSymbol])
+  @@index([waypointSymbol])
+  @@index([tradeGoodSymbol])
 }
 
 model TradeGood {
@@ -170,7 +186,7 @@ model TradeGood {
   name        String
   description String @db.Text
 
-  cargo ShipCargo[]
+  cargo      ShipCargo[]
   onMarketAt MarketPrice[]
 }
 
@@ -182,93 +198,95 @@ model ShipCargo {
   units           Int
 
   @@id([shipSymbol, tradeGoodSymbol])
+  @@index([tradeGoodSymbol])
+  @@index([shipSymbol])
 }
 
 model ShipFrame {
-    symbol String @id
-    name String?
-    description String? @db.Text
-    moduleSlots Int?
-    mountingPoints Int?
-    fuelCapacity Int?
+  symbol         String  @id
+  name           String?
+  description    String? @db.Text
+  moduleSlots    Int?
+  mountingPoints Int?
+  fuelCapacity   Int?
 
-    crewRequirement Int?
-    powerRequirement Int?
+  crewRequirement  Int?
+  powerRequirement Int?
 
-    ship Ship[]
+  ship Ship[]
 }
 
 model ShipReactor {
-    symbol String @id
-    name String?
-    description String? @db.Text
+  symbol      String  @id
+  name        String?
+  description String? @db.Text
 
-    powerOutput Int?
+  powerOutput Int?
 
-    crewRequirement Int?
+  crewRequirement Int?
 
-    ships Ship[]
+  ships Ship[]
 }
 
 model ShipEngine {
-    symbol String @id
-    name String?
-    description String? @db.Text
+  symbol      String  @id
+  name        String?
+  description String? @db.Text
 
-    speed Int?
-    crewRequirement Int?
-    powerRequirement Int?
+  speed            Int?
+  crewRequirement  Int?
+  powerRequirement Int?
 
-    ships Ship[]
+  ships Ship[]
 }
 
 model ShipModule {
-    symbol String @id
-    name String
-    description String @db.Text
+  symbol      String @id
+  name        String
+  description String @db.Text
 
-    effectName String?
-    value Int?
+  effectName String?
+  value      Int?
 
-    crewRequirement Int?
-    powerRequirement Int?
-    slotRequirement Int?
+  crewRequirement  Int?
+  powerRequirement Int?
+  slotRequirement  Int?
 
-    ships Ship[]
+  ships Ship[]
 }
 
 model ShipMount {
-    symbol String @id
-    name String
-    description String @db.Text
+  symbol      String @id
+  name        String
+  description String @db.Text
 
-    effectName String?
-    value Int?
-    worksOn String? @db.Text
+  effectName String?
+  value      Int?
+  worksOn    String? @db.Text
 
-    crewRequirement Int?
-    powerRequirement Int?
-    slotRequirement Int?
+  crewRequirement  Int?
+  powerRequirement Int?
+  slotRequirement  Int?
 
-    ships Ship[]
+  ships Ship[]
 }
 
 model Ship {
   symbol        String   @id
-  agent         String @default("PHANTASM")
+  agent         String   @default("PHANTASM")
   name          String
   factionSymbol String
   role          ShipRole
 
   currentSystemSymbol   String
-  currentSystem         System   @relation("currentSystem", fields: [currentSystemSymbol], references: [symbol])
+  currentSystem         System   @relation("currentSystem", fields: [currentSystemSymbol], references: [symbol], onDelete: Cascade)
   currentWaypointSymbol String
-  currentWaypoint       Waypoint @relation("currentWaypoint", fields: [currentWaypointSymbol], references: [symbol])
+  currentWaypoint       Waypoint @relation("currentWaypoint", fields: [currentWaypointSymbol], references: [symbol], onDelete: Cascade)
 
   destinationWaypointSymbol String?
-  destinationWaypoint       Waypoint? @relation("destinationWaypoint", fields: [destinationWaypointSymbol], references: [symbol])
-  departureWaypointSymbol String?
-  departureWaypoint       Waypoint? @relation("departureWaypoint", fields: [departureWaypointSymbol], references: [symbol])
+  destinationWaypoint       Waypoint? @relation("destinationWaypoint", fields: [destinationWaypointSymbol], references: [symbol], onDelete: Cascade)
+  departureWaypointSymbol   String?
+  departureWaypoint         Waypoint? @relation("departureWaypoint", fields: [departureWaypointSymbol], references: [symbol], onDelete: Cascade)
   departureOn               DateTime?
   arrivalOn                 DateTime?
 
@@ -277,29 +295,31 @@ model Ship {
 
   reactorCooldownOn DateTime?
 
-  fuelCapacity Int @default(0)
+  fuelCapacity  Int @default(0)
   fuelAvailable Int @default(0)
 
   cargoCapacity Int?
   cargoUsed     Int?
   cargo         ShipCargo[]
 
-  frame ShipFrame @relation(fields: [frameSymbol], references: [symbol])
-  frameSymbol String
-  reactor ShipReactor @relation(fields: [reactorSymbol], references: [symbol])
+  frame         ShipFrame   @relation(fields: [frameSymbol], references: [symbol], onDelete: Cascade)
+  frameSymbol   String
+  reactor       ShipReactor @relation(fields: [reactorSymbol], references: [symbol], onDelete: Cascade)
   reactorSymbol String
-  engine ShipEngine @relation(fields: [engineSymbol], references: [symbol])
-  engineSymbol String
+  engine        ShipEngine  @relation(fields: [engineSymbol], references: [symbol], onDelete: Cascade)
+  engineSymbol  String
+
+  updatedAt DateTime @default(now()) @updatedAt
 
   modules ShipModule[]
-  mounts ShipMount[]
+  mounts  ShipMount[]
 
   //    crew ShipCrew
-  //    frame ShipFrame
-  //    reactor ShipReactor
-  //    engine ShipEngine
-  //    modules ShipModule[]
-  //    mounts ShipMount[]
-  //    cargo ShipCargo
-  //    fuel ShipFuel
+  @@index([currentSystemSymbol])
+  @@index([currentWaypointSymbol])
+  @@index([destinationWaypointSymbol])
+  @@index([departureWaypointSymbol])
+  @@index([frameSymbol])
+  @@index([reactorSymbol])
+  @@index([engineSymbol])
 }

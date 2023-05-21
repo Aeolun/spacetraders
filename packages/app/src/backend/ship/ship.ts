@@ -1,7 +1,7 @@
-import {throttle} from "@app/lib/queue";
+import {createOrGetAgentQueue, Queue } from "@app/lib/queue";
 import {logShipAction} from "@app/lib/log";
-import api from "@app/lib/apis";
-import {storeShipScan, storeWaypoint, storeWaypointScan} from "@app/ship/storeResults";
+import api, {APIInstance} from "@app/lib/createApi";
+import {storeMarketInformation, storeShipScan, storeWaypoint, storeWaypointScan} from "@app/ship/storeResults";
 import fs from "fs";
 import {
     ExtractResources201Response,
@@ -19,6 +19,9 @@ import {
 } from "@app/ship/updateShips";
 import * as process from "process";
 import axios from "axios";
+import {Context} from "@app/context";
+import createApi from "@app/lib/createApi";
+import throttledQueue from "throttled-queue";
 
 type CooldownKind = 'reactor'
 
@@ -27,14 +30,28 @@ const cooldowns: Record<CooldownKind, Record<string, Promise<any> | undefined>> 
 }
 
 export class Ship {
-    private currentSystemSymbol: string
-    private currentWaypointSymbol: string
+    public api: APIInstance
+    private queue: Queue
 
-    constructor(public symbol: string) {}
+    public currentSystemSymbol: string
+    public currentWaypointSymbol: string
+
+    constructor(public token: string, public agent: string, public symbol: string) {
+        this.api = createApi(token)
+        this.queue = createOrGetAgentQueue(agent)
+    }
 
     public setCurrentLocation(system:string, waypoint: string) {
         this.currentSystemSymbol = system
         this.currentWaypointSymbol = waypoint
+    }
+
+    public async updateLocation() {
+
+        const shipInfo = await this.queue(() => this.api.fleet.getMyShip(this.symbol))
+
+        this.currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol
+        this.currentSystemSymbol = shipInfo.data.data.nav.systemSymbol
     }
 
     log(message: string) {
@@ -59,9 +76,9 @@ export class Ship {
     }
 
     async validateCooldowns() {
-        const res = await throttle(() => {
+        const res = await this.queue(() => {
             this.log(`Retrieving cooldowns, to wait for existing ones.`)
-            return api.fleet.getShipCooldown(this.symbol)
+            return this.api.fleet.getShipCooldown(this.symbol)
         })
 
         if (res.status === 204) {
@@ -76,9 +93,9 @@ export class Ship {
 
     async navigate(waypoint: string, waitForTimeout = true) {
         try {
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 this.log(`Navigating ship to ${waypoint}`)
-                return api.fleet.navigateShip(this.symbol, {
+                return this.api.fleet.navigateShip(this.symbol, {
                     waypointSymbol: waypoint
                 })
             })
@@ -116,9 +133,9 @@ export class Ship {
 
     async warp(waypoint: string, waitForTimeout = true) {
         try {
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 this.log(`Navigating ship to ${waypoint}`)
-                return api.fleet.warpShip(this.symbol, {
+                return this.api.fleet.warpShip(this.symbol, {
                     waypointSymbol: waypoint
                 })
             })
@@ -155,14 +172,61 @@ export class Ship {
         }
     }
 
+    async jump(system: string, waitForTimeout = true) {
+        try {
+            await this.waitForCooldown('reactor')
+
+            const res = await this.queue(() => {
+                this.log(`Jumping ship to ${system}`)
+                return this.api.fleet.jumpShip(this.symbol, {
+                    systemSymbol: system
+                })
+            })
+
+            this.currentSystemSymbol = res.data.data.nav.route.destination.systemSymbol;
+            this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol
+
+            this.log(`Jumping from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`)
+
+            const navResult = await processNav(this.symbol, res.data.data.nav)
+
+            await processCooldown(this.symbol, res.data.data.cooldown)
+
+            const expiry = new Date(res.data.data.cooldown.expiration)
+            const waitTime = expiry.getTime() - Date.now() + 200
+            this.setCooldown('reactor', waitTime)
+
+            if (waitForTimeout) {
+                const arrivalTime = new Date(res.data.data.nav.route.arrival)
+                const waitTime = arrivalTime.getTime() - Date.now() + 200
+                this.log(`Waiting ${waitTime} ms until arrival`)
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(navResult)
+                    }, waitTime)
+                })
+            } else {
+                return navResult
+            }
+        } catch(error) {
+            if (error.response?.data?.error?.code === 4204) {
+                this.log(`Already at ${system}`)
+                return;
+            } else {
+                console.error('went wrong', error.response.data)
+                throw error
+            }
+        }
+    }
+
     async extract(survey?: Survey) {
         try {
             await this.waitForCooldown('reactor')
 
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 const fromDeposit = survey ? ` from deposit ${survey.signature}` : ''
                 this.log(`Extracting resources${fromDeposit}`)
-                return api.fleet.extractResources(this.symbol, {
+                return this.api.fleet.extractResources(this.symbol, {
                     survey: survey
                 })
             })
@@ -213,12 +277,12 @@ export class Ship {
 
     async refuel() {
         try {
-            const beforeDetails = await throttle(() => {
-                return api.agents.getMyAgent()
+            const beforeDetails = await this.queue(() => {
+                return this.api.agents.getMyAgent()
             })
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 this.log(`Refueling ship`)
-                return api.fleet.refuelShip(this.symbol)
+                return this.api.fleet.refuelShip(this.symbol)
             })
 
             const cost = beforeDetails.data.data.credits - res.data.data.agent.credits
@@ -234,28 +298,28 @@ export class Ship {
     }
 
     async dock() {
-        return throttle(async () => {
+        return this.queue(async () => {
             this.log(`Docking ship`)
-            const res = await api.fleet.dockShip(this.symbol)
+            const res = await this.api.fleet.dockShip(this.symbol)
 
             return processNav(this.symbol, res.data.data.nav)
         })
     }
 
     async orbit() {
-        return throttle(async () => {
+        return this.queue(async () => {
             this.log(`Orbiting ship`)
-            const res = await api.fleet.orbitShip(this.symbol)
+            const res = await this.api.fleet.orbitShip(this.symbol)
 
             return processNav(this.symbol, res.data.data.nav)
         })
     }
 
     async chart() {
-        return throttle(async () => {
+        return this.queue(async () => {
             try {
                 this.log(`Charting current position`)
-                const res = await api.fleet.createChart(this.symbol)
+                const res = await this.api.fleet.createChart(this.symbol)
 
                 await storeWaypoint(res.data.data.waypoint)
 
@@ -267,10 +331,10 @@ export class Ship {
     }
 
     async navigateMode(mode: ShipNavFlightMode) {
-        return throttle(async () => {
+        return this.queue(async () => {
             try {
                 this.log(`Setting navigate mode to ${mode}`)
-                const res = await api.fleet.patchShipNav(this.symbol, {
+                const res = await this.api.fleet.patchShipNav(this.symbol, {
                     flightMode: mode
                 })
 
@@ -284,8 +348,8 @@ export class Ship {
     }
 
     async currentCargo() {
-        const cargo = await throttle(() => {
-            return api.fleet.getMyShipCargo(this.symbol)
+        const cargo = await this.queue(() => {
+            return this.api.fleet.getMyShipCargo(this.symbol)
         })
 
         cargo.data.data.inventory.forEach(item => {
@@ -298,8 +362,8 @@ export class Ship {
     async survey() {
         await this.waitForCooldown('reactor')
 
-        const survey = await throttle(() => {
-            return api.fleet.createSurvey(this.symbol)
+        const survey = await this.queue(() => {
+            return this.api.fleet.createSurvey(this.symbol)
         })
 
         survey.data.data.surveys.forEach(item => {
@@ -313,12 +377,31 @@ export class Ship {
         return processCooldown(this.symbol, survey.data.data.cooldown)
     }
 
+    async purchaseCargo(good: string, quantity: number) {
+        let shipData: any = undefined
+        try {
 
+            const result = await this.api.fleet.purchaseCargo(this.symbol, {
+                symbol: good,
+                units: quantity
+            })
+            this.log(`Purchased ${quantity} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`)
+
+            const shipData = await processCargo(this.symbol, result.data.data.cargo)
+
+            return shipData
+        } catch(error) {
+            console.log(error.response.data)
+        }
+
+        return shipData
+    }
 
     async sellAllCargo() {
-        const cargo = await throttle(() => {
-            return api.fleet.getMyShipCargo(this.symbol)
+        const cargo = await this.queue(() => {
+            return this.api.fleet.getMyShipCargo(this.symbol)
         })
+        const market = await this.queue(() => this.api.systems.getMarket(this.currentSystemSymbol, this.currentWaypointSymbol))
 
         let shipData: any = undefined
         try {
@@ -327,16 +410,21 @@ export class Ship {
                     continue;
                 }
                 try {
-                    const result = await throttle(() => {
-                        this.log(`Selling ${item.units} of ${item.symbol}`)
-                        return api.fleet.sellCargo(this.symbol, {
-                            symbol: item.symbol,
-                            units: item.units
+                    const tradeVolume = market.data.data.tradeGoods.find(g => g.symbol === item.symbol).tradeVolume
+                    let leftToSell = item.units
+                    do {
+                        const result = await this.queue(() => {
+                            this.log(`Selling ${item.units} of ${item.symbol}`)
+                            return this.api.fleet.sellCargo(this.symbol, {
+                                symbol: item.symbol,
+                                units: Math.min(item.units, tradeVolume)
+                            })
                         })
-                    })
-                    this.log(`Sold ${item.units} units of ${item.symbol} for ${result.data.data.transaction.pricePerUnit} each, total ${result.data.data.transaction.totalPrice}. Credits ${result.data.data.agent.credits}.`)
-                    await processAgent(result.data.data.agent)
-                    shipData = await processCargo(this.symbol, result.data.data.cargo)
+                        leftToSell -= Math.min(item.units, tradeVolume)
+                        this.log(`Sold ${item.units} units of ${item.symbol} for ${result.data.data.transaction.pricePerUnit} each, total ${result.data.data.transaction.totalPrice}. Credits ${result.data.data.agent.credits}.`)
+                        await processAgent(result.data.data.agent)
+                        shipData = await processCargo(this.symbol, result.data.data.cargo)
+                    } while (leftToSell > 0)
                 } catch(error) {
                     console.error(`failed to sell ${item.symbol}`, error.response.data)
                 }
@@ -352,9 +440,9 @@ export class Ship {
         try {
             await this.waitForCooldown('reactor')
 
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 this.log(`Scanning waypoints`)
-                return api.fleet.createShipWaypointScan(this.symbol)
+                return this.api.fleet.createShipWaypointScan(this.symbol)
             })
             fs.writeFileSync(`scanresult${res.data.data.waypoints[0].systemSymbol}`, JSON.stringify(res.data.data.waypoints, null, 2))
             const expiry = new Date(res.data.data.cooldown.expiration)
@@ -374,9 +462,9 @@ export class Ship {
         try {
             await this.waitForCooldown('reactor')
 
-            const res = await throttle(() => {
+            const res = await this.queue(() => {
                 this.log(`Scanning ships`)
-                return api.fleet.createShipShipScan(this.symbol)
+                return this.api.fleet.createShipShipScan(this.symbol)
             })
 
             this.log(`Scanned for ships, found ${res.data.data.ships.length} ships in scan range.`)
@@ -395,12 +483,12 @@ export class Ship {
     }
 
     async market() {
-        const res = await throttle(() => {
+        const res = await this.queue(() => {
             this.log(`Retrieving market information`)
-            return api.systems.getMarket(this.currentSystemSymbol, this.currentWaypointSymbol)
+            return this.api.systems.getMarket(this.currentSystemSymbol, this.currentWaypointSymbol)
         })
 
-        fs.writeFileSync(`marketInformation-${this.currentWaypointSymbol}.json`, JSON.stringify(res.data.data, null, 2))
+        await storeMarketInformation(res.data)
 
         axios.put('https://st.feba66.de/markets', res.data.data).catch(error => {
             console.log("Error loading market data to feba66", error)
@@ -408,7 +496,22 @@ export class Ship {
             console.log("Uploaded market data to feba66")
         })
 
+        return res.data.data;
+    }
 
+    async shipyard() {
+        const res = await this.queue(() => {
+            this.log(`Retrieving shipyard information`)
+            return this.api.systems.getShipyard(this.currentSystemSymbol, this.currentWaypointSymbol)
+        })
+
+        fs.writeFileSync(`dumps/shipyardInformation-${this.currentWaypointSymbol}.json`, JSON.stringify(res.data.data, null, 2))
+
+        // axios.put('https://st.feba66.de/markets', res.data.data).catch(error => {
+        //     console.log("Error loading market data to feba66", error)
+        // }).then(() => {
+        //     console.log("Uploaded market data to feba66")
+        // })
 
         return res.data.data;
     }

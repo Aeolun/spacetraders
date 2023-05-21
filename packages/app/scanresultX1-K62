@@ -1,0 +1,241 @@
+[
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-78270C",
+    "type": "PLANET",
+    "x": -19,
+    "y": 24,
+    "orbitals": [
+      {
+        "symbol": "X1-K62-52501Z"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "VOLCANIC",
+        "name": "Volcanic",
+        "description": "A volatile world marked by intense volcanic activity, creating a hazardous environment with the potential for valuable resource extraction, such as rare metals and geothermal energy."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-52501Z",
+    "type": "MOON",
+    "x": -19,
+    "y": 24,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-46982F",
+    "type": "PLANET",
+    "x": -9,
+    "y": 52,
+    "orbitals": [
+      {
+        "symbol": "X1-K62-23273D"
+      },
+      {
+        "symbol": "X1-K62-40874C"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-23273D",
+    "type": "MOON",
+    "x": -9,
+    "y": 52,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-40874C",
+    "type": "MOON",
+    "x": -9,
+    "y": 52,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-77175E",
+    "type": "PLANET",
+    "x": -18,
+    "y": 80,
+    "orbitals": [
+      {
+        "symbol": "X1-K62-26236E"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      },
+      {
+        "symbol": "MEGA_STRUCTURES",
+        "name": "Mega Structures",
+        "description": "Colossal feats of engineering, these structures house entire cities, industries, or even ecosystems within their vast interiors."
+      },
+      {
+        "symbol": "OVERCROWDED",
+        "name": "Overcrowded",
+        "description": "A waypoint teeming with inhabitants, leading to cramped living conditions and a high demand for resources."
+      },
+      {
+        "symbol": "BUREAUCRATIC",
+        "name": "Bureaucratic",
+        "description": "A waypoint governed by complex regulations, red tape, and layers of administration, often leading to inefficiencies and frustration."
+      },
+      {
+        "symbol": "MARKETPLACE",
+        "name": "Marketplace",
+        "description": "A thriving center of commerce where traders from across the galaxy gather to buy, sell, and exchange goods."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-26236E",
+    "type": "MOON",
+    "x": -18,
+    "y": 80,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      },
+      {
+        "symbol": "OUTPOST",
+        "name": "Outpost",
+        "description": "A small, remote settlement providing essential services and a safe haven for travelers passing through."
+      },
+      {
+        "symbol": "BUREAUCRATIC",
+        "name": "Bureaucratic",
+        "description": "A waypoint governed by complex regulations, red tape, and layers of administration, often leading to inefficiencies and frustration."
+      },
+      {
+        "symbol": "OVERCROWDED",
+        "name": "Overcrowded",
+        "description": "A waypoint teeming with inhabitants, leading to cramped living conditions and a high demand for resources."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-43147C",
+    "type": "PLANET",
+    "x": 90,
+    "y": -32,
+    "orbitals": [
+      {
+        "symbol": "X1-K62-48088Z"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "BARREN",
+        "name": "Barren",
+        "description": "A desolate world with little to no vegetation or water, presenting unique challenges for habitation and resource extraction."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-48088Z",
+    "type": "MOON",
+    "x": 90,
+    "y": -32,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "SWAMP",
+        "name": "Swamp",
+        "description": "A damp, murky world characterized by its wetlands and abundant vegetation, fostering a diverse ecosystem and offering potential resources like hydrocarbons and exotic plant life."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-56639C",
+    "type": "GAS_GIANT",
+    "x": 17,
+    "y": 103,
+    "orbitals": [],
+    "traits": [],
+    "chart": {
+      "waypointSymbol": "X1-K62-56639C",
+      "submittedBy": "PHANTASM-1",
+      "submittedOn": "2023-05-21T15:34:00.049Z"
+    }
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-70810A",
+    "type": "ASTEROID_FIELD",
+    "x": 129,
+    "y": 26,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "MINERAL_DEPOSITS",
+        "name": "Mineral Deposits",
+        "description": "Abundant mineral resources, attracting mining operations and providing valuable materials such as iron ore, copper ore, aluminum ore, and quartz sand for various industries."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-K62",
+    "symbol": "X1-K62-40411F",
+    "type": "JUMP_GATE",
+    "x": -8,
+    "y": 143,
+    "orbitals": [],
+    "traits": [],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  }
+]

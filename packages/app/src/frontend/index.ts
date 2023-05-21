@@ -8,7 +8,7 @@ import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/
 import {systemCoordinates, totalSize} from '@front/lib/consts'
 import {
     actionButton,
-    createUIElements, cruiseModeSelect,
+    createUIElements, credits, cruiseModeSelect,
     currentCoordinate,
     currentSelected, entityInfo, fps,
     systemView, universeCuller, universeGraphics, universeGraphicsText,
@@ -20,6 +20,12 @@ import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/lib
 import {availableActions} from "@front/lib/availableActions";
 import {loadPlayerData} from "@front/lib/loadPlayerData";
 import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/lib/targetingLine";
+import {loadSystem} from "@front/lib/loadSystem";
+
+if (!localStorage.getItem('agent-token')) {
+    const agentToken = prompt('Please enter your agent token')
+    localStorage.setItem('agent-token', agentToken)
+}
 
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
@@ -51,9 +57,13 @@ await loadPlayerData()
 
 const loadedUniverse = await loadUniverse()
 
+const format = Intl.NumberFormat('en');
 // Listen for frame updates
+let lastRefresh = Date.now()
 app.ticker.add(() => {
     const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
+
+    credits.text = `${format.format(GameState.agent.credits)}`
 
     if (GameState.currentView == 'universe') {
         Object.values(loadedUniverse.systems).forEach(ref => {
@@ -76,10 +86,12 @@ app.ticker.add(() => {
             if (nav) {
                 if (shipPosition.navRot) {
                     nav.visible = true
-                    shipContainer.rotation = shipPosition.navRot
+                    shipContainer.getChildByName('ship').rotation = shipPosition.navRot
+                    shipContainer.getChildByName('nav').rotation = shipPosition.navRot
                 } else {
                     nav.visible = false
-                    shipContainer.rotation = 0
+                    shipContainer.getChildByName('ship').rotation = 0
+                    shipContainer.getChildByName('nav').rotation = 0
                 }
             }
             if (shipData.navStatus === 'IN_TRANSIT' && new Date(shipData.arrivalOn).getTime() < Date.now()) {
@@ -87,6 +99,11 @@ app.ticker.add(() => {
             }
         })
     } else {
+        if (Date.now() - lastRefresh > 5000) {
+            lastRefresh = Date.now()
+            loadPlayerData()
+        }
+
         const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset))
         currentCoordinate.text = systemCoordinate.x + ', ' + systemCoordinate.y
 
@@ -102,10 +119,12 @@ app.ticker.add(() => {
             if (nav) {
                 if (shipPosition.navRot) {
                     nav.visible = true
-                    shipContainer.rotation = shipPosition.navRot
+                    shipContainer.getChildByName('ship').rotation = shipPosition.navRot
+                    shipContainer.getChildByName('nav').rotation = shipPosition.navRot
                 } else {
                     nav.visible = false
-                    shipContainer.rotation = 0
+                    shipContainer.getChildByName('ship').rotation = 0
+                    shipContainer.getChildByName('nav').rotation = 0
                 }
             }
             if (shipData.navStatus === 'IN_TRANSIT' && new Date(shipData.arrivalOn).getTime() < Date.now()) {
@@ -125,7 +144,6 @@ app.ticker.add(() => {
     })
 
     if (GameState.selected) {
-        currentSelected.text = `Selected: ${GameState.selected.symbol} - ${GameState.selected.type}`
         if (GameState.selected.type === 'ship') {
             const shipInfo = GameState.shipData[GameState.selected.symbol]
 
@@ -138,14 +156,19 @@ app.ticker.add(() => {
             const cooldownValue = cooldownTime > Date.now() ? (Math.round((cooldownTime - Date.now())/1000)+'s') : 'Ready'
             const navTime = new Date(shipInfo.arrivalOn).getTime();
             const arrivalValue = navTime > Date.now() ? (Math.round((navTime - Date.now())/1000)+'s') : 'Ready'
-            entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}`
+            if (GameState.agent.symbol === shipInfo.agent) {
+                // your own ships
+                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}`
+            } else {
+                // someone elses ships
+                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nOwner: ${shipInfo.agent}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nLast update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime())/1000)}s ago`
+            }
         } else if (GameState.selected.type === 'waypoint') {
             const waypointInfo = GameState.visibleWaypoints[GameState.selected.symbol].waypointData
             entityInfo.text = `Entity Information\nSymbol: ${GameState.selected.symbol}\nKind: ${waypointInfo.type}\nTraits: ${waypointInfo.traits.length == 0 ? 'UNKNOWN' : waypointInfo.traits.map(t => t.name).join(', ')}\nFaction: ${waypointInfo.factionSymbol}\nChart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : 'None'}`
         }
     } else {
         cruiseModeSelect.visible = false
-        currentSelected.text = `Selected:`
         entityInfo.text = `Entity Information`
     }
 

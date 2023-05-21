@@ -20,16 +20,17 @@ export function positionShip(ship: ShipData) {
         serverY = ship.departureWaypoint.y + (ship.destinationWaypoint.y - ship.departureWaypoint.y) * positionAlongPath
         navRot = Math.atan2(ship.destinationWaypoint.y - ship.departureWaypoint.y, ship.destinationWaypoint.x - ship.departureWaypoint.x) + Math.PI/2;
     } else {
-        if (waypointShips[ship.currentWaypoint.symbol] === undefined) {
-            waypointShips[ship.currentWaypoint.symbol] = 0
+        const orbitSymbol = ship.currentWaypoint.orbitsSymbol ? ship.currentWaypoint.orbitsSymbol : ship.currentWaypoint.symbol
+        if (waypointShips[orbitSymbol] === undefined) {
+            waypointShips[orbitSymbol] = 0
         } else {
-            waypointShips[ship.currentWaypoint.symbol]++
+            waypointShips[orbitSymbol]++
         }
 
         serverX = ship.currentWaypoint.x
         serverY = ship.currentWaypoint.y
 
-        xOffset = (32 * waypointShips[ship.currentWaypoint.symbol])
+        xOffset = (32 * waypointShips[orbitSymbol])
         yOffset = 80
     }
     const x = serverX * systemScale + xOffset + Math.abs(systemCoordinates.minX) * systemScale

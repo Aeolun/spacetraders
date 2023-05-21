@@ -1,11 +1,9 @@
-import api from '@app/lib/apis'
+import {APIInstance} from '@app/lib/createApi'
 import {prisma} from "@app/prisma";
 import {Agent, Cooldown, ScannedShip, Ship, ShipCargo, ShipFuel, ShipNav} from "spacetraders-sdk";
-import fs from "fs";
 
-export async function updateShips() {
+export async function updateShips(api: APIInstance) {
     const ships = await api.fleet.getMyShips(1, 20)
-    fs.writeFileSync('ships.json', JSON.stringify(ships.data.data, null, 2))
     await Promise.all(ships.data.data.map(async ship => {
         return processShip(ship)
     }))
@@ -52,7 +50,9 @@ export async function processShip(ship: Ship | ScannedShip) {
                 powerRequirement: module.requirements.power,
                 slotRequirement: module.requirements.slots,
             } : {
-                symbol: module.symbol
+                symbol: module.symbol,
+                name: module.symbol,
+                description: module.symbol
             }
             await prisma.shipMount.upsert({
                 where: {
@@ -76,7 +76,9 @@ export async function processShip(ship: Ship | ScannedShip) {
         crewRequirement: ship.frame.requirements.crew,
         powerRequirement: ship.frame.requirements.power,
     } : {
-        symbol: ship.frame.symbol
+        symbol: ship.frame.symbol,
+        name: ship.frame.symbol,
+        description: ship.frame.symbol,
     }
 
     const reactorData = 'name' in ship.reactor ? {
@@ -88,7 +90,9 @@ export async function processShip(ship: Ship | ScannedShip) {
 
         crewRequirement: ship.reactor.requirements.crew,
     } : {
-        symbol: ship.reactor.symbol
+        symbol: ship.reactor.symbol,
+        name: ship.reactor.symbol,
+        description: ship.reactor.symbol,
     }
 
     const engineData = 'name' in ship.engine ? {
@@ -101,12 +105,15 @@ export async function processShip(ship: Ship | ScannedShip) {
         crewRequirement: ship.engine.requirements.crew,
         powerRequirement: ship.engine.requirements.power,
     } : {
-        symbol: ship.engine.symbol
+        symbol: ship.engine.symbol,
+        name: ship.engine.symbol,
+        description: ship.engine.symbol,
     }
 
         const shipData = {
             symbol: ship.symbol,
             name: ship.registration.name,
+            agent: ship.registration.name.split('-').slice(0, 1).join(),
             factionSymbol: ship.registration.factionSymbol,
             role: ship.registration.role,
 

@@ -187,4 +187,28 @@ export const availableActions: {
         }
         return false
     }
+}, {
+    name: 'Shipyard',
+    action: async (event) => {
+        event.stopPropagation();
+        if (GameState.selected && GameState.currentSystem) {
+            const market = await trpc.instructShipyard.mutate({
+                shipSymbol: GameState.selected.symbol,
+                systemSymbol: GameState.currentSystem.symbol,
+                waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+            })
+
+            // open market dialog
+            console.log(market)
+        }
+    },
+    isAvailable: () => {
+        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+            const selectedShip = GameState.shipData[GameState.selected.symbol]
+            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
+                return selectedShip.navStatus === 'DOCKED' && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter(t => t.symbol === 'SHIPYARD').length > 0
+            }
+        }
+        return false
+    }
 }]

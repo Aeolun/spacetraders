@@ -1,17 +1,14 @@
 import {Ship} from "@app/ship/ship";
+import {Context} from "@app/context";
 
 export class ShipStore {
     private ships: Record<string, Ship> = {}
 
     constructor() {}
 
-    addShip(symbol: string) {
-        this.ships[symbol] = new Ship(symbol)
-    }
-
-    getShip(symbol: string) {
+    constructShipFor(token: string, agent: string, symbol: string) {
         if (!this.ships[symbol]) {
-            throw new Error("Ship with symbol does not exists.")
+            this.ships[symbol] = new Ship(token, agent, symbol)
         }
         return this.ships[symbol]
     }

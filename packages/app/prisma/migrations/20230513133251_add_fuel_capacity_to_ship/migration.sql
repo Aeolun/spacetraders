@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `Ship` ADD COLUMN `fuelAvailable` INTEGER NOT NULL DEFAULT 0,
-    ADD COLUMN `fuelCapacity` INTEGER NOT NULL DEFAULT 0;
