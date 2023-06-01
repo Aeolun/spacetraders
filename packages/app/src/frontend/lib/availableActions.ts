@@ -3,6 +3,9 @@ import {trpc} from "@front/lib/trpc";
 import {FederatedPointerEvent} from "pixi.js";
 import {loadSystem} from "@front/lib/loadSystem";
 import {updateCredits} from "@front/lib/loadPlayerData";
+import {ShipyardWindow} from "@front/lib/ShipyardWindow";
+import {uiOverlay} from "@front/lib/UIElements";
+import {deselectListeners} from "@front/lib/makeInteractiveAndSelectable";
 
 export const availableActions: {
     name: string
@@ -76,10 +79,10 @@ export const availableActions: {
         }
     },
     isAvailable: () => {
-        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
-            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
-                return selectedShip.navStatus === 'IN_ORBIT' && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter(t => t.symbol === 'COMMON_METAL_DEPOSITS' || t.symbol === 'MINERAL_DEPOSITS' || t.symbol === 'PRECIOUS_METAL_DEPOSITS').length > 0 && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime()
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
+                return selectedShip.navStatus === 'IN_ORBIT' && GameState.waypointData[selectedShip.currentWaypoint.symbol].traits.filter(t => t.symbol === 'COMMON_METAL_DEPOSITS' || t.symbol === 'MINERAL_DEPOSITS' || t.symbol === 'PRECIOUS_METAL_DEPOSITS').length > 0 && Date.now() > new Date(selectedShip.reactorCooldownOn).getTime()
             }
         }
         return false
@@ -97,9 +100,9 @@ export const availableActions: {
         }
     },
     isAvailable: () => {
-        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
-            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
                 return selectedShip.navStatus === 'DOCKED' && selectedShip.cargoUsed > 0
             }
         }
@@ -110,17 +113,18 @@ export const availableActions: {
     action: async (event) => {
         event.stopPropagation();
         if (GameState.selected) {
-            const orbit = await trpc.instructChart.mutate({
+            const chartResult = await trpc.instructChart.mutate({
                 shipSymbol: GameState.selected.symbol
             })
-            GameState.shipData[orbit.symbol] = orbit
+            GameState.shipData[chartResult.ship.symbol] = chartResult.ship
+            GameState.waypointData[chartResult.waypoint.symbol] = chartResult.waypoint
         }
     },
     isAvailable: () => {
-        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
-            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
-                return selectedShip.navStatus === 'IN_ORBIT' && !GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.chartSubmittedBy
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
+                return selectedShip.navStatus === 'IN_ORBIT' && !GameState.waypointData[selectedShip.currentWaypoint.symbol].chartSubmittedBy
             }
         }
         return false
@@ -170,7 +174,7 @@ export const availableActions: {
         if (GameState.selected && GameState.currentSystem) {
             const market = await trpc.instructMarket.mutate({
                 shipSymbol: GameState.selected.symbol,
-                systemSymbol: GameState.currentSystem.symbol,
+                systemSymbol: GameState.currentSystem,
                 waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
             })
 
@@ -179,10 +183,10 @@ export const availableActions: {
         }
     },
     isAvailable: () => {
-        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
-            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
-                return selectedShip.navStatus === 'DOCKED' && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter(t => t.symbol === 'MARKETPLACE').length > 0
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
+                return selectedShip.navStatus === 'DOCKED' && GameState.waypointData[selectedShip.currentWaypoint.symbol].traits.filter(t => t.symbol === 'MARKETPLACE').length > 0
             }
         }
         return false
@@ -194,19 +198,60 @@ export const availableActions: {
         if (GameState.selected && GameState.currentSystem) {
             const market = await trpc.instructShipyard.mutate({
                 shipSymbol: GameState.selected.symbol,
-                systemSymbol: GameState.currentSystem.symbol,
+                systemSymbol: GameState.currentSystem,
                 waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
             })
 
             // open market dialog
             console.log(market)
+            const shipyardData = await trpc.getShipyard.query({
+                waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+            })
+            const window = new ShipyardWindow(shipyardData)
+            uiOverlay.addChild(window.container)
+            deselectListeners.once('deselect', () => {
+                uiOverlay.removeChild(window.container)
+            })
         }
     },
     isAvailable: () => {
-        if (GameState.selected?.type === 'ship' && GameState.visibleWaypoints) {
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
-            if (GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol]) {
-                return selectedShip.navStatus === 'DOCKED' && GameState.visibleWaypoints[selectedShip.currentWaypoint.symbol].waypointData.traits.filter(t => t.symbol === 'SHIPYARD').length > 0
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
+                return selectedShip.navStatus === 'DOCKED' && GameState.waypointData[selectedShip.currentWaypoint.symbol].traits.filter(t => t.symbol === 'SHIPYARD').length > 0
+            }
+        }
+        return false
+    }
+}, {
+    name: 'Jumpgate',
+    action: async (event) => {
+        event.stopPropagation();
+        if (GameState.selected && GameState.currentSystem) {
+            let waypointSymbol;
+            if (GameState.selected.type == 'ship') {
+                waypointSymbol = GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+            } else {
+                waypointSymbol = GameState.selected.symbol
+            }
+            const jumpgateInfo = await trpc.instructJumpGate.mutate({
+                shipSymbol: GameState.selected.symbol,
+                systemSymbol: GameState.currentSystem,
+                waypointSymbol: waypointSymbol
+            })
+
+            // open market dialog
+            console.log(jumpgateInfo)
+        }
+    },
+    isAvailable: () => {
+        if (GameState.selected?.type === 'waypoint') {
+            return GameState.waypointData[GameState.selected.symbol].type === 'JUMP_GATE'
+        }
+        if (GameState.selected?.type === 'ship' && GameState.waypointData) {
+            const selectedShip = GameState.shipData[GameState.selected.symbol]
+            if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
+                return GameState.waypointData[selectedShip.currentWaypoint.symbol].type === 'JUMP_GATE'
             }
         }
         return false

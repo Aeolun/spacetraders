@@ -52,8 +52,8 @@ export function positionUniverseShip(ship: ShipData) {
     if (ship.destinationWaypoint.systemSymbol !== ship.departureWaypoint.systemSymbol && Date.now() < arrivalOn.getTime()) {
         const positionAlongPath = (Date.now() - departureOn.getTime())/(arrivalOn.getTime() - departureOn.getTime())
 
-        const departureSystem = GameState.visibleSystems[ship.departureWaypoint.systemSymbol].container
-        const destinationSystem = GameState.visibleSystems[ship.destinationWaypoint.systemSymbol].container
+        const departureSystem = GameState.systems[ship.departureWaypoint.systemSymbol]
+        const destinationSystem = GameState.systems[ship.destinationWaypoint.systemSymbol]
 
         serverX = departureSystem.x + (destinationSystem.x - departureSystem.x) * positionAlongPath
         serverY = departureSystem.y + (destinationSystem.y - departureSystem.y) * positionAlongPath
@@ -65,16 +65,16 @@ export function positionUniverseShip(ship: ShipData) {
             waypointShips[ship.currentWaypoint.systemSymbol]++
         }
 
-        const currentSystem = GameState.visibleSystems[ship.currentWaypoint.systemSymbol].container
+        const currentSystem = GameState.systems[ship.currentWaypoint.systemSymbol]
 
         serverX = currentSystem.x
         serverY = currentSystem.y
 
-        xOffset = (32 * waypointShips[ship.currentWaypoint.systemSymbol] * sizeMultiplier)
+        xOffset = (32 * waypointShips[ship.currentWaypoint.systemSymbol]) * sizeMultiplier
         yOffset = 80 * sizeMultiplier
     }
-    const x = serverX + xOffset * scale.universe
-    const y = serverY + (yOffset)
+    const x = serverX + xOffset
+    const y = serverY + yOffset
 
     return {
         x, y, navRot

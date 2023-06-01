@@ -1,0 +1,199 @@
+[
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-99450A",
+    "type": "PLANET",
+    "x": -18,
+    "y": -29,
+    "orbitals": [
+      {
+        "symbol": "X1-CM17-13831F"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-13831F",
+    "type": "MOON",
+    "x": -18,
+    "y": -29,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-83522A",
+    "type": "PLANET",
+    "x": 51,
+    "y": 14,
+    "orbitals": [
+      {
+        "symbol": "X1-CM17-23343Z"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "BARREN",
+        "name": "Barren",
+        "description": "A desolate world with little to no vegetation or water, presenting unique challenges for habitation and resource extraction."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-23343Z",
+    "type": "MOON",
+    "x": 51,
+    "y": 14,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "JUNGLE",
+        "name": "Jungle",
+        "description": "A lush, tropical world with dense vegetation and a thriving ecosystem, offering a wealth of resources and unique opportunities for research and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-94444X",
+    "type": "PLANET",
+    "x": -53,
+    "y": 53,
+    "orbitals": [
+      {
+        "symbol": "X1-CM17-60895E"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "TEMPERATE",
+        "name": "Temperate",
+        "description": "A world with a mild climate and balanced ecosystem, providing a comfortable environment for a variety of life forms and supporting diverse industries."
+      },
+      {
+        "symbol": "SCATTERED_SETTLEMENTS",
+        "name": "Scattered Settlements",
+        "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
+      },
+      {
+        "symbol": "MARKETPLACE",
+        "name": "Marketplace",
+        "description": "A thriving center of commerce where traders from across the galaxy gather to buy, sell, and exchange goods."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-60895E",
+    "type": "MOON",
+    "x": -53,
+    "y": 53,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      },
+      {
+        "symbol": "SCATTERED_SETTLEMENTS",
+        "name": "Scattered Settlements",
+        "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
+      },
+      {
+        "symbol": "BUREAUCRATIC",
+        "name": "Bureaucratic",
+        "description": "A waypoint governed by complex regulations, red tape, and layers of administration, often leading to inefficiencies and frustration."
+      },
+      {
+        "symbol": "BLACK_MARKET",
+        "name": "Black Market",
+        "description": "A hidden network of illegal trade, where outlaws and opportunists gather to exchange contraband and forbidden goods."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-86986B",
+    "type": "PLANET",
+    "x": 3,
+    "y": 92,
+    "orbitals": [
+      {
+        "symbol": "X1-CM17-13927Z"
+      },
+      {
+        "symbol": "X1-CM17-40328B"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-13927Z",
+    "type": "MOON",
+    "x": 3,
+    "y": 92,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "JUNGLE",
+        "name": "Jungle",
+        "description": "A lush, tropical world with dense vegetation and a thriving ecosystem, offering a wealth of resources and unique opportunities for research and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-40328B",
+    "type": "MOON",
+    "x": 3,
+    "y": 92,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "JUNGLE",
+        "name": "Jungle",
+        "description": "A lush, tropical world with dense vegetation and a thriving ecosystem, offering a wealth of resources and unique opportunities for research and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-CM17",
+    "symbol": "X1-CM17-44769C",
+    "type": "JUMP_GATE",
+    "x": 67,
+    "y": 77,
+    "orbitals": [],
+    "traits": [],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  }
+]

@@ -9,6 +9,7 @@
     "lib": ["ES2021", "dom"],
     "paths": {
       "@app/*": ["src/backend/*"],
+      "@common/*": ["src/common/*"],
       "@front/*": ["src/frontend/*"]
     }
   },

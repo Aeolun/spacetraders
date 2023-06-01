@@ -53,5 +53,11 @@ export interface Faction {
      * @memberof Faction
      */
     'traits': Array<FactionTrait>;
+    /**
+     * Whether or not the faction is currently recruiting new agents.
+     * @type {boolean}
+     * @memberof Faction
+     */
+    'isRecruiting': boolean;
 }
 

@@ -5,13 +5,13 @@ export class Button extends Container {
     buttonSprite: NineSlicePlane
     private isDisabled = false
 
-    constructor(name: string, dimensions: { width: number, height: number, textSize?: number }, private clickAction?: (event: FederatedPointerEvent) => void) {
+    constructor(name: string, dimensions?: { width?: number, height?: number, textSize?: number }, private clickAction?: (event: FederatedPointerEvent) => void) {
         super()
 
         this.interactive = true;
         this.buttonSprite = new NineSlicePlane(loadedAssets.button,  4,4,4,4)
-        this.buttonSprite.width = dimensions.width
-        this.buttonSprite.height = dimensions.height
+        this.buttonSprite.width = dimensions?.width ?? 200
+        this.buttonSprite.height = dimensions?.height ?? 40
 
         this.addChild(this.buttonSprite)
 

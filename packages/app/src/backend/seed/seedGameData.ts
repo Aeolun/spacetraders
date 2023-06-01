@@ -29,17 +29,11 @@ export const seedSystems = async (agentToken: string) => {
             existingSectorIds[system.sectorSymbol] = true
         }
 
-        if (!existingSystems[system.symbol]) {
-            createableSystems.push({
-                symbol: system.symbol,
-                sectorSymbol: system.sectorSymbol,
-                type: system.type,
-                x: system.x,
-                y: system.y,
-            })
-        }
-
+        let hasJumpGate = false
         system.waypoints.forEach(waypoint => {
+            if (waypoint.type === 'JUMP_GATE') {
+                hasJumpGate = true
+            }
             creatableWaypoints[waypoint.symbol] = {
                 symbol: waypoint.symbol,
                 type: waypoint.type,
@@ -48,6 +42,17 @@ export const seedSystems = async (agentToken: string) => {
                 y: waypoint.y
             }
         })
+
+        if (!existingSystems[system.symbol]) {
+            createableSystems.push({
+                symbol: system.symbol,
+                sectorSymbol: system.sectorSymbol,
+                type: system.type,
+                x: system.x,
+                y: system.y,
+                hasJumpGate: hasJumpGate
+            })
+        }
     }
 
     console.log("creating systems")
@@ -65,7 +70,7 @@ export const seedSystems = async (agentToken: string) => {
 }
 
 export const seedFactions = async (agentToken) => {
-    const factionData = await axios.get('https://api.spacetraders.io/v2/factions', {
+    const factionData = await axios.get('https://api.spacetraders.io/v2/factions?page=1&limit=20', {
         headers: {
             Authorization: 'Bearer '+agentToken
         }
@@ -76,30 +81,50 @@ export const seedFactions = async (agentToken) => {
     factions.forEach(f => existingFactions[f.symbol] = true)
 
     for(const faction of factionData.data.data) {
-        console.log(faction);
-        if (!existingFactions[faction.symbol]) {
-            await prisma.faction.create({
-                data: {
-                    symbol: faction.symbol,
-                    name: faction.name,
-                    description: faction.description,
-                    headquartersSymbol: faction.headquarters,
-                    traits: {
-                        connectOrCreate: faction.traits.map(t => {
-                            return {
-                                where: {
-                                    symbol: t.symbol,
-                                },
-                                create: {
-                                    symbol: t.symbol,
-                                    name: t.name,
-                                    description: t.description
-                                }
+        console.log(`updating faction ${faction.symbol}`)
+        await prisma.faction.upsert({
+            where: {
+                symbol: faction.symbol
+            },
+            update: {
+                name: faction.name,
+                description: faction.description,
+                headquartersSymbol: faction.headquarters,
+                traits: {
+                    connectOrCreate: faction.traits.map(t => {
+                        return {
+                            where: {
+                                symbol: t.symbol,
+                            },
+                            create: {
+                                symbol: t.symbol,
+                                name: t.name,
+                                description: t.description
                             }
-                        })
-                    }
+                        }
+                    })
                 }
-            })
-        }
+            },
+            create: {
+                symbol: faction.symbol,
+                name: faction.name,
+                description: faction.description,
+                headquartersSymbol: faction.headquarters,
+                traits: {
+                    connectOrCreate: faction.traits.map(t => {
+                        return {
+                            where: {
+                                symbol: t.symbol,
+                            },
+                            create: {
+                                symbol: t.symbol,
+                                name: t.name,
+                                description: t.description
+                            }
+                        }
+                    })
+                }
+            }
+        })
     }
 }

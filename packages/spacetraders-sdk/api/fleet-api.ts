@@ -60,6 +60,8 @@ import { NavigateShip200Response } from '../models';
 // @ts-ignore
 import { NavigateShipRequest } from '../models';
 // @ts-ignore
+import { NegotiateContract200Response } from '../models';
+// @ts-ignore
 import { OrbitShip200Response } from '../models';
 // @ts-ignore
 import { PatchShipNavRequest } from '../models';
@@ -600,7 +602,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Jump your ship instantly to a target system. Unlike other forms of navigation, jumping requires a unit of antimatter.
+         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
          * @summary Jump Ship
          * @param {string} shipSymbol 
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -677,6 +679,48 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(navigateShipRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Negotiate Contract
+         * @param {string} shipSymbol 
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        negotiateContract: async (shipSymbol: string, body?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('negotiateContract', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/negotiate/contract`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1206,7 +1250,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Jump your ship instantly to a target system. Unlike other forms of navigation, jumping requires a unit of antimatter.
+         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
          * @summary Jump Ship
          * @param {string} shipSymbol 
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -1227,6 +1271,18 @@ export const FleetApiFp = function(configuration?: Configuration) {
          */
         async navigateShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NavigateShip200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.navigateShip(shipSymbol, navigateShipRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Negotiate Contract
+         * @param {string} shipSymbol 
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async negotiateContract(shipSymbol: string, body?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NegotiateContract200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.negotiateContract(shipSymbol, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1478,7 +1534,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.jettison(shipSymbol, jettisonRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Jump your ship instantly to a target system. Unlike other forms of navigation, jumping requires a unit of antimatter.
+         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
          * @summary Jump Ship
          * @param {string} shipSymbol 
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -1498,6 +1554,17 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         navigateShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: any): AxiosPromise<NavigateShip200Response> {
             return localVarFp.navigateShip(shipSymbol, navigateShipRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Negotiate Contract
+         * @param {string} shipSymbol 
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        negotiateContract(shipSymbol: string, body?: any, options?: any): AxiosPromise<NegotiateContract200Response> {
+            return localVarFp.negotiateContract(shipSymbol, body, options).then((request) => request(axios, basePath));
         },
         /**
          * Attempt to move your ship into orbit at it\'s current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
@@ -1765,7 +1832,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Jump your ship instantly to a target system. Unlike other forms of navigation, jumping requires a unit of antimatter.
+     * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
      * @summary Jump Ship
      * @param {string} shipSymbol 
      * @param {JumpShipRequest} [jumpShipRequest] 
@@ -1788,6 +1855,19 @@ export class FleetApi extends BaseAPI {
      */
     public navigateShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).navigateShip(shipSymbol, navigateShipRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Negotiate Contract
+     * @param {string} shipSymbol 
+     * @param {any} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public negotiateContract(shipSymbol: string, body?: any, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).negotiateContract(shipSymbol, body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

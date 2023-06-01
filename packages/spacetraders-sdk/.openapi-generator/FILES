@@ -58,6 +58,14 @@ models/get-my-ships200-response.ts
 models/get-ship-cooldown200-response.ts
 models/get-ship-nav200-response.ts
 models/get-shipyard200-response.ts
+models/get-status200-response-announcements-inner.ts
+models/get-status200-response-leaderboards-most-credits-inner.ts
+models/get-status200-response-leaderboards-most-submitted-charts-inner.ts
+models/get-status200-response-leaderboards.ts
+models/get-status200-response-links-inner.ts
+models/get-status200-response-server-resets.ts
+models/get-status200-response-stats.ts
+models/get-status200-response.ts
 models/get-system-waypoints200-response.ts
 models/get-system200-response.ts
 models/get-systems200-response.ts
@@ -77,6 +85,8 @@ models/meta.ts
 models/navigate-ship-request.ts
 models/navigate-ship200-response-data.ts
 models/navigate-ship200-response.ts
+models/negotiate-contract200-response-data.ts
+models/negotiate-contract200-response.ts
 models/orbit-ship200-response-data.ts
 models/orbit-ship200-response.ts
 models/patch-ship-nav-request.ts

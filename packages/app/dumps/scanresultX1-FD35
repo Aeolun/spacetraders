@@ -1,0 +1,149 @@
+[
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-47240A",
+    "type": "PLANET",
+    "x": 20,
+    "y": -18,
+    "orbitals": [
+      {
+        "symbol": "X1-FD35-59571F"
+      },
+      {
+        "symbol": "X1-FD35-04762B"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "FROZEN",
+        "name": "Frozen",
+        "description": "An ice-covered world with frigid temperatures, providing unique research opportunities and resources such as ice water, ammonia ice, and other frozen compounds."
+      },
+      {
+        "symbol": "SCATTERED_SETTLEMENTS",
+        "name": "Scattered Settlements",
+        "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
+      },
+      {
+        "symbol": "OVERCROWDED",
+        "name": "Overcrowded",
+        "description": "A waypoint teeming with inhabitants, leading to cramped living conditions and a high demand for resources."
+      },
+      {
+        "symbol": "TRADING_HUB",
+        "name": "Trading Hub",
+        "description": "A critical junction in the galaxy's trade network, with countless goods and services flowing through daily."
+      },
+      {
+        "symbol": "MARKETPLACE",
+        "name": "Marketplace",
+        "description": "A thriving center of commerce where traders from across the galaxy gather to buy, sell, and exchange goods."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-59571F",
+    "type": "MOON",
+    "x": 20,
+    "y": -18,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "BARREN",
+        "name": "Barren",
+        "description": "A desolate world with little to no vegetation or water, presenting unique challenges for habitation and resource extraction."
+      },
+      {
+        "symbol": "SCATTERED_SETTLEMENTS",
+        "name": "Scattered Settlements",
+        "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
+      },
+      {
+        "symbol": "INDUSTRIAL",
+        "name": "Industrial",
+        "description": "A waypoint dominated by factories, refineries, and other heavy industries, often accompanied by pollution and a bustling workforce."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-04762B",
+    "type": "MOON",
+    "x": 20,
+    "y": -18,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "TEMPERATE",
+        "name": "Temperate",
+        "description": "A world with a mild climate and balanced ecosystem, providing a comfortable environment for a variety of life forms and supporting diverse industries."
+      },
+      {
+        "symbol": "SCATTERED_SETTLEMENTS",
+        "name": "Scattered Settlements",
+        "description": "A collection of dispersed communities, each independent yet connected through trade and communication networks."
+      },
+      {
+        "symbol": "TRADING_HUB",
+        "name": "Trading Hub",
+        "description": "A critical junction in the galaxy's trade network, with countless goods and services flowing through daily."
+      }
+    ],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  },
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-95723D",
+    "type": "PLANET",
+    "x": -54,
+    "y": -2,
+    "orbitals": [
+      {
+        "symbol": "X1-FD35-11214C"
+      }
+    ],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-11214C",
+    "type": "MOON",
+    "x": -54,
+    "y": -2,
+    "orbitals": [],
+    "traits": [
+      {
+        "symbol": "ROCKY",
+        "name": "Rocky",
+        "description": "A world with a rugged, rocky landscape, rich in minerals and other resources, providing a variety of opportunities for mining, research, and exploration."
+      }
+    ]
+  },
+  {
+    "systemSymbol": "X1-FD35",
+    "symbol": "X1-FD35-38275Z",
+    "type": "JUMP_GATE",
+    "x": 50,
+    "y": 41,
+    "orbitals": [],
+    "traits": [],
+    "faction": {
+      "symbol": "GALACTIC"
+    }
+  }
+]

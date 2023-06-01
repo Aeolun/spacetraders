@@ -21,6 +21,7 @@ model Faction {
   description        String?        @db.Text
   headquartersSymbol String?
   traits             FactionTrait[]
+  color              String?
 
   @@index([headquartersSymbol])
 }
@@ -61,19 +62,75 @@ enum SystemType {
 }
 
 model System {
-  symbol       String     @id
-  sectorSymbol String
-  name         String?
-  sector       Sector     @relation(fields: [sectorSymbol], references: [symbol], onDelete: Cascade)
-  type         SystemType
-  x            Float
-  y            Float
+  symbol          String     @id
+  sectorSymbol    String
+  name            String?
+  sector          Sector     @relation(fields: [sectorSymbol], references: [symbol], onDelete: Cascade)
+  type            SystemType
+  x               Float
+  y               Float
+  hasJumpGate     Boolean    @default(false)
+  majorityFaction String?
 
   waypoints          Waypoint[]
   waypointsRetrieved Boolean    @default(false)
   shipsInSystem      Ship[]     @relation("currentSystem")
 
   @@index([sectorSymbol])
+}
+
+model ShipLog {
+  id        String   @id @default(uuid())
+  symbol    String
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([symbol, createdAt])
+}
+
+model TradeLog {
+  id                     String   @id @default(uuid())
+  shipSymbol             String
+  tradeGoodSymbol        String
+  waypointSymbol         String
+  purchaseWaypointSymbol String?
+  sellWaypointSymbol     String?
+  purchasePrice          Int?
+  purchaseAmount         Int?
+  purchasePriceAfter     Int?
+  purchaseVolume         Int?
+  sellPrice              Int?
+  sellAmount             Int?
+  sellPriceAfter         Int?
+  sellVolume             Int?
+  tradeVolume            Int
+  fuelCost               Int?
+  supply                 String
+  supplyAfter            String
+  createdAt              DateTime @default(now())
+  parentTrade            String?
+
+  @@index([shipSymbol, createdAt])
+  @@index([tradeGoodSymbol, createdAt])
+}
+
+model TravelLog {
+  id               String            @id @default(uuid())
+  fromSystemSymbol String
+  toSystemSymbol   String
+  fromWaypoint     String
+  toWaypoint       String
+  shipSymbol       String
+  method           String
+  flightMode       ShipNavFlightMode
+  engineSpeed      Int
+  fuelConsumed     Int
+  cooldown         Int
+  flightDuration   Int
+  distance         Int
+  createdAt        DateTime          @default(now())
+
+  @@index([shipSymbol, createdAt])
 }
 
 enum WaypointType {
@@ -113,10 +170,55 @@ model Waypoint {
   agentsWithHeadquarters Agent[] @relation("agentHeadquarters")
 
   tradeGoods MarketPrice[]
+  jumpgate   Jumpgate?
 
   @@index([orbitsSymbol])
   @@index([systemSymbol])
   @@index([factionSymbol])
+}
+
+model ShipConfiguration {
+  symbol String @id
+
+  name        String
+  description String @db.Text
+
+  frameSymbol   String
+  reactorSymbol String
+  engineSymbol  String
+
+  shipConfigurationModule ShipConfigurationModule[]
+  shipConfigurationMount  ShipConfigurationMount[]
+  ShipyardModel           ShipyardModel[]
+}
+
+model ShipConfigurationModule {
+  id                      Int               @id @default(autoincrement())
+  shipConfigurationSymbol String
+  shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
+  moduleSymbol            String
+
+  @@index([shipConfigurationSymbol])
+}
+
+model ShipConfigurationMount {
+  id                      Int               @id @default(autoincrement())
+  shipConfigurationSymbol String
+  shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
+  mountSymbol             String
+
+  @@index([shipConfigurationSymbol])
+}
+
+model ShipyardModel {
+  shipConfigurationSymbol String
+  shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol])
+  waypointSymbol          String
+
+  price Int
+
+  @@id([shipConfigurationSymbol, waypointSymbol])
+  @@index([shipConfigurationSymbol])
 }
 
 model WaypointTrait {
@@ -124,6 +226,45 @@ model WaypointTrait {
   name        String
   description String     @db.Text
   waypoints   Waypoint[]
+}
+
+model Jumpgate {
+  waypointSymbol String   @id
+  waypoint       Waypoint @relation(fields: [waypointSymbol], references: [symbol])
+
+  range Int
+
+  validJumpTargets  JumpConnectedSystem[] @relation("fromSystem")
+  incomingJumpsFrom JumpConnectedSystem[] @relation("toSystem")
+
+  @@index([waypointSymbol])
+}
+
+model JumpConnectedSystem {
+  fromWaypointSymbol String
+  fromWaypoint       Jumpgate @relation("fromSystem", fields: [fromWaypointSymbol], references: [waypointSymbol])
+  toWaypointSymbol   String
+  toWaypoint         Jumpgate @relation("toSystem", fields: [toWaypointSymbol], references: [waypointSymbol])
+
+  // x and y here are duplicate information, but don't want to join more
+  x        Int
+  y        Int
+  distance Int
+
+  @@id([fromWaypointSymbol, toWaypointSymbol])
+  @@index([fromWaypointSymbol])
+  @@index([toWaypointSymbol])
+}
+
+model JumpDistance {
+  fromSystemSymbol String
+  toSystemSymbol   String
+
+  // x and y here are duplicate information, but don't want to join more
+  jumps         Int
+  totalDistance Int?
+
+  @@id([fromSystemSymbol, toSystemSymbol])
 }
 
 enum ShipRole {
@@ -271,6 +412,14 @@ model ShipMount {
   ships Ship[]
 }
 
+enum ShipBehavior {
+  TRADE
+  UPDATE_MARKETS
+  EXPLORE_MARKETS
+  EXPLORE
+  MINE
+}
+
 model Ship {
   symbol        String   @id
   agent         String   @default("PHANTASM")
@@ -308,6 +457,12 @@ model Ship {
   reactorSymbol String
   engine        ShipEngine  @relation(fields: [engineSymbol], references: [symbol], onDelete: Cascade)
   engineSymbol  String
+
+  currentBehavior        ShipBehavior?
+  homeSystemSymbol       String?
+  behaviorRange          Int?
+  travelGoalSystemSymbol String?
+  overalGoal             String?
 
   updatedAt DateTime @default(now()) @updatedAt
 

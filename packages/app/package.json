@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "tsx src/backend/index.ts",
+    "jumptable": "tsx src/backend/generate-jump-table.ts",
     "dev:serve": "serve public",
     "dev:build": "esbuild --bundle --format=esm --watch --outfile=public/app.js src/frontend/index.ts",
     "dev": "run-p dev:*",
@@ -61,7 +62,7 @@
     "@trpc/server": "^10.25.1",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
-    "dijkstra-calculator": "^1.0.8",
+    "@aeolun/dijkstra-calculator": "^1.1.0",
     "dotenv": "^16.0.3",
     "jwt-decode": "^3.1.2",
     "pixi-cull": "^2.2.0",
@@ -70,6 +71,7 @@
     "prisma": "^4.14.0",
     "spacetraders-sdk": "workspace:^2",
     "throttled-queue": "^2.1.4",
+    "@aeolun/yoga-layout-prebuilt": "^1.10.0",
     "zod": "^3.21.4"
   }
 }

@@ -1,29 +1,36 @@
 import {Container} from "pixi.js";
+import type {Waypoint, WaypointTrait, Jumpgate, JumpConnectedSystem, Faction } from "@app/prisma";
+import {inferRouterOutputs} from "@trpc/server";
+import {AppRouter} from "@app/server";
 
 
 export type SelectedType = 'ship' | 'waypoint'
 export interface GameState {
-    currentView: 'universe' | 'system';
     agent: Agent;
     selected?: {
         symbol: string;
         type: SelectedType;
     };
-    currentSystem?: System;
-    visibleSystems: Record<string, {
-        systemData: System,
-        container: Container
-    }>
-    shipData: Record<string, ShipData>
+
+    // stuff for what UI displays
+    currentView: 'universe' | 'system';
     hoveredSystem?: System;
     hoveredWaypoint?: Waypoint;
+    currentSystem?: string;
+    displayedMarket: string
+
+    // source data for objects
+    systemData: Record<string, System>
+    waypointData: Record<string, WaypointData>
+    shipData: Record<string, ShipData>
+
+    // references to all the visible nodes
+    systems: Record<string, Container>
     systemShips: Record<string, Container>
     universeShips: Record<string, Container>
-    visibleWaypoints: Record<string, {
-        waypointData: WaypointData
-        container: Container
-    }>
-    currentMarket: TradeGood
+    waypoints: Record<string, Container>
+
+    factions: Record<string, Faction>
 }
 
 export interface TradeGood {
@@ -40,48 +47,11 @@ export interface Agent {
     credits: number
 }
 
-export interface WaypointData {
-    symbol: string
-    type: string
-    x: number
-    y: number
-    factionSymbol: string
-    chartSubmittedBy: string
-    chartSubmittedOn: string
-    traits: {
-        symbol: string
-        name: string
-        description: string
-    }[]
-}
+export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export interface Waypoint {
-    symbol: string,
-    x: number,
-    y: number
-    orbitsSymbol: string
-    systemSymbol: string
-}
-export interface ShipData {
-    symbol: string,
-    role: string;
-    agent: string;
-    departureOn: string
-    arrivalOn: string
-    fuelAvailable: number
-    fuelCapacity: number
-    cargoCapacity: number
-    cargoUsed: number
-    reactorCooldownOn: string
-    navStatus: 'IN_TRANSIT' | 'IN_ORBIT' | 'DOCKED'
-    flightMode: 'DRIFT' | 'STEALTH' | 'CRUISE' | 'BURN'
-    currentWaypoint: Waypoint,
-    departureWaypoint: Waypoint,
-    destinationWaypoint: Waypoint,
-    updatedAt: string
-    modules: ShipModule[]
-    mounts: ShipMount[]
-}
+export type WaypointData = Waypoint & {traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}}
+
+export type ShipData = RouterOutputs['instructRefuel']
 
 export interface ShipModule {
     effectName: string
@@ -92,12 +62,7 @@ export interface ShipMount {
     value: number
 }
 
-export interface System {
-    symbol: string;
-    type: string;
-    x: number;
-    y: number;
-}
+export type System = RouterOutputs['getSystems'][number]
 
 
 
@@ -111,8 +76,10 @@ export const GameState: GameState = {
     selected: undefined,
     systemShips: {},
     shipData: {},
-    visibleWaypoints: {},
-    visibleSystems: {},
+    waypoints: {},
+    systems: {},
     universeShips: {},
-    currentMarket: undefined
+    displayedMarket: undefined,
+    systemData: {},
+    waypointData: {}
 }

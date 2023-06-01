@@ -4,6 +4,7 @@ import {backgroundQueue} from "@app/lib/queue";
 import {storeWaypointScan} from "@app/ship/storeResults";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import createApi from "@app/lib/createApi";
+import throttledQueue from "throttled-queue";
 
 export const updateMarketPrices = async () => {
     const marketprices = await axios.get('https://st.feba66.de/prices')
@@ -76,9 +77,13 @@ export const loadWaypoint = async () => {
         await backgroundQueue(async () => {
             i++
 
-            const allWaypoints = await api.systems.getSystemWaypoints(system.symbol, 1, 20)
-            console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol}): ${allWaypoints.data.data.length}`)
-            await storeWaypointScan(system.symbol, allWaypoints.data)
+            try {
+                const allWaypoints = await api.systems.getSystemWaypoints(system.symbol, 1, 20)
+                console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol}): ${allWaypoints.data.data.length}`)
+                await storeWaypointScan(system.symbol, allWaypoints.data)
+            } catch(error) {
+                console.error('failure loading waypoints', error)
+            }
         })
     }
 }

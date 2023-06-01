@@ -2,21 +2,34 @@ import {BitmapText, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
 import { trpc } from '@front/lib/trpc'
 import { makeInteractiveAndSelectable } from "@front/lib/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/lib/assets";
-import {scale, systemCoordinates, systemScale, totalSize, universeCoordinates, universeScale} from "@front/lib/consts";
+import {scale, systemCoordinates, systemScale, totalSize, universeCoordinates,} from "@front/lib/consts";
 import {backButton, systemView, uiOverlay, universeView} from "@front/lib/UIElements";
 import {GameState, System, WaypointData} from "@front/lib/game-state";
+import type { Waypoint, Jumpgate, JumpConnectedSystem, WaypointTrait } from '@app/prisma'
 import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadSystem} from "@front/lib/loadSystem";
+import {getDistance} from "@common/lib/getDistance";
 
 
 const addTraitIcons = (item: any, container: Container) => {
-    let xOffset = 0, hasMarket = false, hasShipyard = false, hasBelt = false
+    let xOffset = 0, hasMarket = false, hasUncharted = false, hasShipyard = false, hasBelt = false, hasJumpgate = false, hasStation = false
     item.waypoints.forEach(waypoint => {
+        if (waypoint.type == 'JUMP_GATE') {
+            hasJumpgate = true
+        }
+        if (waypoint.type === 'ORBITAL_STATION') {
+            hasStation = true
+        }
         waypoint.traits.forEach(trait => {
+            if (trait.symbol === 'UNCHARTED') {
+                hasUncharted = true
+            }
             if (trait.symbol === 'MARKETPLACE') {
                 hasMarket = true
             }
             if (trait.symbol === 'SHIPYARD') {
+                // either shipyard or station, otherwise too much noise
+                hasStation = false
                 hasShipyard = true
             }
             if (trait.symbol === 'COMMON_METAL_DEPOSITS' || trait.symbol === 'PRECIOUS_METAL_DEPOSITS' || trait.symbol === 'MINERAL_DEPOSITS') {
@@ -60,104 +73,234 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
+    if (hasJumpgate) {
+        const sprite = new Sprite(loadedAssets.jumpgate)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.24}
+        sprite.x = xOffset - 16
+        sprite.y = 24
+        container.addChild(sprite)
+        xOffset += 16
+    }
+    if (hasStation) {
+        const sprite = new Sprite(loadedAssets.station)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.24}
+        sprite.x = xOffset - 16
+        sprite.y = 24
+        container.addChild(sprite)
+        xOffset += 16
+    }
+    if (hasUncharted) {
+        const sprite = new Sprite(loadedAssets.treasure)
+        sprite.pivot = {
+            x: 32,
+            y: 32
+        }
+        sprite.scale = {x: 0.25, y: 0.24}
+        sprite.x = xOffset - 16
+        sprite.y = 24
+        container.addChild(sprite)
+        xOffset += 16
+    }
 }
+
+const convertToDisplayCoordinates = (position: { x: number, y: number}) => {
+    return {
+        x: (position.x+Math.abs(universeCoordinates.minX))/(universeCoordinates.maxX-universeCoordinates.minX)*totalSize,
+        y: (position.y+Math.abs(universeCoordinates.minY))/(universeCoordinates.maxY-universeCoordinates.minY)*totalSize,
+    }
+}
+
+function createStar(starData: System & {waypoints: (Waypoint & {traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}})[]}) {
+    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
+
+    const star = new Sprite(texture)
+    star.pivot = {
+        x: 32,
+        y: 32
+    }
+    const text = new BitmapText(starData.name+'\n('+starData.symbol+')', {
+        fontName: 'sans-serif',
+        fontSize: 18,
+        align: 'left',
+    })
+    text.x = 0
+    text.y = 40
+
+    const starContainer = new Container();
+    starContainer.addChild(star)
+    starContainer.addChild(text)
+
+    addTraitIcons(starData, starContainer)
+
+    makeInteractiveAndSelectable(starContainer, {
+        onMouseOut: () => {
+            GameState.hoveredSystem = undefined
+        },
+        onMouseOver: () => {
+            GameState.hoveredSystem = starData
+        },
+        onOrder: [
+            {
+                name: 'Warp',
+                withSelection: 'ship',
+                isAvailable: async () => {
+                    const shipData = GameState.shipData[GameState.selected.symbol]
+                    const warpRange = shipData.modules.find(m => m.effectName === 'WARP_DRIVE')?.value
+                    const currentSystem = GameState.systemData[shipData.currentWaypoint.systemSymbol]
+                    return getDistance(currentSystem, GameState.hoveredSystem) < warpRange
+                },
+                action: async () => {
+                    const waypoints: WaypointData[] = await trpc.waypointsForSystem.query({
+                        system: starData.symbol
+                    });
+
+                    console.log('waypoints', waypoints)
+                    const bestWaypoint = waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE'))?.symbol ?? waypoints[0].symbol
+                    if (bestWaypoint) {
+                        console.log("warping to ", bestWaypoint)
+                        const res = await trpc.instructWarp.mutate({
+                            shipSymbol: GameState.selected.symbol,
+                            waypointSymbol: bestWaypoint
+                        })
+
+                        GameState.shipData[res.symbol] = res
+                    } else {
+                        alert("Cannot warp to system without waypoints, nothing to target")
+                    }
+                }
+            },
+            {
+                name: 'Jump using gate',
+                withSelection: 'ship',
+                isAvailable: async () => {
+                    const shipData = GameState.shipData[GameState.selected.symbol]
+
+                    const currentSystemWaypoints: WaypointData[] = await trpc.waypointsForSystem.query({
+                        system: shipData.currentWaypoint.systemSymbol
+                    });
+                    const jumpGate = currentSystemWaypoints.find(wp => wp.type === 'JUMP_GATE' && wp.symbol === shipData.currentWaypoint.symbol)
+
+                    console.log('deve', {currentSystemWaypoints, jumpGate})
+                    return !!jumpGate
+                },
+                action: async () => {
+                    const res = await trpc.instructJump.mutate({
+                        shipSymbol: GameState.selected.symbol,
+                        systemSymbol: starData.symbol
+                    })
+                    GameState.shipData[res.symbol] = res
+                }
+            },
+            {
+                name: 'Jump',
+                withSelection: 'ship',
+                isAvailable: async () => {
+                    const shipData = GameState.shipData[GameState.selected.symbol]
+                    const jumpRange = shipData.modules.find(m => m.effectName === 'JUMP_DRIVE')?.value
+                    const currentSystem = GameState.systemData[shipData.currentWaypoint.systemSymbol]
+                    return !!GameState.selected?.symbol && getDistance(currentSystem, GameState.hoveredSystem) < jumpRange
+                },
+                action: async () => {
+                    const res = await trpc.instructJump.mutate({
+                        shipSymbol: GameState.selected.symbol,
+                        systemSymbol: starData.symbol
+                    })
+                    GameState.shipData[res.symbol] = res
+                }
+            }
+        ]
+    })
+
+    starContainer.on('click', () => {
+        loadSystem(starData.symbol)
+    })
+
+    const displayCoords = convertToDisplayCoordinates(starData)
+    starContainer.x = displayCoords.x
+    starContainer.y = displayCoords.y
+
+    return starContainer
+}
+
+var stringToColour = function(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = '#';
+    for (var i = 0; i < 3; i++) {
+        var value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+}
+
 export const loadUniverse = async () => {
     const references: Record<string, Container<DisplayObject>> = {}
 
-    const systems = await trpc.getSystems.query({})
+    const systems = await trpc.getSystems.query()
 
     for(const starData of systems) {
+        GameState.systemData[starData.symbol] = starData
+
         if (starData.x < universeCoordinates.minX) universeCoordinates.minX = starData.x
         if (starData.x > universeCoordinates.maxX) universeCoordinates.maxX = starData.x
         if (starData.y < universeCoordinates.minY) universeCoordinates.minY = starData.y
         if (starData.y > universeCoordinates.maxY) universeCoordinates.maxY = starData.y
     }
 
-    GameState.visibleSystems = {}
+    GameState.systems = {}
     scale.universe = totalSize/(universeCoordinates.maxX-universeCoordinates.minX)
 
+    const influenceGraphics = new Graphics()
     for(const starData of systems) {
-        let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
-
-        const star = new Sprite(texture)
-        star.pivot = {
-            x: 32,
-            y: 32
+        if (starData.majorityFaction) {
+            const isHeadquarters = GameState.factions[starData.majorityFaction].headquartersSymbol.includes(starData.symbol)
+            const displayCoords = convertToDisplayCoordinates(starData)
+            influenceGraphics.beginFill(stringToColour(starData.majorityFaction), isHeadquarters ? 0.4 : 0.2)
+            influenceGraphics.drawCircle(displayCoords.x, displayCoords.y,  isHeadquarters? 4500 : 1500)
         }
-        const text = new BitmapText(starData.name+'\n('+starData.symbol+')', {
-            fontName: 'sans-serif',
-            fontSize: 18,
-            align: 'left',
-        })
-        text.x = 0
-        text.y = 40
+    }
+    universeView.addChild(influenceGraphics);
 
-        const starContainer = new Container();
-        starContainer.addChild(star)
-        starContainer.addChild(text)
+    // draw jump connections
+    for(const starData of systems) {
+        const jumpGate = starData.waypoints.find(wp => wp.type === 'JUMP_GATE')
+        if (jumpGate && jumpGate.jumpgate) {
+            jumpGate.jumpgate.validJumpTargets.forEach(jumpTarget => {
+                const displayCoords = convertToDisplayCoordinates(starData)
+                const targetCoords = convertToDisplayCoordinates(jumpTarget)
 
-        addTraitIcons(starData, starContainer)
+                const jumpGraphics = new Graphics()
+                jumpGraphics.lineStyle({
+                    width: 10,
+                    color: 0x999933
+                })
+                jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
+                jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
 
-        GameState.visibleSystems[starData.symbol] = {
-            systemData: starData,
-            container: starContainer
+                universeView.addChild(jumpGraphics)
+            })
+
         }
+    }
 
-        makeInteractiveAndSelectable(starContainer, {
-            onMouseOut: () => {
-                GameState.hoveredSystem = undefined
-            },
-            onMouseOver: () => {
-                GameState.hoveredSystem = starData
-            },
-            onOrder: [
-                {
-                    name: 'Warp',
-                    withSelection: 'ship',
-                    action: async () => {
-                        if (GameState.selected?.symbol) {
+    for(const starData of systems) {
+        const starContainer = createStar(starData)
 
-                            const waypoints: WaypointData[] = await trpc.waypointsForSystem.query({
-                                system: starData.symbol
-                            });
-                            const shipData = GameState.shipData[GameState.selected.symbol]
-                            if (GameState.visibleWaypoints[shipData.currentWaypoint.symbol].waypointData.type === 'JUMP_GATE') {
-                                const res = await trpc.instructJump.mutate({
-                                    shipSymbol: GameState.selected.symbol,
-                                    systemSymbol: starData.symbol
-                                })
-                                GameState.shipData[res.symbol] = res
-                            } else {
-                                console.log('waypoints', waypoints)
-                                const bestWaypoint = waypoints.find(w => w.traits.find(t => t.symbol === 'MARKETPLACE'))?.symbol ?? waypoints[0].symbol
-                                if (bestWaypoint) {
-                                    console.log("warping to ", bestWaypoint)
-                                    const res = await trpc.instructWarp.mutate({
-                                        shipSymbol: GameState.selected.symbol,
-                                        waypointSymbol: bestWaypoint
-                                    })
+        GameState.systems[starData.symbol] = starContainer
 
-                                    GameState.shipData[res.symbol] = res
-                                } else {
-                                    alert("Cannot warp to system without waypoints, nothing to target")
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        })
-
-        starContainer.on('click', () => {
-            loadSystem(starData)
-        })
-
-        starContainer.x = (starData.x+Math.abs(universeCoordinates.minX))/(universeCoordinates.maxX-universeCoordinates.minX)*totalSize
-        starContainer.y = (starData.y+Math.abs(universeCoordinates.minY))/(universeCoordinates.maxY-universeCoordinates.minY)*totalSize
 
         universeView.addChild(starContainer)
         references[starData.symbol] = starContainer
-
     }
 
     resetShipWaypoints()
@@ -165,7 +308,7 @@ export const loadUniverse = async () => {
     Object.values(GameState.shipData).forEach(ship => {
         const shipGroup = new Container()
 
-        const itemSprite = new Sprite(loadedAssets.spaceshipTexture)
+        const itemSprite = new Sprite(ship.frameSymbol === 'FRAME_PROBE' ? loadedAssets.probeTexture : loadedAssets.spaceshipTexture)
         itemSprite.name = 'ship'
         itemSprite.pivot = {
             x: 32,
@@ -220,13 +363,7 @@ export const loadUniverse = async () => {
         color: 0x0077FF
     })
     const multiFactor = 5000 / (universeCoordinates.maxX-universeCoordinates.minX) * totalSize
-    // graphics.drawCircle(references['X1-VU95'].x, references['X1-VU95'].y, multiFactor)
-    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    // graphics.lineTo(references['X1-FS18'].x, references['X1-FS18'].y)
-    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    // graphics.lineTo(references['X1-AA92'].x, references['X1-AA92'].y)
-    // graphics.moveTo(references['X1-VU95'].x, references['X1-VU95'].y)
-    // graphics.lineTo(references['X1-JQ84'].x, references['X1-JQ84'].y)
+
 
     const commandShip = Object.values(GameState.shipData).find(ship => ship.role === 'COMMAND')
     const commandShipLocation = commandShip?.currentWaypoint.systemSymbol

@@ -1,0 +1,285 @@
+{
+  "symbol": "X1-AR84-47026C",
+  "shipTypes": [
+    {
+      "type": "SHIP_HEAVY_FREIGHTER"
+    },
+    {
+      "type": "SHIP_LIGHT_SHUTTLE"
+    }
+  ],
+  "transactions": [],
+  "ships": [
+    {
+      "type": "SHIP_HEAVY_FREIGHTER",
+      "name": "Heavy Freighter",
+      "description": "The heavy freighter is a massive spacecraft designed for carrying large amounts of cargo across long distances. With its reinforced hull and advanced propulsion systems, the freighter is capable of navigating through harsh environments and hazardous conditions. It is equipped with a jump drive for faster-than-light travel, as well as a range of modules and mounts for handling a variety of cargo and defensive needs. The heavy freighter is a reliable and indispensable vessel for traders and haulers looking to transport goods and resources across the vast expanse of space.",
+      "purchasePrice": 1897530,
+      "frame": {
+        "symbol": "FRAME_HEAVY_FREIGHTER",
+        "name": "Frame Heavy Freighter",
+        "description": "A large, heavily-armed spacecraft used for cargo transport and other commercial operations in hostile environments.",
+        "moduleSlots": 12,
+        "mountingPoints": 3,
+        "fuelCapacity": 2300,
+        "requirements": {
+          "power": 10,
+          "crew": 100
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_FUSION_I",
+        "name": "Fusion Reactor I",
+        "description": "A basic fusion power reactor, used to generate electricity from nuclear fusion reactions.",
+        "powerOutput": 40,
+        "requirements": {
+          "crew": 12
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_ION_DRIVE_II",
+        "name": "Ion Drive II",
+        "description": "An advanced propulsion system that uses ionized particles to generate high-speed, low-thrust acceleration, with improved efficiency and performance.",
+        "speed": 30,
+        "requirements": {
+          "power": 6,
+          "crew": 8
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_WARP_DRIVE_II",
+          "name": "Warp Drive II",
+          "description": "An advanced warp drive that allows for longer-range interstellar travel with improved reliability.",
+          "range": 6000,
+          "requirements": {
+            "crew": 8,
+            "power": 5,
+            "slots": 2
+          }
+        },
+        {
+          "symbol": "MODULE_SHIELD_GENERATOR_II",
+          "name": "Advanced Shield Generator",
+          "description": "An advanced shield generator that provides enhanced protection against incoming weapons fire and other hazards.",
+          "requirements": {
+            "crew": 4,
+            "power": 5,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        },
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        },
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "SHIP_LIGHT_SHUTTLE",
+      "name": "Light Shuttle",
+      "description": "The light shuttle is a versatile spacecraft designed for exploration, diplomacy, and light cargo transport. With its compact size and agile maneuverability, the shuttle is capable of navigating through tight spaces and challenging environments.",
+      "purchasePrice": 124800,
+      "frame": {
+        "symbol": "FRAME_SHUTTLE",
+        "name": "Frame Shuttle",
+        "description": "A small, reusable spacecraft designed for short-range, low-speed travel between spacecraft or planetary surfaces.",
+        "moduleSlots": 4,
+        "mountingPoints": 1,
+        "fuelCapacity": 900,
+        "requirements": {
+          "power": 1,
+          "crew": 10
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_CHEMICAL_I",
+        "name": "Chemical Reactor I",
+        "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+        "powerOutput": 15,
+        "requirements": {
+          "crew": 3
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_IMPULSE_DRIVE_I",
+        "name": "Impulse Drive I",
+        "description": "A basic low-energy propulsion system that generates thrust for interplanetary travel.",
+        "speed": 2,
+        "requirements": {
+          "power": 1,
+          "crew": 0
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_PASSENGER_CABIN_I",
+          "name": "Passenger Cabin",
+          "description": "A module that provides living space and amenities for passengers.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 2,
+            "power": 2,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_ENVOY_QUARTERS_I",
+          "name": "Envoy Quarters",
+          "description": "A module that provides living space and amenities for VIP passengers or diplomatic envoys.",
+          "capacity": 1,
+          "requirements": {
+            "crew": 5,
+            "power": 2,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        }
+      ]
+    }
+  ]
+}

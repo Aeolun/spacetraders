@@ -44,5 +44,11 @@ export interface Agent {
      * @memberof Agent
      */
     'credits': number;
+    /**
+     * The faction the agent started with.
+     * @type {string}
+     * @memberof Agent
+     */
+    'startingFaction': string;
 }
 

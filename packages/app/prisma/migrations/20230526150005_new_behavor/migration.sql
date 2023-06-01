@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Ship` MODIFY `currentBehavior` ENUM('TRADE', 'UPDATE_MARKETS', 'EXPLORE_MARKETS', 'EXPLORE', 'MINE') NULL;

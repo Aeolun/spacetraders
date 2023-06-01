@@ -8,6 +8,7 @@ import {trpc} from "@front/lib/trpc";
 import {availableActions} from "@front/lib/availableActions";
 import { Simple, SpatialHash } from "pixi-cull"
 import {Switch} from "@front/lib/switch";
+import {MarketWindow} from "@front/lib/MarketWindow";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -25,6 +26,8 @@ export let universeGraphicsText: BitmapText
 export let systemGraphics: Graphics
 export let systemGraphicsText: BitmapText
 export let cruiseModeSelect: Switch
+
+export let marketWindow: MarketWindow
 
 export const createUIElements = (app: Application) => {
     let pointerDownPlace: Point | undefined;
@@ -170,7 +173,8 @@ export const createUIElements = (app: Application) => {
     credits.y = 132
     panelBg.addChild(credits)
 
-    const actionPanelY = window.innerHeight - 16 - Math.ceil(availableActions.length / 2) * 64
+    const actionPanelHeight = Math.ceil(availableActions.length / 2) * 64
+    const actionPanelY = window.innerHeight - 16 - actionPanelHeight
 
     availableActions.forEach((action, index) => {
         actionButton[action.name] = new Button(action.name, {
@@ -195,7 +199,7 @@ export const createUIElements = (app: Application) => {
                 navMode: selectedOption
             })
             console.log('new state', newShip)
-            GameState.shipData[GameState.selected.symbol].shipData = newShip
+            GameState.shipData[GameState.selected.symbol] = newShip
         }
     })
     cruiseModeSelect.visible = true
@@ -217,13 +221,17 @@ export const createUIElements = (app: Application) => {
     //     cruiseModeButtons[button] = but
     // })
 
+    marketWindow = new MarketWindow()
+    marketWindow.container.visible = false
+    uiOverlay.addChild(marketWindow.container)
+
     uiOverlay.addChild(panelBg);
 
     const statsBlock = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10)
     statsBlock.x = 8
     statsBlock.width = 384
     statsBlock.height = 200
-    statsBlock.y = window.innerHeight - 656
+    statsBlock.y = actionPanelY - 300
     panelBg.addChild(statsBlock)
 
     entityInfo = new BitmapText('Entity Information', {
@@ -234,7 +242,7 @@ export const createUIElements = (app: Application) => {
         maxWidth: 368
     })
     entityInfo.x = 24
-    entityInfo.y = window.innerHeight - 634
+    entityInfo.y = actionPanelY - 280
     panelBg.addChild(entityInfo)
 
     currentCoordinate = new BitmapText('0, 0', {

@@ -1,0 +1,238 @@
+{
+  "symbol": "X1-KB27-28845X",
+  "shipTypes": [
+    {
+      "type": "SHIP_LIGHT_HAULER"
+    },
+    {
+      "type": "SHIP_LIGHT_SHUTTLE"
+    }
+  ],
+  "transactions": [],
+  "ships": [
+    {
+      "type": "SHIP_LIGHT_HAULER",
+      "name": "Light Hauler",
+      "description": "A small, fast cargo ship that is designed for short-range transport of light loads.",
+      "purchasePrice": 329856,
+      "frame": {
+        "symbol": "FRAME_LIGHT_FREIGHTER",
+        "name": "Frame Light Freighter",
+        "description": "A small, versatile spacecraft used for cargo transport and other commercial operations.",
+        "moduleSlots": 6,
+        "mountingPoints": 1,
+        "fuelCapacity": 1700,
+        "requirements": {
+          "power": 5,
+          "crew": 40
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_CHEMICAL_I",
+        "name": "Chemical Reactor I",
+        "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+        "powerOutput": 15,
+        "requirements": {
+          "crew": 3
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_ION_DRIVE_I",
+        "name": "Ion Drive I",
+        "description": "An advanced propulsion system that uses ionized particles to generate high-speed, low-thrust acceleration.",
+        "speed": 10,
+        "requirements": {
+          "power": 3,
+          "crew": 3
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_SURVEYOR_I",
+          "name": "Surveyor I",
+          "description": "A basic survey probe that can be used to gather information about a mineral deposit.",
+          "strength": 1,
+          "deposits": [
+            "QUARTZ_SAND",
+            "SILICON_CRYSTALS",
+            "PRECIOUS_STONES",
+            "ICE_WATER",
+            "AMMONIA_ICE",
+            "IRON_ORE",
+            "COPPER_ORE",
+            "SILVER_ORE",
+            "ALUMINUM_ORE",
+            "GOLD_ORE",
+            "PLATINUM_ORE"
+          ],
+          "requirements": {
+            "crew": 2,
+            "power": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "SHIP_LIGHT_SHUTTLE",
+      "name": "Light Shuttle",
+      "description": "The light shuttle is a versatile spacecraft designed for exploration, diplomacy, and light cargo transport. With its compact size and agile maneuverability, the shuttle is capable of navigating through tight spaces and challenging environments.",
+      "purchasePrice": 124800,
+      "frame": {
+        "symbol": "FRAME_SHUTTLE",
+        "name": "Frame Shuttle",
+        "description": "A small, reusable spacecraft designed for short-range, low-speed travel between spacecraft or planetary surfaces.",
+        "moduleSlots": 4,
+        "mountingPoints": 1,
+        "fuelCapacity": 900,
+        "requirements": {
+          "power": 1,
+          "crew": 10
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_CHEMICAL_I",
+        "name": "Chemical Reactor I",
+        "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+        "powerOutput": 15,
+        "requirements": {
+          "crew": 3
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_IMPULSE_DRIVE_I",
+        "name": "Impulse Drive I",
+        "description": "A basic low-energy propulsion system that generates thrust for interplanetary travel.",
+        "speed": 2,
+        "requirements": {
+          "power": 1,
+          "crew": 0
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_PASSENGER_CABIN_I",
+          "name": "Passenger Cabin",
+          "description": "A module that provides living space and amenities for passengers.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 2,
+            "power": 2,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_ENVOY_QUARTERS_I",
+          "name": "Envoy Quarters",
+          "description": "A module that provides living space and amenities for VIP passengers or diplomatic envoys.",
+          "capacity": 1,
+          "requirements": {
+            "crew": 5,
+            "power": 2,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        }
+      ]
+    }
+  ]
+}

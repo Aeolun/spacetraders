@@ -11,12 +11,16 @@ export let loadedAssets: {
     navArrow: Texture,
     starTexture: Texture,
     spaceshipTexture: Texture,
+    probeTexture: Texture,
     panel: Texture
     asteroidBelt: Texture
     button: Texture
     statsBlock: Texture
+    station: Texture
+    treasure: Texture
     select: Texture
     selectInactive: Texture
+    jumpgate: Texture
     panelBg: Texture
     shipyard: Texture
     market: Texture
@@ -34,12 +38,16 @@ export async function loadAssets() {
     const navArrow = await Assets.load('navarrow.png');
     const starTexture: Texture = await Assets.load('stars.png');
     const shipyard: Texture = await Assets.load('shipyard.png');
+    const station:Texture = await Assets.load('station.png');
+    const jumpgate: Texture = await Assets.load('jumpgate.png');
+    const treasure: Texture = await Assets.load('treasure-map.png');
     const select: Texture = await Assets.load('ui/select.png')
     const statsBlock: Texture = await Assets.load('ui/stats.png')
     const selectInactive: Texture = await Assets.load('ui/select_inactive.png')
     const asteroidBelt: Texture = await Assets.load('asteroid_belt.png');
     const market: Texture = await Assets.load('money-bag-xxl.png');
     const spaceshipTexture: Texture = await Assets.load('spaceship.png');
+    const probeTexture: Texture = await Assets.load('ships/PROBE.png');
 
     loadedAssets = {
         sheet,
@@ -52,7 +60,11 @@ export async function loadAssets() {
         navArrow,
         starTexture,
         statsBlock,
+        station,
+        jumpgate,
+        treasure,
         spaceshipTexture,
+        probeTexture,
         asteroidBelt,
         shipyard,
         select,

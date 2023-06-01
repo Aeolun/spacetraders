@@ -1,6 +1,16 @@
 import {APIInstance} from '@app/lib/createApi'
 import {prisma} from "@app/prisma";
-import {Agent, Cooldown, ScannedShip, Ship, ShipCargo, ShipFuel, ShipNav} from "spacetraders-sdk";
+import {
+    Agent,
+    Cooldown,
+    ScannedShip, ScannedShipEngine, ScannedShipFrame, ScannedShipMountsInner, ScannedShipReactor,
+    Ship,
+    ShipCargo, ShipEngine, ShipFrame,
+    ShipFuel,
+    ShipModule,
+    ShipMount,
+    ShipNav, ShipReactor
+} from "spacetraders-sdk";
 
 export async function updateShips(api: APIInstance) {
     const ships = await api.fleet.getMyShips(1, 20)
@@ -9,185 +19,225 @@ export async function updateShips(api: APIInstance) {
     }))
 }
 
+export async function processModule(module: ShipModule) {
+    const smsplit = module.symbol.split('_')
+    const moduleData = {
+        name: module.name,
+        description: module.description,
+
+        effectName: smsplit.slice(1, smsplit.length - 1).join('_'),
+        value: module.range ?? module.capacity,
+
+        crewRequirement: module.requirements.crew,
+        powerRequirement: module.requirements.power,
+        slotRequirement: module.requirements.slots,
+    }
+    await prisma.shipModule.upsert({
+        where: {
+            symbol: module.symbol
+        },
+        create: {
+            symbol: module.symbol,
+            ...moduleData
+        },
+        update: moduleData
+    })
+}
+
+export async function processMount(module: ShipMount | ScannedShipMountsInner) {
+    const smsplit = module.symbol.split('_')
+    const mountData = 'name' in module ? {
+        name: module.name,
+        description: module.description,
+
+        effectName: smsplit.slice(1, smsplit.length - 1).join('_'),
+        value: module.strength,
+        worksOn: module.deposits?.join(','),
+
+        crewRequirement: module.requirements.crew,
+        powerRequirement: module.requirements.power,
+        slotRequirement: module.requirements.slots,
+    } : {
+        name: module.symbol,
+        description: module.symbol
+    }
+    await prisma.shipMount.upsert({
+        where: {
+            symbol: module.symbol
+        },
+        create: {
+            symbol: module.symbol,
+            ...mountData
+        },
+        update: mountData
+    })
+}
+
+export async function processShipFrame(frame: ShipFrame | ScannedShipFrame) {
+    const frameData = 'name' in frame ? {
+        name: frame.name,
+        description: frame.description,
+
+        moduleSlots: frame.moduleSlots,
+        mountingPoints: frame.mountingPoints,
+        fuelCapacity: frame.fuelCapacity,
+
+        crewRequirement: frame.requirements.crew,
+        powerRequirement: frame.requirements.power,
+    } : {
+        name: frame.symbol,
+        description: frame.symbol,
+    }
+
+    return prisma.shipFrame.upsert({
+        where: {
+            symbol: frame.symbol
+        },
+        create: {
+            symbol: frame.symbol,
+            ...frameData
+        },
+        update: frameData
+    })
+}
+
+export async function processShipEngine(engine: ShipEngine | ScannedShipEngine) {
+    const engineData = 'name' in engine ? {
+        name: engine.name,
+        description: engine.description,
+
+        speed: engine.speed,
+
+        crewRequirement: engine.requirements.crew,
+        powerRequirement: engine.requirements.power,
+    } : {
+        name: engine.symbol,
+        description: engine.symbol,
+    }
+
+    return prisma.shipEngine.upsert({
+        where: {
+            symbol: engine.symbol
+        },
+        create: {
+            symbol: engine.symbol,
+            ...engineData
+        },
+        update: engineData
+    })
+}
+
+export async function processReactor(reactor: ShipReactor | ScannedShipReactor) {
+    const reactorData = 'name' in reactor ? {
+        name: reactor.name,
+        description: reactor.description,
+
+        powerOutput: reactor.powerOutput,
+
+        crewRequirement: reactor.requirements.crew,
+    } : {
+        name: reactor.symbol,
+        description: reactor.symbol,
+    }
+
+    return prisma.shipReactor.upsert({
+        where: {
+            symbol: reactor.symbol
+        },
+        create: {
+            symbol: reactor.symbol,
+            ...reactorData
+        },
+        update: reactorData
+    })
+}
+
 export async function processShip(ship: Ship | ScannedShip) {
     if ('modules' in ship) {
         for (const module of ship.modules) {
-            const smsplit = module.symbol.split('_')
-            const moduleData = {
-                symbol: module.symbol,
-                name: module.name,
-                description: module.description,
-
-                effectName: smsplit.slice(1, smsplit.length - 1).join('_'),
-                value: module.range ?? module.capacity,
-
-                crewRequirement: module.requirements.crew,
-                powerRequirement: module.requirements.power,
-                slotRequirement: module.requirements.slots,
-            }
-            await prisma.shipModule.upsert({
-                where: {
-                    symbol: module.symbol
-                },
-                create: moduleData,
-                update: moduleData
-            })
+            await processModule(module)
         }
     }
     if (ship.mounts) {
         for (const module of ship.mounts) {
-            const smsplit = module.symbol.split('_')
-            const mountData = 'name' in module ? {
-                symbol: module.symbol,
-                name: module.name,
-                description: module.description,
-
-                effectName: smsplit.slice(1, smsplit.length - 1).join('_'),
-                value: module.strength,
-                worksOn: module.deposits?.join(','),
-
-                crewRequirement: module.requirements.crew,
-                powerRequirement: module.requirements.power,
-                slotRequirement: module.requirements.slots,
-            } : {
-                symbol: module.symbol,
-                name: module.symbol,
-                description: module.symbol
-            }
-            await prisma.shipMount.upsert({
-                where: {
-                    symbol: module.symbol
-                },
-                create: mountData,
-                update: mountData
-            })
+            await processMount(module)
         }
     }
 
-    const frameData = 'name' in ship.frame ? {
-        symbol: ship.frame.symbol,
-        name: ship.frame.name,
-        description: ship.frame.description,
+    await processShipFrame(ship.frame)
+    await processShipEngine(ship.engine)
+    await processReactor(ship.reactor)
 
-        moduleSlots: ship.frame.moduleSlots,
-        mountingPoints: ship.frame.mountingPoints,
-        fuelCapacity: ship.frame.fuelCapacity,
+    const shipData = {
+        symbol: ship.symbol,
+        name: ship.registration.name,
+        agent: ship.registration.name.split('-').slice(0, 1).join(),
+        factionSymbol: ship.registration.factionSymbol,
+        role: ship.registration.role,
 
-        crewRequirement: ship.frame.requirements.crew,
-        powerRequirement: ship.frame.requirements.power,
-    } : {
-        symbol: ship.frame.symbol,
-        name: ship.frame.symbol,
-        description: ship.frame.symbol,
+        currentSystem: {
+            connect: {
+                symbol: ship.nav.systemSymbol
+            }
+        },
+        currentWaypoint: {
+            connect: {
+                symbol: ship.nav.waypointSymbol
+            }
+        },
+
+        destinationWaypoint: {
+            connect: {
+                symbol: ship.nav.route.destination.symbol
+            }
+        },
+        departureWaypoint: {
+            connect: {
+                symbol: ship.nav.route.departure.symbol
+            }
+        },
+        departureOn: ship.nav.route.departureTime,
+        arrivalOn: ship.nav.route.arrival,
+
+        navStatus: ship.nav.status,
+        flightMode: ship.nav.flightMode,
+
+        fuelCapacity: ship.fuel?.capacity,
+        fuelAvailable: ship.fuel?.current,
+
+        cargoCapacity: ship.cargo?.capacity,
+        cargoUsed: ship.cargo?.units,
+
+        frame: {
+            connect: {
+                symbol: ship.frame.symbol,
+            }
+        },
+        reactor: {
+            connect: {
+                symbol: ship.reactor.symbol
+            }
+        },
+        engine: {
+            connect: {
+                symbol: ship.engine.symbol
+            }
+        },
+        modules: {
+            connect: 'modules' in ship ? ship.modules.map(m => ({ symbol: m.symbol })) : []
+        },
+        mounts: {
+            connect: ship.mounts.map(m => ({ symbol: m.symbol }))
+        }
     }
-
-    const reactorData = 'name' in ship.reactor ? {
-        symbol: ship.reactor.symbol,
-        name: ship.reactor.name,
-        description: ship.reactor.description,
-
-        powerOutput: ship.reactor.powerOutput,
-
-        crewRequirement: ship.reactor.requirements.crew,
-    } : {
-        symbol: ship.reactor.symbol,
-        name: ship.reactor.symbol,
-        description: ship.reactor.symbol,
-    }
-
-    const engineData = 'name' in ship.engine ? {
-        symbol: ship.engine.symbol,
-        name: ship.engine.name,
-        description: ship.engine.description,
-
-        speed: ship.engine.speed,
-
-        crewRequirement: ship.engine.requirements.crew,
-        powerRequirement: ship.engine.requirements.power,
-    } : {
-        symbol: ship.engine.symbol,
-        name: ship.engine.symbol,
-        description: ship.engine.symbol,
-    }
-
-        const shipData = {
+    await prisma.ship.upsert({
+        where: {
             symbol: ship.symbol,
-            name: ship.registration.name,
-            agent: ship.registration.name.split('-').slice(0, 1).join(),
-            factionSymbol: ship.registration.factionSymbol,
-            role: ship.registration.role,
-
-            currentSystem: {
-                connect: {
-                    symbol: ship.nav.systemSymbol
-                }
-            },
-            currentWaypoint: {
-                connect: {
-                    symbol: ship.nav.waypointSymbol
-                }
-            },
-
-            destinationWaypoint: {
-                connect: {
-                    symbol: ship.nav.route.destination.symbol
-                }
-            },
-            departureWaypoint: {
-                connect: {
-                    symbol: ship.nav.route.departure.symbol
-                }
-            },
-            departureOn: ship.nav.route.departureTime,
-            arrivalOn: ship.nav.route.arrival,
-
-            navStatus: ship.nav.status,
-            flightMode: ship.nav.flightMode,
-
-            fuelCapacity: ship.fuel?.capacity,
-            fuelAvailable: ship.fuel?.current,
-
-            cargoCapacity: ship.cargo?.capacity,
-            cargoUsed: ship.cargo?.units,
-
-            frame: {
-                connectOrCreate: {
-                    where: {
-                        symbol: ship.frame.symbol,
-                    },
-                    create: frameData
-                }
-            },
-            reactor: {
-                connectOrCreate: {
-                    where: {
-                        symbol: ship.reactor.symbol
-                    },
-                    create: reactorData
-                }
-            },
-            engine: {
-                connectOrCreate: {
-                    where: {
-                        symbol: ship.engine.symbol
-                    },
-                    create: engineData
-                }
-            },
-            modules: {
-                connect: 'modules' in ship ? ship.modules.map(m => ({ symbol: m.symbol })) : []
-            },
-            mounts: {
-                connect: ship.mounts.map(m => ({ symbol: m.symbol }))
-            }
-        }
-        await prisma.ship.upsert({
-            where: {
-                symbol: ship.symbol,
-            },
-            create: shipData,
-            update: shipData
-        })
+        },
+        create: shipData,
+        update: shipData
+    })
+    
     if ('cargo' in ship) {
         await processCargo(ship.symbol, ship.cargo)
     }
@@ -286,48 +336,56 @@ export async function processCooldown(shipSymbol: string, cooldown: Cooldown) {
 }
 
 export async function processCargo(shipSymbol: string, cargo: ShipCargo) {
-    await prisma.ship.update({
-        where: {
-            symbol: shipSymbol,
-        },
-        data: {
-            cargoUsed: cargo.units,
-            cargoCapacity: cargo.capacity,
-        }
-    })
-    await Promise.all(cargo.inventory.map(async c => {
-        await prisma.tradeGood.upsert({
+    await prisma.$transaction(async () => {
+        await prisma.ship.update({
             where: {
-                symbol: c.symbol,
+                symbol: shipSymbol,
             },
-            create: {
-                name: c.name,
-                symbol: c.symbol,
-                description: c.description
-            },
-            update: {
-                name: c.name,
-                symbol: c.symbol,
-                description: c.description
+            data: {
+                cargoUsed: cargo.units,
+                cargoCapacity: cargo.capacity,
             }
         })
-        return prisma.shipCargo.upsert({
+        // remove existing cargo
+        await prisma.shipCargo.deleteMany({
             where: {
-                shipSymbol_tradeGoodSymbol: {
+                shipSymbol: shipSymbol
+            }
+        })
+        // create a new entry for every cargo item
+        for (const c of cargo.inventory) {
+            await prisma.tradeGood.upsert({
+                where: {
+                    symbol: c.symbol,
+                },
+                create: {
+                    name: c.name,
+                    symbol: c.symbol,
+                    description: c.description
+                },
+                update: {
+                    name: c.name,
+                    description: c.description
+                }
+            })
+            await prisma.shipCargo.upsert({
+                where: {
+                    shipSymbol_tradeGoodSymbol: {
+                        shipSymbol: shipSymbol,
+                        tradeGoodSymbol: c.symbol
+                    }
+                },
+                create: {
                     shipSymbol: shipSymbol,
                     tradeGoodSymbol: c.symbol,
+                    units: c.units
                 },
-            },
-            update: {
-                units: c.units,
-            },
-            create: {
-                shipSymbol: shipSymbol,
-                tradeGoodSymbol: c.symbol,
-                units: c.units
-            }
-        })
-    }))
+                update: {
+                    units: c.units
+                }
+            })
+        }
+    })
 
     return returnShipData(shipSymbol)
 }
@@ -345,7 +403,8 @@ export async function returnShipData(shipSymbol: string) {
             reactor: true,
             engine: true,
             mounts: true,
-            modules: true
+            modules: true,
+            cargo: true
         }
     })
 }

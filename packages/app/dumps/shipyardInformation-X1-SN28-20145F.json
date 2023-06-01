@@ -1,0 +1,440 @@
+{
+  "symbol": "X1-SN28-20145F",
+  "shipTypes": [
+    {
+      "type": "SHIP_LIGHT_HAULER"
+    },
+    {
+      "type": "SHIP_REFINING_FREIGHTER"
+    },
+    {
+      "type": "SHIP_ORE_HOUND"
+    }
+  ],
+  "transactions": [],
+  "ships": [
+    {
+      "type": "SHIP_LIGHT_HAULER",
+      "name": "Light Hauler",
+      "description": "A small, fast cargo ship that is designed for short-range transport of light loads.",
+      "purchasePrice": 329856,
+      "frame": {
+        "symbol": "FRAME_LIGHT_FREIGHTER",
+        "name": "Frame Light Freighter",
+        "description": "A small, versatile spacecraft used for cargo transport and other commercial operations.",
+        "moduleSlots": 6,
+        "mountingPoints": 1,
+        "fuelCapacity": 1700,
+        "requirements": {
+          "power": 5,
+          "crew": 40
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_CHEMICAL_I",
+        "name": "Chemical Reactor I",
+        "description": "A basic chemical power reactor, used to generate electricity from chemical reactions.",
+        "powerOutput": 15,
+        "requirements": {
+          "crew": 3
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_ION_DRIVE_I",
+        "name": "Ion Drive I",
+        "description": "An advanced propulsion system that uses ionized particles to generate high-speed, low-thrust acceleration.",
+        "speed": 10,
+        "requirements": {
+          "power": 3,
+          "crew": 3
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_SURVEYOR_I",
+          "name": "Surveyor I",
+          "description": "A basic survey probe that can be used to gather information about a mineral deposit.",
+          "strength": 1,
+          "deposits": [
+            "QUARTZ_SAND",
+            "SILICON_CRYSTALS",
+            "PRECIOUS_STONES",
+            "ICE_WATER",
+            "AMMONIA_ICE",
+            "IRON_ORE",
+            "COPPER_ORE",
+            "SILVER_ORE",
+            "ALUMINUM_ORE",
+            "GOLD_ORE",
+            "PLATINUM_ORE"
+          ],
+          "requirements": {
+            "crew": 2,
+            "power": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "SHIP_REFINING_FREIGHTER",
+      "name": "Refining Freighter",
+      "description": "A large cargo ship designed specifically for refining raw materials. Equipped with a powerful reactor and space for large modules, the refining freighter is a versatile and convenient tool for industrial operations in remote or difficult-to-reach locations.",
+      "purchasePrice": 1678650,
+      "frame": {
+        "symbol": "FRAME_HEAVY_FREIGHTER",
+        "name": "Frame Heavy Freighter",
+        "description": "A large, heavily-armed spacecraft used for cargo transport and other commercial operations in hostile environments.",
+        "moduleSlots": 12,
+        "mountingPoints": 3,
+        "fuelCapacity": 2300,
+        "requirements": {
+          "power": 10,
+          "crew": 100
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_FUSION_I",
+        "name": "Fusion Reactor I",
+        "description": "A basic fusion power reactor, used to generate electricity from nuclear fusion reactions.",
+        "powerOutput": 40,
+        "requirements": {
+          "crew": 12
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_ION_DRIVE_II",
+        "name": "Ion Drive II",
+        "description": "An advanced propulsion system that uses ionized particles to generate high-speed, low-thrust acceleration, with improved efficiency and performance.",
+        "speed": 30,
+        "requirements": {
+          "power": 6,
+          "crew": 8
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_ORE_REFINERY_I",
+          "name": "Ore Refinery",
+          "description": "A specialized module that can refine raw ores into usable metals and other materials.",
+          "production": [
+            "IRON",
+            "COPPER",
+            "SILVER",
+            "GOLD",
+            "ALUMINUM",
+            "PLATINUM",
+            "URANITE",
+            "MERITIUM"
+          ],
+          "requirements": {
+            "crew": 20,
+            "power": 12,
+            "slots": 4
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        },
+        {
+          "symbol": "MOUNT_TURRET_I",
+          "name": "Rotary Cannon",
+          "description": "A rotary cannon is a type of mounted turret that is designed to fire a high volume of rounds in rapid succession.",
+          "requirements": {
+            "power": 1,
+            "crew": 1
+          }
+        },
+        {
+          "symbol": "MOUNT_MISSILE_LAUNCHER_I",
+          "name": "Missile Launcher",
+          "description": "A basic missile launcher that fires guided missiles with a variety of warheads for different targets.",
+          "requirements": {
+            "power": 1,
+            "crew": 2
+          }
+        }
+      ]
+    },
+    {
+      "type": "SHIP_ORE_HOUND",
+      "name": "Ore Hound",
+      "description": "The Ore Hound is a specialized mining ship designed for extracting valuable ores and minerals from asteroids and other celestial bodies. With its advanced mining lasers and reinforced hull, the Ore Hound is capable of excavating large amounts of ore and minerals from even the toughest asteroids. It is equipped with a range of modules and mounts for handling a variety of mining and defensive needs, and is an essential vessel for miners and traders looking to profit from the rich resources of the galaxy.",
+      "purchasePrice": 159220,
+      "frame": {
+        "symbol": "FRAME_MINER",
+        "name": "Frame Miner",
+        "description": "A medium-sized spacecraft designed for mining operations and resource extraction.",
+        "moduleSlots": 5,
+        "mountingPoints": 3,
+        "fuelCapacity": 900,
+        "requirements": {
+          "power": 5,
+          "crew": 15
+        }
+      },
+      "reactor": {
+        "symbol": "REACTOR_FISSION_I",
+        "name": "Fission Reactor I",
+        "description": "A basic fission power reactor, used to generate electricity from nuclear fission reactions.",
+        "powerOutput": 31,
+        "requirements": {
+          "crew": 8
+        }
+      },
+      "engine": {
+        "symbol": "ENGINE_ION_DRIVE_I",
+        "name": "Ion Drive I",
+        "description": "An advanced propulsion system that uses ionized particles to generate high-speed, low-thrust acceleration.",
+        "speed": 10,
+        "requirements": {
+          "power": 3,
+          "crew": 3
+        }
+      },
+      "modules": [
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_CARGO_HOLD_I",
+          "name": "Cargo Hold",
+          "description": "A module that increases a ship's cargo capacity.",
+          "capacity": 30,
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 1
+          }
+        },
+        {
+          "symbol": "MODULE_MINERAL_PROCESSOR_I",
+          "name": "Mineral Processor",
+          "description": "Crushes and processes extracted minerals and ores into their component parts, filters out impurities, and containerizes them into raw storage units.",
+          "requirements": {
+            "crew": 0,
+            "power": 1,
+            "slots": 2
+          }
+        },
+        {
+          "symbol": "MODULE_CREW_QUARTERS_I",
+          "name": "Crew Quarters",
+          "description": "A module that provides living space and amenities for the crew.",
+          "capacity": 40,
+          "requirements": {
+            "crew": 2,
+            "power": 1,
+            "slots": 1
+          }
+        }
+      ],
+      "mounts": [
+        {
+          "symbol": "MOUNT_MINING_LASER_II",
+          "name": "Mining Laser II",
+          "description": "An advanced mining laser that is more efficient and effective at extracting valuable minerals from asteroids and other space objects.",
+          "strength": 25,
+          "requirements": {
+            "crew": 2,
+            "power": 2
+          }
+        },
+        {
+          "symbol": "MOUNT_SURVEYOR_I",
+          "name": "Surveyor I",
+          "description": "A basic survey probe that can be used to gather information about a mineral deposit.",
+          "strength": 1,
+          "deposits": [
+            "QUARTZ_SAND",
+            "SILICON_CRYSTALS",
+            "PRECIOUS_STONES",
+            "ICE_WATER",
+            "AMMONIA_ICE",
+            "IRON_ORE",
+            "COPPER_ORE",
+            "SILVER_ORE",
+            "ALUMINUM_ORE",
+            "GOLD_ORE",
+            "PLATINUM_ORE"
+          ],
+          "requirements": {
+            "crew": 2,
+            "power": 1
+          }
+        }
+      ]
+    }
+  ]
+}

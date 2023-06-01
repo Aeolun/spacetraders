@@ -1,32 +1,207 @@
 import {trpc} from "@front/lib/trpc";
 import {backButton, systemGraphics, systemGraphicsText, systemView, universeView} from "@front/lib/UIElements";
-import {GameState, System, WaypointData} from "@front/lib/game-state";
+import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/lib/game-state";
 import {systemCoordinates, systemScale} from "@front/lib/consts";
 import {BitmapText, Container, Graphics, Sprite} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadedAssets} from "@front/lib/assets";
 import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
 
-export async function loadSystem(starData: System) {
-  const systemSymbol = starData.symbol
-  await trpc.shipsForSystem.query({
-    system: systemSymbol
-  }).then(ships => {
+function createShipContainer(ship: ShipData) {
+  const shipGroup = new Container()
+
+  const itemSprite = new Sprite(ship.frameSymbol === 'FRAME_PROBE' ? loadedAssets.probeTexture : loadedAssets.spaceshipTexture)
+  itemSprite.name = 'ship'
+  itemSprite.pivot = {
+    x: 32,
+    y: 32
+  }
+  const navSprite = new Sprite(loadedAssets.navArrow);
+  navSprite.pivot = {
+    x: navSprite.width / 2,
+    y: navSprite.height / 2,
+  }
+  navSprite.name = 'nav'
+  navSprite.visible = false;
+  shipGroup.addChild(navSprite)
+
+  itemSprite.scale = { x: 0.5, y: 0.5 }
+  const shipPosition = positionShip(ship)
+  shipGroup.x = shipPosition.x
+  shipGroup.y = shipPosition.y
+
+  if (ship.agent !== GameState.agent.symbol) {
+    itemSprite.tint = 0xDD9999
+  }
+
+  shipGroup.addChild(itemSprite)
+
+  const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
+    fontName: 'sans-serif',
+    fontSize: 16,
+    align: 'right',
+  })
+  text.visible = false
+  text.x = 0
+  text.y = 32
+  shipGroup.addChild(text);
+
+  makeInteractiveAndSelectable(shipGroup, {
+    onMouseOver: () => {
+      text.visible = true
+    },
+    onMouseOut: () => {
+      text.visible = false
+    },
+    onSelect: {
+      type: 'ship',
+      symbol: ship.symbol
+    }
+  })
+
+  return shipGroup
+}
+
+function createOrbitGraphics(item: Waypoint) {
+  const orbit = new Graphics()
+  orbit.lineStyle({
+    width: 2,
+    color: 0x444444
+  })
+  orbit.drawCircle(Math.abs(systemCoordinates.minX)*systemScale, Math.abs(systemCoordinates.minY)*systemScale, Math.sqrt(Math.pow(item.x*systemScale, 2) + Math.pow(item.y*systemScale, 2)))
+
+  return orbit
+}
+
+function addTraitIcons(item: WaypointData, container: Container) {
+  let xOffset = 0
+  item.traits.forEach(trait => {
+    if (trait.symbol === 'MARKETPLACE') {
+      const sprite = new Sprite(loadedAssets.market)
+      sprite.pivot = {
+        x: 32,
+        y: 32
+      }
+      sprite.scale = {x: 0.25, y: 0.25}
+      sprite.x = xOffset - 16
+      sprite.y =  24
+      container.addChild(sprite)
+      xOffset += 16
+    }
+    if (trait.symbol === 'SHIPYARD') {
+      const sprite = new Sprite(loadedAssets.shipyard)
+      sprite.pivot = {
+        x: 32,
+        y: 32
+      }
+      sprite.scale = {x: 0.25, y: 0.24}
+      sprite.x = xOffset - 16
+      sprite.y = 24
+      container.addChild(sprite)
+      xOffset += 16
+    }
+  })
+}
+
+function createSystemItem(data: {
+    waypoint: WaypointData
+    parent?: WaypointData
+  }, scale = 1, index = 0) {
+  const orbitingGroup = new Container()
+
+  const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
+  orbitingSprite.pivot = {
+    x: 32,
+    y: 32
+  }
+  orbitingSprite.scale = {x: scale, y: scale}
+
+  if (data.parent) {
+    orbitingGroup.x = data.parent.x * systemScale + 32 + Math.abs(systemCoordinates.minX) * systemScale
+    orbitingGroup.y = data.parent.y * systemScale + 48 + 64*index + Math.abs(systemCoordinates.minY) * systemScale
+  } else {
+    orbitingGroup.x = (data.waypoint.x + Math.abs(systemCoordinates.minX)) * systemScale
+    orbitingGroup.y = (data.waypoint.y + Math.abs(systemCoordinates.minY)) * systemScale
+  }
+
+  orbitingGroup.addChild(orbitingSprite)
+
+  const orbitingText = new BitmapText(data.waypoint.symbol + ' - ' + data.waypoint.type, {
+    fontName: 'sans-serif',
+    fontSize: 16,
+    align: 'right',
+  })
+  orbitingText.x = 24
+  orbitingText.y = -8
+  orbitingGroup.addChild(orbitingText)
+
+  makeInteractiveAndSelectable(orbitingGroup, {
+    onMouseOver: () => {
+      console.log('hovered', data.waypoint)
+      GameState.hoveredWaypoint = data.waypoint
+    },
+    onMouseOut: () => {
+      GameState.hoveredWaypoint = undefined
+    },
+    onSelect: {
+      type: 'waypoint',
+      symbol: data.waypoint.symbol,
+    },
+    onOrder: [
+      {
+        name: "navigate",
+        withSelection: 'ship',
+        action: async (selectedSymbol: string) => {
+          const res = await trpc.instructNavigate.mutate({
+            shipSymbol: selectedSymbol,
+            waypointSymbol: data.waypoint.symbol,
+          })
+          GameState.shipData[res.symbol] = res
+          console.log("updated state for ship "+res.symbol)
+        }
+      }
+    ]
+  })
+
+  addTraitIcons(data.waypoint, orbitingGroup)
+
+  return orbitingGroup
+}
+
+export function clearSystem() {
+  systemView.removeChildren()
+  systemView.addChild(systemGraphics)
+  systemView.addChild(systemGraphicsText)
+}
+
+export function showSystemView() {
+  universeView.visible = false
+  systemView.visible = true
+  GameState.currentView = 'system'
+}
+
+export async function loadSystem(systemSymbol: string, resetCamera = true) {
+  Promise.all([
+    trpc.shipsForSystem.query({
+      system: systemSymbol
+    }),
+    trpc.waypointsForSystem.query({
+      system: systemSymbol,
+    })
+  ]).then(([ships, waypoints]) => {
+    const starData = GameState.systemData[systemSymbol]
+
     ships.forEach(ship => {
       GameState.shipData[ship.symbol] = ship
     })
-  })
-  trpc.waypointsForSystem.query({
-    system: systemSymbol,
-  }).then(waypoints => {
-    console.log('result from query', waypoints)
-    GameState.currentSystem = starData
-    universeView.visible = false
-    systemView.visible = true
-    GameState.currentView = 'system'
-    systemView.removeChildren()
-    systemView.addChild(systemGraphics)
-    systemView.addChild(systemGraphicsText)
+    waypoints.forEach(waypoint => {
+      GameState.waypointData[waypoint.symbol] = waypoint
+    })
+
+    clearSystem()
+    showSystemView()
+    GameState.currentSystem = systemSymbol
+
 
     systemCoordinates.minX = 0
     systemCoordinates.minY = 0
@@ -53,223 +228,45 @@ export async function loadSystem(starData: System) {
 
     resetShipWaypoints()
     GameState.systemShips = {}
-    GameState.visibleWaypoints = {}
+    GameState.waypoints = {}
 
     Object.values(GameState.shipData).filter(ship => ship.currentWaypoint.systemSymbol === starData.symbol).forEach(data => {
       const ship = data
 
-      const shipGroup = new Container()
-
-      const itemSprite = new Sprite(loadedAssets.spaceshipTexture)
-      itemSprite.name = 'ship'
-      itemSprite.pivot = {
-        x: 32,
-        y: 32
-      }
-      const navSprite = new Sprite(loadedAssets.navArrow);
-      navSprite.pivot = {
-        x: navSprite.width / 2,
-        y: navSprite.height / 2,
-      }
-      navSprite.name = 'nav'
-      navSprite.visible = false;
-      shipGroup.addChild(navSprite)
-
-      itemSprite.scale = { x: 0.5, y: 0.5 }
-      const shipPosition = positionShip(ship)
-      shipGroup.x = shipPosition.x
-      shipGroup.y = shipPosition.y
-
-      if (data.agent !== GameState.agent.symbol) {
-        itemSprite.tint = 0xDD9999
-      }
-
-      shipGroup.addChild(itemSprite)
-
-      const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
-        fontName: 'sans-serif',
-        fontSize: 16,
-        align: 'right',
-      })
-      text.visible = false
-      text.x = 0
-      text.y = 32
-      shipGroup.addChild(text);
-
-      makeInteractiveAndSelectable(shipGroup, {
-        onMouseOver: () => {
-          text.visible = true
-        },
-        onMouseOut: () => {
-          text.visible = false
-        },
-        onSelect: {
-          type: 'ship',
-          symbol: ship.symbol
-        }
-      })
+      const shipGroup = createShipContainer(ship)
 
       systemView.addChild(shipGroup)
       GameState.systemShips[ship.symbol] = shipGroup
     })
 
-    const addTraitIcons = (item: WaypointData, container: Container) => {
-      let xOffset = 0
-      item.traits.forEach(trait => {
-        if (trait.symbol === 'MARKETPLACE') {
-          const sprite = new Sprite(loadedAssets.market)
-          sprite.pivot = {
-            x: 32,
-            y: 32
-          }
-          sprite.scale = {x: 0.25, y: 0.25}
-          sprite.x = xOffset - 16
-          sprite.y =  24
-          container.addChild(sprite)
-          xOffset += 16
-        }
-        if (trait.symbol === 'SHIPYARD') {
-          const sprite = new Sprite(loadedAssets.shipyard)
-          sprite.pivot = {
-            x: 32,
-            y: 32
-          }
-          sprite.scale = {x: 0.25, y: 0.24}
-          sprite.x = xOffset - 16
-          sprite.y = 24
-          container.addChild(sprite)
-          xOffset += 16
-        }
-      })
-    }
-
     waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
-      const orbit = new Graphics()
-      orbit.lineStyle({
-        width: 2,
-        color: 0x444444
+      systemView.addChild(createOrbitGraphics(item))
+
+      const itemGroup = createSystemItem({
+        waypoint: item
       })
-      orbit.drawCircle(Math.abs(systemCoordinates.minX)*systemScale, Math.abs(systemCoordinates.minY)*systemScale, Math.sqrt(Math.pow(item.x*systemScale, 2) + Math.pow(item.y*systemScale, 2)))
-      systemView.addChild(orbit)
-
-      const itemGroup = new Container()
-      makeInteractiveAndSelectable(itemGroup, {
-        onMouseOver: () => {
-          GameState.hoveredWaypoint = item
-        },
-        onMouseOut: () => {
-          GameState.hoveredWaypoint = undefined
-        },
-        onSelect: {
-          type: 'waypoint',
-          symbol: item.symbol,
-        },
-        onOrder: [
-          {
-            name: "navigate",
-            withSelection: 'ship',
-            action: async (selectedSymbol: string) => {
-              const res = await trpc.instructNavigate.mutate({
-                shipSymbol: selectedSymbol,
-                waypointSymbol: item.symbol,
-              })
-              GameState.shipData[res.symbol] = res
-              console.log("updated state for ship "+res.symbol)
-            }
-          }
-        ]
-      })
-
-      const itemSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${item.type}.png`])
-      itemSprite.pivot = {
-        x: 32,
-        y: 32
-      }
-      itemGroup.x = (item.x + Math.abs(systemCoordinates.minX)) * systemScale
-      itemGroup.y = (item.y + Math.abs(systemCoordinates.minY)) * systemScale
-      itemGroup.addChild(itemSprite)
-
-      const text = new BitmapText(item.symbol.replace(starData.symbol+'-', '') + ' - ' + item.type, {
-        fontName: 'sans-serif',
-        fontSize: 16,
-        align: 'right',
-      })
-      text.x = 40
-      text.y = -8
-      itemGroup.addChild(text);
-
-      addTraitIcons(item, itemGroup)
 
       waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y)).forEach((orbitingThing, index) => {
-        const orbitingGroup = new Container()
-        makeInteractiveAndSelectable(orbitingGroup, {
-          onMouseOver: () => {
-            console.log('hovered', item)
-            GameState.hoveredWaypoint = orbitingThing
-          },
-          onMouseOut: () => {
-            GameState.hoveredWaypoint = undefined
-          },
-          onSelect: {
-            type: 'waypoint',
-            symbol: orbitingThing.symbol,
-          },
-          onOrder: [
-              {
-                name: "navigate",
-                withSelection: 'ship',
-                action: async (selectedSymbol: string) => {
-                  const res = await trpc.instructNavigate.mutate({
-                    shipSymbol: selectedSymbol,
-                    waypointSymbol: orbitingThing.symbol,
-                  })
-                  GameState.shipData[res.symbol] = res
-                  console.log("updated state for ship "+res.symbol)
-                }
-              }
-            ]
-        })
+        const orbitingGroup = createSystemItem({
+          waypoint: orbitingThing,
+          parent: item
+        }, 0.75, index)
 
-        const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${orbitingThing.type}.png`])
-        orbitingSprite.pivot = {
-          x: 32,
-          y: 32
-        }
-        orbitingSprite.scale = {x: 0.75, y: 0.75}
-        orbitingGroup.x = item.x * systemScale + 32 + Math.abs(systemCoordinates.minX) * systemScale
-        orbitingGroup.y = item.y * systemScale + 48 + 64*index + Math.abs(systemCoordinates.minY) * systemScale
-        orbitingGroup.addChild(orbitingSprite)
-
-        const orbitingText = new BitmapText(orbitingThing.symbol.replace(starData.symbol+'-', '') + ' - ' + orbitingThing.type, {
-          fontName: 'sans-serif',
-          fontSize: 16,
-          align: 'right',
-        })
-        orbitingText.x = 24
-        orbitingText.y = -8
-        orbitingGroup.addChild(orbitingText)
-
-        addTraitIcons(orbitingThing, orbitingGroup)
-
-        GameState.visibleWaypoints[orbitingThing.symbol] = {
-          waypointData: orbitingThing,
-          container: orbitingGroup
-        }
+        GameState.waypoints[orbitingThing.symbol] = orbitingGroup
 
         systemView.addChild(orbitingGroup)
       })
 
-      GameState.visibleWaypoints[item.symbol] = {
-        waypointData: item,
-        container: itemGroup
-      }
+      GameState.waypoints[item.symbol] = itemGroup
 
       systemView.addChild(itemGroup)
     })
 
-    systemView.moveCenter({
-      x: Math.abs(systemCoordinates.minX) * systemScale,
-      y: Math.abs(systemCoordinates.minY) * systemScale
-    })
+    if (resetCamera) {
+      systemView.moveCenter({
+        x: Math.abs(systemCoordinates.minX) * systemScale,
+        y: Math.abs(systemCoordinates.minY) * systemScale
+      })
+    }
   })
 }

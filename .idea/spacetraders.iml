@@ -10,5 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="api-docs" />
+    <orderEntry type="module" module-name="st-meta" />
+    <orderEntry type="module" module-name="dijkstra-calculator" />
   </component>
 </module>

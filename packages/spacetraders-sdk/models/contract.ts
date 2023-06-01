@@ -60,11 +60,18 @@ export interface Contract {
      */
     'fulfilled': boolean;
     /**
-     * The time at which the contract expires
+     * Deprecated in favor of deadlineToAccept
+     * @type {string}
+     * @memberof Contract
+     * @deprecated
+     */
+    'expiration': string;
+    /**
+     * The time at which the contract is no longer available to be accepted
      * @type {string}
      * @memberof Contract
      */
-    'expiration': string;
+    'deadlineToAccept'?: string;
 }
 
 export const ContractTypeEnum = {

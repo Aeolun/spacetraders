@@ -10,7 +10,7 @@ import {
     actionButton,
     createUIElements, credits, cruiseModeSelect,
     currentCoordinate,
-    currentSelected, entityInfo, fps,
+    currentSelected, entityInfo, fps, marketWindow,
     systemView, universeCuller, universeGraphics, universeGraphicsText,
     universeView
 } from "@front/lib/UIElements";
@@ -21,6 +21,7 @@ import {availableActions} from "@front/lib/availableActions";
 import {loadPlayerData} from "@front/lib/loadPlayerData";
 import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/lib/targetingLine";
 import {loadSystem} from "@front/lib/loadSystem";
+import {trpc} from "@front/lib/trpc";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -31,7 +32,8 @@ if (!localStorage.getItem('agent-token')) {
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
 const app = new Application({
-    resizeTo: window
+    resizeTo: window,
+    antialias: true
 });
 
 // The application will create a canvas element for you that you
@@ -61,9 +63,16 @@ const format = Intl.NumberFormat('en');
 // Listen for frame updates
 let lastRefresh = Date.now()
 app.ticker.add(() => {
-    const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
+    const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5)
+    const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
     credits.text = `${format.format(GameState.agent.credits)}`
+
+    if (Date.now() - lastRefresh > 5000) {
+        lastRefresh = Date.now()
+        loadPlayerData()
+    }
+
 
     if (GameState.currentView == 'universe') {
         Object.values(loadedUniverse.systems).forEach(ref => {
@@ -78,7 +87,7 @@ app.ticker.add(() => {
             const shipData = GameState.shipData[shipKey]
             const shipContainer = GameState.universeShips[shipKey]
 
-            shipContainer.scale = {x: sizeMultiplier, y: sizeMultiplier}
+            shipContainer.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
             const shipPosition = positionUniverseShip(shipData)
             shipContainer.x = shipPosition.x
             shipContainer.y = shipPosition.y
@@ -99,11 +108,6 @@ app.ticker.add(() => {
             }
         })
     } else {
-        if (Date.now() - lastRefresh > 5000) {
-            lastRefresh = Date.now()
-            loadPlayerData()
-        }
-
         const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset))
         currentCoordinate.text = systemCoordinate.x + ', ' + systemCoordinate.y
 
@@ -158,16 +162,30 @@ app.ticker.add(() => {
             const arrivalValue = navTime > Date.now() ? (Math.round((navTime - Date.now())/1000)+'s') : 'Ready'
             if (GameState.agent.symbol === shipInfo.agent) {
                 // your own ships
-                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}`
+                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}\nAction: ${shipInfo.overalGoal}`
             } else {
                 // someone elses ships
                 entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nOwner: ${shipInfo.agent}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nLast update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime())/1000)}s ago`
             }
         } else if (GameState.selected.type === 'waypoint') {
-            const waypointInfo = GameState.visibleWaypoints[GameState.selected.symbol].waypointData
+            const waypointInfo = GameState.waypointData[GameState.selected.symbol]
             entityInfo.text = `Entity Information\nSymbol: ${GameState.selected.symbol}\nKind: ${waypointInfo.type}\nTraits: ${waypointInfo.traits.length == 0 ? 'UNKNOWN' : waypointInfo.traits.map(t => t.name).join(', ')}\nFaction: ${waypointInfo.factionSymbol}\nChart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : 'None'}`
+
+            if (waypointInfo.traits.find(t => t.symbol === 'MARKETPLACE') && GameState.displayedMarket !== GameState.selected.symbol) {
+                GameState.displayedMarket = GameState.selected.symbol
+                trpc.getMarketInfo.query({
+                    waypoint: GameState.selected.symbol
+                }).then(data => {
+                    console.log('marketinfo', data)
+                    marketWindow.clearGoods()
+                    marketWindow.setGoods(data)
+                    marketWindow.container.visible = true
+                })
+            }
         }
     } else {
+        GameState.displayedMarket = undefined
+        marketWindow.container.visible = false
         cruiseModeSelect.visible = false
         entityInfo.text = `Entity Information`
     }

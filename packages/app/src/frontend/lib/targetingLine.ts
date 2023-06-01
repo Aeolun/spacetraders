@@ -15,21 +15,26 @@ const jumpColor = 0x999933;
 
 export const universeTargetingLine = (sizeMultiplier: number) => {
     if (GameState.hoveredSystem && GameState.currentView == 'universe' && GameState.selected?.type === 'ship') {
-        const warpRange = GameState.shipData[GameState.selected?.symbol].modules.find(m => m.effectName === 'WARP_DRIVE')?.value
-        const jumpRange = GameState.shipData[GameState.selected?.symbol].modules.find(m => m.effectName === 'JUMP_DRIVE')?.value
+        const selectedShip = GameState.shipData[GameState.selected?.symbol]
+        const warpRange = selectedShip.modules.find(m => m.effectName === 'WARP_DRIVE')?.value
+        const jumpRange = selectedShip.modules.find(m => m.effectName === 'JUMP_DRIVE')?.value
+
+        const jumpGateRange = GameState.waypointData[selectedShip.currentWaypoint.symbol]?.jumpgate?.range
 
         const currentSystemSymbol = GameState.shipData[GameState.selected.symbol].currentWaypoint.systemSymbol
         const hoveredSystemSymbol = GameState.hoveredSystem.symbol
 
-        const fromContainer = GameState.visibleSystems[currentSystemSymbol].container
-        const toContainer = GameState.visibleSystems[hoveredSystemSymbol].container
+        const fromContainer = GameState.systems[currentSystemSymbol]
+        const toContainer = GameState.systems[hoveredSystemSymbol]
 
-        const fromData = GameState.visibleSystems[currentSystemSymbol].systemData
-        const toData = GameState.visibleSystems[hoveredSystemSymbol].systemData
+        if (!fromContainer || !toContainer) return;
+
+        const fromData = GameState.systemData[currentSystemSymbol]
+        const toData = GameState.systemData[hoveredSystemSymbol]
 
         const distance = Math.round(Math.sqrt(Math.pow(fromData.x - toData.x, 2)+Math.pow(fromData.y - toData.y, 2)))
 
-        if (jumpRange && distance < jumpRange) {
+        if (jumpRange && distance < (jumpGateRange ?? jumpRange)) {
             universeGraphics.lineStyle({
                 color: jumpColor,
                 width: sizeMultiplier
@@ -57,10 +62,15 @@ export const universeTargetingLine = (sizeMultiplier: number) => {
     if (GameState.currentView === 'universe' && GameState.selected?.type === 'ship') {
 
         const currentSystemSymbol = GameState.shipData[GameState.selected.symbol].currentWaypoint.systemSymbol
-        const fromContainer = GameState.visibleSystems[currentSystemSymbol].container
+        const fromContainer = GameState.systems[currentSystemSymbol]
 
-        const warpRange = GameState.shipData[GameState.selected?.symbol].modules.find(m => m.effectName === 'WARP_DRIVE')?.value
-        const jumpRange = GameState.shipData[GameState.selected?.symbol].modules.find(m => m.effectName === 'JUMP_DRIVE')?.value
+        const selectedShip = GameState.shipData[GameState.selected?.symbol]
+        const warpRange = selectedShip.modules.find(m => m.effectName === 'WARP_DRIVE')?.value
+        const jumpRange = selectedShip.modules.find(m => m.effectName === 'JUMP_DRIVE')?.value
+
+        const jumpGateRange = GameState.waypointData[selectedShip.currentWaypoint.symbol]?.jumpgate?.range
+
+        console.log("jumpgate range", jumpGateRange)
 
         if (warpRange) {
             universeGraphics.lineStyle({
@@ -69,12 +79,12 @@ export const universeTargetingLine = (sizeMultiplier: number) => {
             })
             universeGraphics.drawCircle(fromContainer.x, fromContainer.y, warpRange*scale.universe)
         }
-        if (jumpRange) {
+        if (jumpRange || jumpGateRange) {
             universeGraphics.lineStyle({
                 color: jumpColor,
                 width: sizeMultiplier
             })
-            universeGraphics.drawCircle(fromContainer.x, fromContainer.y, jumpRange*scale.universe)
+            universeGraphics.drawCircle(fromContainer.x, fromContainer.y, (jumpGateRange ?? jumpRange)*scale.universe)
         }
     }
 }
@@ -91,14 +101,16 @@ export const systemTargetingLine = () => {
         const currentWaypointSymbol = GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
         const hoveredWaypointSymbol = GameState.hoveredWaypoint.symbol
 
-        const fromContainer = GameState.visibleWaypoints[currentWaypointSymbol].container
-        const toContainer = GameState.visibleWaypoints[hoveredWaypointSymbol].container
+        const fromContainer = GameState.waypoints[currentWaypointSymbol]
+        const toContainer = GameState.waypoints[hoveredWaypointSymbol]
+
+        if (!fromContainer || !toContainer) return;
 
         systemGraphics.moveTo(fromContainer.x, fromContainer.y)
         systemGraphics.lineTo(toContainer.x, toContainer.y)
 
-        const fromData = GameState.visibleWaypoints[currentWaypointSymbol].waypointData
-        const toData = GameState.visibleWaypoints[hoveredWaypointSymbol].waypointData
+        const fromData = GameState.waypointData[currentWaypointSymbol]
+        const toData = GameState.waypointData[hoveredWaypointSymbol]
 
         systemGraphicsText.x = (toContainer.x - fromContainer.x) / 2
         systemGraphicsText.y = (toContainer.y - fromContainer.y) / 2 + 120

@@ -12,6 +12,12 @@ export async function loadPlayerData() {
   })
 
   await updateCredits()
+
+  const factions = await trpc.getFactions.query()
+  GameState.factions = {}
+  factions.forEach(faction => {
+    GameState.factions[faction.symbol] = faction
+  })
 }
 
 export async function updateCredits() {

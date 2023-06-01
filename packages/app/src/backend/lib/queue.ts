@@ -13,4 +13,4 @@ export const createOrGetAgentQueue = (agentId: string) => {
     return agentQueue[agentId]
 }
 
-export const backgroundQueue = ThrottledQueue(1, 600);
+export const backgroundQueue = ThrottledQueue(1, 1000);

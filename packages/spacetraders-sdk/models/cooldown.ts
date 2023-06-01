@@ -43,6 +43,6 @@ export interface Cooldown {
      * @type {string}
      * @memberof Cooldown
      */
-    'expiration': string;
+    'expiration'?: string;
 }
 

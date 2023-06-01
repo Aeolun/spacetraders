@@ -18,6 +18,9 @@
 import { Agent } from './agent';
 // May contain unused imports in some cases
 // @ts-ignore
+import { MarketTransaction } from './market-transaction';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ShipFuel } from './ship-fuel';
 
 /**
@@ -38,5 +41,11 @@ export interface RefuelShip200ResponseData {
      * @memberof RefuelShip200ResponseData
      */
     'fuel': ShipFuel;
+    /**
+     * 
+     * @type {MarketTransaction}
+     * @memberof RefuelShip200ResponseData
+     */
+    'transaction': MarketTransaction;
 }
 
