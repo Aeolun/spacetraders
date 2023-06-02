@@ -31203,6 +31203,7 @@ var Button = (props) => {
 var App = () => {
   const [active] = (0, import_react38.useState)(true);
   const token2 = localStorage.getItem("agent-token");
+  const [selectedFaction, setSelectedFaction] = (0, import_react38.useState)("");
   const [factions, setFactions] = (0, import_react38.useState)([]);
   (0, import_react38.useEffect)(() => {
     trpc.getFactions.query().then((result) => {
@@ -31280,11 +31281,13 @@ var App = () => {
             flexWrap: "wrap"
           }, children: factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: "factions/" + faction.symbol + "/emblem.png", style: {
             height: 96,
-            width: 96
+            width: 96,
+            background: selectedFaction === faction.symbol ? "radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat" : "transparent",
+            opacity: selectedFaction === faction.symbol ? 1 : 0.4
           } })) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", onChange: (e) => setSelectedFaction(e.currentTarget.value), children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- faction --" }),
-            factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: faction.name }))
+            factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: faction.symbol, children: faction.name }))
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Agent name", pattern: "[a-zA-Z0-9]{3,14}}" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Email" }),

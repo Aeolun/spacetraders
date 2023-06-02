@@ -143,6 +143,7 @@ const Button = (props: PropsWithChildren<any>) => {
 const App = () => {
     const [active] = useState(true);
     const token = localStorage.getItem('agent-token')
+    const [selectedFaction, setSelectedFaction] = useState('')
     const [factions, setFactions] = useState<Faction[]>([])
 
     useEffect(() => {
@@ -230,12 +231,14 @@ const App = () => {
                         }}>
                         {factions.map(faction => <img src={'factions/'+faction.symbol+'/emblem.png'} style={{
                             height: 96,
-                            width: 96
+                            width: 96,
+                            background: selectedFaction === faction.symbol ?'radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat' : 'transparent',
+                            opacity: selectedFaction === faction.symbol ? 1 : 0.4
                         }} /> )}
                         </div>
-                        <select placeholder={'-- faction --'}>
+                        <select placeholder={'-- faction --'} onChange={(e) => setSelectedFaction(e.currentTarget.value)}>
                             <option>-- faction --</option>
-                            {factions.map(faction => <option>{faction.name}</option> )}
+                            {factions.map(faction => <option value={faction.symbol}>{faction.name}</option> )}
                         </select>
                         <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" />
                         <Input type="text" placeholder="Email" />
