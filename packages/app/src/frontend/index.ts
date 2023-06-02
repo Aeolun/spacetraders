@@ -10,7 +10,7 @@ import {
     actionButton,
     createUIElements, credits, cruiseModeSelect,
     currentCoordinate,
-    currentSelected, entityInfo, fps, marketWindow,
+    entityInfo, fps, marketWindow,
     systemView, universeCuller, universeGraphics, universeGraphicsText,
     universeView
 } from "@front/lib/UIElements";

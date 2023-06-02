@@ -5,6 +5,7 @@
     "rootDir": "./",
     "baseUrl": "./",
     "esModuleInterop": true,
+    "jsx": "react-jsx",
     "target": "esnext",
     "lib": ["ES2021", "dom"],
     "paths": {

@@ -8,6 +8,7 @@
     "jumptable": "tsx src/backend/generate-jump-table.ts",
     "dev:serve": "serve public",
     "dev:build": "esbuild --bundle --format=esm --watch --outfile=public/app.js src/frontend/index.ts",
+    "dev:build-ui": "esbuild --bundle --format=esm --watch --outfile=public/index.js src/frontend/react-ui.tsx",
     "dev": "run-p dev:*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +24,17 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@aeolun/dijkstra-calculator": "^1.1.0",
+    "@aeolun/yoga-layout-prebuilt": "^1.10.0",
+    "@arwes/animated": "1.0.0-next.7",
+    "@arwes/animator": "1.0.0-next.7",
+    "@arwes/bgs": "1.0.0-next.7",
+    "@arwes/bleeps": "1.0.0-next.7",
+    "@arwes/frames": "1.0.0-next.8",
+    "@arwes/react": "1.0.0-next.8",
+    "@arwes/text": "1.0.0-next.7",
+    "@arwes/tools": "1.0.0-next.7",
+    "@emotion/react": "^11.11.0",
     "@pixi/accessibility": "7.2.4",
     "@pixi/app": "7.2.4",
     "@pixi/assets": "7.2.4",
@@ -62,16 +74,17 @@
     "@trpc/server": "^10.25.1",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
-    "@aeolun/dijkstra-calculator": "^1.1.0",
     "dotenv": "^16.0.3",
     "jwt-decode": "^3.1.2",
+    "motion": "^10.16.2",
     "pixi-cull": "^2.2.0",
     "pixi-viewport": "^5.0.1",
     "pixi.js": "^7.2.4",
     "prisma": "^4.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "spacetraders-sdk": "workspace:^2",
     "throttled-queue": "^2.1.4",
-    "@aeolun/yoga-layout-prebuilt": "^1.10.0",
     "zod": "^3.21.4"
   }
 }
