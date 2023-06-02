@@ -12,5 +12,6 @@
     <orderEntry type="module" module-name="api-docs" />
     <orderEntry type="module" module-name="st-meta" />
     <orderEntry type="module" module-name="dijkstra-calculator" />
+    <orderEntry type="module" module-name="st-universe" />
   </component>
 </module>

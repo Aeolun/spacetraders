@@ -5,6 +5,7 @@ importers:
   packages/app:
     specifiers:
       '@aeolun/dijkstra-calculator': ^1.1.0
+      '@aeolun/yoga-layout-prebuilt': ^1.10.0
       '@pixi/accessibility': 7.2.4
       '@pixi/app': 7.2.4
       '@pixi/assets': 7.2.4
@@ -58,10 +59,10 @@ importers:
       throttled-queue: ^2.1.4
       tsx: ^3.12.7
       typescript: ^5
-      yoga-layout-prebuilt: ^1.10.0
       zod: ^3.21.4
     dependencies:
       '@aeolun/dijkstra-calculator': 1.1.0
+      '@aeolun/yoga-layout-prebuilt': 1.10.0
       '@pixi/accessibility': 7.2.4_apmmhdndg7szcc4swgeztfmmb4
       '@pixi/app': 7.2.4_itsaoqwq56fcz2brnb773dvv24
       '@pixi/assets': 7.2.4_g6kcrvjte5opnujtwgun74ym6y
@@ -109,7 +110,6 @@ importers:
       prisma: 4.14.0
       spacetraders-sdk: link:../spacetraders-sdk
       throttled-queue: 2.1.4
-      yoga-layout-prebuilt: 1.10.0
       zod: 3.21.4
     devDependencies:
       '@types/node': 12.20.55
@@ -256,6 +256,13 @@ packages:
   /@aeolun/dijkstra-calculator/1.1.0:
     resolution: {integrity: sha512-a7WLgBEw69ZtbzrZ1ZYTBY0Jw1RY0XBtuAmeToTeyHFdInkN1x7jE/oRt/wD1HjlCRX1cSDi8LOFbur2XDP0OA==}
     engines: {node: '>=10'}
+    dev: false
+
+  /@aeolun/yoga-layout-prebuilt/1.10.0:
+    resolution: {integrity: sha512-1RW1nIFAi7Vw7DF0Eg3UusXVjja2+Lvg7EQ8C82TOlvTYKuCGFhTxDlpPmEwsyOKTS3gteorAw7KHPVqoKhp+g==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@types/yoga-layout': 1.9.2
     dev: false
 
   /@apidevtools/json-schema-ref-parser/9.0.9:
@@ -4972,13 +4979,6 @@ packages:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
     dev: true
-
-  /yoga-layout-prebuilt/1.10.0:
-    resolution: {integrity: sha512-YnOmtSbv4MTf7RGJMK0FvZ+KD8OEe/J5BNnR0GHhD8J/XcG/Qvxgszm0Un6FTHWW4uHlTgP0IztiXQnGyIR45g==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@types/yoga-layout': 1.9.2
-    dev: false
 
   /zod/3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
