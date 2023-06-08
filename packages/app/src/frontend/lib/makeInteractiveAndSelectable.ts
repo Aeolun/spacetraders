@@ -3,7 +3,7 @@ import {GlowFilter} from "@pixi/filter-glow";
 import {EventEmitter} from "@pixi/utils";
 import {GameState, SelectedType} from "@front/lib/game-state";
 import {loadedAssets} from "@front/lib/assets";
-import {Button} from "@front/lib/button";
+import {BaseButton} from "@front/lib/base-elements/base-button";
 
 export const deselectListeners = new EventEmitter()
 
@@ -65,7 +65,7 @@ export function makeInteractiveAndSelectable(item: Container, options?: {
                 background.height = filteredCommands.length * 40
                 background.width = 180
                 filteredCommands.forEach((comm, index) => {
-                    const button = new Button(comm.name, {
+                    const button = new BaseButton(comm.name, {
                         width: 160,
                         height: 30,
                         textSize: 16

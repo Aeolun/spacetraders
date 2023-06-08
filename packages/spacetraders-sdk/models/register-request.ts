@@ -22,10 +22,10 @@
 export interface RegisterRequest {
     /**
      * The faction you choose determines your headquarters.
-     * @type {string}
+     * @type {any}
      * @memberof RegisterRequest
      */
-    'faction': RegisterRequestFactionEnum;
+    'faction': any;
     /**
      * How other agents will see your ships and information.
      * @type {string}
@@ -39,15 +39,4 @@ export interface RegisterRequest {
      */
     'email'?: string;
 }
-
-export const RegisterRequestFactionEnum = {
-    Cosmic: 'COSMIC',
-    Void: 'VOID',
-    Galactic: 'GALACTIC',
-    Quantum: 'QUANTUM',
-    Dominion: 'DOMINION'
-} as const;
-
-export type RegisterRequestFactionEnum = typeof RegisterRequestFactionEnum[keyof typeof RegisterRequestFactionEnum];
-
 

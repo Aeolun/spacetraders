@@ -417,6 +417,7 @@ enum ShipBehavior {
   UPDATE_MARKETS
   EXPLORE_MARKETS
   EXPLORE
+  MAP_JUMPGATE
   MINE
 }
 
@@ -477,4 +478,25 @@ model Ship {
   @@index([frameSymbol])
   @@index([reactorSymbol])
   @@index([engineSymbol])
+}
+
+enum ContractType {
+  PROCUREMENT
+}
+
+model Contract {
+  id                        String       @id
+  agentSymbol               String
+  factionSymbol             String
+  type                      ContractType
+  deadlineToAccept          DateTime
+  paymentOnAccepted         Int
+  paymentOnFulfilled        Int
+  tradeGoodSymbol           String
+  destinationWaypointSymbol String
+  unitsRequired             Int
+  unitsFulfilled            Int
+  accepted                  Boolean
+  fulfilled                 Boolean
+  expiration                DateTime
 }

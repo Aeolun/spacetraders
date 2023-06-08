@@ -130,7 +130,12 @@ export const appRouter = router({
                 waypointSymbol: input.waypointSymbol
             },
             include: {
-                shipConfiguration: true
+                shipConfiguration: {
+                    include: {
+                        shipConfigurationMount: true,
+                        shipConfigurationModule: true
+                    }
+                }
             }
         })
     }),

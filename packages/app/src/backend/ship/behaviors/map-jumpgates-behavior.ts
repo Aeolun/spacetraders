@@ -2,7 +2,7 @@ import {Ship} from "@app/ship/ship";
 import {ExtractResources201Response, Survey} from "spacetraders-sdk";
 import {logShipAction} from "@app/lib/log";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
-import {prisma} from "@app/prisma";
+import {prisma, Prisma} from "@app/prisma";
 import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {getDistance} from "@common/lib/getDistance";
@@ -45,7 +45,7 @@ export const mapJumpgatesBehavior = async (shipReg: string) => {
                              LEFT JOIN JumpConnectedSystem cnt ON cnt.fromWaypointSymbol = wp.symbol
                              INNER JOIN \`System\` s ON
                         wp.systemSymbol = s.symbol
-                    WHERE s.hasJumpGate = true
+                    WHERE s.hasJumpGate = true and s.symbol NOT IN(${Prisma.join(jumpMapTaken.size > 0 ? [...jumpMapTaken.values()] : ['stuff'])})
                     GROUP BY s.symbol
                     HAVING connectedSystemCount = 0
                     ORDER BY connectedSystemCount ASC, distance ASC LIMIT 50;`
@@ -57,6 +57,7 @@ export const mapJumpgatesBehavior = async (shipReg: string) => {
             })
             if (explorable.length <= 0) {
                 ship.log(`No systems to map jumps for`)
+                await ship.waitFor(30000)
                 continue;
             }
 
@@ -76,7 +77,11 @@ export const mapJumpgatesBehavior = async (shipReg: string) => {
                 }
             })
 
-            await travelBehavior(exploreSystem.symbol, ship, explorableWaypoints[0].symbol)
+            const success = await travelBehavior(exploreSystem.symbol, ship, explorableWaypoints[0].symbol)
+            if (!success) {
+                ship.log(`Failed to navigate to ${exploreSystem.symbol}`)
+                continue;
+            }
 
             ship.log(`Arrived at ${exploreSystem.symbol} for charting jump gate.`)
 

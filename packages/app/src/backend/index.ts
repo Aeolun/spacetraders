@@ -11,6 +11,10 @@ import {reloadWorldStatus} from "@app/setup/reload-world-status";
 import {loadWaypoint, updateMarketPrices} from "@app/init";
 import {createContext} from "@app/context";
 import {prisma, ShipBehavior} from "@app/prisma";
+import fs from "fs";
+import {initializeShipBehaviors} from "@app/ship/initializeShipBehaviors";
+import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
+import {Ship} from "@app/ship/ship";
 
 export type { AppRouter } from '@app/server'
 
@@ -31,15 +35,18 @@ const init = async () => {
     // do we have a database connection?
     await prisma.$queryRaw`SELECT 1`
 
+
+    if (fs.existsSync('.resetdate')) {
+        currentInstance = fs.readFileSync('.resetdate', 'utf8')
+    }
+
     const serverStatus = await axios.get<StatusResponse>('https://api.spacetraders.io/v2')
-    currentInstance = serverStatus.data.resetDate
-    const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
 
     const initWorld = async (resetDate: string) => {
         console.log("Resetting database")
         await resetDatabase()
         console.log("Getting (new) token")
-        const newToken = await getBackgroundAgentToken();
+        const newToken = await getBackgroundAgentToken(serverStatus.data.resetDate);
         console.log("Have token!", newToken)
         console.log("Reloading world from API")
         await reloadWorldStatus()
@@ -49,11 +56,10 @@ const init = async () => {
                 resetDate
             }
         })
+        fs.writeFileSync('.resetdate', resetDate)
     }
 
-    console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
     let resetYetInterval;
-
     const resetTimeout = () => {
         resetYetInterval = setInterval(async () => {
             const serverStatus = await axios.get<StatusResponse>('https://api.spacetraders.io/v2')
@@ -75,11 +81,13 @@ const init = async () => {
             }
         }, 5000)
     }
-    setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
 
-    const server = await prisma.server.findFirst({})
-    if (!server) {
-        console.log("Server has not been initialized in this database.")
+    if (serverStatus.data.resetDate === currentInstance) {
+        const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
+        console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
+        setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
+    } else {
+        console.log("Server already reset or never initialized.")
         await initWorld(serverStatus.data.resetDate)
     }
 
@@ -100,6 +108,7 @@ const httpServer = createHTTPServer({
     createContext: createContext
 })
 
+initializeShipBehaviors()
 
 httpServer.listen(4001)
 init().catch(error => {

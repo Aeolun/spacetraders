@@ -21,142 +21,142 @@
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "X64",
-      "price": 68719,
-      "timestamp": "2023-05-30T13:58:28.731Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "GASTON",
-      "price": 88005,
-      "timestamp": "2023-05-30T13:44:15.394Z"
-    },
-    {
-      "shipSymbol": "SHIP_REFINING_FREIGHTER",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "X64",
-      "price": 1860904,
-      "timestamp": "2023-05-30T13:24:46.450Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "ANTISTS18",
-      "price": 88003,
-      "timestamp": "2023-05-30T13:24:34.362Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70271,
+      "timestamp": "2023-06-03T05:21:34.994Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "KSRANDOM",
-      "price": 68716,
-      "timestamp": "2023-05-30T13:21:44.346Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "NANI",
-      "price": 680933,
-      "timestamp": "2023-05-30T13:15:59.743Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "EISWUERFEL13",
-      "price": 88002,
-      "timestamp": "2023-05-30T12:42:41.672Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "MRPROPR",
-      "price": 88000,
-      "timestamp": "2023-05-30T12:24:15.479Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "OLIVE",
-      "price": 87998,
-      "timestamp": "2023-05-30T10:53:52.717Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "M1R4ND4",
-      "price": 87997,
-      "timestamp": "2023-05-30T08:36:24.567Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "M1R4ND4",
-      "price": 87995,
-      "timestamp": "2023-05-30T08:35:24.043Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "M1R4ND4",
-      "price": 87994,
-      "timestamp": "2023-05-30T08:20:33.242Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70268,
+      "timestamp": "2023-06-03T05:11:33.370Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "QAZ-1",
-      "price": 68714,
-      "timestamp": "2023-05-30T08:06:13.986Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "ZXC",
-      "price": 87992,
-      "timestamp": "2023-05-30T08:03:10.648Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "ABCD1234",
-      "price": 87990,
-      "timestamp": "2023-05-30T07:58:09.167Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70265,
+      "timestamp": "2023-06-03T05:06:30.355Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "KIJ",
-      "price": 68712,
-      "timestamp": "2023-05-30T07:56:20.625Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "N2YFTEFHLNUQ9S",
-      "price": 87989,
-      "timestamp": "2023-05-30T06:43:43.255Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "NANI",
-      "price": 669507,
-      "timestamp": "2023-05-30T06:34:46.689Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70263,
+      "timestamp": "2023-06-03T04:59:36.997Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "KAKTUS",
-      "price": 68709,
-      "timestamp": "2023-05-30T06:32:38.907Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70260,
+      "timestamp": "2023-06-03T04:51:47.643Z"
     },
     {
-      "shipSymbol": "SHIP_MINING_DRONE",
+      "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-VS75-97637F",
-      "agentSymbol": "AVERY71",
-      "price": 87987,
-      "timestamp": "2023-05-30T06:10:41.933Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70257,
+      "timestamp": "2023-06-03T04:46:22.492Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70255,
+      "timestamp": "2023-06-03T04:38:01.803Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70252,
+      "timestamp": "2023-06-03T04:30:07.314Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70249,
+      "timestamp": "2023-06-03T04:19:21.915Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70246,
+      "timestamp": "2023-06-03T04:14:24.781Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70244,
+      "timestamp": "2023-06-03T04:04:41.471Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70241,
+      "timestamp": "2023-06-03T03:56:41.368Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70238,
+      "timestamp": "2023-06-03T03:48:41.413Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70235,
+      "timestamp": "2023-06-03T03:44:23.361Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70233,
+      "timestamp": "2023-06-03T03:35:27.374Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70230,
+      "timestamp": "2023-06-03T03:28:03.009Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70227,
+      "timestamp": "2023-06-03T03:21:16.616Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70225,
+      "timestamp": "2023-06-03T03:14:14.654Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70222,
+      "timestamp": "2023-06-03T03:03:44.601Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-VS75-97637F",
+      "agentSymbol": "ANUBEKO",
+      "price": 70219,
+      "timestamp": "2023-06-03T02:56:41.496Z"
     }
   ],
   "ships": [
@@ -164,7 +164,7 @@
       "type": "SHIP_PROBE",
       "name": "Probe Satellite",
       "description": "A small, unmanned spacecraft that can be launched into orbit to gather data and perform basic tasks.",
-      "purchasePrice": 68721,
+      "purchasePrice": 70274,
       "frame": {
         "symbol": "FRAME_PROBE",
         "name": "Frame Probe",
@@ -203,7 +203,7 @@
       "type": "SHIP_ORE_HOUND",
       "name": "Ore Hound",
       "description": "The Ore Hound is a specialized mining ship designed for extracting valuable ores and minerals from asteroids and other celestial bodies. With its advanced mining lasers and reinforced hull, the Ore Hound is capable of excavating large amounts of ore and minerals from even the toughest asteroids. It is equipped with a range of modules and mounts for handling a variety of mining and defensive needs, and is an essential vessel for miners and traders looking to profit from the rich resources of the galaxy.",
-      "purchasePrice": 692600,
+      "purchasePrice": 900108,
       "frame": {
         "symbol": "FRAME_MINER",
         "name": "Frame Miner",
@@ -626,7 +626,7 @@
       "type": "SHIP_MINING_DRONE",
       "name": "Mining Drone",
       "description": "A small, unmanned spacecraft that can be used for mining operations, such as extracting valuable minerals from asteroids.",
-      "purchasePrice": 88007,
+      "purchasePrice": 88124,
       "frame": {
         "symbol": "FRAME_DRONE",
         "name": "Frame Drone",

@@ -13,6 +13,13 @@
   ],
   "transactions": [
     {
+      "shipSymbol": "SHIP_ORE_HOUND",
+      "waypointSymbol": "X1-NQ72-66624A",
+      "agentSymbol": "APHORANCE",
+      "price": 160896,
+      "timestamp": "2023-06-02T17:51:15.814Z"
+    },
+    {
       "shipSymbol": "SHIP_LIGHT_HAULER",
       "waypointSymbol": "X1-NQ72-66624A",
       "agentSymbol": "GUI",
@@ -345,7 +352,7 @@
       "type": "SHIP_ORE_HOUND",
       "name": "Ore Hound",
       "description": "The Ore Hound is a specialized mining ship designed for extracting valuable ores and minerals from asteroids and other celestial bodies. With its advanced mining lasers and reinforced hull, the Ore Hound is capable of excavating large amounts of ore and minerals from even the toughest asteroids. It is equipped with a range of modules and mounts for handling a variety of mining and defensive needs, and is an essential vessel for miners and traders looking to profit from the rich resources of the galaxy.",
-      "purchasePrice": 160896,
+      "purchasePrice": 167094,
       "frame": {
         "symbol": "FRAME_MINER",
         "name": "Frame Miner",

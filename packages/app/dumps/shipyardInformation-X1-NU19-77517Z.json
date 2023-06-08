@@ -19,144 +19,144 @@
   ],
   "transactions": [
     {
-      "shipSymbol": "SHIP_MINING_DRONE",
+      "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "BOBBYDT2",
-      "price": 87367,
-      "timestamp": "2023-06-01T09:58:04.836Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "VIAT",
-      "price": 702732,
-      "timestamp": "2023-05-31T15:24:40.245Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "VIAT",
-      "price": 691202,
-      "timestamp": "2023-05-31T00:07:54.872Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "VIAT",
-      "price": 679909,
-      "timestamp": "2023-05-30T10:34:47.921Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "VIAT",
-      "price": 668849,
-      "timestamp": "2023-05-29T23:52:28.516Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70310,
+      "timestamp": "2023-06-03T07:15:15.902Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
       "agentSymbol": "ANUBEKO",
-      "price": 69384,
-      "timestamp": "2023-05-29T20:44:41.889Z"
-    },
-    {
-      "shipSymbol": "SHIP_MINING_DRONE",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "REDSHIFT",
-      "price": 87365,
-      "timestamp": "2023-05-29T20:08:52.684Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "X64",
-      "price": 658016,
-      "timestamp": "2023-05-29T15:22:35.873Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "X64",
-      "price": 647406,
-      "timestamp": "2023-05-29T15:22:35.349Z"
-    },
-    {
-      "shipSymbol": "SHIP_ORE_HOUND",
-      "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "VIAT",
-      "price": 637014,
-      "timestamp": "2023-05-29T12:20:40.481Z"
+      "price": 70308,
+      "timestamp": "2023-06-03T07:07:25.665Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69382,
-      "timestamp": "2023-05-29T10:43:01.929Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70306,
+      "timestamp": "2023-06-03T07:03:45.535Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69380,
-      "timestamp": "2023-05-29T10:38:10.371Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70304,
+      "timestamp": "2023-06-03T06:58:32.621Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69378,
-      "timestamp": "2023-05-29T10:34:06.518Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70302,
+      "timestamp": "2023-06-03T06:50:44.446Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69376,
-      "timestamp": "2023-05-29T10:26:57.139Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70300,
+      "timestamp": "2023-06-03T06:47:56.281Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69375,
-      "timestamp": "2023-05-29T10:21:55.584Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70298,
+      "timestamp": "2023-06-03T06:42:56.454Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69373,
-      "timestamp": "2023-05-29T10:16:55.176Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70296,
+      "timestamp": "2023-06-03T06:39:56.506Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69371,
-      "timestamp": "2023-05-29T10:12:02.407Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70294,
+      "timestamp": "2023-06-03T06:33:10.940Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69369,
-      "timestamp": "2023-05-29T10:07:50.593Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70292,
+      "timestamp": "2023-06-03T06:27:02.410Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69367,
-      "timestamp": "2023-05-29T09:45:38.192Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70290,
+      "timestamp": "2023-06-03T06:22:58.736Z"
     },
     {
       "shipSymbol": "SHIP_PROBE",
       "waypointSymbol": "X1-NU19-77517Z",
-      "agentSymbol": "KAKTUS",
-      "price": 69366,
-      "timestamp": "2023-05-29T09:40:38.159Z"
+      "agentSymbol": "ANUBEKO",
+      "price": 70288,
+      "timestamp": "2023-06-03T06:15:06.436Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70286,
+      "timestamp": "2023-06-03T06:10:18.691Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70284,
+      "timestamp": "2023-06-03T06:04:48.837Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70282,
+      "timestamp": "2023-06-03T05:58:21.397Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70280,
+      "timestamp": "2023-06-03T05:53:44.352Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70278,
+      "timestamp": "2023-06-03T05:47:41.945Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70276,
+      "timestamp": "2023-06-03T05:42:05.710Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70274,
+      "timestamp": "2023-06-03T05:33:41.615Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-NU19-77517Z",
+      "agentSymbol": "ANUBEKO",
+      "price": 70272,
+      "timestamp": "2023-06-03T05:26:59.855Z"
     }
   ],
   "ships": [
@@ -164,7 +164,7 @@
       "type": "SHIP_PROBE",
       "name": "Probe Satellite",
       "description": "A small, unmanned spacecraft that can be launched into orbit to gather data and perform basic tasks.",
-      "purchasePrice": 69385,
+      "purchasePrice": 70312,
       "frame": {
         "symbol": "FRAME_PROBE",
         "name": "Frame Probe",
@@ -203,7 +203,7 @@
       "type": "SHIP_MINING_DRONE",
       "name": "Mining Drone",
       "description": "A small, unmanned spacecraft that can be used for mining operations, such as extracting valuable minerals from asteroids.",
-      "purchasePrice": 87368,
+      "purchasePrice": 87370,
       "frame": {
         "symbol": "FRAME_DRONE",
         "name": "Frame Drone",

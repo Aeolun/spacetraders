@@ -207,10 +207,13 @@ export const availableActions: {
             const shipyardData = await trpc.getShipyard.query({
                 waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
             })
-            const window = new ShipyardWindow(shipyardData)
-            uiOverlay.addChild(window.container)
+            const shipyardWindow = new ShipyardWindow(shipyardData)
+
+            uiOverlay.addChild(shipyardWindow.container.displayObject)
+            shipyardWindow.container.displayObject.x = (window.innerWidth - 1000) / 2
+            shipyardWindow.container.displayObject.y = (window.innerHeight - 600) / 2
             deselectListeners.once('deselect', () => {
-                uiOverlay.removeChild(window.container)
+                uiOverlay.removeChild(shipyardWindow.container.displayObject)
             })
         }
     },

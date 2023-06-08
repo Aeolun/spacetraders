@@ -51,13 +51,13 @@ export const updateMarketsBehavior = async (shipReg: string, aroundSystem: strin
                     LEFT JOIN MarketPrice mp ON wp.symbol = mp.waypointSymbol
                 WHERE
                     s.hasJumpGate = true
-                    and (mp.purchasePrice is null or mp.purchasePrice > 5000)
+                    and mp.purchasePrice is null
                     and s.x > ${system.x - range}
                     and s.x < ${system.x + range}
                     and s.y > ${system.y - range}
                     and s.y < ${system.y + range}
                 GROUP BY s.symbol
-                HAVING MIN(mp.updatedOn) < NOW() - INTERVAL 2 HOUR
+                HAVING MIN(mp.updatedOn) IS NULL OR MIN(mp.updatedOn) < NOW() - INTERVAL 2 HOUR
                 ORDER BY distance ASC;`
 
             ship.log(`Found ${list.length} systems that haven't been updated in the past 3 hours`)

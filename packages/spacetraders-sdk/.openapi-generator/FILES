@@ -51,6 +51,7 @@ models/get-faction200-response.ts
 models/get-factions200-response.ts
 models/get-jump-gate200-response.ts
 models/get-market200-response.ts
+models/get-mounts200-response.ts
 models/get-my-agent200-response.ts
 models/get-my-ship-cargo200-response.ts
 models/get-my-ship200-response.ts
@@ -71,6 +72,10 @@ models/get-system200-response.ts
 models/get-systems200-response.ts
 models/get-waypoint200-response.ts
 models/index.ts
+models/install-mount-request.ts
+models/install-mount201-response-data-transaction.ts
+models/install-mount201-response-data.ts
+models/install-mount201-response.ts
 models/jettison-request.ts
 models/jettison200-response-data.ts
 models/jettison200-response.ts
@@ -100,6 +105,8 @@ models/refuel-ship200-response.ts
 models/register-request.ts
 models/register201-response-data.ts
 models/register201-response.ts
+models/remove-mount-request.ts
+models/remove-mount201-response.ts
 models/scanned-ship-engine.ts
 models/scanned-ship-frame.ts
 models/scanned-ship-mounts-inner.ts

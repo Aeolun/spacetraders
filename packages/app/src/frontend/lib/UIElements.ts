@@ -2,13 +2,14 @@ import {Viewport} from "pixi-viewport";
 import {totalSize} from "@front/lib/consts";
 import {Application, BitmapText, Container, Graphics, NineSlicePlane, Point, Sprite, TilingSprite} from "pixi.js";
 import {loadedAssets} from "@front/lib/assets";
-import {Button} from "@front/lib/button";
 import {GameState} from "@front/lib/game-state";
 import {trpc} from "@front/lib/trpc";
 import {availableActions} from "@front/lib/availableActions";
 import { Simple, SpatialHash } from "pixi-cull"
 import {Switch} from "@front/lib/switch";
 import {MarketWindow} from "@front/lib/MarketWindow";
+import {createActionButtons} from "@front/lib/ui/action-buttons";
+import {BaseButton} from "@front/lib/base-elements/base-button";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -16,8 +17,7 @@ export let uiOverlay: Container
 export let currentCoordinate: BitmapText
 export let fps: BitmapText
 export let credits: BitmapText
-export let backButton: Button
-export let actionButton: Record<string, Button> = {}
+export let backButton: BaseButton
 export let entityInfo: BitmapText
 export let universeCuller: Simple
 export let universeGraphics: Graphics
@@ -131,7 +131,7 @@ export const createUIElements = (app: Application) => {
 
 
 
-    backButton = new Button('Back', {
+    backButton = new BaseButton('Back', {
         height: 64,
         width: 368
     })
@@ -173,19 +173,7 @@ export const createUIElements = (app: Application) => {
     credits.y = 132
     panelBg.addChild(credits)
 
-    const actionPanelHeight = Math.ceil(availableActions.length / 2) * 64
-    const actionPanelY = window.innerHeight - 16 - actionPanelHeight
 
-    availableActions.forEach((action, index) => {
-        actionButton[action.name] = new Button(action.name, {
-            height: 64,
-            width: 368/2
-        }, action.action)
-        actionButton[action.name].y = actionPanelY + Math.floor(index / 2) * 64;
-        actionButton[action.name].x = index % 2 == 0 ? 200 : 16
-        actionButton[action.name].disabled = true
-        panelBg.addChild(actionButton[action.name])
-    })
 
     const cruiseModeButtons = ['CRUISE', 'DRIFT', 'BURN', 'STEALTH']
     cruiseModeSelect = new Switch(cruiseModeButtons, {
@@ -203,7 +191,7 @@ export const createUIElements = (app: Application) => {
         }
     })
     cruiseModeSelect.visible = true
-    cruiseModeSelect.y = actionPanelY - 64
+    cruiseModeSelect.y = 700 - 64
     cruiseModeSelect.x = 16
     panelBg.addChild(cruiseModeSelect)
 
@@ -222,16 +210,21 @@ export const createUIElements = (app: Application) => {
     // })
 
     marketWindow = new MarketWindow()
-    marketWindow.container.visible = false
-    uiOverlay.addChild(marketWindow.container)
+    marketWindow.container.displayObject.visible = false
+
+    uiOverlay.addChild(marketWindow.container.displayObject)
 
     uiOverlay.addChild(panelBg);
+
+    const actionButtons = createActionButtons()
+    actionButtons.y = 800
+    panelBg.addChild(actionButtons)
 
     const statsBlock = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10)
     statsBlock.x = 8
     statsBlock.width = 384
     statsBlock.height = 200
-    statsBlock.y = actionPanelY - 300
+    statsBlock.y = 700 - 300
     panelBg.addChild(statsBlock)
 
     entityInfo = new BitmapText('Entity Information', {
@@ -242,7 +235,7 @@ export const createUIElements = (app: Application) => {
         maxWidth: 368
     })
     entityInfo.x = 24
-    entityInfo.y = actionPanelY - 280
+    entityInfo.y = 700 - 280
     panelBg.addChild(entityInfo)
 
     currentCoordinate = new BitmapText('0, 0', {

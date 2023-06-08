@@ -1,9 +1,10 @@
-import {Assets, BitmapFont, BitmapText, Spritesheet, Texture} from "pixi.js";
+import {Assets, BitmapFont, BitmapText, Sprite, Spritesheet, Texture} from "pixi.js";
 
 export let loadedAssets: {
     sheet: Spritesheet,
     planetsheet: Spritesheet,
     uisheet: Spritesheet
+    buttonsheet: Spritesheet,
     font: BitmapFont,
     buttonTextWhite: BitmapFont,
     buttonText: BitmapFont,
@@ -11,7 +12,9 @@ export let loadedAssets: {
     navArrow: Texture,
     starTexture: Texture,
     spaceshipTexture: Texture,
-    probeTexture: Texture,
+    spaceshipTextures: Record<string, Texture>
+    panel2: Texture,
+    panelInvisible: Texture,
     panel: Texture
     asteroidBelt: Texture
     button: Texture
@@ -30,6 +33,7 @@ export async function loadAssets() {
     const sheet: Spritesheet = await Assets.load('stars.json');
     const planetsheet: Spritesheet = await Assets.load('planets.json');
     const uisheet: Spritesheet = await Assets.load('uisheet.json');
+    const buttonSheet: Spritesheet = await Assets.load('ui/button.json');
     const font = await Assets.load('font.fnt');
     const buttonText = await Assets.load('buttontext.fnt')
     const segment = await Assets.load('segment.fnt')
@@ -43,28 +47,38 @@ export async function loadAssets() {
     const treasure: Texture = await Assets.load('treasure-map.png');
     const select: Texture = await Assets.load('ui/select.png')
     const statsBlock: Texture = await Assets.load('ui/stats.png')
+    const panel2: Texture = await Assets.load('ui/panel2.png')
+    const panelInvisible: Texture = await Assets.load('ui/panel_invisible.png')
     const selectInactive: Texture = await Assets.load('ui/select_inactive.png')
     const asteroidBelt: Texture = await Assets.load('asteroid_belt.png');
     const market: Texture = await Assets.load('money-bag-xxl.png');
     const spaceshipTexture: Texture = await Assets.load('spaceship.png');
     const probeTexture: Texture = await Assets.load('ships/PROBE.png');
+    const lightFreighterTexture: Texture = await Assets.load('ships/LIGHT_FREIGHTER.png');
 
     loadedAssets = {
         sheet,
         planetsheet,
         uisheet,
         font,
+        buttonsheet: buttonSheet,
         buttonText,
         buttonTextWhite,
         bgTexture,
         navArrow,
+        panelInvisible,
         starTexture,
         statsBlock,
+        panel2,
         station,
         jumpgate,
         treasure,
         spaceshipTexture,
-        probeTexture,
+        spaceshipTextures: {
+            FRAME_PROBE: probeTexture,
+            FRAME_LIGHT_FREIGHTER: lightFreighterTexture,
+            FRAME_EXPLORER: await Assets.load('ships/FRAME_EXPLORER.png')
+        },
         asteroidBelt,
         shipyard,
         select,

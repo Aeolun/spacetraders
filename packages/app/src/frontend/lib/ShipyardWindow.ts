@@ -1,40 +1,69 @@
-import type {ShipConfiguration, ShipyardModel} from '@app/prisma'
-import {BitmapText, Container, NineSlicePlane} from "pixi.js";
-import {Flex, FlexDirection} from "@front/lib/Flex";
-import {loadedAssets} from "@front/lib/assets";
-import {CenteredBitmapText} from "@front/lib/CenteredBitmapText";
+import type {ShipConfiguration, ShipyardModel, ShipConfigurationMount, ShipConfigurationModule} from '@app/prisma'
+import {FlexDirection} from "@front/lib/Flex";
 import {trpc} from "@front/lib/trpc";
 import {loadSystem} from "@front/lib/loadSystem";
 import {GameState} from "@front/lib/game-state";
+import {Text} from "@front/lib/ui-elements/text";
+import {Container} from '@front/lib/ui-elements/container'
+import {Button} from "@front/lib/ui-elements/button";
 
 
-type ExpectedData = (ShipyardModel & { shipConfiguration: ShipConfiguration})
+type ExpectedData = (ShipyardModel & { shipConfiguration: ShipConfiguration & { shipConfigurationMount: ShipConfigurationMount[], shipConfigurationModule: ShipConfigurationModule[] }})
 export class ShipyardWindow {
     public container: Container
-    private flexContainer: Flex<Container>
+
     constructor(ships: ExpectedData[]) {
         this.container = new Container()
-        this.container.x = (window.innerWidth - 600) / 2
-        this.container.y = (window.innerHeight - 600) / 2
-
-        this.flexContainer = new Flex(new NineSlicePlane(loadedAssets.statsBlock))
-        this.flexContainer.height = 600
-        this.flexContainer.width = 600
-        this.flexContainer.flexDirection = FlexDirection.COLUMN
+        this.container.width = 1000
+        this.container.height = 600
 
         ships.forEach(ship => {
             this.addGood(ship)
         })
 
-        this.flexContainer.updateLayout()
-        this.container.addChild(this.flexContainer.displayObject)
+        this.container.updateLayout()
     }
 
     addGood(ship: ExpectedData) {
-        const flexRow = new Flex(new NineSlicePlane(loadedAssets.statsBlock))
+        const flexRow = new Container()
 
-        flexRow.displayObject.interactive = true
-        flexRow.displayObject.on('click', async (event) => {
+        flexRow.flexDirection = FlexDirection.COLUMN
+        flexRow.height = 80
+        flexRow.width = '100%'
+
+        const firstRow = new Container({ variant: 'invisible' })
+        firstRow.height = 40
+        firstRow.width = '100%'
+        firstRow.flexDirection = FlexDirection.ROW
+
+        const secondRow = new Container({ variant: 'invisible' })
+        secondRow.height = 40
+        secondRow.width = '100%'
+        secondRow.flexDirection = FlexDirection.ROW
+
+        const fontStyle = {
+            fontName: 'buttontext_white',
+            fontSize: 12
+        }
+
+        const displayFields: (keyof ShipConfiguration)[] = ['name', 'frameSymbol', 'engineSymbol', 'reactorSymbol']
+
+        displayFields.forEach(field => {
+            const name = ship.shipConfiguration[field].includes('_') ? ship.shipConfiguration[field].split('_').slice(1).join('_') : ship.shipConfiguration[field]
+            const firstText = new Text(name, {
+                align: 'left',
+                font: fontStyle
+            })
+            firstText.flex = 1
+            firstRow.addChild(firstText)
+        })
+        const thirdText = new Text(ship.price.toString(), {
+            align: 'right',
+            font: fontStyle
+        })
+        thirdText.flex = 1
+        firstRow.addChild(thirdText)
+        const buyButton = new Button('Buy', {}, async (event) => {
             event.stopPropagation()
             await trpc.instructBuyShip.mutate({
                 waypointSymbol: ship.waypointSymbol,
@@ -42,26 +71,27 @@ export class ShipyardWindow {
             })
             loadSystem(GameState.currentSystem, false)
         })
+        buyButton.flex = 1
+        firstRow.addChild(buyButton)
 
-        flexRow.flexDirection = FlexDirection.ROW
-        flexRow.height = 40
-        flexRow.width = '100%'
+        const counts = {}
+        ship.shipConfiguration.shipConfigurationModule.forEach(module => {
+            if (!counts[module.moduleSymbol]) {
+                counts[module.moduleSymbol] = 1
+            } else {
+                counts[module.moduleSymbol]++
+            }
+        })
+        const secondRowText = new Text(Object.keys(counts).map(moduleKey => `${moduleKey.replace('MODULE_', '')} x${counts[moduleKey]}`).join(', '), {
+            align: 'left',
+            font: fontStyle
+        })
+        secondRowText.flex = 1
+        secondRow.addChild(secondRowText)
 
-        const fontStyle = {
-            fontName: 'buttontext_white',
-            fontSize: 12
-        }
+        flexRow.addChild(firstRow)
+        flexRow.addChild(secondRow)
 
-        const firstText = new Flex(new CenteredBitmapText(ship.shipConfiguration.name, fontStyle))
-        firstText.flex = 1
-        flexRow.addChild(firstText)
-        const secondText = new Flex(new CenteredBitmapText(ship.shipConfiguration.frameSymbol, fontStyle))
-        secondText.flex = 1
-        flexRow.addChild(secondText)
-        const thirdText = new Flex(new CenteredBitmapText(ship.price.toString(), fontStyle))
-        thirdText.flex = 1
-        flexRow.addChild(thirdText)
-
-        this.flexContainer.addChild(flexRow)
+        this.container.addChild(flexRow)
     }
 }

@@ -38,6 +38,8 @@ import { ExtractResources201Response } from '../models';
 // @ts-ignore
 import { ExtractResourcesRequest } from '../models';
 // @ts-ignore
+import { GetMounts200Response } from '../models';
+// @ts-ignore
 import { GetMyShip200Response } from '../models';
 // @ts-ignore
 import { GetMyShipCargo200Response } from '../models';
@@ -47,6 +49,10 @@ import { GetMyShips200Response } from '../models';
 import { GetShipCooldown200Response } from '../models';
 // @ts-ignore
 import { GetShipNav200Response } from '../models';
+// @ts-ignore
+import { InstallMount201Response } from '../models';
+// @ts-ignore
+import { InstallMountRequest } from '../models';
 // @ts-ignore
 import { Jettison200Response } from '../models';
 // @ts-ignore
@@ -75,6 +81,10 @@ import { PurchaseShip201Response } from '../models';
 import { PurchaseShipRequest } from '../models';
 // @ts-ignore
 import { RefuelShip200Response } from '../models';
+// @ts-ignore
+import { RemoveMount201Response } from '../models';
+// @ts-ignore
+import { RemoveMountRequest } from '../models';
 // @ts-ignore
 import { SellCargo201Response } from '../models';
 // @ts-ignore
@@ -364,6 +374,44 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Get the mounts on a ship.
+         * @summary Get Mounts
+         * @param {string} shipSymbol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMounts: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('getMounts', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/mounts`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieve the details of your ship.
          * @summary Get Ship
          * @param {string} shipSymbol 
@@ -553,6 +601,48 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Install a mount on a ship.
+         * @summary Install Mount
+         * @param {string} shipSymbol 
+         * @param {InstallMountRequest} [installMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installMount: async (shipSymbol: string, installMountRequest?: InstallMountRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('installMount', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/mounts/install`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(installMountRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -926,6 +1016,48 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Remove a mount from a ship.
+         * @summary Remove Mount
+         * @param {string} shipSymbol 
+         * @param {RemoveMountRequest} [removeMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeMount: async (shipSymbol: string, removeMountRequest?: RemoveMountRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('removeMount', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/mounts/remove`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(removeMountRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sell cargo.
          * @summary Sell Cargo
          * @param {string} shipSymbol 
@@ -1182,6 +1314,17 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Get the mounts on a ship.
+         * @summary Get Mounts
+         * @param {string} shipSymbol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMounts(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMounts200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMounts(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Retrieve the details of your ship.
          * @summary Get Ship
          * @param {string} shipSymbol 
@@ -1235,6 +1378,18 @@ export const FleetApiFp = function(configuration?: Configuration) {
          */
         async getShipNav(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetShipNav200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getShipNav(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Install a mount on a ship.
+         * @summary Install Mount
+         * @param {string} shipSymbol 
+         * @param {InstallMountRequest} [installMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async installMount(shipSymbol: string, installMountRequest?: InstallMountRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InstallMount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.installMount(shipSymbol, installMountRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1340,6 +1495,18 @@ export const FleetApiFp = function(configuration?: Configuration) {
          */
         async refuelShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefuelShip200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.refuelShip(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Remove a mount from a ship.
+         * @summary Remove Mount
+         * @param {string} shipSymbol 
+         * @param {RemoveMountRequest} [removeMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeMount(shipSymbol: string, removeMountRequest?: RemoveMountRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RemoveMount201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeMount(shipSymbol, removeMountRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1472,6 +1639,16 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.extractResources(shipSymbol, extractResourcesRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get the mounts on a ship.
+         * @summary Get Mounts
+         * @param {string} shipSymbol 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMounts(shipSymbol: string, options?: any): AxiosPromise<GetMounts200Response> {
+            return localVarFp.getMounts(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieve the details of your ship.
          * @summary Get Ship
          * @param {string} shipSymbol 
@@ -1521,6 +1698,17 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         getShipNav(shipSymbol: string, options?: any): AxiosPromise<GetShipNav200Response> {
             return localVarFp.getShipNav(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Install a mount on a ship.
+         * @summary Install Mount
+         * @param {string} shipSymbol 
+         * @param {InstallMountRequest} [installMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installMount(shipSymbol: string, installMountRequest?: InstallMountRequest, options?: any): AxiosPromise<InstallMount201Response> {
+            return localVarFp.installMount(shipSymbol, installMountRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Jettison cargo from your ship\'s cargo hold.
@@ -1617,6 +1805,17 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         refuelShip(shipSymbol: string, options?: any): AxiosPromise<RefuelShip200Response> {
             return localVarFp.refuelShip(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Remove a mount from a ship.
+         * @summary Remove Mount
+         * @param {string} shipSymbol 
+         * @param {RemoveMountRequest} [removeMountRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeMount(shipSymbol: string, removeMountRequest?: RemoveMountRequest, options?: any): AxiosPromise<RemoveMount201Response> {
+            return localVarFp.removeMount(shipSymbol, removeMountRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Sell cargo.
@@ -1758,6 +1957,18 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
+     * Get the mounts on a ship.
+     * @summary Get Mounts
+     * @param {string} shipSymbol 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public getMounts(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).getMounts(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieve the details of your ship.
      * @summary Get Ship
      * @param {string} shipSymbol 
@@ -1816,6 +2027,19 @@ export class FleetApi extends BaseAPI {
      */
     public getShipNav(shipSymbol: string, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).getShipNav(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Install a mount on a ship.
+     * @summary Install Mount
+     * @param {string} shipSymbol 
+     * @param {InstallMountRequest} [installMountRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public installMount(shipSymbol: string, installMountRequest?: InstallMountRequest, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).installMount(shipSymbol, installMountRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1930,6 +2154,19 @@ export class FleetApi extends BaseAPI {
      */
     public refuelShip(shipSymbol: string, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).refuelShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Remove a mount from a ship.
+     * @summary Remove Mount
+     * @param {string} shipSymbol 
+     * @param {RemoveMountRequest} [removeMountRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public removeMount(shipSymbol: string, removeMountRequest?: RemoveMountRequest, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).removeMount(shipSymbol, removeMountRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

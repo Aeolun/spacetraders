@@ -49,6 +49,9 @@ export class Ship {
     public hasWarpDrive = false
     public engineSpeed = 0
 
+    public fuel = 0
+    public maxFuel = 0
+
     public navigationUntil: string | undefined = undefined
 
     constructor(public token: string, public agent: string, public symbol: string) {
@@ -69,8 +72,13 @@ export class Ship {
 
         this.navigationUntil = shipInfo.data.data.nav.status === 'IN_TRANSIT' ? shipInfo.data.data.nav.route.arrival : undefined
 
+        this.fuel = shipInfo.data.data.fuel.current
+        this.maxFuel = shipInfo.data.data.fuel.capacity
+
         this.engineSpeed = shipInfo.data.data.engine.speed
         this.hasWarpDrive = shipInfo.data.data.modules.some(m => m.symbol.includes('WARP_DRIVE'))
+
+        await this.waitUntil(shipInfo.data.data.nav.route.arrival)
     }
 
     setTravelGoal(system: string) {
@@ -170,6 +178,9 @@ export class Ship {
             this.currentSystemSymbol = res.data.data.nav.route.destination.systemSymbol;
             this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol
 
+            this.fuel = res.data.data.fuel.current
+            this.maxFuel = res.data.data.fuel.capacity
+
             this.log(`Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
 
             try {
@@ -203,7 +214,10 @@ export class Ship {
                 return navResult
             }
         } catch(error) {
-            if (error.response?.data?.error?.code === 4204) {
+            if (error.response?.data?.error?.code === 4203) {
+                await this.navigateMode('DRIFT')
+                await this.warp(waypoint, waitForTimeout)
+            } else if (error.response?.data?.error?.code === 4204) {
                 this.log(`Already at ${waypoint}`)
                 return;
             } else {
@@ -230,6 +244,9 @@ export class Ship {
 
             this.currentSystemSymbol = res.data.data.nav.route.destination.systemSymbol;
             this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol
+
+            this.fuel = res.data.data.fuel.current
+            this.maxFuel = res.data.data.fuel.capacity
 
             this.log(`Navigating from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`)
 
@@ -281,7 +298,10 @@ export class Ship {
                 return navResult
             }
         } catch(error) {
-            if (error.response?.data?.error?.code === 4204) {
+            if (error.response?.data?.error?.code === 4203) {
+                await this.navigateMode('DRIFT')
+                await this.warp(waypoint, waitForTimeout)
+            } else if (error.response?.data?.error?.code === 4204) {
                 this.log(`Already at ${waypoint}`)
                 return;
             } else {
@@ -451,7 +471,11 @@ export class Ship {
 
             await processAgent(res.data.data.agent)
 
+            this.fuel = res.data.data.fuel.current
+            this.maxFuel = res.data.data.fuel.capacity
+
             this.log(`New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`)
+            await this.navigateMode('CRUISE')
 
             return processFuel(this.symbol, res.data.data.fuel)
         } catch(error) {
@@ -489,6 +513,8 @@ export class Ship {
                 const res = await this.api.fleet.negotiateContract(this.symbol)
 
                 fs.writeFileSync('./dumps/contract.json', JSON.stringify(res.data.data.contract, null, 2))
+
+                return res
             })
             return result
         }catch(error) {
@@ -561,6 +587,8 @@ export class Ship {
         survey.data.data.surveys.forEach(item => {
             this.log(`Survey: ${item.signature} [${item.size}] ${item.deposits.map(d => d.symbol).join(', ')}, expires ${item.expiration}`)
         })
+
+        fs.writeFileSync(`dumps/survey${survey.data.data.surveys[0].signature}`, JSON.stringify(survey.data.data, null, 2))
 
         const expiry = new Date(survey.data.data.cooldown.expiration)
         const waitTime = expiry.getTime() - Date.now() + 200

@@ -172,6 +172,7 @@ order by
 
                 if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
                     console.log(`No more profitable trades within ${range} of ${fromSystem}, waiting for a bit`)
+                    await ship.setOverallGoal('Wait for trades')
                     await ship.waitUntil(new Date(Date.now() + 1000 * 60).toISOString())
                     continue;
                 } else if(Array.isArray(bestTrades)) {
@@ -385,6 +386,7 @@ order by
             }
         } catch(error) {
             console.log("Unexpected issue in agent, restarting in 60s: ",error?.response?.data ? error?.response?.data : error)
+            await ship.setOverallGoal(null)
             await ship.waitFor(60000)
 
             started = false

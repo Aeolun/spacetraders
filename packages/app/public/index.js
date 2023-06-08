@@ -31177,6 +31177,7 @@ var Input = (props) => {
 };
 var Button = (props) => {
   const bleeps = useBleeps();
+  const { children, ...otherProps } = props;
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     Animated2,
     {
@@ -31190,20 +31191,21 @@ var Button = (props) => {
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FrameSVGNefrex2, { className: "button", style: {
           cursor: "pointer"
-        } }) }),
+        }, ...otherProps }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animated2, { style: {
           pointerEvents: "none",
           textAlign: "center",
           lineHeight: "45px"
-        }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "div", children: props.children }) })
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "div", children }) })
       ]
     }
   );
 };
 var App = () => {
   const [active] = (0, import_react38.useState)(true);
-  const token2 = localStorage.getItem("agent-token");
+  const currentToken = localStorage.getItem("agent-token");
   const [selectedFaction, setSelectedFaction] = (0, import_react38.useState)("");
+  const [token2, setToken] = (0, import_react38.useState)("");
   const [factions, setFactions] = (0, import_react38.useState)([]);
   (0, import_react38.useEffect)(() => {
     trpc.getFactions.query().then((result) => {
@@ -31300,13 +31302,13 @@ var App = () => {
         flexDirection: "column",
         gap: "1em"
       }, children: [
-        token2 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+        currentToken ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
           display: "flex",
           flexDirection: "column",
           gap: "1em"
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Current token" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "code", children: token2 }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "code", children: currentToken }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
         ] }) : null,
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
@@ -31316,8 +31318,12 @@ var App = () => {
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Existing token" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Note that if you already have a token set, this token will override the existing one." }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Token" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", value: token2, onChange: (e) => setToken(e.currentTarget.value), placeholder: "Token" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
+            console.log("buttonclick");
+            localStorage.setItem("agent-token", token2);
+            window.location.href = "/play.html";
+          }, children: "Play" })
         ] })
       ] })
     ] })

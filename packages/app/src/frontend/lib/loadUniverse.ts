@@ -308,7 +308,7 @@ export const loadUniverse = async () => {
     Object.values(GameState.shipData).forEach(ship => {
         const shipGroup = new Container()
 
-        const itemSprite = new Sprite(ship.frameSymbol === 'FRAME_PROBE' ? loadedAssets.probeTexture : loadedAssets.spaceshipTexture)
+        const itemSprite = new Sprite(loadedAssets.spaceshipTextures[ship.frameSymbol] ? loadedAssets.spaceshipTextures[ship.frameSymbol] : loadedAssets.spaceshipTexture)
         itemSprite.name = 'ship'
         itemSprite.pivot = {
             x: 32,

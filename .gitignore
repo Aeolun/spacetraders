@@ -1,1 +1,3 @@
 node_modules
+**/.agent-token
+packages/app/dumps

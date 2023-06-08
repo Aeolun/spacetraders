@@ -19,6 +19,20 @@
   ],
   "transactions": [
     {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-GZ3-93937B",
+      "agentSymbol": "EXPL0R3R",
+      "price": 70731,
+      "timestamp": "2023-06-02T23:12:16.902Z"
+    },
+    {
+      "shipSymbol": "SHIP_PROBE",
+      "waypointSymbol": "X1-GZ3-93937B",
+      "agentSymbol": "ANUBEKO",
+      "price": 70730,
+      "timestamp": "2023-06-02T18:25:06.683Z"
+    },
+    {
       "shipSymbol": "SHIP_LIGHT_HAULER",
       "waypointSymbol": "X1-GZ3-93937B",
       "agentSymbol": "PHANTASM",
@@ -143,20 +157,6 @@
       "agentSymbol": "PHANTASM",
       "price": 70724,
       "timestamp": "2023-05-30T07:00:57.862Z"
-    },
-    {
-      "shipSymbol": "SHIP_PROBE",
-      "waypointSymbol": "X1-GZ3-93937B",
-      "agentSymbol": "PHANTASM",
-      "price": 70724,
-      "timestamp": "2023-05-30T07:00:56.725Z"
-    },
-    {
-      "shipSymbol": "SHIP_LIGHT_HAULER",
-      "waypointSymbol": "X1-GZ3-93937B",
-      "agentSymbol": "PHANTASM",
-      "price": 368565,
-      "timestamp": "2023-05-30T07:00:54.333Z"
     }
   ],
   "ships": [
@@ -659,7 +659,7 @@
       "type": "SHIP_PROBE",
       "name": "Probe Satellite",
       "description": "A small, unmanned spacecraft that can be launched into orbit to gather data and perform basic tasks.",
-      "purchasePrice": 70730,
+      "purchasePrice": 70731,
       "frame": {
         "symbol": "FRAME_PROBE",
         "name": "Frame Probe",

@@ -116,6 +116,8 @@ const Input = (props) => {
 const Button = (props: PropsWithChildren<any>) => {
     const bleeps = useBleeps();
 
+    const { children, ...otherProps} = props
+
     return <Animated style={{
         width: '150px',
         display: 'inline-block',
@@ -126,15 +128,15 @@ const Button = (props: PropsWithChildren<any>) => {
         <Animator>
             <FrameSVGNefrex className={'button'} style={{
                 cursor: 'pointer'
-            }} />
+            }} {...otherProps} />
         </Animator>
-        <Animated  style={{
+        <Animated style={{
             pointerEvents: 'none',
             textAlign: 'center',
             lineHeight: '45px'
         }}>
             <Text as={'div'}>
-                {props.children}
+                {children}
             </Text>
         </Animated>
     </Animated>
@@ -142,8 +144,9 @@ const Button = (props: PropsWithChildren<any>) => {
 
 const App = () => {
     const [active] = useState(true);
-    const token = localStorage.getItem('agent-token')
+    const currentToken = localStorage.getItem('agent-token')
     const [selectedFaction, setSelectedFaction] = useState('')
+    const [token, setToken] = useState('')
     const [factions, setFactions] = useState<Faction[]>([])
 
     useEffect(() => {
@@ -252,13 +255,13 @@ const App = () => {
                     gap: '1em',
 
                 }}>
-                    {token ? <Card childStyle={{
+                    {currentToken ? <Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
                     }}>
                         <Text as={'h2'}>Current token</Text>
-                        <Text as={'code'}>{token}</Text>
+                        <Text as={'code'}>{currentToken}</Text>
                         <Button>Play</Button>
                     </Card> : null }
                     <Card childStyle={{
@@ -268,8 +271,12 @@ const App = () => {
                     }}>
                         <Text as={'h2'}>Existing token</Text>
                         <Text>Note that if you already have a token set, this token will override the existing one.</Text>
-                        <Input type="text" placeholder="Token" />
-                        <Button>Play</Button>
+                        <Input type="text" value={token} onChange={(e) => setToken(e.currentTarget.value)} placeholder="Token" />
+                        <Button onClick={() => {
+                            console.log("buttonclick")
+                            localStorage.setItem('agent-token', token)
+                            window.location.href = '/play.html'
+                        }}>Play</Button>
                     </Card>
 
                 </Animated>

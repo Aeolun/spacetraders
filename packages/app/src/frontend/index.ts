@@ -1,6 +1,3 @@
-import {Application, BitmapText, Container, TilingSprite} from 'pixi.js';
-import {Viewport} from 'pixi-viewport'
-
 import {loadAssets, loadedAssets} from "@front/lib/assets";
 import {loadUniverse} from "@front/lib/loadUniverse";
 import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/worldCoordinateToOriginal";
@@ -22,6 +19,7 @@ import {loadPlayerData} from "@front/lib/loadPlayerData";
 import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/lib/targetingLine";
 import {loadSystem} from "@front/lib/loadSystem";
 import {trpc} from "@front/lib/trpc";
+import { app  } from './lib/application'
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -31,10 +29,7 @@ if (!localStorage.getItem('agent-token')) {
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
-const app = new Application({
-    resizeTo: window,
-    antialias: true
-});
+
 
 // The application will create a canvas element for you that you
 // can then insert into the DOM
@@ -62,6 +57,7 @@ const loadedUniverse = await loadUniverse()
 const format = Intl.NumberFormat('en');
 // Listen for frame updates
 let lastRefresh = Date.now()
+
 app.ticker.add(() => {
     const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
@@ -141,12 +137,6 @@ app.ticker.add(() => {
     universeTargetingLine(sizeMultiplier)
     systemTargetingLine()
 
-    availableActions.forEach(action => {
-        const isAvailable = action.isAvailable()
-
-        actionButton[action.name].disabled = !isAvailable
-    })
-
     if (GameState.selected) {
         if (GameState.selected.type === 'ship') {
             const shipInfo = GameState.shipData[GameState.selected.symbol]
@@ -179,13 +169,15 @@ app.ticker.add(() => {
                     console.log('marketinfo', data)
                     marketWindow.clearGoods()
                     marketWindow.setGoods(data)
-                    marketWindow.container.visible = true
+                    marketWindow.container.displayObject.x = 400
+                    marketWindow.container.displayObject.y = window.innerHeight - 200
+                    marketWindow.container.displayObject.visible = true
                 })
             }
         }
     } else {
         GameState.displayedMarket = undefined
-        marketWindow.container.visible = false
+        marketWindow.container.displayObject.visible = false
         cruiseModeSelect.visible = false
         entityInfo.text = `Entity Information`
     }

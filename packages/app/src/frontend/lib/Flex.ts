@@ -44,6 +44,12 @@ export enum FlexDirection {
     ROW_REVERSE= 3,
 }
 
+export enum FlexWrap {
+    WRAP_NO_WRAP= 0,
+    WRAP_WRAP= 1,
+    WRAP_WRAP_REVERSE=2
+}
+
 export class Flex<T extends Container> {
     public node: YogaNode
     private children: Flex<Container>[] = []
@@ -89,10 +95,10 @@ export class Flex<T extends Container> {
         this.children = []
     }
 
-    addChild<C extends Container>(node: Flex<C>) {
-        this.node.insertChild(node.node, this.node.getChildCount())
-        this.displayObject.addChild(node.displayObject)
-        this.children.push(node)
+    addChild<C extends Container>(child: Flex<C>) {
+        this.node.insertChild(child.node, this.node.getChildCount())
+        this.displayObject.addChild(child.displayObject)
+        this.children.push(child)
     }
 
     set height(value: number | string) {
@@ -107,8 +113,19 @@ export class Flex<T extends Container> {
         this.node.setFlex(value)
     }
 
+    set wrap(value: FlexWrap) {
+        this.node.setFlexWrap(value)
+    }
+
+    set gap(value: number) {
+
+    }
+
     set padding(value: number | string) {
         this.node.setPadding(Side.ALL, value)
+    }
+    set margin(value: number) {
+        this.node.setMargin(Side.ALL, value)
     }
 
     set paddingHorizontal(value: number | string) {
