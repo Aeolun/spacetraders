@@ -180,18 +180,30 @@ export async function storeMarketInformation(data: GetMarket200Response) {
         })
     })
 
+    const existingGoods = await prisma.tradeGood.findMany({
+        where: {
+            symbol: {
+                in: marketData.map(good => good.tradeGoodSymbol)
+            }
+        }
+    })
     await Promise.all(marketData.map(async data => {
-        await prisma.tradeGood.upsert({
-            where: {
-                symbol: data.tradeGoodSymbol
-            },
-            create: {
-                symbol: data.tradeGoodSymbol,
-                name: data.tradeGoodSymbol,
-                description: data.tradeGoodSymbol
-            },
-            update: {}
-        })
+        if (!existingGoods.find(good => good.symbol === data.tradeGoodSymbol && good.symbol !== good.name)) {
+            await prisma.tradeGood.upsert({
+                where: {
+                    symbol: data.tradeGoodSymbol
+                },
+                create: {
+                    symbol: data.tradeGoodSymbol,
+                    name: data.tradeGoodSymbol,
+                    description: data.tradeGoodSymbol
+                },
+                update: {
+                    name: data.tradeGoodSymbol,
+                    description: data.tradeGoodSymbol
+                }
+            })
+        }
         return prisma.marketPrice.upsert({
             where: {
                 waypointSymbol_tradeGoodSymbol: {
