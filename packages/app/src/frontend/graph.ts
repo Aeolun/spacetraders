@@ -1,374 +1,1002 @@
 export default [
   {
-    "tradeGoodSymbol" : "ADVANCED_CIRCUITRY",
-    "imports" : "ELECTRONICS,MICROPROCESSORS"
+    "export" : "ADVANCED_CIRCUITRY",
+    "imports" : "ELECTRONICS",
+    "weight" : 3
   },
   {
-    "tradeGoodSymbol" : "AI_MAINFRAMES",
-    "imports" : "ADVANCED_CIRCUITRY"
+    "export" : "ADVANCED_CIRCUITRY",
+    "imports" : "MICROPROCESSORS",
+    "weight" : 3
   },
   {
-    "tradeGoodSymbol" : "ALUMINUM",
-    "imports" : "ALUMINUM_ORE,COPPER_ORE,IRON_ORE,MACHINERY"
+    "export" : "AI_MAINFRAMES",
+    "imports" : "ADVANCED_CIRCUITRY",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "ALUMINUM_ORE",
-    "imports" : "EXPLOSIVES,MACHINERY,MEDICINE"
+    "export" : "ALUMINUM",
+    "imports" : "ALUMINUM_ORE",
+    "weight" : 28
   },
   {
-    "tradeGoodSymbol" : "AMMONIA_ICE",
-    "imports" : "MACHINERY"
+    "export" : "ALUMINUM",
+    "imports" : "COPPER_ORE",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "AMMUNITION",
-    "imports" : "COPPER,IRON,LIQUID_NITROGEN"
+    "export" : "ALUMINUM",
+    "imports" : "IRON_ORE",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "ANTIMATTER",
-    "imports" : "LAB_INSTRUMENTS"
+    "export" : "ALUMINUM",
+    "imports" : "MACHINERY",
+    "weight" : 18
   },
   {
-    "tradeGoodSymbol" : "ASSAULT_RIFLES",
-    "imports" : "ALUMINUM,IRON,PLATINUM"
+    "export" : "ALUMINUM_ORE",
+    "imports" : "EXPLOSIVES",
+    "weight" : 4
   },
   {
-    "tradeGoodSymbol" : "BIOCOMPOSITES",
-    "imports" : "FABRICS,LAB_INSTRUMENTS,POLYNUCLEOTIDES"
+    "export" : "ALUMINUM_ORE",
+    "imports" : "MACHINERY",
+    "weight" : 4
   },
   {
-    "tradeGoodSymbol" : "BOTANICAL_SPECIMENS",
-    "imports" : "CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,LAB_INSTRUMENTS,MACHINERY,MEDICINE,PLASTICS"
+    "export" : "ALUMINUM_ORE",
+    "imports" : "MEDICINE",
+    "weight" : 4
   },
   {
-    "tradeGoodSymbol" : "CLOTHING",
-    "imports" : "FABRICS"
+    "export" : "AMMONIA_ICE",
+    "imports" : "MACHINERY",
+    "weight" : 5
   },
   {
-    "tradeGoodSymbol" : "COPPER",
-    "imports" : "ALUMINUM_ORE,COPPER_ORE,IRON_ORE,MACHINERY"
+    "export" : "AMMUNITION",
+    "imports" : "COPPER",
+    "weight" : 30
   },
   {
-    "tradeGoodSymbol" : "COPPER_ORE",
-    "imports" : "EXPLOSIVES,MACHINERY,MEDICINE"
+    "export" : "AMMUNITION",
+    "imports" : "IRON",
+    "weight" : 30
   },
   {
-    "tradeGoodSymbol" : "CYBER_IMPLANTS",
-    "imports" : "BIOCOMPOSITES,CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,MACHINERY,MEDICINE,MICROPROCESSORS,PLASTICS,POLYNUCLEOTIDES"
+    "export" : "AMMUNITION",
+    "imports" : "LIQUID_NITROGEN",
+    "weight" : 30
   },
   {
-    "tradeGoodSymbol" : "DRUGS",
-    "imports" : "AMMONIA_ICE,FERTILIZERS,ICE_WATER"
+    "export" : "ANTIMATTER",
+    "imports" : "LAB_INSTRUMENTS",
+    "weight" : 13
   },
   {
-    "tradeGoodSymbol" : "ELECTRONICS",
-    "imports" : "GOLD,QUARTZ_SAND,SILICON_CRYSTALS"
+    "export" : "ASSAULT_RIFLES",
+    "imports" : "ALUMINUM",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "ENGINE_HYPER_DRIVE_I",
-    "imports" : "MACHINERY,PLATINUM"
+    "export" : "ASSAULT_RIFLES",
+    "imports" : "IRON",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "ENGINE_IMPULSE_DRIVE_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "ASSAULT_RIFLES",
+    "imports" : "PLATINUM",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "ENGINE_ION_DRIVE_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "BIOCOMPOSITES",
+    "imports" : "FABRICS",
+    "weight" : 16
   },
   {
-    "tradeGoodSymbol" : "ENGINE_ION_DRIVE_II",
-    "imports" : "MACHINERY,PLATINUM"
+    "export" : "BIOCOMPOSITES",
+    "imports" : "LAB_INSTRUMENTS",
+    "weight" : 16
   },
   {
-    "tradeGoodSymbol" : "EQUIPMENT",
-    "imports" : "ELECTRONICS,MACHINERY"
+    "export" : "BIOCOMPOSITES",
+    "imports" : "POLYNUCLEOTIDES",
+    "weight" : 16
   },
   {
-    "tradeGoodSymbol" : "EXOTIC_MATTER",
-    "imports" : "LAB_INSTRUMENTS"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "CLOTHING",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "EXPLOSIVES",
-    "imports" : "AMMONIA_ICE,HYDROCARBON,LIQUID_NITROGEN"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "DRUGS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "FABRICS",
-    "imports" : "FERTILIZERS,ICE_WATER,MACHINERY"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "ELECTRONICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "FERTILIZERS",
-    "imports" : "AMMONIA_ICE,HYDROCARBON,LIQUID_NITROGEN"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "EQUIPMENT",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "FIREARMS",
-    "imports" : "ALUMINUM,IRON,PLATINUM"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "FABRICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "FOOD",
-    "imports" : "FERTILIZERS,ICE_WATER,MACHINERY"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "FOOD",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "FUEL",
-    "imports" : "ENGINE_IMPULSE_DRIVE_I,ENGINE_ION_DRIVE_I,ENGINE_ION_DRIVE_II,FABRICS,HYDROCARBON,IRON,MACHINERY,MODULE_CARGO_HOLD_I,MODULE_CREW_QUARTERS_I,MODULE_MINERAL_PROCESSOR_I,MODULE_ORE_REFINERY_I,MOUNT_MINING_LASER_I,MOUNT_MINING_LASER_II,MOUNT_MISSILE_LAUNCHER_I,MOUNT_SURVEYOR_I,MOUNT_TURRET_I,REACTOR_CHEMICAL_I,REACTOR_FISSION_I,REACTOR_FUSION_I,REACTOR_SOLAR_I,SHIP_PLATING"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "FUEL",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "GENE_THERAPEUTICS",
-    "imports" : "CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,LAB_INSTRUMENTS,MACHINERY,MEDICINE,PLASTICS,POLYNUCLEOTIDES"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "ICE_WATER",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "GOLD",
-    "imports" : "GOLD_ORE,MACHINERY,PLATINUM_ORE,SILVER_ORE"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "LAB_INSTRUMENTS",
+    "weight" : 40
   },
   {
-    "tradeGoodSymbol" : "GRAVITON_EMITTERS",
-    "imports" : "ADVANCED_CIRCUITRY,CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,MACHINERY,MEDICINE,PLASTICS"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "MACHINERY",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "HOLOGRAPHICS",
-    "imports" : "CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,GOLD,ICE_WATER,MACHINERY,MEDICINE,MICROPROCESSORS,PLASTICS,SILVER"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "MEDICINE",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "HYDROCARBON",
-    "imports" : "MACHINERY"
+    "export" : "BOTANICAL_SPECIMENS",
+    "imports" : "PLASTICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "ICE_WATER",
-    "imports" : "MACHINERY"
+    "export" : "CLOTHING",
+    "imports" : "FABRICS",
+    "weight" : 17
   },
   {
-    "tradeGoodSymbol" : "IRON",
-    "imports" : "ALUMINUM_ORE,COPPER_ORE,IRON_ORE,MACHINERY"
+    "export" : "COPPER",
+    "imports" : "ALUMINUM_ORE",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "IRON_ORE",
-    "imports" : "EXPLOSIVES,MACHINERY,MEDICINE"
+    "export" : "COPPER",
+    "imports" : "COPPER_ORE",
+    "weight" : 31
   },
   {
-    "tradeGoodSymbol" : "JEWELRY",
-    "imports" : "GOLD,PRECIOUS_STONES,SILVER"
+    "export" : "COPPER",
+    "imports" : "IRON_ORE",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "LAB_INSTRUMENTS",
-    "imports" : "ELECTRONICS,SILICON_CRYSTALS,SILVER"
+    "export" : "COPPER",
+    "imports" : "MACHINERY",
+    "weight" : 21
   },
   {
-    "tradeGoodSymbol" : "LASER_RIFLES",
-    "imports" : "DIAMONDS,MICROPROCESSORS,PLATINUM"
+    "export" : "COPPER_ORE",
+    "imports" : "EXPLOSIVES",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "LIQUID_HYDROGEN",
-    "imports" : "MACHINERY"
+    "export" : "COPPER_ORE",
+    "imports" : "MACHINERY",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "LIQUID_NITROGEN",
-    "imports" : "MACHINERY"
+    "export" : "COPPER_ORE",
+    "imports" : "MEDICINE",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MACHINERY",
-    "imports" : "ALUMINUM,ELECTRONICS,IRON"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "BIOCOMPOSITES",
+    "weight" : 14
   },
   {
-    "tradeGoodSymbol" : "MEDICINE",
-    "imports" : "BOTANICAL_SPECIMENS,NOVEL_LIFEFORMS"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "CLOTHING",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MICRO_FUSION_GENERATORS",
-    "imports" : "DIAMONDS,MACHINERY,PLATINUM"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "DRUGS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MICROPROCESSORS",
-    "imports" : "QUARTZ_SAND,SILICON_CRYSTALS"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "ELECTRONICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MILITARY_EQUIPMENT",
-    "imports" : "ELECTRONICS,IRON,MICROPROCESSORS"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "EQUIPMENT",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_CARGO_HOLD_I",
-    "imports" : "FABRICS,IRON,MACHINERY"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "FABRICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_CREW_QUARTERS_I",
-    "imports" : "FABRICS,IRON,MACHINERY"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "FOOD",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_ENVOY_QUARTERS_I",
-    "imports" : "FABRICS,IRON,MACHINERY"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "FUEL",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_JUMP_DRIVE_I",
-    "imports" : "ADVANCED_CIRCUITRY,IRON"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "ICE_WATER",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_JUMP_DRIVE_II",
-    "imports" : "ADVANCED_CIRCUITRY,GOLD,PLATINUM"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "MACHINERY",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_MICRO_REFINERY_I",
-    "imports" : "MACHINERY,PLATINUM"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "MEDICINE",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_MINERAL_PROCESSOR_I",
-    "imports" : "FABRICS,IRON,MACHINERY"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "MICROPROCESSORS",
+    "weight" : 14
   },
   {
-    "tradeGoodSymbol" : "MODULE_PASSENGER_CABIN_I",
-    "imports" : "FABRICS,IRON,MACHINERY"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "PLASTICS",
+    "weight" : 1
   },
   {
-    "tradeGoodSymbol" : "MODULE_SCIENCE_LAB_I",
-    "imports" : "ADVANCED_CIRCUITRY,MACHINERY,PLATINUM"
+    "export" : "CYBER_IMPLANTS",
+    "imports" : "POLYNUCLEOTIDES",
+    "weight" : 14
   },
   {
-    "tradeGoodSymbol" : "MODULE_SHIELD_GENERATOR_I",
-    "imports" : "IRON,MACHINERY,URANITE"
+    "export" : "DRUGS",
+    "imports" : "AMMONIA_ICE",
+    "weight" : 36
   },
   {
-    "tradeGoodSymbol" : "MODULE_SHIELD_GENERATOR_II",
-    "imports" : "ALUMINUM,MACHINERY,URANITE"
+    "export" : "DRUGS",
+    "imports" : "FERTILIZERS",
+    "weight" : 36
   },
   {
-    "tradeGoodSymbol" : "MOOD_REGULATORS",
-    "imports" : "BOTANICAL_SPECIMENS,CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,LAB_INSTRUMENTS,MACHINERY,MEDICINE,PLASTICS,POLYNUCLEOTIDES"
+    "export" : "DRUGS",
+    "imports" : "ICE_WATER",
+    "weight" : 36
   },
   {
-    "tradeGoodSymbol" : "MOUNT_GAS_SIPHON_I",
-    "imports" : "DIAMONDS,ELECTRONICS,IRON,MACHINERY"
+    "export" : "ELECTRONICS",
+    "imports" : "GOLD",
+    "weight" : 11
   },
   {
-    "tradeGoodSymbol" : "MOUNT_GAS_SIPHON_II",
-    "imports" : "MACHINERY,PLATINUM"
+    "export" : "ELECTRONICS",
+    "imports" : "QUARTZ_SAND",
+    "weight" : 11
   },
   {
-    "tradeGoodSymbol" : "MOUNT_GAS_SIPHON_III",
-    "imports" : "MACHINERY,PLATINUM"
+    "export" : "ELECTRONICS",
+    "imports" : "SILICON_CRYSTALS",
+    "weight" : 11
   },
   {
-    "tradeGoodSymbol" : "MOUNT_LASER_CANNON_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "ENGINE_HYPER_DRIVE_I",
+    "imports" : "MACHINERY",
+    "weight" : 3
   },
   {
-    "tradeGoodSymbol" : "MOUNT_MINING_LASER_I",
-    "imports" : "DIAMONDS,ELECTRONICS,IRON,MACHINERY"
+    "export" : "ENGINE_HYPER_DRIVE_I",
+    "imports" : "PLATINUM",
+    "weight" : 3
   },
   {
-    "tradeGoodSymbol" : "MOUNT_MINING_LASER_II",
-    "imports" : "DIAMONDS,MACHINERY,PLATINUM"
+    "export" : "ENGINE_IMPULSE_DRIVE_I",
+    "imports" : "IRON",
+    "weight" : 21
   },
   {
-    "tradeGoodSymbol" : "MOUNT_MINING_LASER_III",
-    "imports" : "DIAMONDS,MACHINERY,PLATINUM"
+    "export" : "ENGINE_IMPULSE_DRIVE_I",
+    "imports" : "MACHINERY",
+    "weight" : 21
   },
   {
-    "tradeGoodSymbol" : "MOUNT_MISSILE_LAUNCHER_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "ENGINE_ION_DRIVE_I",
+    "imports" : "IRON",
+    "weight" : 25
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SENSOR_ARRAY_I",
-    "imports" : "DIAMONDS,ELECTRONICS,IRON,MACHINERY"
+    "export" : "ENGINE_ION_DRIVE_I",
+    "imports" : "MACHINERY",
+    "weight" : 25
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SENSOR_ARRAY_II",
-    "imports" : "ELECTRONICS,MACHINERY,PLATINUM"
+    "export" : "ENGINE_ION_DRIVE_II",
+    "imports" : "MACHINERY",
+    "weight" : 23
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SENSOR_ARRAY_III",
-    "imports" : "ELECTRONICS,MACHINERY,PLATINUM"
+    "export" : "ENGINE_ION_DRIVE_II",
+    "imports" : "PLATINUM",
+    "weight" : 23
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SURVEYOR_I",
-    "imports" : "DIAMONDS,ELECTRONICS,IRON,MACHINERY"
+    "export" : "EQUIPMENT",
+    "imports" : "ELECTRONICS",
+    "weight" : 12
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SURVEYOR_II",
-    "imports" : "ELECTRONICS,IRON,MACHINERY"
+    "export" : "EQUIPMENT",
+    "imports" : "MACHINERY",
+    "weight" : 12
   },
   {
-    "tradeGoodSymbol" : "MOUNT_SURVEYOR_III",
-    "imports" : "ELECTRONICS,IRON,MACHINERY"
+    "export" : "EXOTIC_MATTER",
+    "imports" : "LAB_INSTRUMENTS",
+    "weight" : 7
   },
   {
-    "tradeGoodSymbol" : "MOUNT_TURRET_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "EXPLOSIVES",
+    "imports" : "AMMONIA_ICE",
+    "weight" : 38
   },
   {
-    "tradeGoodSymbol" : "NANOBOTS",
-    "imports" : "CLOTHING,DIAMONDS,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,LAB_INSTRUMENTS,MACHINERY,MEDICINE,PLASTICS,POLYNUCLEOTIDES"
+    "export" : "EXPLOSIVES",
+    "imports" : "HYDROCARBON",
+    "weight" : 38
   },
   {
-    "tradeGoodSymbol" : "NEURAL_CHIPS",
-    "imports" : "LAB_INSTRUMENTS,MICROPROCESSORS,POLYNUCLEOTIDES"
+    "export" : "EXPLOSIVES",
+    "imports" : "LIQUID_NITROGEN",
+    "weight" : 38
   },
   {
-    "tradeGoodSymbol" : "NOVEL_LIFEFORMS",
-    "imports" : "LAB_INSTRUMENTS"
+    "export" : "FABRICS",
+    "imports" : "FERTILIZERS",
+    "weight" : 25
   },
   {
-    "tradeGoodSymbol" : "PLASTICS",
-    "imports" : "AMMONIA_ICE,HYDROCARBON,LIQUID_NITROGEN"
+    "export" : "FABRICS",
+    "imports" : "ICE_WATER",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "PLATINUM",
-    "imports" : "GOLD_ORE,MACHINERY,PLATINUM_ORE,SILVER_ORE"
+    "export" : "FABRICS",
+    "imports" : "MACHINERY",
+    "weight" : 25
   },
   {
-    "tradeGoodSymbol" : "POLYNUCLEOTIDES",
-    "imports" : "AMMONIA_ICE,HYDROCARBON,LIQUID_NITROGEN"
+    "export" : "FERTILIZERS",
+    "imports" : "AMMONIA_ICE",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "QUARTZ_SAND",
-    "imports" : "EXPLOSIVES,MACHINERY,MEDICINE"
+    "export" : "FERTILIZERS",
+    "imports" : "HYDROCARBON",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "REACTOR_ANTIMATTER_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "FERTILIZERS",
+    "imports" : "LIQUID_NITROGEN",
+    "weight" : 23
   },
   {
-    "tradeGoodSymbol" : "REACTOR_CHEMICAL_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "FIREARMS",
+    "imports" : "ALUMINUM",
+    "weight" : 35
   },
   {
-    "tradeGoodSymbol" : "REACTOR_FISSION_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "FIREARMS",
+    "imports" : "IRON",
+    "weight" : 35
   },
   {
-    "tradeGoodSymbol" : "REACTOR_FUSION_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "FIREARMS",
+    "imports" : "PLATINUM",
+    "weight" : 35
   },
   {
-    "tradeGoodSymbol" : "REACTOR_SOLAR_I",
-    "imports" : "IRON,MACHINERY"
+    "export" : "FOOD",
+    "imports" : "FERTILIZERS",
+    "weight" : 21
   },
   {
-    "tradeGoodSymbol" : "RELIC_TECH",
-    "imports" : "CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,LAB_INSTRUMENTS,MACHINERY,MEDICINE,PLASTICS"
+    "export" : "FOOD",
+    "imports" : "ICE_WATER",
+    "weight" : 21
   },
   {
-    "tradeGoodSymbol" : "ROBOTIC_DRONES",
-    "imports" : "ADVANCED_CIRCUITRY,ALUMINUM,CLOTHING,DRUGS,ELECTRONICS,EQUIPMENT,FABRICS,FOOD,FUEL,ICE_WATER,MACHINERY,MEDICINE,PLASTICS"
+    "export" : "FOOD",
+    "imports" : "MACHINERY",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "SHIP_PLATING",
-    "imports" : "ALUMINUM,IRON,PLATINUM"
+    "export" : "FUEL",
+    "imports" : "ENGINE_IMPULSE_DRIVE_I",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "SILICON_CRYSTALS",
-    "imports" : "EXPLOSIVES,MACHINERY,MEDICINE"
+    "export" : "FUEL",
+    "imports" : "ENGINE_ION_DRIVE_I",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "SILVER",
-    "imports" : "GOLD_ORE,MACHINERY,PLATINUM_ORE,SILVER_ORE"
+    "export" : "FUEL",
+    "imports" : "ENGINE_ION_DRIVE_II",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "SUPERGRAINS",
-    "imports" : "BOTANICAL_SPECIMENS,FERTILIZERS,ICE_WATER"
+    "export" : "FUEL",
+    "imports" : "FABRICS",
+    "weight" : 10
   },
   {
-    "tradeGoodSymbol" : "URANITE",
-    "imports" : "MACHINERY,URANITE_ORE"
+    "export" : "FUEL",
+    "imports" : "HYDROCARBON",
+    "weight" : 15
   },
   {
-    "tradeGoodSymbol" : "VIRAL_AGENTS",
-    "imports" : "BOTANICAL_SPECIMENS,NOVEL_LIFEFORMS,POLYNUCLEOTIDES"
+    "export" : "FUEL",
+    "imports" : "IRON",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MACHINERY",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MODULE_CARGO_HOLD_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MODULE_CREW_QUARTERS_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MODULE_MINERAL_PROCESSOR_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MODULE_ORE_REFINERY_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MOUNT_MINING_LASER_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MOUNT_MINING_LASER_II",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MOUNT_MISSILE_LAUNCHER_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MOUNT_SURVEYOR_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "MOUNT_TURRET_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "REACTOR_CHEMICAL_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "REACTOR_FISSION_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "REACTOR_FUSION_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "REACTOR_SOLAR_I",
+    "weight" : 10
+  },
+  {
+    "export" : "FUEL",
+    "imports" : "SHIP_PLATING",
+    "weight" : 10
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "CLOTHING",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "DRUGS",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "ELECTRONICS",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "EQUIPMENT",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "FABRICS",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "FOOD",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "FUEL",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "ICE_WATER",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "LAB_INSTRUMENTS",
+    "weight" : 12
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "MACHINERY",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "MEDICINE",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "PLASTICS",
+    "weight" : 2
+  },
+  {
+    "export" : "GENE_THERAPEUTICS",
+    "imports" : "POLYNUCLEOTIDES",
+    "weight" : 12
+  },
+  {
+    "export" : "GOLD",
+    "imports" : "GOLD_ORE",
+    "weight" : 14
+  },
+  {
+    "export" : "GOLD",
+    "imports" : "MACHINERY",
+    "weight" : 4
+  },
+  {
+    "export" : "GOLD",
+    "imports" : "PLATINUM_ORE",
+    "weight" : 10
+  },
+  {
+    "export" : "GOLD",
+    "imports" : "SILVER_ORE",
+    "weight" : 10
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "ADVANCED_CIRCUITRY",
+    "weight" : 9
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "CLOTHING",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "DRUGS",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "ELECTRONICS",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "EQUIPMENT",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "FABRICS",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "FOOD",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "FUEL",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "ICE_WATER",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "MACHINERY",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "MEDICINE",
+    "weight" : 1
+  },
+  {
+    "export" : "GRAVITON_EMITTERS",
+    "imports" : "PLASTICS",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "CLOTHING",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "DRUGS",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "ELECTRONICS",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "EQUIPMENT",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "FABRICS",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "FOOD",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "FUEL",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "GOLD",
+    "weight" : 15
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "ICE_WATER",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "MACHINERY",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "MEDICINE",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "MICROPROCESSORS",
+    "weight" : 15
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "PLASTICS",
+    "weight" : 1
+  },
+  {
+    "export" : "HOLOGRAPHICS",
+    "imports" : "SILVER",
+    "weight" : 15
+  },
+  {
+    "export" : "HYDROCARBON",
+    "imports" : "MACHINERY",
+    "weight" : 4
+  },
+  {
+    "export" : "ICE_WATER",
+    "imports" : "MACHINERY",
+    "weight" : 18
+  },
+  {
+    "export" : "IRON",
+    "imports" : "ALUMINUM_ORE",
+    "weight" : 10
+  },
+  {
+    "export" : "IRON",
+    "imports" : "COPPER_ORE",
+    "weight" : 10
+  },
+  {
+    "export" : "IRON",
+    "imports" : "IRON_ORE",
+    "weight" : 28
+  },
+  {
+    "export" : "IRON",
+    "imports" : "MACHINERY",
+    "weight" : 18
+  },
+  {
+    "export" : "IRON_ORE",
+    "imports" : "EXPLOSIVES",
+    "weight" : 3
+  },
+  {
+    "export" : "IRON_ORE",
+    "imports" : "MACHINERY",
+    "weight" : 3
+  },
+  {
+    "export" : "IRON_ORE",
+    "imports" : "MEDICINE",
+    "weight" : 3
+  },
+  {
+    "export" : "JEWELRY",
+    "imports" : "GOLD",
+    "weight" : 12
+  },
+  {
+    "export" : "JEWELRY",
+    "imports" : "PRECIOUS_STONES",
+    "weight" : 12
+  },
+  {
+    "export" : "JEWELRY",
+    "imports" : "SILVER",
+    "weight" : 12
+  },
+  {
+    "export" : "LAB_INSTRUMENTS",
+    "imports" : "ELECTRONICS",
+    "weight" : 19
+  },
+  {
+    "export" : "LAB_INSTRUMENTS",
+    "imports" : "SILICON_CRYSTALS",
+    "weight" : 19
+  },
+  {
+    "export" : "LAB_INSTRUMENTS",
+    "imports" : "SILVER",
+    "weight" : 19
+  },
+  {
+    "export" : "LASER_RIFLES",
+    "imports" : "DIAMONDS",
+    "weight" : 10
+  },
+  {
+    "export" : "LASER_RIFLES",
+    "imports" : "MICROPROCESSORS",
+    "weight" : 10
+  },
+  {
+    "export" : "LASER_RIFLES",
+    "imports" : "PLATINUM",
+    "weight" : 10
+  },
+  {
+    "export" : "LIQUID_HYDROGEN",
+    "imports" : "MACHINERY",
+    "weight" : 2
+  },
+  {
+    "export" : "LIQUID_NITROGEN",
+    "imports" : "MACHINERY",
+    "weight" : 1
+  },
+  {
+    "export" : "MACHINERY",
+    "imports" : "ALUMINUM",
+    "weight" : 8
+  },
+  {
+    "export" : "MACHINERY",
+    "imports" : "ELECTRONICS",
+    "weight" : 8
+  },
+  {
+    "export" : "MACHINERY",
+    "imports" : "IRON",
+    "weight" : 8
+  },
+  {
+    "export" : "MEDICINE",
+    "imports" : "BOTANICAL_SPECIMENS",
+    "weight" : 16
+  },
+  {
+    "export" : "MEDICINE",
+    "imports" : "NOVEL_LIFEFORMS",
+    "weight" : 16
+  },
+  {
+    "export" : "MICRO_FUSION_GENERATORS",
+    "imports" : "DIAMONDS",
+    "weight" : 1
+  },
+  {
+    "export" : "MICRO_FUSION_GENERATORS",
+    "imports" : "MACHINERY",
+    "weight" : 1
+  },
+  {
+    "export" : "MICRO_FUSION_GENERATORS",
+    "imports" : "PLATINUM",
+    "weight" : 1
+  },
+  {
+    "export" : "MICROPROCESSORS",
+    "imports" : "QUARTZ_SAND",
+    "weight" : 13
+  },
+  {
+    "export" : "MICROPROCESSORS",
+    "imports" : "SILICON_CRYSTALS",
+    "weight" : 13
+  },
+  {
+    "export" : "MILITARY_EQUIPMENT",
+    "imports" : "ELECTRONICS",
+    "weight" : 10
+  },
+  {
+    "export" : "MILITARY_EQUIPMENT",
+    "imports" : "IRON",
+    "weight" : 10
+  },
+  {
+    "export" : "MILITARY_EQUIPMENT",
+    "imports" : "MICROPROCESSORS",
+    "weight" : 10
+  },
+  {
+    "export" : "MODULE_CARGO_HOLD_I",
+    "imports" : "FABRICS",
+    "weight" : 10
+  },
+  {
+    "export" : "MODULE_CARGO_HOLD_I",
+    "imports" : "IRON",
+    "weight" : 28
+  },
+  {
+    "export" : "MODULE_CARGO_HOLD_I",
+    "imports" : "MACHINERY",
+    "weight" : 28
+  },
+  {
+    "export" : "MODULE_CREW_QUARTERS_I",
+    "imports" : "FABRICS",
+    "weight" : 24
+  },
+  {
+    "export" : "MODULE_CREW_QUARTERS_I",
+    "imports" : "IRON",
+    "weight" : 24
+  },
+  {
+    "export" : "MODULE_CREW_QUARTERS_I",
+    "imports" : "MACHINERY",
+    "weight" : 24
+  },
+  {
+    "export" : "MODULE_ENVOY_QUARTERS_I",
+    "imports" : "FABRICS",
+    "weight" : 34
+  },
+  {
+    "export" : "MODULE_ENVOY_QUARTERS_I",
+    "imports" : "IRON",
+    "weight" : 34
+  },
+  {
+    "export" : "MODULE_ENVOY_QUARTERS_I",
+    "imports" : "MACHINERY",
+    "weight" : 34
+  },
+  {
+    "export" : "MODULE_JUMP_DRIVE_I",
+    "imports" : "ADVANCED_CIRCUITRY",
+    "weight" : 26
+  },
+  {
+    "export" : "MODULE_JUMP_DRIVE_I",
+    "imports" : "IRON",
+    "weight" : 26
+  },
+  {
+    "export" : "MODULE_JUMP_DRIVE_II",
+    "imports" : "ADVANCED_CIRCUITRY",
+    "weight" : 2
+  },
+  {
+    "export" : "MODULE_JUMP_DRIVE_II",
+    "imports" : "GOLD",
+    "weight" : 2
+  },
+  {
+    "export" : "MODULE_JUMP_DRIVE_II",
+    "imports" : "PLATINUM",
+    "weight" : 2
+  },
+  {
+    "export" : "MODULE_MICRO_REFINERY_I",
+    "imports" : "MACHINERY",
+    "weight" : 22
+  },
+  {
+    "export" : "MODULE_MICRO_REFINERY_I",
+    "imports" : "PLATINUM",
+    "weight" : 22
   }
 ]

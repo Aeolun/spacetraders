@@ -6,27 +6,28 @@ import data from './graph'
 const edges = []
 const nodes = []
 data.forEach(d => {
-  if (nodes.find(i => i.id === d.tradeGoodSymbol) === undefined) {
+  if (nodes.find(i => i.id === d.imports) === undefined) {
     nodes.push({
-      id: d.tradeGoodSymbol,
-      label: d.tradeGoodSymbol
+      id: d.imports,
+      label: d.imports
+    })
+  }
+  if (nodes.find(i => i.id === d.export) === undefined) {
+    nodes.push({
+      id: d.export,
+      label: d.export
     })
   }
 
-  d.imports.split(',').forEach(i => {
-    if (!nodes.find(n => n.id === i)) {
-      nodes.push({
-        id: i,
-        label: i
-      })
-    }
-    edges.push({
-      id: i +'->'+d.tradeGoodSymbol,
-      source: i,
-      target: d.tradeGoodSymbol,
-      label: 'Import'
-    })
+
+  edges.push({
+    id: d.imports +'->'+d.export,
+    source: d.imports,
+    target: d.export,
+    size: Math.max(d.weight / 4, 1),
+    label: d.weight
   })
+
 })
 
 const App = () => {
@@ -53,7 +54,7 @@ const App = () => {
           edges={edges}
           layoutType={layout}
           sizingType={'pagerank'}
-          labelType={'nodes'}
+          labelType={'all'}
           selections={selections}
           actives={actives}
           onNodePointerOver={onNodePointerOver}

@@ -16,34 +16,6 @@ import {
 import {BleepsManagerProps} from "@arwes/bleeps";
 import {trpc} from "@front/lib/trpc";
 import {Faction} from "spacetraders-sdk";
-import {GraphCanvas, GraphCanvasRef, recommendLayout, useSelection} from 'reagraph';
-import data from './graph'
-
-const edges = []
-const nodes = []
-data.forEach(d => {
-    if (nodes.find(i => i.id === d.tradeGoodSymbol) === undefined) {
-        nodes.push({
-            id: d.tradeGoodSymbol,
-            label: d.tradeGoodSymbol
-        })
-    }
-
-    d.imports.split(',').forEach(i => {
-        if (!nodes.find(n => n.id === i)) {
-            nodes.push({
-                id: i,
-                label: i
-            })
-        }
-        edges.push({
-            id: i +'->'+d.tradeGoodSymbol,
-            source: i,
-            target: d.tradeGoodSymbol,
-            label: 'Import'
-        })
-    })
-})
 
 const animatorsSettings: AnimatorGeneralProviderSettings = {
     // Durations in seconds.
