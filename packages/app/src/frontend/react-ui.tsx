@@ -183,23 +183,6 @@ const App = () => {
         })
     }, [])
 
-    const layout = recommendLayout(nodes, edges);
-    const graphRef = useRef<GraphCanvasRef | null>(null);
-    const {
-        selections,
-        actives,
-        onNodeClick,
-        onCanvasClick,
-        onNodePointerOver,
-        onNodePointerOut
-    } = useSelection({
-        ref: graphRef,
-        nodes: nodes,
-        edges: edges,
-        pathHoverType: 'in',
-        pathSelectionType: 'out'
-    });
-
     return <AnimatorGeneralProvider {...animatorsSettings}>
         <BleepsProvider {...bleepsSettings}>
             <Animator>
@@ -245,68 +228,6 @@ const App = () => {
                         Welcome to Spacetraders UI! You can register your token here, or enter an existing token to get a view of all your ships and others. The database behind this is shared, and while you won't be able to see data for ships unaffiliated with your token. You will be able to see other ships flying in-universe if the players are using this app and have that setting enabled.
                     </Text>
                 </Animator>
-            </Card>
-            <Card
-              style={{margin: '1rem',}}
-              childStyle={{
-
-                height: "1200px"
-            }}>
-            <GraphCanvas
-              ref={graphRef}
-              nodes={nodes}
-              edges={edges}
-              layoutType={layout}
-              sizingType={'pagerank'}
-              labelType={'nodes'}
-              selections={selections}
-              actives={actives}
-              onNodePointerOver={onNodePointerOver}
-              onNodePointerOut={onNodePointerOut}
-              onCanvasClick={onCanvasClick}
-              onNodeClick={onNodeClick}
-              // theme={{
-              //     canvas: {
-              //         background: 'rgba(0, 0, 0, 1)',
-              //     },
-              //     node: {
-              //         fill: 'rgba(128, 128, 128, 0.5)',
-              //         activeFill: 'rgba(128, 128, 128, 0.5)',
-              //         opacity: 1,
-              //         selectedOpacity: 1,
-              //         inactiveOpacity: 1,
-              //         label: {
-              //             stroke: 'rgba(128, 128, 128, 0.5)',
-              //             color: 'rgba(128, 128, 128, 0.5)',
-              //             activeColor: 'rgba(128, 128, 128, 0.5)',
-              //         }
-              //     },
-              //     ring: {
-              //         fill: 'rgba(128, 128, 128, 0.5)',
-              //         activeFill: 'rgba(128, 128, 128, 0.5)',
-              //     },
-              //     edge: {
-              //         fill: 'rgba(128, 128, 128, 0.5)',
-              //         activeFill: 'rgba(128, 128, 128, 0.5)',
-              //         opacity: 1,
-              //         selectedOpacity: 1,
-              //         inactiveOpacity: 1,
-              //         label: {
-              //             stroke: 'rgba(128, 128, 128, 0.5)',
-              //             color: 'rgba(128, 128, 128, 0.5)',
-              //             activeColor: 'rgba(128, 128, 128, 0.5)',
-              //         }
-              //     },
-              //     arrow: {
-              //         fill: 'rgba(128, 128, 128, 0.5)',
-              //         activeFill: 'rgba(128, 128, 128, 0.5)',
-              //     },
-              //     lasso: {
-              //         background: 'rgba(128, 128, 128, 0.5)',
-              //         border: 'rgba(128, 128, 128, 0.5)',
-              //     },
-              // }}
-            />
             </Card>
             <Animated style={{
                 display: 'flex',
