@@ -24,7 +24,7 @@ data.forEach(d => {
     id: d.imports +'->'+d.export,
     source: d.imports,
     target: d.export,
-    size: Math.max(d.weight / 4, 1),
+    size: Math.max(d.weight / 8, 1),
     label: d.weight
   })
 
