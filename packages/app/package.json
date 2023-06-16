@@ -9,6 +9,7 @@
     "dev:serve": "serve public",
     "dev:build": "esbuild --bundle --format=esm --watch --outfile=public/app.js src/frontend/index.ts",
     "dev:build-ui": "esbuild --bundle --format=esm --watch --outfile=public/index.js src/frontend/react-ui.tsx",
+    "dev:build-graph": "esbuild --bundle --format=esm --watch --outfile=public/tradegoods.js src/frontend/tradegoods.tsx",
     "dev": "run-p dev:*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -83,6 +84,7 @@
     "prisma": "^4.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "reagraph": "^4.8.3",
     "spacetraders-sdk": "workspace:^2",
     "throttled-queue": "^2.1.4",
     "zod": "^3.21.4"
