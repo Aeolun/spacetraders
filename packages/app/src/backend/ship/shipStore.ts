@@ -8,7 +8,7 @@ export class ShipStore {
 
     constructShipFor(token: string, agent: string, symbol: string) {
         if (!this.ships[symbol]) {
-            this.ships[symbol] = new Ship(token, agent, symbol)
+            this.ships[symbol] = new Ship(token, symbol)
         }
         return this.ships[symbol]
     }

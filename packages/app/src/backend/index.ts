@@ -15,6 +15,9 @@ import fs from "fs";
 import {initializeShipBehaviors} from "@app/ship/initializeShipBehaviors";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {Ship} from "@app/ship/ship";
+import {agentToken} from "@app/configuration";
+import {processShip} from "@app/ship/updateShips";
+import createApi from "@app/lib/createApi";
 
 export type { AppRouter } from '@app/server'
 
@@ -57,6 +60,10 @@ const init = async () => {
             }
         })
         fs.writeFileSync('.resetdate', resetDate)
+
+        loadWaypoint().then(() => {
+            console.log('Waypoint load complete')
+        })
     }
 
     let resetYetInterval;
@@ -70,10 +77,6 @@ const init = async () => {
                 await deleteBackgroundAgentToken()
 
                 await initWorld(serverStatus.data.resetDate)
-
-                loadWaypoint().then(() => {
-                    console.log('Waypoint load complete')
-                })
 
                 clearInterval(resetYetInterval)
                 const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
@@ -91,15 +94,11 @@ const init = async () => {
         await initWorld(serverStatus.data.resetDate)
     }
 
-    // await updateMarketPrices()
     loadWaypoint().then(() => {
         console.log('Waypoint load complete')
-    }).catch(error => {
-        console.error(error)
     })
-    // updateMarketPrices().then(() => {
-    //     console.log("market prices updated")
-    // })
+
+    await initializeShipBehaviors()
 }
 
 const httpServer = createHTTPServer({
@@ -107,8 +106,6 @@ const httpServer = createHTTPServer({
     middleware: cors(),
     createContext: createContext
 })
-
-initializeShipBehaviors()
 
 httpServer.listen(4001)
 init().catch(error => {

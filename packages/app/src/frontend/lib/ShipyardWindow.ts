@@ -6,6 +6,7 @@ import {GameState} from "@front/lib/game-state";
 import {Text} from "@front/lib/ui-elements/text";
 import {Container} from '@front/lib/ui-elements/container'
 import {Button} from "@front/lib/ui-elements/button";
+import {updateCredits} from "@front/lib/loadPlayerData";
 
 
 type ExpectedData = (ShipyardModel & { shipConfiguration: ShipConfiguration & { shipConfigurationMount: ShipConfigurationMount[], shipConfigurationModule: ShipConfigurationModule[] }})
@@ -69,6 +70,7 @@ export class ShipyardWindow {
                 waypointSymbol: ship.waypointSymbol,
                 shipConfigurationSymbol: ship.shipConfigurationSymbol
             })
+            await updateCredits()
             loadSystem(GameState.currentSystem, false)
         })
         buyButton.flex = 1

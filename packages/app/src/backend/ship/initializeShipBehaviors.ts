@@ -8,6 +8,7 @@ import {mapJumpgatesBehavior} from "@app/ship/behaviors/map-jumpgates-behavior";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {Ship} from "@app/ship/ship";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
+import {shipBehaviors, startBehaviorForShip} from "@app/ship/shipBehavior";
 
 export const initializeShipBehaviors = async () => {
     prisma.ship.findMany({
@@ -21,25 +22,23 @@ export const initializeShipBehaviors = async () => {
             // start behavior
             switch(ship.currentBehavior) {
                 case ShipBehavior.TRADE:
-                    tradeLogic(ship.symbol, ship.homeSystemSymbol, ship.behaviorRange)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, tradeLogic)
                     break;
                 case ShipBehavior.MINE:
-                    mineBehavior(ship.symbol, ship.homeSystemSymbol, ship.behaviorRange)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, mineBehavior)
                     break;
                 case ShipBehavior.MAP_JUMPGATE:
-                    mapJumpgatesBehavior(ship.symbol)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, mapJumpgatesBehavior)
                     break;
                 case ShipBehavior.EXPLORE:
-                    exploreBehavior(ship.symbol, ship.homeSystemSymbol, ship.behaviorRange)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, exploreBehavior)
                     break;
                 case ShipBehavior.UPDATE_MARKETS:
-                    updateMarketsBehavior(ship.symbol, ship.homeSystemSymbol, ship.behaviorRange)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, updateMarketsBehavior)
                     break;
                 case ShipBehavior.EXPLORE_MARKETS:
-                    exploreNewMarkets(ship.symbol, ship.homeSystemSymbol, ship.behaviorRange)
+                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, exploreNewMarkets)
             }
         })
     })
-    const token = await getBackgroundAgentToken()
-    travelBehavior('X1-UH91', new Ship(token, 'PHANTASM', 'PHANTASM-F'))
 }

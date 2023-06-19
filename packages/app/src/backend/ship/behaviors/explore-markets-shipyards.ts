@@ -5,6 +5,7 @@ import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import {prisma, Prisma} from "@app/prisma";
 import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
+import {BehaviorParamaters} from "@app/ship/shipBehavior";
 
 const updateTaken = new Set([] as string[])
 const shitList: {
@@ -15,24 +16,10 @@ const shitList: {
     expire: Number.MAX_SAFE_INTEGER
 }]
 
-export const exploreNewMarkets = async (shipReg: string, aroundSystem: string, range: number) => {
-    const token = await getBackgroundAgentToken()
-    const ship = new Ship(token, 'PHANTASM', shipReg)
-
-    let started = false
-
-    while(true) {
-        try {
-            if (!started) {
-                await ship.validateCooldowns()
-                await ship.updateShipStatus()
-
-                started = true
-            }
-
+export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamaters) => {
             const system = await prisma.system.findFirstOrThrow({
                 where: {
-                    symbol: aroundSystem
+                    symbol: parameters.systemSymbol
                 }
             })
 
@@ -88,10 +75,10 @@ export const exploreNewMarkets = async (shipReg: string, aroundSystem: string, r
                     LEFT JOIN MarketPrice mp ON wp.symbol = mp.waypointSymbol
                 WHERE
                     s.hasJumpGate = true
-                    and s.x > ${system.x - range}
-                    and s.x < ${system.x + range}
-                    and s.y > ${system.y - range}
-                    and s.y < ${system.y + range}
+                    and s.x > ${system.x - parameters.range}
+                    and s.x < ${system.x + parameters.range}
+                    and s.y > ${system.y - parameters.range}
+                    and s.y < ${system.y + parameters.range}
                 GROUP BY s.symbol
                 HAVING MIN(mp.updatedOn) < NOW() - INTERVAL 3 HOUR
                 ORDER BY lastUpdated ASC;`
@@ -102,10 +89,10 @@ export const exploreNewMarkets = async (shipReg: string, aroundSystem: string, r
             }
 
             if (updatable.length <= 0) {
-                ship.log(`No systems to updated market prices for within ${range} of ${aroundSystem}, pausing for a bit.`)
+                ship.log(`No systems to updated market prices for within ${parameters.range} of ${parameters.systemSymbol}, pausing for a bit.`)
                 await ship.setOverallGoal(null)
                 await ship.waitFor(60000)
-                continue
+                return;
             }
 
             const updateSystem = updatable[0]
@@ -120,7 +107,7 @@ export const exploreNewMarkets = async (shipReg: string, aroundSystem: string, r
                     system: updateSystem.symbol,
                     expire: Date.now()+86400*30*1000
                 })
-                continue;
+                return;
             }
 
             ship.log(`Arrived at ${updateSystem.symbol} for updating ${updateSystem.waypointCount} markets.`)
@@ -167,14 +154,4 @@ export const exploreNewMarkets = async (shipReg: string, aroundSystem: string, r
             ship.log(`Finished updating markets in ${updateSystem.symbol}`)
             updateTaken.delete(updateSystem.symbol)
             await ship.setOverallGoal(null)
-        } catch(error) {
-            console.log("Unexpected issue in agent, restarting in 60s: ",error?.response?.data ? error?.response?.data : error.toString())
-            await ship.setOverallGoal(null)
-            await ship.waitFor(60000)
-            started = false
-        }
-    }
-
-    // const shipyardresponse = await api.systems.getShipyard('X1-VU95', 'X1-VU95-02777Z')
-    // fs.writeFileSync('shipyard.json', JSON.stringify(shipyardresponse.data.data, null, 2))
 }

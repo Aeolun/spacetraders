@@ -296,7 +296,7 @@ export async function processFuel(shipSymbol: string, fuel: ShipFuel) {
     })
 }
 
-export async function processAgent(agent: Agent) {
+export async function processAgent(agent: Agent, token?: string) {
     return await prisma.agent.upsert({
         where: {
             symbol: agent.symbol
@@ -305,11 +305,13 @@ export async function processAgent(agent: Agent) {
             symbol: agent.symbol,
             credits: agent.credits,
             accountId: agent.accountId,
-            headquartersSymbol: agent.headquarters
+            headquartersSymbol: agent.headquarters,
+            token: token,
         },
         update: {
             credits: agent.credits,
-            headquartersSymbol: agent.headquarters
+            headquartersSymbol: agent.headquarters,
+            token: token,
         }
     })
 }

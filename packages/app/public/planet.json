@@ -1,0 +1,198 @@
+{
+  "meta": {
+    "app": "https://github.com/pencil-js/spritesheet",
+    "version": "1.5.1",
+    "image": "planet.png",
+    "size": {
+      "w": 1280,
+      "h": 64
+    },
+    "scale": 1
+  },
+  "frames": {
+    "planet/tile/planet.png_0": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_1": {
+      "frame": {
+        "x": 64,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_2": {
+      "frame": {
+        "x": 128,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_3": {
+      "frame": {
+        "x": 192,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_4": {
+      "frame": {
+        "x": 256,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_5": {
+      "frame": {
+        "x": 320,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_6": {
+      "frame": {
+        "x": 384,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_7": {
+      "frame": {
+        "x": 448,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_8": {
+      "frame": {
+        "x": 512,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_9": {
+      "frame": {
+        "x": 576,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_10": {
+      "frame": {
+        "x": 640,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_11": {
+      "frame": {
+        "x": 704,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_12": {
+      "frame": {
+        "x": 768,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_13": {
+      "frame": {
+        "x": 832,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_14": {
+      "frame": {
+        "x": 896,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_15": {
+      "frame": {
+        "x": 960,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_16": {
+      "frame": {
+        "x": 1024,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_17": {
+      "frame": {
+        "x": 1088,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_18": {
+      "frame": {
+        "x": 1152,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    },
+    "planet/tile/planet.png_19": {
+      "frame": {
+        "x": 1216,
+        "y": 0,
+        "w": 64,
+        "h": 64
+      }
+    }
+  },
+  "animations": {
+    "planet/tile/planet.png_spin": [
+      "planet/tile/planet.png_0",
+      "planet/tile/planet.png_1",
+      "planet/tile/planet.png_2",
+      "planet/tile/planet.png_3",
+      "planet/tile/planet.png_4",
+      "planet/tile/planet.png_5",
+      "planet/tile/planet.png_6",
+      "planet/tile/planet.png_7",
+      "planet/tile/planet.png_8",
+      "planet/tile/planet.png_9",
+      "planet/tile/planet.png_10",
+      "planet/tile/planet.png_11",
+      "planet/tile/planet.png_12",
+      "planet/tile/planet.png_13",
+      "planet/tile/planet.png_14",
+      "planet/tile/planet.png_15",
+      "planet/tile/planet.png_16",
+      "planet/tile/planet.png_17",
+      "planet/tile/planet.png_18",
+      "planet/tile/planet.png_19"
+    ]
+  }
+}

@@ -1,17 +1,11 @@
-import api from "@app/lib/createApi";
 import {processAgent, updateShips} from "@app/ship/updateShips";
-import {prisma} from "@app/prisma";
-import {defaultShipStore} from "@app/ship/shipStore";
-import fs from "fs";
-import {backgroundQueue} from "@app/lib/queue";
-import {storeWaypointScan} from "@app/ship/storeResults";
 import createApi from "@app/lib/createApi";
 
 export const initAgent = async (token: string) => {
     const api = createApi(token)
 
     const res = await api.agents.getMyAgent()
-    await processAgent(res.data.data)
+    await processAgent(res.data.data, token)
     const agentSymbol = res.data.data.symbol
 
     try {

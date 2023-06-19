@@ -13,7 +13,7 @@ import {
 } from "@front/lib/UIElements";
 import {GameState} from "@front/lib/game-state";
 import {deselectListeners} from "@front/lib/makeInteractiveAndSelectable";
-import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
+import {positionShip, positionUniverseShip, positionWaypoint, resetShipWaypoints} from "@front/lib/positionShips";
 import {availableActions} from "@front/lib/availableActions";
 import {loadPlayerData} from "@front/lib/loadPlayerData";
 import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/lib/targetingLine";
@@ -57,10 +57,13 @@ const loadedUniverse = await loadUniverse()
 const format = Intl.NumberFormat('en');
 // Listen for frame updates
 let lastRefresh = Date.now()
+let hidingLabels = false;
 
-app.ticker.add(() => {
+app.ticker.add((dt) => {
     const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
+
+
 
     credits.text = `${format.format(GameState.agent.credits)}`
 
@@ -74,6 +77,19 @@ app.ticker.add(() => {
         Object.values(loadedUniverse.systems).forEach(ref => {
             ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
         })
+        if (!hidingLabels && shipSizeMultiplier > 10) {
+            hidingLabels = true
+            Object.values(loadedUniverse.systems).forEach(ref => {
+                ref.getChildByName('label').visible = false
+                ref.interactive = false;
+            })
+        } else if (hidingLabels && shipSizeMultiplier < 10) {
+            hidingLabels = false
+            Object.values(loadedUniverse.systems).forEach(ref => {
+                ref.getChildByName('label').visible = true
+                ref.interactive = true
+            })
+        }
 
         const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset))
         currentCoordinate.text = worldCoordinates.x + ', ' + worldCoordinates.y
@@ -106,6 +122,15 @@ app.ticker.add(() => {
     } else {
         const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset))
         currentCoordinate.text = systemCoordinate.x + ', ' + systemCoordinate.y
+
+        Object.keys(GameState.waypoints).forEach(waypointSymbol => {
+            const waypointItem = GameState.waypoints[waypointSymbol]
+            const waypointData = GameState.waypointData[waypointSymbol]
+
+            const newPosition = positionWaypoint(waypointData, Date.now(), )
+            waypointItem.x = newPosition.x
+            waypointItem.y = newPosition.y
+        })
 
         resetShipWaypoints()
         Object.keys(GameState.systemShips).forEach(shipKey => {
@@ -170,7 +195,7 @@ app.ticker.add(() => {
                     marketWindow.clearGoods()
                     marketWindow.setGoods(data)
                     marketWindow.container.displayObject.x = 400
-                    marketWindow.container.displayObject.y = window.innerHeight - 200
+                    marketWindow.container.displayObject.y = 1080 - 200
                     marketWindow.container.displayObject.visible = true
                 })
             }

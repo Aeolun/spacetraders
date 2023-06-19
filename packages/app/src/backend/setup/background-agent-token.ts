@@ -3,6 +3,7 @@ import api from "@app/lib/createApi";
 import createApi from "@app/lib/createApi";
 import jwtDecode from "jwt-decode";
 import {RegisterRequestFactionEnum} from "spacetraders-sdk";
+import {processShip} from "@app/ship/updateShips";
 
 export const getBackgroundAgentToken = async (resetDate?: string) => {
     let agentToken, agentTokenData
@@ -23,6 +24,7 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
         })
         fs.writeFileSync(`dumps/registrationResult${resetDate}.json`, JSON.stringify(result.data, null, 2))
         fs.writeFileSync('.agent-token', result.data.data.token)
+        await processShip(result.data.data.ship)
         agentToken = result.data.data.token
     } else {
         agentToken = fs.readFileSync('.agent-token').toString().trim()

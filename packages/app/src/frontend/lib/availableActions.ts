@@ -4,7 +4,7 @@ import {FederatedPointerEvent} from "pixi.js";
 import {loadSystem} from "@front/lib/loadSystem";
 import {updateCredits} from "@front/lib/loadPlayerData";
 import {ShipyardWindow} from "@front/lib/ShipyardWindow";
-import {uiOverlay} from "@front/lib/UIElements";
+import {behaviorWindow, uiOverlay} from "@front/lib/UIElements";
 import {deselectListeners} from "@front/lib/makeInteractiveAndSelectable";
 
 export const availableActions: {
@@ -258,5 +258,17 @@ export const availableActions: {
             }
         }
         return false
+    }
+}, {
+    name: 'Behavior',
+    action: async (event) => {
+        event.stopPropagation();
+        behaviorWindow.show()
+        deselectListeners.once('deselect', () => {
+            behaviorWindow.hide()
+        })
+    },
+    isAvailable: () => {
+        return GameState.selected?.type === 'ship'
     }
 }]

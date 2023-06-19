@@ -49,7 +49,7 @@ export interface Agent {
 
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export type WaypointData = Waypoint & {traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}}
+export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}}
 
 export type ShipData = RouterOutputs['instructRefuel']
 

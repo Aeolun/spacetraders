@@ -32,6 +32,7 @@ model Agent {
   headquartersSymbol String?
   headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
   accountId          String
+  token              String    @default("") @db.Text()
 
   @@index([headquartersSymbol])
 }

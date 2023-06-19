@@ -118,7 +118,7 @@ const convertToDisplayCoordinates = (position: { x: number, y: number}) => {
     }
 }
 
-function createStar(starData: System & {waypoints: (Waypoint & {traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}})[]}) {
+function createStar(starData: System) {
     let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
 
     const star = new Sprite(texture)
@@ -131,6 +131,7 @@ function createStar(starData: System & {waypoints: (Waypoint & {traits: Waypoint
         fontSize: 18,
         align: 'left',
     })
+    text.name = 'label'
     text.x = 0
     text.y = 40
 
@@ -138,7 +139,7 @@ function createStar(starData: System & {waypoints: (Waypoint & {traits: Waypoint
     starContainer.addChild(star)
     starContainer.addChild(text)
 
-    addTraitIcons(starData, starContainer)
+    //addTraitIcons(starData, starContainer)
 
     makeInteractiveAndSelectable(starContainer, {
         onMouseOut: () => {
@@ -272,26 +273,26 @@ export const loadUniverse = async () => {
     universeView.addChild(influenceGraphics);
 
     // draw jump connections
-    for(const starData of systems) {
-        const jumpGate = starData.waypoints.find(wp => wp.type === 'JUMP_GATE')
-        if (jumpGate && jumpGate.jumpgate) {
-            jumpGate.jumpgate.validJumpTargets.forEach(jumpTarget => {
-                const displayCoords = convertToDisplayCoordinates(starData)
-                const targetCoords = convertToDisplayCoordinates(jumpTarget)
-
-                const jumpGraphics = new Graphics()
-                jumpGraphics.lineStyle({
-                    width: 10,
-                    color: 0x999933
-                })
-                jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
-                jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
-
-                universeView.addChild(jumpGraphics)
-            })
-
-        }
-    }
+    // for(const starData of systems) {
+    //     const jumpGate = starData.waypoints.find(wp => wp.type === 'JUMP_GATE')
+    //     if (jumpGate && jumpGate.jumpgate) {
+    //         jumpGate.jumpgate.validJumpTargets.forEach(jumpTarget => {
+    //             const displayCoords = convertToDisplayCoordinates(starData)
+    //             const targetCoords = convertToDisplayCoordinates(jumpTarget)
+    //
+    //             const jumpGraphics = new Graphics()
+    //             jumpGraphics.lineStyle({
+    //                 width: 10,
+    //                 color: 0x999933
+    //             })
+    //             jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
+    //             jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
+    //
+    //             universeView.addChild(jumpGraphics)
+    //         })
+    //
+    //     }
+    // }
 
     for(const starData of systems) {
         const starContainer = createStar(starData)

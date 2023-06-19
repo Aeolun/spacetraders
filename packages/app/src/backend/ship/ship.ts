@@ -21,7 +21,7 @@ import {
     processCargo,
     processCooldown,
     processFuel,
-    processNav,
+    processNav, processShip,
     returnShipData
 } from "@app/ship/updateShips";
 import * as process from "process";
@@ -53,10 +53,11 @@ export class Ship {
     public maxFuel = 0
 
     public navigationUntil: string | undefined = undefined
+    public isDocked = false
 
-    constructor(public token: string, public agent: string, public symbol: string) {
+    constructor(public token: string, public symbol: string) {
         this.api = createApi(token)
-        this.queue = createOrGetAgentQueue(agent)
+        this.queue = createOrGetAgentQueue(symbol.split('-')[0])
     }
 
     public setCurrentLocation(system:string, waypoint: string) {
@@ -66,6 +67,7 @@ export class Ship {
 
     public async updateShipStatus() {
         const shipInfo = await this.queue(() => this.api.fleet.getMyShip(this.symbol))
+        await processShip(shipInfo.data.data)
 
         this.currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol
         this.currentSystemSymbol = shipInfo.data.data.nav.systemSymbol
@@ -77,6 +79,8 @@ export class Ship {
 
         this.engineSpeed = shipInfo.data.data.engine.speed
         this.hasWarpDrive = shipInfo.data.data.modules.some(m => m.symbol.includes('WARP_DRIVE'))
+
+        this.isDocked = shipInfo.data.data.nav.status === 'DOCKED'
 
         await this.waitUntil(shipInfo.data.data.nav.route.arrival)
     }
@@ -167,6 +171,10 @@ export class Ship {
                 await this.waitUntil(this.navigationUntil)
             }
 
+            if (this.isDocked) {
+                await this.orbit()
+            }
+
             const res = await this.queue(() => {
                 this.log(`Navigating ship to ${waypoint}`)
                 return this.api.fleet.navigateShip(this.symbol, {
@@ -232,6 +240,10 @@ export class Ship {
             if (this.navigationUntil) {
                 this.log('Ship still navigating, waiting until completion')
                 await this.waitUntil(this.navigationUntil)
+            }
+
+            if (this.isDocked) {
+                await this.orbit()
             }
 
             const res = await this.queue(() => {
@@ -319,6 +331,10 @@ export class Ship {
             }
 
             await this.waitForCooldown('reactor')
+
+            if (this.isDocked) {
+                await this.orbit()
+            }
 
             const res = await this.queue(() => {
                 this.log(`Jumping ship from ${this.currentSystemSymbol} to ${system}`)
@@ -490,6 +506,7 @@ export class Ship {
             try {
                 const res = await this.api.fleet.dockShip(this.symbol)
 
+                this.isDocked = true;
                 return processNav(this.symbol, res.data.data.nav)
             } catch(error) {
                 console.log(`error docking for ${this.symbol}`, error.response?.data ? error.response.data : error.toString())
@@ -501,6 +518,8 @@ export class Ship {
         return this.queue(async () => {
             this.log(`Orbiting ship`)
             const res = await this.api.fleet.orbitShip(this.symbol)
+
+            this.isDocked = false
 
             return processNav(this.symbol, res.data.data.nav)
         })

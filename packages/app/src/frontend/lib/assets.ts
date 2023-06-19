@@ -5,6 +5,7 @@ export let loadedAssets: {
     planetsheet: Spritesheet,
     uisheet: Spritesheet
     buttonsheet: Spritesheet,
+    planet: Spritesheet,
     font: BitmapFont,
     buttonTextWhite: BitmapFont,
     buttonText: BitmapFont,
@@ -33,6 +34,7 @@ export async function loadAssets() {
     const sheet: Spritesheet = await Assets.load('stars.json');
     const planetsheet: Spritesheet = await Assets.load('planets.json');
     const uisheet: Spritesheet = await Assets.load('uisheet.json');
+    const planet: Spritesheet = await Assets.load('planet.json');
     const buttonSheet: Spritesheet = await Assets.load('ui/button.json');
     const font = await Assets.load('font.fnt');
     const buttonText = await Assets.load('buttontext.fnt')
@@ -63,6 +65,7 @@ export async function loadAssets() {
         font,
         buttonsheet: buttonSheet,
         buttonText,
+        planet,
         buttonTextWhite,
         bgTexture,
         navArrow,

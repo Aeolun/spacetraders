@@ -13,7 +13,7 @@ export class MarketWindow {
     private nextColumn = 0
     constructor() {
         this.container = new Container()
-        this.container.width = window.innerWidth - 400
+        this.container.width = 1920 - 400
         this.container.height = 200
 
         const names: MarketGoodKind[] = ['IMPORT', 'EXPORT', 'EXCHANGE']

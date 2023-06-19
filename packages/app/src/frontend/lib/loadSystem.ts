@@ -2,7 +2,7 @@ import {trpc} from "@front/lib/trpc";
 import {backButton, systemGraphics, systemGraphicsText, systemView, universeView} from "@front/lib/UIElements";
 import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/lib/game-state";
 import {systemCoordinates, systemScale} from "@front/lib/consts";
-import {BitmapText, Container, Graphics, Sprite} from "pixi.js";
+import {AnimatedSprite, BitmapText, Container, Graphics, Sprite} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadedAssets} from "@front/lib/assets";
 import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
@@ -109,7 +109,16 @@ function createSystemItem(data: {
   }, scale = 1, index = 0) {
   const orbitingGroup = new Container()
 
-  const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
+  let orbitingSprite: Sprite | AnimatedSprite;
+  if (data.waypoint.type === 'PLANET') {
+    orbitingSprite = new AnimatedSprite(loadedAssets.planet.animations['planet/tile/planet.png_spin'], true)
+    if (orbitingSprite instanceof AnimatedSprite) {
+      orbitingSprite.animationSpeed = 1/20
+      orbitingSprite.play()
+    }
+  } else {
+    orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
+  }
   orbitingSprite.pivot = {
     x: 32,
     y: 32
@@ -133,15 +142,18 @@ function createSystemItem(data: {
   })
   orbitingText.x = 24
   orbitingText.y = -8
+  orbitingText.visible = false
   orbitingGroup.addChild(orbitingText)
 
   makeInteractiveAndSelectable(orbitingGroup, {
     onMouseOver: () => {
       console.log('hovered', data.waypoint)
       GameState.hoveredWaypoint = data.waypoint
+      orbitingText.visible = true
     },
     onMouseOut: () => {
       GameState.hoveredWaypoint = undefined
+      orbitingText.visible = false
     },
     onSelect: {
       type: 'waypoint',
@@ -195,7 +207,10 @@ export async function loadSystem(systemSymbol: string, resetCamera = true) {
       GameState.shipData[ship.symbol] = ship
     })
     waypoints.forEach(waypoint => {
-      GameState.waypointData[waypoint.symbol] = waypoint
+      GameState.waypointData[waypoint.symbol] = {
+        ...waypoint,
+        offset: Math.random()
+      }
     })
 
     clearSystem()
@@ -250,7 +265,7 @@ export async function loadSystem(systemSymbol: string, resetCamera = true) {
         const orbitingGroup = createSystemItem({
           waypoint: orbitingThing,
           parent: item
-        }, 0.75, index)
+        }, 0.5, index)
 
         GameState.waypoints[orbitingThing.symbol] = orbitingGroup
 

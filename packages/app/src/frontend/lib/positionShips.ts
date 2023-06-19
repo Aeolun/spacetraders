@@ -1,11 +1,47 @@
 import {scale, systemCoordinates, systemScale} from "@front/lib/consts";
-import {GameState, ShipData} from "@front/lib/game-state";
+import {GameState, ShipData, WaypointData} from "@front/lib/game-state";
 import {universeView} from "@front/lib/UIElements";
 
 let waypointShips: Record<string, number> = {}
 
 export function resetShipWaypoints() {
     waypointShips = {}
+}
+
+const planetOrbitSpeed = 20000
+export function positionWaypoint(waypoint: WaypointData, timeElapsed: number) {
+    let x, y
+
+    if (waypoint.orbitsSymbol) {
+        const orbitData = GameState.waypointData[waypoint.orbitsSymbol]
+
+        const orbitDistance = Math.sqrt(Math.pow(waypoint.x, 2) + Math.pow(waypoint.y,2 ))
+        const orbitalPeriod = orbitDistance * planetOrbitSpeed
+
+        const currentAngle = (timeElapsed % orbitalPeriod / orbitalPeriod + orbitData.offset) * Math.PI * 2
+        x = (Math.abs(systemCoordinates.minX) + Math.cos(currentAngle) * orbitDistance) * systemScale
+        y = (Math.abs(systemCoordinates.minY) + Math.sin(currentAngle) * orbitDistance) * systemScale
+
+
+        const ownOrbitalPeriod = 60 * 500
+        const ownAngle = (timeElapsed % ownOrbitalPeriod / ownOrbitalPeriod + waypoint.offset) * Math.PI * 2
+        const offsetX = Math.cos(ownAngle) * 60
+        const offsetY = Math.sin(ownAngle) * 60
+
+        x += offsetX
+        y += offsetY
+    } else {
+        const orbitDistance = Math.sqrt(Math.pow(waypoint.x, 2) + Math.pow(waypoint.y,2 ))
+        const orbitalPeriod = orbitDistance * planetOrbitSpeed
+
+        const currentAngle = (timeElapsed % orbitalPeriod / orbitalPeriod + waypoint.offset) * Math.PI * 2
+        x = (Math.abs(systemCoordinates.minX) + Math.cos(currentAngle) * orbitDistance) * systemScale
+        y = (Math.abs(systemCoordinates.minY) + Math.sin(currentAngle) * orbitDistance) * systemScale
+    }
+
+    return {
+        x, y
+    }
 }
 
 export function positionShip(ship: ShipData) {
@@ -16,9 +52,18 @@ export function positionShip(ship: ShipData) {
     if (ship.destinationWaypoint.symbol !== ship.departureWaypoint.symbol && Date.now() < arrivalOn.getTime()) {
         const positionAlongPath = (Date.now() - departureOn.getTime())/(arrivalOn.getTime() - departureOn.getTime())
 
-        serverX = ship.departureWaypoint.x + (ship.destinationWaypoint.x - ship.departureWaypoint.x) * positionAlongPath
-        serverY = ship.departureWaypoint.y + (ship.destinationWaypoint.y - ship.departureWaypoint.y) * positionAlongPath
-        navRot = Math.atan2(ship.destinationWaypoint.y - ship.departureWaypoint.y, ship.destinationWaypoint.x - ship.departureWaypoint.x) + Math.PI/2;
+        try {
+            const from = GameState.waypoints[ship.departureWaypoint.symbol]
+            const to = GameState.waypoints[ship.destinationWaypoint.symbol]
+
+            serverX = from.x + (to.x - from.x) * positionAlongPath
+            serverY = from.y + (to.y - from.y) * positionAlongPath
+            navRot = Math.atan2(to.y - from.y, to.x - from.x) + Math.PI / 2;
+        } catch (e) {
+            serverX = 0
+            serverY = 0
+            navRot = 0
+        }
     } else {
         const orbitSymbol = ship.currentWaypoint.orbitsSymbol ? ship.currentWaypoint.orbitsSymbol : ship.currentWaypoint.symbol
         if (waypointShips[orbitSymbol] === undefined) {
@@ -27,14 +72,23 @@ export function positionShip(ship: ShipData) {
             waypointShips[orbitSymbol]++
         }
 
-        serverX = ship.currentWaypoint.x
-        serverY = ship.currentWaypoint.y
 
-        xOffset = (32 * waypointShips[orbitSymbol])
-        yOffset = 80
+            const curr = GameState.waypoints[ship.currentWaypoint.symbol]
+
+        if (curr) {
+            serverX = curr.x
+            serverY = curr.y
+
+            xOffset = (32 * waypointShips[orbitSymbol])
+            yOffset = 80
+        } else {
+            serverX = 0
+            serverY = 0
+            navRot = 0
+        }
     }
-    const x = serverX * systemScale + xOffset + Math.abs(systemCoordinates.minX) * systemScale
-    const y = serverY * systemScale + yOffset + Math.abs(systemCoordinates.minY) * systemScale
+    const x = serverX + xOffset
+    const y = serverY + yOffset
 
     return {
         x, y, navRot

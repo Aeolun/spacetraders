@@ -50319,6 +50319,193 @@ Prepare.extension = {
 };
 extensions.add(Prepare);
 
+// ../../node_modules/.pnpm/@pixi+sprite-animated@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/sprite-animated/lib/AnimatedSprite.mjs
+var AnimatedSprite = class extends Sprite {
+  constructor(textures, autoUpdate = true) {
+    super(textures[0] instanceof Texture ? textures[0] : textures[0].texture);
+    this._textures = null;
+    this._durations = null;
+    this._autoUpdate = autoUpdate;
+    this._isConnectedToTicker = false;
+    this.animationSpeed = 1;
+    this.loop = true;
+    this.updateAnchor = false;
+    this.onComplete = null;
+    this.onFrameChange = null;
+    this.onLoop = null;
+    this._currentTime = 0;
+    this._playing = false;
+    this._previousFrame = null;
+    this.textures = textures;
+  }
+  stop() {
+    if (!this._playing) {
+      return;
+    }
+    this._playing = false;
+    if (this._autoUpdate && this._isConnectedToTicker) {
+      Ticker.shared.remove(this.update, this);
+      this._isConnectedToTicker = false;
+    }
+  }
+  play() {
+    if (this._playing) {
+      return;
+    }
+    this._playing = true;
+    if (this._autoUpdate && !this._isConnectedToTicker) {
+      Ticker.shared.add(this.update, this, UPDATE_PRIORITY.HIGH);
+      this._isConnectedToTicker = true;
+    }
+  }
+  gotoAndStop(frameNumber) {
+    this.stop();
+    this.currentFrame = frameNumber;
+  }
+  gotoAndPlay(frameNumber) {
+    this.currentFrame = frameNumber;
+    this.play();
+  }
+  update(deltaTime) {
+    if (!this._playing) {
+      return;
+    }
+    const elapsed = this.animationSpeed * deltaTime;
+    const previousFrame = this.currentFrame;
+    if (this._durations !== null) {
+      let lag = this._currentTime % 1 * this._durations[this.currentFrame];
+      lag += elapsed / 60 * 1e3;
+      while (lag < 0) {
+        this._currentTime--;
+        lag += this._durations[this.currentFrame];
+      }
+      const sign2 = Math.sign(this.animationSpeed * deltaTime);
+      this._currentTime = Math.floor(this._currentTime);
+      while (lag >= this._durations[this.currentFrame]) {
+        lag -= this._durations[this.currentFrame] * sign2;
+        this._currentTime += sign2;
+      }
+      this._currentTime += lag / this._durations[this.currentFrame];
+    } else {
+      this._currentTime += elapsed;
+    }
+    if (this._currentTime < 0 && !this.loop) {
+      this.gotoAndStop(0);
+      if (this.onComplete) {
+        this.onComplete();
+      }
+    } else if (this._currentTime >= this._textures.length && !this.loop) {
+      this.gotoAndStop(this._textures.length - 1);
+      if (this.onComplete) {
+        this.onComplete();
+      }
+    } else if (previousFrame !== this.currentFrame) {
+      if (this.loop && this.onLoop) {
+        if (this.animationSpeed > 0 && this.currentFrame < previousFrame || this.animationSpeed < 0 && this.currentFrame > previousFrame) {
+          this.onLoop();
+        }
+      }
+      this.updateTexture();
+    }
+  }
+  updateTexture() {
+    const currentFrame = this.currentFrame;
+    if (this._previousFrame === currentFrame) {
+      return;
+    }
+    this._previousFrame = currentFrame;
+    this._texture = this._textures[currentFrame];
+    this._textureID = -1;
+    this._textureTrimmedID = -1;
+    this._cachedTint = 16777215;
+    this.uvs = this._texture._uvs.uvsFloat32;
+    if (this.updateAnchor) {
+      this._anchor.copyFrom(this._texture.defaultAnchor);
+    }
+    if (this.onFrameChange) {
+      this.onFrameChange(this.currentFrame);
+    }
+  }
+  destroy(options) {
+    this.stop();
+    super.destroy(options);
+    this.onComplete = null;
+    this.onFrameChange = null;
+    this.onLoop = null;
+  }
+  static fromFrames(frames) {
+    const textures = [];
+    for (let i3 = 0; i3 < frames.length; ++i3) {
+      textures.push(Texture.from(frames[i3]));
+    }
+    return new AnimatedSprite(textures);
+  }
+  static fromImages(images) {
+    const textures = [];
+    for (let i3 = 0; i3 < images.length; ++i3) {
+      textures.push(Texture.from(images[i3]));
+    }
+    return new AnimatedSprite(textures);
+  }
+  get totalFrames() {
+    return this._textures.length;
+  }
+  get textures() {
+    return this._textures;
+  }
+  set textures(value) {
+    if (value[0] instanceof Texture) {
+      this._textures = value;
+      this._durations = null;
+    } else {
+      this._textures = [];
+      this._durations = [];
+      for (let i3 = 0; i3 < value.length; i3++) {
+        this._textures.push(value[i3].texture);
+        this._durations.push(value[i3].time);
+      }
+    }
+    this._previousFrame = null;
+    this.gotoAndStop(0);
+    this.updateTexture();
+  }
+  get currentFrame() {
+    let currentFrame = Math.floor(this._currentTime) % this._textures.length;
+    if (currentFrame < 0) {
+      currentFrame += this._textures.length;
+    }
+    return currentFrame;
+  }
+  set currentFrame(value) {
+    if (value < 0 || value > this.totalFrames - 1) {
+      throw new Error(`[AnimatedSprite]: Invalid frame index value ${value}, expected to be between 0 and totalFrames ${this.totalFrames}.`);
+    }
+    const previousFrame = this.currentFrame;
+    this._currentTime = value;
+    if (previousFrame !== this.currentFrame) {
+      this.updateTexture();
+    }
+  }
+  get playing() {
+    return this._playing;
+  }
+  get autoUpdate() {
+    return this._autoUpdate;
+  }
+  set autoUpdate(value) {
+    if (value !== this._autoUpdate) {
+      this._autoUpdate = value;
+      if (!this._autoUpdate && this._isConnectedToTicker) {
+        Ticker.shared.remove(this.update, this);
+        this._isConnectedToTicker = false;
+      } else if (this._autoUpdate && !this._isConnectedToTicker && this._playing) {
+        Ticker.shared.add(this.update, this);
+        this._isConnectedToTicker = true;
+      }
+    }
+  }
+};
+
 // ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
 var tempPoint3 = new Point();
 var TilingSprite = class extends Sprite {
@@ -52277,6 +52464,7 @@ async function loadAssets() {
   const sheet = await Assets.load("stars.json");
   const planetsheet = await Assets.load("planets.json");
   const uisheet = await Assets.load("uisheet.json");
+  const planet = await Assets.load("planet.json");
   const buttonSheet = await Assets.load("ui/button.json");
   const font = await Assets.load("font.fnt");
   const buttonText = await Assets.load("buttontext.fnt");
@@ -52306,6 +52494,7 @@ async function loadAssets() {
     font,
     buttonsheet: buttonSheet,
     buttonText,
+    planet,
     buttonTextWhite,
     bgTexture,
     navArrow,
@@ -55808,7 +55997,7 @@ var MarketWindow = class {
   nextColumn = 0;
   constructor() {
     this.container = new Container4();
-    this.container.width = window.innerWidth - 400;
+    this.container.width = 1920 - 400;
     this.container.height = 200;
     const names = ["IMPORT", "EXPORT", "EXCHANGE"];
     const columnHeaders = new Container4();
@@ -55893,15 +56082,51 @@ var waypointShips = {};
 function resetShipWaypoints() {
   waypointShips = {};
 }
+var planetOrbitSpeed = 2e4;
+function positionWaypoint(waypoint, timeElapsed) {
+  let x2, y2;
+  if (waypoint.orbitsSymbol) {
+    const orbitData = GameState.waypointData[waypoint.orbitsSymbol];
+    const orbitDistance = Math.sqrt(Math.pow(waypoint.x, 2) + Math.pow(waypoint.y, 2));
+    const orbitalPeriod = orbitDistance * planetOrbitSpeed;
+    const currentAngle = (timeElapsed % orbitalPeriod / orbitalPeriod + orbitData.offset) * Math.PI * 2;
+    x2 = (Math.abs(systemCoordinates.minX) + Math.cos(currentAngle) * orbitDistance) * systemScale;
+    y2 = (Math.abs(systemCoordinates.minY) + Math.sin(currentAngle) * orbitDistance) * systemScale;
+    const ownOrbitalPeriod = 60 * 500;
+    const ownAngle = (timeElapsed % ownOrbitalPeriod / ownOrbitalPeriod + waypoint.offset) * Math.PI * 2;
+    const offsetX = Math.cos(ownAngle) * 60;
+    const offsetY = Math.sin(ownAngle) * 60;
+    x2 += offsetX;
+    y2 += offsetY;
+  } else {
+    const orbitDistance = Math.sqrt(Math.pow(waypoint.x, 2) + Math.pow(waypoint.y, 2));
+    const orbitalPeriod = orbitDistance * planetOrbitSpeed;
+    const currentAngle = (timeElapsed % orbitalPeriod / orbitalPeriod + waypoint.offset) * Math.PI * 2;
+    x2 = (Math.abs(systemCoordinates.minX) + Math.cos(currentAngle) * orbitDistance) * systemScale;
+    y2 = (Math.abs(systemCoordinates.minY) + Math.sin(currentAngle) * orbitDistance) * systemScale;
+  }
+  return {
+    x: x2,
+    y: y2
+  };
+}
 function positionShip(ship) {
   let serverX, serverY, navRot, xOffset = 0, yOffset = 0;
   const arrivalOn = new Date(ship.arrivalOn);
   const departureOn = new Date(ship.departureOn);
   if (ship.destinationWaypoint.symbol !== ship.departureWaypoint.symbol && Date.now() < arrivalOn.getTime()) {
     const positionAlongPath = (Date.now() - departureOn.getTime()) / (arrivalOn.getTime() - departureOn.getTime());
-    serverX = ship.departureWaypoint.x + (ship.destinationWaypoint.x - ship.departureWaypoint.x) * positionAlongPath;
-    serverY = ship.departureWaypoint.y + (ship.destinationWaypoint.y - ship.departureWaypoint.y) * positionAlongPath;
-    navRot = Math.atan2(ship.destinationWaypoint.y - ship.departureWaypoint.y, ship.destinationWaypoint.x - ship.departureWaypoint.x) + Math.PI / 2;
+    try {
+      const from = GameState.waypoints[ship.departureWaypoint.symbol];
+      const to = GameState.waypoints[ship.destinationWaypoint.symbol];
+      serverX = from.x + (to.x - from.x) * positionAlongPath;
+      serverY = from.y + (to.y - from.y) * positionAlongPath;
+      navRot = Math.atan2(to.y - from.y, to.x - from.x) + Math.PI / 2;
+    } catch (e3) {
+      serverX = 0;
+      serverY = 0;
+      navRot = 0;
+    }
   } else {
     const orbitSymbol = ship.currentWaypoint.orbitsSymbol ? ship.currentWaypoint.orbitsSymbol : ship.currentWaypoint.symbol;
     if (waypointShips[orbitSymbol] === void 0) {
@@ -55909,13 +56134,20 @@ function positionShip(ship) {
     } else {
       waypointShips[orbitSymbol]++;
     }
-    serverX = ship.currentWaypoint.x;
-    serverY = ship.currentWaypoint.y;
-    xOffset = 32 * waypointShips[orbitSymbol];
-    yOffset = 80;
+    const curr = GameState.waypoints[ship.currentWaypoint.symbol];
+    if (curr) {
+      serverX = curr.x;
+      serverY = curr.y;
+      xOffset = 32 * waypointShips[orbitSymbol];
+      yOffset = 80;
+    } else {
+      serverX = 0;
+      serverY = 0;
+      navRot = 0;
+    }
   }
-  const x2 = serverX * systemScale + xOffset + Math.abs(systemCoordinates.minX) * systemScale;
-  const y2 = serverY * systemScale + yOffset + Math.abs(systemCoordinates.minY) * systemScale;
+  const x2 = serverX + xOffset;
+  const y2 = serverY + yOffset;
   return {
     x: x2,
     y: y2,
@@ -56043,7 +56275,16 @@ function addTraitIcons(item, container) {
 }
 function createSystemItem(data, scale3 = 1, index = 0) {
   const orbitingGroup = new Container();
-  const orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`]);
+  let orbitingSprite;
+  if (data.waypoint.type === "PLANET") {
+    orbitingSprite = new AnimatedSprite(loadedAssets.planet.animations["planet/tile/planet.png_spin"], true);
+    if (orbitingSprite instanceof AnimatedSprite) {
+      orbitingSprite.animationSpeed = 1 / 20;
+      orbitingSprite.play();
+    }
+  } else {
+    orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`]);
+  }
   orbitingSprite.pivot = {
     x: 32,
     y: 32
@@ -56064,14 +56305,17 @@ function createSystemItem(data, scale3 = 1, index = 0) {
   });
   orbitingText.x = 24;
   orbitingText.y = -8;
+  orbitingText.visible = false;
   orbitingGroup.addChild(orbitingText);
   makeInteractiveAndSelectable(orbitingGroup, {
     onMouseOver: () => {
       console.log("hovered", data.waypoint);
       GameState.hoveredWaypoint = data.waypoint;
+      orbitingText.visible = true;
     },
     onMouseOut: () => {
       GameState.hoveredWaypoint = void 0;
+      orbitingText.visible = false;
     },
     onSelect: {
       type: "waypoint",
@@ -56119,7 +56363,10 @@ async function loadSystem(systemSymbol, resetCamera = true) {
       GameState.shipData[ship.symbol] = ship;
     });
     waypoints.forEach((waypoint) => {
-      GameState.waypointData[waypoint.symbol] = waypoint;
+      GameState.waypointData[waypoint.symbol] = {
+        ...waypoint,
+        offset: Math.random()
+      };
     });
     clearSystem();
     showSystemView();
@@ -56162,7 +56409,7 @@ async function loadSystem(systemSymbol, resetCamera = true) {
         const orbitingGroup = createSystemItem({
           waypoint: orbitingThing,
           parent: item
-        }, 0.75, index);
+        }, 0.5, index);
         GameState.waypoints[orbitingThing.symbol] = orbitingGroup;
         systemView.addChild(orbitingGroup);
       });
@@ -56260,6 +56507,7 @@ var ShipyardWindow = class {
         waypointSymbol: ship.waypointSymbol,
         shipConfigurationSymbol: ship.shipConfigurationSymbol
       });
+      await updateCredits();
       loadSystem(GameState.currentSystem, false);
     });
     buyButton.flex = 1;
@@ -56526,6 +56774,18 @@ var availableActions = [{
     }
     return false;
   }
+}, {
+  name: "Behavior",
+  action: async (event) => {
+    event.stopPropagation();
+    behaviorWindow.show();
+    deselectListeners.once("deselect", () => {
+      behaviorWindow.hide();
+    });
+  },
+  isAvailable: () => {
+    return GameState.selected?.type === "ship";
+  }
 }];
 
 // src/frontend/lib/application.ts
@@ -56562,6 +56822,61 @@ var createActionButtons = () => {
   return flex.displayObject;
 };
 
+// src/frontend/lib/BehaviorWindow.ts
+var BehaviorWindow = class {
+  container;
+  constructor() {
+    this.container = new Container4();
+    this.container.width = 1920 - 400;
+    this.container.height = 600;
+    this.container.flexDirection = 0 /* COLUMN */;
+    this.container.padding = 10;
+    this.container.updateLayout();
+  }
+  setBehaviors(behaviors) {
+    behaviors.forEach((behavior) => {
+      const row = new Container4();
+      row.flex = 1;
+      row.flexDirection = 2 /* ROW */;
+      const texts = [behavior.symbol, behavior.name, behavior.description];
+      texts.forEach((textString) => {
+        const text = new Text2(textString, {
+          align: "left",
+          font: {
+            fontName: "buttontext_white",
+            fontSize: 16
+          }
+        });
+        text.flex = 1;
+        row.addChild(text);
+      });
+      const button = new Button("Activate", {
+        textSize: 16
+      }, () => {
+        trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
+          systemSymbol: GameState.shipData[GameState.selected.symbol].currentSystemSymbol,
+          range: 5e3
+        } }).then(() => {
+          alert("Behavior started");
+          this.hide();
+        });
+      });
+      button.flex = 1;
+      row.addChild(button);
+      this.container.addChild(row);
+    });
+    this.container.updateLayout();
+  }
+  show() {
+    this.container.displayObject.visible = true;
+    this.container.displayObject.x = 200;
+    this.container.displayObject.y = 200;
+  }
+  hide() {
+    this.container.displayObject.visible = false;
+  }
+};
+
 // src/frontend/lib/UIElements.ts
 var universeView;
 var systemView;
@@ -56578,6 +56893,7 @@ var systemGraphics;
 var systemGraphicsText;
 var cruiseModeSelect;
 var marketWindow;
+var behaviorWindow;
 var createUIElements = (app2) => {
   let pointerDownPlace;
   systemView = new ht({
@@ -56651,6 +56967,7 @@ var createUIElements = (app2) => {
   });
   universeView.addChild(universeGraphicsText);
   uiOverlay = new Container();
+  const popupOverlay = new Container();
   const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208);
   panelBack.height = window.innerHeight - 16;
   panelBack.x = 8;
@@ -56720,9 +57037,15 @@ var createUIElements = (app2) => {
   cruiseModeSelect.y = 700 - 64;
   cruiseModeSelect.x = 16;
   panelBg.addChild(cruiseModeSelect);
+  behaviorWindow = new BehaviorWindow();
+  trpc.availableBehaviors.query().then((behaviors) => {
+    behaviorWindow.setBehaviors(behaviors);
+  });
+  behaviorWindow.hide();
   marketWindow = new MarketWindow();
   marketWindow.container.displayObject.visible = false;
   uiOverlay.addChild(marketWindow.container.displayObject);
+  popupOverlay.addChild(behaviorWindow.container.displayObject);
   uiOverlay.addChild(panelBg);
   const actionButtons = createActionButtons();
   actionButtons.y = 800;
@@ -56748,7 +57071,7 @@ var createUIElements = (app2) => {
     fontSize: 18,
     align: "right"
   });
-  currentCoordinate.x = window.innerWidth - 166;
+  currentCoordinate.x = 1920 - 166;
   currentCoordinate.y = 16;
   currentCoordinate.maxWidth = 150;
   uiOverlay.addChild(currentCoordinate);
@@ -56757,7 +57080,7 @@ var createUIElements = (app2) => {
     fontSize: 18,
     align: "right"
   });
-  fps.x = window.innerWidth - 166;
+  fps.x = 1920 - 166;
   fps.y = 40;
   fps.maxWidth = 150;
   uiOverlay.addChild(fps);
@@ -56766,6 +57089,7 @@ var createUIElements = (app2) => {
   app2.stage.addChild(universeView);
   app2.stage.addChild(systemView);
   app2.stage.addChild(uiOverlay);
+  app2.stage.addChild(popupOverlay);
 };
 
 // src/common/lib/getDistance.ts
@@ -56774,104 +57098,6 @@ var getDistance = (pos1, pos2) => {
 };
 
 // src/frontend/lib/loadUniverse.ts
-var addTraitIcons2 = (item, container) => {
-  let xOffset = 0, hasMarket = false, hasUncharted = false, hasShipyard = false, hasBelt = false, hasJumpgate = false, hasStation = false;
-  item.waypoints.forEach((waypoint) => {
-    if (waypoint.type == "JUMP_GATE") {
-      hasJumpgate = true;
-    }
-    if (waypoint.type === "ORBITAL_STATION") {
-      hasStation = true;
-    }
-    waypoint.traits.forEach((trait) => {
-      if (trait.symbol === "UNCHARTED") {
-        hasUncharted = true;
-      }
-      if (trait.symbol === "MARKETPLACE") {
-        hasMarket = true;
-      }
-      if (trait.symbol === "SHIPYARD") {
-        hasStation = false;
-        hasShipyard = true;
-      }
-      if (trait.symbol === "COMMON_METAL_DEPOSITS" || trait.symbol === "PRECIOUS_METAL_DEPOSITS" || trait.symbol === "MINERAL_DEPOSITS") {
-        hasBelt = true;
-      }
-    });
-  });
-  if (hasMarket) {
-    const sprite = new Sprite(loadedAssets.market);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.25 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-  if (hasShipyard) {
-    const sprite = new Sprite(loadedAssets.shipyard);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.24 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-  if (hasBelt) {
-    const sprite = new Sprite(loadedAssets.asteroidBelt);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.24 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-  if (hasJumpgate) {
-    const sprite = new Sprite(loadedAssets.jumpgate);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.24 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-  if (hasStation) {
-    const sprite = new Sprite(loadedAssets.station);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.24 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-  if (hasUncharted) {
-    const sprite = new Sprite(loadedAssets.treasure);
-    sprite.pivot = {
-      x: 32,
-      y: 32
-    };
-    sprite.scale = { x: 0.25, y: 0.24 };
-    sprite.x = xOffset - 16;
-    sprite.y = 24;
-    container.addChild(sprite);
-    xOffset += 16;
-  }
-};
 var convertToDisplayCoordinates = (position) => {
   return {
     x: (position.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize,
@@ -56890,12 +57116,12 @@ function createStar(starData) {
     fontSize: 18,
     align: "left"
   });
+  text.name = "label";
   text.x = 0;
   text.y = 40;
   const starContainer = new Container();
   starContainer.addChild(star);
   starContainer.addChild(text);
-  addTraitIcons2(starData, starContainer);
   makeInteractiveAndSelectable(starContainer, {
     onMouseOut: () => {
       GameState.hoveredSystem = void 0;
@@ -57016,23 +57242,6 @@ var loadUniverse = async () => {
     }
   }
   universeView.addChild(influenceGraphics);
-  for (const starData of systems) {
-    const jumpGate = starData.waypoints.find((wp) => wp.type === "JUMP_GATE");
-    if (jumpGate && jumpGate.jumpgate) {
-      jumpGate.jumpgate.validJumpTargets.forEach((jumpTarget) => {
-        const displayCoords = convertToDisplayCoordinates(starData);
-        const targetCoords = convertToDisplayCoordinates(jumpTarget);
-        const jumpGraphics = new Graphics();
-        jumpGraphics.lineStyle({
-          width: 10,
-          color: 10066227
-        });
-        jumpGraphics.moveTo(displayCoords.x, displayCoords.y);
-        jumpGraphics.lineTo(targetCoords.x, targetCoords.y);
-        universeView.addChild(jumpGraphics);
-      });
-    }
-  }
   for (const starData of systems) {
     const starContainer = createStar(starData);
     GameState.systems[starData.symbol] = starContainer;
@@ -57235,7 +57444,8 @@ await loadPlayerData();
 var loadedUniverse = await loadUniverse();
 var format2 = Intl.NumberFormat("en");
 var lastRefresh = Date.now();
-app.ticker.add(() => {
+var hidingLabels = false;
+app.ticker.add((dt) => {
   const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5);
   const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   credits.text = `${format2.format(GameState.agent.credits)}`;
@@ -57247,6 +57457,19 @@ app.ticker.add(() => {
     Object.values(loadedUniverse.systems).forEach((ref) => {
       ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
     });
+    if (!hidingLabels && shipSizeMultiplier > 10) {
+      hidingLabels = true;
+      Object.values(loadedUniverse.systems).forEach((ref) => {
+        ref.getChildByName("label").visible = false;
+        ref.interactive = false;
+      });
+    } else if (hidingLabels && shipSizeMultiplier < 10) {
+      hidingLabels = false;
+      Object.values(loadedUniverse.systems).forEach((ref) => {
+        ref.getChildByName("label").visible = true;
+        ref.interactive = true;
+      });
+    }
     const worldCoordinates = worldCoordinateToOriginal(universeView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
     currentCoordinate.text = worldCoordinates.x + ", " + worldCoordinates.y;
     resetShipWaypoints();
@@ -57276,6 +57499,13 @@ app.ticker.add(() => {
   } else {
     const systemCoordinate = systemCoordinateToOriginal(systemView.toWorld(app.renderer.plugins.interaction.rootPointerEvent.offset));
     currentCoordinate.text = systemCoordinate.x + ", " + systemCoordinate.y;
+    Object.keys(GameState.waypoints).forEach((waypointSymbol) => {
+      const waypointItem = GameState.waypoints[waypointSymbol];
+      const waypointData = GameState.waypointData[waypointSymbol];
+      const newPosition = positionWaypoint(waypointData, Date.now());
+      waypointItem.x = newPosition.x;
+      waypointItem.y = newPosition.y;
+    });
     resetShipWaypoints();
     Object.keys(GameState.systemShips).forEach((shipKey) => {
       const shipData = GameState.shipData[shipKey];
@@ -57348,7 +57578,7 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
           marketWindow.clearGoods();
           marketWindow.setGoods(data);
           marketWindow.container.displayObject.x = 400;
-          marketWindow.container.displayObject.y = window.innerHeight - 200;
+          marketWindow.container.displayObject.y = 1080 - 200;
           marketWindow.container.displayObject.visible = true;
         });
       }

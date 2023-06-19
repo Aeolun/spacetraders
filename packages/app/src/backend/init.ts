@@ -5,6 +5,7 @@ import {storeWaypointScan} from "@app/ship/storeResults";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import createApi from "@app/lib/createApi";
 import throttledQueue from "throttled-queue";
+import {processShip} from "@app/ship/updateShips";
 
 export const updateMarketPrices = async () => {
     const marketprices = await axios.get('https://st.feba66.de/prices')
@@ -65,12 +66,10 @@ export const updateMarketPrices = async () => {
 export const loadWaypoint = async () => {
     const token = await getBackgroundAgentToken()
     const api = createApi(token)
+    
+    const hq = await prisma.$queryRaw<{x: number, y: number}[]>`SELECT * FROM System s INNER JOIN Ship sh ON sh.currentSystemSymbol = s.symbol WHERE sh.symbol = 'PHANTASM-1' LIMIT 1`
 
-    const systems = await prisma.system.findMany({
-        where: {
-            waypointsRetrieved: false
-        }
-    })
+    const systems = await prisma.$queryRaw<{ name: string, symbol: string }[]>`SELECT * FROM System s WHERE waypointsRetrieved = false ORDER BY SQRT(POW(ABS(s.x - ${hq[0].x}), 2) + POW(ABS(s.y - ${hq[0].y}), 2)) ASC`
     console.log("Loading waypoint information for all unscanned systems")
     let i = 0;
     for (const system of systems) {

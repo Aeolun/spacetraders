@@ -10,6 +10,7 @@ import {Switch} from "@front/lib/switch";
 import {MarketWindow} from "@front/lib/MarketWindow";
 import {createActionButtons} from "@front/lib/ui/action-buttons";
 import {BaseButton} from "@front/lib/base-elements/base-button";
+import {BehaviorWindow} from "@front/lib/BehaviorWindow";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -28,6 +29,7 @@ export let systemGraphicsText: BitmapText
 export let cruiseModeSelect: Switch
 
 export let marketWindow: MarketWindow
+export let behaviorWindow: BehaviorWindow
 
 export const createUIElements = (app: Application) => {
     let pointerDownPlace: Point | undefined;
@@ -115,6 +117,7 @@ export const createUIElements = (app: Application) => {
 
 
     uiOverlay = new Container()
+    const popupOverlay = new Container()
 
     const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208)
     panelBack.height=window.innerHeight - 16
@@ -209,10 +212,17 @@ export const createUIElements = (app: Application) => {
     //     cruiseModeButtons[button] = but
     // })
 
+    behaviorWindow = new BehaviorWindow()
+    trpc.availableBehaviors.query().then((behaviors) => {
+        behaviorWindow.setBehaviors(behaviors)
+    })
+    behaviorWindow.hide()
+
     marketWindow = new MarketWindow()
     marketWindow.container.displayObject.visible = false
 
     uiOverlay.addChild(marketWindow.container.displayObject)
+    popupOverlay.addChild(behaviorWindow.container.displayObject)
 
     uiOverlay.addChild(panelBg);
 
@@ -243,7 +253,7 @@ export const createUIElements = (app: Application) => {
         fontSize: 18,
         align: 'right',
     })
-    currentCoordinate.x = window.innerWidth - 166
+    currentCoordinate.x = 1920 - 166
     currentCoordinate.y = 16
     currentCoordinate.maxWidth = 150
     uiOverlay.addChild(currentCoordinate)
@@ -253,7 +263,7 @@ export const createUIElements = (app: Application) => {
         fontSize: 18,
         align: 'right',
     })
-    fps.x = window.innerWidth - 166
+    fps.x = 1920 - 166
     fps.y = 40
     fps.maxWidth = 150
     uiOverlay.addChild(fps)
@@ -264,4 +274,5 @@ export const createUIElements = (app: Application) => {
     app.stage.addChild(universeView);
     app.stage.addChild(systemView);
     app.stage.addChild(uiOverlay);
+    app.stage.addChild(popupOverlay);
 }

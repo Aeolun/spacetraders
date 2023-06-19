@@ -56,9 +56,13 @@ export const seedSystems = async (agentToken: string) => {
     }
 
     console.log("creating systems")
-    await prisma.system.createMany({
-        data: createableSystems
-    })
+    const systemList = Object.values(createableSystems) as any
+    for(let i = 0; i < systemList.length; i += 1000) {
+        console.log('creating systems', i, 'to '+(i+1000));
+        await prisma.system.createMany({
+            data: systemList.slice(i, i+1000)
+        })
+    }
 
     const waypointList = Object.values(creatableWaypoints) as any
     for(let i = 0; i < waypointList.length; i += 1000) {
