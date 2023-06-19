@@ -3,17 +3,22 @@ import api from "@app/lib/createApi";
 import createApi from "@app/lib/createApi";
 import jwtDecode from "jwt-decode";
 import {RegisterRequestFactionEnum} from "spacetraders-sdk";
-import {processShip} from "@app/ship/updateShips";
+import {processAgent, processShip} from "@app/ship/updateShips";
+import {prisma} from "@app/prisma";
 
 export const getBackgroundAgentToken = async (resetDate?: string) => {
     let agentToken, agentTokenData
 
-    if (fs.existsSync('.agent-token')) {
-        agentToken = fs.readFileSync('.agent-token').toString()
-        agentTokenData = jwtDecode(agentToken);
+    const agent = await prisma.agent.findFirst({
+        where: {
+            symbol: process.env.AGENT_NAME
+        }
+    })
+    if (agent) {
+        agentTokenData = jwtDecode(agent.token);
     }
 
-    if (!agentToken || (resetDate && agentTokenData.reset_date !== resetDate)) {
+    if (!agent || !agent.token || (resetDate && agentTokenData.reset_date !== resetDate)) {
         console.log("No agent token or agent token for older reset.")
         const api = createApi('')
 
@@ -22,17 +27,12 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
             email: process.env.AGENT_EMAIL,
             faction: process.env.AGENT_FACTION as RegisterRequestFactionEnum
         })
-        fs.writeFileSync(`dumps/registrationResult${resetDate}.json`, JSON.stringify(result.data, null, 2))
-        fs.writeFileSync('.agent-token', result.data.data.token)
+        await processAgent(result.data.data.agent, result.data.data.token)
         await processShip(result.data.data.ship)
         agentToken = result.data.data.token
     } else {
-        agentToken = fs.readFileSync('.agent-token').toString().trim()
+        agentToken = agent.token
     }
 
     return agentToken
-}
-
-export const deleteBackgroundAgentToken = () => {
-    fs.unlinkSync('.agent-token')
 }

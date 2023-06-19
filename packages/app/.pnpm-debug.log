@@ -1,0 +1,23 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/Users/bart/Projects/spacetraders"
+  },
+  "1 error pnpm": {
+    "code": "ELIFECYCLE",
+    "errno": "ENOENT",
+    "syscall": "spawn",
+    "file": "sh",
+    "pkgid": "@spacetraders/app@1.0.0",
+    "stage": "dev",
+    "script": "run-p dev:*",
+    "pkgname": "@spacetraders/app",
+    "err": {
+      "name": "pnpm",
+      "message": "@spacetraders/app@1.0.0 dev: `run-p dev:*`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: @spacetraders/app@1.0.0 dev: `run-p dev:*`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/Users/bart/.nvm/versions/node/v18.4.0/lib/node_modules/pnpm/dist/pnpm.cjs:94974:22)\n    at ChildProcess.emit (node:events:537:28)\n    at maybeClose (node:internal/child_process:1091:16)\n    at ChildProcess._handle.onexit (node:internal/child_process:302:5)"
+    }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
+}
