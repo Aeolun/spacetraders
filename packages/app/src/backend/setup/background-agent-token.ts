@@ -1,5 +1,4 @@
 import fs from "fs";
-import api from "@app/lib/createApi";
 import createApi from "@app/lib/createApi";
 import jwtDecode from "jwt-decode";
 import {RegisterRequestFactionEnum} from "spacetraders-sdk";

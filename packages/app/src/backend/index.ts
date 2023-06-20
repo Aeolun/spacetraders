@@ -54,7 +54,6 @@ const init = async () => {
                 resetDate
             }
         })
-        fs.writeFileSync('.resetdate', resetDate)
 
         loadWaypoint().then(() => {
             console.log('Waypoint load complete')
@@ -83,6 +82,8 @@ const init = async () => {
     }
 
     let agentToken;
+    console.log('Current data reset date: ', currentInstance)
+    console.log('API reset date', serverStatus.data.resetDate)
     if (serverStatus.data.resetDate === currentInstance) {
         const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
         console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
