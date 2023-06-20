@@ -65,8 +65,8 @@ class Wayfinding {
                     const systemSymbol = system.symbol
                     const toSystemSymbol = connection.symbol
 
-                    this.dijkstra.addEdge(systemSymbol, toSystemSymbol, 1)
-                    this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, getDistance(system, connection))
+                    this.dijkstra.addEdge(systemSymbol, toSystemSymbol, Math.max(getDistance(system, connection), 600))
+                    this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, Math.max(getDistance(system, connection), 600))
                 })
             }
         })
