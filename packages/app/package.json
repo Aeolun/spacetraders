@@ -7,6 +7,8 @@
     "start": "tsx src/backend/index.ts",
     "jumptable": "tsx src/backend/generate-jump-table.ts",
     "dev:serve": "serve public",
+    "generate": "prisma generate",
+    "prepare": "pnpm run generate",
     "dev:build": "esbuild --bundle --format=esm --watch --outfile=public/app.js src/frontend/index.ts",
     "dev:build-ui": "esbuild --bundle --format=esm --watch --outfile=public/index.js src/frontend/react-ui.tsx",
     "dev:build-graph": "esbuild --bundle --format=esm --watch --outfile=public/tradegoods.js src/frontend/tradegoods.tsx",
