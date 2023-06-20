@@ -13,11 +13,7 @@ import {createContext} from "@app/context";
 import {prisma, ShipBehavior} from "@app/prisma";
 import fs from "fs";
 import {initializeShipBehaviors} from "@app/ship/initializeShipBehaviors";
-import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
-import {Ship} from "@app/ship/ship";
-import {agentToken} from "@app/configuration";
-import {processShip} from "@app/ship/updateShips";
-import createApi from "@app/lib/createApi";
+import {initAgent} from "@app/agent/init-agent";
 
 export type { AppRouter } from '@app/server'
 
@@ -36,11 +32,10 @@ let currentInstance: string
 
 const init = async () => {
     // do we have a database connection?
-    await prisma.$queryRaw`SELECT 1`
+    const resetDate = await prisma.$queryRaw<{ resetDate: string }[]>`SELECT resetDate from Server`
 
-
-    if (fs.existsSync('.resetdate')) {
-        currentInstance = fs.readFileSync('.resetdate', 'utf8')
+    if (resetDate.length > 0 && resetDate[0].resetDate) {
+        currentInstance = resetDate[0].resetDate
     }
 
     const serverStatus = await axios.get<StatusResponse>('https://api.spacetraders.io/v2')
@@ -64,6 +59,8 @@ const init = async () => {
         loadWaypoint().then(() => {
             console.log('Waypoint load complete')
         })
+
+        return newToken
     }
 
     let resetYetInterval;
@@ -85,14 +82,18 @@ const init = async () => {
         }, 5000)
     }
 
+    let agentToken;
     if (serverStatus.data.resetDate === currentInstance) {
         const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
         console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
         setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
+        agentToken = await getBackgroundAgentToken(resetDate)
     } else {
         console.log("Server already reset or never initialized.")
-        await initWorld(serverStatus.data.resetDate)
+        agentToken = await initWorld(serverStatus.data.resetDate)
     }
+
+    await initAgent(agentToken);
 
     loadWaypoint().then(() => {
         console.log('Waypoint load complete')
