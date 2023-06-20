@@ -5,11 +5,11 @@ import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import {prisma} from "@app/prisma";
 import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const updateTaken = new Set([] as string[])
 
-export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorParamaters) => {
+export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorParameters) => {
     const system = await prisma.system.findFirstOrThrow({
         where: {
             symbol: parameters.systemSymbol

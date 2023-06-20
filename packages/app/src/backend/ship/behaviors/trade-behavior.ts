@@ -11,10 +11,10 @@ import {availableActions} from "@front/lib/availableActions";
 import {symbol} from "zod";
 import {getFuelCost} from "@common/lib/getFuelCost";
 import {generateLogsFromBuyAndSell} from "@app/lib/generateLogsFromBuyAndSell";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const tradeTaken = new Set([] as string[])
-export const tradeLogic = async (ship: Ship, parameters: BehaviorParamaters) => {
+export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => {
     const currentSystem = await prisma.system.findFirstOrThrow({
         where: {
             symbol: ship.currentSystemSymbol
@@ -48,13 +48,13 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParamaters) => 
                 wp.symbol = mp.waypointSymbol
                      inner join \`System\` s on
                 s.symbol = wp.systemSymbol
-                     inner join JumpDistance jd on
+                     left join JumpDistance jd on
                 jd.fromSystemSymbol = ${currentSystem.symbol} and jd.toSystemSymbol = s.symbol
             where mp.tradeGoodSymbol = ${sellableCargo[0].tradeGoodSymbol}
               and s.hasJumpGate = true
               and mp.updatedOn > NOW() - INTERVAL 8 HOUR
             order by
-                (${sellableCargo[0].units} * mp.sellPrice) - (jd.jumps * 1000) desc
+                mp.sellPrice desc
                 limit 10`
 
         if (!whereToSell || whereToSell.length <= 0) {
@@ -146,7 +146,7 @@ m1.purchasePrice < m2.sellPrice
 and ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice)) > ${minProfit}
 and LEAST(m1.updatedOn, m2.updatedOn) > NOW() - INTERVAL 4 HOUR
 order by
-creditsPerSecond desc;`
+creditsPerSecond desc, totalPerRunDistance desc;`
 
         if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
             console.log(`No more profitable trades found.`)

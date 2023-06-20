@@ -1,12 +1,17 @@
 import {Ship} from "@app/ship/ship";
 import {getAgentToken} from "@app/ship/getAgentToken";
+import {availableLogic} from "@app/ship/behaviors";
+import {prisma, ShipBehavior} from "@app/prisma";
 
-export interface ShipBehavior {
-  logic: (ship: Ship, parameters: BehaviorParamaters) => Promise<void>,
+export interface ShipBehaviorDescription {
+  kind: ShipBehavior
+  logic: (ship: Ship, parameters: BehaviorParameters) => Promise<void>,
+  parameters: BehaviorParameters,
   cancel: () => void
 }
-export const shipBehaviors: Record<string, ShipBehavior> = {}
-export interface BehaviorParamaters {
+export const shipBehaviors: Record<string, ShipBehaviorDescription> = {}
+export interface BehaviorParameters {
+  once?: boolean
   systemSymbol?: string,
   range?: number
   abortIfCancelled?: () => void
@@ -18,11 +23,28 @@ export class CancelledError extends Error {
   }
 }
 
-export const startBehaviorForShip = (symbol: string, parameters: BehaviorParamaters, logic: (ship: Ship, parameters: BehaviorParamaters) => Promise<void>) => {
+export const startBehaviorForShip = async (symbol: string, parameters: BehaviorParameters, kind: ShipBehavior) => {
   if (!shipBehaviors[symbol]) {
     let cancelled = false;
+
+    const logic = availableLogic.find(logic => logic.symbol === kind).logic
+
+    await prisma.ship.update({
+      where: {
+        symbol
+      },
+      data: {
+        currentBehavior: kind,
+        homeSystemSymbol: parameters.systemSymbol,
+        behaviorRange: parameters.range,
+        behaviorOnce: parameters.once
+      }
+    })
+
     shipBehaviors[symbol] = {
+      kind,
       logic: logic,
+      parameters,
       cancel: () => {
         cancelled = true;
       }
@@ -59,6 +81,11 @@ export const startBehaviorForShip = (symbol: string, parameters: BehaviorParamat
               }
             }
           })
+          if (parameters.once === true) {
+            console.log(`Ship behavior for ${symbol} completed`)
+            onCancel()
+            break
+          }
         } catch (error) {
           if (error instanceof CancelledError) {
             console.log(`Ship behavior for ${symbol} cancelled by abort handler`)

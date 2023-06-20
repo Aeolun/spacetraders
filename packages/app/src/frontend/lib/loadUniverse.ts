@@ -1,43 +1,20 @@
-import {BitmapText, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
-import { trpc } from '@front/lib/trpc'
-import { makeInteractiveAndSelectable } from "@front/lib/makeInteractiveAndSelectable";
+import {AlphaFilter, BitmapText, BLEND_MODES, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
+import {trpc} from '@front/lib/trpc'
+import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/lib/assets";
-import {scale, systemCoordinates, systemScale, totalSize, universeCoordinates,} from "@front/lib/consts";
-import {backButton, systemView, uiOverlay, universeView} from "@front/lib/UIElements";
+import {scale, totalSize, universeCoordinates,} from "@front/lib/consts";
+import {universeCuller, universeView} from "@front/lib/UIElements";
 import {GameState, System, WaypointData} from "@front/lib/game-state";
-import type { Waypoint, Jumpgate, JumpConnectedSystem, WaypointTrait } from '@app/prisma'
-import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
+import {positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadSystem} from "@front/lib/loadSystem";
 import {getDistance} from "@common/lib/getDistance";
+import {convertToDisplayCoordinates} from "@front/lib/util";
+import {highlightmodes} from "@front/lib/highlightmodes";
 
 
-const addTraitIcons = (item: any, container: Container) => {
-    let xOffset = 0, hasMarket = false, hasUncharted = false, hasShipyard = false, hasBelt = false, hasJumpgate = false, hasStation = false
-    item.waypoints.forEach(waypoint => {
-        if (waypoint.type == 'JUMP_GATE') {
-            hasJumpgate = true
-        }
-        if (waypoint.type === 'ORBITAL_STATION') {
-            hasStation = true
-        }
-        waypoint.traits.forEach(trait => {
-            if (trait.symbol === 'UNCHARTED') {
-                hasUncharted = true
-            }
-            if (trait.symbol === 'MARKETPLACE') {
-                hasMarket = true
-            }
-            if (trait.symbol === 'SHIPYARD') {
-                // either shipyard or station, otherwise too much noise
-                hasStation = false
-                hasShipyard = true
-            }
-            if (trait.symbol === 'COMMON_METAL_DEPOSITS' || trait.symbol === 'PRECIOUS_METAL_DEPOSITS' || trait.symbol === 'MINERAL_DEPOSITS') {
-                hasBelt = true
-            }
-        })
-    })
-    if (hasMarket) {
+const addTraitIcons = (item: System, container: Container) => {
+    let xOffset = 0
+    if (item.hasMarket) {
         const sprite = new Sprite(loadedAssets.market)
         sprite.pivot = {
             x: 32,
@@ -49,7 +26,7 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
-    if (hasShipyard) {
+    if (item.hasShipyard) {
         const sprite = new Sprite(loadedAssets.shipyard)
         sprite.pivot = {
             x: 32,
@@ -61,7 +38,7 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
-    if (hasBelt) {
+    if (item.hasBelt) {
         const sprite = new Sprite(loadedAssets.asteroidBelt)
         sprite.pivot = {
             x: 32,
@@ -73,7 +50,7 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
-    if (hasJumpgate) {
+    if (item.hasJumpGate) {
         const sprite = new Sprite(loadedAssets.jumpgate)
         sprite.pivot = {
             x: 32,
@@ -85,7 +62,7 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
-    if (hasStation) {
+    if (item.hasStation && !item.hasShipyard) {
         const sprite = new Sprite(loadedAssets.station)
         sprite.pivot = {
             x: 32,
@@ -97,7 +74,7 @@ const addTraitIcons = (item: any, container: Container) => {
         container.addChild(sprite)
         xOffset += 16
     }
-    if (hasUncharted) {
+    if (item.hasUncharted) {
         const sprite = new Sprite(loadedAssets.treasure)
         sprite.pivot = {
             x: 32,
@@ -111,12 +88,7 @@ const addTraitIcons = (item: any, container: Container) => {
     }
 }
 
-const convertToDisplayCoordinates = (position: { x: number, y: number}) => {
-    return {
-        x: (position.x+Math.abs(universeCoordinates.minX))/(universeCoordinates.maxX-universeCoordinates.minX)*totalSize,
-        y: (position.y+Math.abs(universeCoordinates.minY))/(universeCoordinates.maxY-universeCoordinates.minY)*totalSize,
-    }
-}
+
 
 function createStar(starData: System) {
     let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
@@ -139,16 +111,30 @@ function createStar(starData: System) {
     starContainer.addChild(star)
     starContainer.addChild(text)
 
-    //addTraitIcons(starData, starContainer)
+    addTraitIcons(starData, starContainer)
 
     makeInteractiveAndSelectable(starContainer, {
         onMouseOut: () => {
             GameState.hoveredSystem = undefined
+
         },
         onMouseOver: () => {
             GameState.hoveredSystem = starData
         },
         onOrder: [
+            {
+                name: 'Travel',
+                withSelection: 'ship',
+                isAvailable: async () => {
+                    return true
+                },
+                action: async () => {
+                    await trpc.orderTravel.mutate({
+                        shipSymbol: GameState.selected.symbol,
+                        systemSymbol: starData.symbol
+                    });
+                }
+            },
             {
                 name: 'Warp',
                 withSelection: 'ship',
@@ -231,19 +217,6 @@ function createStar(starData: System) {
     return starContainer
 }
 
-var stringToColour = function(str) {
-    var hash = 0;
-    for (var i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    var colour = '#';
-    for (var i = 0; i < 3; i++) {
-        var value = (hash >> (i * 8)) & 0xFF;
-        colour += ('00' + value.toString(16)).substr(-2);
-    }
-    return colour;
-}
-
 export const loadUniverse = async () => {
     const references: Record<string, Container<DisplayObject>> = {}
 
@@ -262,47 +235,52 @@ export const loadUniverse = async () => {
     scale.universe = totalSize/(universeCoordinates.maxX-universeCoordinates.minX)
 
     const influenceGraphics = new Graphics()
-    for(const starData of systems) {
-        if (starData.majorityFaction) {
-            const isHeadquarters = GameState.factions[starData.majorityFaction].headquartersSymbol.includes(starData.symbol)
-            const displayCoords = convertToDisplayCoordinates(starData)
-            influenceGraphics.beginFill(stringToColour(starData.majorityFaction), isHeadquarters ? 0.4 : 0.2)
-            influenceGraphics.drawCircle(displayCoords.x, displayCoords.y,  isHeadquarters? 4500 : 1500)
-        }
-    }
+    highlightmodes.Factions(influenceGraphics)
+    influenceGraphics.name = 'highlight'
     universeView.addChild(influenceGraphics);
 
     // draw jump connections
-    // for(const starData of systems) {
-    //     const jumpGate = starData.waypoints.find(wp => wp.type === 'JUMP_GATE')
-    //     if (jumpGate && jumpGate.jumpgate) {
-    //         jumpGate.jumpgate.validJumpTargets.forEach(jumpTarget => {
-    //             const displayCoords = convertToDisplayCoordinates(starData)
-    //             const targetCoords = convertToDisplayCoordinates(jumpTarget)
-    //
-    //             const jumpGraphics = new Graphics()
-    //             jumpGraphics.lineStyle({
-    //                 width: 10,
-    //                 color: 0x999933
-    //             })
-    //             jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
-    //             jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
-    //
-    //             universeView.addChild(jumpGraphics)
-    //         })
-    //
-    //     }
-    // }
+    const jumpGraphics = new Graphics()
+    for(const starData of systems) {
+        const jumpGate = starData.hasJumpGate
+        if (jumpGate) {
+            const validJumpTargets = systems.filter(s => getDistance(s, starData) <= 2000 && s.hasJumpGate && s.symbol !== starData.symbol)
 
+            validJumpTargets.forEach(jumpTarget => {
+                const displayCoords = convertToDisplayCoordinates(starData)
+                const targetCoords = convertToDisplayCoordinates(jumpTarget)
+
+                jumpGraphics.lineStyle({
+                    width: 10,
+                    color: 0x999933,
+                    alpha: 0.05,
+                })
+                jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
+                jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
+                jumpGraphics.closePath()
+
+            })
+
+        }
+    }
+    universeView.addChild(jumpGraphics)
+
+    const routeGraphics = new Graphics()
+    routeGraphics.name = 'route'
+    universeView.addChild(routeGraphics)
+
+    const starsCont = new Container()
     for(const starData of systems) {
         const starContainer = createStar(starData)
 
         GameState.systems[starData.symbol] = starContainer
 
 
-        universeView.addChild(starContainer)
+        starsCont.addChild(starContainer)
         references[starData.symbol] = starContainer
     }
+    universeView.addChild(starsCont)
+    universeCuller.addList(starsCont.children)
 
     resetShipWaypoints()
     GameState.universeShips = {}

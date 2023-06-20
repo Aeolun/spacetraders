@@ -1,11 +1,12 @@
 import {trpc} from "@front/lib/trpc";
-import {backButton, systemGraphics, systemGraphicsText, systemView, universeView} from "@front/lib/UIElements";
+import {systemGraphics, systemGraphicsText, systemView, universeView} from "@front/lib/UIElements";
 import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/lib/game-state";
 import {systemCoordinates, systemScale} from "@front/lib/consts";
 import {AnimatedSprite, BitmapText, Container, Graphics, Sprite} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadedAssets} from "@front/lib/assets";
 import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
+import {backButton} from "@front/lib/createSidebar";
 
 function createShipContainer(ship: ShipData) {
   const shipGroup = new Container()
@@ -217,6 +218,7 @@ export async function loadSystem(systemSymbol: string, resetCamera = true) {
     showSystemView()
     GameState.currentSystem = systemSymbol
 
+    backButton.disabled = false
 
     systemCoordinates.minX = 0
     systemCoordinates.minY = 0
@@ -238,8 +240,6 @@ export async function loadSystem(systemSymbol: string, resetCamera = true) {
       y: 32
     }
     systemView.addChild(star)
-
-    backButton.visible = true
 
     resetShipWaypoints()
     GameState.systemShips = {}

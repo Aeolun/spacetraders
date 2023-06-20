@@ -71,6 +71,11 @@ model System {
   x               Float
   y               Float
   hasJumpGate     Boolean    @default(false)
+  hasMarket       Boolean    @default(false)
+  hasShipyard     Boolean    @default(false)
+  hasBelt         Boolean    @default(false)
+  hasUncharted    Boolean    @default(false)
+  hasStation      Boolean    @default(false)
   majorityFaction String?
 
   waypoints          Waypoint[]
@@ -213,10 +218,10 @@ model ShipConfigurationMount {
 
 model ShipyardModel {
   shipConfigurationSymbol String
-  shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol])
+  shipConfiguration       ShipConfiguration? @relation(fields: [shipConfigurationSymbol], references: [symbol])
   waypointSymbol          String
 
-  price Int
+  price Int?
 
   @@id([shipConfigurationSymbol, waypointSymbol])
   @@index([shipConfigurationSymbol])
@@ -420,6 +425,7 @@ enum ShipBehavior {
   EXPLORE
   MAP_JUMPGATE
   MINE
+  TRAVEL
 }
 
 model Ship {
@@ -463,6 +469,7 @@ model Ship {
   currentBehavior        ShipBehavior?
   homeSystemSymbol       String?
   behaviorRange          Int?
+  behaviorOnce           Boolean?
   travelGoalSystemSymbol String?
   overalGoal             String?
 

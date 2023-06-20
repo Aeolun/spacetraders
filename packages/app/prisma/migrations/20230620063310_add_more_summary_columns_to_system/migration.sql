@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `System` ADD COLUMN `hasBelt` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `hasMarket` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `hasShipyard` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `hasStation` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `hasUncharted` BOOLEAN NOT NULL DEFAULT false;

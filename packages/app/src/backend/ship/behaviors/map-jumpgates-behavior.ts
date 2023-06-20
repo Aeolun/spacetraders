@@ -7,11 +7,11 @@ import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {getDistance} from "@common/lib/getDistance";
 import {defaultWayfinder} from "@app/wayfinding";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const jumpMapTaken = new Set([] as string[])
 
-export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParamaters) => {
+export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParameters) => {
     const system = await prisma.system.findFirstOrThrow({
         where: {
             symbol: ship.currentSystemSymbol

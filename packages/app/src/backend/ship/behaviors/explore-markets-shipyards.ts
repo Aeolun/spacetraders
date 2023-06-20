@@ -5,7 +5,7 @@ import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import {prisma, Prisma} from "@app/prisma";
 import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const updateTaken = new Set([] as string[])
 const shitList: {
@@ -16,7 +16,7 @@ const shitList: {
     expire: Number.MAX_SAFE_INTEGER
 }]
 
-export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamaters) => {
+export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParameters) => {
             const system = await prisma.system.findFirstOrThrow({
                 where: {
                     symbol: parameters.systemSymbol

@@ -24,10 +24,25 @@ export async function storeWaypointScan(systemSymbol: string, data: CreateShipWa
     const waypoints: (Waypoint | ScannedWaypoint)[] = 'waypoints' in data ? data.waypoints : data.data
 
     let faction
+    let hasUncharted = false, hasMarket = false, hasShipyard = false, hasBelt = false
     await Promise.all(waypoints.map(async waypoint => {
         if (waypoint.faction?.symbol) {
             faction = waypoint.faction.symbol
         }
+        waypoint.traits.forEach(trait => {
+            if (trait.symbol === 'UNCHARTED') {
+                hasUncharted = true
+            }
+            if (trait.symbol === 'MARKETPLACE') {
+                hasMarket = true
+            }
+            if (trait.symbol === 'SHIPYARD') {
+                hasShipyard = true
+            }
+            if (trait.symbol === 'COMMON_METAL_DEPOSITS' || trait.symbol === 'PRECIOUS_METAL_DEPOSITS' || trait.symbol === 'MINERAL_DEPOSITS') {
+                hasBelt = true
+            }
+        })
         return storeWaypoint(waypoint)
     }))
 
@@ -37,6 +52,10 @@ export async function storeWaypointScan(systemSymbol: string, data: CreateShipWa
         },
         data: {
             waypointsRetrieved: true,
+            hasUncharted: hasUncharted,
+            hasMarket: hasMarket,
+            hasShipyard: hasShipyard,
+            hasBelt: hasBelt,
             majorityFaction: faction
         }
     })
@@ -60,6 +79,8 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
             console.log("Error creating", waypoint.faction, error)
         }
     }
+
+
     try {
         const updateValues = {
             factionSymbol: waypoint.faction?.symbol,
@@ -220,62 +241,87 @@ export async function storeMarketInformation(data: GetMarket200Response) {
 }
 
 export async function processShipyard(data: Shipyard) {
-    return Promise.all(data.ships.map(async ship => {
-        await prisma.$transaction(async () => {
-            await prisma.shipConfiguration.upsert({
-                where: {
-                    symbol: ship.type,
-                },
-                create: {
-                    symbol: ship.type,
+    if (data.ships) {
+        return Promise.all(data.ships.map(async ship => {
+            await prisma.$transaction(async () => {
+                await prisma.shipConfiguration.upsert({
+                    where: {
+                        symbol: ship.type,
+                    },
+                    create: {
+                        symbol: ship.type,
 
-                    name: ship.name,
-                    description: ship.description,
+                        name: ship.name,
+                        description: ship.description,
 
-                    frameSymbol: ship.frame.symbol,
-                    engineSymbol: ship.engine.symbol,
-                    reactorSymbol: ship.reactor.symbol,
-                },
-                update: {
-                    name: ship.name,
-                    description: ship.description,
+                        frameSymbol: ship.frame.symbol,
+                        engineSymbol: ship.engine.symbol,
+                        reactorSymbol: ship.reactor.symbol,
+                    },
+                    update: {
+                        name: ship.name,
+                        description: ship.description,
 
-                    frameSymbol: ship.frame.symbol,
-                    engineSymbol: ship.engine.symbol,
-                    reactorSymbol: ship.reactor.symbol,
+                        frameSymbol: ship.frame.symbol,
+                        engineSymbol: ship.engine.symbol,
+                        reactorSymbol: ship.reactor.symbol,
+                    }
+                })
+                await processShipEngine(ship.engine)
+                await processShipFrame(ship.frame)
+                await processReactor(ship.reactor)
+                for (const module of ship.modules) {
+                    await processModule(module)
                 }
-            })
-            await processShipEngine(ship.engine)
-            await processShipFrame(ship.frame)
-            await processReactor(ship.reactor)
-            for(const module of ship.modules) {
-                await processModule(module)
-            }
-            for(const mount of ship.mounts) {
-                await processMount(mount)
-            }
-            await prisma.shipConfigurationModule.deleteMany({
-                where: {
-                    shipConfigurationSymbol: ship.type
+                for (const mount of ship.mounts) {
+                    await processMount(mount)
                 }
+                await prisma.shipConfigurationModule.deleteMany({
+                    where: {
+                        shipConfigurationSymbol: ship.type
+                    }
+                })
+                await prisma.shipConfigurationModule.createMany({
+                    data: ship.modules.map(module => {
+                        return {
+                            shipConfigurationSymbol: ship.type,
+                            moduleSymbol: module.symbol
+                        }
+                    })
+                })
+                await prisma.shipConfigurationMount.deleteMany({
+                    where: {
+                        shipConfigurationSymbol: ship.type
+                    }
+                })
+                await prisma.shipConfigurationMount.createMany({
+                    data: ship.mounts.map(module => {
+                        return {
+                            shipConfigurationSymbol: ship.type,
+                            mountSymbol: module.symbol
+                        }
+                    })
+                })
+                await prisma.shipyardModel.upsert({
+                    where: {
+                        shipConfigurationSymbol_waypointSymbol: {
+                            shipConfigurationSymbol: ship.type,
+                            waypointSymbol: data.symbol,
+                        }
+                    },
+                    create: {
+                        shipConfigurationSymbol: ship.type,
+                        waypointSymbol: data.symbol,
+                        price: ship.purchasePrice
+                    },
+                    update: {
+                        price: ship.purchasePrice
+                    }
+                })
             })
-            await prisma.shipConfigurationModule.createMany({
-                data: ship.modules.map(module => { return {
-                    shipConfigurationSymbol: ship.type,
-                    moduleSymbol: module.symbol
-                }})
-            })
-            await prisma.shipConfigurationMount.deleteMany({
-                where: {
-                    shipConfigurationSymbol: ship.type
-                }
-            })
-            await prisma.shipConfigurationMount.createMany({
-                data: ship.mounts.map(module => { return {
-                    shipConfigurationSymbol: ship.type,
-                    mountSymbol: module.symbol
-                }})
-            })
+        }))
+    } else if (data.shipTypes) {
+        return Promise.all(data.shipTypes.map(async ship => {
             await prisma.shipyardModel.upsert({
                 where: {
                     shipConfigurationSymbol_waypointSymbol: {
@@ -286,14 +332,13 @@ export async function processShipyard(data: Shipyard) {
                 create: {
                     shipConfigurationSymbol: ship.type,
                     waypointSymbol: data.symbol,
-                    price: ship.purchasePrice
                 },
-                update: {
-                    price: ship.purchasePrice
-                }
+                update: {}
             })
-        })
-    }))
+        }))
+    } else {
+        return Promise.resolve([])
+    }
 }
 
 export async function storeShipScan(data: CreateShipShipScan201ResponseData) {

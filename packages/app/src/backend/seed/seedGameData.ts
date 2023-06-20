@@ -29,10 +29,13 @@ export const seedSystems = async (agentToken: string) => {
             existingSectorIds[system.sectorSymbol] = true
         }
 
-        let hasJumpGate = false
+        let hasJumpGate = false, hasStation = false
         system.waypoints.forEach(waypoint => {
             if (waypoint.type === 'JUMP_GATE') {
                 hasJumpGate = true
+            }
+            if (waypoint.type === 'ORBITAL_STATION') {
+                hasStation = true
             }
             creatableWaypoints[waypoint.symbol] = {
                 symbol: waypoint.symbol,
@@ -50,7 +53,8 @@ export const seedSystems = async (agentToken: string) => {
                 type: system.type,
                 x: system.x,
                 y: system.y,
-                hasJumpGate: hasJumpGate
+                hasJumpGate: hasJumpGate,
+                hasStation: hasStation
             })
         }
     }

@@ -6,13 +6,15 @@ import {exploreBehavior} from "@app/ship/behaviors/explore-behavior";
 import {updateMarketsBehavior} from "@app/ship/behaviors/update-markets-behavior";
 import {exploreNewMarkets} from "@app/ship/behaviors/explore-markets-shipyards";
 import {mapJumpgatesBehavior} from "@app/ship/behaviors/map-jumpgates-behavior";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
+import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 
 export interface ShipLogic {
   symbol: ShipBehavior
   name: string;
   description: string;
-  logic: (ship: Ship, parameters: BehaviorParamaters) => Promise<void>;
+  unlisted?: boolean
+  logic: (ship: Ship, parameters: BehaviorParameters) => Promise<void>;
 }
 
 export const availableLogic: ShipLogic[] = [
@@ -51,5 +53,14 @@ export const availableLogic: ShipLogic[] = [
     name: "Map jump gates",
     description: "Map jump gates",
     logic: mapJumpgatesBehavior
+  },
+  {
+    symbol: ShipBehavior.TRAVEL,
+    name: "Travel",
+    description: "Travel to a system",
+    unlisted: true,
+    logic: async (ship: Ship, parameters: BehaviorParameters) => {
+      await travelBehavior(parameters.systemSymbol, ship, undefined)
+    }
   }
 ]

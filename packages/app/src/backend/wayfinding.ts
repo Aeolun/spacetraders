@@ -28,7 +28,6 @@ class Wayfinding {
         this.dijkstra = new DijkstraCalculator()
         this.jumpDijkstra = new DijkstraCalculator()
 
-        const connections = await prisma.jumpConnectedSystem.findMany({})
         const systems = await prisma.system.findMany({
             where: {
                 waypoints: {
@@ -58,16 +57,21 @@ class Wayfinding {
             nearbySystems.forEach(nearbySystem => {
                 this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, nearbySystem.distance)
             })
+
+            if (system.hasJumpGate) {
+                systems.filter(nearbySystem => {
+                    return nearbySystem.hasJumpGate && getDistance(system, nearbySystem) <= 2000 && system.symbol !== nearbySystem.symbol
+                }).forEach(connection => {
+                    const systemSymbol = system.symbol
+                    const toSystemSymbol = connection.symbol
+
+                    this.dijkstra.addEdge(systemSymbol, toSystemSymbol, 1)
+                    this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, getDistance(system, connection))
+                })
+            }
         })
 
-        connections.forEach(connection => {
-            const systemSymbol = connection.fromWaypointSymbol.split('-').slice(0, 2).join('-')
-            const toSystemSymbol = connection.toWaypointSymbol
-
-            this.dijkstra.addEdge(systemSymbol, toSystemSymbol, 1)
-            this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, connection.distance)
-        })
-        console.log(`Reloaded waypoints with ${connections.length} connections, ${systems.length}`)
+        console.log(`Reloaded edges for ${systems.length} systems`)
     }
 }
 

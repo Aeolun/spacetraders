@@ -11,6 +11,7 @@ import {createOrGetAgentQueue} from "@app/lib/queue";
 import {defaultWayfinder} from "@app/wayfinding";
 import {availableLogic} from "@app/ship/behaviors";
 import {shipBehaviors, startBehaviorForShip} from "@app/ship/shipBehavior";
+import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 
 export const appRouter = router({
     initUserData: publicProcedure.mutation(async ({input, ctx}) => {
@@ -21,7 +22,7 @@ export const appRouter = router({
         }
     }),
     availableBehaviors: publicProcedure.query(async () => {
-        return availableLogic.map(behavior => {
+        return availableLogic.filter(b => !b.unlisted).map(behavior => {
             return {
                 symbol: behavior.symbol,
                 name: behavior.name,
@@ -37,8 +38,6 @@ export const appRouter = router({
             systemSymbol: z.string()
         })
     })).mutation(async ({input, ctx}) => {
-        const correctLogic = availableLogic.find(behavior => behavior.symbol === input.behavior)
-
         await prisma.ship.update({
             where: {
                 symbol: input.shipSymbol
@@ -49,12 +48,35 @@ export const appRouter = router({
                 homeSystemSymbol: input.parameters.systemSymbol
             }
         })
-        startBehaviorForShip(input.shipSymbol, input.parameters, correctLogic.logic)
+        startBehaviorForShip(input.shipSymbol, {
+            ...input.parameters,
+            once: false,
+        }, input.behavior)
+    }),
+    getRoute: publicProcedure.input(z.object({
+        fromSystemSymbol: z.string(),
+        toSystemSymbol: z.string(),
+        jumpOnly: z.boolean().optional()
+    })).query(async ({input}) => {
+        if (input.jumpOnly) {
+            return defaultWayfinder.findJumpRoute(input.fromSystemSymbol, input.toSystemSymbol)
+        } else {
+            return defaultWayfinder.findRoute(input.fromSystemSymbol, input.toSystemSymbol)
+        }
     }),
     cancelBehaviorForShip: publicProcedure.input(z.object({
         shipSymbol: z.string()
     })).mutation(async ({input, ctx}) => {
         shipBehaviors[input.shipSymbol]?.cancel()
+    }),
+    orderTravel: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        systemSymbol: z.string()
+    })).mutation(async ({input, ctx}) => {
+        startBehaviorForShip(input.shipSymbol, {
+            systemSymbol: input.systemSymbol,
+            once: true
+        }, ShipBehavior.TRAVEL)
     }),
     waypointsForSystem: publicProcedure.input(z.object({
         system: z.string()
@@ -133,20 +155,7 @@ export const appRouter = router({
        })
     }),
     getSystems: publicProcedure.query(async () => {
-        return prisma.system.findMany({
-            // include: {
-                // waypoints: {
-                //     include: {
-                //         traits: true,
-                //         jumpgate: {
-                //             include: {
-                //                 validJumpTargets: true
-                //             }
-                //         }
-                //     }
-                // }
-            // }
-        })
+        return prisma.system.findMany({})
     }),
     instructBuyShip: publicProcedure.input(z.object({
         waypointSymbol: z.string(),

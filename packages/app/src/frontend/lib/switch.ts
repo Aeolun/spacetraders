@@ -1,35 +1,46 @@
-import {BitmapText, Container, FederatedPointerEvent, NineSlicePlane} from "pixi.js";
+import {BitmapText, FederatedPointerEvent} from "pixi.js";
 import {loadedAssets} from "@front/lib/assets";
+import {Container} from "@front/lib/ui-elements/container";
+import {FlexDirection} from "@front/lib/Flex";
+import {Text} from "@front/lib/ui-elements/text";
 
 export class Switch extends Container {
-    optionSprites: Record<string, NineSlicePlane> = {}
+    optionSprites: Record<string, Container> = {}
     selectedValue?: string
 
     constructor(options: string[], dimensions: { width: number, textSize?: number, defaultSelected?: string }, private clickAction?: (event: FederatedPointerEvent, selectedOption: string) => void) {
-        super()
+        super({
+            variant: 'invisible'
+        })
+        this.width = '100%'
+        this.height = 41
+        this.flexDirection = FlexDirection.ROW
 
         this.selectedValue = dimensions.defaultSelected
 
         options.forEach((option, index) => {
-            this.optionSprites[option] = new NineSlicePlane(option === this.selectedValue ? loadedAssets.select : loadedAssets.selectInactive,  15,5,15,5)
-            this.optionSprites[option].interactive = true;
-            this.optionSprites[option].width = dimensions.width / options.length
-            this.optionSprites[option].height = 41
-            this.optionSprites[option].x = (dimensions.width / options.length) * index
+            this.optionSprites[option] = new Container({
+                variant: 'custom',
+                texture: option === this.selectedValue ? loadedAssets.select : loadedAssets.selectInactive,
+                xBand: 15,
+                yBand: 5
+            })
+            this.optionSprites[option].displayObject.interactive = true;
+            this.optionSprites[option].flex = 1
 
             this.addChild(this.optionSprites[option])
 
-            this.optionSprites[option].cursor = 'pointer';
-            this.optionSprites[option].on('mouseover', () => {
-                this.optionSprites[option].texture = loadedAssets.select
+            this.optionSprites[option].displayObject.cursor = 'pointer';
+            this.optionSprites[option].displayObject.on('mouseover', () => {
+                this.optionSprites[option].displayObject.texture = loadedAssets.select
             })
-            this.optionSprites[option].on('mouseout', () => {
+            this.optionSprites[option].displayObject.on('mouseout', () => {
                 if (this.selectedValue !== option) {
-                    this.optionSprites[option].texture = loadedAssets.selectInactive
+                    this.optionSprites[option].displayObject.texture = loadedAssets.selectInactive
                 }
             })
 
-            this.optionSprites[option].on('click', (event) => {
+            this.optionSprites[option].displayObject.on('click', (event) => {
                 event.stopPropagation();
                 this.switchHighlight(option)
                 if (this.clickAction) {
@@ -38,24 +49,26 @@ export class Switch extends Container {
             })
 
             const textSize = dimensions.textSize ?? 20
-            const text = new BitmapText(option, {
-                fontName: 'buttontext_white',
-                fontSize: textSize,
+            const text = new Text(option, {
+                font: {
+                    fontName: 'buttontext_white',
+                    fontSize: textSize,
+
+                    tint: 0xFFFFFF,
+                },
                 align: 'center',
-                tint: 0xFFFFFF,
             })
-            text.x = 20
-            text.y = 10 + (20 - dimensions.textSize) / 2
+            text.flex = 1
             this.optionSprites[option].addChild(text)
         })
     }
 
     switchHighlight(value: string) {
         if (this.selectedValue) {
-            this.optionSprites[this.selectedValue].texture = loadedAssets.selectInactive
+            this.optionSprites[this.selectedValue].displayObject.texture = loadedAssets.selectInactive
         }
         this.selectedValue =  value
-        this.optionSprites[this.selectedValue].texture = loadedAssets.select
+        this.optionSprites[this.selectedValue].displayObject.texture = loadedAssets.select
     }
 
     setSelectedValue(value: string) {

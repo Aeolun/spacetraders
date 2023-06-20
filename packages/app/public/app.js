@@ -29475,40 +29475,40 @@ var BUFFER_BITS = /* @__PURE__ */ ((BUFFER_BITS2) => {
   BUFFER_BITS2[BUFFER_BITS2["STENCIL"] = 1024] = "STENCIL";
   return BUFFER_BITS2;
 })(BUFFER_BITS || {});
-var BLEND_MODES = /* @__PURE__ */ ((BLEND_MODES2) => {
-  BLEND_MODES2[BLEND_MODES2["NORMAL"] = 0] = "NORMAL";
-  BLEND_MODES2[BLEND_MODES2["ADD"] = 1] = "ADD";
-  BLEND_MODES2[BLEND_MODES2["MULTIPLY"] = 2] = "MULTIPLY";
-  BLEND_MODES2[BLEND_MODES2["SCREEN"] = 3] = "SCREEN";
-  BLEND_MODES2[BLEND_MODES2["OVERLAY"] = 4] = "OVERLAY";
-  BLEND_MODES2[BLEND_MODES2["DARKEN"] = 5] = "DARKEN";
-  BLEND_MODES2[BLEND_MODES2["LIGHTEN"] = 6] = "LIGHTEN";
-  BLEND_MODES2[BLEND_MODES2["COLOR_DODGE"] = 7] = "COLOR_DODGE";
-  BLEND_MODES2[BLEND_MODES2["COLOR_BURN"] = 8] = "COLOR_BURN";
-  BLEND_MODES2[BLEND_MODES2["HARD_LIGHT"] = 9] = "HARD_LIGHT";
-  BLEND_MODES2[BLEND_MODES2["SOFT_LIGHT"] = 10] = "SOFT_LIGHT";
-  BLEND_MODES2[BLEND_MODES2["DIFFERENCE"] = 11] = "DIFFERENCE";
-  BLEND_MODES2[BLEND_MODES2["EXCLUSION"] = 12] = "EXCLUSION";
-  BLEND_MODES2[BLEND_MODES2["HUE"] = 13] = "HUE";
-  BLEND_MODES2[BLEND_MODES2["SATURATION"] = 14] = "SATURATION";
-  BLEND_MODES2[BLEND_MODES2["COLOR"] = 15] = "COLOR";
-  BLEND_MODES2[BLEND_MODES2["LUMINOSITY"] = 16] = "LUMINOSITY";
-  BLEND_MODES2[BLEND_MODES2["NORMAL_NPM"] = 17] = "NORMAL_NPM";
-  BLEND_MODES2[BLEND_MODES2["ADD_NPM"] = 18] = "ADD_NPM";
-  BLEND_MODES2[BLEND_MODES2["SCREEN_NPM"] = 19] = "SCREEN_NPM";
-  BLEND_MODES2[BLEND_MODES2["NONE"] = 20] = "NONE";
-  BLEND_MODES2[BLEND_MODES2["SRC_OVER"] = 0] = "SRC_OVER";
-  BLEND_MODES2[BLEND_MODES2["SRC_IN"] = 21] = "SRC_IN";
-  BLEND_MODES2[BLEND_MODES2["SRC_OUT"] = 22] = "SRC_OUT";
-  BLEND_MODES2[BLEND_MODES2["SRC_ATOP"] = 23] = "SRC_ATOP";
-  BLEND_MODES2[BLEND_MODES2["DST_OVER"] = 24] = "DST_OVER";
-  BLEND_MODES2[BLEND_MODES2["DST_IN"] = 25] = "DST_IN";
-  BLEND_MODES2[BLEND_MODES2["DST_OUT"] = 26] = "DST_OUT";
-  BLEND_MODES2[BLEND_MODES2["DST_ATOP"] = 27] = "DST_ATOP";
-  BLEND_MODES2[BLEND_MODES2["ERASE"] = 26] = "ERASE";
-  BLEND_MODES2[BLEND_MODES2["SUBTRACT"] = 28] = "SUBTRACT";
-  BLEND_MODES2[BLEND_MODES2["XOR"] = 29] = "XOR";
-  return BLEND_MODES2;
+var BLEND_MODES = /* @__PURE__ */ ((BLEND_MODES22) => {
+  BLEND_MODES22[BLEND_MODES22["NORMAL"] = 0] = "NORMAL";
+  BLEND_MODES22[BLEND_MODES22["ADD"] = 1] = "ADD";
+  BLEND_MODES22[BLEND_MODES22["MULTIPLY"] = 2] = "MULTIPLY";
+  BLEND_MODES22[BLEND_MODES22["SCREEN"] = 3] = "SCREEN";
+  BLEND_MODES22[BLEND_MODES22["OVERLAY"] = 4] = "OVERLAY";
+  BLEND_MODES22[BLEND_MODES22["DARKEN"] = 5] = "DARKEN";
+  BLEND_MODES22[BLEND_MODES22["LIGHTEN"] = 6] = "LIGHTEN";
+  BLEND_MODES22[BLEND_MODES22["COLOR_DODGE"] = 7] = "COLOR_DODGE";
+  BLEND_MODES22[BLEND_MODES22["COLOR_BURN"] = 8] = "COLOR_BURN";
+  BLEND_MODES22[BLEND_MODES22["HARD_LIGHT"] = 9] = "HARD_LIGHT";
+  BLEND_MODES22[BLEND_MODES22["SOFT_LIGHT"] = 10] = "SOFT_LIGHT";
+  BLEND_MODES22[BLEND_MODES22["DIFFERENCE"] = 11] = "DIFFERENCE";
+  BLEND_MODES22[BLEND_MODES22["EXCLUSION"] = 12] = "EXCLUSION";
+  BLEND_MODES22[BLEND_MODES22["HUE"] = 13] = "HUE";
+  BLEND_MODES22[BLEND_MODES22["SATURATION"] = 14] = "SATURATION";
+  BLEND_MODES22[BLEND_MODES22["COLOR"] = 15] = "COLOR";
+  BLEND_MODES22[BLEND_MODES22["LUMINOSITY"] = 16] = "LUMINOSITY";
+  BLEND_MODES22[BLEND_MODES22["NORMAL_NPM"] = 17] = "NORMAL_NPM";
+  BLEND_MODES22[BLEND_MODES22["ADD_NPM"] = 18] = "ADD_NPM";
+  BLEND_MODES22[BLEND_MODES22["SCREEN_NPM"] = 19] = "SCREEN_NPM";
+  BLEND_MODES22[BLEND_MODES22["NONE"] = 20] = "NONE";
+  BLEND_MODES22[BLEND_MODES22["SRC_OVER"] = 0] = "SRC_OVER";
+  BLEND_MODES22[BLEND_MODES22["SRC_IN"] = 21] = "SRC_IN";
+  BLEND_MODES22[BLEND_MODES22["SRC_OUT"] = 22] = "SRC_OUT";
+  BLEND_MODES22[BLEND_MODES22["SRC_ATOP"] = 23] = "SRC_ATOP";
+  BLEND_MODES22[BLEND_MODES22["DST_OVER"] = 24] = "DST_OVER";
+  BLEND_MODES22[BLEND_MODES22["DST_IN"] = 25] = "DST_IN";
+  BLEND_MODES22[BLEND_MODES22["DST_OUT"] = 26] = "DST_OUT";
+  BLEND_MODES22[BLEND_MODES22["DST_ATOP"] = 27] = "DST_ATOP";
+  BLEND_MODES22[BLEND_MODES22["ERASE"] = 26] = "ERASE";
+  BLEND_MODES22[BLEND_MODES22["SUBTRACT"] = 28] = "SUBTRACT";
+  BLEND_MODES22[BLEND_MODES22["XOR"] = 29] = "XOR";
+  return BLEND_MODES22;
 })(BLEND_MODES || {});
 var DRAW_MODES = /* @__PURE__ */ ((DRAW_MODES2) => {
   DRAW_MODES2[DRAW_MODES2["POINTS"] = 0] = "POINTS";
@@ -55807,61 +55807,6 @@ var SpatialHash = (
   }()
 );
 
-// src/frontend/lib/switch.ts
-var Switch = class extends Container {
-  constructor(options, dimensions, clickAction) {
-    super();
-    this.clickAction = clickAction;
-    this.selectedValue = dimensions.defaultSelected;
-    options.forEach((option, index) => {
-      this.optionSprites[option] = new NineSlicePlane(option === this.selectedValue ? loadedAssets.select : loadedAssets.selectInactive, 15, 5, 15, 5);
-      this.optionSprites[option].interactive = true;
-      this.optionSprites[option].width = dimensions.width / options.length;
-      this.optionSprites[option].height = 41;
-      this.optionSprites[option].x = dimensions.width / options.length * index;
-      this.addChild(this.optionSprites[option]);
-      this.optionSprites[option].cursor = "pointer";
-      this.optionSprites[option].on("mouseover", () => {
-        this.optionSprites[option].texture = loadedAssets.select;
-      });
-      this.optionSprites[option].on("mouseout", () => {
-        if (this.selectedValue !== option) {
-          this.optionSprites[option].texture = loadedAssets.selectInactive;
-        }
-      });
-      this.optionSprites[option].on("click", (event) => {
-        event.stopPropagation();
-        this.switchHighlight(option);
-        if (this.clickAction) {
-          this.clickAction(event, option);
-        }
-      });
-      const textSize = dimensions.textSize ?? 20;
-      const text = new BitmapText(option, {
-        fontName: "buttontext_white",
-        fontSize: textSize,
-        align: "center",
-        tint: 16777215
-      });
-      text.x = 20;
-      text.y = 10 + (20 - dimensions.textSize) / 2;
-      this.optionSprites[option].addChild(text);
-    });
-  }
-  optionSprites = {};
-  selectedValue;
-  switchHighlight(value) {
-    if (this.selectedValue) {
-      this.optionSprites[this.selectedValue].texture = loadedAssets.selectInactive;
-    }
-    this.selectedValue = value;
-    this.optionSprites[this.selectedValue].texture = loadedAssets.select;
-  }
-  setSelectedValue(value) {
-    this.switchHighlight(value);
-  }
-};
-
 // src/frontend/lib/Flex.ts
 var import_yoga_layout_prebuilt = __toESM(require_entry_browser());
 var Flex = class {
@@ -55908,6 +55853,37 @@ var Flex = class {
       this.node.setHeightPercent(parseInt(value.substring(0, value.length - 1)));
     } else {
       this.node.setHeight(value);
+    }
+  }
+  set position(value) {
+    this.node.setPositionType(value);
+  }
+  set minHeight(value) {
+    if (typeof value === "string") {
+      this.node.setMinHeightPercent(parseInt(value.substring(0, value.length - 1)));
+    } else {
+      this.node.setMinHeight(value);
+    }
+  }
+  set maxHeight(value) {
+    if (typeof value === "string") {
+      this.node.setMaxHeightPercent(parseInt(value.substring(0, value.length - 1)));
+    } else {
+      this.node.setMaxHeight(value);
+    }
+  }
+  set minWidth(value) {
+    if (typeof value === "string") {
+      this.node.setMinWidthPercent(parseInt(value.substring(0, value.length - 1)));
+    } else {
+      this.node.setMinWidth(value);
+    }
+  }
+  set maxWidth(value) {
+    if (typeof value === "string") {
+      this.node.setMaxWidthPercent(parseInt(value.substring(0, value.length - 1)));
+    } else {
+      this.node.setMaxWidth(value);
     }
   }
   set flex(value) {
@@ -55986,7 +55962,13 @@ var Text2 = class extends Flex {
 // src/frontend/lib/ui-elements/container.ts
 var Container4 = class extends Flex {
   constructor(properties) {
-    super(new NineSlicePlane(properties?.variant === "invisible" ? loadedAssets.panelInvisible : loadedAssets.panel2));
+    let innerComponent;
+    if (properties?.variant === "custom") {
+      innerComponent = new NineSlicePlane(properties.texture, properties.xBand ?? 10, properties.yBand ?? 10, properties.xBand ?? 10, properties.yBand ?? 10);
+    } else {
+      innerComponent = new NineSlicePlane(properties?.variant === "invisible" ? loadedAssets.panelInvisible : loadedAssets.panel2);
+    }
+    super(innerComponent);
   }
 };
 
@@ -56074,6 +56056,136 @@ var MarketWindow = class {
     this.nextColumn++;
     if (this.nextColumn >= columns.length)
       this.nextColumn = 0;
+  }
+};
+
+// src/frontend/lib/ui-elements/button.ts
+var Button = class extends Flex {
+  constructor(text, properties, clickAction) {
+    super(new BaseButton(text, properties, clickAction));
+    this.clickAction = clickAction;
+  }
+  set disabled(value) {
+    this.displayObject.disabled = value;
+  }
+};
+
+// src/frontend/lib/BehaviorWindow.ts
+var BehaviorWindow = class {
+  container;
+  constructor() {
+    this.container = new Container4();
+    this.container.width = 1920 - 400;
+    this.container.height = 600;
+    this.container.flexDirection = 0 /* COLUMN */;
+    this.container.padding = 10;
+    this.container.updateLayout();
+  }
+  setBehaviors(behaviors) {
+    behaviors.forEach((behavior) => {
+      const row = new Container4();
+      row.flex = 1;
+      row.flexDirection = 2 /* ROW */;
+      const texts = [behavior.symbol, behavior.name, behavior.description];
+      texts.forEach((textString) => {
+        const text = new Text2(textString, {
+          align: "left",
+          font: {
+            fontName: "buttontext_white",
+            fontSize: 16
+          }
+        });
+        text.flex = 1;
+        row.addChild(text);
+      });
+      const button = new Button("Activate", {
+        textSize: 16
+      }, () => {
+        trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
+          systemSymbol: GameState.shipData[GameState.selected.symbol].currentSystemSymbol,
+          range: 5e3
+        } }).then(() => {
+          alert("Behavior started");
+          this.hide();
+        });
+      });
+      button.flex = 1;
+      row.addChild(button);
+      this.container.addChild(row);
+    });
+    this.container.updateLayout();
+  }
+  show() {
+    this.container.displayObject.visible = true;
+    this.container.displayObject.x = 200;
+    this.container.displayObject.y = 200;
+  }
+  hide() {
+    this.container.displayObject.visible = false;
+  }
+};
+
+// src/frontend/lib/switch.ts
+var Switch = class extends Container4 {
+  constructor(options, dimensions, clickAction) {
+    super({
+      variant: "invisible"
+    });
+    this.clickAction = clickAction;
+    this.width = "100%";
+    this.height = 41;
+    this.flexDirection = 2 /* ROW */;
+    this.selectedValue = dimensions.defaultSelected;
+    options.forEach((option, index) => {
+      this.optionSprites[option] = new Container4({
+        variant: "custom",
+        texture: option === this.selectedValue ? loadedAssets.select : loadedAssets.selectInactive,
+        xBand: 15,
+        yBand: 5
+      });
+      this.optionSprites[option].displayObject.interactive = true;
+      this.optionSprites[option].flex = 1;
+      this.addChild(this.optionSprites[option]);
+      this.optionSprites[option].displayObject.cursor = "pointer";
+      this.optionSprites[option].displayObject.on("mouseover", () => {
+        this.optionSprites[option].displayObject.texture = loadedAssets.select;
+      });
+      this.optionSprites[option].displayObject.on("mouseout", () => {
+        if (this.selectedValue !== option) {
+          this.optionSprites[option].displayObject.texture = loadedAssets.selectInactive;
+        }
+      });
+      this.optionSprites[option].displayObject.on("click", (event) => {
+        event.stopPropagation();
+        this.switchHighlight(option);
+        if (this.clickAction) {
+          this.clickAction(event, option);
+        }
+      });
+      const textSize = dimensions.textSize ?? 20;
+      const text = new Text2(option, {
+        font: {
+          fontName: "buttontext_white",
+          fontSize: textSize,
+          tint: 16777215
+        },
+        align: "center"
+      });
+      text.flex = 1;
+      this.optionSprites[option].addChild(text);
+    });
+  }
+  optionSprites = {};
+  selectedValue;
+  switchHighlight(value) {
+    if (this.selectedValue) {
+      this.optionSprites[this.selectedValue].displayObject.texture = loadedAssets.selectInactive;
+    }
+    this.selectedValue = value;
+    this.optionSprites[this.selectedValue].displayObject.texture = loadedAssets.select;
+  }
+  setSelectedValue(value) {
+    this.switchHighlight(value);
   }
 };
 
@@ -56176,7 +56288,7 @@ function positionUniverseShip(ship) {
     serverX = currentSystem.x;
     serverY = currentSystem.y;
     xOffset = 32 * waypointShips[ship.currentWaypoint.systemSymbol] * sizeMultiplier;
-    yOffset = 80 * sizeMultiplier;
+    yOffset = 80 * Math.min(sizeMultiplier, 8);
   }
   const x2 = serverX + xOffset;
   const y2 = serverY + yOffset;
@@ -56371,6 +56483,7 @@ async function loadSystem(systemSymbol, resetCamera = true) {
     clearSystem();
     showSystemView();
     GameState.currentSystem = systemSymbol;
+    backButton.disabled = false;
     systemCoordinates.minX = 0;
     systemCoordinates.minY = 0;
     waypoints.filter((item) => !item.orbitsSymbol).forEach((item) => {
@@ -56390,7 +56503,6 @@ async function loadSystem(systemSymbol, resetCamera = true) {
       y: 32
     };
     systemView.addChild(star);
-    backButton.visible = true;
     resetShipWaypoints();
     GameState.systemShips = {};
     GameState.waypoints = {};
@@ -56445,21 +56557,10 @@ async function updateCredits() {
   GameState.agent = agent;
 }
 
-// src/frontend/lib/ui-elements/button.ts
-var Button = class extends Flex {
-  constructor(text, properties, clickAction) {
-    super(new BaseButton(text, properties, clickAction));
-    this.clickAction = clickAction;
-  }
-  set disabled(value) {
-    this.displayObject.disabled = value;
-  }
-};
-
 // src/frontend/lib/ShipyardWindow.ts
 var ShipyardWindow = class {
-  container;
-  constructor(ships) {
+  constructor(ships, readonly = false) {
+    this.readonly = readonly;
     this.container = new Container4();
     this.container.width = 1e3;
     this.container.height = 600;
@@ -56468,6 +56569,7 @@ var ShipyardWindow = class {
     });
     this.container.updateLayout();
   }
+  container;
   addGood(ship) {
     const flexRow = new Container4();
     flexRow.flexDirection = 0 /* COLUMN */;
@@ -56495,7 +56597,7 @@ var ShipyardWindow = class {
       firstText.flex = 1;
       firstRow.addChild(firstText);
     });
-    const thirdText = new Text2(ship.price.toString(), {
+    const thirdText = new Text2(ship.price ? ship.price.toString() : "???", {
       align: "right",
       font: fontStyle
     });
@@ -56510,6 +56612,7 @@ var ShipyardWindow = class {
       await updateCredits();
       loadSystem(GameState.currentSystem, false);
     });
+    buyButton.disabled = this.readonly;
     buyButton.flex = 1;
     firstRow.addChild(buyButton);
     const counts = {};
@@ -56715,17 +56818,19 @@ var availableActions = [{
   name: "Shipyard",
   action: async (event) => {
     event.stopPropagation();
+    console.log("click  shy");
     if (GameState.selected && GameState.currentSystem) {
+      const waypointSymbol = GameState.selected?.type === "waypoint" ? GameState.selected.symbol : GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol;
       const market = await trpc.instructShipyard.mutate({
         shipSymbol: GameState.selected.symbol,
         systemSymbol: GameState.currentSystem,
-        waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+        waypointSymbol
       });
       console.log(market);
       const shipyardData = await trpc.getShipyard.query({
-        waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+        waypointSymbol
       });
-      const shipyardWindow = new ShipyardWindow(shipyardData);
+      const shipyardWindow = new ShipyardWindow(shipyardData, GameState.selected.type === "waypoint");
       uiOverlay.addChild(shipyardWindow.container.displayObject);
       shipyardWindow.container.displayObject.x = (window.innerWidth - 1e3) / 2;
       shipyardWindow.container.displayObject.y = (window.innerHeight - 600) / 2;
@@ -56735,6 +56840,11 @@ var availableActions = [{
     }
   },
   isAvailable: () => {
+    if (GameState.selected?.type === "waypoint" && GameState.waypointData) {
+      if (GameState.waypointData[GameState.selected.symbol]) {
+        return GameState.waypointData[GameState.selected.symbol].traits.filter((t2) => t2.symbol === "SHIPYARD").length > 0;
+      }
+    }
     if (GameState.selected?.type === "ship" && GameState.waypointData) {
       const selectedShip = GameState.shipData[GameState.selected.symbol];
       if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {
@@ -56796,21 +56906,68 @@ var app = new Application({
   antialias: true
 });
 
+// src/frontend/lib/util.ts
+var convertToDisplayCoordinates = (position) => {
+  return {
+    x: (position.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize,
+    y: (position.y + Math.abs(universeCoordinates.minY)) / (universeCoordinates.maxY - universeCoordinates.minY) * totalSize
+  };
+};
+
+// src/frontend/lib/highlightmodes.ts
+var stringToColour = function(str) {
+  var hash = 0;
+  for (var i3 = 0; i3 < str.length; i3++) {
+    hash = str.charCodeAt(i3) + ((hash << 5) - hash);
+  }
+  var colour = "#";
+  for (var i3 = 0; i3 < 3; i3++) {
+    var value = hash >> i3 * 8 & 255;
+    colour += ("00" + value.toString(16)).substr(-2);
+  }
+  return colour;
+};
+var highlightmodes = {
+  Factions: (graphics) => {
+    for (const starData of Object.values(GameState.systemData)) {
+      if (starData.majorityFaction) {
+        const isHeadquarters = GameState.factions[starData.majorityFaction].headquartersSymbol.includes(starData.symbol);
+        const displayCoords = convertToDisplayCoordinates(starData);
+        graphics.beginFill(stringToColour(starData.majorityFaction));
+        graphics.drawCircle(displayCoords.x, displayCoords.y, isHeadquarters ? 4500 : 1500);
+      }
+    }
+    const colorMatrix = new AlphaFilter();
+    colorMatrix.alpha = 0.1;
+    graphics.filters = [colorMatrix];
+  },
+  Shipyards: (graphics) => {
+    for (const starData of Object.values(GameState.systemData)) {
+      if (starData.hasShipyard) {
+        const displayCoords = convertToDisplayCoordinates(starData);
+        graphics.beginFill(255);
+        graphics.drawCircle(displayCoords.x, displayCoords.y, 1500);
+      }
+    }
+    const colorMatrix = new AlphaFilter();
+    colorMatrix.alpha = 0.1;
+    graphics.filters = [colorMatrix];
+  }
+};
+
 // src/frontend/lib/ui/action-buttons.ts
 var actionPanelHeight = Math.ceil(availableActions.length / 2) * 48;
 var actionPanelY = window.innerHeight - 16 - actionPanelHeight;
 var createActionButtons = () => {
   const flex = new Container4();
-  flex.height = 250;
-  flex.width = 400;
-  flex.padding = 2;
+  flex.maxWidth = "100%";
+  flex.position = 0 /* RELATIVE */;
   flex.wrap = 1 /* WRAP_WRAP */;
   flex.flexDirection = 2 /* ROW */;
   availableActions.forEach((action, index) => {
     const button = new Button(action.name, {}, action.action);
-    button.width = "47%";
-    button.height = 32;
-    button.margin = 2;
+    button.width = "50%";
+    button.height = 36;
     app.ticker.add(() => {
       const isAvailable = action.isAvailable();
       button.disabled = !isAvailable;
@@ -56818,63 +56975,123 @@ var createActionButtons = () => {
     button.disabled = true;
     flex.addChild(button);
   });
-  flex.updateLayout();
-  return flex.displayObject;
+  return flex;
+};
+var createHighlightButtons = () => {
+  const flex = new Container4();
+  flex.maxWidth = "100%";
+  flex.padding = 2;
+  flex.wrap = 1 /* WRAP_WRAP */;
+  flex.flexDirection = 2 /* ROW */;
+  Object.keys(highlightmodes).forEach((action) => {
+    const drawFunction = highlightmodes[action];
+    const button = new Button(action, {}, () => {
+      const highlight = universeView.getChildByName("highlight");
+      highlight.clear();
+      drawFunction(highlight);
+    });
+    button.width = "50%";
+    button.height = 36;
+    flex.addChild(button);
+  });
+  return flex;
 };
 
-// src/frontend/lib/BehaviorWindow.ts
-var BehaviorWindow = class {
-  container;
-  constructor() {
-    this.container = new Container4();
-    this.container.width = 1920 - 400;
-    this.container.height = 600;
-    this.container.flexDirection = 0 /* COLUMN */;
-    this.container.padding = 10;
-    this.container.updateLayout();
-  }
-  setBehaviors(behaviors) {
-    behaviors.forEach((behavior) => {
-      const row = new Container4();
-      row.flex = 1;
-      row.flexDirection = 2 /* ROW */;
-      const texts = [behavior.symbol, behavior.name, behavior.description];
-      texts.forEach((textString) => {
-        const text = new Text2(textString, {
-          align: "left",
-          font: {
-            fontName: "buttontext_white",
-            fontSize: 16
-          }
-        });
-        text.flex = 1;
-        row.addChild(text);
+// src/frontend/lib/createSidebar.ts
+var credits;
+var cruiseModeSelect;
+var entityInfo;
+var backButton;
+var createSidebar = () => {
+  const sidebarContainer = new Container4();
+  sidebarContainer.height = 1080;
+  sidebarContainer.width = 400;
+  sidebarContainer.displayObject.x = 0;
+  sidebarContainer.displayObject.y = 0;
+  sidebarContainer.padding = 10;
+  backButton = new Button("Back", {
+    height: 64,
+    width: 368
+  }, (event) => {
+    event.stopPropagation();
+    universeView.visible = true;
+    systemView.visible = false;
+    GameState.currentView = "universe";
+    systemView.removeChildren();
+    backButton.disabled = true;
+  });
+  backButton.minHeight = 60;
+  backButton.disabled = true;
+  sidebarContainer.addChild(backButton);
+  const creditsBackground = new Container4({
+    variant: "custom",
+    texture: loadedAssets.statsBlock
+  });
+  creditsBackground.width = "100%";
+  creditsBackground.minHeight = 100;
+  creditsBackground.padding = 8;
+  sidebarContainer.addChild(creditsBackground);
+  const creditsLabel = new Text2("Credits", {
+    font: {
+      fontName: "buttontext_white",
+      tint: 65280,
+      fontSize: 16
+    },
+    align: "left"
+  });
+  creditsLabel.height = 40;
+  creditsBackground.addChild(creditsLabel);
+  credits = new Text2("0", {
+    font: {
+      fontName: "segment",
+      fontSize: 36,
+      tint: 65280
+    },
+    align: "left"
+  });
+  creditsBackground.addChild(credits);
+  const cruiseModeButtons = ["CRUISE", "DRIFT", "BURN", "STEALTH"];
+  cruiseModeSelect = new Switch(cruiseModeButtons, {
+    width: 368,
+    textSize: 14,
+    defaultSelected: "CRUISE"
+  }, async (event, selectedOption) => {
+    if (GameState.selected?.type === "ship") {
+      const newShip = await trpc.instructPatchNavigate.mutate({
+        shipSymbol: GameState.selected?.symbol,
+        navMode: selectedOption
       });
-      const button = new Button("Activate", {
-        textSize: 16
-      }, () => {
-        trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
-          systemSymbol: GameState.shipData[GameState.selected.symbol].currentSystemSymbol,
-          range: 5e3
-        } }).then(() => {
-          alert("Behavior started");
-          this.hide();
-        });
-      });
-      button.flex = 1;
-      row.addChild(button);
-      this.container.addChild(row);
-    });
-    this.container.updateLayout();
-  }
-  show() {
-    this.container.displayObject.visible = true;
-    this.container.displayObject.x = 200;
-    this.container.displayObject.y = 200;
-  }
-  hide() {
-    this.container.displayObject.visible = false;
-  }
+      console.log("new state", newShip);
+      GameState.shipData[GameState.selected.symbol] = newShip;
+    }
+  });
+  sidebarContainer.addChild(cruiseModeSelect);
+  const actionButtons = createActionButtons();
+  sidebarContainer.addChild(actionButtons);
+  const statsBlock = new Container4({
+    variant: "custom",
+    texture: loadedAssets.statsBlock
+  });
+  statsBlock.paddingVertical = 24;
+  statsBlock.paddingHorizontal = 8;
+  statsBlock.width = "100%";
+  statsBlock.height = 200;
+  sidebarContainer.addChild(statsBlock);
+  const highlightButtons = createHighlightButtons();
+  sidebarContainer.addChild(highlightButtons);
+  entityInfo = new Text2("Entity Information", {
+    font: {
+      fontName: "buttontext_white",
+      fontSize: 16,
+      align: "left",
+      maxWidth: 368,
+      tint: 52224
+    },
+    align: "left"
+  });
+  statsBlock.addChild(entityInfo);
+  sidebarContainer.updateLayout();
+  return sidebarContainer;
 };
 
 // src/frontend/lib/UIElements.ts
@@ -56883,15 +57100,11 @@ var systemView;
 var uiOverlay;
 var currentCoordinate;
 var fps;
-var credits;
-var backButton;
-var entityInfo;
 var universeCuller;
 var universeGraphics;
 var universeGraphicsText;
 var systemGraphics;
 var systemGraphicsText;
-var cruiseModeSelect;
 var marketWindow;
 var behaviorWindow;
 var createUIElements = (app2) => {
@@ -56954,8 +57167,10 @@ var createUIElements = (app2) => {
   });
   universeView.drag().pinch().wheel().decelerate();
   universeView.moveCenter(totalSize / 2, totalSize / 2);
+  const starContainer = new Container();
+  starContainer.name = "stars";
+  universeView.addChild(starContainer);
   universeCuller = new Simple();
-  universeCuller.addList(universeView.children);
   universeCuller.cull(universeView.getVisibleBounds());
   universeGraphics = new Graphics();
   universeView.addChild(universeGraphics);
@@ -56968,75 +57183,8 @@ var createUIElements = (app2) => {
   universeView.addChild(universeGraphicsText);
   uiOverlay = new Container();
   const popupOverlay = new Container();
-  const panelBack = new TilingSprite(loadedAssets.panelBg, 208, 208);
-  panelBack.height = window.innerHeight - 16;
-  panelBack.x = 8;
-  panelBack.width = 386;
-  panelBack.y = 8;
-  uiOverlay.addChild(panelBack);
-  const panelBg = new NineSlicePlane(loadedAssets.panel, 19, 19, 19, 19);
-  panelBg.x = 0;
-  panelBg.y = 0;
-  panelBg.width = 400;
-  panelBg.height = window.innerHeight;
-  backButton = new BaseButton("Back", {
-    height: 64,
-    width: 368
-  });
-  backButton.on("click", (event) => {
-    event.stopPropagation();
-    universeView.visible = true;
-    systemView.visible = false;
-    GameState.currentView = "universe";
-    systemView.removeChildren();
-    backButton.visible = false;
-  });
-  backButton.y = 16;
-  backButton.x = 16;
-  backButton.visible = false;
-  panelBg.addChild(backButton);
-  const creditsBackground = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10);
-  creditsBackground.x = 8;
-  creditsBackground.width = 384;
-  creditsBackground.height = 80;
-  creditsBackground.y = 100;
-  panelBg.addChild(creditsBackground);
-  const creditsLabel = new BitmapText("Credits", {
-    fontName: "buttontext_white",
-    tint: 65280,
-    fontSize: 16
-  });
-  creditsLabel.x = 16;
-  creditsLabel.y = 120;
-  panelBg.addChild(creditsLabel);
-  credits = new BitmapText("0", {
-    fontName: "segment",
-    fontSize: 36,
-    align: "left",
-    tint: 65280
-  });
-  credits.x = 16;
-  credits.y = 132;
-  panelBg.addChild(credits);
-  const cruiseModeButtons = ["CRUISE", "DRIFT", "BURN", "STEALTH"];
-  cruiseModeSelect = new Switch(cruiseModeButtons, {
-    width: 368,
-    textSize: 14,
-    defaultSelected: "CRUISE"
-  }, async (event, selectedOption) => {
-    if (GameState.selected?.type === "ship") {
-      const newShip = await trpc.instructPatchNavigate.mutate({
-        shipSymbol: GameState.selected?.symbol,
-        navMode: selectedOption
-      });
-      console.log("new state", newShip);
-      GameState.shipData[GameState.selected.symbol] = newShip;
-    }
-  });
-  cruiseModeSelect.visible = true;
-  cruiseModeSelect.y = 700 - 64;
-  cruiseModeSelect.x = 16;
-  panelBg.addChild(cruiseModeSelect);
+  const sidebar = createSidebar();
+  uiOverlay.addChild(sidebar.displayObject);
   behaviorWindow = new BehaviorWindow();
   trpc.availableBehaviors.query().then((behaviors) => {
     behaviorWindow.setBehaviors(behaviors);
@@ -57046,26 +57194,6 @@ var createUIElements = (app2) => {
   marketWindow.container.displayObject.visible = false;
   uiOverlay.addChild(marketWindow.container.displayObject);
   popupOverlay.addChild(behaviorWindow.container.displayObject);
-  uiOverlay.addChild(panelBg);
-  const actionButtons = createActionButtons();
-  actionButtons.y = 800;
-  panelBg.addChild(actionButtons);
-  const statsBlock = new NineSlicePlane(loadedAssets.statsBlock, 10, 10, 10, 10);
-  statsBlock.x = 8;
-  statsBlock.width = 384;
-  statsBlock.height = 200;
-  statsBlock.y = 700 - 300;
-  panelBg.addChild(statsBlock);
-  entityInfo = new BitmapText("Entity Information", {
-    fontName: "buttontext_white",
-    fontSize: 16,
-    align: "left",
-    tint: 52224,
-    maxWidth: 368
-  });
-  entityInfo.x = 24;
-  entityInfo.y = 700 - 280;
-  panelBg.addChild(entityInfo);
   currentCoordinate = new BitmapText("0, 0", {
     fontName: "sans-serif",
     fontSize: 18,
@@ -57098,11 +57226,80 @@ var getDistance = (pos1, pos2) => {
 };
 
 // src/frontend/lib/loadUniverse.ts
-var convertToDisplayCoordinates = (position) => {
-  return {
-    x: (position.x + Math.abs(universeCoordinates.minX)) / (universeCoordinates.maxX - universeCoordinates.minX) * totalSize,
-    y: (position.y + Math.abs(universeCoordinates.minY)) / (universeCoordinates.maxY - universeCoordinates.minY) * totalSize
-  };
+var addTraitIcons2 = (item, container) => {
+  let xOffset = 0;
+  if (item.hasMarket) {
+    const sprite = new Sprite(loadedAssets.market);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.25 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (item.hasShipyard) {
+    const sprite = new Sprite(loadedAssets.shipyard);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (item.hasBelt) {
+    const sprite = new Sprite(loadedAssets.asteroidBelt);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (item.hasJumpGate) {
+    const sprite = new Sprite(loadedAssets.jumpgate);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (item.hasStation && !item.hasShipyard) {
+    const sprite = new Sprite(loadedAssets.station);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
+  if (item.hasUncharted) {
+    const sprite = new Sprite(loadedAssets.treasure);
+    sprite.pivot = {
+      x: 32,
+      y: 32
+    };
+    sprite.scale = { x: 0.25, y: 0.24 };
+    sprite.x = xOffset - 16;
+    sprite.y = 24;
+    container.addChild(sprite);
+    xOffset += 16;
+  }
 };
 function createStar(starData) {
   let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`];
@@ -57122,6 +57319,7 @@ function createStar(starData) {
   const starContainer = new Container();
   starContainer.addChild(star);
   starContainer.addChild(text);
+  addTraitIcons2(starData, starContainer);
   makeInteractiveAndSelectable(starContainer, {
     onMouseOut: () => {
       GameState.hoveredSystem = void 0;
@@ -57130,6 +57328,19 @@ function createStar(starData) {
       GameState.hoveredSystem = starData;
     },
     onOrder: [
+      {
+        name: "Travel",
+        withSelection: "ship",
+        isAvailable: async () => {
+          return true;
+        },
+        action: async () => {
+          await trpc.orderTravel.mutate({
+            shipSymbol: GameState.selected.symbol,
+            systemSymbol: starData.symbol
+          });
+        }
+      },
       {
         name: "Warp",
         withSelection: "ship",
@@ -57204,18 +57415,6 @@ function createStar(starData) {
   starContainer.y = displayCoords.y;
   return starContainer;
 }
-var stringToColour = function(str) {
-  var hash = 0;
-  for (var i3 = 0; i3 < str.length; i3++) {
-    hash = str.charCodeAt(i3) + ((hash << 5) - hash);
-  }
-  var colour = "#";
-  for (var i3 = 0; i3 < 3; i3++) {
-    var value = hash >> i3 * 8 & 255;
-    colour += ("00" + value.toString(16)).substr(-2);
-  }
-  return colour;
-};
 var loadUniverse = async () => {
   const references = {};
   const systems = await trpc.getSystems.query();
@@ -57233,21 +57432,41 @@ var loadUniverse = async () => {
   GameState.systems = {};
   scale.universe = totalSize / (universeCoordinates.maxX - universeCoordinates.minX);
   const influenceGraphics = new Graphics();
+  highlightmodes.Factions(influenceGraphics);
+  influenceGraphics.name = "highlight";
+  universeView.addChild(influenceGraphics);
+  const jumpGraphics = new Graphics();
   for (const starData of systems) {
-    if (starData.majorityFaction) {
-      const isHeadquarters = GameState.factions[starData.majorityFaction].headquartersSymbol.includes(starData.symbol);
-      const displayCoords = convertToDisplayCoordinates(starData);
-      influenceGraphics.beginFill(stringToColour(starData.majorityFaction), isHeadquarters ? 0.4 : 0.2);
-      influenceGraphics.drawCircle(displayCoords.x, displayCoords.y, isHeadquarters ? 4500 : 1500);
+    const jumpGate = starData.hasJumpGate;
+    if (jumpGate) {
+      const validJumpTargets = systems.filter((s2) => getDistance(s2, starData) <= 2e3 && s2.hasJumpGate && s2.symbol !== starData.symbol);
+      validJumpTargets.forEach((jumpTarget) => {
+        const displayCoords = convertToDisplayCoordinates(starData);
+        const targetCoords = convertToDisplayCoordinates(jumpTarget);
+        jumpGraphics.lineStyle({
+          width: 10,
+          color: 10066227,
+          alpha: 0.05
+        });
+        jumpGraphics.moveTo(displayCoords.x, displayCoords.y);
+        jumpGraphics.lineTo(targetCoords.x, targetCoords.y);
+        jumpGraphics.closePath();
+      });
     }
   }
-  universeView.addChild(influenceGraphics);
+  universeView.addChild(jumpGraphics);
+  const routeGraphics = new Graphics();
+  routeGraphics.name = "route";
+  universeView.addChild(routeGraphics);
+  const starsCont = new Container();
   for (const starData of systems) {
     const starContainer = createStar(starData);
     GameState.systems[starData.symbol] = starContainer;
-    universeView.addChild(starContainer);
+    starsCont.addChild(starContainer);
     references[starData.symbol] = starContainer;
   }
+  universeView.addChild(starsCont);
+  universeCuller.addList(starsCont.children);
   resetShipWaypoints();
   GameState.universeShips = {};
   Object.values(GameState.shipData).forEach((ship) => {
@@ -57445,10 +57664,11 @@ var loadedUniverse = await loadUniverse();
 var format2 = Intl.NumberFormat("en");
 var lastRefresh = Date.now();
 var hidingLabels = false;
+var currentRoute;
 app.ticker.add((dt) => {
   const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5);
   const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
-  credits.text = `${format2.format(GameState.agent.credits)}`;
+  credits.displayObject.bitmapText.text = `${format2.format(GameState.agent.credits)}`;
   if (Date.now() - lastRefresh > 5e3) {
     lastRefresh = Date.now();
     loadPlayerData();
@@ -57457,13 +57677,13 @@ app.ticker.add((dt) => {
     Object.values(loadedUniverse.systems).forEach((ref) => {
       ref.scale = { x: sizeMultiplier, y: sizeMultiplier };
     });
-    if (!hidingLabels && shipSizeMultiplier > 10) {
+    if (!hidingLabels && shipSizeMultiplier > 15) {
       hidingLabels = true;
       Object.values(loadedUniverse.systems).forEach((ref) => {
         ref.getChildByName("label").visible = false;
         ref.interactive = false;
       });
-    } else if (hidingLabels && shipSizeMultiplier < 10) {
+    } else if (hidingLabels && shipSizeMultiplier < 15) {
       hidingLabels = false;
       Object.values(loadedUniverse.systems).forEach((ref) => {
         ref.getChildByName("label").visible = true;
@@ -57536,7 +57756,7 @@ app.ticker.add((dt) => {
   if (GameState.selected) {
     if (GameState.selected.type === "ship") {
       const shipInfo = GameState.shipData[GameState.selected.symbol];
-      cruiseModeSelect.visible = true;
+      cruiseModeSelect.displayObject.visible = true;
       if (shipInfo.flightMode && cruiseModeSelect.selectedValue !== shipInfo.flightMode) {
         cruiseModeSelect.setSelectedValue(shipInfo.flightMode);
       }
@@ -57545,7 +57765,7 @@ app.ticker.add((dt) => {
       const navTime = new Date(shipInfo.arrivalOn).getTime();
       const arrivalValue = navTime > Date.now() ? Math.round((navTime - Date.now()) / 1e3) + "s" : "Ready";
       if (GameState.agent.symbol === shipInfo.agent) {
-        entityInfo.text = `Entity Information
+        entityInfo.displayObject.bitmapText.text = `Entity Information
 Symbol: ${shipInfo.symbol}
 Location: ${shipInfo.currentWaypoint.symbol}
 Fuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}
@@ -57554,16 +57774,46 @@ Nav Status: ${shipInfo.navStatus} ${arrivalValue}
 Reactor Cooldown: ${cooldownValue}
 Action: ${shipInfo.overalGoal}`;
       } else {
-        entityInfo.text = `Entity Information
+        entityInfo.displayObject.bitmapText.text = `Entity Information
 Symbol: ${shipInfo.symbol}
 Location: ${shipInfo.currentWaypoint.symbol}
 Owner: ${shipInfo.agent}
 Nav Status: ${shipInfo.navStatus} ${arrivalValue}
 Last update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime()) / 1e3)}s ago`;
       }
+      if (GameState.hoveredSystem) {
+        if (currentRoute != GameState.hoveredSystem + GameState.selected.symbol) {
+          currentRoute = GameState.hoveredSystem + GameState.selected.symbol;
+          const route = trpc.getRoute.query({
+            fromSystemSymbol: shipInfo.currentSystemSymbol,
+            toSystemSymbol: GameState.hoveredSystem.symbol
+          }).then((data) => {
+            const graphics = universeView.getChildByName("route");
+            graphics.clear();
+            data.finalPath.forEach((item) => {
+              const fromSystem = GameState.systemData[item.source];
+              const toSystem = GameState.systemData[item.target];
+              const displayCoords = convertToDisplayCoordinates(fromSystem);
+              const targetCoords = convertToDisplayCoordinates(toSystem);
+              graphics.lineStyle({
+                width: 10,
+                color: 65280,
+                alpha: 0.25
+              });
+              graphics.moveTo(displayCoords.x, displayCoords.y);
+              graphics.lineTo(targetCoords.x, targetCoords.y);
+              graphics.closePath();
+            });
+          });
+        }
+      } else {
+        currentRoute = "";
+        const graphics = universeView.getChildByName("route");
+        graphics.clear();
+      }
     } else if (GameState.selected.type === "waypoint") {
       const waypointInfo = GameState.waypointData[GameState.selected.symbol];
-      entityInfo.text = `Entity Information
+      entityInfo.displayObject.bitmapText.text = `Entity Information
 Symbol: ${GameState.selected.symbol}
 Kind: ${waypointInfo.type}
 Traits: ${waypointInfo.traits.length == 0 ? "UNKNOWN" : waypointInfo.traits.map((t2) => t2.name).join(", ")}
@@ -57584,10 +57834,13 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
       }
     }
   } else {
+    currentRoute = "";
+    const graphics = universeView.getChildByName("route");
+    graphics.clear();
     GameState.displayedMarket = void 0;
     marketWindow.container.displayObject.visible = false;
-    cruiseModeSelect.visible = false;
-    entityInfo.text = `Entity Information`;
+    cruiseModeSelect.displayObject.visible = false;
+    entityInfo.displayObject.bitmapText.text = `Entity Information`;
   }
   if (universeView.dirty) {
     universeCuller.cull(universeView.getVisibleBounds());

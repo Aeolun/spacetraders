@@ -195,19 +195,22 @@ export const availableActions: {
     name: 'Shipyard',
     action: async (event) => {
         event.stopPropagation();
+        console.log("click  shy")
         if (GameState.selected && GameState.currentSystem) {
+            const waypointSymbol = GameState.selected?.type === 'waypoint' ? GameState.selected.symbol : GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+
             const market = await trpc.instructShipyard.mutate({
                 shipSymbol: GameState.selected.symbol,
                 systemSymbol: GameState.currentSystem,
-                waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+                waypointSymbol
             })
 
             // open market dialog
             console.log(market)
             const shipyardData = await trpc.getShipyard.query({
-                waypointSymbol: GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol
+                waypointSymbol
             })
-            const shipyardWindow = new ShipyardWindow(shipyardData)
+            const shipyardWindow = new ShipyardWindow(shipyardData, GameState.selected.type === 'waypoint')
 
             uiOverlay.addChild(shipyardWindow.container.displayObject)
             shipyardWindow.container.displayObject.x = (window.innerWidth - 1000) / 2
@@ -218,6 +221,11 @@ export const availableActions: {
         }
     },
     isAvailable: () => {
+        if (GameState.selected?.type === 'waypoint' && GameState.waypointData) {
+            if (GameState.waypointData[GameState.selected.symbol]) {
+                return GameState.waypointData[GameState.selected.symbol].traits.filter(t => t.symbol === 'SHIPYARD').length > 0
+            }
+        }
         if (GameState.selected?.type === 'ship' && GameState.waypointData) {
             const selectedShip = GameState.shipData[GameState.selected.symbol]
             if (GameState.waypointData[selectedShip.currentWaypoint.symbol]) {

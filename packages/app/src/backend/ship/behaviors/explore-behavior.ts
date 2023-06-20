@@ -7,7 +7,7 @@ import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {getDistance} from "@common/lib/getDistance";
 import {defaultWayfinder} from "@app/wayfinding";
-import {BehaviorParamaters} from "@app/ship/shipBehavior";
+import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const exploreTaken = new Set([] as string[])
 const shitList: {
@@ -18,7 +18,7 @@ const shitList: {
     expire: Number.MAX_SAFE_INTEGER
 }]
 
-export const exploreBehavior = async (ship: Ship, parameters: BehaviorParamaters) => {
+export const exploreBehavior = async (ship: Ship, parameters: BehaviorParameters) => {
     const system = await prisma.system.findFirstOrThrow({
         where: {
             symbol: parameters.systemSymbol

@@ -20,25 +20,7 @@ export const initializeShipBehaviors = async () => {
     }).then(ships => {
         ships.forEach(ship => {
             // start behavior
-            switch(ship.currentBehavior) {
-                case ShipBehavior.TRADE:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, tradeLogic)
-                    break;
-                case ShipBehavior.MINE:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, mineBehavior)
-                    break;
-                case ShipBehavior.MAP_JUMPGATE:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, mapJumpgatesBehavior)
-                    break;
-                case ShipBehavior.EXPLORE:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, exploreBehavior)
-                    break;
-                case ShipBehavior.UPDATE_MARKETS:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, updateMarketsBehavior)
-                    break;
-                case ShipBehavior.EXPLORE_MARKETS:
-                    startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange }, exploreNewMarkets)
-            }
+            startBehaviorForShip(ship.symbol, { systemSymbol: ship.homeSystemSymbol, range: ship.behaviorRange, once: ship.behaviorOnce }, ship.currentBehavior)
         })
     })
 }

@@ -125,7 +125,7 @@ export function positionUniverseShip(ship: ShipData) {
         serverY = currentSystem.y
 
         xOffset = (32 * waypointShips[ship.currentWaypoint.systemSymbol]) * sizeMultiplier
-        yOffset = 80 * sizeMultiplier
+        yOffset = 80 * Math.min(sizeMultiplier, 8)
     }
     const x = serverX + xOffset
     const y = serverY + yOffset

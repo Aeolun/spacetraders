@@ -50,6 +50,11 @@ export enum FlexWrap {
     WRAP_WRAP_REVERSE=2
 }
 
+export enum PositionType {
+    RELATIVE = 0,
+    ABSOLUTE = 1
+}
+
 export class Flex<T extends Container> {
     public node: YogaNode
     private children: Flex<Container>[] = []
@@ -106,6 +111,42 @@ export class Flex<T extends Container> {
             this.node.setHeightPercent(parseInt(value.substring(0, value.length-1)))
         } else {
             this.node.setHeight(value)
+        }
+    }
+
+    set position(value: PositionType) {
+        this.node.setPositionType(value)
+    }
+
+    set minHeight(value: number | string) {
+        if (typeof value === 'string') {
+            this.node.setMinHeightPercent(parseInt(value.substring(0, value.length-1)))
+        } else {
+            this.node.setMinHeight(value)
+        }
+    }
+
+    set maxHeight(value: number | string) {
+        if (typeof value === 'string') {
+            this.node.setMaxHeightPercent(parseInt(value.substring(0, value.length-1)))
+        } else {
+            this.node.setMaxHeight(value)
+        }
+    }
+
+    set minWidth(value: number | string) {
+        if (typeof value === 'string') {
+            this.node.setMinWidthPercent(parseInt(value.substring(0, value.length-1)))
+        } else {
+            this.node.setMinWidth(value)
+        }
+    }
+
+    set maxWidth(value: number | string) {
+        if (typeof value === 'string') {
+            this.node.setMaxWidthPercent(parseInt(value.substring(0, value.length-1)))
+        } else {
+            this.node.setMaxWidth(value)
         }
     }
 

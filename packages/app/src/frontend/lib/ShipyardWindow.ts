@@ -13,7 +13,7 @@ type ExpectedData = (ShipyardModel & { shipConfiguration: ShipConfiguration & { 
 export class ShipyardWindow {
     public container: Container
 
-    constructor(ships: ExpectedData[]) {
+    constructor(ships: ExpectedData[], private readonly: boolean = false) {
         this.container = new Container()
         this.container.width = 1000
         this.container.height = 600
@@ -58,7 +58,7 @@ export class ShipyardWindow {
             firstText.flex = 1
             firstRow.addChild(firstText)
         })
-        const thirdText = new Text(ship.price.toString(), {
+        const thirdText = new Text(ship.price ? ship.price.toString() : '???', {
             align: 'right',
             font: fontStyle
         })
@@ -73,6 +73,7 @@ export class ShipyardWindow {
             await updateCredits()
             loadSystem(GameState.currentSystem, false)
         })
+        buyButton.disabled = this.readonly
         buyButton.flex = 1
         firstRow.addChild(buyButton)
 

@@ -55,6 +55,7 @@ const init = async () => {
             }
         })
 
+        await initAgent(agentToken);
         loadWaypoint().then(() => {
             console.log('Waypoint load complete')
         })
@@ -88,17 +89,16 @@ const init = async () => {
         const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
         console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
         setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
-        agentToken = await getBackgroundAgentToken(resetDate)
+        agentToken = await getBackgroundAgentToken(serverStatus.data.resetDate)
+        await initAgent(agentToken);
+
+        loadWaypoint().then(() => {
+            console.log('Waypoint load complete')
+        })
     } else {
         console.log("Server already reset or never initialized.")
         agentToken = await initWorld(serverStatus.data.resetDate)
     }
-
-    await initAgent(agentToken);
-
-    loadWaypoint().then(() => {
-        console.log('Waypoint load complete')
-    })
 
     await initializeShipBehaviors()
 }

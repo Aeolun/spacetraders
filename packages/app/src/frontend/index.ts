@@ -4,10 +4,8 @@ import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/
 //     👆 **type-only** import
 import {systemCoordinates, totalSize} from '@front/lib/consts'
 import {
-    actionButton,
-    createUIElements, credits, cruiseModeSelect,
-    currentCoordinate,
-    entityInfo, fps, marketWindow,
+    createUIElements,
+    currentCoordinate, fps, marketWindow,
     systemView, universeCuller, universeGraphics, universeGraphicsText,
     universeView
 } from "@front/lib/UIElements";
@@ -20,6 +18,9 @@ import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/
 import {loadSystem} from "@front/lib/loadSystem";
 import {trpc} from "@front/lib/trpc";
 import { app  } from './lib/application'
+import {convertToDisplayCoordinates} from "@front/lib/util";
+import {Graphics} from "pixi.js";
+import {credits, cruiseModeSelect, entityInfo} from "@front/lib/createSidebar";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -59,13 +60,15 @@ const format = Intl.NumberFormat('en');
 let lastRefresh = Date.now()
 let hidingLabels = false;
 
+let currentRoute
+
 app.ticker.add((dt) => {
     const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
 
 
-    credits.text = `${format.format(GameState.agent.credits)}`
+    credits.displayObject.bitmapText.text = `${format.format(GameState.agent.credits)}`
 
     if (Date.now() - lastRefresh > 5000) {
         lastRefresh = Date.now()
@@ -77,13 +80,13 @@ app.ticker.add((dt) => {
         Object.values(loadedUniverse.systems).forEach(ref => {
             ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
         })
-        if (!hidingLabels && shipSizeMultiplier > 10) {
+        if (!hidingLabels && shipSizeMultiplier > 15) {
             hidingLabels = true
             Object.values(loadedUniverse.systems).forEach(ref => {
                 ref.getChildByName('label').visible = false
                 ref.interactive = false;
             })
-        } else if (hidingLabels && shipSizeMultiplier < 10) {
+        } else if (hidingLabels && shipSizeMultiplier < 15) {
             hidingLabels = false
             Object.values(loadedUniverse.systems).forEach(ref => {
                 ref.getChildByName('label').visible = true
@@ -166,7 +169,7 @@ app.ticker.add((dt) => {
         if (GameState.selected.type === 'ship') {
             const shipInfo = GameState.shipData[GameState.selected.symbol]
 
-            cruiseModeSelect.visible = true
+            cruiseModeSelect.displayObject.visible = true
             if (shipInfo.flightMode && cruiseModeSelect.selectedValue !== shipInfo.flightMode) {
                 cruiseModeSelect.setSelectedValue(shipInfo.flightMode)
             }
@@ -177,14 +180,46 @@ app.ticker.add((dt) => {
             const arrivalValue = navTime > Date.now() ? (Math.round((navTime - Date.now())/1000)+'s') : 'Ready'
             if (GameState.agent.symbol === shipInfo.agent) {
                 // your own ships
-                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}\nAction: ${shipInfo.overalGoal}`
+                entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}\nAction: ${shipInfo.overalGoal}`
             } else {
                 // someone elses ships
-                entityInfo.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nOwner: ${shipInfo.agent}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nLast update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime())/1000)}s ago`
+                entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nOwner: ${shipInfo.agent}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nLast update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime())/1000)}s ago`
+            }
+
+            if (GameState.hoveredSystem) {
+                if (currentRoute != GameState.hoveredSystem + GameState.selected.symbol) {
+                    currentRoute = GameState.hoveredSystem + GameState.selected.symbol
+                    const route = trpc.getRoute.query({
+                        fromSystemSymbol: shipInfo.currentSystemSymbol,
+                        toSystemSymbol: GameState.hoveredSystem.symbol
+                    }).then(data => {
+                        const graphics: Graphics = universeView.getChildByName('route')
+                        graphics.clear()
+                        data.finalPath.forEach(item => {
+                            const fromSystem = GameState.systemData[item.source]
+                            const toSystem = GameState.systemData[item.target]
+                            const displayCoords = convertToDisplayCoordinates(fromSystem)
+                            const targetCoords = convertToDisplayCoordinates(toSystem)
+
+                            graphics.lineStyle({
+                                width: 10,
+                                color: 0x00FF00,
+                                alpha: 0.25,
+                            })
+                            graphics.moveTo(displayCoords.x, displayCoords.y)
+                            graphics.lineTo(targetCoords.x, targetCoords.y)
+                            graphics.closePath()
+                        })
+                    })
+                }
+            } else {
+                currentRoute = ''
+                const graphics: Graphics = universeView.getChildByName('route')
+                graphics.clear()
             }
         } else if (GameState.selected.type === 'waypoint') {
             const waypointInfo = GameState.waypointData[GameState.selected.symbol]
-            entityInfo.text = `Entity Information\nSymbol: ${GameState.selected.symbol}\nKind: ${waypointInfo.type}\nTraits: ${waypointInfo.traits.length == 0 ? 'UNKNOWN' : waypointInfo.traits.map(t => t.name).join(', ')}\nFaction: ${waypointInfo.factionSymbol}\nChart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : 'None'}`
+            entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${GameState.selected.symbol}\nKind: ${waypointInfo.type}\nTraits: ${waypointInfo.traits.length == 0 ? 'UNKNOWN' : waypointInfo.traits.map(t => t.name).join(', ')}\nFaction: ${waypointInfo.factionSymbol}\nChart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : 'None'}`
 
             if (waypointInfo.traits.find(t => t.symbol === 'MARKETPLACE') && GameState.displayedMarket !== GameState.selected.symbol) {
                 GameState.displayedMarket = GameState.selected.symbol
@@ -201,10 +236,14 @@ app.ticker.add((dt) => {
             }
         }
     } else {
+        currentRoute = ''
+        const graphics: Graphics = universeView.getChildByName('route')
+        graphics.clear()
+
         GameState.displayedMarket = undefined
         marketWindow.container.displayObject.visible = false
-        cruiseModeSelect.visible = false
-        entityInfo.text = `Entity Information`
+        cruiseModeSelect.displayObject.visible = false
+        entityInfo.displayObject.bitmapText.text = `Entity Information`
     }
 
     if (universeView.dirty) {
