@@ -1,9 +1,9 @@
 import {AlphaFilter, BitmapText, BLEND_MODES, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
 import {trpc} from '@front/lib/trpc'
-import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
+import {deselectListeners, makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/lib/assets";
 import {scale, totalSize, universeCoordinates,} from "@front/lib/consts";
-import {universeCuller, universeView} from "@front/lib/UIElements";
+import {behaviorWindow, universeCuller, universeView} from "@front/lib/UIElements";
 import {GameState, System, WaypointData} from "@front/lib/game-state";
 import {positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
 import {loadSystem} from "@front/lib/loadSystem";
@@ -202,6 +202,20 @@ function createStar(starData: System) {
                     })
                     GameState.shipData[res.symbol] = res
                 }
+            },
+            {
+                name: 'Set behavior',
+                withSelection: 'ship',
+                isAvailable: async () => {
+                    return true
+                },
+                action: async (selectedSymbol) => {
+                    behaviorWindow.show()
+                    behaviorWindow.setHome(starData.symbol)
+                    deselectListeners.once('deselect', () => {
+                        behaviorWindow.hide()
+                    })
+                }
             }
         ]
     })
@@ -268,6 +282,10 @@ export const loadUniverse = async () => {
     const routeGraphics = new Graphics()
     routeGraphics.name = 'route'
     universeView.addChild(routeGraphics)
+
+    const homeSystemGraphics = new Graphics()
+    homeSystemGraphics.name = 'homeSystem'
+    universeView.addChild(homeSystemGraphics)
 
     const starsCont = new Container()
     for(const starData of systems) {

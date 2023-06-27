@@ -3,7 +3,7 @@ import {prisma} from "../prisma";
 import createApi from "@app/lib/createApi";
 
 export const seedSystems = async (agentToken: string) => {
-    const data = await axios.get('https://api.spacetraders.io/v2/systems.json', {
+    const data = await axios.get(process.env.API_ENDPOINT+'/systems.json', {
         headers: {
             Authorization: 'Bearer '+ agentToken
         }
@@ -78,7 +78,7 @@ export const seedSystems = async (agentToken: string) => {
 }
 
 export const seedFactions = async (agentToken) => {
-    const factionData = await axios.get('https://api.spacetraders.io/v2/factions?page=1&limit=20', {
+    const factionData = await axios.get(process.env.API_ENDPOINT+'/factions?page=1&limit=20', {
         headers: {
             Authorization: 'Bearer '+agentToken
         }

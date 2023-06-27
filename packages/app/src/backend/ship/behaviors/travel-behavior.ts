@@ -6,6 +6,7 @@ import {LinkedListItem} from "@aeolun/dijkstra-calculator";
 
 export async function travelBehavior(toSystem: string, ship: Ship, preferredWaypointSymbol?: string, options?: {
     executeEveryStop?: () => Promise<void>
+    jumpOnly?: boolean
 }) {
     ship.log(`Traveling to ${toSystem}`)
     await ship.setTravelGoal(toSystem);
@@ -20,10 +21,14 @@ export async function travelBehavior(toSystem: string, ship: Ship, preferredWayp
 
             if (ship.currentSystemSymbol !== toSystem) {
                 let route: LinkedListItem[]
-                if (ship.hasWarpDrive) {
+                if (ship.hasWarpDrive && !options?.jumpOnly) {
                     route = (await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem)).finalPath
                 } else {
                     route = (await defaultWayfinder.findJumpRoute(ship.currentSystemSymbol, toSystem)).finalPath
+                    if (route.length <= 0 && ship.hasWarpDrive) {
+                        ship.log(`Cannot find a route to ${toSystem} from ${ship.currentSystemSymbol} using jump gates, trying warp.`)
+                        route = (await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem)).finalPath
+                    }
                 }
 
                 if (route.length <= 0) {
@@ -61,7 +66,9 @@ export async function travelBehavior(toSystem: string, ship: Ship, preferredWayp
                         const targetWaypoint = availableWaypoints.find(w => w.symbol === preferredWaypointSymbol)
 
                         const target = targetWaypoint ? targetWaypoint.symbol : availableWaypoints.length > 0 ? availableWaypoints[0].symbol : undefined
-                        if (target) {
+                        if (ship.currentSystemSymbol === nextSystem.target) {
+                            ship.log(`Already at system ${nextSystem.target}`)
+                        } else if (target) {
                             await ship.warp(target)
                             await options?.executeEveryStop?.()
                         } else {

@@ -272,6 +272,7 @@ export const availableActions: {
     action: async (event) => {
         event.stopPropagation();
         behaviorWindow.show()
+        behaviorWindow.setHome(GameState.shipData[GameState.selected.symbol].currentSystemSymbol)
         deselectListeners.once('deselect', () => {
             behaviorWindow.hide()
         })

@@ -43,7 +43,6 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
                 faction: process.env.AGENT_FACTION as RegisterRequestFactionEnum
             })
             await processAgent(result.data.data.agent, result.data.data.token)
-            await processShip(result.data.data.ship)
 
             agentToken = result.data.data.token
         }

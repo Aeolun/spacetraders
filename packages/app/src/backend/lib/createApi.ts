@@ -11,6 +11,7 @@ export interface APIInstance {
 
 export default (agentToken: string) => {
     const configuration = new Configuration({
+        basePath: process.env.API_ENDPOINT,
         accessToken: agentToken,
     })
     return {

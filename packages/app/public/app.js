@@ -53635,6 +53635,7 @@ function makeInteractiveAndSelectable(item, options) {
           }, (event2) => {
             event2.stopPropagation();
             comm.action(GameState.selected.symbol);
+            item.removeChild(background);
           });
           button.x = 10;
           button.y = 10 + index * 35;
@@ -55900,6 +55901,15 @@ var Flex = class {
   set margin(value) {
     this.node.setMargin(8 /* ALL */, value);
   }
+  set marginVertical(value) {
+    this.node.setMargin(7 /* VERTICAL */, value);
+  }
+  set marginHorizontal(value) {
+    this.node.setMargin(6 /* HORIZONTAL */, value);
+  }
+  set marginBottom(value) {
+    this.node.setMargin(3 /* BOTTOM */, value);
+  }
   set paddingHorizontal(value) {
     this.node.setPadding(6 /* HORIZONTAL */, value);
   }
@@ -56070,61 +56080,6 @@ var Button = class extends Flex {
   }
 };
 
-// src/frontend/lib/BehaviorWindow.ts
-var BehaviorWindow = class {
-  container;
-  constructor() {
-    this.container = new Container4();
-    this.container.width = 1920 - 400;
-    this.container.height = 600;
-    this.container.flexDirection = 0 /* COLUMN */;
-    this.container.padding = 10;
-    this.container.updateLayout();
-  }
-  setBehaviors(behaviors) {
-    behaviors.forEach((behavior) => {
-      const row = new Container4();
-      row.flex = 1;
-      row.flexDirection = 2 /* ROW */;
-      const texts = [behavior.symbol, behavior.name, behavior.description];
-      texts.forEach((textString) => {
-        const text = new Text2(textString, {
-          align: "left",
-          font: {
-            fontName: "buttontext_white",
-            fontSize: 16
-          }
-        });
-        text.flex = 1;
-        row.addChild(text);
-      });
-      const button = new Button("Activate", {
-        textSize: 16
-      }, () => {
-        trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
-          systemSymbol: GameState.shipData[GameState.selected.symbol].currentSystemSymbol,
-          range: 5e3
-        } }).then(() => {
-          alert("Behavior started");
-          this.hide();
-        });
-      });
-      button.flex = 1;
-      row.addChild(button);
-      this.container.addChild(row);
-    });
-    this.container.updateLayout();
-  }
-  show() {
-    this.container.displayObject.visible = true;
-    this.container.displayObject.x = 200;
-    this.container.displayObject.y = 200;
-  }
-  hide() {
-    this.container.displayObject.visible = false;
-  }
-};
-
 // src/frontend/lib/switch.ts
 var Switch = class extends Container4 {
   constructor(options, dimensions, clickAction) {
@@ -56186,6 +56141,108 @@ var Switch = class extends Container4 {
   }
   setSelectedValue(value) {
     this.switchHighlight(value);
+  }
+};
+
+// src/frontend/lib/BehaviorWindow.ts
+var BehaviorWindow = class {
+  container;
+  selectedRange = 1500;
+  homeSystem = "";
+  switchRange;
+  homeSystemText;
+  constructor() {
+    this.container = new Container4();
+    this.container.width = 1920 - 400;
+    this.container.height = 600;
+    this.container.flexDirection = 0 /* COLUMN */;
+    this.container.padding = 10;
+    this.container.updateLayout();
+  }
+  setHome(homeSystem) {
+    this.homeSystem = homeSystem;
+    this.homeSystemText.displayObject.bitmapText.text = `Home: ${homeSystem}`;
+  }
+  setBehaviors(behaviors) {
+    const header = new Container4();
+    header.width = "100%";
+    header.height = 140;
+    header.flexDirection = 0 /* COLUMN */;
+    this.container.addChild(header);
+    this.homeSystemText = new Text2("Home", {
+      align: "left",
+      font: {
+        fontName: "buttontext_white",
+        fontSize: 24
+      }
+    });
+    this.homeSystemText.marginVertical = 10;
+    this.homeSystemText.width = "100%";
+    this.homeSystemText.height = 30;
+    this.homeSystemText.paddingVertical = 6;
+    header.addChild(this.homeSystemText);
+    const headerText = new Text2("Range", {
+      align: "left",
+      font: {
+        fontName: "buttontext_white",
+        fontSize: 16
+      }
+    });
+    headerText.width = "100%";
+    headerText.height = 20;
+    header.addChild(headerText);
+    this.switchRange = new Switch(["1500", "2500", "3500", "5000"], {
+      width: 100,
+      defaultSelected: "1500"
+    }, (event, value) => {
+      this.selectedRange = parseInt(value);
+    });
+    header.addChild(this.switchRange);
+    const behaviorsContainer = new Container4();
+    behaviorsContainer.flex = 1;
+    this.container.addChild(behaviorsContainer);
+    behaviors.forEach((behavior) => {
+      const row = new Container4();
+      row.flex = 1;
+      row.flexDirection = 2 /* ROW */;
+      const texts = [behavior.symbol, behavior.name, behavior.description];
+      texts.forEach((textString) => {
+        const text = new Text2(textString, {
+          align: "left",
+          font: {
+            fontName: "buttontext_white",
+            fontSize: 16
+          }
+        });
+        text.flex = 1;
+        row.addChild(text);
+      });
+      const button = new Button("Activate", {
+        textSize: 16
+      }, () => {
+        trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
+          systemSymbol: this.homeSystem,
+          range: this.selectedRange
+        } }).then(() => {
+          alert("Behavior started");
+          this.hide();
+        });
+      });
+      button.flex = 1;
+      row.addChild(button);
+      behaviorsContainer.addChild(row);
+    });
+    this.container.updateLayout();
+  }
+  show() {
+    this.selectedRange = 1500;
+    this.switchRange.selectedValue = "1500";
+    this.container.displayObject.visible = true;
+    this.container.displayObject.x = 200;
+    this.container.displayObject.y = 200;
+  }
+  hide() {
+    this.container.displayObject.visible = false;
   }
 };
 
@@ -56889,6 +56946,7 @@ var availableActions = [{
   action: async (event) => {
     event.stopPropagation();
     behaviorWindow.show();
+    behaviorWindow.setHome(GameState.shipData[GameState.selected.symbol].currentSystemSymbol);
     deselectListeners.once("deselect", () => {
       behaviorWindow.hide();
     });
@@ -56947,6 +57005,20 @@ var highlightmodes = {
         const displayCoords = convertToDisplayCoordinates(starData);
         graphics.beginFill(255);
         graphics.drawCircle(displayCoords.x, displayCoords.y, 1500);
+      }
+    }
+    const colorMatrix = new AlphaFilter();
+    colorMatrix.alpha = 0.1;
+    graphics.filters = [colorMatrix];
+  },
+  "Market Update": (graphics) => {
+    for (const shipData of Object.values(GameState.shipData)) {
+      if (shipData.currentBehavior === "EXPLORE_MARKETS" || shipData.currentBehavior === "UPDATE_MARKETS") {
+        const homeSystem = GameState.systemData[shipData.homeSystemSymbol];
+        const displayCoords = convertToDisplayCoordinates(homeSystem);
+        const range = shipData.behaviorRange * scale.universe;
+        graphics.beginFill(6750054);
+        graphics.drawRect(displayCoords.x - range, displayCoords.y - range, range * 2, range * 2);
       }
     }
     const colorMatrix = new AlphaFilter();
@@ -57404,6 +57476,20 @@ function createStar(starData) {
           });
           GameState.shipData[res.symbol] = res;
         }
+      },
+      {
+        name: "Set behavior",
+        withSelection: "ship",
+        isAvailable: async () => {
+          return true;
+        },
+        action: async (selectedSymbol) => {
+          behaviorWindow.show();
+          behaviorWindow.setHome(starData.symbol);
+          deselectListeners.once("deselect", () => {
+            behaviorWindow.hide();
+          });
+        }
       }
     ]
   });
@@ -57458,6 +57544,9 @@ var loadUniverse = async () => {
   const routeGraphics = new Graphics();
   routeGraphics.name = "route";
   universeView.addChild(routeGraphics);
+  const homeSystemGraphics = new Graphics();
+  homeSystemGraphics.name = "homeSystem";
+  universeView.addChild(homeSystemGraphics);
   const starsCont = new Container();
   for (const starData of systems) {
     const starContainer = createStar(starData);
@@ -57666,7 +57755,7 @@ var lastRefresh = Date.now();
 var hidingLabels = false;
 var currentRoute;
 app.ticker.add((dt) => {
-  const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5);
+  const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 20);
   const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   credits.displayObject.bitmapText.text = `${format2.format(GameState.agent.credits)}`;
   if (Date.now() - lastRefresh > 5e3) {
@@ -57753,6 +57842,7 @@ app.ticker.add((dt) => {
   clearGraphics();
   universeTargetingLine(sizeMultiplier);
   systemTargetingLine();
+  const homeGraphics = universeView.getChildByName("homeSystem");
   if (GameState.selected) {
     if (GameState.selected.type === "ship") {
       const shipInfo = GameState.shipData[GameState.selected.symbol];
@@ -57811,6 +57901,30 @@ Last update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime()) 
         const graphics = universeView.getChildByName("route");
         graphics.clear();
       }
+      if (GameState.currentView == "universe" && shipInfo.currentBehavior) {
+        homeGraphics.clear();
+        const homeSystem = GameState.systemData[shipInfo.homeSystemSymbol];
+        const shipCoordinates = GameState.universeShips[shipInfo.symbol].position;
+        const displayCoordinates = convertToDisplayCoordinates(homeSystem);
+        homeGraphics.lineStyle({
+          width: 10 * sizeMultiplier,
+          color: 65280,
+          alpha: 0.5
+        });
+        homeGraphics.moveTo(shipCoordinates.x, shipCoordinates.y);
+        homeGraphics.lineTo(displayCoordinates.x, displayCoordinates.y);
+        homeGraphics.closePath();
+        homeGraphics.lineStyle({
+          width: 10 * sizeMultiplier,
+          color: 16777215,
+          alpha: 0.5
+        });
+        const range = shipInfo.behaviorRange * scale.universe;
+        homeGraphics.drawRect(displayCoordinates.x - range, displayCoordinates.y - range, range * 2, range * 2);
+        homeGraphics.closePath();
+      } else {
+        homeGraphics.clear();
+      }
     } else if (GameState.selected.type === "waypoint") {
       const waypointInfo = GameState.waypointData[GameState.selected.symbol];
       entityInfo.displayObject.bitmapText.text = `Entity Information
@@ -57837,6 +57951,7 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
     currentRoute = "";
     const graphics = universeView.getChildByName("route");
     graphics.clear();
+    homeGraphics.clear();
     GameState.displayedMarket = void 0;
     marketWindow.container.displayObject.visible = false;
     cruiseModeSelect.displayObject.visible = false;

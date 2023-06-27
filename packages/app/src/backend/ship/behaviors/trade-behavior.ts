@@ -73,7 +73,9 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
             await ship.dock()
             await ship.attemptRefuel()
             await ship.orbit()
-            await travelBehavior(whereToSell[0].systemSymbol, ship, whereToSell[0].waypointSymbol)
+            await travelBehavior(whereToSell[0].systemSymbol, ship, whereToSell[0].waypointSymbol, {
+                jumpOnly: true
+            })
             await ship.navigate(whereToSell[0].waypointSymbol)
             await ship.dock()
             await ship.sellCargo(sellableCargo[0].tradeGoodSymbol, sellableCargo[0].units)
@@ -94,11 +96,13 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
             sellVolume: number
             tradeVolume: number
             disSys: number
+            disStart: number
             tradeGoodSymbol: string
             purchasePrice: number
             sellPrice: number
             totalProfit: number
             since: string
+            totalPerRunDistance: number
         }[]>`select
 s1.symbol buySystem,
 m1.waypointSymbol as buyAt,
@@ -115,6 +119,7 @@ ROUND(LEAST(${cargoValue},
         m1.tradeVolume, m2.tradeVolume)) as tradeVolume,
 ROUND(SQRT(POW(ABS(wp1.x - wp2.x), 2) + POW(ABS(wp1.y - wp2.y), 2))) as dis,
 ROUND(SQRT(POW(ABS(s1.x - s2.x), 2) + POW(ABS(s1.y - s2.y), 2))) as disSys,
+ROUND(SQRT(POW(ABS(sts.x - s1.x), 2) + POW(ABS(sts.y - s1.y), 2))) as disStart,
 jd.totalDistance jumpDistance,
 jd2.totalDistance distanceToStart,
 m1.tradeGoodSymbol,
@@ -122,7 +127,7 @@ m1.purchasePrice,
 m2.sellPrice,
 ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice)) totalProfit,
 ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice)) / ROUND((jd.totalDistance+jd2.totalDistance)/10+60) creditsPerSecond,
-ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice))/ROUND(SQRT(POW(ABS(s1.x - s2.x), 2) + POW(ABS(s1.y - s2.y), 2)))  as totalPerRunDistance,
+ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice))/(ROUND(SQRT(POW(ABS(s1.x - s2.x), 2) + POW(ABS(s1.y - s2.y), 2)))+ROUND(SQRT(POW(ABS(sts.x - s1.x), 2) + POW(ABS(sts.y - s1.y), 2))))  as totalPerRunDistance,
 LEAST(m1.updatedOn, m2.updatedOn) as since
 from
 MarketPrice as m1
@@ -137,6 +142,8 @@ join \`System\` as s1 on
 wp1.systemSymbol = s1.symbol
 join \`System\` as s2 on
 wp2.systemSymbol = s2.symbol
+join \`System\` as sts on
+sts.symbol = ${currentSystem.symbol}
 join Waypoint gatewp1 on gatewp1.type = 'JUMP_GATE' and gatewp1.systemSymbol = s1.symbol 
 join Waypoint gatewp2 on gatewp2.type = 'JUMP_GATE' and gatewp2.systemSymbol = s2.symbol 
 left join JumpDistance jd on jd.fromSystemSymbol = s1.symbol and jd.toSystemSymbol =s2.symbol
@@ -146,7 +153,7 @@ m1.purchasePrice < m2.sellPrice
 and ROUND(LEAST(${cargoValue}, ${currentMoney} / m1.purchasePrice, m1.tradeVolume, m2.tradeVolume) * (m2.sellPrice - m1.purchasePrice)) > ${minProfit}
 and LEAST(m1.updatedOn, m2.updatedOn) > NOW() - INTERVAL 4 HOUR
 order by
-creditsPerSecond desc, totalPerRunDistance desc;`
+creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
 
         if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
             console.log(`No more profitable trades found.`)
@@ -161,21 +168,34 @@ creditsPerSecond desc, totalPerRunDistance desc;`
 
         const bestTrade = allowedTrades[0]
 
-        const route = await defaultWayfinder.findJumpRoute(currentSystem.symbol, bestTrade.buySystem);
-        const extraRoute = await defaultWayfinder.findJumpRoute(bestTrade.buySystem, bestTrade.sellSystem);
-
         const fullRoute = []
-        route.finalPath.forEach(p => {
-            fullRoute.push(p.source)
-        })
 
-        extraRoute.finalPath.forEach(p => {
-            fullRoute.push(p.source)
-        })
-        fullRoute.push(extraRoute.finalPath[extraRoute.finalPath.length - 1].target)
+        try {
+            const route = await defaultWayfinder.findJumpRoute(currentSystem.symbol, bestTrade.buySystem);
+            const extraRoute = await defaultWayfinder.findJumpRoute(bestTrade.buySystem, bestTrade.sellSystem);
+
+
+            route.finalPath.forEach(p => {
+                fullRoute.push(p.source)
+            })
+
+            extraRoute.finalPath.forEach(p => {
+                fullRoute.push(p.source)
+            })
+
+            if (extraRoute.finalPath.length > 0) {
+                fullRoute.push(extraRoute.finalPath[extraRoute.finalPath.length - 1].target)
+            }
+        } catch (e) {
+            console.error(e)
+            await ship.setOverallGoal(null)
+            await ship.waitFor(60000)
+            return;
+        }
         console.log(JSON.stringify(fullRoute))
 
-        ship.log(`Going to trade ${bestTrade.tradeGoodSymbol}, sold at ${bestTrade.purchasePrice}, purchased at ${bestTrade.sellPrice}, total profit ${bestTrade.totalProfit}`)
+        ship.log(`Going to trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol}, sold at ${bestTrade.purchasePrice}, purchased at ${bestTrade.sellPrice}, total profit ${bestTrade.totalProfit}, tprd ${bestTrade.totalPerRunDistance}, dissta ${bestTrade.disStart}`)
+
         tradeTaken.add(bestTrade.buyAt+bestTrade.sellAt+bestTrade.tradeGoodSymbol)
         await ship.setOverallGoal(`Trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol} from ${bestTrade.buyAt} to ${bestTrade.sellAt}`)
 
@@ -187,6 +207,7 @@ creditsPerSecond desc, totalPerRunDistance desc;`
         const madeTrades = []
 
         await travelBehavior(bestTrade.buySystem, ship, bestTrade.buyAt, {
+            jumpOnly: true,
             executeEveryStop: async () => {
                 const initialLocation = ship.currentWaypointSymbol
 
@@ -286,17 +307,21 @@ creditsPerSecond desc, totalPerRunDistance desc;`
             currentMoney = newCurrentMoneyResult.data.data.credits
 
             maxPurchaseAmount = Math.min(availableCargoSpace, thingToBuy.tradeVolume, thingToBuy.purchasePrice > 10000 ? bestTrade.sellVolume * 3 : thingToBuy.tradeVolume, Math.floor(currentMoney / thingToBuy.purchasePrice))
-            console.log("Maximum to buy is " + maxPurchaseAmount)
-            buyTransactions.push(await ship.purchaseCargo(good, maxPurchaseAmount))
+            if (maxPurchaseAmount > 0) {
+                ship.log("Maximum to buy is " + maxPurchaseAmount)
+                buyTransactions.push(await ship.purchaseCargo(good, maxPurchaseAmount))
 
-            const marketInfoAfter = await ship.market()
-            thingBought = marketInfoAfter.tradeGoods.find(i => i.symbol == good)
-            console.log(`Price changed from ${thingToBuy.purchasePrice} -> ${thingBought.purchasePrice}`)
-            totalCount += maxPurchaseAmount
-            availableCargoSpace -= maxPurchaseAmount
+                const marketInfoAfter = await ship.market()
+                thingBought = marketInfoAfter.tradeGoods.find(i => i.symbol == good)
+                ship.log(`Price changed from ${thingToBuy.purchasePrice} -> ${thingBought.purchasePrice}`)
+                totalCount += maxPurchaseAmount
+                availableCargoSpace -= maxPurchaseAmount
+            }
         } while(thingBought && maxPurchaseAmount > 0 && thingBought.purchasePrice < bestTrade.sellPrice && totalCount < bestTrade.sellVolume)
 
-        await travelBehavior(bestTrade.sellSystem, ship, bestTrade.sellAt)
+        await travelBehavior(bestTrade.sellSystem, ship, bestTrade.sellAt, {
+            jumpOnly: true
+        })
         await ship.navigate(bestTrade.sellAt)
 
 
@@ -335,7 +360,9 @@ creditsPerSecond desc, totalPerRunDistance desc;`
 
                 if (alternativeSaleLocation.length > 0 && alternativeSaleLocation[0].sellPrice > thingToSell.sellPrice) {
                     ship.log(`Going to ${alternativeSaleLocation[0].waypointSymbol} to sell there for ${alternativeSaleLocation[0].sellPrice} instead.`)
-                    await travelBehavior(alternativeSaleLocation[0].systemSymbol, ship, alternativeSaleLocation[0].waypointSymbol)
+                    await travelBehavior(alternativeSaleLocation[0].systemSymbol, ship, alternativeSaleLocation[0].waypointSymbol, {
+                        jumpOnly: true
+                    })
                 } else {
                     ship.log(`No alternative sale location found for a decent enough price.`)
                     await ship.setOverallGoal("Waiting for price increase.")

@@ -169,6 +169,18 @@ export class Flex<T extends Container> {
         this.node.setMargin(Side.ALL, value)
     }
 
+    set marginVertical(value: number) {
+        this.node.setMargin(Side.VERTICAL, value)
+    }
+
+    set marginHorizontal(value: number) {
+        this.node.setMargin(Side.HORIZONTAL, value)
+    }
+
+    set marginBottom(value: number) {
+        this.node.setMargin(Side.BOTTOM, value)
+    }
+
     set paddingHorizontal(value: number | string) {
         this.node.setPadding(Side.HORIZONTAL, value)
     }

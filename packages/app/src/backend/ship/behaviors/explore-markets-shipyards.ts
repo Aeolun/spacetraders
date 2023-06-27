@@ -46,6 +46,8 @@ export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamete
                     LEFT JOIN MarketPrice mp ON wp.symbol = mp.waypointSymbol
                 WHERE
                     s.hasJumpGate = true
+                    and s.x > -20000 and s.x < 20000
+                    and s.y > -20000 and s.y < 20000
                     and s.symbol NOT IN(${Prisma.join(shitList.map(s => s.system))})
                 GROUP BY s.symbol
                 HAVING MIN(mp.updatedOn) IS NULL

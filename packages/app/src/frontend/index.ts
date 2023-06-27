@@ -2,7 +2,7 @@ import {loadAssets, loadedAssets} from "@front/lib/assets";
 import {loadUniverse} from "@front/lib/loadUniverse";
 import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/worldCoordinateToOriginal";
 //     👆 **type-only** import
-import {systemCoordinates, totalSize} from '@front/lib/consts'
+import {scale, systemCoordinates, totalSize} from '@front/lib/consts'
 import {
     createUIElements,
     currentCoordinate, fps, marketWindow,
@@ -63,7 +63,7 @@ let hidingLabels = false;
 let currentRoute
 
 app.ticker.add((dt) => {
-    const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5)
+    const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 20)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
 
@@ -165,6 +165,7 @@ app.ticker.add((dt) => {
     universeTargetingLine(sizeMultiplier)
     systemTargetingLine()
 
+    const homeGraphics: Graphics =  universeView.getChildByName('homeSystem')
     if (GameState.selected) {
         if (GameState.selected.type === 'ship') {
             const shipInfo = GameState.shipData[GameState.selected.symbol]
@@ -217,6 +218,35 @@ app.ticker.add((dt) => {
                 const graphics: Graphics = universeView.getChildByName('route')
                 graphics.clear()
             }
+
+
+            if (GameState.currentView == 'universe' && shipInfo.currentBehavior) {
+                homeGraphics.clear()
+                const homeSystem = GameState.systemData[shipInfo.homeSystemSymbol]
+
+                const shipCoordinates = GameState.universeShips[shipInfo.symbol].position
+                const displayCoordinates = convertToDisplayCoordinates(homeSystem)
+
+                homeGraphics.lineStyle({
+                    width: 10 * sizeMultiplier,
+                    color: 0x00FF00,
+                    alpha: 0.5,
+                })
+                homeGraphics.moveTo(shipCoordinates.x, shipCoordinates.y)
+                homeGraphics.lineTo(displayCoordinates.x, displayCoordinates.y)
+                homeGraphics.closePath()
+
+                homeGraphics.lineStyle({
+                    width: 10 * sizeMultiplier,
+                    color: 0xFFFFFF,
+                    alpha: 0.5,
+                })
+                const range = shipInfo.behaviorRange * scale.universe
+                homeGraphics.drawRect(displayCoordinates.x - range, displayCoordinates.y - range, range*2, range*2)
+                homeGraphics.closePath()
+            } else {
+                homeGraphics.clear()
+            }
         } else if (GameState.selected.type === 'waypoint') {
             const waypointInfo = GameState.waypointData[GameState.selected.symbol]
             entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${GameState.selected.symbol}\nKind: ${waypointInfo.type}\nTraits: ${waypointInfo.traits.length == 0 ? 'UNKNOWN' : waypointInfo.traits.map(t => t.name).join(', ')}\nFaction: ${waypointInfo.factionSymbol}\nChart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${waypointInfo.chartSubmittedOn}` : 'None'}`
@@ -239,6 +269,7 @@ app.ticker.add((dt) => {
         currentRoute = ''
         const graphics: Graphics = universeView.getChildByName('route')
         graphics.clear()
+        homeGraphics.clear()
 
         GameState.displayedMarket = undefined
         marketWindow.container.displayObject.visible = false

@@ -72,6 +72,7 @@ export function makeInteractiveAndSelectable(item: Container, options?: {
                     }, (event) => {
                         event.stopPropagation();
                         comm.action(GameState.selected.symbol)
+                        item.removeChild(background)
                     })
                     button.x = 10
                     button.y = 10 + (index * 35)

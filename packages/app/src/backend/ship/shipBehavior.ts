@@ -24,10 +24,12 @@ export class CancelledError extends Error {
 }
 
 export const startBehaviorForShip = async (symbol: string, parameters: BehaviorParameters, kind: ShipBehavior) => {
+  const logic = availableLogic.find(logic => logic.symbol === kind).logic
+  if (!logic) {
+    throw new Error(`No logic found for behavior ${kind}`)
+  }
   if (!shipBehaviors[symbol]) {
     let cancelled = false;
-
-    const logic = availableLogic.find(logic => logic.symbol === kind).logic
 
     await prisma.ship.update({
       where: {

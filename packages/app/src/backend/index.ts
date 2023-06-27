@@ -6,7 +6,7 @@ import {config} from 'dotenv'
 
 import axios from "axios";
 import {resetDatabase} from "@app/setup/reset-database";
-import {deleteBackgroundAgentToken, getBackgroundAgentToken} from "@app/setup/background-agent-token";
+import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import {reloadWorldStatus} from "@app/setup/reload-world-status";
 import {loadWaypoint, updateMarketPrices} from "@app/init";
 import {createContext} from "@app/context";
@@ -38,7 +38,7 @@ const init = async () => {
         currentInstance = resetDate[0].resetDate
     }
 
-    const serverStatus = await axios.get<StatusResponse>('https://api.spacetraders.io/v2')
+    const serverStatus = await axios.get<StatusResponse>(process.env.API_ENDPOINT)
 
     const initWorld = async (resetDate: string) => {
         console.log("Resetting database")
@@ -55,7 +55,7 @@ const init = async () => {
             }
         })
 
-        await initAgent(agentToken);
+        await initAgent(newToken);
         loadWaypoint().then(() => {
             console.log('Waypoint load complete')
         })
@@ -66,12 +66,10 @@ const init = async () => {
     let resetYetInterval;
     const resetTimeout = () => {
         resetYetInterval = setInterval(async () => {
-            const serverStatus = await axios.get<StatusResponse>('https://api.spacetraders.io/v2')
+            const serverStatus = await axios.get<StatusResponse>(process.env.API_ENDPOINT)
 
             if (serverStatus.data.resetDate !== currentInstance) {
                 // yay! reset completed
-                console.log("Deleting previous token")
-                await deleteBackgroundAgentToken()
 
                 await initWorld(serverStatus.data.resetDate)
 

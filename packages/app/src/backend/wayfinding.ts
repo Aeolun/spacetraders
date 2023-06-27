@@ -55,7 +55,8 @@ class Wayfinding {
                 }
             })
             nearbySystems.forEach(nearbySystem => {
-                this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, nearbySystem.distance)
+                // increase cost function by fuel cost
+                this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, nearbySystem.distance+nearbySystem.distance)
             })
 
             if (system.hasJumpGate) {

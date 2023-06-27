@@ -1,6 +1,7 @@
 import {AlphaFilter, Graphics} from "pixi.js";
 import {GameState} from "@front/lib/game-state";
 import {convertToDisplayCoordinates} from "@front/lib/util";
+import {scale} from "@front/lib/consts";
 
 
 var stringToColour = function(str) {
@@ -16,7 +17,7 @@ var stringToColour = function(str) {
   return colour;
 }
 
-type HighlightMode = 'Factions' | 'Shipyards'
+type HighlightMode = 'Factions' | 'Shipyards' | 'Market Update'
 export const highlightmodes: Record<HighlightMode, (graphics: Graphics) => void> = {
   Factions: (graphics) => {
     for(const starData of Object.values(GameState.systemData)) {
@@ -37,6 +38,20 @@ export const highlightmodes: Record<HighlightMode, (graphics: Graphics) => void>
         const displayCoords = convertToDisplayCoordinates(starData)
         graphics.beginFill(0x0000FF)
         graphics.drawCircle(displayCoords.x, displayCoords.y,  1500)
+      }
+    }
+    const colorMatrix = new AlphaFilter();
+    colorMatrix.alpha = 0.1;
+    graphics.filters = [colorMatrix];
+  },
+  'Market Update': (graphics) => {
+    for(const shipData of Object.values(GameState.shipData)) {
+      if (shipData.currentBehavior === 'EXPLORE_MARKETS' || shipData.currentBehavior === 'UPDATE_MARKETS') {
+        const homeSystem = GameState.systemData[shipData.homeSystemSymbol]
+        const displayCoords = convertToDisplayCoordinates(homeSystem)
+        const range = shipData.behaviorRange * scale.universe
+        graphics.beginFill(0x66FF66)
+        graphics.drawRect(displayCoords.x-range, displayCoords.y-range,  range*2, range*2)
       }
     }
     const colorMatrix = new AlphaFilter();
