@@ -17,6 +17,7 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
         agentTokenData = jwtDecode(agent.token);
     }
 
+    console.log("Agent token reset date", agentTokenData?.reset_date, resetDate)
     if (!agent || !agent.token || (resetDate && agentTokenData.reset_date !== resetDate)) {
         let existingToken;
         try {

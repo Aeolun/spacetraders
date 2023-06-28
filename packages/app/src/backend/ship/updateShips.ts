@@ -311,6 +311,7 @@ export async function processAgent(agent: Agent, token?: string) {
         update: {
             credits: agent.credits,
             headquartersSymbol: agent.headquarters,
+            accountId: agent.accountId,
             token: token,
         }
     })

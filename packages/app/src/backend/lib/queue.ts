@@ -8,9 +8,9 @@ export const createOrGetAgentQueue = (agentId: string) => {
     if (agentQueue[agentId]) {
         return agentQueue[agentId]
     } else {
-        agentQueue[agentId] = ThrottledQueue(1, 600)
+        agentQueue[agentId] = ThrottledQueue(process.env.FOREGROUND_RATELIMIT ? parseInt(process.env.FOREGROUND_RATELIMIT) : 2, 1000)
     }
     return agentQueue[agentId]
 }
 
-export const backgroundQueue = ThrottledQueue(1, 1000);
+export const backgroundQueue = ThrottledQueue(process.env.BACKGROUND_RATELIMIT ? parseInt(process.env.BACKGROUND_RATELIMIT) : 1, 1000);
