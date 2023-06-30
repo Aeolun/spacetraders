@@ -1,8 +1,9 @@
 import {Application} from "pixi.js";
+import {gameHeight, gameWidth} from "@front/lib/consts";
 
 export const app = new Application({
     //resizeTo: window,
-    width: 1920,
-    height: 1080,
+    width: gameWidth,
+    height: gameHeight,
     antialias: true
 });

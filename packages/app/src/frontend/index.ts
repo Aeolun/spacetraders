@@ -2,7 +2,7 @@ import {loadAssets, loadedAssets} from "@front/lib/assets";
 import {loadUniverse} from "@front/lib/loadUniverse";
 import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/worldCoordinateToOriginal";
 //     👆 **type-only** import
-import {scale, systemCoordinates, totalSize} from '@front/lib/consts'
+import {gameHeight, scale, systemCoordinates, totalSize} from '@front/lib/consts'
 import {
     createUIElements,
     currentCoordinate, fps, marketWindow,
@@ -260,7 +260,7 @@ app.ticker.add((dt) => {
                     marketWindow.clearGoods()
                     marketWindow.setGoods(data)
                     marketWindow.container.displayObject.x = 400
-                    marketWindow.container.displayObject.y = 1080 - 200
+                    marketWindow.container.displayObject.y = gameHeight - 200
                     marketWindow.container.displayObject.visible = true
                 })
             }

@@ -56,9 +56,9 @@ const init = async () => {
         })
 
         await initAgent(newToken);
-        loadWaypoint().then(() => {
-            console.log('Waypoint load complete')
-        })
+        // loadWaypoint().then(() => {
+        //     console.log('Waypoint load complete')
+        // })
 
         return newToken
     }
@@ -90,9 +90,9 @@ const init = async () => {
         agentToken = await getBackgroundAgentToken(serverStatus.data.resetDate)
         await initAgent(agentToken);
 
-        loadWaypoint().then(() => {
-            console.log('Waypoint load complete')
-        })
+        // loadWaypoint().then(() => {
+        //     console.log('Waypoint load complete')
+        // })
     } else {
         console.log("Server already reset or never initialized.")
         agentToken = await initWorld(serverStatus.data.resetDate)

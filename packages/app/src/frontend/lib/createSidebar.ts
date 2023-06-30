@@ -10,6 +10,7 @@ import {createActionButtons, createHighlightButtons} from "@front/lib/ui/action-
 import {Button} from "@front/lib/ui-elements/button";
 import {Text} from "@front/lib/ui-elements/text";
 import {systemView, universeView} from "@front/lib/UIElements";
+import {gameHeight} from "@front/lib/consts";
 
 
 export let credits: Text
@@ -19,7 +20,7 @@ export let entityInfo: Text
 export let backButton: Button
 export const createSidebar = () => {
   const sidebarContainer = new UIContainer()
-  sidebarContainer.height = 1080
+  sidebarContainer.height = gameHeight
   sidebarContainer.width = 400
   sidebarContainer.displayObject.x = 0
   sidebarContainer.displayObject.y = 0

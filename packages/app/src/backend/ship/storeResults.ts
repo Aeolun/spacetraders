@@ -189,7 +189,7 @@ export async function storeMarketInformation(data: GetMarket200Response) {
     //const exhangeGoods = data.data.exchange.map(i => i.symbol)
 
     const marketData = []
-    data.data.tradeGoods.map(good => {
+    data.data.tradeGoods?.map(good => {
         marketData.push({
             tradeGoodSymbol: good.symbol,
             kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',

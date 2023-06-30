@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE `Agent` ADD COLUMN `token` TEXT NOT NULL DEFAULT '';
+ALTER TABLE `Agent` ADD COLUMN `token` TEXT NULL;
 
 -- CreateTable
 CREATE TABLE `Contract` (

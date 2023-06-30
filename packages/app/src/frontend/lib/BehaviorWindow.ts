@@ -6,6 +6,7 @@ import {trpc} from "@front/lib/trpc";
 import {GameState} from "@front/lib/game-state";
 import type {ShipBehavior} from "@app/prisma";
 import {Switch} from "@front/lib/switch";
+import {gameWidth} from "@front/lib/consts";
 
 export class BehaviorWindow {
     public container: Container
@@ -16,7 +17,7 @@ export class BehaviorWindow {
 
     constructor() {
         this.container = new Container()
-        this.container.width = 1920 - 400
+        this.container.width = gameWidth - 400
         this.container.height = 600
         this.container.flexDirection = FlexDirection.COLUMN
         this.container.padding = 10

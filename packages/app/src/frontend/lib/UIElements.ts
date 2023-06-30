@@ -1,5 +1,5 @@
 import {Viewport} from "pixi-viewport";
-import {totalSize} from "@front/lib/consts";
+import {gameWidth, totalSize} from "@front/lib/consts";
 import {Application, BitmapText, Container, Graphics, NineSlicePlane, Point, Sprite, TilingSprite} from "pixi.js";
 import { Text} from '@front/lib/ui-elements/text'
 import {loadedAssets} from "@front/lib/assets";
@@ -139,7 +139,7 @@ export const createUIElements = (app: Application) => {
         fontSize: 18,
         align: 'right',
     })
-    currentCoordinate.x = 1920 - 166
+    currentCoordinate.x = gameWidth - 166
     currentCoordinate.y = 16
     currentCoordinate.maxWidth = 150
     uiOverlay.addChild(currentCoordinate)
@@ -149,7 +149,7 @@ export const createUIElements = (app: Application) => {
         fontSize: 18,
         align: 'right',
     })
-    fps.x = 1920 - 166
+    fps.x = gameWidth - 166
     fps.y = 40
     fps.maxWidth = 150
     uiOverlay.addChild(fps)

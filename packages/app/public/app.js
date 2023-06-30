@@ -53680,6 +53680,8 @@ var systemCoordinates = {
 var scale = {
   universe: 1
 };
+var gameWidth = window.innerWidth ?? 1920;
+var gameHeight = window.innerHeight ?? 1080;
 
 // ../../node_modules/.pnpm/pixi-viewport@5.0.1/node_modules/pixi-viewport/dist/pixi_viewport.js
 var S2 = Object.defineProperty;
@@ -55989,7 +55991,7 @@ var MarketWindow = class {
   nextColumn = 0;
   constructor() {
     this.container = new Container4();
-    this.container.width = 1920 - 400;
+    this.container.width = gameWidth - 400;
     this.container.height = 200;
     const names = ["IMPORT", "EXPORT", "EXCHANGE"];
     const columnHeaders = new Container4();
@@ -56153,7 +56155,7 @@ var BehaviorWindow = class {
   homeSystemText;
   constructor() {
     this.container = new Container4();
-    this.container.width = 1920 - 400;
+    this.container.width = gameWidth - 400;
     this.container.height = 600;
     this.container.flexDirection = 0 /* COLUMN */;
     this.container.padding = 10;
@@ -56959,8 +56961,8 @@ var availableActions = [{
 // src/frontend/lib/application.ts
 var app = new Application({
   //resizeTo: window,
-  width: 1920,
-  height: 1080,
+  width: gameWidth,
+  height: gameHeight,
   antialias: true
 });
 
@@ -57076,7 +57078,7 @@ var entityInfo;
 var backButton;
 var createSidebar = () => {
   const sidebarContainer = new Container4();
-  sidebarContainer.height = 1080;
+  sidebarContainer.height = gameHeight;
   sidebarContainer.width = 400;
   sidebarContainer.displayObject.x = 0;
   sidebarContainer.displayObject.y = 0;
@@ -57271,7 +57273,7 @@ var createUIElements = (app2) => {
     fontSize: 18,
     align: "right"
   });
-  currentCoordinate.x = 1920 - 166;
+  currentCoordinate.x = gameWidth - 166;
   currentCoordinate.y = 16;
   currentCoordinate.maxWidth = 150;
   uiOverlay.addChild(currentCoordinate);
@@ -57280,7 +57282,7 @@ var createUIElements = (app2) => {
     fontSize: 18,
     align: "right"
   });
-  fps.x = 1920 - 166;
+  fps.x = gameWidth - 166;
   fps.y = 40;
   fps.maxWidth = 150;
   uiOverlay.addChild(fps);
@@ -57942,7 +57944,7 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
           marketWindow.clearGoods();
           marketWindow.setGoods(data);
           marketWindow.container.displayObject.x = 400;
-          marketWindow.container.displayObject.y = 1080 - 200;
+          marketWindow.container.displayObject.y = gameHeight - 200;
           marketWindow.container.displayObject.visible = true;
         });
       }

@@ -4,6 +4,7 @@ import {loadedAssets} from "@front/lib/assets";
 import {MarketPrice} from "@app/prisma";
 import {Text} from "@front/lib/ui-elements/text";
 import {Container} from "@front/lib/ui-elements/container";
+import {gameWidth} from "@front/lib/consts";
 
 type ExpectedData = MarketPrice
 type MarketGoodKind = 'IMPORT' | 'EXPORT' | 'EXCHANGE'
@@ -13,7 +14,7 @@ export class MarketWindow {
     private nextColumn = 0
     constructor() {
         this.container = new Container()
-        this.container.width = 1920 - 400
+        this.container.width = gameWidth - 400
         this.container.height = 200
 
         const names: MarketGoodKind[] = ['IMPORT', 'EXPORT', 'EXCHANGE']

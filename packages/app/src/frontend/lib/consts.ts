@@ -13,3 +13,6 @@ export let systemCoordinates = {
 export const scale = {
     universe: 1
 }
+
+export const gameWidth = window.innerWidth ?? 1920
+export const gameHeight = window.innerHeight ?? 1080
