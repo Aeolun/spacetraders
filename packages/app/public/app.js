@@ -58076,10 +58076,10 @@ var MarketWindow = class {
     const fiveText = new Text2(good.tradeVolume.toString(), { align: "left", font: fontStyle });
     fiveText.width = "15%";
     flexRow.addChild(fiveText);
-    const secondText = new Text2(good.purchasePrice.toString(), { align: "left", font: fontStyle });
+    const secondText = new Text2(good.purchasePrice.toString() + " P", { align: "right", font: fontStyle });
     secondText.width = "15%";
     flexRow.addChild(secondText);
-    const thirdText = new Text2(good.sellPrice.toString(), { align: "left", font: fontStyle });
+    const thirdText = new Text2(good.sellPrice.toString() + " S", { align: "right", font: fontStyle });
     thirdText.width = "15%";
     flexRow.addChild(thirdText);
     const columns = ["IMPORT", "EXPORT", "EXCHANGE"];

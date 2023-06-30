@@ -96,10 +96,10 @@ export class MarketWindow {
         const fiveText = new Text(good.tradeVolume.toString(), {align: 'left', font: fontStyle})
         fiveText.width = '15%'
         flexRow.addChild(fiveText)
-        const secondText = new Text(good.purchasePrice.toString(), {align: 'left', font: fontStyle})
+        const secondText = new Text(good.purchasePrice.toString()+' P', {align: 'right', font: fontStyle})
         secondText.width = '15%'
         flexRow.addChild(secondText)
-        const thirdText = new Text(good.sellPrice.toString(), {align: 'left', font: fontStyle})
+        const thirdText = new Text(good.sellPrice.toString()+' S', {align: 'right', font: fontStyle})
         thirdText.width = '15%'
         flexRow.addChild(thirdText)
 
