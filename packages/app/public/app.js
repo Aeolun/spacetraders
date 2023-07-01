@@ -57526,15 +57526,15 @@ var loadUniverse = async () => {
   const jumpGraphics = new Graphics();
   for (const starData of systems) {
     const jumpGate = starData.hasJumpGate;
-    if (jumpGate) {
-      const validJumpTargets = systems.filter((s2) => getDistance(s2, starData) <= 2e3 && s2.hasJumpGate && s2.symbol !== starData.symbol);
+    if (jumpGate && starData.jumpgateRange) {
+      const validJumpTargets = systems.filter((s2) => getDistance(s2, starData) <= starData.jumpgateRange && s2.hasJumpGate && s2.symbol !== starData.symbol);
       validJumpTargets.forEach((jumpTarget) => {
         const displayCoords = convertToDisplayCoordinates(starData);
         const targetCoords = convertToDisplayCoordinates(jumpTarget);
         jumpGraphics.lineStyle({
-          width: 10,
+          width: starData.jumpgateRange / 250,
           color: 10066227,
-          alpha: 0.05
+          alpha: 0.1
         });
         jumpGraphics.moveTo(displayCoords.x, displayCoords.y);
         jumpGraphics.lineTo(targetCoords.x, targetCoords.y);

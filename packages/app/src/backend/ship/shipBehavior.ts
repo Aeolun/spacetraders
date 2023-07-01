@@ -28,20 +28,19 @@ export const startBehaviorForShip = async (symbol: string, parameters: BehaviorP
   if (!logic) {
     throw new Error(`No logic found for behavior ${kind}`)
   }
+  await prisma.ship.update({
+    where: {
+      symbol
+    },
+    data: {
+      currentBehavior: kind,
+      homeSystemSymbol: parameters.systemSymbol,
+      behaviorRange: parameters.range,
+      behaviorOnce: parameters.once
+    }
+  })
   if (!shipBehaviors[symbol]) {
     let cancelled = false;
-
-    await prisma.ship.update({
-      where: {
-        symbol
-      },
-      data: {
-        currentBehavior: kind,
-        homeSystemSymbol: parameters.systemSymbol,
-        behaviorRange: parameters.range,
-        behaviorOnce: parameters.once
-      }
-    })
 
     shipBehaviors[symbol] = {
       kind,
@@ -109,5 +108,6 @@ export const startBehaviorForShip = async (symbol: string, parameters: BehaviorP
     })
   } else {
     shipBehaviors[symbol].logic = logic
+    shipBehaviors[symbol].parameters = parameters
   }
 }

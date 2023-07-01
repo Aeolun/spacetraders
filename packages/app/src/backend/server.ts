@@ -73,7 +73,7 @@ export const appRouter = router({
         shipSymbol: z.string(),
         systemSymbol: z.string()
     })).mutation(async ({input, ctx}) => {
-        startBehaviorForShip(input.shipSymbol, {
+        await startBehaviorForShip(input.shipSymbol, {
             systemSymbol: input.systemSymbol,
             once: true
         }, ShipBehavior.TRAVEL)
@@ -291,7 +291,7 @@ export const appRouter = router({
         const api = createApi(ctx.token)
         const throttle = createOrGetAgentQueue(ctx.payload.identifier)
         const jumpgateInfo = await throttle( () => api.systems.getJumpGate(input.systemSymbol, input.waypointSymbol))
-        await storeJumpGateInformation(input.waypointSymbol, jumpgateInfo.data)
+        await storeJumpGateInformation(input.systemSymbol, input.waypointSymbol, jumpgateInfo.data)
         await defaultWayfinder.loadWaypoints()
         return jumpgateInfo.data
     }),

@@ -834,7 +834,7 @@ export class Ship {
             return this.api.systems.getJumpGate(this.currentSystemSymbol, this.currentWaypointSymbol)
         })
 
-        await storeJumpGateInformation(this.currentWaypointSymbol, res.data)
+        await storeJumpGateInformation(this.currentSystemSymbol, this.currentWaypointSymbol, res.data)
 
         return res.data.data;
     }

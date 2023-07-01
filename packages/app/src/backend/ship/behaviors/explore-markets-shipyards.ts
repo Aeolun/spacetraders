@@ -102,7 +102,9 @@ export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamete
             ship.log(`Updating ${updateSystem.waypointCount} new markets in ${updateSystem.symbol}`)
             await ship.setOverallGoal(`Updating ${updateSystem.waypointCount} new markets in ${updateSystem.symbol}`)
 
-            const success = await travelBehavior(updateSystem.symbol, ship)
+            const success = await travelBehavior(updateSystem.symbol, ship, undefined, {
+              jumpOnly: true,
+            })
             if (!success) {
                 ship.log(`Cannot navigate to ${updateSystem.symbol}`)
                 shitList.push({

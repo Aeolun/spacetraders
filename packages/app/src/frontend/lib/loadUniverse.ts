@@ -131,7 +131,7 @@ function createStar(starData: System) {
                 action: async () => {
                     await trpc.orderTravel.mutate({
                         shipSymbol: GameState.selected.symbol,
-                        systemSymbol: starData.symbol
+                        systemSymbol: starData.symbol,
                     });
                 }
             },
@@ -257,17 +257,17 @@ export const loadUniverse = async () => {
     const jumpGraphics = new Graphics()
     for(const starData of systems) {
         const jumpGate = starData.hasJumpGate
-        if (jumpGate) {
-            const validJumpTargets = systems.filter(s => getDistance(s, starData) <= 2000 && s.hasJumpGate && s.symbol !== starData.symbol)
+        if (jumpGate && starData.jumpgateRange) {
+            const validJumpTargets = systems.filter(s => getDistance(s, starData) <= starData.jumpgateRange && s.hasJumpGate && s.symbol !== starData.symbol)
 
             validJumpTargets.forEach(jumpTarget => {
                 const displayCoords = convertToDisplayCoordinates(starData)
                 const targetCoords = convertToDisplayCoordinates(jumpTarget)
 
                 jumpGraphics.lineStyle({
-                    width: 10,
+                    width: starData.jumpgateRange / 250,
                     color: 0x999933,
-                    alpha: 0.05,
+                    alpha: 0.1,
                 })
                 jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
                 jumpGraphics.lineTo(targetCoords.x, targetCoords.y)

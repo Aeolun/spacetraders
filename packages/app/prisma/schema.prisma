@@ -71,6 +71,7 @@ model System {
   x               Float
   y               Float
   hasJumpGate     Boolean    @default(false)
+  jumpgateRange   Int?
   hasMarket       Boolean    @default(false)
   hasShipyard     Boolean    @default(false)
   hasBelt         Boolean    @default(false)

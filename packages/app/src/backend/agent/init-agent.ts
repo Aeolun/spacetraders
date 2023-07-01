@@ -1,10 +1,12 @@
 import {processAgent, updateShips} from "@app/ship/updateShips";
 import createApi from "@app/lib/createApi";
+import jwtDecode from "jwt-decode";
 
 export const initAgent = async (token: string) => {
     const api = createApi(token)
 
     const res = await api.agents.getMyAgent()
+
     await processAgent(res.data.data, token)
     const agentSymbol = res.data.data.symbol
 

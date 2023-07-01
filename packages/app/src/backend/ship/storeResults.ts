@@ -145,7 +145,18 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
     }
 }
 
-export async function storeJumpGateInformation(waypointSymbol: string, data: GetJumpGate200Response) {
+export async function storeJumpGateInformation(systemSymbol: string, waypointSymbol: string, data: GetJumpGate200Response) {
+    await prisma.system.update({
+        where: {
+            symbol: systemSymbol
+        },
+        data: {
+            hasJumpGate: true,
+            jumpgateRange: data.data.jumpRange
+        }
+    })
+    console.log('save jump infomration', systemSymbol, data.data.jumpRange)
+
     await prisma.jumpgate.upsert({
         where: {
             waypointSymbol: waypointSymbol

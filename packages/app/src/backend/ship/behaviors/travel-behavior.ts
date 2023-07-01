@@ -25,10 +25,6 @@ export async function travelBehavior(toSystem: string, ship: Ship, preferredWayp
                     route = (await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem)).finalPath
                 } else {
                     route = (await defaultWayfinder.findJumpRoute(ship.currentSystemSymbol, toSystem)).finalPath
-                    if (route.length <= 0 && ship.hasWarpDrive) {
-                        ship.log(`Cannot find a route to ${toSystem} from ${ship.currentSystemSymbol} using jump gates, trying warp.`)
-                        route = (await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem)).finalPath
-                    }
                 }
 
                 if (route.length <= 0) {

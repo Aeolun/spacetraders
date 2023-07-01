@@ -61,7 +61,7 @@ class Wayfinding {
 
             if (system.hasJumpGate) {
                 systems.filter(nearbySystem => {
-                    return nearbySystem.hasJumpGate && getDistance(system, nearbySystem) <= 2000 && system.symbol !== nearbySystem.symbol
+                    return nearbySystem.hasJumpGate && getDistance(system, nearbySystem) <= system.jumpgateRange && system.symbol !== nearbySystem.symbol
                 }).forEach(connection => {
                     const systemSymbol = system.symbol
                     const toSystemSymbol = connection.symbol

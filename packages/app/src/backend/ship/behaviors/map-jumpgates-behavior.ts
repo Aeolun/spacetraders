@@ -14,7 +14,7 @@ const jumpMapTaken = new Set([] as string[])
 export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParameters) => {
     const system = await prisma.system.findFirstOrThrow({
         where: {
-            symbol: ship.currentSystemSymbol
+            symbol: parameters.systemSymbol
         }
     })
 
@@ -64,7 +64,9 @@ export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParam
         }
     })
 
-    const success = await travelBehavior(exploreSystem.symbol, ship, explorableWaypoints[0].symbol)
+    const success = await travelBehavior(exploreSystem.symbol, ship, explorableWaypoints[0].symbol, {
+        jumpOnly: true
+    })
     if (!success) {
         ship.log(`Failed to navigate to ${exploreSystem.symbol}`)
         return;
