@@ -105,6 +105,20 @@ export class BehaviorWindow {
             row.addChild(button)
             behaviorsContainer.addChild(row)
         })
+        const row = new Container()
+        row.flex = 1
+        row.flexDirection = FlexDirection.ROW
+        const button = new Button('Cancel', {
+            textSize: 16
+        }, () => {
+            trpc.cancelBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol }).then(() => {
+                alert("Behavior canceled")
+            });
+            this.hide()
+        })
+        button.flex = 1
+        row.addChild(button)
+        behaviorsContainer.addChild(row)
 
         this.container.updateLayout()
     }

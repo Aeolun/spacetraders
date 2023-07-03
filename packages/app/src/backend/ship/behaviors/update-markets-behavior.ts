@@ -45,8 +45,9 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
             and s.y < ${system.y + parameters.range}
         GROUP BY s.symbol
         HAVING MIN(mp.updatedOn) IS NULL OR MIN(mp.updatedOn) < NOW() - INTERVAL 2 HOUR
-        ORDER BY lastUpdated DESC, distance ASC;`
+        ORDER BY lastUpdated DESC, distance ASC LIMIT 50;`
 
+    console.log(list)
     ship.log(`Found ${list.length} systems that haven't been updated in the past 3 hours`)
 
     let updatable = list.filter(system => {

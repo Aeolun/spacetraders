@@ -31,6 +31,8 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
 
     const sellableCargo = cargo.cargo.filter(c => c.tradeGoodSymbol !== 'ANTIMATTER')
 
+    console.log('sellable cargo', sellableCargo)
+
     if (sellableCargo.length > 0) {
         // need to sell cargo, make a trade for that
 
@@ -156,7 +158,7 @@ order by
 creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
 
         if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
-            console.log(`No more profitable trades found.`)
+            ship.log(`No more profitable trades found.`)
             await ship.setOverallGoal('Wait for trades')
             await ship.waitUntil(new Date(Date.now() + 1000 * 60).toISOString())
             return;

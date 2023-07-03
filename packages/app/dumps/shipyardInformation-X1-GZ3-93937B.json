@@ -265,7 +265,7 @@
         "speed": 10,
         "requirements": {
           "power": 3,
-          "crew": 3
+          "crew": 3f
         }
       },
       "modules": [

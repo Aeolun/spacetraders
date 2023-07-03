@@ -56204,9 +56204,9 @@ var BehaviorWindow = class {
     behaviorsContainer.flex = 1;
     this.container.addChild(behaviorsContainer);
     behaviors.forEach((behavior) => {
-      const row = new Container4();
-      row.flex = 1;
-      row.flexDirection = 2 /* ROW */;
+      const row2 = new Container4();
+      row2.flex = 1;
+      row2.flexDirection = 2 /* ROW */;
       const texts = [behavior.symbol, behavior.name, behavior.description];
       texts.forEach((textString) => {
         const text = new Text2(textString, {
@@ -56217,9 +56217,9 @@ var BehaviorWindow = class {
           }
         });
         text.flex = 1;
-        row.addChild(text);
+        row2.addChild(text);
       });
-      const button = new Button("Activate", {
+      const button2 = new Button("Activate", {
         textSize: 16
       }, () => {
         trpc.startBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol, behavior: behavior.symbol, parameters: {
@@ -56230,10 +56230,24 @@ var BehaviorWindow = class {
           this.hide();
         });
       });
-      button.flex = 1;
-      row.addChild(button);
-      behaviorsContainer.addChild(row);
+      button2.flex = 1;
+      row2.addChild(button2);
+      behaviorsContainer.addChild(row2);
     });
+    const row = new Container4();
+    row.flex = 1;
+    row.flexDirection = 2 /* ROW */;
+    const button = new Button("Cancel", {
+      textSize: 16
+    }, () => {
+      trpc.cancelBehaviorForShip.mutate({ shipSymbol: GameState.selected.symbol }).then(() => {
+        alert("Behavior canceled");
+      });
+      this.hide();
+    });
+    button.flex = 1;
+    row.addChild(button);
+    behaviorsContainer.addChild(row);
     this.container.updateLayout();
   }
   show() {
