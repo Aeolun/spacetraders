@@ -15,25 +15,40 @@
 
 
 /**
- * Type of ship
+ * Result of a transaction for a ship modification, such as installing a mount or a module.
  * @export
- * @enum {string}
+ * @interface ShipModificationTransaction
  */
-
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
-} as const;
-
-export type ShipType = typeof ShipType[keyof typeof ShipType];
-
-
+export interface ShipModificationTransaction {
+    /**
+     * The symbol of the waypoint where the transaction took place.
+     * @type {string}
+     * @memberof ShipModificationTransaction
+     */
+    'waypointSymbol': string;
+    /**
+     * The symbol of the ship that made the transaction.
+     * @type {string}
+     * @memberof ShipModificationTransaction
+     */
+    'shipSymbol': string;
+    /**
+     * The symbol of the trade good.
+     * @type {string}
+     * @memberof ShipModificationTransaction
+     */
+    'tradeSymbol': string;
+    /**
+     * The total price of the transaction.
+     * @type {number}
+     * @memberof ShipModificationTransaction
+     */
+    'totalPrice': number;
+    /**
+     * The timestamp of the transaction.
+     * @type {string}
+     * @memberof ShipModificationTransaction
+     */
+    'timestamp': string;
+}
 

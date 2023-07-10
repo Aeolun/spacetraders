@@ -40,9 +40,9 @@ import { GetContracts200Response } from '../models';
 export const ContractsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Accept a contract.
+         * Accept a contract by ID.   You can only accept contracts that were offered to you, were not accepted yet, and whose deadlines has not passed yet.
          * @summary Accept Contract
-         * @param {string} contractId 
+         * @param {string} contractId The contract ID to accept.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -78,9 +78,9 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Deliver cargo on a given contract.
-         * @summary Deliver Contract
-         * @param {string} contractId The ID of the contract
+         * Deliver cargo to a contract.  In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.  Cargo that was delivered will be removed from the ship\'s cargo.
+         * @summary Deliver Cargo to Contract
+         * @param {string} contractId The ID of the contract.
          * @param {DeliverContractRequest} [deliverContractRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -120,9 +120,9 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Fulfill a contract
+         * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
          * @summary Fulfill Contract
-         * @param {string} contractId The ID of the contract
+         * @param {string} contractId The ID of the contract to fulfill.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -196,7 +196,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * List all of your contracts.
+         * Return a paginated list of all your contracts.
          * @summary List Contracts
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -250,9 +250,9 @@ export const ContractsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ContractsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Accept a contract.
+         * Accept a contract by ID.   You can only accept contracts that were offered to you, were not accepted yet, and whose deadlines has not passed yet.
          * @summary Accept Contract
-         * @param {string} contractId 
+         * @param {string} contractId The contract ID to accept.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -261,9 +261,9 @@ export const ContractsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Deliver cargo on a given contract.
-         * @summary Deliver Contract
-         * @param {string} contractId The ID of the contract
+         * Deliver cargo to a contract.  In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.  Cargo that was delivered will be removed from the ship\'s cargo.
+         * @summary Deliver Cargo to Contract
+         * @param {string} contractId The ID of the contract.
          * @param {DeliverContractRequest} [deliverContractRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -273,9 +273,9 @@ export const ContractsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Fulfill a contract
+         * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
          * @summary Fulfill Contract
-         * @param {string} contractId The ID of the contract
+         * @param {string} contractId The ID of the contract to fulfill.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -295,7 +295,7 @@ export const ContractsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * List all of your contracts.
+         * Return a paginated list of all your contracts.
          * @summary List Contracts
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -317,9 +317,9 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     const localVarFp = ContractsApiFp(configuration)
     return {
         /**
-         * Accept a contract.
+         * Accept a contract by ID.   You can only accept contracts that were offered to you, were not accepted yet, and whose deadlines has not passed yet.
          * @summary Accept Contract
-         * @param {string} contractId 
+         * @param {string} contractId The contract ID to accept.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -327,9 +327,9 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
             return localVarFp.acceptContract(contractId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Deliver cargo on a given contract.
-         * @summary Deliver Contract
-         * @param {string} contractId The ID of the contract
+         * Deliver cargo to a contract.  In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.  Cargo that was delivered will be removed from the ship\'s cargo.
+         * @summary Deliver Cargo to Contract
+         * @param {string} contractId The ID of the contract.
          * @param {DeliverContractRequest} [deliverContractRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -338,9 +338,9 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
             return localVarFp.deliverContract(contractId, deliverContractRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Fulfill a contract
+         * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
          * @summary Fulfill Contract
-         * @param {string} contractId The ID of the contract
+         * @param {string} contractId The ID of the contract to fulfill.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -358,7 +358,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
             return localVarFp.getContract(contractId, options).then((request) => request(axios, basePath));
         },
         /**
-         * List all of your contracts.
+         * Return a paginated list of all your contracts.
          * @summary List Contracts
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -379,9 +379,9 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
  */
 export class ContractsApi extends BaseAPI {
     /**
-     * Accept a contract.
+     * Accept a contract by ID.   You can only accept contracts that were offered to you, were not accepted yet, and whose deadlines has not passed yet.
      * @summary Accept Contract
-     * @param {string} contractId 
+     * @param {string} contractId The contract ID to accept.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ContractsApi
@@ -391,9 +391,9 @@ export class ContractsApi extends BaseAPI {
     }
 
     /**
-     * Deliver cargo on a given contract.
-     * @summary Deliver Contract
-     * @param {string} contractId The ID of the contract
+     * Deliver cargo to a contract.  In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.  Cargo that was delivered will be removed from the ship\'s cargo.
+     * @summary Deliver Cargo to Contract
+     * @param {string} contractId The ID of the contract.
      * @param {DeliverContractRequest} [deliverContractRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -404,9 +404,9 @@ export class ContractsApi extends BaseAPI {
     }
 
     /**
-     * Fulfill a contract
+     * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
      * @summary Fulfill Contract
-     * @param {string} contractId The ID of the contract
+     * @param {string} contractId The ID of the contract to fulfill.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ContractsApi
@@ -428,7 +428,7 @@ export class ContractsApi extends BaseAPI {
     }
 
     /**
-     * List all of your contracts.
+     * Return a paginated list of all your contracts.
      * @summary List Contracts
      * @param {number} [page] What entry offset to request
      * @param {number} [limit] How many entries to return per page

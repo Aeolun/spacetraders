@@ -21,19 +21,19 @@
  */
 export interface DeliverContractRequest {
     /**
-     * 
+     * Symbol of a ship located in the destination to deliver a contract and that has a good to deliver in its cargo.
      * @type {string}
      * @memberof DeliverContractRequest
      */
     'shipSymbol': string;
     /**
-     * 
+     * The symbol of the good to deliver.
      * @type {string}
      * @memberof DeliverContractRequest
      */
     'tradeSymbol': string;
     /**
-     * 
+     * Amount of units to deliver.
      * @type {number}
      * @memberof DeliverContractRequest
      */

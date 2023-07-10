@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { TradeSymbol } from './trade-symbol';
 
 /**
  * 
@@ -22,15 +25,17 @@
 export interface JettisonRequest {
     /**
      * 
-     * @type {string}
+     * @type {TradeSymbol}
      * @memberof JettisonRequest
      */
-    'symbol': string;
+    'symbol': TradeSymbol;
     /**
-     * 
+     * Amount of units to jettison of this good.
      * @type {number}
      * @memberof JettisonRequest
      */
     'units': number;
 }
+
+
 

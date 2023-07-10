@@ -18,7 +18,7 @@
 import { TradeSymbol } from './trade-symbol';
 
 /**
- * 
+ * A good that can be traded for other goods or currency.
  * @export
  * @interface TradeGood
  */
@@ -30,13 +30,13 @@ export interface TradeGood {
      */
     'symbol': TradeSymbol;
     /**
-     * 
+     * The name of the good.
      * @type {string}
      * @memberof TradeGood
      */
     'name': string;
     /**
-     * 
+     * The description of the good.
      * @type {string}
      * @memberof TradeGood
      */

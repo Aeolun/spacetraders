@@ -18,7 +18,7 @@
 import { ShipCargoItem } from './ship-cargo-item';
 
 /**
- * 
+ * Ship cargo details.
  * @export
  * @interface ShipCargo
  */

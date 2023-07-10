@@ -75,7 +75,7 @@ export interface ScannedShip {
      */
     'engine': ScannedShipEngine;
     /**
-     * 
+     * List of mounts installed in the ship.
      * @type {Array<ScannedShipMountsInner>}
      * @memberof ScannedShip
      */

@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The good\'s symbol.
  * @export
  * @enum {string}
  */

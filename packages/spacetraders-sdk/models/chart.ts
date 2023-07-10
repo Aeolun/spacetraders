@@ -21,19 +21,19 @@
  */
 export interface Chart {
     /**
-     * 
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof Chart
      */
     'waypointSymbol'?: string;
     /**
-     * 
+     * The agent that submitted the chart for this waypoint.
      * @type {string}
      * @memberof Chart
      */
     'submittedBy'?: string;
     /**
-     * 
+     * The time the chart for this waypoint was submitted.
      * @type {string}
      * @memberof Chart
      */

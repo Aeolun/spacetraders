@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Result of a transaction with a market.
  * @export
  * @interface MarketTransaction
  */

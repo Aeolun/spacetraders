@@ -82,6 +82,8 @@ import { PurchaseShipRequest } from '../models';
 // @ts-ignore
 import { RefuelShip200Response } from '../models';
 // @ts-ignore
+import { RefuelShipRequest } from '../models';
+// @ts-ignore
 import { RemoveMount201Response } from '../models';
 // @ts-ignore
 import { RemoveMountRequest } from '../models';
@@ -90,7 +92,7 @@ import { SellCargo201Response } from '../models';
 // @ts-ignore
 import { SellCargoRequest } from '../models';
 // @ts-ignore
-import { ShipRefine200Response } from '../models';
+import { ShipRefine201Response } from '../models';
 // @ts-ignore
 import { ShipRefineRequest } from '../models';
 // @ts-ignore
@@ -104,9 +106,9 @@ import { TransferCargoRequest } from '../models';
 export const FleetApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Command a ship to chart the current waypoint.  Waypoints in the universe are uncharted by default. These locations will not show up in the API until they have been charted by a ship.  Charting a location will record your agent as the one who created the chart.
+         * Command a ship to chart the waypoint at its current location.  Most waypoints in the universe are uncharted by default. These waypoints have their traits hidden until they have been charted by a ship.  Charting a waypoint will record your agent as the one who created the chart, and all other agents would also be able to see the waypoint\'s traits.
          * @summary Create Chart
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -142,9 +144,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for ship information.
+         * Scan for nearby ships, retrieving information for all ships in range.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Ships
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -180,9 +182,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for system information.
+         * Scan for nearby systems, retrieving information on the systems\' distance from the ship and their waypoints. Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Systems
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -218,9 +220,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for waypoint information.
+         * Scan for nearby waypoints, retrieving detailed information on each waypoint in range. Scanning uncharted waypoints will allow you to ignore their uncharted state and will list the waypoints\' traits.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Waypoints
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -256,9 +258,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * If you want to target specific yields for an extraction, you can survey a waypoint, such as an asteroid field, and send the survey in the body of the extract request. Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown between consecutive survey requests. Surveys will eventually expire after a period of time. Multiple ships can use the same survey for extraction.
+         * Create surveys on a waypoint that can be extracted such as asteroid fields. A survey focuses on specific types of deposits from the extracted location. When ships extract using this survey, they are guaranteed to procure a high amount of one of the goods in the survey.  In order to use a survey, send the entire survey details in the body of the extract request.  Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown after surveying in which it is unable to perform certain actions. Surveys will eventually expire after a period of time or will be exhausted after being extracted several times based on the survey\'s size. Multiple ships can use the same survey for extraction.  A ship must have the `Surveyor` mount installed in order to use this function.
          * @summary Create Survey
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -294,9 +296,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Attempt to dock your ship at it\'s current location. Docking will only succeed if the waypoint is a dockable location, and your ship is capable of docking at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
+         * Attempt to dock your ship at its current location. Docking will only succeed if your ship is capable of docking at the time of the request.  Docked ships can access elements in their current location, such as the market or a shipyard, but cannot do actions that require the ship to be above surface such as navigating or extracting.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
          * @summary Dock Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -332,9 +334,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Extract resources from the waypoint into your ship. Send an optional survey as the payload to target specific yields.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
          * @summary Extract Resources
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -374,9 +376,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get the mounts on a ship.
+         * Get the mounts installed on a ship.
          * @summary Get Mounts
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -412,9 +414,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieve the details of your ship.
+         * Retrieve the details of a ship under your agent\'s ownership.
          * @summary Get Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -450,9 +452,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieve the cargo of your ship.
+         * Retrieve the cargo of a ship under your agent\'s ownership.
          * @summary Get Ship Cargo
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -488,7 +490,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieve all of your ships.
+         * Return a paginated list of all of ships under your agent\'s ownership.
          * @summary List Ships
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -534,7 +536,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
          * @summary Get Ship Cooldown
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -572,7 +574,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Get the current nav status of a ship.
          * @summary Get Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -608,9 +610,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Install a mount on a ship.
+         * Install a mount on a ship.  In order to install a mount, the ship must be docked and located in a waypoint that has a `Shipyard` trait. The ship also must have the mount to install in its cargo hold.  An installation fee will be deduced by the Shipyard for installing the mount on the ship. 
          * @summary Install Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {InstallMountRequest} [installMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -652,7 +654,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Jettison cargo from your ship\'s cargo hold.
          * @summary Jettison Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JettisonRequest} [jettisonRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -692,9 +694,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
+         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
          * @summary Jump Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -734,9 +736,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Navigate to a target destination. The destination must be located within the same system as the ship. Navigating will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s warp or jump actions.
+         * Navigate to a target destination. The ship must be in orbit to use this function. The destination waypoint must be within the same system as the ship\'s current location. Navigating will consume the necessary fuel from the ship\'s manifest based on the distance to the target waypoint.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s Warp or Jump actions.
          * @summary Navigate Ship
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -776,14 +778,13 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
          * @summary Negotiate Contract
-         * @param {string} shipSymbol 
-         * @param {any} [body] 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        negotiateContract: async (shipSymbol: string, body?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        negotiateContract: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'shipSymbol' is not null or undefined
             assertParamExists('negotiateContract', 'shipSymbol', shipSymbol)
             const localVarPath = `/my/ships/{shipSymbol}/negotiate/contract`
@@ -805,12 +806,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -818,9 +816,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Attempt to move your ship into orbit at it\'s current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
+         * Attempt to move your ship into orbit at its current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  Orbiting ships are able to do actions that require the ship to be above surface such as navigating or extracting, but cannot access elements in their current waypoint, such as the market or a shipyard.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
          * @summary Orbit Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -856,9 +854,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Update the nav data of a ship, such as the flight mode.
+         * Update the nav configuration of a ship.  Currently only supports configuring the Flight Mode of the ship, which affects its speed and fuel consumption.
          * @summary Patch Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {PatchShipNavRequest} [patchShipNavRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -898,9 +896,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Purchase cargo.
+         * Purchase cargo from a market.  The ship must be docked in a waypoint that has `Marketplace` trait, and the market must be selling a good to be able to purchase it.  The maximum amount of units of a good that can be purchased in each transaction are denoted by the `tradeVolume` value of the good, which can be viewed by using the Get Market action.  Purchased goods are added to the ship\'s cargo hold.
          * @summary Purchase Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {PurchaseCargoRequest} [purchaseCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -940,7 +938,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Purchase a ship
+         * Purchase a ship from a Shipyard. In order to use this function, a ship under your agent\'s ownership must be in a waypoint that has the `Shipyard` trait, and the Shipyard must sell the type of the desired ship.  Shipyards typically offer ship types, which are predefined templates of ships that have dedicated roles. A template comes with a preset of an engine, a reactor, and a frame. It may also include a few modules and mounts.
          * @summary Purchase Ship
          * @param {PurchaseShipRequest} [purchaseShipRequest] 
          * @param {*} [options] Override http request option.
@@ -978,13 +976,14 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Refuel your ship from the local market.
+         * Refuel your ship by buying fuel from the local market.  Requires the ship to be docked in a waypoint that has the `Marketplace` trait, and the market must be selling fuel in order to refuel.  Each fuel bought from the market replenishes 100 units in your ship\'s fuel.  Ships will always be refuel to their frame\'s maximum fuel capacity when using this action.
          * @summary Refuel Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
+         * @param {RefuelShipRequest} [refuelShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refuelShip: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        refuelShip: async (shipSymbol: string, refuelShipRequest?: RefuelShipRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'shipSymbol' is not null or undefined
             assertParamExists('refuelShip', 'shipSymbol', shipSymbol)
             const localVarPath = `/my/ships/{shipSymbol}/refuel`
@@ -1006,9 +1005,12 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(refuelShipRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1016,9 +1018,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Remove a mount from a ship.
+         * Remove a mount from a ship.  The ship must be docked in a waypoint that has the `Shipyard` trait, and must have the desired mount that it wish to remove installed.  A removal fee will be deduced from the agent by the Shipyard.
          * @summary Remove Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {RemoveMountRequest} [removeMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1058,9 +1060,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Sell cargo.
+         * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol Symbol of a ship.
          * @param {SellCargoRequest} [sellCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1100,9 +1102,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.
+         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request. In order to be able to refine, a ship must have goods that can be refined and have installed a `Refinery` module that can refine it.  When refining, 30 basic goods will be converted into 10 processed goods.
          * @summary Ship Refine
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {ShipRefineRequest} [shipRefineRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1142,9 +1144,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Transfer cargo between ships.
+         * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
          * @summary Transfer Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The transferring ship\&#39;s symbol.
          * @param {TransferCargoRequest} [transferCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1184,9 +1186,9 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Warp your ship to a target destination in another system. Warping will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.
+         * Warp your ship to a target destination in another system. The ship must be in orbit to use this function and must have the `Warp Drive` module installed. Warping will consume the necessary fuel from the ship\'s manifest.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at its destination.
          * @summary Warp Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1236,9 +1238,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = FleetApiAxiosParamCreator(configuration)
     return {
         /**
-         * Command a ship to chart the current waypoint.  Waypoints in the universe are uncharted by default. These locations will not show up in the API until they have been charted by a ship.  Charting a location will record your agent as the one who created the chart.
+         * Command a ship to chart the waypoint at its current location.  Most waypoints in the universe are uncharted by default. These waypoints have their traits hidden until they have been charted by a ship.  Charting a waypoint will record your agent as the one who created the chart, and all other agents would also be able to see the waypoint\'s traits.
          * @summary Create Chart
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1247,9 +1249,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for ship information.
+         * Scan for nearby ships, retrieving information for all ships in range.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Ships
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1258,9 +1260,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for system information.
+         * Scan for nearby systems, retrieving information on the systems\' distance from the ship and their waypoints. Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Systems
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1269,9 +1271,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for waypoint information.
+         * Scan for nearby waypoints, retrieving detailed information on each waypoint in range. Scanning uncharted waypoints will allow you to ignore their uncharted state and will list the waypoints\' traits.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Waypoints
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1280,9 +1282,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * If you want to target specific yields for an extraction, you can survey a waypoint, such as an asteroid field, and send the survey in the body of the extract request. Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown between consecutive survey requests. Surveys will eventually expire after a period of time. Multiple ships can use the same survey for extraction.
+         * Create surveys on a waypoint that can be extracted such as asteroid fields. A survey focuses on specific types of deposits from the extracted location. When ships extract using this survey, they are guaranteed to procure a high amount of one of the goods in the survey.  In order to use a survey, send the entire survey details in the body of the extract request.  Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown after surveying in which it is unable to perform certain actions. Surveys will eventually expire after a period of time or will be exhausted after being extracted several times based on the survey\'s size. Multiple ships can use the same survey for extraction.  A ship must have the `Surveyor` mount installed in order to use this function.
          * @summary Create Survey
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1291,9 +1293,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Attempt to dock your ship at it\'s current location. Docking will only succeed if the waypoint is a dockable location, and your ship is capable of docking at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
+         * Attempt to dock your ship at its current location. Docking will only succeed if your ship is capable of docking at the time of the request.  Docked ships can access elements in their current location, such as the market or a shipyard, but cannot do actions that require the ship to be above surface such as navigating or extracting.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
          * @summary Dock Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1302,9 +1304,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Extract resources from the waypoint into your ship. Send an optional survey as the payload to target specific yields.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
          * @summary Extract Resources
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1314,9 +1316,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get the mounts on a ship.
+         * Get the mounts installed on a ship.
          * @summary Get Mounts
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1325,9 +1327,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve the details of your ship.
+         * Retrieve the details of a ship under your agent\'s ownership.
          * @summary Get Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1336,9 +1338,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve the cargo of your ship.
+         * Retrieve the cargo of a ship under your agent\'s ownership.
          * @summary Get Ship Cargo
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1347,7 +1349,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve all of your ships.
+         * Return a paginated list of all of ships under your agent\'s ownership.
          * @summary List Ships
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -1361,7 +1363,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
         /**
          * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
          * @summary Get Ship Cooldown
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1372,7 +1374,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
         /**
          * Get the current nav status of a ship.
          * @summary Get Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1381,9 +1383,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Install a mount on a ship.
+         * Install a mount on a ship.  In order to install a mount, the ship must be docked and located in a waypoint that has a `Shipyard` trait. The ship also must have the mount to install in its cargo hold.  An installation fee will be deduced by the Shipyard for installing the mount on the ship. 
          * @summary Install Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {InstallMountRequest} [installMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1395,7 +1397,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
         /**
          * Jettison cargo from your ship\'s cargo hold.
          * @summary Jettison Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JettisonRequest} [jettisonRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1405,9 +1407,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
+         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
          * @summary Jump Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1417,9 +1419,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Navigate to a target destination. The destination must be located within the same system as the ship. Navigating will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s warp or jump actions.
+         * Navigate to a target destination. The ship must be in orbit to use this function. The destination waypoint must be within the same system as the ship\'s current location. Navigating will consume the necessary fuel from the ship\'s manifest based on the distance to the target waypoint.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s Warp or Jump actions.
          * @summary Navigate Ship
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1429,21 +1431,20 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
          * @summary Negotiate Contract
-         * @param {string} shipSymbol 
-         * @param {any} [body] 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async negotiateContract(shipSymbol: string, body?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NegotiateContract200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.negotiateContract(shipSymbol, body, options);
+        async negotiateContract(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NegotiateContract200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.negotiateContract(shipSymbol, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Attempt to move your ship into orbit at it\'s current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
+         * Attempt to move your ship into orbit at its current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  Orbiting ships are able to do actions that require the ship to be above surface such as navigating or extracting, but cannot access elements in their current waypoint, such as the market or a shipyard.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
          * @summary Orbit Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1452,9 +1453,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Update the nav data of a ship, such as the flight mode.
+         * Update the nav configuration of a ship.  Currently only supports configuring the Flight Mode of the ship, which affects its speed and fuel consumption.
          * @summary Patch Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {PatchShipNavRequest} [patchShipNavRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1464,9 +1465,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Purchase cargo.
+         * Purchase cargo from a market.  The ship must be docked in a waypoint that has `Marketplace` trait, and the market must be selling a good to be able to purchase it.  The maximum amount of units of a good that can be purchased in each transaction are denoted by the `tradeVolume` value of the good, which can be viewed by using the Get Market action.  Purchased goods are added to the ship\'s cargo hold.
          * @summary Purchase Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {PurchaseCargoRequest} [purchaseCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1476,7 +1477,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Purchase a ship
+         * Purchase a ship from a Shipyard. In order to use this function, a ship under your agent\'s ownership must be in a waypoint that has the `Shipyard` trait, and the Shipyard must sell the type of the desired ship.  Shipyards typically offer ship types, which are predefined templates of ships that have dedicated roles. A template comes with a preset of an engine, a reactor, and a frame. It may also include a few modules and mounts.
          * @summary Purchase Ship
          * @param {PurchaseShipRequest} [purchaseShipRequest] 
          * @param {*} [options] Override http request option.
@@ -1487,20 +1488,21 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Refuel your ship from the local market.
+         * Refuel your ship by buying fuel from the local market.  Requires the ship to be docked in a waypoint that has the `Marketplace` trait, and the market must be selling fuel in order to refuel.  Each fuel bought from the market replenishes 100 units in your ship\'s fuel.  Ships will always be refuel to their frame\'s maximum fuel capacity when using this action.
          * @summary Refuel Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
+         * @param {RefuelShipRequest} [refuelShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async refuelShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefuelShip200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.refuelShip(shipSymbol, options);
+        async refuelShip(shipSymbol: string, refuelShipRequest?: RefuelShipRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefuelShip200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refuelShip(shipSymbol, refuelShipRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Remove a mount from a ship.
+         * Remove a mount from a ship.  The ship must be docked in a waypoint that has the `Shipyard` trait, and must have the desired mount that it wish to remove installed.  A removal fee will be deduced from the agent by the Shipyard.
          * @summary Remove Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {RemoveMountRequest} [removeMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1510,9 +1512,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Sell cargo.
+         * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol Symbol of a ship.
          * @param {SellCargoRequest} [sellCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1522,21 +1524,21 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.
+         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request. In order to be able to refine, a ship must have goods that can be refined and have installed a `Refinery` module that can refine it.  When refining, 30 basic goods will be converted into 10 processed goods.
          * @summary Ship Refine
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {ShipRefineRequest} [shipRefineRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShipRefine200Response>> {
+        async shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShipRefine201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shipRefine(shipSymbol, shipRefineRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Transfer cargo between ships.
+         * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
          * @summary Transfer Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The transferring ship\&#39;s symbol.
          * @param {TransferCargoRequest} [transferCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1546,9 +1548,9 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Warp your ship to a target destination in another system. Warping will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.
+         * Warp your ship to a target destination in another system. The ship must be in orbit to use this function and must have the `Warp Drive` module installed. Warping will consume the necessary fuel from the ship\'s manifest.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at its destination.
          * @summary Warp Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1568,9 +1570,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = FleetApiFp(configuration)
     return {
         /**
-         * Command a ship to chart the current waypoint.  Waypoints in the universe are uncharted by default. These locations will not show up in the API until they have been charted by a ship.  Charting a location will record your agent as the one who created the chart.
+         * Command a ship to chart the waypoint at its current location.  Most waypoints in the universe are uncharted by default. These waypoints have their traits hidden until they have been charted by a ship.  Charting a waypoint will record your agent as the one who created the chart, and all other agents would also be able to see the waypoint\'s traits.
          * @summary Create Chart
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1578,9 +1580,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createChart(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for ship information.
+         * Scan for nearby ships, retrieving information for all ships in range.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Ships
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1588,9 +1590,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createShipShipScan(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for system information.
+         * Scan for nearby systems, retrieving information on the systems\' distance from the ship and their waypoints. Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Systems
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1598,9 +1600,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createShipSystemScan(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Activate your ship\'s sensor arrays to scan for waypoint information.
+         * Scan for nearby waypoints, retrieving detailed information on each waypoint in range. Scanning uncharted waypoints will allow you to ignore their uncharted state and will list the waypoints\' traits.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
          * @summary Scan Waypoints
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1608,9 +1610,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createShipWaypointScan(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * If you want to target specific yields for an extraction, you can survey a waypoint, such as an asteroid field, and send the survey in the body of the extract request. Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown between consecutive survey requests. Surveys will eventually expire after a period of time. Multiple ships can use the same survey for extraction.
+         * Create surveys on a waypoint that can be extracted such as asteroid fields. A survey focuses on specific types of deposits from the extracted location. When ships extract using this survey, they are guaranteed to procure a high amount of one of the goods in the survey.  In order to use a survey, send the entire survey details in the body of the extract request.  Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown after surveying in which it is unable to perform certain actions. Surveys will eventually expire after a period of time or will be exhausted after being extracted several times based on the survey\'s size. Multiple ships can use the same survey for extraction.  A ship must have the `Surveyor` mount installed in order to use this function.
          * @summary Create Survey
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1618,9 +1620,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createSurvey(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Attempt to dock your ship at it\'s current location. Docking will only succeed if the waypoint is a dockable location, and your ship is capable of docking at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
+         * Attempt to dock your ship at its current location. Docking will only succeed if your ship is capable of docking at the time of the request.  Docked ships can access elements in their current location, such as the market or a shipyard, but cannot do actions that require the ship to be above surface such as navigating or extracting.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
          * @summary Dock Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1628,9 +1630,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.dockShip(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Extract resources from the waypoint into your ship. Send an optional survey as the payload to target specific yields.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
          * @summary Extract Resources
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1639,9 +1641,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.extractResources(shipSymbol, extractResourcesRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get the mounts on a ship.
+         * Get the mounts installed on a ship.
          * @summary Get Mounts
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1649,9 +1651,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getMounts(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve the details of your ship.
+         * Retrieve the details of a ship under your agent\'s ownership.
          * @summary Get Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1659,9 +1661,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getMyShip(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve the cargo of your ship.
+         * Retrieve the cargo of a ship under your agent\'s ownership.
          * @summary Get Ship Cargo
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1669,7 +1671,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getMyShipCargo(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve all of your ships.
+         * Return a paginated list of all of ships under your agent\'s ownership.
          * @summary List Ships
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
@@ -1682,7 +1684,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
         /**
          * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
          * @summary Get Ship Cooldown
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1692,7 +1694,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
         /**
          * Get the current nav status of a ship.
          * @summary Get Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1700,9 +1702,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getShipNav(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Install a mount on a ship.
+         * Install a mount on a ship.  In order to install a mount, the ship must be docked and located in a waypoint that has a `Shipyard` trait. The ship also must have the mount to install in its cargo hold.  An installation fee will be deduced by the Shipyard for installing the mount on the ship. 
          * @summary Install Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {InstallMountRequest} [installMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1713,7 +1715,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
         /**
          * Jettison cargo from your ship\'s cargo hold.
          * @summary Jettison Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JettisonRequest} [jettisonRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1722,9 +1724,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.jettison(shipSymbol, jettisonRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
+         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
          * @summary Jump Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1733,9 +1735,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.jumpShip(shipSymbol, jumpShipRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Navigate to a target destination. The destination must be located within the same system as the ship. Navigating will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s warp or jump actions.
+         * Navigate to a target destination. The ship must be in orbit to use this function. The destination waypoint must be within the same system as the ship\'s current location. Navigating will consume the necessary fuel from the ship\'s manifest based on the distance to the target waypoint.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s Warp or Jump actions.
          * @summary Navigate Ship
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1744,20 +1746,19 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.navigateShip(shipSymbol, navigateShipRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
          * @summary Negotiate Contract
-         * @param {string} shipSymbol 
-         * @param {any} [body] 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        negotiateContract(shipSymbol: string, body?: any, options?: any): AxiosPromise<NegotiateContract200Response> {
-            return localVarFp.negotiateContract(shipSymbol, body, options).then((request) => request(axios, basePath));
+        negotiateContract(shipSymbol: string, options?: any): AxiosPromise<NegotiateContract200Response> {
+            return localVarFp.negotiateContract(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Attempt to move your ship into orbit at it\'s current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
+         * Attempt to move your ship into orbit at its current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  Orbiting ships are able to do actions that require the ship to be above surface such as navigating or extracting, but cannot access elements in their current waypoint, such as the market or a shipyard.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
          * @summary Orbit Ship
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1765,9 +1766,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orbitShip(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update the nav data of a ship, such as the flight mode.
+         * Update the nav configuration of a ship.  Currently only supports configuring the Flight Mode of the ship, which affects its speed and fuel consumption.
          * @summary Patch Ship Nav
-         * @param {string} shipSymbol The ship symbol
+         * @param {string} shipSymbol The ship symbol.
          * @param {PatchShipNavRequest} [patchShipNavRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1776,9 +1777,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.patchShipNav(shipSymbol, patchShipNavRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Purchase cargo.
+         * Purchase cargo from a market.  The ship must be docked in a waypoint that has `Marketplace` trait, and the market must be selling a good to be able to purchase it.  The maximum amount of units of a good that can be purchased in each transaction are denoted by the `tradeVolume` value of the good, which can be viewed by using the Get Market action.  Purchased goods are added to the ship\'s cargo hold.
          * @summary Purchase Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {PurchaseCargoRequest} [purchaseCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1787,7 +1788,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.purchaseCargo(shipSymbol, purchaseCargoRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Purchase a ship
+         * Purchase a ship from a Shipyard. In order to use this function, a ship under your agent\'s ownership must be in a waypoint that has the `Shipyard` trait, and the Shipyard must sell the type of the desired ship.  Shipyards typically offer ship types, which are predefined templates of ships that have dedicated roles. A template comes with a preset of an engine, a reactor, and a frame. It may also include a few modules and mounts.
          * @summary Purchase Ship
          * @param {PurchaseShipRequest} [purchaseShipRequest] 
          * @param {*} [options] Override http request option.
@@ -1797,19 +1798,20 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.purchaseShip(purchaseShipRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Refuel your ship from the local market.
+         * Refuel your ship by buying fuel from the local market.  Requires the ship to be docked in a waypoint that has the `Marketplace` trait, and the market must be selling fuel in order to refuel.  Each fuel bought from the market replenishes 100 units in your ship\'s fuel.  Ships will always be refuel to their frame\'s maximum fuel capacity when using this action.
          * @summary Refuel Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
+         * @param {RefuelShipRequest} [refuelShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refuelShip(shipSymbol: string, options?: any): AxiosPromise<RefuelShip200Response> {
-            return localVarFp.refuelShip(shipSymbol, options).then((request) => request(axios, basePath));
+        refuelShip(shipSymbol: string, refuelShipRequest?: RefuelShipRequest, options?: any): AxiosPromise<RefuelShip200Response> {
+            return localVarFp.refuelShip(shipSymbol, refuelShipRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Remove a mount from a ship.
+         * Remove a mount from a ship.  The ship must be docked in a waypoint that has the `Shipyard` trait, and must have the desired mount that it wish to remove installed.  A removal fee will be deduced from the agent by the Shipyard.
          * @summary Remove Mount
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {RemoveMountRequest} [removeMountRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1818,9 +1820,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.removeMount(shipSymbol, removeMountRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Sell cargo.
+         * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol Symbol of a ship.
          * @param {SellCargoRequest} [sellCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1829,20 +1831,20 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.sellCargo(shipSymbol, sellCargoRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.
+         * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request. In order to be able to refine, a ship must have goods that can be refined and have installed a `Refinery` module that can refine it.  When refining, 30 basic goods will be converted into 10 processed goods.
          * @summary Ship Refine
-         * @param {string} shipSymbol The symbol of the ship
+         * @param {string} shipSymbol The symbol of the ship.
          * @param {ShipRefineRequest} [shipRefineRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: any): AxiosPromise<ShipRefine200Response> {
+        shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: any): AxiosPromise<ShipRefine201Response> {
             return localVarFp.shipRefine(shipSymbol, shipRefineRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Transfer cargo between ships.
+         * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
          * @summary Transfer Cargo
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The transferring ship\&#39;s symbol.
          * @param {TransferCargoRequest} [transferCargoRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1851,9 +1853,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.transferCargo(shipSymbol, transferCargoRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Warp your ship to a target destination in another system. Warping will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.
+         * Warp your ship to a target destination in another system. The ship must be in orbit to use this function and must have the `Warp Drive` module installed. Warping will consume the necessary fuel from the ship\'s manifest.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at its destination.
          * @summary Warp Ship
-         * @param {string} shipSymbol 
+         * @param {string} shipSymbol The ship symbol.
          * @param {NavigateShipRequest} [navigateShipRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1872,9 +1874,9 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
  */
 export class FleetApi extends BaseAPI {
     /**
-     * Command a ship to chart the current waypoint.  Waypoints in the universe are uncharted by default. These locations will not show up in the API until they have been charted by a ship.  Charting a location will record your agent as the one who created the chart.
+     * Command a ship to chart the waypoint at its current location.  Most waypoints in the universe are uncharted by default. These waypoints have their traits hidden until they have been charted by a ship.  Charting a waypoint will record your agent as the one who created the chart, and all other agents would also be able to see the waypoint\'s traits.
      * @summary Create Chart
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1884,9 +1886,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Activate your ship\'s sensor arrays to scan for ship information.
+     * Scan for nearby ships, retrieving information for all ships in range.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
      * @summary Scan Ships
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1896,9 +1898,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Activate your ship\'s sensor arrays to scan for system information.
+     * Scan for nearby systems, retrieving information on the systems\' distance from the ship and their waypoints. Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
      * @summary Scan Systems
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1908,9 +1910,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Activate your ship\'s sensor arrays to scan for waypoint information.
+     * Scan for nearby waypoints, retrieving detailed information on each waypoint in range. Scanning uncharted waypoints will allow you to ignore their uncharted state and will list the waypoints\' traits.  Requires a ship to have the `Sensor Array` mount installed to use.  The ship will enter a cooldown after using this function, during which it cannot execute certain actions.
      * @summary Scan Waypoints
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1920,9 +1922,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * If you want to target specific yields for an extraction, you can survey a waypoint, such as an asteroid field, and send the survey in the body of the extract request. Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown between consecutive survey requests. Surveys will eventually expire after a period of time. Multiple ships can use the same survey for extraction.
+     * Create surveys on a waypoint that can be extracted such as asteroid fields. A survey focuses on specific types of deposits from the extracted location. When ships extract using this survey, they are guaranteed to procure a high amount of one of the goods in the survey.  In order to use a survey, send the entire survey details in the body of the extract request.  Each survey may have multiple deposits, and if a symbol shows up more than once, that indicates a higher chance of extracting that resource.  Your ship will enter a cooldown after surveying in which it is unable to perform certain actions. Surveys will eventually expire after a period of time or will be exhausted after being extracted several times based on the survey\'s size. Multiple ships can use the same survey for extraction.  A ship must have the `Surveyor` mount installed in order to use this function.
      * @summary Create Survey
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1932,9 +1934,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Attempt to dock your ship at it\'s current location. Docking will only succeed if the waypoint is a dockable location, and your ship is capable of docking at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
+     * Attempt to dock your ship at its current location. Docking will only succeed if your ship is capable of docking at the time of the request.  Docked ships can access elements in their current location, such as the market or a shipyard, but cannot do actions that require the ship to be above surface such as navigating or extracting.  The endpoint is idempotent - successive calls will succeed even if the ship is already docked.
      * @summary Dock Ship
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1944,9 +1946,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Extract resources from the waypoint into your ship. Send an optional survey as the payload to target specific yields.
+     * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
      * @summary Extract Resources
-     * @param {string} shipSymbol The ship symbol
+     * @param {string} shipSymbol The ship symbol.
      * @param {ExtractResourcesRequest} [extractResourcesRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1957,9 +1959,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Get the mounts on a ship.
+     * Get the mounts installed on a ship.
      * @summary Get Mounts
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1969,9 +1971,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Retrieve the details of your ship.
+     * Retrieve the details of a ship under your agent\'s ownership.
      * @summary Get Ship
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1981,9 +1983,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Retrieve the cargo of your ship.
+     * Retrieve the cargo of a ship under your agent\'s ownership.
      * @summary Get Ship Cargo
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -1993,7 +1995,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Retrieve all of your ships.
+     * Return a paginated list of all of ships under your agent\'s ownership.
      * @summary List Ships
      * @param {number} [page] What entry offset to request
      * @param {number} [limit] How many entries to return per page
@@ -2008,7 +2010,7 @@ export class FleetApi extends BaseAPI {
     /**
      * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
      * @summary Get Ship Cooldown
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -2020,7 +2022,7 @@ export class FleetApi extends BaseAPI {
     /**
      * Get the current nav status of a ship.
      * @summary Get Ship Nav
-     * @param {string} shipSymbol The ship symbol
+     * @param {string} shipSymbol The ship symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -2030,9 +2032,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Install a mount on a ship.
+     * Install a mount on a ship.  In order to install a mount, the ship must be docked and located in a waypoint that has a `Shipyard` trait. The ship also must have the mount to install in its cargo hold.  An installation fee will be deduced by the Shipyard for installing the mount on the ship. 
      * @summary Install Mount
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {InstallMountRequest} [installMountRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2045,7 +2047,7 @@ export class FleetApi extends BaseAPI {
     /**
      * Jettison cargo from your ship\'s cargo hold.
      * @summary Jettison Cargo
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {JettisonRequest} [jettisonRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2056,9 +2058,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Jump your ship instantly to a target system. When used while in orbit or docked to a jump gate waypoint, any ship can use this command. When used elsewhere, jumping requires a jump drive unit and consumes a unit of antimatter (which needs to be in your cargo).
+     * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
      * @summary Jump Ship
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {JumpShipRequest} [jumpShipRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2069,9 +2071,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Navigate to a target destination. The destination must be located within the same system as the ship. Navigating will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s warp or jump actions.
+     * Navigate to a target destination. The ship must be in orbit to use this function. The destination waypoint must be within the same system as the ship\'s current location. Navigating will consume the necessary fuel from the ship\'s manifest based on the distance to the target waypoint.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.  To travel between systems, see the ship\'s Warp or Jump actions.
      * @summary Navigate Ship
-     * @param {string} shipSymbol The ship symbol
+     * @param {string} shipSymbol The ship symbol.
      * @param {NavigateShipRequest} [navigateShipRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2082,22 +2084,21 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
      * @summary Negotiate Contract
-     * @param {string} shipSymbol 
-     * @param {any} [body] 
+     * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
      */
-    public negotiateContract(shipSymbol: string, body?: any, options?: AxiosRequestConfig) {
-        return FleetApiFp(this.configuration).negotiateContract(shipSymbol, body, options).then((request) => request(this.axios, this.basePath));
+    public negotiateContract(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).negotiateContract(shipSymbol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Attempt to move your ship into orbit at it\'s current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
+     * Attempt to move your ship into orbit at its current location. The request will only succeed if your ship is capable of moving into orbit at the time of the request.  Orbiting ships are able to do actions that require the ship to be above surface such as navigating or extracting, but cannot access elements in their current waypoint, such as the market or a shipyard.  The endpoint is idempotent - successive calls will succeed even if the ship is already in orbit.
      * @summary Orbit Ship
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
@@ -2107,9 +2108,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Update the nav data of a ship, such as the flight mode.
+     * Update the nav configuration of a ship.  Currently only supports configuring the Flight Mode of the ship, which affects its speed and fuel consumption.
      * @summary Patch Ship Nav
-     * @param {string} shipSymbol The ship symbol
+     * @param {string} shipSymbol The ship symbol.
      * @param {PatchShipNavRequest} [patchShipNavRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2120,9 +2121,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Purchase cargo.
+     * Purchase cargo from a market.  The ship must be docked in a waypoint that has `Marketplace` trait, and the market must be selling a good to be able to purchase it.  The maximum amount of units of a good that can be purchased in each transaction are denoted by the `tradeVolume` value of the good, which can be viewed by using the Get Market action.  Purchased goods are added to the ship\'s cargo hold.
      * @summary Purchase Cargo
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {PurchaseCargoRequest} [purchaseCargoRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2133,7 +2134,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Purchase a ship
+     * Purchase a ship from a Shipyard. In order to use this function, a ship under your agent\'s ownership must be in a waypoint that has the `Shipyard` trait, and the Shipyard must sell the type of the desired ship.  Shipyards typically offer ship types, which are predefined templates of ships that have dedicated roles. A template comes with a preset of an engine, a reactor, and a frame. It may also include a few modules and mounts.
      * @summary Purchase Ship
      * @param {PurchaseShipRequest} [purchaseShipRequest] 
      * @param {*} [options] Override http request option.
@@ -2145,21 +2146,22 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Refuel your ship from the local market.
+     * Refuel your ship by buying fuel from the local market.  Requires the ship to be docked in a waypoint that has the `Marketplace` trait, and the market must be selling fuel in order to refuel.  Each fuel bought from the market replenishes 100 units in your ship\'s fuel.  Ships will always be refuel to their frame\'s maximum fuel capacity when using this action.
      * @summary Refuel Ship
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
+     * @param {RefuelShipRequest} [refuelShipRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FleetApi
      */
-    public refuelShip(shipSymbol: string, options?: AxiosRequestConfig) {
-        return FleetApiFp(this.configuration).refuelShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    public refuelShip(shipSymbol: string, refuelShipRequest?: RefuelShipRequest, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).refuelShip(shipSymbol, refuelShipRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Remove a mount from a ship.
+     * Remove a mount from a ship.  The ship must be docked in a waypoint that has the `Shipyard` trait, and must have the desired mount that it wish to remove installed.  A removal fee will be deduced from the agent by the Shipyard.
      * @summary Remove Mount
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {RemoveMountRequest} [removeMountRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2170,9 +2172,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Sell cargo.
+     * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
      * @summary Sell Cargo
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol Symbol of a ship.
      * @param {SellCargoRequest} [sellCargoRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2183,9 +2185,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.
+     * Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request. In order to be able to refine, a ship must have goods that can be refined and have installed a `Refinery` module that can refine it.  When refining, 30 basic goods will be converted into 10 processed goods.
      * @summary Ship Refine
-     * @param {string} shipSymbol The symbol of the ship
+     * @param {string} shipSymbol The symbol of the ship.
      * @param {ShipRefineRequest} [shipRefineRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2196,9 +2198,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Transfer cargo between ships.
+     * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
      * @summary Transfer Cargo
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The transferring ship\&#39;s symbol.
      * @param {TransferCargoRequest} [transferCargoRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2209,9 +2211,9 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Warp your ship to a target destination in another system. Warping will consume the necessary fuel and supplies from the ship\'s manifest, and will pay out crew wages from the agent\'s account.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at it\'s destination.
+     * Warp your ship to a target destination in another system. The ship must be in orbit to use this function and must have the `Warp Drive` module installed. Warping will consume the necessary fuel from the ship\'s manifest.  The returned response will detail the route information including the expected time of arrival. Most ship actions are unavailable until the ship has arrived at its destination.
      * @summary Warp Ship
-     * @param {string} shipSymbol 
+     * @param {string} shipSymbol The ship symbol.
      * @param {NavigateShipRequest} [navigateShipRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

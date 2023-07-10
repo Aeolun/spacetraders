@@ -21,7 +21,7 @@
  */
 export interface ScannedShipReactor {
     /**
-     * 
+     * The symbol of the reactor.
      * @type {string}
      * @memberof ScannedShipReactor
      */

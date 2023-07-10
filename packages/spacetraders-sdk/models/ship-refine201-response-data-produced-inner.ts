@@ -15,25 +15,22 @@
 
 
 /**
- * Type of ship
+ * 
  * @export
- * @enum {string}
+ * @interface ShipRefine201ResponseDataProducedInner
  */
-
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
-} as const;
-
-export type ShipType = typeof ShipType[keyof typeof ShipType];
-
-
+export interface ShipRefine201ResponseDataProducedInner {
+    /**
+     * Symbol of the good.
+     * @type {string}
+     * @memberof ShipRefine201ResponseDataProducedInner
+     */
+    'tradeSymbol'?: string;
+    /**
+     * Amount of units of the good.
+     * @type {number}
+     * @memberof ShipRefine201ResponseDataProducedInner
+     */
+    'units'?: number;
+}
 

@@ -21,7 +21,7 @@
  */
 export interface RemoveMountRequest {
     /**
-     * 
+     * The symbol of the mount to remove.
      * @type {string}
      * @memberof RemoveMountRequest
      */

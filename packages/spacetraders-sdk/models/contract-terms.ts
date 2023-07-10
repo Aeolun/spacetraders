@@ -21,7 +21,7 @@ import { ContractDeliverGood } from './contract-deliver-good';
 import { ContractPayment } from './contract-payment';
 
 /**
- * 
+ * Terms of the contract needed to fulfill it.
  * @export
  * @interface ContractTerms
  */
@@ -39,7 +39,7 @@ export interface ContractTerms {
      */
     'payment': ContractPayment;
     /**
-     * 
+     * The cargo that needs to be delivered to fulfill the contract.
      * @type {Array<ContractDeliverGood>}
      * @memberof ContractTerms
      */

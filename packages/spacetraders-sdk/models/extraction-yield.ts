@@ -13,19 +13,22 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { TradeSymbol } from './trade-symbol';
 
 /**
- * 
+ * A yield from the extraction operation.
  * @export
  * @interface ExtractionYield
  */
 export interface ExtractionYield {
     /**
      * 
-     * @type {string}
+     * @type {TradeSymbol}
      * @memberof ExtractionYield
      */
-    'symbol': string;
+    'symbol': TradeSymbol;
     /**
      * The number of units extracted that were placed into the ship\'s cargo hold.
      * @type {number}
@@ -33,4 +36,6 @@ export interface ExtractionYield {
      */
     'units': number;
 }
+
+
 

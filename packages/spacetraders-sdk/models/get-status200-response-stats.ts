@@ -21,25 +21,25 @@
  */
 export interface GetStatus200ResponseStats {
     /**
-     * 
+     * Number of registered agents in the game.
      * @type {number}
      * @memberof GetStatus200ResponseStats
      */
     'agents': number;
     /**
-     * 
+     * Total number of ships in the game.
      * @type {number}
      * @memberof GetStatus200ResponseStats
      */
     'ships': number;
     /**
-     * 
+     * Total number of systems in the game.
      * @type {number}
      * @memberof GetStatus200ResponseStats
      */
     'systems': number;
     /**
-     * 
+     * Total number of waypoints in the game.
      * @type {number}
      * @memberof GetStatus200ResponseStats
      */

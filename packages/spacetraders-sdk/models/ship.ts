@@ -45,13 +45,13 @@ import { ShipReactor } from './ship-reactor';
 import { ShipRegistration } from './ship-registration';
 
 /**
- * A ship
+ * Ship details.
  * @export
  * @interface Ship
  */
 export interface Ship {
     /**
-     * The globally unique identifier of the ship in the following format: `[AGENT_SYMBOL]_[HEX_ID]`
+     * The globally unique identifier of the ship in the following format: `[AGENT_SYMBOL]-[HEX_ID]`
      * @type {string}
      * @memberof Ship
      */
@@ -93,13 +93,13 @@ export interface Ship {
      */
     'engine': ShipEngine;
     /**
-     * 
+     * Modules installed in this ship.
      * @type {Array<ShipModule>}
      * @memberof Ship
      */
     'modules': Array<ShipModule>;
     /**
-     * 
+     * Mounts installed in this ship.
      * @type {Array<ShipMount>}
      * @memberof Ship
      */

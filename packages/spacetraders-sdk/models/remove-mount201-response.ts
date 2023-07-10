@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { InstallMount201ResponseData } from './install-mount201-response-data';
+import { RemoveMount201ResponseData } from './remove-mount201-response-data';
 
 /**
  * 
@@ -25,9 +25,9 @@ import { InstallMount201ResponseData } from './install-mount201-response-data';
 export interface RemoveMount201Response {
     /**
      * 
-     * @type {InstallMount201ResponseData}
+     * @type {RemoveMount201ResponseData}
      * @memberof RemoveMount201Response
      */
-    'data': InstallMount201ResponseData;
+    'data': RemoveMount201ResponseData;
 }
 

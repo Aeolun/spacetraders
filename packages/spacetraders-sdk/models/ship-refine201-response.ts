@@ -13,27 +13,21 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipRefine201ResponseData } from './ship-refine201-response-data';
 
 /**
- * Type of ship
+ * 
  * @export
- * @enum {string}
+ * @interface ShipRefine201Response
  */
-
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
-} as const;
-
-export type ShipType = typeof ShipType[keyof typeof ShipType];
-
-
+export interface ShipRefine201Response {
+    /**
+     * 
+     * @type {ShipRefine201ResponseData}
+     * @memberof ShipRefine201Response
+     */
+    'data': ShipRefine201ResponseData;
+}
 

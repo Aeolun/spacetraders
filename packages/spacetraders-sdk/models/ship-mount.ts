@@ -24,31 +24,31 @@ import { ShipRequirements } from './ship-requirements';
  */
 export interface ShipMount {
     /**
-     * 
+     * Symbo of this mount.
      * @type {string}
      * @memberof ShipMount
      */
     'symbol': ShipMountSymbolEnum;
     /**
-     * 
+     * Name of this mount.
      * @type {string}
      * @memberof ShipMount
      */
     'name': string;
     /**
-     * 
+     * Description of this mount.
      * @type {string}
      * @memberof ShipMount
      */
     'description'?: string;
     /**
-     * 
+     * Mounts that have this value, such as mining lasers, denote how powerful this mount\'s capabilities are.
      * @type {number}
      * @memberof ShipMount
      */
     'strength'?: number;
     /**
-     * 
+     * Mounts that have this value denote what goods can be produced from using the mount.
      * @type {Array<string>}
      * @memberof ShipMount
      */

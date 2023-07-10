@@ -21,7 +21,7 @@
  */
 export interface WaypointOrbital {
     /**
-     * 
+     * The symbol of the orbiting waypoint.
      * @type {string}
      * @memberof WaypointOrbital
      */

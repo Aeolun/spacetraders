@@ -24,19 +24,19 @@ import { ShipRequirements } from './ship-requirements';
  */
 export interface ShipReactor {
     /**
-     * 
+     * Symbol of the reactor.
      * @type {string}
      * @memberof ShipReactor
      */
     'symbol': ShipReactorSymbolEnum;
     /**
-     * 
+     * Name of the reactor.
      * @type {string}
      * @memberof ShipReactor
      */
     'name': string;
     /**
-     * 
+     * Description of the reactor.
      * @type {string}
      * @memberof ShipReactor
      */
@@ -48,7 +48,7 @@ export interface ShipReactor {
      */
     'condition'?: number;
     /**
-     * 
+     * The amount of power provided by this reactor. The more power a reactor provides to the ship, the lower the cooldown it gets when using a module or mount that taxes the ship\'s power.
      * @type {number}
      * @memberof ShipReactor
      */

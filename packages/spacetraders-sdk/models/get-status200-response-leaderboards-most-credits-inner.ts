@@ -21,13 +21,13 @@
  */
 export interface GetStatus200ResponseLeaderboardsMostCreditsInner {
     /**
-     * 
+     * Symbol of the agent.
      * @type {string}
      * @memberof GetStatus200ResponseLeaderboardsMostCreditsInner
      */
     'agentSymbol': string;
     /**
-     * 
+     * Amount of credits.
      * @type {number}
      * @memberof GetStatus200ResponseLeaderboardsMostCreditsInner
      */

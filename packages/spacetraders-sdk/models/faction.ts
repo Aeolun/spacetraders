@@ -15,40 +15,43 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { FactionSymbols } from './faction-symbols';
+// May contain unused imports in some cases
+// @ts-ignore
 import { FactionTrait } from './faction-trait';
 
 /**
- * 
+ * Faction details.
  * @export
  * @interface Faction
  */
 export interface Faction {
     /**
      * 
-     * @type {string}
+     * @type {FactionSymbols}
      * @memberof Faction
      */
-    'symbol': string;
+    'symbol': FactionSymbols;
     /**
-     * 
+     * Name of the faction.
      * @type {string}
      * @memberof Faction
      */
     'name': string;
     /**
-     * 
+     * Description of the faction.
      * @type {string}
      * @memberof Faction
      */
     'description': string;
     /**
-     * 
+     * The waypoint in which the faction\'s HQ is located in.
      * @type {string}
      * @memberof Faction
      */
     'headquarters': string;
     /**
-     * 
+     * List of traits that define this faction.
      * @type {Array<FactionTrait>}
      * @memberof Faction
      */
@@ -60,4 +63,6 @@ export interface Faction {
      */
     'isRecruiting': boolean;
 }
+
+
 

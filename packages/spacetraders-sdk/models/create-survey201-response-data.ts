@@ -33,7 +33,7 @@ export interface CreateSurvey201ResponseData {
      */
     'cooldown': Cooldown;
     /**
-     * 
+     * Surveys created by this action.
      * @type {Array<Survey>}
      * @memberof CreateSurvey201ResponseData
      */

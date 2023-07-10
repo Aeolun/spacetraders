@@ -21,7 +21,7 @@
  */
 export interface ShipRefineRequest {
     /**
-     * 
+     * The type of good to produce out of the refining process.
      * @type {string}
      * @memberof ShipRefineRequest
      */

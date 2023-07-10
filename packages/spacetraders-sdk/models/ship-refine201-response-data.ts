@@ -18,25 +18,40 @@
 import { Cooldown } from './cooldown';
 // May contain unused imports in some cases
 // @ts-ignore
-import { ScannedWaypoint } from './scanned-waypoint';
+import { ShipCargo } from './ship-cargo';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipRefine201ResponseDataProducedInner } from './ship-refine201-response-data-produced-inner';
 
 /**
  * 
  * @export
- * @interface CreateShipWaypointScan201ResponseData
+ * @interface ShipRefine201ResponseData
  */
-export interface CreateShipWaypointScan201ResponseData {
+export interface ShipRefine201ResponseData {
+    /**
+     * 
+     * @type {ShipCargo}
+     * @memberof ShipRefine201ResponseData
+     */
+    'cargo': ShipCargo;
     /**
      * 
      * @type {Cooldown}
-     * @memberof CreateShipWaypointScan201ResponseData
+     * @memberof ShipRefine201ResponseData
      */
     'cooldown': Cooldown;
     /**
-     * List of scanned waypoints.
-     * @type {Array<ScannedWaypoint>}
-     * @memberof CreateShipWaypointScan201ResponseData
+     * Goods that were produced by this refining process.
+     * @type {Array<ShipRefine201ResponseDataProducedInner>}
+     * @memberof ShipRefine201ResponseData
      */
-    'waypoints': Array<ScannedWaypoint>;
+    'produced': Array<ShipRefine201ResponseDataProducedInner>;
+    /**
+     * Goods that were consumed during this refining process.
+     * @type {Array<ShipRefine201ResponseDataProducedInner>}
+     * @memberof ShipRefine201ResponseData
+     */
+    'consumed': Array<ShipRefine201ResponseDataProducedInner>;
 }
 

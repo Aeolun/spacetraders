@@ -42,6 +42,7 @@ models/extract-resources201-response-data.ts
 models/extract-resources201-response.ts
 models/extraction-yield.ts
 models/extraction.ts
+models/faction-symbols.ts
 models/faction-trait.ts
 models/faction.ts
 models/fulfill-contract200-response.ts
@@ -73,7 +74,6 @@ models/get-systems200-response.ts
 models/get-waypoint200-response.ts
 models/index.ts
 models/install-mount-request.ts
-models/install-mount201-response-data-transaction.ts
 models/install-mount201-response-data.ts
 models/install-mount201-response.ts
 models/jettison-request.ts
@@ -100,12 +100,14 @@ models/purchase-cargo201-response.ts
 models/purchase-ship-request.ts
 models/purchase-ship201-response-data.ts
 models/purchase-ship201-response.ts
+models/refuel-ship-request.ts
 models/refuel-ship200-response-data.ts
 models/refuel-ship200-response.ts
 models/register-request.ts
 models/register201-response-data.ts
 models/register201-response.ts
 models/remove-mount-request.ts
+models/remove-mount201-response-data.ts
 models/remove-mount201-response.ts
 models/scanned-ship-engine.ts
 models/scanned-ship-frame.ts
@@ -124,6 +126,7 @@ models/ship-engine.ts
 models/ship-frame.ts
 models/ship-fuel-consumed.ts
 models/ship-fuel.ts
+models/ship-modification-transaction.ts
 models/ship-module.ts
 models/ship-mount.ts
 models/ship-nav-flight-mode.ts
@@ -133,9 +136,9 @@ models/ship-nav-status.ts
 models/ship-nav.ts
 models/ship-reactor.ts
 models/ship-refine-request.ts
-models/ship-refine200-response-data-produced-inner.ts
-models/ship-refine200-response-data.ts
-models/ship-refine200-response.ts
+models/ship-refine201-response-data-produced-inner.ts
+models/ship-refine201-response-data.ts
+models/ship-refine201-response.ts
 models/ship-registration.ts
 models/ship-requirements.ts
 models/ship-role.ts

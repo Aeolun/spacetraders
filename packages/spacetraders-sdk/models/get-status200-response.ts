@@ -30,7 +30,7 @@ import { GetStatus200ResponseServerResets } from './get-status200-response-serve
 import { GetStatus200ResponseStats } from './get-status200-response-stats';
 
 /**
- * OK
+ * 
  * @export
  * @interface GetStatus200Response
  */

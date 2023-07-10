@@ -13,27 +13,48 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { Agent } from './agent';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipCargo } from './ship-cargo';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipModificationTransaction } from './ship-modification-transaction';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipMount } from './ship-mount';
 
 /**
- * Type of ship
+ * 
  * @export
- * @enum {string}
+ * @interface RemoveMount201ResponseData
  */
-
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
-} as const;
-
-export type ShipType = typeof ShipType[keyof typeof ShipType];
-
-
+export interface RemoveMount201ResponseData {
+    /**
+     * 
+     * @type {Agent}
+     * @memberof RemoveMount201ResponseData
+     */
+    'agent': Agent;
+    /**
+     * List of installed mounts after the removal of the selected mount.
+     * @type {Array<ShipMount>}
+     * @memberof RemoveMount201ResponseData
+     */
+    'mounts': Array<ShipMount>;
+    /**
+     * 
+     * @type {ShipCargo}
+     * @memberof RemoveMount201ResponseData
+     */
+    'cargo': ShipCargo;
+    /**
+     * 
+     * @type {ShipModificationTransaction}
+     * @memberof RemoveMount201ResponseData
+     */
+    'transaction': ShipModificationTransaction;
+}
 

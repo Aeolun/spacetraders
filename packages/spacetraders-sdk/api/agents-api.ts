@@ -31,7 +31,7 @@ export const AgentsApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * Fetch your agent\'s details.
-         * @summary My Agent Details
+         * @summary Get Agent
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -75,7 +75,7 @@ export const AgentsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * Fetch your agent\'s details.
-         * @summary My Agent Details
+         * @summary Get Agent
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -95,7 +95,7 @@ export const AgentsApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * Fetch your agent\'s details.
-         * @summary My Agent Details
+         * @summary Get Agent
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -114,7 +114,7 @@ export const AgentsApiFactory = function (configuration?: Configuration, basePat
 export class AgentsApi extends BaseAPI {
     /**
      * Fetch your agent\'s details.
-     * @summary My Agent Details
+     * @summary Get Agent
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AgentsApi

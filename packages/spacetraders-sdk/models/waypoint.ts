@@ -36,7 +36,7 @@ import { WaypointType } from './waypoint-type';
  */
 export interface Waypoint {
     /**
-     * 
+     * Symbol fo the waypoint.
      * @type {string}
      * @memberof Waypoint
      */
@@ -48,25 +48,25 @@ export interface Waypoint {
      */
     'type': WaypointType;
     /**
-     * 
+     * The symbol of the system this waypoint belongs to.
      * @type {string}
      * @memberof Waypoint
      */
     'systemSymbol': string;
     /**
-     * 
+     * Position in the universe in the x axis.
      * @type {number}
      * @memberof Waypoint
      */
     'x': number;
     /**
-     * 
+     * Position in the universe in the Y axis.
      * @type {number}
      * @memberof Waypoint
      */
     'y': number;
     /**
-     * 
+     * Waypoints that orbit this waypoint.
      * @type {Array<WaypointOrbital>}
      * @memberof Waypoint
      */

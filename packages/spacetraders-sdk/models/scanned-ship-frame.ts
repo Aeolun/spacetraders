@@ -21,7 +21,7 @@
  */
 export interface ScannedShipFrame {
     /**
-     * 
+     * The symbol of the frame.
      * @type {string}
      * @memberof ScannedShipFrame
      */

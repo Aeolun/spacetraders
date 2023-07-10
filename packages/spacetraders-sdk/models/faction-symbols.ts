@@ -15,25 +15,34 @@
 
 
 /**
- * Type of ship
+ * The symbol of the faction.
  * @export
  * @enum {string}
  */
 
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
+export const FactionSymbols = {
+    Cosmic: 'COSMIC',
+    Void: 'VOID',
+    Galactic: 'GALACTIC',
+    Quantum: 'QUANTUM',
+    Dominion: 'DOMINION',
+    Astro: 'ASTRO',
+    Corsairs: 'CORSAIRS',
+    Obsidian: 'OBSIDIAN',
+    Aegis: 'AEGIS',
+    United: 'UNITED',
+    Solitary: 'SOLITARY',
+    Cobalt: 'COBALT',
+    Omega: 'OMEGA',
+    Echo: 'ECHO',
+    Lords: 'LORDS',
+    Cult: 'CULT',
+    Ancients: 'ANCIENTS',
+    Shadow: 'SHADOW',
+    Ethereal: 'ETHEREAL'
 } as const;
 
-export type ShipType = typeof ShipType[keyof typeof ShipType];
+export type FactionSymbols = typeof FactionSymbols[keyof typeof FactionSymbols];
 
 
 

@@ -15,19 +15,19 @@
 
 
 /**
- * 
+ * Agent details.
  * @export
  * @interface Agent
  */
 export interface Agent {
     /**
-     * 
+     * Account ID that is tied to this agent.
      * @type {string}
      * @memberof Agent
      */
     'accountId': string;
     /**
-     * 
+     * Symbol of the agent.
      * @type {string}
      * @memberof Agent
      */

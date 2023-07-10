@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { FactionSymbols } from './faction-symbols';
 
 /**
  * 
@@ -22,9 +25,11 @@
 export interface SystemFaction {
     /**
      * 
-     * @type {string}
+     * @type {FactionSymbols}
      * @memberof SystemFaction
      */
-    'symbol': string;
+    'symbol': FactionSymbols;
 }
+
+
 

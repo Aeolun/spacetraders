@@ -24,35 +24,35 @@ import { ShipRequirements } from './ship-requirements';
  */
 export interface ShipModule {
     /**
-     * 
+     * The symbol of the module.
      * @type {string}
      * @memberof ShipModule
      */
     'symbol': ShipModuleSymbolEnum;
     /**
-     * 
+     * Modules that provide capacity, such as cargo hold or crew quarters will show this value to denote how much of a bonus the module grants.
      * @type {number}
      * @memberof ShipModule
      */
     'capacity'?: number;
     /**
-     * 
+     * Modules that have a range will such as a sensor array show this value to denote how far can the module reach with its capabilities.
      * @type {number}
      * @memberof ShipModule
      */
     'range'?: number;
     /**
-     * 
+     * Name of this module.
      * @type {string}
      * @memberof ShipModule
      */
     'name': string;
     /**
-     * 
+     * Description of this module.
      * @type {string}
      * @memberof ShipModule
      */
-    'description'?: string;
+    'description': string;
     /**
      * 
      * @type {ShipRequirements}

@@ -21,13 +21,13 @@
  */
 export interface GetStatus200ResponseLeaderboardsMostSubmittedChartsInner {
     /**
-     * 
+     * Symbol of the agent.
      * @type {string}
      * @memberof GetStatus200ResponseLeaderboardsMostSubmittedChartsInner
      */
     'agentSymbol': string;
     /**
-     * 
+     * Amount of charts done by the agent.
      * @type {number}
      * @memberof GetStatus200ResponseLeaderboardsMostSubmittedChartsInner
      */

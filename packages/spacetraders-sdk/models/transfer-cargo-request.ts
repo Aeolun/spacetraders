@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { TradeSymbol } from './trade-symbol';
 
 /**
  * 
@@ -22,21 +25,23 @@
 export interface TransferCargoRequest {
     /**
      * 
-     * @type {string}
+     * @type {TradeSymbol}
      * @memberof TransferCargoRequest
      */
-    'tradeSymbol': string;
+    'tradeSymbol': TradeSymbol;
     /**
-     * 
+     * Amount of units to transfer.
      * @type {number}
      * @memberof TransferCargoRequest
      */
     'units': number;
     /**
-     * 
+     * The symbol of the ship to transfer to.
      * @type {string}
      * @memberof TransferCargoRequest
      */
     'shipSymbol': string;
 }
+
+
 

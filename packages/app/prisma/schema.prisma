@@ -33,6 +33,10 @@ model Agent {
   headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
   accountId          String
   token              String?    @db.Text()
+  automationStep     Int       @default(0)
+
+  automationActions AutomationPlan[]
+  behaviorGroups    BehaviorGroup[]
 
   @@index([headquartersSymbol])
 }
@@ -84,6 +88,44 @@ model System {
   shipsInSystem      Ship[]     @relation("currentSystem")
 
   @@index([sectorSymbol])
+}
+
+enum AutomationAction {
+  EXPAND_GROUP
+}
+
+model AutomationPlan {
+  id       String   @id @default(uuid())
+  agent    Agent    @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  agentSymbol String
+  action   AutomationAction
+  step     Int
+
+  requiredCredits Int
+
+  count    Int?
+
+  shipGroup ShipGroup @relation(fields: [shipGroupSymbol], references: [id], onDelete: SetNull)
+  shipGroupSymbol String
+
+  @@index([agentSymbol])
+}
+
+model ShipGroup {
+  id String @id @default(uuid())
+  name String
+  description String @db.Text
+  agent Agent @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  agentSymbol String
+
+  shipConfiguration ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: SetNull)
+  shipConfigurationSymbol String
+
+  behavior ShipBehavior
+
+  automationPlans AutomationPlan[]
+
+  @@index([agentSymbol])
 }
 
 model ShipLog {

@@ -37,6 +37,6 @@ export interface JumpShip200ResponseData {
      * @type {ShipNav}
      * @memberof JumpShip200ResponseData
      */
-    'nav'?: ShipNav;
+    'nav': ShipNav;
 }
 

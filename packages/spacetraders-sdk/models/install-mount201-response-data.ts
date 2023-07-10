@@ -18,10 +18,10 @@
 import { Agent } from './agent';
 // May contain unused imports in some cases
 // @ts-ignore
-import { InstallMount201ResponseDataTransaction } from './install-mount201-response-data-transaction';
+import { ShipCargo } from './ship-cargo';
 // May contain unused imports in some cases
 // @ts-ignore
-import { ShipCargo } from './ship-cargo';
+import { ShipModificationTransaction } from './ship-modification-transaction';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ShipMount } from './ship-mount';
@@ -39,7 +39,7 @@ export interface InstallMount201ResponseData {
      */
     'agent': Agent;
     /**
-     * 
+     * List of installed mounts after the installation of the new mount.
      * @type {Array<ShipMount>}
      * @memberof InstallMount201ResponseData
      */
@@ -52,9 +52,9 @@ export interface InstallMount201ResponseData {
     'cargo': ShipCargo;
     /**
      * 
-     * @type {InstallMount201ResponseDataTransaction}
+     * @type {ShipModificationTransaction}
      * @memberof InstallMount201ResponseData
      */
-    'transaction': InstallMount201ResponseDataTransaction;
+    'transaction': ShipModificationTransaction;
 }
 

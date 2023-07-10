@@ -30,13 +30,13 @@ import { SystemWaypoint } from './system-waypoint';
  */
 export interface System {
     /**
-     * 
+     * The symbol of the system.
      * @type {string}
      * @memberof System
      */
     'symbol': string;
     /**
-     * 
+     * The symbol of the sector.
      * @type {string}
      * @memberof System
      */
@@ -48,25 +48,25 @@ export interface System {
      */
     'type': SystemType;
     /**
-     * 
+     * Position in the universe in the x axis.
      * @type {number}
      * @memberof System
      */
     'x': number;
     /**
-     * 
+     * Position in the universe in the y axis.
      * @type {number}
      * @memberof System
      */
     'y': number;
     /**
-     * 
+     * Waypoints in this system.
      * @type {Array<SystemWaypoint>}
      * @memberof System
      */
     'waypoints': Array<SystemWaypoint>;
     /**
-     * 
+     * Factions that control this system.
      * @type {Array<SystemFaction>}
      * @memberof System
      */

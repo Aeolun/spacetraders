@@ -15,25 +15,25 @@
 
 
 /**
- * 
+ * Meta details for pagination.
  * @export
  * @interface Meta
  */
 export interface Meta {
     /**
-     * 
+     * Shows the total amount of items of this kind that exist.
      * @type {number}
      * @memberof Meta
      */
     'total': number;
     /**
-     * 
+     * A page denotes an amount of items, offset from the first item. Each page holds an amount of items equal to the `limit`.
      * @type {number}
      * @memberof Meta
      */
     'page': number;
     /**
-     * 
+     * The amount of items in each page. Limits how many items can be fetched at once.
      * @type {number}
      * @memberof Meta
      */

@@ -33,7 +33,7 @@ export interface CreateShipSystemScan201ResponseData {
      */
     'cooldown': Cooldown;
     /**
-     * 
+     * List of scanned systems.
      * @type {Array<ScannedSystem>}
      * @memberof CreateShipSystemScan201ResponseData
      */

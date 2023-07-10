@@ -15,25 +15,16 @@
 
 
 /**
- * Type of ship
+ * 
  * @export
- * @enum {string}
+ * @interface RefuelShipRequest
  */
-
-export const ShipType = {
-    Probe: 'SHIP_PROBE',
-    MiningDrone: 'SHIP_MINING_DRONE',
-    Interceptor: 'SHIP_INTERCEPTOR',
-    LightHauler: 'SHIP_LIGHT_HAULER',
-    CommandFrigate: 'SHIP_COMMAND_FRIGATE',
-    Explorer: 'SHIP_EXPLORER',
-    HeavyFreighter: 'SHIP_HEAVY_FREIGHTER',
-    LightShuttle: 'SHIP_LIGHT_SHUTTLE',
-    OreHound: 'SHIP_ORE_HOUND',
-    RefiningFreighter: 'SHIP_REFINING_FREIGHTER'
-} as const;
-
-export type ShipType = typeof ShipType[keyof typeof ShipType];
-
-
+export interface RefuelShipRequest {
+    /**
+     * The amount of fuel to fill in the ship\'s tanks. When not specified, the ship will be refueled to its maximum fuel capacity. If the amount specified is greater than the ship\'s remaining capacity, the ship will only be refueled to its maximum fuel capacity. The amount specified is not in market units but in ship fuel units.
+     * @type {number}
+     * @memberof RefuelShipRequest
+     */
+    'units'?: number;
+}
 
