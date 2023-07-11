@@ -32,11 +32,11 @@ model Agent {
   headquartersSymbol String?
   headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
   accountId          String
-  token              String?    @db.Text()
+  token              String?   @db.Text()
   automationStep     Int       @default(0)
 
   automationActions AutomationPlan[]
-  behaviorGroups    BehaviorGroup[]
+  shipGroups        ShipGroup[]
 
   @@index([headquartersSymbol])
 }
@@ -95,31 +95,31 @@ enum AutomationAction {
 }
 
 model AutomationPlan {
-  id       String   @id @default(uuid())
-  agent    Agent    @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  id          String           @id @default(uuid())
+  agent       Agent            @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
   agentSymbol String
-  action   AutomationAction
-  step     Int
+  action      AutomationAction
+  step        Int
 
   requiredCredits Int
 
-  count    Int?
+  count Int?
 
-  shipGroup ShipGroup @relation(fields: [shipGroupSymbol], references: [id], onDelete: SetNull)
-  shipGroupSymbol String
+  shipGroup       ShipGroup? @relation(fields: [shipGroupSymbol], references: [id], onDelete: SetNull)
+  shipGroupSymbol String?
 
   @@index([agentSymbol])
 }
 
 model ShipGroup {
-  id String @id @default(uuid())
-  name String
+  id          String @id @default(uuid())
+  name        String
   description String @db.Text
-  agent Agent @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  agent       Agent  @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
   agentSymbol String
 
-  shipConfiguration ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: SetNull)
-  shipConfigurationSymbol String
+  shipConfiguration       ShipConfiguration? @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: SetNull)
+  shipConfigurationSymbol String?
 
   behavior ShipBehavior
 
@@ -239,6 +239,7 @@ model ShipConfiguration {
   shipConfigurationModule ShipConfigurationModule[]
   shipConfigurationMount  ShipConfigurationMount[]
   ShipyardModel           ShipyardModel[]
+  ShipGroup               ShipGroup[]
 }
 
 model ShipConfigurationModule {

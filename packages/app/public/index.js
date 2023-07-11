@@ -553,10 +553,10 @@ var require_react_development = __commonJS({
             props.children = childArray;
           }
           if (type && type.defaultProps) {
-            var defaultProps5 = type.defaultProps;
-            for (propName in defaultProps5) {
+            var defaultProps6 = type.defaultProps;
+            for (propName in defaultProps6) {
               if (props[propName] === void 0) {
-                props[propName] = defaultProps5[propName];
+                props[propName] = defaultProps6[propName];
               }
             }
           }
@@ -599,14 +599,14 @@ var require_react_development = __commonJS({
               }
               key = "" + config.key;
             }
-            var defaultProps5;
+            var defaultProps6;
             if (element.type && element.type.defaultProps) {
-              defaultProps5 = element.type.defaultProps;
+              defaultProps6 = element.type.defaultProps;
             }
             for (propName in config) {
               if (hasOwnProperty2.call(config, propName) && !RESERVED_PROPS.hasOwnProperty(propName)) {
-                if (config[propName] === void 0 && defaultProps5 !== void 0) {
-                  props[propName] = defaultProps5[propName];
+                if (config[propName] === void 0 && defaultProps6 !== void 0) {
+                  props[propName] = defaultProps6[propName];
                 } else {
                   props[propName] = config[propName];
                 }
@@ -937,17 +937,17 @@ var require_react_development = __commonJS({
             _init: lazyInitializer
           };
           {
-            var defaultProps5;
+            var defaultProps6;
             var propTypes;
             Object.defineProperties(lazyType, {
               defaultProps: {
                 configurable: true,
                 get: function() {
-                  return defaultProps5;
+                  return defaultProps6;
                 },
                 set: function(newDefaultProps) {
                   error("React.lazy(...): It is not supported to assign `defaultProps` to a lazy component import. Either specify them where the component is defined, or create a wrapping component around it.");
-                  defaultProps5 = newDefaultProps;
+                  defaultProps6 = newDefaultProps;
                   Object.defineProperty(lazyType, "defaultProps", {
                     enumerable: true
                   });
@@ -11757,10 +11757,10 @@ var require_react_dom_development = __commonJS({
         function resolveDefaultProps(Component, baseProps) {
           if (Component && Component.defaultProps) {
             var props = assign2({}, baseProps);
-            var defaultProps5 = Component.defaultProps;
-            for (var propName in defaultProps5) {
+            var defaultProps6 = Component.defaultProps;
+            for (var propName in defaultProps6) {
               if (props[propName] === void 0) {
-                props[propName] = defaultProps5[propName];
+                props[propName] = defaultProps6[propName];
               }
             }
             return props;
@@ -24386,10 +24386,10 @@ var require_react_jsx_runtime_development = __commonJS({
               }
             }
             if (type && type.defaultProps) {
-              var defaultProps5 = type.defaultProps;
-              for (propName in defaultProps5) {
+              var defaultProps6 = type.defaultProps;
+              for (propName in defaultProps6) {
                 if (props[propName] === void 0) {
-                  props[propName] = defaultProps5[propName];
+                  props[propName] = defaultProps6[propName];
                 }
               }
             }
@@ -24707,7 +24707,7 @@ var randomizeList = (providedList) => {
   return list;
 };
 
-// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/theme/build/esm/createThemeColor/createThemeColor.js
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-next.7/node_modules/@arwes/theme/build/esm/createThemeColor/createThemeColor.js
 var minMax = (min, max) => (value) => Math.min(max, Math.max(min, value));
 var minMax0to360 = minMax(0, 360);
 var minMax0to100 = minMax(0, 100);
@@ -25407,260 +25407,6 @@ var createAnimation = (props) => {
     }
   };
   return { isPending, cancel };
-};
-
-// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleep/createBleep.js
-var createBleep = (props) => {
-  var _a;
-  if (!IS_BROWSER) {
-    return null;
-  }
-  const { sources, preload = true, loop = false, volume = 1, fetchHeaders, masterGain } = props;
-  let isBufferLoading = false;
-  let isBufferError = false;
-  let isBufferPlaying = false;
-  let source = null;
-  let buffer = null;
-  let duration = 0;
-  const context = (_a = props.context) !== null && _a !== void 0 ? _a : new window.AudioContext();
-  const gain = context.createGain();
-  const callersAccount = /* @__PURE__ */ new Set();
-  const fetchAudioBuffer = () => {
-    if (buffer || isBufferLoading || isBufferError) {
-      return;
-    }
-    if (!sources.length) {
-      isBufferError = true;
-      console.error("Every bleep must have at least one source with a valid audio file URL and type.");
-      return;
-    }
-    const audioTest = new window.Audio();
-    const source2 = sources.find((source3) => {
-      if (IS_BROWSER_SAFARI && source3.type.includes("audio/webm")) {
-        return false;
-      }
-      const support = audioTest.canPlayType(source3.type || "");
-      return support === "probably" || support === "maybe";
-    });
-    if (!source2) {
-      isBufferError = true;
-      console.error(`The bleep sources "${JSON.stringify(sources)}" are not supported on this navigator.`);
-      return;
-    }
-    const { src, type } = source2;
-    isBufferLoading = true;
-    window.fetch(src, {
-      method: "GET",
-      headers: fetchHeaders
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error("Bleep source could not be fetched.");
-      }
-      return response;
-    }).then((response) => response.arrayBuffer()).then((audioArrayBuffer) => context.decodeAudioData(audioArrayBuffer)).then((audioBuffer) => {
-      buffer = audioBuffer;
-      duration = buffer.duration;
-    }).catch((err) => {
-      isBufferError = true;
-      console.error(`The bleep with source URL "${src}" and type "${type}" could not be used:`, err);
-    }).then(() => isBufferLoading = false);
-  };
-  const getDuration = () => duration;
-  const getIsPlaying = () => isBufferPlaying;
-  const getIsLoaded = () => !!buffer;
-  const play = (caller) => {
-    if (!buffer) {
-      fetchAudioBuffer();
-      return;
-    }
-    if (loop && isBufferPlaying) {
-      return;
-    }
-    if (context.state === "suspended") {
-      let isResumeError = false;
-      context.resume().catch((err) => {
-        isResumeError = true;
-        console.error(`The bleep audio context with sources "${JSON.stringify(sources)}" could not be resumed to be played:`, err);
-      });
-      if (isResumeError) {
-        return;
-      }
-    }
-    if (caller) {
-      callersAccount.add(caller);
-    }
-    isBufferPlaying = true;
-    if (source) {
-      source.stop();
-      source.disconnect(gain);
-      source = null;
-    }
-    source = context.createBufferSource();
-    source.buffer = buffer;
-    source.loop = loop;
-    if (loop) {
-      source.loopStart = 0;
-      source.loopEnd = buffer.duration;
-    }
-    source.connect(gain);
-    source.start();
-    source.onended = () => {
-      isBufferPlaying = false;
-    };
-  };
-  const stop = (caller) => {
-    if (!buffer) {
-      return;
-    }
-    if (caller) {
-      callersAccount.delete(caller);
-    }
-    const canStop = loop ? !callersAccount.size : true;
-    if (canStop) {
-      if (source) {
-        source.stop();
-        source.disconnect(gain);
-        source = null;
-      }
-      isBufferPlaying = false;
-    }
-  };
-  const load = () => {
-    fetchAudioBuffer();
-  };
-  const unload = () => {
-    if (source) {
-      source.stop();
-      source.disconnect(gain);
-      source = null;
-    }
-    buffer = null;
-    isBufferLoading = false;
-    isBufferError = false;
-  };
-  const update = (props2) => {
-    if (props2.volume !== void 0) {
-      const bleepVolume = Math.max(0, Math.min(1, props2.volume));
-      gain.gain.setValueAtTime(bleepVolume, context.currentTime);
-    }
-  };
-  const bleep = {};
-  const bleepAPI = {
-    duration: {
-      get: getDuration,
-      enumerable: true
-    },
-    isPlaying: {
-      get: getIsPlaying,
-      enumerable: true
-    },
-    isLoaded: {
-      get: getIsLoaded,
-      enumerable: true
-    },
-    play: {
-      value: play,
-      enumerable: true
-    },
-    stop: {
-      value: stop,
-      enumerable: true
-    },
-    load: {
-      value: load,
-      enumerable: true
-    },
-    unload: {
-      value: unload,
-      enumerable: true
-    },
-    update: {
-      value: update,
-      enumerable: true
-    }
-  };
-  Object.defineProperties(bleep, bleepAPI);
-  if (masterGain) {
-    gain.connect(masterGain);
-  } else {
-    gain.connect(context.destination);
-  }
-  update({ volume });
-  if (preload) {
-    fetchAudioBuffer();
-  }
-  return bleep;
-};
-
-// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleepsManager/createBleepsManager.js
-var createBleepsManager = (props) => {
-  var _a, _b;
-  const context = IS_BROWSER ? new window.AudioContext() : null;
-  const masterGain = IS_BROWSER ? context.createGain() : null;
-  const bleeps = {};
-  const bleepNames = Object.keys(props.bleeps);
-  bleepNames.forEach((bleepName) => {
-    var _a2;
-    const bleepProps = props.bleeps[bleepName];
-    const categoryProps = bleepProps.category ? (_a2 = props.categories) === null || _a2 === void 0 ? void 0 : _a2[bleepProps.category] : null;
-    const generalProps = {
-      ...props.common,
-      ...categoryProps
-    };
-    bleeps[bleepName] = generalProps.disabled ? null : createBleep({
-      ...generalProps,
-      ...bleepProps,
-      context,
-      masterGain
-    });
-  });
-  if (IS_BROWSER) {
-    masterGain.connect(context.destination);
-    const globalVolume = Math.max(0, Math.min(1, (_b = (_a = props === null || props === void 0 ? void 0 : props.master) === null || _a === void 0 ? void 0 : _a.volume) !== null && _b !== void 0 ? _b : 1));
-    masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
-  }
-  const unload = () => {
-    bleepNames.forEach((bleepName) => {
-      var _a2;
-      (_a2 = bleeps[bleepName]) === null || _a2 === void 0 ? void 0 : _a2.unload();
-    });
-  };
-  const update = (newProps) => {
-    var _a2;
-    if (((_a2 = newProps.master) === null || _a2 === void 0 ? void 0 : _a2.volume) !== void 0) {
-      const globalVolume = Math.max(0, Math.min(1, newProps.master.volume));
-      masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
-    }
-    bleepNames.forEach((bleepName) => {
-      var _a3, _b2, _c, _d;
-      const baseBleepProps = props.bleeps[bleepName];
-      const category = baseBleepProps === null || baseBleepProps === void 0 ? void 0 : baseBleepProps.category;
-      const newCategoryProps = category ? (_a3 = newProps.categories) === null || _a3 === void 0 ? void 0 : _a3[category] : null;
-      const generalProps = {
-        ...newProps.common,
-        ...newCategoryProps
-      };
-      if (generalProps.disabled) {
-        (_b2 = bleeps[bleepName]) === null || _b2 === void 0 ? void 0 : _b2.unload();
-        bleeps[bleepName] = null;
-      } else {
-        if (bleeps[bleepName]) {
-          (_c = bleeps[bleepName]) === null || _c === void 0 ? void 0 : _c.update({
-            ...generalProps,
-            ...(_d = newProps.bleeps) === null || _d === void 0 ? void 0 : _d[bleepName]
-          });
-        } else {
-          bleeps[bleepName] = createBleep({
-            ...generalProps,
-            ...baseBleepProps,
-            context,
-            masterGain
-          });
-        }
-      }
-    });
-  };
-  return Object.freeze({ bleeps, unload, update });
 };
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/array.es.js
@@ -26409,7 +26155,7 @@ function createAnimate(AnimatePolyfill) {
 // ../../node_modules/.pnpm/@motionone+dom@10.16.2/node_modules/@motionone/dom/dist/animate/index.es.js
 var animate = createAnimate(Animation);
 
-// ../../node_modules/.pnpm/tslib@2.5.2/node_modules/tslib/tslib.es6.js
+// ../../node_modules/.pnpm/tslib@2.6.0/node_modules/tslib/tslib.es6.mjs
 function __rest(s, e) {
   var t = {};
   for (var p in s)
@@ -26595,7 +26341,7 @@ function animate2(target, keyframesOrOptions, options) {
   return factory(target, keyframesOrOptions, options);
 }
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/internal/walkTextNodes/walkTextNodes.js
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_@arwes+animated@1.0.0-next.7_@arwes+tools@1.0.0-next.7_motion@10.16.2/node_modules/@arwes/text/build/esm/internal/walkTextNodes/walkTextNodes.js
 var walkTextNodes = (node2, callback) => {
   Array.from(node2.childNodes).forEach((child) => {
     if (child.nodeType === Node.TEXT_NODE) {
@@ -26606,7 +26352,7 @@ var walkTextNodes = (node2, callback) => {
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/internal/setTextNodesContent/setTextNodesContent.js
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_@arwes+animated@1.0.0-next.7_@arwes+tools@1.0.0-next.7_motion@10.16.2/node_modules/@arwes/text/build/esm/internal/setTextNodesContent/setTextNodesContent.js
 var setTextNodesContent = (textNodes, texts, contentLength) => {
   let markerLength = 0;
   for (let index = 0; index < textNodes.length; index++) {
@@ -26632,7 +26378,7 @@ var setTextNodesContent = (textNodes, texts, contentLength) => {
   }
 };
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/transitionTextSequence/transitionTextSequence.js
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_@arwes+animated@1.0.0-next.7_@arwes+tools@1.0.0-next.7_motion@10.16.2/node_modules/@arwes/text/build/esm/transitionTextSequence/transitionTextSequence.js
 var transitionTextSequence = (props) => {
   const { rootElement, contentElement, duration, easing: easing2 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
   if (!rootElement || !contentElement) {
@@ -26698,7 +26444,7 @@ var transitionTextSequence = (props) => {
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/transitionTextDecipher/transitionTextDecipher.js
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_@arwes+animated@1.0.0-next.7_@arwes+tools@1.0.0-next.7_motion@10.16.2/node_modules/@arwes/text/build/esm/transitionTextDecipher/transitionTextDecipher.js
 var LETTERS = "abcdefghijklmn\xF1opqrstuvwxyzABCDEFGHIJKLMN\xD1OPQRSTUVWXYZ>!\xB7$%&/()=?\xBF\u2264|@#";
 var transitionTextDecipher = (props) => {
   const { rootElement, contentElement, duration, easing: easing2 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
@@ -26759,7 +26505,7 @@ var transitionTextDecipher = (props) => {
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/getTransitionTextDuration/getTransitionTextDuration.js
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_@arwes+animated@1.0.0-next.7_@arwes+tools@1.0.0-next.7_motion@10.16.2/node_modules/@arwes/text/build/esm/getTransitionTextDuration/getTransitionTextDuration.js
 var getTransitionTextDuration = (props) => {
   const { length: length2, maxDuration = 4, cps = 400 } = props;
   const realDuration = 1e3 / cps * length2 / 1e3;
@@ -26854,13 +26600,13 @@ var renderFrameSVGPaths = (parentElement, width, height, pathsCustom) => {
   }
 };
 
-// ../../node_modules/.pnpm/@arwes+react-tools@1.0.0-next.7_react@18.2.0/node_modules/@arwes/react-tools/build/esm/memo/memo.js
+// ../../node_modules/.pnpm/@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-tools/build/esm/memo/memo.js
 var import_react = __toESM(require_react(), 1);
 var memo = (component, comparator) => {
   return (0, import_react.memo)(component, comparator);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-tools@1.0.0-next.7_react@18.2.0/node_modules/@arwes/react-tools/build/esm/mergeRefs/mergeRefs.js
+// ../../node_modules/.pnpm/@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-tools/build/esm/mergeRefs/mergeRefs.js
 var mergeRefs = (...refs) => {
   return (value) => {
     refs.filter(Boolean).forEach((ref) => {
@@ -26873,16 +26619,16 @@ var mergeRefs = (...refs) => {
   };
 };
 
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_s2jwwd4ifzjofup7sguc5tked4/node_modules/@arwes/react-styles/build/esm/constants.js
+// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_@emotion+react@11.11.1_react@18.2.0/node_modules/@arwes/react-styles/build/esm/constants.js
 var STYLES_EMPTY = Object.freeze({});
 
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_s2jwwd4ifzjofup7sguc5tked4/node_modules/@arwes/react-styles/build/esm/useStyles/useStyles.js
+// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_@emotion+react@11.11.1_react@18.2.0/node_modules/@arwes/react-styles/build/esm/useStyles/useStyles.js
 var import_react2 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_s2jwwd4ifzjofup7sguc5tked4/node_modules/@arwes/react-styles/build/esm/useThemeStyles/useThemeStyles.js
+// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_@emotion+react@11.11.1_react@18.2.0/node_modules/@arwes/react-styles/build/esm/useThemeStyles/useThemeStyles.js
 var import_react4 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@emotion+react@11.11.0_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
+// ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
 var React2 = __toESM(require_react());
 var import_react3 = __toESM(require_react());
 
@@ -28120,7 +27866,7 @@ var useInsertionEffect2 = React["useInsertionEffect"] ? React["useInsertionEffec
 var useInsertionEffectAlwaysWithSyncFallback = useInsertionEffect2 || syncFallback;
 var useInsertionEffectWithLayoutFallback = useInsertionEffect2 || React.useLayoutEffect;
 
-// ../../node_modules/.pnpm/@emotion+react@11.11.0_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
+// ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
 var isBrowser2 = true;
 var hasOwnProperty = {}.hasOwnProperty;
 var EmotionCacheContext = /* @__PURE__ */ React2.createContext(
@@ -28266,12 +28012,12 @@ if (true) {
 }
 var Emotion$1 = Emotion;
 
-// ../../node_modules/.pnpm/@emotion+react@11.11.0_react@18.2.0/node_modules/@emotion/react/dist/emotion-react.browser.esm.js
+// ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-react.browser.esm.js
 var React3 = __toESM(require_react());
 var import_hoist_non_react_statics = __toESM(require_hoist_non_react_statics_cjs());
 var pkg = {
   name: "@emotion/react",
-  version: "11.11.0",
+  version: "11.11.1",
   main: "dist/emotion-react.cjs.js",
   module: "dist/emotion-react.esm.js",
   browser: {
@@ -28608,18 +28354,18 @@ var isTestEnv;
 var globalContext;
 var globalKey;
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
 var import_react7 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/internal/AnimatorContext/AnimatorContext.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/internal/AnimatorContext/AnimatorContext.js
 var import_react5 = __toESM(require_react(), 1);
 var AnimatorContext = (0, import_react5.createContext)(void 0);
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/internal/AnimatorGeneralContext/AnimatorGeneralContext.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/internal/AnimatorGeneralContext/AnimatorGeneralContext.js
 var import_react6 = __toESM(require_react(), 1);
 var AnimatorGeneralContext = (0, import_react6.createContext)(void 0);
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
 var setNodeRefValue = (nodeRef, node2) => {
   if (typeof nodeRef === "function") {
     nodeRef(node2);
@@ -28741,16 +28487,16 @@ var Animator = (props) => {
   return (0, import_react7.createElement)(AnimatorContext.Provider, { value: animatorInterface }, isEnabledToUnmount ? null : children);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/Animator/index.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/Animator/index.js
 var Animator2 = memo(Animator);
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/useAnimator/useAnimator.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/useAnimator/useAnimator.js
 var import_react8 = __toESM(require_react(), 1);
 var useAnimator = () => {
   return (0, import_react8.useContext)(AnimatorContext);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/AnimatorGeneralProvider.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/AnimatorGeneralProvider.js
 var import_react9 = __toESM(require_react(), 1);
 var AnimatorGeneralProvider = (props) => {
   const { children, ...animatorGeneralSettings } = props;
@@ -28763,22 +28509,22 @@ var AnimatorGeneralProvider = (props) => {
   return (0, import_react9.createElement)(AnimatorGeneralContext.Provider, { value: animatorGeneralInterface }, children);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/index.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/index.js
 var AnimatorGeneralProvider2 = memo(AnimatorGeneralProvider);
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.8_65ukdgg3hyeqvzyivjvuuxqkjm/node_modules/@arwes/react-animator/build/esm/useAnimatorGeneral/useAnimatorGeneral.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-next.7_@arwes+react-tools@1.0.0-nex_odjqlvkjyy6a22pygihsjygl3y/node_modules/@arwes/react-animator/build/esm/useAnimatorGeneral/useAnimatorGeneral.js
 var import_react10 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/constants.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/constants.js
 var ANIMATED_ANIMATIONS_EMPTY = Object.freeze({});
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/Animated/index.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/Animated/index.js
 var import_react12 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
 var import_react11 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/internal/formatAnimatedCSSPropsShorthands/formatAnimatedCSSPropsShorthands.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/internal/formatAnimatedCSSPropsShorthands/formatAnimatedCSSPropsShorthands.js
 var propsTransformDistances = {
   x: "translateX",
   y: "translateY",
@@ -28829,7 +28575,7 @@ var formatAnimatedCSSPropsShorthands = (cssPropertiesEnhanced) => {
   return cssProperties;
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
 var Animated = (props) => {
   const { as: asProvided, animated, className, style: style2, elementRef: externalElementRef, hideOnExited = true, hideOnEntered, ...otherProps } = props;
   const animator = useAnimator();
@@ -28870,8 +28616,8 @@ var Animated = (props) => {
             animationControlsRef.current.push(control);
           }
         } else {
-          const { duration: duration2, easing: easing2, options, ...definition } = transition;
-          const control = animate2(element, definition, { duration: duration2 || durationTransition, easing: easing2, ...options });
+          const { duration: duration2, delay, easing: easing2, options, ...definition } = transition;
+          const control = animate2(element, definition, { duration: duration2 || durationTransition, delay, easing: easing2, ...options });
           animationControlsRef.current.push(control);
         }
       });
@@ -28902,16 +28648,16 @@ var Animated = (props) => {
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/Animated/index.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/Animated/index.js
 var Animated2 = (0, import_react12.memo)((0, import_react12.forwardRef)((props, forwardedRef) => (0, import_react12.createElement)(Animated, {
   elementRef: forwardedRef,
   ...props
 })));
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
 var import_react14 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/AnimatedX/AnimatedX.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/AnimatedX/AnimatedX.js
 var import_react13 = __toESM(require_react(), 1);
 var AnimatedX = (props) => {
   const { as: asProvided, state: animatedState, animated, className, style: style2, elementRef: externalElementRef, ...otherProps } = props;
@@ -28943,8 +28689,8 @@ var AnimatedX = (props) => {
           animationControlsRef.current.push(control);
         }
       } else {
-        const { duration, easing: easing2, options, ...definition } = transition;
-        const control = animate2(element, definition, { duration, easing: easing2, ...options });
+        const { duration, delay, easing: easing2, options, ...definition } = transition;
+        const control = animate2(element, definition, { duration, delay, easing: easing2, ...options });
         animationControlsRef.current.push(control);
       }
     });
@@ -28972,16 +28718,16 @@ var AnimatedX = (props) => {
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
 var AnimatedX2 = (0, import_react14.memo)((0, import_react14.forwardRef)((props, forwardedRef) => (0, import_react14.createElement)(AnimatedX, {
   elementRef: forwardedRef,
   ...props
 })));
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/useAnimatedAnimations/useAnimatedAnimations.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/useAnimatedAnimations/useAnimatedAnimations.js
 var import_react15 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.8_adguotwy3jzvpf7dx5wdapbo2y/node_modules/@arwes/react-animated/build/esm/animations/animations.js
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-n_vvbjxbbvqyd6xhldzdnga7mura/node_modules/@arwes/react-animated/build/esm/animations/animations.js
 var aa = (prop, from2, to, back) => ({
   transitions: {
     entering: { [prop]: [from2, to] },
@@ -29005,14 +28751,268 @@ var aaVisibility = () => {
   };
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.7_dyhap6fin7m77tpy5pvrfqey3a/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-next.7_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
 var import_react17 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.7_dyhap6fin7m77tpy5pvrfqey3a/node_modules/@arwes/react-bleeps/build/esm/internal/BleepsManagerContext.js
+// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleep/createBleep.js
+var createBleep2 = (props) => {
+  var _a;
+  if (!IS_BROWSER) {
+    return null;
+  }
+  const { sources, preload = true, loop = false, volume = 1, fetchHeaders, masterGain } = props;
+  let isBufferLoading = false;
+  let isBufferError = false;
+  let isBufferPlaying = false;
+  let source = null;
+  let buffer = null;
+  let duration = 0;
+  const context = (_a = props.context) !== null && _a !== void 0 ? _a : new window.AudioContext();
+  const gain = context.createGain();
+  const callersAccount = /* @__PURE__ */ new Set();
+  const fetchAudioBuffer = () => {
+    if (buffer || isBufferLoading || isBufferError) {
+      return;
+    }
+    if (!sources.length) {
+      isBufferError = true;
+      console.error("Every bleep must have at least one source with a valid audio file URL and type.");
+      return;
+    }
+    const audioTest = new window.Audio();
+    const source2 = sources.find((source3) => {
+      if (IS_BROWSER_SAFARI && source3.type.includes("audio/webm")) {
+        return false;
+      }
+      const support = audioTest.canPlayType(source3.type || "");
+      return support === "probably" || support === "maybe";
+    });
+    if (!source2) {
+      isBufferError = true;
+      console.error(`The bleep sources "${JSON.stringify(sources)}" are not supported on this navigator.`);
+      return;
+    }
+    const { src, type } = source2;
+    isBufferLoading = true;
+    window.fetch(src, {
+      method: "GET",
+      headers: fetchHeaders
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Bleep source could not be fetched.");
+      }
+      return response;
+    }).then((response) => response.arrayBuffer()).then((audioArrayBuffer) => context.decodeAudioData(audioArrayBuffer)).then((audioBuffer) => {
+      buffer = audioBuffer;
+      duration = buffer.duration;
+    }).catch((err) => {
+      isBufferError = true;
+      console.error(`The bleep with source URL "${src}" and type "${type}" could not be used:`, err);
+    }).then(() => isBufferLoading = false);
+  };
+  const getDuration = () => duration;
+  const getIsPlaying = () => isBufferPlaying;
+  const getIsLoaded = () => !!buffer;
+  const play = (caller) => {
+    if (!buffer) {
+      fetchAudioBuffer();
+      return;
+    }
+    if (loop && isBufferPlaying) {
+      return;
+    }
+    if (context.state === "suspended") {
+      let isResumeError = false;
+      context.resume().catch((err) => {
+        isResumeError = true;
+        console.error(`The bleep audio context with sources "${JSON.stringify(sources)}" could not be resumed to be played:`, err);
+      });
+      if (isResumeError) {
+        return;
+      }
+    }
+    if (caller) {
+      callersAccount.add(caller);
+    }
+    isBufferPlaying = true;
+    if (source) {
+      source.stop();
+      source.disconnect(gain);
+      source = null;
+    }
+    source = context.createBufferSource();
+    source.buffer = buffer;
+    source.loop = loop;
+    if (loop) {
+      source.loopStart = 0;
+      source.loopEnd = buffer.duration;
+    }
+    source.connect(gain);
+    source.start();
+    source.onended = () => {
+      isBufferPlaying = false;
+    };
+  };
+  const stop = (caller) => {
+    if (!buffer) {
+      return;
+    }
+    if (caller) {
+      callersAccount.delete(caller);
+    }
+    const canStop = loop ? !callersAccount.size : true;
+    if (canStop) {
+      if (source) {
+        source.stop();
+        source.disconnect(gain);
+        source = null;
+      }
+      isBufferPlaying = false;
+    }
+  };
+  const load = () => {
+    fetchAudioBuffer();
+  };
+  const unload = () => {
+    if (source) {
+      source.stop();
+      source.disconnect(gain);
+      source = null;
+    }
+    buffer = null;
+    isBufferLoading = false;
+    isBufferError = false;
+  };
+  const update = (props2) => {
+    if (props2.volume !== void 0) {
+      const bleepVolume = Math.max(0, Math.min(1, props2.volume));
+      gain.gain.setValueAtTime(bleepVolume, context.currentTime);
+    }
+  };
+  const bleep = {};
+  const bleepAPI = {
+    duration: {
+      get: getDuration,
+      enumerable: true
+    },
+    isPlaying: {
+      get: getIsPlaying,
+      enumerable: true
+    },
+    isLoaded: {
+      get: getIsLoaded,
+      enumerable: true
+    },
+    play: {
+      value: play,
+      enumerable: true
+    },
+    stop: {
+      value: stop,
+      enumerable: true
+    },
+    load: {
+      value: load,
+      enumerable: true
+    },
+    unload: {
+      value: unload,
+      enumerable: true
+    },
+    update: {
+      value: update,
+      enumerable: true
+    }
+  };
+  Object.defineProperties(bleep, bleepAPI);
+  if (masterGain) {
+    gain.connect(masterGain);
+  } else {
+    gain.connect(context.destination);
+  }
+  update({ volume });
+  if (preload) {
+    fetchAudioBuffer();
+  }
+  return bleep;
+};
+
+// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleepsManager/createBleepsManager.js
+var createBleepsManager = (props) => {
+  var _a, _b;
+  const context = IS_BROWSER ? new window.AudioContext() : null;
+  const masterGain = IS_BROWSER ? context.createGain() : null;
+  const bleeps = {};
+  const bleepNames = Object.keys(props.bleeps);
+  bleepNames.forEach((bleepName) => {
+    var _a2;
+    const bleepProps = props.bleeps[bleepName];
+    const categoryProps = bleepProps.category ? (_a2 = props.categories) === null || _a2 === void 0 ? void 0 : _a2[bleepProps.category] : null;
+    const generalProps = {
+      ...props.common,
+      ...categoryProps
+    };
+    bleeps[bleepName] = generalProps.disabled ? null : createBleep2({
+      ...generalProps,
+      ...bleepProps,
+      context,
+      masterGain
+    });
+  });
+  if (IS_BROWSER) {
+    masterGain.connect(context.destination);
+    const globalVolume = Math.max(0, Math.min(1, (_b = (_a = props === null || props === void 0 ? void 0 : props.master) === null || _a === void 0 ? void 0 : _a.volume) !== null && _b !== void 0 ? _b : 1));
+    masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
+  }
+  const unload = () => {
+    bleepNames.forEach((bleepName) => {
+      var _a2;
+      (_a2 = bleeps[bleepName]) === null || _a2 === void 0 ? void 0 : _a2.unload();
+    });
+  };
+  const update = (newProps) => {
+    var _a2;
+    if (((_a2 = newProps.master) === null || _a2 === void 0 ? void 0 : _a2.volume) !== void 0) {
+      const globalVolume = Math.max(0, Math.min(1, newProps.master.volume));
+      masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
+    }
+    bleepNames.forEach((bleepName) => {
+      var _a3, _b2, _c, _d;
+      const baseBleepProps = props.bleeps[bleepName];
+      const category = baseBleepProps === null || baseBleepProps === void 0 ? void 0 : baseBleepProps.category;
+      const newCategoryProps = category ? (_a3 = newProps.categories) === null || _a3 === void 0 ? void 0 : _a3[category] : null;
+      const generalProps = {
+        ...newProps.common,
+        ...newCategoryProps
+      };
+      if (generalProps.disabled) {
+        (_b2 = bleeps[bleepName]) === null || _b2 === void 0 ? void 0 : _b2.unload();
+        bleeps[bleepName] = null;
+      } else {
+        if (bleeps[bleepName]) {
+          (_c = bleeps[bleepName]) === null || _c === void 0 ? void 0 : _c.update({
+            ...generalProps,
+            ...(_d = newProps.bleeps) === null || _d === void 0 ? void 0 : _d[bleepName]
+          });
+        } else {
+          bleeps[bleepName] = createBleep2({
+            ...generalProps,
+            ...baseBleepProps,
+            context,
+            masterGain
+          });
+        }
+      }
+    });
+  };
+  return Object.freeze({ bleeps, unload, update });
+};
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-next.7_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/internal/BleepsManagerContext.js
 var import_react16 = __toESM(require_react(), 1);
 var BleepsManagerContext = (0, import_react16.createContext)(null);
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.7_dyhap6fin7m77tpy5pvrfqey3a/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-next.7_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
 var BleepsProvider = (props) => {
   const { master, common, categories, bleeps, children } = props;
   const bleepsManager = (0, import_react17.useMemo)(() => createBleepsManager({ master, common, categories, bleeps }), []);
@@ -29027,18 +29027,22 @@ var BleepsProvider = (props) => {
   return import_react17.default.createElement(BleepsManagerContext.Provider, { value: bleepsManager }, children);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.7_dyhap6fin7m77tpy5pvrfqey3a/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/index.js
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-next.7_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/index.js
 var BleepsProvider2 = memo(BleepsProvider);
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.7_dyhap6fin7m77tpy5pvrfqey3a/node_modules/@arwes/react-bleeps/build/esm/useBleeps/useBleeps.js
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-next.7_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/useBleeps/useBleeps.js
 var import_react18 = __toESM(require_react(), 1);
-var useBleeps = () => {
+var defaultProps = {};
+var useBleeps = (props = defaultProps) => {
   var _a;
+  if (props.disabled) {
+    return {};
+  }
   const bleepsManager = (0, import_react18.useContext)(BleepsManagerContext);
   return (_a = bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.bleeps) !== null && _a !== void 0 ? _a : {};
 };
 
-// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_nozrrdatspu36oielznv6zivmy/node_modules/@arwes/react-text/build/esm/Text/Text.js
+// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-next._hv6hchejgqxylbetkjcsphfwj4/node_modules/@arwes/react-text/build/esm/Text/Text.js
 var import_react19 = __toESM(require_react(), 1);
 var TEXT_CLASS = "arwes-react-text-text";
 var Text = (props) => {
@@ -29139,10 +29143,10 @@ var Text = (props) => {
   }, children));
 };
 
-// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_nozrrdatspu36oielznv6zivmy/node_modules/@arwes/react-text/build/esm/Text/index.js
+// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_@arwes+animator@1.0.0-next.7_@arwes+react-animator@1.0.0-next._hv6hchejgqxylbetkjcsphfwj4/node_modules/@arwes/react-text/build/esm/Text/index.js
 var Text2 = memo(Text);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/useFrameSVGRenderer/useFrameSVGRenderer.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/useFrameSVGRenderer/useFrameSVGRenderer.js
 var import_react21 = __toESM(require_react(), 1);
 var useFrameSVGRenderer = (svgRef, onRenderExternal) => {
   (0, import_react21.useEffect)(() => {
@@ -29171,10 +29175,10 @@ var useFrameSVGRenderer = (svgRef, onRenderExternal) => {
   }, [onRenderExternal]);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/useFrameSVGAssemblingAnimation/useFrameSVGAssemblingAnimation.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/useFrameSVGAssemblingAnimation/useFrameSVGAssemblingAnimation.js
 var import_react22 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVG/FrameSVG.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVG/FrameSVG.js
 var import_react23 = __toESM(require_react(), 1);
 var FrameSVG = (props) => {
   const { paths, onRender: onRenderExternal, className, style: style2, elementRef, children, ...otherProps } = props;
@@ -29212,10 +29216,10 @@ var FrameSVG = (props) => {
   }, children);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVG/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVG/index.js
 var FrameSVG2 = memo(FrameSVG);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/FrameSVGOctagon.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/FrameSVGOctagon.js
 var import_react24 = __toESM(require_react(), 1);
 var toPath = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGOctagon = (props) => {
@@ -29265,7 +29269,7 @@ var FrameSVGOctagon = (props) => {
     ]);
     const paths2 = [
       {
-        name: "shape",
+        name: "bg",
         style: {
           strokeWidth: 0,
           fill: "currentcolor"
@@ -29273,12 +29277,12 @@ var FrameSVGOctagon = (props) => {
         path: polyline1.concat(polyline2)
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: polyline1
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: polyline2
       }
@@ -29288,10 +29292,10 @@ var FrameSVGOctagon = (props) => {
   return import_react24.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgoctagon", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/index.js
 var FrameSVGOctagon2 = memo(FrameSVGOctagon);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/FrameSVGUnderline.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/FrameSVGUnderline.js
 var import_react25 = __toESM(require_react(), 1);
 var FrameSVGUnderline = (props) => {
   const { squareSize: ss = 16, strokeWidth: sw = 1, inverted, className, ...otherProps } = props;
@@ -29299,7 +29303,7 @@ var FrameSVGUnderline = (props) => {
     const so = sw / 2;
     return [
       {
-        name: "shape",
+        name: "bg",
         style: {
           strokeWidth: 0,
           fill: "currentcolor"
@@ -29313,7 +29317,7 @@ var FrameSVGUnderline = (props) => {
         ]
       },
       {
-        name: "decoration",
+        name: "line",
         style: {
           stroke: "currentcolor",
           strokeLinecap: "round",
@@ -29332,17 +29336,17 @@ var FrameSVGUnderline = (props) => {
   return import_react25.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgunderline", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/index.js
 var FrameSVGUnderline2 = memo(FrameSVGUnderline);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/FrameSVGCorners.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/FrameSVGCorners.js
 var import_react26 = __toESM(require_react(), 1);
 var FrameSVGCorners = (props) => {
   const { strokeWidth: cw = 1, cornerLength: cl = 16, className, ...otherProps } = props;
   const paths = (0, import_react26.useMemo)(() => {
     const co = cw / 2;
     const bg = {
-      name: "shape",
+      name: "bg",
       style: {
         strokeWidth: 0,
         fill: "currentcolor"
@@ -29369,7 +29373,7 @@ var FrameSVGCorners = (props) => {
       [["M", co, `100% - ${co}`], ["L", cl, `100% - ${co}`]]
     ];
     const lines = linesPaths.map((path) => ({
-      name: "decoration",
+      name: "line",
       style: {
         stroke: "currentcolor",
         strokeLinecap: "round",
@@ -29384,10 +29388,10 @@ var FrameSVGCorners = (props) => {
   return import_react26.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgcorners", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/index.js
 var FrameSVGCorners2 = memo(FrameSVGCorners);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/FrameSVGLines.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/FrameSVGLines.js
 var import_react27 = __toESM(require_react(), 1);
 var FrameSVGLines = (props) => {
   const { largeLineWidth: llw = 1, smallLineWidth: slw = 1, smallLineLength: sll = 16, className, ...otherProps } = props;
@@ -29441,7 +29445,7 @@ var FrameSVGLines = (props) => {
     ];
     return [
       {
-        name: "shape",
+        name: "bg",
         style: {
           strokeWidth: 0,
           fill: "currentcolor"
@@ -29454,7 +29458,7 @@ var FrameSVGLines = (props) => {
         ]
       },
       ...largePolylines.map((polyline) => ({
-        name: "decoration",
+        name: "line",
         style: {
           ...polylineStyle,
           strokeWidth: String(llw)
@@ -29462,7 +29466,7 @@ var FrameSVGLines = (props) => {
         path: polyline
       })),
       ...smallPolylines.map((polyline) => ({
-        name: "decoration",
+        name: "line",
         style: {
           ...polylineStyle,
           strokeWidth: String(slw)
@@ -29474,10 +29478,10 @@ var FrameSVGLines = (props) => {
   return import_react27.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvglines", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/index.js
 var FrameSVGLines2 = memo(FrameSVGLines);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/FrameSVGNefrex.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/FrameSVGNefrex.js
 var import_react28 = __toESM(require_react(), 1);
 var toPath2 = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGNefrex = (props) => {
@@ -29505,7 +29509,7 @@ var FrameSVGNefrex = (props) => {
     ];
     const paths2 = [
       {
-        name: "shape",
+        name: "bg",
         style: {
           strokeWidth: 0,
           fill: "currentcolor"
@@ -29517,12 +29521,12 @@ var FrameSVGNefrex = (props) => {
         ]))
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: toPath2(leftTopLine)
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: toPath2(rightBottomLine)
       }
@@ -29532,10 +29536,10 @@ var FrameSVGNefrex = (props) => {
   return import_react28.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgnefrex", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/index.js
 var FrameSVGNefrex2 = memo(FrameSVGNefrex);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/FrameSVGKranox.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/FrameSVGKranox.js
 var import_react29 = __toESM(require_react(), 1);
 var toPath3 = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGKranox = (props) => {
@@ -29581,7 +29585,7 @@ var FrameSVGKranox = (props) => {
     ];
     const paths2 = [
       {
-        name: "shape",
+        name: "bg",
         style: {
           strokeWidth: 0,
           fill: "currentcolor"
@@ -29589,12 +29593,12 @@ var FrameSVGKranox = (props) => {
         path: toPath3(leftTopLine.concat(rightBottomLine))
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: toPath3(leftTopLine)
       },
       {
-        name: "decoration",
+        name: "line",
         style: polylineStyle,
         path: toPath3(rightBottomLine)
       }
@@ -29604,10 +29608,10 @@ var FrameSVGKranox = (props) => {
   return import_react29.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgkranox", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/index.js
 var FrameSVGKranox2 = memo(FrameSVGKranox);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/IlluminatorSVG.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/IlluminatorSVG.js
 var import_react30 = __toESM(require_react(), 1);
 var IlluminatorSVG = (props) => {
   const { color = "hsl(0 0% 50% / 5%)", size = 300, className, style: style2 } = props;
@@ -29660,10 +29664,10 @@ var IlluminatorSVG = (props) => {
   );
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/index.js
 var IlluminatorSVG2 = memo(IlluminatorSVG);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/Illuminator/Illuminator.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/Illuminator/Illuminator.js
 var import_react31 = __toESM(require_react(), 1);
 var Illuminator = (props) => {
   const { color = "hsl(0 0% 50% / 5%)", size = 300, className, style: style2 } = props;
@@ -29701,13 +29705,13 @@ var Illuminator = (props) => {
   }, ref: elementRef });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.8_fl3lsyddxl2xl6j3po2tmspgpi/node_modules/@arwes/react-frames/build/esm/Illuminator/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-next.8_@arwes+react-animator@1.0.0-next._o73qucgw6bhhcyljyoerdwhslm/node_modules/@arwes/react-frames/build/esm/Illuminator/index.js
 var Illuminator2 = memo(Illuminator);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
 var import_react32 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Dots/getDistanceFromOriginToCornerProgress.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Dots/getDistanceFromOriginToCornerProgress.js
 var getDistanceBetweenTwoPoints = (x1, y1, x2, y2) => {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 };
@@ -29735,9 +29739,9 @@ var getDistanceFromOriginToCornerProgress = (width, height, x1, y1, origin) => {
   return distanceFromOrigin / maxDistanceToCorner;
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
 var { entering, exiting } = ANIMATOR_STATES;
-var defaultProps = {
+var defaultProps2 = {
   color: "#777",
   type: "box",
   distance: 30,
@@ -29745,7 +29749,7 @@ var defaultProps = {
   origin: "center"
 };
 var Dots = (props) => {
-  const propsFull = { ...defaultProps, ...props };
+  const propsFull = { ...defaultProps2, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
   const elementRef = (0, import_react32.useRef)(null);
@@ -29838,16 +29842,15 @@ var Dots = (props) => {
     ...style2
   } });
 };
-Dots.defaultProps = defaultProps;
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Dots/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Dots/index.js
 var Dots2 = memo(Dots);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Puffs/Puffs.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Puffs/Puffs.js
 var import_react33 = __toESM(require_react(), 1);
 var { entering: entering2, entered, exiting: exiting2, exited } = ANIMATOR_STATES;
 var minmaxOverflow01 = (value) => Math.min(1, Math.max(0, value === 1 ? 1 : value % 1));
-var defaultProps2 = {
+var defaultProps3 = {
   padding: 50,
   xOffset: [0, 0],
   yOffset: [-10, -100],
@@ -29856,7 +29859,7 @@ var defaultProps2 = {
   sets: 5
 };
 var Puffs = (props) => {
-  const propsFull = { ...defaultProps2, ...props };
+  const propsFull = { ...defaultProps3, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
   const elementRef = (0, import_react33.useRef)(null);
@@ -29978,15 +29981,14 @@ var Puffs = (props) => {
     ...style2
   } });
 };
-Puffs.defaultProps = defaultProps2;
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/Puffs/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/Puffs/index.js
 var Puffs2 = memo(Puffs);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/GridLines/GridLines.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/GridLines/GridLines.js
 var import_react34 = __toESM(require_react(), 1);
 var { entering: entering3, exiting: exiting3 } = ANIMATOR_STATES;
-var defaultProps3 = {
+var defaultProps4 = {
   lineWidth: 1,
   lineColor: "#777",
   horizontalLineDash: [4],
@@ -29994,7 +29996,7 @@ var defaultProps3 = {
   distance: 30
 };
 var GridLines = (props) => {
-  const propsFull = { ...defaultProps3, ...props };
+  const propsFull = { ...defaultProps4, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
   const elementRef = (0, import_react34.useRef)(null);
@@ -30080,12 +30082,11 @@ var GridLines = (props) => {
     ...style2
   } });
 };
-GridLines.defaultProps = defaultProps3;
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/GridLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/GridLines/index.js
 var GridLines2 = memo(GridLines);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/MovingLines/MovingLines.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/MovingLines/MovingLines.js
 var import_react35 = __toESM(require_react(), 1);
 var { entering: entering4, exiting: exiting4, exited: exited2 } = ANIMATOR_STATES;
 var random = (min, max) => (max - min) * Math.random();
@@ -30103,14 +30104,14 @@ var createLinesSet = (config) => {
     return { axis1, axis2Initial, length: length2 };
   });
 };
-var defaultProps4 = {
+var defaultProps5 = {
   lineWidth: 1,
   lineColor: "#777",
   distance: 30,
   sets: 5
 };
 var MovingLines = (props) => {
-  const propsFull = { ...defaultProps4, ...props };
+  const propsFull = { ...defaultProps5, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
   const elementRef = (0, import_react35.useRef)(null);
@@ -30166,12 +30167,12 @@ var MovingLines = (props) => {
       const { duration } = node2.control.getSettings();
       switch (state) {
         case entering4: {
-          transitionControl = animate2(canvas, { opacity: [0, 1] }, { duration: duration === null || duration === void 0 ? void 0 : duration.enter, easing: "ease-out" });
-          intervalControl = animate2(draw, { duration: duration === null || duration === void 0 ? void 0 : duration.interval, easing: "linear", repeat: Infinity });
+          transitionControl = animate2(canvas, { opacity: [0, 1] }, { duration: duration.enter, easing: "ease-out" });
+          intervalControl = animate2(draw, { duration: duration.interval || 10, easing: "linear", repeat: Infinity });
           break;
         }
         case exiting4: {
-          transitionControl = animate2(canvas, { opacity: [1, 0] }, { duration: duration === null || duration === void 0 ? void 0 : duration.exit, easing: "ease-out" });
+          transitionControl = animate2(canvas, { opacity: [1, 0] }, { duration: duration.exit, easing: "ease-out" });
           break;
         }
         case exited2: {
@@ -30201,12 +30202,11 @@ var MovingLines = (props) => {
     ...style2
   } });
 };
-MovingLines.defaultProps = defaultProps4;
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.7_aurw6akqi34pv7nww7ms36xtjm/node_modules/@arwes/react-bgs/build/esm/MovingLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arw_rpyfmjk6cbxh4mqrxpmeayr72a/node_modules/@arwes/react-bgs/build/esm/MovingLines/index.js
 var MovingLines2 = memo(MovingLines);
 
-// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_7flhwo624pxhszgqxa2iv3vhvu/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/BleepsOnAnimator.js
+// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arwes+bleeps@1.0.0-next.7_@arwes_qzjdtb4qnporqdc6g2kq4bzrty/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/BleepsOnAnimator.js
 var import_react36 = __toESM(require_react(), 1);
 var import_react37 = __toESM(require_react(), 1);
 var BleepsOnAnimator = (props) => {
@@ -30242,10 +30242,10 @@ var BleepsOnAnimator = (props) => {
   return import_react37.default.createElement(import_react37.default.Fragment, null);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_7flhwo624pxhszgqxa2iv3vhvu/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/index.js
+// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_@arwes+animator@1.0.0-next.7_@arwes+bleeps@1.0.0-next.7_@arwes_qzjdtb4qnporqdc6g2kq4bzrty/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/index.js
 var BleepsOnAnimator2 = memo(BleepsOnAnimator);
 
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
 function identity(x) {
   return x;
 }
@@ -30320,7 +30320,7 @@ function observable(subscribe) {
   return self;
 }
 
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/observable/index.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/observable/index.mjs
 function share(_opts) {
   return (originalObserver) => {
     let refCount = 0;
@@ -30418,81 +30418,7 @@ function observableToPromise(observable2) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/transformResult-a4d3dad0.mjs
-var TRPCClientError = class extends Error {
-  static from(cause, opts = {}) {
-    if (!(cause instanceof Error)) {
-      return new TRPCClientError(cause.error.message ?? "", {
-        ...opts,
-        cause: void 0,
-        result: cause
-      });
-    }
-    if (cause.name === "TRPCClientError") {
-      return cause;
-    }
-    return new TRPCClientError(cause.message, {
-      ...opts,
-      cause,
-      result: null
-    });
-  }
-  constructor(message, opts) {
-    const cause = opts?.cause;
-    super(message, {
-      cause
-    });
-    this.meta = opts?.meta;
-    this.cause = cause;
-    this.shape = opts?.result?.error;
-    this.data = opts?.result?.error.data;
-    this.name = "TRPCClientError";
-    Object.setPrototypeOf(this, TRPCClientError.prototype);
-  }
-};
-function isObject(value) {
-  return !!value && !Array.isArray(value) && typeof value === "object";
-}
-function transformResultInner(response, runtime) {
-  if ("error" in response) {
-    const error = runtime.transformer.deserialize(response.error);
-    return {
-      ok: false,
-      error: {
-        ...response,
-        error
-      }
-    };
-  }
-  const result = {
-    ...response.result,
-    ...(!response.result.type || response.result.type === "data") && {
-      type: "data",
-      data: runtime.transformer.deserialize(response.result.data)
-    }
-  };
-  return {
-    ok: true,
-    result
-  };
-}
-function transformResult(response, runtime) {
-  let result;
-  try {
-    result = transformResultInner(response, runtime);
-  } catch (err) {
-    throw new TRPCClientError("Unable to transform response from server");
-  }
-  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
-    throw new TRPCClientError("Badly formatted response from server");
-  }
-  if (result.ok && !isObject(result.result)) {
-    throw new TRPCClientError("Badly formatted response from server");
-  }
-  return result;
-}
-
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
 function createChain(opts) {
   return observable((observer) => {
     function execute(index = 0, op = opts.op) {
@@ -30514,7 +30440,92 @@ function createChain(opts) {
   });
 }
 
-// ../../node_modules/.pnpm/@trpc+server@10.25.1/node_modules/@trpc/server/dist/index-972002da.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/TRPCClientError-fef6cf44.mjs
+function isTRPCClientError(cause) {
+  return cause instanceof TRPCClientError || /**
+  * @deprecated
+  * Delete in next major
+  */
+  cause.name === "TRPCClientError";
+}
+var TRPCClientError = class extends Error {
+  static from(cause, opts = {}) {
+    if (!(cause instanceof Error)) {
+      return new TRPCClientError(cause.error.message ?? "", {
+        ...opts,
+        cause: void 0,
+        result: cause
+      });
+    }
+    if (isTRPCClientError(cause)) {
+      if (opts.meta) {
+        cause.meta = {
+          ...cause.meta,
+          ...opts.meta
+        };
+      }
+      return cause;
+    }
+    return new TRPCClientError(cause.message, {
+      ...opts,
+      cause,
+      result: null
+    });
+  }
+  constructor(message, opts) {
+    const cause = opts?.cause;
+    super(message, {
+      cause
+    });
+    this.meta = opts?.meta;
+    this.cause = cause;
+    this.shape = opts?.result?.error;
+    this.data = opts?.result?.error.data;
+    this.name = "TRPCClientError";
+    Object.setPrototypeOf(this, TRPCClientError.prototype);
+  }
+};
+
+// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/codes-24aa1ce1.mjs
+function invert(obj) {
+  const newObj = /* @__PURE__ */ Object.create(null);
+  for (const key in obj) {
+    const v = obj[key];
+    newObj[v] = key;
+  }
+  return newObj;
+}
+var TRPC_ERROR_CODES_BY_KEY = {
+  /**
+  * Invalid JSON was received by the server.
+  * An error occurred on the server while parsing the JSON text.
+  */
+  PARSE_ERROR: -32700,
+  /**
+  * The JSON sent is not a valid Request object.
+  */
+  BAD_REQUEST: -32600,
+  /**
+  * Internal JSON-RPC error.
+  */
+  INTERNAL_SERVER_ERROR: -32603,
+  // Implementation specific errors
+  UNAUTHORIZED: -32001,
+  FORBIDDEN: -32003,
+  NOT_FOUND: -32004,
+  METHOD_NOT_SUPPORTED: -32005,
+  TIMEOUT: -32008,
+  CONFLICT: -32009,
+  PRECONDITION_FAILED: -32012,
+  PAYLOAD_TOO_LARGE: -32013,
+  UNPROCESSABLE_CONTENT: -32022,
+  TOO_MANY_REQUESTS: -32029,
+  CLIENT_CLOSED_REQUEST: -32099
+};
+var TRPC_ERROR_CODES_BY_NUMBER = invert(TRPC_ERROR_CODES_BY_KEY);
+
+// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/index-044a193b.mjs
+var TRPC_ERROR_CODES_BY_NUMBER2 = invert(TRPC_ERROR_CODES_BY_KEY);
 var noop2 = () => {
 };
 function createInnerProxy(callback, path) {
@@ -30529,9 +30540,10 @@ function createInnerProxy(callback, path) {
       ]);
     },
     apply(_1, _2, args) {
+      const isApply = path[path.length - 1] === "apply";
       return callback({
-        args,
-        path
+        args: isApply ? args.length >= 2 ? args[1] : [] : args,
+        path: isApply ? path.slice(0, -1) : path
       });
     }
   });
@@ -30549,20 +30561,17 @@ var createFlatProxy = (callback) => {
   });
 };
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/httpUtils-8a5c637a.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/httpUtils-1efcb902.mjs
 var isFunction2 = (fn) => typeof fn === "function";
-function _bind(fn, thisArg) {
-  return isFunction2(fn.bind) ? fn.bind(thisArg) : fn;
-}
 function getFetch(customFetchImpl) {
   if (customFetchImpl) {
     return customFetchImpl;
   }
   if (typeof window !== "undefined" && isFunction2(window.fetch)) {
-    return _bind(window.fetch, window);
+    return window.fetch;
   }
   if (typeof globalThis !== "undefined" && isFunction2(globalThis.fetch)) {
-    return _bind(globalThis.fetch, globalThis);
+    return globalThis.fetch;
   }
   throw new Error("No fetch implementation found");
 }
@@ -30581,7 +30590,7 @@ function getAbortController(customAbortControllerImpl) {
 function resolveHTTPLinkOptions(opts) {
   return {
     url: opts.url,
-    fetch: getFetch(opts.fetch),
+    fetch: opts.fetch,
     AbortController: getAbortController(opts.AbortController)
   };
 }
@@ -30632,37 +30641,48 @@ var jsonHttpRequester = (opts) => {
     getBody
   });
 };
-function httpRequest(opts) {
+async function fetchHTTPResponse(opts, ac) {
+  const url = opts.getUrl(opts);
+  const body = opts.getBody(opts);
   const { type } = opts;
+  const resolvedHeaders = await opts.headers();
+  if (type === "subscription") {
+    throw new Error("Subscriptions should use wsLink");
+  }
+  const headers = {
+    ...opts.contentTypeHeader ? {
+      "content-type": opts.contentTypeHeader
+    } : {},
+    ...opts.batchModeHeader ? {
+      "trpc-batch-mode": opts.batchModeHeader
+    } : {},
+    ...resolvedHeaders
+  };
+  return getFetch(opts.fetch)(url, {
+    method: METHOD[type],
+    signal: ac?.signal,
+    body,
+    headers
+  });
+}
+function httpRequest(opts) {
   const ac = opts.AbortController ? new opts.AbortController() : null;
+  const meta = {};
   const promise = new Promise((resolve, reject) => {
-    const url = opts.getUrl(opts);
-    const body = opts.getBody(opts);
-    const meta = {};
-    Promise.resolve(opts.headers()).then((headers) => {
-      if (type === "subscription") {
-        throw new Error("Subscriptions should use wsLink");
-      }
-      return opts.fetch(url, {
-        method: METHOD[type],
-        signal: ac?.signal,
-        body,
-        headers: {
-          ...opts.contentTypeHeader ? {
-            "content-type": opts.contentTypeHeader
-          } : {},
-          ...headers
-        }
-      });
-    }).then((_res) => {
+    fetchHTTPResponse(opts, ac).then((_res) => {
       meta.response = _res;
       return _res.json();
     }).then((json) => {
+      meta.responseJSON = json;
       resolve({
         json,
         meta
       });
-    }).catch(reject);
+    }).catch((err) => {
+      reject(TRPCClientError.from(err, {
+        meta
+      }));
+    });
   });
   const cancel = () => {
     ac?.abort();
@@ -30673,7 +30693,55 @@ function httpRequest(opts) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpBatchLink.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/transformResult-7ab522e6.mjs
+function isObject(value) {
+  return !!value && !Array.isArray(value) && typeof value === "object";
+}
+function transformResultInner(response, runtime) {
+  if ("error" in response) {
+    const error = runtime.transformer.deserialize(response.error);
+    return {
+      ok: false,
+      error: {
+        ...response,
+        error
+      }
+    };
+  }
+  const result = {
+    ...response.result,
+    ...(!response.result.type || response.result.type === "data") && {
+      type: "data",
+      data: runtime.transformer.deserialize(response.result.data)
+    }
+  };
+  return {
+    ok: true,
+    result
+  };
+}
+var TransformResultError = class extends Error {
+  constructor() {
+    super("Unable to transform response from server");
+  }
+};
+function transformResult(response, runtime) {
+  let result;
+  try {
+    result = transformResultInner(response, runtime);
+  } catch (err) {
+    throw new TransformResultError();
+  }
+  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
+    throw new TransformResultError();
+  }
+  if (result.ok && !isObject(result.result)) {
+    throw new TransformResultError();
+  }
+  return result;
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/httpBatchLink-fbd7b43c.mjs
 var throwFatalError = () => {
   throw new Error("Something went wrong. Please submit an issue at https://github.com/trpc/trpc/issues/new");
 };
@@ -30697,7 +30765,7 @@ function dataLoader(batchLoader) {
       }
       const lastGroup = groupedItems[groupedItems.length - 1];
       if (item.aborted) {
-        item.reject(new Error("Aborted"));
+        item.reject?.(new Error("Aborted"));
         index++;
         continue;
       }
@@ -30708,7 +30776,7 @@ function dataLoader(batchLoader) {
         continue;
       }
       if (lastGroup.length === 0) {
-        item.reject(new Error("Input is too big for a single dispatch"));
+        item.reject?.(new Error("Input is too big for a single dispatch"));
         index++;
         continue;
       }
@@ -30730,18 +30798,27 @@ function dataLoader(batchLoader) {
       for (const item of items) {
         item.batch = batch;
       }
-      const { promise, cancel } = batchLoader.fetch(batch.items.map((_item) => _item.key));
+      const unitResolver = (index, value) => {
+        const item = batch.items[index];
+        item.resolve?.(value);
+        item.batch = null;
+        item.reject = null;
+        item.resolve = null;
+      };
+      const { promise, cancel } = batchLoader.fetch(batch.items.map((_item) => _item.key), unitResolver);
       batch.cancel = cancel;
       promise.then((result) => {
         for (let i = 0; i < result.length; i++) {
           const value = result[i];
-          const item = batch.items[i];
-          item.resolve(value);
+          unitResolver(i, value);
+        }
+        for (const item of batch.items) {
+          item.reject?.(new Error("Missing result"));
           item.batch = null;
         }
       }).catch((cause) => {
         for (const item of batch.items) {
-          item.reject(cause);
+          item.reject?.(cause);
           item.batch = null;
         }
       });
@@ -30782,99 +30859,114 @@ function dataLoader(batchLoader) {
     load
   };
 }
-function httpBatchLink(opts) {
-  const resolvedOpts = resolveHTTPLinkOptions(opts);
-  return (runtime) => {
-    const maxURLLength = opts.maxURLLength || Infinity;
-    const batchLoader = (type) => {
-      const validate = (batchOps) => {
-        if (maxURLLength === Infinity) {
-          return true;
-        }
-        const path = batchOps.map((op) => op.path).join(",");
-        const inputs = batchOps.map((op) => op.input);
-        const url = getUrl({
-          ...resolvedOpts,
-          runtime,
-          type,
-          path,
-          inputs
-        });
-        return url.length <= maxURLLength;
-      };
-      const fetch = (batchOps) => {
-        const path = batchOps.map((op) => op.path).join(",");
-        const inputs = batchOps.map((op) => op.input);
-        const { promise, cancel } = jsonHttpRequester({
-          ...resolvedOpts,
-          runtime,
-          type,
-          path,
-          inputs,
-          headers() {
-            if (!opts.headers) {
-              return {};
-            }
-            if (typeof opts.headers === "function") {
-              return opts.headers({
-                opList: batchOps
-              });
-            }
-            return opts.headers;
+function createHTTPBatchLink(requester) {
+  return function httpBatchLink2(opts) {
+    const resolvedOpts = resolveHTTPLinkOptions(opts);
+    const maxURLLength = opts.maxURLLength ?? Infinity;
+    return (runtime) => {
+      const batchLoader = (type) => {
+        const validate = (batchOps) => {
+          if (maxURLLength === Infinity) {
+            return true;
           }
+          const path = batchOps.map((op) => op.path).join(",");
+          const inputs = batchOps.map((op) => op.input);
+          const url = getUrl({
+            ...resolvedOpts,
+            runtime,
+            type,
+            path,
+            inputs
+          });
+          return url.length <= maxURLLength;
+        };
+        const fetch = requester({
+          ...resolvedOpts,
+          runtime,
+          type,
+          opts
         });
         return {
-          promise: promise.then((res) => {
-            const resJSON = Array.isArray(res.json) ? res.json : batchOps.map(() => res.json);
-            const result = resJSON.map((item) => ({
-              meta: res.meta,
-              json: item
-            }));
-            return result;
-          }),
-          cancel
+          validate,
+          fetch
         };
       };
-      return {
-        validate,
-        fetch
+      const query = dataLoader(batchLoader("query"));
+      const mutation = dataLoader(batchLoader("mutation"));
+      const subscription = dataLoader(batchLoader("subscription"));
+      const loaders = {
+        query,
+        subscription,
+        mutation
       };
-    };
-    const query = dataLoader(batchLoader("query"));
-    const mutation = dataLoader(batchLoader("mutation"));
-    const subscription = dataLoader(batchLoader("subscription"));
-    const loaders = {
-      query,
-      subscription,
-      mutation
-    };
-    return ({ op }) => {
-      return observable((observer) => {
-        const loader = loaders[op.type];
-        const { promise, cancel } = loader.load(op);
-        promise.then((res) => {
-          const transformed = transformResult(res.json, runtime);
-          if (!transformed.ok) {
-            observer.error(TRPCClientError.from(transformed.error, {
-              meta: res.meta
+      return ({ op }) => {
+        return observable((observer) => {
+          const loader = loaders[op.type];
+          const { promise, cancel } = loader.load(op);
+          let _res = void 0;
+          promise.then((res) => {
+            _res = res;
+            const transformed = transformResult(res.json, runtime);
+            if (!transformed.ok) {
+              observer.error(TRPCClientError.from(transformed.error, {
+                meta: res.meta
+              }));
+              return;
+            }
+            observer.next({
+              context: res.meta,
+              result: transformed.result
+            });
+            observer.complete();
+          }).catch((err) => {
+            observer.error(TRPCClientError.from(err, {
+              meta: _res?.meta
             }));
-            return;
-          }
-          observer.next({
-            context: res.meta,
-            result: transformed.result
           });
-          observer.complete();
-        }).catch((err) => observer.error(TRPCClientError.from(err)));
-        return () => {
-          cancel();
-        };
-      });
+          return () => {
+            cancel();
+          };
+        });
+      };
     };
   };
 }
+var batchRequester = (requesterOpts) => {
+  return (batchOps) => {
+    const path = batchOps.map((op) => op.path).join(",");
+    const inputs = batchOps.map((op) => op.input);
+    const { promise, cancel } = jsonHttpRequester({
+      ...requesterOpts,
+      path,
+      inputs,
+      headers() {
+        if (!requesterOpts.opts.headers) {
+          return {};
+        }
+        if (typeof requesterOpts.opts.headers === "function") {
+          return requesterOpts.opts.headers({
+            opList: batchOps
+          });
+        }
+        return requesterOpts.opts.headers;
+      }
+    });
+    return {
+      promise: promise.then((res) => {
+        const resJSON = Array.isArray(res.json) ? res.json : batchOps.map(() => res.json);
+        const result = resJSON.map((item) => ({
+          meta: res.meta,
+          json: item
+        }));
+        return result;
+      }),
+      cancel
+    };
+  };
+};
+var httpBatchLink = createHTTPBatchLink(batchRequester);
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/links/httpLink.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/links/httpLink.mjs
 function httpLinkFactory(factoryOpts) {
   return (opts) => {
     const resolvedOpts = resolveHTTPLinkOptions(opts);
@@ -30898,11 +30990,13 @@ function httpLinkFactory(factoryOpts) {
           return opts.headers;
         }
       });
+      let meta = void 0;
       promise.then((res) => {
+        meta = res.meta;
         const transformed = transformResult(res.json, runtime);
         if (!transformed.ok) {
           observer.error(TRPCClientError.from(transformed.error, {
-            meta: res.meta
+            meta
           }));
           return;
         }
@@ -30911,7 +31005,11 @@ function httpLinkFactory(factoryOpts) {
           result: transformed.result
         });
         observer.complete();
-      }).catch((cause) => observer.error(TRPCClientError.from(cause)));
+      }).catch((cause) => {
+        observer.error(TRPCClientError.from(cause, {
+          meta
+        }));
+      });
       return () => {
         cancel();
       };
@@ -30922,7 +31020,7 @@ var httpLink = httpLinkFactory({
   requester: jsonHttpRequester
 });
 
-// ../../node_modules/.pnpm/@trpc+client@10.25.1_@trpc+server@10.25.1/node_modules/@trpc/client/dist/index.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/index.mjs
 var TRPCUntypedClient = class {
   $request({ type, input, path, context = {} }) {
     const chain$ = createChain({
@@ -31032,18 +31130,23 @@ var clientCallTypeMap = {
   mutate: "mutation",
   subscribe: "subscription"
 };
+var clientCallTypeToProcedureType = (clientCallType) => {
+  return clientCallTypeMap[clientCallType];
+};
 function createTRPCClientProxy(client) {
   return createFlatProxy((key) => {
     if (client.hasOwnProperty(key)) {
       return client[key];
+    }
+    if (key === "__untypedClient") {
+      return client;
     }
     return createRecursiveProxy(({ path, args }) => {
       const pathCopy = [
         key,
         ...path
       ];
-      const clientCallType = pathCopy.pop();
-      const procedureType = clientCallTypeMap[clientCallType];
+      const procedureType = clientCallTypeToProcedureType(pathCopy.pop());
       const fullPath = pathCopy.join(".");
       return client[procedureType](fullPath, ...args);
     });
@@ -31054,6 +31157,137 @@ function createTRPCProxyClient(opts) {
   const proxy = createTRPCClientProxy(client);
   return proxy;
 }
+function getTextDecoder(customTextDecoder) {
+  if (customTextDecoder) {
+    return customTextDecoder;
+  }
+  if (typeof window !== "undefined" && window.TextDecoder) {
+    return new window.TextDecoder();
+  }
+  if (typeof globalThis !== "undefined" && globalThis.TextDecoder) {
+    return new globalThis.TextDecoder();
+  }
+  throw new Error("No TextDecoder implementation found");
+}
+async function parseJSONStream(opts) {
+  const parse2 = opts.parse ?? JSON.parse;
+  const onLine = (line2) => {
+    if (opts.signal?.aborted)
+      return;
+    if (!line2 || line2 === "}") {
+      return;
+    }
+    const indexOfColon = line2.indexOf(":");
+    const indexAsStr = line2.substring(2, indexOfColon - 1);
+    const text = line2.substring(indexOfColon + 1);
+    opts.onSingle(Number(indexAsStr), parse2(text));
+  };
+  await readLines(opts.readableStream, onLine, opts.textDecoder);
+}
+async function readLines(readableStream, onLine, textDecoder) {
+  let partOfLine = "";
+  const onChunk = (chunk) => {
+    const chunkText = textDecoder.decode(chunk);
+    const chunkLines = chunkText.split("\n");
+    if (chunkLines.length === 1) {
+      partOfLine += chunkLines[0];
+    } else if (chunkLines.length > 1) {
+      onLine(partOfLine + chunkLines[0]);
+      for (let i = 1; i < chunkLines.length - 1; i++) {
+        onLine(chunkLines[i]);
+      }
+      partOfLine = chunkLines[chunkLines.length - 1];
+    }
+  };
+  if ("getReader" in readableStream) {
+    await readStandardChunks(readableStream, onChunk);
+  } else {
+    await readNodeChunks(readableStream, onChunk);
+  }
+  onLine(partOfLine);
+}
+function readNodeChunks(stream, onChunk) {
+  return new Promise((resolve) => {
+    stream.on("data", onChunk);
+    stream.on("end", resolve);
+  });
+}
+async function readStandardChunks(stream, onChunk) {
+  const reader = stream.getReader();
+  let readResult = await reader.read();
+  while (!readResult.done) {
+    onChunk(readResult.value);
+    readResult = await reader.read();
+  }
+}
+var streamingJsonHttpRequester = (opts, onSingle) => {
+  const ac = opts.AbortController ? new opts.AbortController() : null;
+  const responsePromise = fetchHTTPResponse({
+    ...opts,
+    contentTypeHeader: "application/json",
+    batchModeHeader: "stream",
+    getUrl,
+    getBody
+  }, ac);
+  const cancel = () => ac?.abort();
+  const promise = responsePromise.then(async (res) => {
+    if (!res.body)
+      throw new Error("Received response without body");
+    const meta = {
+      response: res
+    };
+    return parseJSONStream({
+      readableStream: res.body,
+      onSingle,
+      parse: (string) => ({
+        json: JSON.parse(string),
+        meta
+      }),
+      signal: ac?.signal,
+      textDecoder: opts.textDecoder
+    });
+  });
+  return {
+    cancel,
+    promise
+  };
+};
+var streamRequester = (requesterOpts) => {
+  const textDecoder = getTextDecoder(requesterOpts.opts.textDecoder);
+  return (batchOps, unitResolver) => {
+    const path = batchOps.map((op) => op.path).join(",");
+    const inputs = batchOps.map((op) => op.input);
+    const { cancel, promise } = streamingJsonHttpRequester({
+      ...requesterOpts,
+      textDecoder,
+      path,
+      inputs,
+      headers() {
+        if (!requesterOpts.opts.headers) {
+          return {};
+        }
+        if (typeof requesterOpts.opts.headers === "function") {
+          return requesterOpts.opts.headers({
+            opList: batchOps
+          });
+        }
+        return requesterOpts.opts.headers;
+      }
+    }, (index, res) => {
+      unitResolver(index, res);
+    });
+    return {
+      /**
+      * return an empty array because the batchLoader expects an array of results
+      * but we've already called the `unitResolver` for each of them, there's
+      * nothing left to do here.
+      */
+      promise: promise.then(() => []),
+      cancel
+    };
+  };
+};
+var unstable_httpBatchStreamLink = createHTTPBatchLink(streamRequester);
 var getBody2 = (opts) => {
   if (!("input" in opts)) {
     return void 0;
@@ -31083,7 +31317,7 @@ var experimental_formDataLink = httpLinkFactory({
 var trpc = createTRPCProxyClient({
   links: [
     httpBatchLink({
-      url: "http://localhost:4001",
+      url: "http://" + window.location.hostname + ":4001",
       async headers() {
         return {
           authorization: "Bearer " + localStorage.getItem("agent-token")
@@ -31400,7 +31634,7 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 
-@trpc/client/dist/httpUtils-8a5c637a.mjs:
+@trpc/client/dist/httpUtils-1efcb902.mjs:
   (* istanbul ignore if -- @preserve *)
 
 @trpc/client/dist/links/wsLink.mjs:

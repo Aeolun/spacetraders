@@ -108,6 +108,7 @@ const httpServer = createHTTPServer({
 })
 
 httpServer.listen(4001)
+console.log("Listening at port 4001")
 init().catch(error => {
     console.error("Issue during initialization, server probably broken", error)
     process.exit(1)

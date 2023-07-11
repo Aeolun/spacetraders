@@ -13,7 +13,7 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
             symbol: process.env.AGENT_NAME
         }
     })
-    if (agent) {
+    if (agent && agent.token) {
         agentTokenData = jwtDecode(agent.token);
     }
 
