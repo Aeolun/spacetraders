@@ -299,7 +299,7 @@ var require_react_development = __commonJS({
           return refObject;
         }
         var isArrayImpl = Array.isArray;
-        function isArray(a2) {
+        function isArray2(a2) {
           return isArrayImpl(a2);
         }
         function typeName(value) {
@@ -400,7 +400,7 @@ var require_react_development = __commonJS({
           }
           return null;
         }
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        var hasOwnProperty2 = Object.prototype.hasOwnProperty;
         var RESERVED_PROPS2 = {
           key: true,
           ref: true,
@@ -413,7 +413,7 @@ var require_react_development = __commonJS({
         }
         function hasValidRef(config2) {
           {
-            if (hasOwnProperty.call(config2, "ref")) {
+            if (hasOwnProperty2.call(config2, "ref")) {
               var getter = Object.getOwnPropertyDescriptor(config2, "ref").get;
               if (getter && getter.isReactWarning) {
                 return false;
@@ -424,7 +424,7 @@ var require_react_development = __commonJS({
         }
         function hasValidKey(config2) {
           {
-            if (hasOwnProperty.call(config2, "key")) {
+            if (hasOwnProperty2.call(config2, "key")) {
               var getter = Object.getOwnPropertyDescriptor(config2, "key").get;
               if (getter && getter.isReactWarning) {
                 return false;
@@ -536,7 +536,7 @@ var require_react_development = __commonJS({
             self2 = config2.__self === void 0 ? null : config2.__self;
             source = config2.__source === void 0 ? null : config2.__source;
             for (propName in config2) {
-              if (hasOwnProperty.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
+              if (hasOwnProperty2.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
                 props[propName] = config2[propName];
               }
             }
@@ -608,7 +608,7 @@ var require_react_development = __commonJS({
               defaultProps = element.type.defaultProps;
             }
             for (propName in config2) {
-              if (hasOwnProperty.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
+              if (hasOwnProperty2.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
                 if (config2[propName] === void 0 && defaultProps !== void 0) {
                   props[propName] = defaultProps[propName];
                 } else {
@@ -685,7 +685,7 @@ var require_react_development = __commonJS({
             var _child = children;
             var mappedChild = callback(_child);
             var childKey = nameSoFar === "" ? SEPARATOR + getElementKey(_child, 0) : nameSoFar;
-            if (isArray(mappedChild)) {
+            if (isArray2(mappedChild)) {
               var escapedChildKey = "";
               if (childKey != null) {
                 escapedChildKey = escapeUserProvidedKey(childKey) + "/";
@@ -720,7 +720,7 @@ var require_react_development = __commonJS({
           var nextName;
           var subtreeCount = 0;
           var nextNamePrefix = nameSoFar === "" ? SEPARATOR : nameSoFar + SUBSEPARATOR;
-          if (isArray(children)) {
+          if (isArray2(children)) {
             for (var i2 = 0; i2 < children.length; i2++) {
               child = children[i2];
               nextName = nextNamePrefix + getElementKey(child, i2);
@@ -1408,7 +1408,7 @@ var require_react_development = __commonJS({
         }
         function checkPropTypes(typeSpecs, values, location, componentName, element) {
           {
-            var has = Function.call.bind(hasOwnProperty);
+            var has = Function.call.bind(hasOwnProperty2);
             for (var typeSpecName in typeSpecs) {
               if (has(typeSpecs, typeSpecName)) {
                 var error$1 = void 0;
@@ -1510,7 +1510,7 @@ var require_react_development = __commonJS({
           if (typeof node !== "object") {
             return;
           }
-          if (isArray(node)) {
+          if (isArray2(node)) {
             for (var i2 = 0; i2 < node.length; i2++) {
               var child = node[i2];
               if (isValidElement(child)) {
@@ -1567,9 +1567,9 @@ var require_react_development = __commonJS({
         }
         function validateFragmentProps(fragment2) {
           {
-            var keys2 = Object.keys(fragment2.props);
-            for (var i2 = 0; i2 < keys2.length; i2++) {
-              var key = keys2[i2];
+            var keys3 = Object.keys(fragment2.props);
+            for (var i2 = 0; i2 < keys3.length; i2++) {
+              var key = keys3[i2];
               if (key !== "children" && key !== "key") {
                 setCurrentlyValidatingElement$1(fragment2);
                 error("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
@@ -1600,7 +1600,7 @@ var require_react_development = __commonJS({
             var typeString;
             if (type === null) {
               typeString = "null";
-            } else if (isArray(type)) {
+            } else if (isArray2(type)) {
               typeString = "array";
             } else if (type !== void 0 && type.$$typeof === REACT_ELEMENT_TYPE) {
               typeString = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />";
@@ -2491,7 +2491,7 @@ var require_react_dom_development = __commonJS({
           }
         }
         var canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        var hasOwnProperty2 = Object.prototype.hasOwnProperty;
         function typeName(value) {
           {
             var hasToStringTag = typeof Symbol === "function" && Symbol.toStringTag;
@@ -2573,10 +2573,10 @@ var require_react_dom_development = __commonJS({
         var illegalAttributeNameCache = {};
         var validatedAttributeNameCache = {};
         function isAttributeNameSafe(attributeName) {
-          if (hasOwnProperty.call(validatedAttributeNameCache, attributeName)) {
+          if (hasOwnProperty2.call(validatedAttributeNameCache, attributeName)) {
             return true;
           }
-          if (hasOwnProperty.call(illegalAttributeNameCache, attributeName)) {
+          if (hasOwnProperty2.call(illegalAttributeNameCache, attributeName)) {
             return false;
           }
           if (VALID_ATTRIBUTE_NAME_REGEX.test(attributeName)) {
@@ -3684,7 +3684,7 @@ var require_react_dom_development = __commonJS({
             isRendering = rendering;
           }
         }
-        function toString(value) {
+        function toString2(value) {
           return "" + value;
         }
         function getToStringValue(value) {
@@ -3755,11 +3755,11 @@ var require_react_dom_development = __commonJS({
           if (node.hasOwnProperty(valueField) || typeof descriptor === "undefined" || typeof descriptor.get !== "function" || typeof descriptor.set !== "function") {
             return;
           }
-          var get3 = descriptor.get, set3 = descriptor.set;
+          var get4 = descriptor.get, set3 = descriptor.set;
           Object.defineProperty(node, valueField, {
             configurable: true,
             get: function() {
-              return get3.call(this);
+              return get4.call(this);
             },
             set: function(value) {
               {
@@ -3889,10 +3889,10 @@ var require_react_dom_development = __commonJS({
               if (value === 0 && node.value === "" || // We explicitly want to coerce to number here if possible.
               // eslint-disable-next-line
               node.value != value) {
-                node.value = toString(value);
+                node.value = toString2(value);
               }
-            } else if (node.value !== toString(value)) {
-              node.value = toString(value);
+            } else if (node.value !== toString2(value)) {
+              node.value = toString2(value);
             }
           } else if (type === "submit" || type === "reset") {
             node.removeAttribute("value");
@@ -3919,7 +3919,7 @@ var require_react_dom_development = __commonJS({
             if (isButton && (props.value === void 0 || props.value === null)) {
               return;
             }
-            var initialValue = toString(node._wrapperState.initialValue);
+            var initialValue = toString2(node._wrapperState.initialValue);
             if (!isHydrating2) {
               {
                 if (initialValue !== node.value) {
@@ -3979,9 +3979,9 @@ var require_react_dom_development = __commonJS({
             type !== "number" || getActiveElement(node.ownerDocument) !== node
           ) {
             if (value == null) {
-              node.defaultValue = toString(node._wrapperState.initialValue);
-            } else if (node.defaultValue !== toString(value)) {
-              node.defaultValue = toString(value);
+              node.defaultValue = toString2(node._wrapperState.initialValue);
+            } else if (node.defaultValue !== toString2(value)) {
+              node.defaultValue = toString2(value);
             }
           }
         }
@@ -4019,11 +4019,11 @@ var require_react_dom_development = __commonJS({
         }
         function postMountWrapper$1(element, props) {
           if (props.value != null) {
-            element.setAttribute("value", toString(getToStringValue(props.value)));
+            element.setAttribute("value", toString2(getToStringValue(props.value)));
           }
         }
         var isArrayImpl = Array.isArray;
-        function isArray(a2) {
+        function isArray2(a2) {
           return isArrayImpl(a2);
         }
         var didWarnValueDefaultValue$1;
@@ -4046,7 +4046,7 @@ var require_react_dom_development = __commonJS({
               if (props[propName] == null) {
                 continue;
               }
-              var propNameIsArray = isArray(props[propName]);
+              var propNameIsArray = isArray2(props[propName]);
               if (props.multiple && !propNameIsArray) {
                 error("The `%s` prop supplied to <select> must be an array if `multiple` is true.%s", propName, getDeclarationErrorAddendum());
               } else if (!props.multiple && propNameIsArray) {
@@ -4073,7 +4073,7 @@ var require_react_dom_development = __commonJS({
               }
             }
           } else {
-            var _selectedValue = toString(getToStringValue(propValue));
+            var _selectedValue = toString2(getToStringValue(propValue));
             var defaultSelected = null;
             for (var _i2 = 0; _i2 < options2.length; _i2++) {
               if (options2[_i2].value === _selectedValue) {
@@ -4153,7 +4153,7 @@ var require_react_dom_development = __commonJS({
           var hostProps = assign4({}, props, {
             value: void 0,
             defaultValue: void 0,
-            children: toString(node._wrapperState.initialValue)
+            children: toString2(node._wrapperState.initialValue)
           });
           return hostProps;
         }
@@ -4177,7 +4177,7 @@ var require_react_dom_development = __commonJS({
                 if (defaultValue != null) {
                   throw new Error("If you supply `defaultValue` on a <textarea>, do not pass children.");
                 }
-                if (isArray(children)) {
+                if (isArray2(children)) {
                   if (children.length > 1) {
                     throw new Error("<textarea> can only have at most one child.");
                   }
@@ -4200,7 +4200,7 @@ var require_react_dom_development = __commonJS({
           var value = getToStringValue(props.value);
           var defaultValue = getToStringValue(props.defaultValue);
           if (value != null) {
-            var newValue = toString(value);
+            var newValue = toString2(value);
             if (newValue !== node.value) {
               node.value = newValue;
             }
@@ -4209,7 +4209,7 @@ var require_react_dom_development = __commonJS({
             }
           }
           if (defaultValue != null) {
-            node.defaultValue = toString(defaultValue);
+            node.defaultValue = toString2(defaultValue);
           }
         }
         function postMountWrapper$3(element, props) {
@@ -5184,7 +5184,7 @@ var require_react_dom_development = __commonJS({
         var rARIACamel = new RegExp("^(aria)[A-Z][" + ATTRIBUTE_NAME_CHAR + "]*$");
         function validateProperty(tagName, name) {
           {
-            if (hasOwnProperty.call(warnedProperties, name) && warnedProperties[name]) {
+            if (hasOwnProperty2.call(warnedProperties, name) && warnedProperties[name]) {
               return true;
             }
             if (rARIACamel.test(name)) {
@@ -5267,7 +5267,7 @@ var require_react_dom_development = __commonJS({
           var rARIA$1 = new RegExp("^(aria)-[" + ATTRIBUTE_NAME_CHAR + "]*$");
           var rARIACamel$1 = new RegExp("^(aria)[A-Z][" + ATTRIBUTE_NAME_CHAR + "]*$");
           validateProperty$1 = function(tagName, name, value, eventRegistry) {
-            if (hasOwnProperty.call(warnedProperties$1, name) && warnedProperties$1[name]) {
+            if (hasOwnProperty2.call(warnedProperties$1, name) && warnedProperties$1[name]) {
               return true;
             }
             var lowerCasedName = name.toLowerCase();
@@ -5671,7 +5671,7 @@ var require_react_dom_development = __commonJS({
             throw new Error("clearCaughtError was called but no error was captured. This error is likely caused by a bug in React. Please file an issue.");
           }
         }
-        function get2(key) {
+        function get3(key) {
           return key._reactInternals;
         }
         function has(key) {
@@ -5846,7 +5846,7 @@ var require_react_dom_development = __commonJS({
               instance._warnedAboutRefsInRender = true;
             }
           }
-          var fiber = get2(component);
+          var fiber = get3(component);
           if (!fiber) {
             return false;
           }
@@ -6045,11 +6045,11 @@ var require_react_dom_development = __commonJS({
             return false;
           }
         }
-        function onScheduleRoot(root3, children) {
+        function onScheduleRoot(root4, children) {
           {
             if (injectedHook && typeof injectedHook.onScheduleFiberRoot === "function") {
               try {
-                injectedHook.onScheduleFiberRoot(rendererID, root3, children);
+                injectedHook.onScheduleFiberRoot(rendererID, root4, children);
               } catch (err) {
                 if (!hasLoggedError) {
                   hasLoggedError = true;
@@ -6059,10 +6059,10 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function onCommitRoot(root3, eventPriority) {
+        function onCommitRoot(root4, eventPriority) {
           if (injectedHook && typeof injectedHook.onCommitFiberRoot === "function") {
             try {
-              var didError = (root3.current.flags & DidCapture) === DidCapture;
+              var didError = (root4.current.flags & DidCapture) === DidCapture;
               if (enableProfilerTimer) {
                 var schedulerPriority;
                 switch (eventPriority) {
@@ -6082,9 +6082,9 @@ var require_react_dom_development = __commonJS({
                     schedulerPriority = NormalPriority;
                     break;
                 }
-                injectedHook.onCommitFiberRoot(rendererID, root3, schedulerPriority, didError);
+                injectedHook.onCommitFiberRoot(rendererID, root4, schedulerPriority, didError);
               } else {
-                injectedHook.onCommitFiberRoot(rendererID, root3, void 0, didError);
+                injectedHook.onCommitFiberRoot(rendererID, root4, void 0, didError);
               }
             } catch (err) {
               {
@@ -6096,10 +6096,10 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function onPostCommitRoot(root3) {
+        function onPostCommitRoot(root4) {
           if (injectedHook && typeof injectedHook.onPostCommitFiberRoot === "function") {
             try {
-              injectedHook.onPostCommitFiberRoot(rendererID, root3);
+              injectedHook.onPostCommitFiberRoot(rendererID, root4);
             } catch (err) {
               {
                 if (!hasLoggedError) {
@@ -6598,14 +6598,14 @@ var require_react_dom_development = __commonJS({
               return lanes;
           }
         }
-        function getNextLanes(root3, wipLanes) {
-          var pendingLanes = root3.pendingLanes;
+        function getNextLanes(root4, wipLanes) {
+          var pendingLanes = root4.pendingLanes;
           if (pendingLanes === NoLanes) {
             return NoLanes;
           }
           var nextLanes = NoLanes;
-          var suspendedLanes = root3.suspendedLanes;
-          var pingedLanes = root3.pingedLanes;
+          var suspendedLanes = root4.suspendedLanes;
+          var pingedLanes = root4.pingedLanes;
           var nonIdlePendingLanes = pendingLanes & NonIdleLanes;
           if (nonIdlePendingLanes !== NoLanes) {
             var nonIdleUnblockedLanes = nonIdlePendingLanes & ~suspendedLanes;
@@ -6649,9 +6649,9 @@ var require_react_dom_development = __commonJS({
           if ((nextLanes & InputContinuousLane) !== NoLanes) {
             nextLanes |= pendingLanes & DefaultLane;
           }
-          var entangledLanes = root3.entangledLanes;
+          var entangledLanes = root4.entangledLanes;
           if (entangledLanes !== NoLanes) {
-            var entanglements = root3.entanglements;
+            var entanglements = root4.entanglements;
             var lanes = nextLanes & entangledLanes;
             while (lanes > 0) {
               var index3 = pickArbitraryLaneIndex(lanes);
@@ -6662,8 +6662,8 @@ var require_react_dom_development = __commonJS({
           }
           return nextLanes;
         }
-        function getMostRecentEventTime(root3, lanes) {
-          var eventTimes = root3.eventTimes;
+        function getMostRecentEventTime(root4, lanes) {
+          var eventTimes = root4.eventTimes;
           var mostRecentEventTime = NoTimestamp;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -6720,11 +6720,11 @@ var require_react_dom_development = __commonJS({
               return NoTimestamp;
           }
         }
-        function markStarvedLanesAsExpired(root3, currentTime) {
-          var pendingLanes = root3.pendingLanes;
-          var suspendedLanes = root3.suspendedLanes;
-          var pingedLanes = root3.pingedLanes;
-          var expirationTimes = root3.expirationTimes;
+        function markStarvedLanesAsExpired(root4, currentTime) {
+          var pendingLanes = root4.pendingLanes;
+          var suspendedLanes = root4.suspendedLanes;
+          var pingedLanes = root4.pingedLanes;
+          var expirationTimes = root4.expirationTimes;
           var lanes = pendingLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -6735,16 +6735,16 @@ var require_react_dom_development = __commonJS({
                 expirationTimes[index3] = computeExpirationTime(lane, currentTime);
               }
             } else if (expirationTime <= currentTime) {
-              root3.expiredLanes |= lane;
+              root4.expiredLanes |= lane;
             }
             lanes &= ~lane;
           }
         }
-        function getHighestPriorityPendingLanes(root3) {
-          return getHighestPriorityLanes(root3.pendingLanes);
+        function getHighestPriorityPendingLanes(root4) {
+          return getHighestPriorityLanes(root4.pendingLanes);
         }
-        function getLanesToRetrySynchronouslyOnError(root3) {
-          var everythingButOffscreen = root3.pendingLanes & ~OffscreenLane;
+        function getLanesToRetrySynchronouslyOnError(root4) {
+          var everythingButOffscreen = root4.pendingLanes & ~OffscreenLane;
           if (everythingButOffscreen !== NoLanes) {
             return everythingButOffscreen;
           }
@@ -6769,12 +6769,12 @@ var require_react_dom_development = __commonJS({
         function includesOnlyTransitions(lanes) {
           return (lanes & TransitionLanes) === lanes;
         }
-        function includesBlockingLane(root3, lanes) {
+        function includesBlockingLane(root4, lanes) {
           var SyncDefaultLanes = InputContinuousHydrationLane | InputContinuousLane | DefaultHydrationLane | DefaultLane;
           return (lanes & SyncDefaultLanes) !== NoLanes;
         }
-        function includesExpiredLane(root3, lanes) {
-          return (lanes & root3.expiredLanes) !== NoLanes;
+        function includesExpiredLane(root4, lanes) {
+          return (lanes & root4.expiredLanes) !== NoLanes;
         }
         function isTransitionLane(lane) {
           return (lane & TransitionLanes) !== NoLanes;
@@ -6835,20 +6835,20 @@ var require_react_dom_development = __commonJS({
           }
           return laneMap;
         }
-        function markRootUpdated(root3, updateLane, eventTime) {
-          root3.pendingLanes |= updateLane;
+        function markRootUpdated(root4, updateLane, eventTime) {
+          root4.pendingLanes |= updateLane;
           if (updateLane !== IdleLane) {
-            root3.suspendedLanes = NoLanes;
-            root3.pingedLanes = NoLanes;
+            root4.suspendedLanes = NoLanes;
+            root4.pingedLanes = NoLanes;
           }
-          var eventTimes = root3.eventTimes;
+          var eventTimes = root4.eventTimes;
           var index3 = laneToIndex(updateLane);
           eventTimes[index3] = eventTime;
         }
-        function markRootSuspended(root3, suspendedLanes) {
-          root3.suspendedLanes |= suspendedLanes;
-          root3.pingedLanes &= ~suspendedLanes;
-          var expirationTimes = root3.expirationTimes;
+        function markRootSuspended(root4, suspendedLanes) {
+          root4.suspendedLanes |= suspendedLanes;
+          root4.pingedLanes &= ~suspendedLanes;
+          var expirationTimes = root4.expirationTimes;
           var lanes = suspendedLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -6857,20 +6857,20 @@ var require_react_dom_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function markRootPinged(root3, pingedLanes, eventTime) {
-          root3.pingedLanes |= root3.suspendedLanes & pingedLanes;
+        function markRootPinged(root4, pingedLanes, eventTime) {
+          root4.pingedLanes |= root4.suspendedLanes & pingedLanes;
         }
-        function markRootFinished(root3, remainingLanes) {
-          var noLongerPendingLanes = root3.pendingLanes & ~remainingLanes;
-          root3.pendingLanes = remainingLanes;
-          root3.suspendedLanes = NoLanes;
-          root3.pingedLanes = NoLanes;
-          root3.expiredLanes &= remainingLanes;
-          root3.mutableReadLanes &= remainingLanes;
-          root3.entangledLanes &= remainingLanes;
-          var entanglements = root3.entanglements;
-          var eventTimes = root3.eventTimes;
-          var expirationTimes = root3.expirationTimes;
+        function markRootFinished(root4, remainingLanes) {
+          var noLongerPendingLanes = root4.pendingLanes & ~remainingLanes;
+          root4.pendingLanes = remainingLanes;
+          root4.suspendedLanes = NoLanes;
+          root4.pingedLanes = NoLanes;
+          root4.expiredLanes &= remainingLanes;
+          root4.mutableReadLanes &= remainingLanes;
+          root4.entangledLanes &= remainingLanes;
+          var entanglements = root4.entanglements;
+          var eventTimes = root4.eventTimes;
+          var expirationTimes = root4.expirationTimes;
           var lanes = noLongerPendingLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -6881,9 +6881,9 @@ var require_react_dom_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function markRootEntangled(root3, entangledLanes) {
-          var rootEntangledLanes = root3.entangledLanes |= entangledLanes;
-          var entanglements = root3.entanglements;
+        function markRootEntangled(root4, entangledLanes) {
+          var rootEntangledLanes = root4.entangledLanes |= entangledLanes;
+          var entanglements = root4.entanglements;
           var lanes = rootEntangledLanes;
           while (lanes) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -6898,7 +6898,7 @@ var require_react_dom_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function getBumpedLaneForHydration(root3, renderLanes2) {
+        function getBumpedLaneForHydration(root4, renderLanes2) {
           var renderLane = getHighestPriorityLane(renderLanes2);
           var lane;
           switch (renderLane) {
@@ -6938,16 +6938,16 @@ var require_react_dom_development = __commonJS({
               lane = NoLane;
               break;
           }
-          if ((lane & (root3.suspendedLanes | renderLanes2)) !== NoLane) {
+          if ((lane & (root4.suspendedLanes | renderLanes2)) !== NoLane) {
             return NoLane;
           }
           return lane;
         }
-        function addFiberToLanesMap(root3, fiber, lanes) {
+        function addFiberToLanesMap(root4, fiber, lanes) {
           if (!isDevToolsPresent) {
             return;
           }
-          var pendingUpdatersLaneMap = root3.pendingUpdatersLaneMap;
+          var pendingUpdatersLaneMap = root4.pendingUpdatersLaneMap;
           while (lanes > 0) {
             var index3 = laneToIndex(lanes);
             var lane = 1 << index3;
@@ -6956,12 +6956,12 @@ var require_react_dom_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function movePendingFibersToMemoized(root3, lanes) {
+        function movePendingFibersToMemoized(root4, lanes) {
           if (!isDevToolsPresent) {
             return;
           }
-          var pendingUpdatersLaneMap = root3.pendingUpdatersLaneMap;
-          var memoizedUpdaters = root3.memoizedUpdaters;
+          var pendingUpdatersLaneMap = root4.pendingUpdatersLaneMap;
+          var memoizedUpdaters = root4.memoizedUpdaters;
           while (lanes > 0) {
             var index3 = laneToIndex(lanes);
             var lane = 1 << index3;
@@ -6978,7 +6978,7 @@ var require_react_dom_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function getTransitionsForLanes(root3, lanes) {
+        function getTransitionsForLanes(root4, lanes) {
           {
             return null;
           }
@@ -7025,8 +7025,8 @@ var require_react_dom_development = __commonJS({
           }
           return IdleEventPriority;
         }
-        function isRootDehydrated(root3) {
-          var currentState = root3.current.memoizedState;
+        function isRootDehydrated(root4) {
+          var currentState = root4.current.memoizedState;
           return currentState.isDehydrated;
         }
         var _attemptSynchronousHydration;
@@ -7197,8 +7197,8 @@ var require_react_dom_development = __commonJS({
                   return;
                 }
               } else if (tag === HostRoot) {
-                var root3 = nearestMounted.stateNode;
-                if (isRootDehydrated(root3)) {
+                var root4 = nearestMounted.stateNode;
+                if (isRootDehydrated(root4)) {
                   queuedTarget.blockedOn = getContainerFromFiber(nearestMounted);
                   return;
                 }
@@ -7432,8 +7432,8 @@ var require_react_dom_development = __commonJS({
                 }
                 targetInst = null;
               } else if (tag === HostRoot) {
-                var root3 = nearestMounted.stateNode;
-                if (isRootDehydrated(root3)) {
+                var root4 = nearestMounted.stateNode;
+                if (isRootDehydrated(root4)) {
                   return getContainerFromFiber(nearestMounted);
                 }
                 targetInst = null;
@@ -7560,16 +7560,16 @@ var require_react_dom_development = __commonJS({
           });
           return listener;
         }
-        var root2 = null;
+        var root3 = null;
         var startText = null;
         var fallbackText = null;
         function initialize(nativeEventTarget) {
-          root2 = nativeEventTarget;
+          root3 = nativeEventTarget;
           startText = getText();
           return true;
         }
         function reset() {
-          root2 = null;
+          root3 = null;
           startText = null;
           fallbackText = null;
         }
@@ -7599,10 +7599,10 @@ var require_react_dom_development = __commonJS({
           return fallbackText;
         }
         function getText() {
-          if ("value" in root2) {
-            return root2.value;
+          if ("value" in root3) {
+            return root3.value;
           }
-          return root2.textContent;
+          return root3.textContent;
         }
         function getEventCharCode(nativeEvent) {
           var charCode;
@@ -8400,7 +8400,7 @@ var require_react_dom_development = __commonJS({
           }
           for (var i2 = 0; i2 < keysA.length; i2++) {
             var currentKey = keysA[i2];
-            if (!hasOwnProperty.call(objB, currentKey) || !objectIs(objA[currentKey], objB[currentKey])) {
+            if (!hasOwnProperty2.call(objB, currentKey) || !objectIs(objA[currentKey], objB[currentKey])) {
               return false;
             }
           }
@@ -8420,8 +8420,8 @@ var require_react_dom_development = __commonJS({
             node = node.parentNode;
           }
         }
-        function getNodeForCharacterOffset(root3, offset) {
-          var node = getLeafNode(root3);
+        function getNodeForCharacterOffset(root4, offset) {
+          var node = getLeafNode(root4);
           var nodeStart = 0;
           var nodeEnd = 0;
           while (node) {
@@ -9326,10 +9326,10 @@ var require_react_dom_development = __commonJS({
         function getOwnerDocumentFromRootContainer(rootContainerElement) {
           return rootContainerElement.nodeType === DOCUMENT_NODE ? rootContainerElement : rootContainerElement.ownerDocument;
         }
-        function noop4() {
+        function noop5() {
         }
         function trapClickOnNonInteractiveElement(node) {
-          node.onclick = noop4;
+          node.onclick = noop5;
         }
         function setInitialDOMProperties(tag, domElement, rootContainerElement, nextProps, isCustomComponentTag) {
           for (var propKey in nextProps) {
@@ -9431,7 +9431,7 @@ var require_react_dom_development = __commonJS({
           }
           {
             if (namespaceURI === HTML_NAMESPACE) {
-              if (!isCustomComponentTag && Object.prototype.toString.call(domElement) === "[object HTMLUnknownElement]" && !hasOwnProperty.call(warnedUnknownTags, type)) {
+              if (!isCustomComponentTag && Object.prototype.toString.call(domElement) === "[object HTMLUnknownElement]" && !hasOwnProperty2.call(warnedUnknownTags, type)) {
                 warnedUnknownTags[type] = true;
                 error("The tag <%s> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.", type);
               }
@@ -10192,8 +10192,8 @@ var require_react_dom_development = __commonJS({
             case DOCUMENT_NODE:
             case DOCUMENT_FRAGMENT_NODE: {
               type = nodeType === DOCUMENT_NODE ? "#document" : "#fragment";
-              var root3 = rootContainerInstance.documentElement;
-              namespace = root3 ? root3.namespaceURI : getChildNamespace(null, "");
+              var root4 = rootContainerInstance.documentElement;
+              namespace = root4 ? root4.namespaceURI : getChildNamespace(null, "");
               break;
             }
             default: {
@@ -10778,7 +10778,7 @@ var require_react_dom_development = __commonJS({
         }
         function checkPropTypes(typeSpecs, values, location, componentName, element) {
           {
-            var has2 = Function.call.bind(hasOwnProperty);
+            var has2 = Function.call.bind(hasOwnProperty2);
             for (var typeSpecName in typeSpecs) {
               if (has2(typeSpecs, typeSpecName)) {
                 var error$1 = void 0;
@@ -12071,8 +12071,8 @@ var require_react_dom_development = __commonJS({
             parent = parent.return;
           }
           if (node.tag === HostRoot) {
-            var root3 = node.stateNode;
-            return root3;
+            var root4 = node.stateNode;
+            return root4;
           } else {
             return null;
           }
@@ -12153,7 +12153,7 @@ var require_react_dom_development = __commonJS({
             return enqueueConcurrentClassUpdate(fiber, sharedQueue, update3, lane);
           }
         }
-        function entangleTransitions(root3, fiber, lane) {
+        function entangleTransitions(root4, fiber, lane) {
           var updateQueue2 = fiber.updateQueue;
           if (updateQueue2 === null) {
             return;
@@ -12161,10 +12161,10 @@ var require_react_dom_development = __commonJS({
           var sharedQueue = updateQueue2.shared;
           if (isTransitionLane(lane)) {
             var queueLanes = sharedQueue.lanes;
-            queueLanes = intersectLanes(queueLanes, root3.pendingLanes);
+            queueLanes = intersectLanes(queueLanes, root4.pendingLanes);
             var newQueueLanes = mergeLanes(queueLanes, lane);
             sharedQueue.lanes = newQueueLanes;
-            markRootEntangled(root3, newQueueLanes);
+            markRootEntangled(root4, newQueueLanes);
           }
         }
         function enqueueCapturedUpdate(workInProgress2, capturedUpdate) {
@@ -12511,7 +12511,7 @@ var require_react_dom_development = __commonJS({
         var classComponentUpdater = {
           isMounted,
           enqueueSetState: function(inst, payload, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -12522,17 +12522,17 @@ var require_react_dom_development = __commonJS({
               }
               update3.callback = callback;
             }
-            var root3 = enqueueUpdate(fiber, update3, lane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
-              entangleTransitions(root3, fiber, lane);
+            var root4 = enqueueUpdate(fiber, update3, lane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
+              entangleTransitions(root4, fiber, lane);
             }
             {
               markStateUpdateScheduled(fiber, lane);
             }
           },
           enqueueReplaceState: function(inst, payload, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -12544,17 +12544,17 @@ var require_react_dom_development = __commonJS({
               }
               update3.callback = callback;
             }
-            var root3 = enqueueUpdate(fiber, update3, lane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
-              entangleTransitions(root3, fiber, lane);
+            var root4 = enqueueUpdate(fiber, update3, lane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
+              entangleTransitions(root4, fiber, lane);
             }
             {
               markStateUpdateScheduled(fiber, lane);
             }
           },
           enqueueForceUpdate: function(inst, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -12565,10 +12565,10 @@ var require_react_dom_development = __commonJS({
               }
               update3.callback = callback;
             }
-            var root3 = enqueueUpdate(fiber, update3, lane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
-              entangleTransitions(root3, fiber, lane);
+            var root4 = enqueueUpdate(fiber, update3, lane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
+              entangleTransitions(root4, fiber, lane);
             }
             {
               markForceUpdateScheduled(fiber, lane);
@@ -12671,7 +12671,7 @@ var require_react_dom_development = __commonJS({
               error("%s: getSnapshotBeforeUpdate() is defined as a static method and will be ignored. Instead, declare it as an instance method.", name);
             }
             var _state = instance.state;
-            if (_state && (typeof _state !== "object" || isArray(_state))) {
+            if (_state && (typeof _state !== "object" || isArray2(_state))) {
               error("%s.state: must be set to an object or null", name);
             }
             if (typeof instance.getChildContext === "function" && typeof ctor.childContextTypes !== "object") {
@@ -13298,7 +13298,7 @@ var require_react_dom_development = __commonJS({
                   return createChild(returnFiber, init(payload), lanes);
                 }
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 var _created3 = createFiberFromFragment(newChild, returnFiber.mode, lanes, null);
                 _created3.return = returnFiber;
                 return _created3;
@@ -13342,7 +13342,7 @@ var require_react_dom_development = __commonJS({
                   return updateSlot(returnFiber, oldFiber, init(payload), lanes);
                 }
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 if (key !== null) {
                   return null;
                 }
@@ -13377,7 +13377,7 @@ var require_react_dom_development = __commonJS({
                   var init = newChild._init;
                   return updateFromMap(existingChildren, returnFiber, newIdx, init(payload), lanes);
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 var _matchedFiber3 = existingChildren.get(newIdx) || null;
                 return updateFragment2(returnFiber, _matchedFiber3, newChild, lanes, null);
               }
@@ -13751,7 +13751,7 @@ var require_react_dom_development = __commonJS({
                   var init = newChild._init;
                   return reconcileChildFibers2(returnFiber, currentFirstChild, init(payload), lanes);
               }
-              if (isArray(newChild)) {
+              if (isArray2(newChild)) {
                 return reconcileChildrenArray(returnFiber, currentFirstChild, newChild, lanes);
               }
               if (getIteratorFn(newChild)) {
@@ -13949,13 +13949,13 @@ var require_react_dom_development = __commonJS({
           }
           workInProgressSources.length = 0;
         }
-        function registerMutableSourceForHydration(root3, mutableSource) {
+        function registerMutableSourceForHydration(root4, mutableSource) {
           var getVersion = mutableSource._getVersion;
           var version2 = getVersion(mutableSource._source);
-          if (root3.mutableSourceEagerHydrationData == null) {
-            root3.mutableSourceEagerHydrationData = [mutableSource, version2];
+          if (root4.mutableSourceEagerHydrationData == null) {
+            root4.mutableSourceEagerHydrationData = [mutableSource, version2];
           } else {
-            root3.mutableSourceEagerHydrationData.push(mutableSource, version2);
+            root4.mutableSourceEagerHydrationData.push(mutableSource, version2);
           }
         }
         var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher, ReactCurrentBatchConfig$2 = ReactSharedInternals.ReactCurrentBatchConfig;
@@ -14000,7 +14000,7 @@ var require_react_dom_development = __commonJS({
         }
         function checkDepsAreArrayDev(deps) {
           {
-            if (deps !== void 0 && deps !== null && !isArray(deps)) {
+            if (deps !== void 0 && deps !== null && !isArray2(deps)) {
               error("%s received a final argument that is not an array (instead, received `%s`). When specified, the final argument must be an array.", currentHookNameInDev, typeof deps);
             }
           }
@@ -14424,11 +14424,11 @@ var require_react_dom_development = __commonJS({
                 }
               }
             }
-            var root3 = getWorkInProgressRoot();
-            if (root3 === null) {
+            var root4 = getWorkInProgressRoot();
+            if (root4 === null) {
               throw new Error("Expected a work-in-progress root. This is a bug in React. Please file an issue.");
             }
-            if (!includesBlockingLane(root3, renderLanes)) {
+            if (!includesBlockingLane(root4, renderLanes)) {
               pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
             }
           }
@@ -14469,11 +14469,11 @@ var require_react_dom_development = __commonJS({
           workInProgressHook !== null && workInProgressHook.memoizedState.tag & HasEffect) {
             fiber.flags |= Passive;
             pushEffect(HasEffect | Passive$1, updateStoreInstance.bind(null, fiber, inst, nextSnapshot, getSnapshot), void 0, null);
-            var root3 = getWorkInProgressRoot();
-            if (root3 === null) {
+            var root4 = getWorkInProgressRoot();
+            if (root4 === null) {
               throw new Error("Expected a work-in-progress root. This is a bug in React. Please file an issue.");
             }
-            if (!includesBlockingLane(root3, renderLanes)) {
+            if (!includesBlockingLane(root4, renderLanes)) {
               pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
             }
           }
@@ -14525,9 +14525,9 @@ var require_react_dom_development = __commonJS({
           }
         }
         function forceStoreRerender(fiber) {
-          var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-          if (root3 !== null) {
-            scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+          var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+          if (root4 !== null) {
+            scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
           }
         }
         function mountState(initialState) {
@@ -14836,8 +14836,8 @@ var require_react_dom_development = __commonJS({
         }
         function mountId() {
           var hook = mountWorkInProgressHook();
-          var root3 = getWorkInProgressRoot();
-          var identifierPrefix = root3.identifierPrefix;
+          var root4 = getWorkInProgressRoot();
+          var identifierPrefix = root4.identifierPrefix;
           var id2;
           if (getIsHydrating()) {
             var treeId = getTreeId();
@@ -14876,11 +14876,11 @@ var require_react_dom_development = __commonJS({
           if (isRenderPhaseUpdate(fiber)) {
             enqueueRenderPhaseUpdate(queue, update3);
           } else {
-            var root3 = enqueueConcurrentHookUpdate(fiber, queue, update3, lane);
-            if (root3 !== null) {
+            var root4 = enqueueConcurrentHookUpdate(fiber, queue, update3, lane);
+            if (root4 !== null) {
               var eventTime = requestEventTime();
-              scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
-              entangleTransitionUpdate(root3, queue, lane);
+              scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
+              entangleTransitionUpdate(root4, queue, lane);
             }
           }
           markUpdateInDevTools(fiber, lane);
@@ -14928,11 +14928,11 @@ var require_react_dom_development = __commonJS({
                 }
               }
             }
-            var root3 = enqueueConcurrentHookUpdate(fiber, queue, update3, lane);
-            if (root3 !== null) {
+            var root4 = enqueueConcurrentHookUpdate(fiber, queue, update3, lane);
+            if (root4 !== null) {
               var eventTime = requestEventTime();
-              scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
-              entangleTransitionUpdate(root3, queue, lane);
+              scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
+              entangleTransitionUpdate(root4, queue, lane);
             }
           }
           markUpdateInDevTools(fiber, lane);
@@ -14952,13 +14952,13 @@ var require_react_dom_development = __commonJS({
           }
           queue.pending = update3;
         }
-        function entangleTransitionUpdate(root3, queue, lane) {
+        function entangleTransitionUpdate(root4, queue, lane) {
           if (isTransitionLane(lane)) {
             var queueLanes = queue.lanes;
-            queueLanes = intersectLanes(queueLanes, root3.pendingLanes);
+            queueLanes = intersectLanes(queueLanes, root4.pendingLanes);
             var newQueueLanes = mergeLanes(queueLanes, lane);
             queue.lanes = newQueueLanes;
-            markRootEntangled(root3, newQueueLanes);
+            markRootEntangled(root4, newQueueLanes);
           }
         }
         function markUpdateInDevTools(fiber, lane, action) {
@@ -15846,8 +15846,8 @@ var require_react_dom_development = __commonJS({
             while (parentFiber !== null) {
               switch (parentFiber.tag) {
                 case HostRoot:
-                  var root3 = parentFiber.stateNode;
-                  root3.effectDuration += elapsedTime;
+                  var root4 = parentFiber.stateNode;
+                  root4.effectDuration += elapsedTime;
                   return;
                 case Profiler:
                   var parentStateNode = parentFiber.stateNode;
@@ -15866,9 +15866,9 @@ var require_react_dom_development = __commonJS({
             while (parentFiber !== null) {
               switch (parentFiber.tag) {
                 case HostRoot:
-                  var root3 = parentFiber.stateNode;
-                  if (root3 !== null) {
-                    root3.passiveEffectDuration += elapsedTime;
+                  var root4 = parentFiber.stateNode;
+                  if (root4 !== null) {
+                    root4.passiveEffectDuration += elapsedTime;
                   }
                   return;
                 case Profiler:
@@ -16007,11 +16007,11 @@ var require_react_dom_development = __commonJS({
           }
           return update3;
         }
-        function attachPingListener(root3, wakeable, lanes) {
-          var pingCache = root3.pingCache;
+        function attachPingListener(root4, wakeable, lanes) {
+          var pingCache = root4.pingCache;
           var threadIDs;
           if (pingCache === null) {
-            pingCache = root3.pingCache = new PossiblyWeakMap$1();
+            pingCache = root4.pingCache = new PossiblyWeakMap$1();
             threadIDs = /* @__PURE__ */ new Set();
             pingCache.set(wakeable, threadIDs);
           } else {
@@ -16023,16 +16023,16 @@ var require_react_dom_development = __commonJS({
           }
           if (!threadIDs.has(lanes)) {
             threadIDs.add(lanes);
-            var ping = pingSuspendedRoot.bind(null, root3, wakeable, lanes);
+            var ping = pingSuspendedRoot.bind(null, root4, wakeable, lanes);
             {
               if (isDevToolsPresent) {
-                restorePendingUpdaters(root3, lanes);
+                restorePendingUpdaters(root4, lanes);
               }
             }
             wakeable.then(ping, ping);
           }
         }
-        function attachRetryListener(suspenseBoundary, root3, wakeable, lanes) {
+        function attachRetryListener(suspenseBoundary, root4, wakeable, lanes) {
           var wakeables = suspenseBoundary.updateQueue;
           if (wakeables === null) {
             var updateQueue2 = /* @__PURE__ */ new Set();
@@ -16066,7 +16066,7 @@ var require_react_dom_development = __commonJS({
           } while (node !== null);
           return null;
         }
-        function markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes) {
+        function markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root4, rootRenderLanes) {
           if ((suspenseBoundary.mode & ConcurrentMode) === NoMode) {
             if (suspenseBoundary === returnFiber) {
               suspenseBoundary.flags |= ShouldCapture;
@@ -16092,11 +16092,11 @@ var require_react_dom_development = __commonJS({
           suspenseBoundary.lanes = rootRenderLanes;
           return suspenseBoundary;
         }
-        function throwException(root3, returnFiber, sourceFiber, value, rootRenderLanes) {
+        function throwException(root4, returnFiber, sourceFiber, value, rootRenderLanes) {
           sourceFiber.flags |= Incomplete;
           {
             if (isDevToolsPresent) {
-              restorePendingUpdaters(root3, rootRenderLanes);
+              restorePendingUpdaters(root4, rootRenderLanes);
             }
           }
           if (value !== null && typeof value === "object" && typeof value.then === "function") {
@@ -16110,15 +16110,15 @@ var require_react_dom_development = __commonJS({
             var suspenseBoundary = getNearestSuspenseBoundaryToCapture(returnFiber);
             if (suspenseBoundary !== null) {
               suspenseBoundary.flags &= ~ForceClientRender;
-              markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes);
+              markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root4, rootRenderLanes);
               if (suspenseBoundary.mode & ConcurrentMode) {
-                attachPingListener(root3, wakeable, rootRenderLanes);
+                attachPingListener(root4, wakeable, rootRenderLanes);
               }
-              attachRetryListener(suspenseBoundary, root3, wakeable);
+              attachRetryListener(suspenseBoundary, root4, wakeable);
               return;
             } else {
               if (!includesSyncLane(rootRenderLanes)) {
-                attachPingListener(root3, wakeable, rootRenderLanes);
+                attachPingListener(root4, wakeable, rootRenderLanes);
                 renderDidSuspendDelayIfPossible();
                 return;
               }
@@ -16133,7 +16133,7 @@ var require_react_dom_development = __commonJS({
                 if ((_suspenseBoundary.flags & ShouldCapture) === NoFlags) {
                   _suspenseBoundary.flags |= ForceClientRender;
                 }
-                markSuspenseBoundaryShouldCapture(_suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes);
+                markSuspenseBoundaryShouldCapture(_suspenseBoundary, returnFiber, sourceFiber, root4, rootRenderLanes);
                 queueHydrationError(createCapturedValueAtFiber(value, sourceFiber));
                 return;
               }
@@ -16627,13 +16627,13 @@ var require_react_dom_development = __commonJS({
           return workInProgress2.child;
         }
         function pushHostRootContext(workInProgress2) {
-          var root3 = workInProgress2.stateNode;
-          if (root3.pendingContext) {
-            pushTopLevelContextObject(workInProgress2, root3.pendingContext, root3.pendingContext !== root3.context);
-          } else if (root3.context) {
-            pushTopLevelContextObject(workInProgress2, root3.context, false);
+          var root4 = workInProgress2.stateNode;
+          if (root4.pendingContext) {
+            pushTopLevelContextObject(workInProgress2, root4.pendingContext, root4.pendingContext !== root4.context);
+          } else if (root4.context) {
+            pushTopLevelContextObject(workInProgress2, root4.context, false);
           }
-          pushHostContainer(workInProgress2, root3.containerInfo);
+          pushHostContainer(workInProgress2, root4.containerInfo);
         }
         function updateHostRoot(current2, workInProgress2, renderLanes2) {
           pushHostRootContext(workInProgress2);
@@ -16646,7 +16646,7 @@ var require_react_dom_development = __commonJS({
           cloneUpdateQueue(current2, workInProgress2);
           processUpdateQueue(workInProgress2, nextProps, null, renderLanes2);
           var nextState = workInProgress2.memoizedState;
-          var root3 = workInProgress2.stateNode;
+          var root4 = workInProgress2.stateNode;
           var nextChildren = nextState.element;
           if (prevState.isDehydrated) {
             var overrideState = {
@@ -17227,14 +17227,14 @@ var require_react_dom_development = __commonJS({
             }
             var hasContextChanged2 = includesSomeLane(renderLanes2, current2.childLanes);
             if (didReceiveUpdate || hasContextChanged2) {
-              var root3 = getWorkInProgressRoot();
-              if (root3 !== null) {
-                var attemptHydrationAtLane = getBumpedLaneForHydration(root3, renderLanes2);
+              var root4 = getWorkInProgressRoot();
+              if (root4 !== null) {
+                var attemptHydrationAtLane = getBumpedLaneForHydration(root4, renderLanes2);
                 if (attemptHydrationAtLane !== NoLane && attemptHydrationAtLane !== suspenseState.retryLane) {
                   suspenseState.retryLane = attemptHydrationAtLane;
                   var eventTime = NoTimestamp;
                   enqueueConcurrentRenderForLane(current2, attemptHydrationAtLane);
-                  scheduleUpdateOnFiber(root3, current2, attemptHydrationAtLane, eventTime);
+                  scheduleUpdateOnFiber(root4, current2, attemptHydrationAtLane, eventTime);
                 }
               }
               renderDidSuspendDelayIfPossible();
@@ -17363,7 +17363,7 @@ var require_react_dom_development = __commonJS({
         }
         function validateSuspenseListNestedChild(childSlot, index3) {
           {
-            var isAnArray = isArray(childSlot);
+            var isAnArray = isArray2(childSlot);
             var isIterable = !isAnArray && typeof getIteratorFn(childSlot) === "function";
             if (isAnArray || isIterable) {
               var type = isAnArray ? "array" : "iterable";
@@ -17376,7 +17376,7 @@ var require_react_dom_development = __commonJS({
         function validateSuspenseListChildren(children, revealOrder) {
           {
             if ((revealOrder === "forwards" || revealOrder === "backwards") && children !== void 0 && children !== null && children !== false) {
-              if (isArray(children)) {
+              if (isArray2(children)) {
                 for (var i2 = 0; i2 < children.length; i2++) {
                   if (!validateSuspenseListNestedChild(children[i2], i2)) {
                     return;
@@ -17679,7 +17679,7 @@ var require_react_dom_development = __commonJS({
           switch (workInProgress2.tag) {
             case HostRoot:
               pushHostRootContext(workInProgress2);
-              var root3 = workInProgress2.stateNode;
+              var root4 = workInProgress2.stateNode;
               resetHydrationState();
               break;
             case HostComponent:
@@ -18456,7 +18456,7 @@ var require_react_dom_development = __commonJS({
               return null;
             }
             case HostRoot: {
-              var root3 = workInProgress2.stateNode;
+              var root4 = workInProgress2.stateNode;
               popHostContainer(workInProgress2);
               popTopLevelContextObject(workInProgress2);
               resetWorkInProgressVersions();
@@ -18522,7 +18522,7 @@ var require_react_dom_development = __commonJS({
               break;
             }
             case HostRoot: {
-              var root3 = interruptedWork.stateNode;
+              var root4 = interruptedWork.stateNode;
               popHostContainer(interruptedWork);
               popTopLevelContextObject(interruptedWork);
               resetWorkInProgressVersions();
@@ -18649,8 +18649,8 @@ var require_react_dom_development = __commonJS({
         }
         var focusedInstanceHandle = null;
         var shouldFireAfterActiveInstanceBlur = false;
-        function commitBeforeMutationEffects(root3, firstChild) {
-          focusedInstanceHandle = prepareForCommit(root3.containerInfo);
+        function commitBeforeMutationEffects(root4, firstChild) {
+          focusedInstanceHandle = prepareForCommit(root4.containerInfo);
           nextEffect = firstChild;
           commitBeforeMutationEffects_begin();
           var shouldFire = shouldFireAfterActiveInstanceBlur;
@@ -18729,8 +18729,8 @@ var require_react_dom_development = __commonJS({
               }
               case HostRoot: {
                 {
-                  var root3 = finishedWork.stateNode;
-                  clearContainer(root3.containerInfo);
+                  var root4 = finishedWork.stateNode;
+                  clearContainer(root4.containerInfo);
                 }
                 break;
               }
@@ -18871,8 +18871,8 @@ var require_react_dom_development = __commonJS({
                     while (parentFiber !== null) {
                       switch (parentFiber.tag) {
                         case HostRoot:
-                          var root3 = parentFiber.stateNode;
-                          root3.passiveEffectDuration += passiveEffectDuration;
+                          var root4 = parentFiber.stateNode;
+                          root4.passiveEffectDuration += passiveEffectDuration;
                           break outer;
                         case Profiler:
                           var parentStateNode = parentFiber.stateNode;
@@ -19031,8 +19031,8 @@ var require_react_dom_development = __commonJS({
                       while (parentFiber !== null) {
                         switch (parentFiber.tag) {
                           case HostRoot:
-                            var root3 = parentFiber.stateNode;
-                            root3.effectDuration += effectDuration;
+                            var root4 = parentFiber.stateNode;
+                            root4.effectDuration += effectDuration;
                             break outer;
                           case Profiler:
                             var parentStateNode = parentFiber.stateNode;
@@ -19351,7 +19351,7 @@ var require_react_dom_development = __commonJS({
         }
         var hostParent = null;
         var hostParentIsContainer = false;
-        function commitDeletionEffects(root3, returnFiber, deletedFiber) {
+        function commitDeletionEffects(root4, returnFiber, deletedFiber) {
           {
             var parent = returnFiber;
             findParent:
@@ -19378,7 +19378,7 @@ var require_react_dom_development = __commonJS({
             if (hostParent === null) {
               throw new Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue.");
             }
-            commitDeletionEffectsOnFiber(root3, returnFiber, deletedFiber);
+            commitDeletionEffectsOnFiber(root4, returnFiber, deletedFiber);
             hostParent = null;
             hostParentIsContainer = false;
           }
@@ -19560,22 +19560,22 @@ var require_react_dom_development = __commonJS({
             });
           }
         }
-        function commitMutationEffects(root3, finishedWork, committedLanes) {
+        function commitMutationEffects(root4, finishedWork, committedLanes) {
           inProgressLanes = committedLanes;
-          inProgressRoot = root3;
+          inProgressRoot = root4;
           setCurrentFiber(finishedWork);
-          commitMutationEffectsOnFiber(finishedWork, root3);
+          commitMutationEffectsOnFiber(finishedWork, root4);
           setCurrentFiber(finishedWork);
           inProgressLanes = null;
           inProgressRoot = null;
         }
-        function recursivelyTraverseMutationEffects(root3, parentFiber, lanes) {
+        function recursivelyTraverseMutationEffects(root4, parentFiber, lanes) {
           var deletions = parentFiber.deletions;
           if (deletions !== null) {
             for (var i2 = 0; i2 < deletions.length; i2++) {
               var childToDelete = deletions[i2];
               try {
-                commitDeletionEffects(root3, parentFiber, childToDelete);
+                commitDeletionEffects(root4, parentFiber, childToDelete);
               } catch (error2) {
                 captureCommitPhaseError(childToDelete, parentFiber, error2);
               }
@@ -19586,13 +19586,13 @@ var require_react_dom_development = __commonJS({
             var child = parentFiber.child;
             while (child !== null) {
               setCurrentFiber(child);
-              commitMutationEffectsOnFiber(child, root3);
+              commitMutationEffectsOnFiber(child, root4);
               child = child.sibling;
             }
           }
           setCurrentFiber(prevDebugFiber);
         }
-        function commitMutationEffectsOnFiber(finishedWork, root3, lanes) {
+        function commitMutationEffectsOnFiber(finishedWork, root4, lanes) {
           var current2 = finishedWork.alternate;
           var flags = finishedWork.flags;
           switch (finishedWork.tag) {
@@ -19600,7 +19600,7 @@ var require_react_dom_development = __commonJS({
             case ForwardRef:
             case MemoComponent:
             case SimpleMemoComponent: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Update) {
                 try {
@@ -19628,7 +19628,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case ClassComponent: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Ref) {
                 if (current2 !== null) {
@@ -19638,7 +19638,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case HostComponent: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Ref) {
                 if (current2 !== null) {
@@ -19675,7 +19675,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case HostText: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Update) {
                 {
@@ -19695,7 +19695,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case HostRoot: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Update) {
                 {
@@ -19703,7 +19703,7 @@ var require_react_dom_development = __commonJS({
                     var prevRootState = current2.memoizedState;
                     if (prevRootState.isDehydrated) {
                       try {
-                        commitHydratedContainer(root3.containerInfo);
+                        commitHydratedContainer(root4.containerInfo);
                       } catch (error2) {
                         captureCommitPhaseError(finishedWork, finishedWork.return, error2);
                       }
@@ -19714,12 +19714,12 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case HostPortal: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               return;
             }
             case SuspenseComponent: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               var offscreenFiber = finishedWork.child;
               if (offscreenFiber.flags & Visibility) {
@@ -19752,10 +19752,10 @@ var require_react_dom_development = __commonJS({
               ) {
                 var prevOffscreenSubtreeWasHidden = offscreenSubtreeWasHidden;
                 offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden || _wasHidden;
-                recursivelyTraverseMutationEffects(root3, finishedWork);
+                recursivelyTraverseMutationEffects(root4, finishedWork);
                 offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden;
               } else {
-                recursivelyTraverseMutationEffects(root3, finishedWork);
+                recursivelyTraverseMutationEffects(root4, finishedWork);
               }
               commitReconciliationEffects(finishedWork);
               if (flags & Visibility) {
@@ -19786,7 +19786,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             case SuspenseListComponent: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               if (flags & Update) {
                 attachSuspenseRetryListeners(finishedWork);
@@ -19797,7 +19797,7 @@ var require_react_dom_development = __commonJS({
               return;
             }
             default: {
-              recursivelyTraverseMutationEffects(root3, finishedWork);
+              recursivelyTraverseMutationEffects(root4, finishedWork);
               commitReconciliationEffects(finishedWork);
               return;
             }
@@ -19817,15 +19817,15 @@ var require_react_dom_development = __commonJS({
             finishedWork.flags &= ~Hydrating;
           }
         }
-        function commitLayoutEffects(finishedWork, root3, committedLanes) {
+        function commitLayoutEffects(finishedWork, root4, committedLanes) {
           inProgressLanes = committedLanes;
-          inProgressRoot = root3;
+          inProgressRoot = root4;
           nextEffect = finishedWork;
-          commitLayoutEffects_begin(finishedWork, root3, committedLanes);
+          commitLayoutEffects_begin(finishedWork, root4, committedLanes);
           inProgressLanes = null;
           inProgressRoot = null;
         }
-        function commitLayoutEffects_begin(subtreeRoot, root3, committedLanes) {
+        function commitLayoutEffects_begin(subtreeRoot, root4, committedLanes) {
           var isModernRoot = (subtreeRoot.mode & ConcurrentMode) !== NoMode;
           while (nextEffect !== null) {
             var fiber = nextEffect;
@@ -19834,7 +19834,7 @@ var require_react_dom_development = __commonJS({
               var isHidden = fiber.memoizedState !== null;
               var newOffscreenSubtreeIsHidden = isHidden || offscreenSubtreeIsHidden;
               if (newOffscreenSubtreeIsHidden) {
-                commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
+                commitLayoutMountEffects_complete(subtreeRoot, root4, committedLanes);
                 continue;
               } else {
                 var current2 = fiber.alternate;
@@ -19854,7 +19854,7 @@ var require_react_dom_development = __commonJS({
                   commitLayoutEffects_begin(
                     child,
                     // New root; bubble back up to here and stop.
-                    root3,
+                    root4,
                     committedLanes
                   );
                   child = child.sibling;
@@ -19862,7 +19862,7 @@ var require_react_dom_development = __commonJS({
                 nextEffect = fiber;
                 offscreenSubtreeIsHidden = prevOffscreenSubtreeIsHidden;
                 offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden;
-                commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
+                commitLayoutMountEffects_complete(subtreeRoot, root4, committedLanes);
                 continue;
               }
             }
@@ -19870,18 +19870,18 @@ var require_react_dom_development = __commonJS({
               firstChild.return = fiber;
               nextEffect = firstChild;
             } else {
-              commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
+              commitLayoutMountEffects_complete(subtreeRoot, root4, committedLanes);
             }
           }
         }
-        function commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes) {
+        function commitLayoutMountEffects_complete(subtreeRoot, root4, committedLanes) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             if ((fiber.flags & LayoutMask) !== NoFlags) {
               var current2 = fiber.alternate;
               setCurrentFiber(fiber);
               try {
-                commitLayoutEffectOnFiber(root3, current2, fiber, committedLanes);
+                commitLayoutEffectOnFiber(root4, current2, fiber, committedLanes);
               } catch (error2) {
                 captureCommitPhaseError(fiber, fiber.return, error2);
               }
@@ -20008,11 +20008,11 @@ var require_react_dom_development = __commonJS({
             nextEffect = fiber.return;
           }
         }
-        function commitPassiveMountEffects(root3, finishedWork, committedLanes, committedTransitions) {
+        function commitPassiveMountEffects(root4, finishedWork, committedLanes, committedTransitions) {
           nextEffect = finishedWork;
-          commitPassiveMountEffects_begin(finishedWork, root3, committedLanes, committedTransitions);
+          commitPassiveMountEffects_begin(finishedWork, root4, committedLanes, committedTransitions);
         }
-        function commitPassiveMountEffects_begin(subtreeRoot, root3, committedLanes, committedTransitions) {
+        function commitPassiveMountEffects_begin(subtreeRoot, root4, committedLanes, committedTransitions) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             var firstChild = fiber.child;
@@ -20020,17 +20020,17 @@ var require_react_dom_development = __commonJS({
               firstChild.return = fiber;
               nextEffect = firstChild;
             } else {
-              commitPassiveMountEffects_complete(subtreeRoot, root3, committedLanes, committedTransitions);
+              commitPassiveMountEffects_complete(subtreeRoot, root4, committedLanes, committedTransitions);
             }
           }
         }
-        function commitPassiveMountEffects_complete(subtreeRoot, root3, committedLanes, committedTransitions) {
+        function commitPassiveMountEffects_complete(subtreeRoot, root4, committedLanes, committedTransitions) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             if ((fiber.flags & Passive) !== NoFlags) {
               setCurrentFiber(fiber);
               try {
-                commitPassiveMountOnFiber(root3, fiber, committedLanes, committedTransitions);
+                commitPassiveMountOnFiber(root4, fiber, committedLanes, committedTransitions);
               } catch (error2) {
                 captureCommitPhaseError(fiber, fiber.return, error2);
               }
@@ -20433,7 +20433,7 @@ var require_react_dom_development = __commonJS({
           }
           return claimNextRetryLane();
         }
-        function scheduleUpdateOnFiber(root3, fiber, lane, eventTime) {
+        function scheduleUpdateOnFiber(root4, fiber, lane, eventTime) {
           checkForNestedUpdates();
           {
             if (isRunningInsertionEffect) {
@@ -20445,25 +20445,25 @@ var require_react_dom_development = __commonJS({
               didScheduleUpdateDuringPassiveEffects = true;
             }
           }
-          markRootUpdated(root3, lane, eventTime);
-          if ((executionContext & RenderContext) !== NoLanes && root3 === workInProgressRoot) {
+          markRootUpdated(root4, lane, eventTime);
+          if ((executionContext & RenderContext) !== NoLanes && root4 === workInProgressRoot) {
             warnAboutRenderPhaseUpdatesInDEV(fiber);
           } else {
             {
               if (isDevToolsPresent) {
-                addFiberToLanesMap(root3, fiber, lane);
+                addFiberToLanesMap(root4, fiber, lane);
               }
             }
             warnIfUpdatesNotWrappedWithActDEV(fiber);
-            if (root3 === workInProgressRoot) {
+            if (root4 === workInProgressRoot) {
               if ((executionContext & RenderContext) === NoContext) {
                 workInProgressRootInterleavedUpdatedLanes = mergeLanes(workInProgressRootInterleavedUpdatedLanes, lane);
               }
               if (workInProgressRootExitStatus === RootSuspendedWithDelay) {
-                markRootSuspended$1(root3, workInProgressRootRenderLanes);
+                markRootSuspended$1(root4, workInProgressRootRenderLanes);
               }
             }
-            ensureRootIsScheduled(root3, eventTime);
+            ensureRootIsScheduled(root4, eventTime);
             if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
             !ReactCurrentActQueue$1.isBatchingLegacy) {
               resetRenderTimer();
@@ -20471,11 +20471,11 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function scheduleInitialHydrationOnRoot(root3, lane, eventTime) {
-          var current2 = root3.current;
+        function scheduleInitialHydrationOnRoot(root4, lane, eventTime) {
+          var current2 = root4.current;
           current2.lanes = lane;
-          markRootUpdated(root3, lane, eventTime);
-          ensureRootIsScheduled(root3, eventTime);
+          markRootUpdated(root4, lane, eventTime);
+          ensureRootIsScheduled(root4, eventTime);
         }
         function isUnsafeClassRenderPhaseUpdate(fiber) {
           return (
@@ -20484,20 +20484,20 @@ var require_react_dom_development = __commonJS({
             (executionContext & RenderContext) !== NoContext
           );
         }
-        function ensureRootIsScheduled(root3, currentTime) {
-          var existingCallbackNode = root3.callbackNode;
-          markStarvedLanesAsExpired(root3, currentTime);
-          var nextLanes = getNextLanes(root3, root3 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
+        function ensureRootIsScheduled(root4, currentTime) {
+          var existingCallbackNode = root4.callbackNode;
+          markStarvedLanesAsExpired(root4, currentTime);
+          var nextLanes = getNextLanes(root4, root4 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
           if (nextLanes === NoLanes) {
             if (existingCallbackNode !== null) {
               cancelCallback$1(existingCallbackNode);
             }
-            root3.callbackNode = null;
-            root3.callbackPriority = NoLane;
+            root4.callbackNode = null;
+            root4.callbackPriority = NoLane;
             return;
           }
           var newCallbackPriority = getHighestPriorityLane(nextLanes);
-          var existingCallbackPriority = root3.callbackPriority;
+          var existingCallbackPriority = root4.callbackPriority;
           if (existingCallbackPriority === newCallbackPriority && // Special case related to `act`. If the currently scheduled task is a
           // Scheduler task, rather than an `act` task, cancel it and re-scheduled
           // on the `act` queue.
@@ -20514,13 +20514,13 @@ var require_react_dom_development = __commonJS({
           }
           var newCallbackNode;
           if (newCallbackPriority === SyncLane) {
-            if (root3.tag === LegacyRoot) {
+            if (root4.tag === LegacyRoot) {
               if (ReactCurrentActQueue$1.isBatchingLegacy !== null) {
                 ReactCurrentActQueue$1.didScheduleLegacyUpdate = true;
               }
-              scheduleLegacySyncCallback(performSyncWorkOnRoot.bind(null, root3));
+              scheduleLegacySyncCallback(performSyncWorkOnRoot.bind(null, root4));
             } else {
-              scheduleSyncCallback(performSyncWorkOnRoot.bind(null, root3));
+              scheduleSyncCallback(performSyncWorkOnRoot.bind(null, root4));
             }
             {
               if (ReactCurrentActQueue$1.current !== null) {
@@ -20553,12 +20553,12 @@ var require_react_dom_development = __commonJS({
                 schedulerPriorityLevel = NormalPriority;
                 break;
             }
-            newCallbackNode = scheduleCallback$1(schedulerPriorityLevel, performConcurrentWorkOnRoot.bind(null, root3));
+            newCallbackNode = scheduleCallback$1(schedulerPriorityLevel, performConcurrentWorkOnRoot.bind(null, root4));
           }
-          root3.callbackPriority = newCallbackPriority;
-          root3.callbackNode = newCallbackNode;
+          root4.callbackPriority = newCallbackPriority;
+          root4.callbackNode = newCallbackNode;
         }
-        function performConcurrentWorkOnRoot(root3, didTimeout) {
+        function performConcurrentWorkOnRoot(root4, didTimeout) {
           {
             resetNestedUpdateFlag();
           }
@@ -20567,77 +20567,77 @@ var require_react_dom_development = __commonJS({
           if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
             throw new Error("Should not already be working.");
           }
-          var originalCallbackNode = root3.callbackNode;
+          var originalCallbackNode = root4.callbackNode;
           var didFlushPassiveEffects = flushPassiveEffects();
           if (didFlushPassiveEffects) {
-            if (root3.callbackNode !== originalCallbackNode) {
+            if (root4.callbackNode !== originalCallbackNode) {
               return null;
             }
           }
-          var lanes = getNextLanes(root3, root3 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
+          var lanes = getNextLanes(root4, root4 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
           if (lanes === NoLanes) {
             return null;
           }
-          var shouldTimeSlice = !includesBlockingLane(root3, lanes) && !includesExpiredLane(root3, lanes) && !didTimeout;
-          var exitStatus = shouldTimeSlice ? renderRootConcurrent(root3, lanes) : renderRootSync(root3, lanes);
+          var shouldTimeSlice = !includesBlockingLane(root4, lanes) && !includesExpiredLane(root4, lanes) && !didTimeout;
+          var exitStatus = shouldTimeSlice ? renderRootConcurrent(root4, lanes) : renderRootSync(root4, lanes);
           if (exitStatus !== RootInProgress) {
             if (exitStatus === RootErrored) {
-              var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
+              var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root4);
               if (errorRetryLanes !== NoLanes) {
                 lanes = errorRetryLanes;
-                exitStatus = recoverFromConcurrentError(root3, errorRetryLanes);
+                exitStatus = recoverFromConcurrentError(root4, errorRetryLanes);
               }
             }
             if (exitStatus === RootFatalErrored) {
               var fatalError = workInProgressRootFatalError;
-              prepareFreshStack(root3, NoLanes);
-              markRootSuspended$1(root3, lanes);
-              ensureRootIsScheduled(root3, now4());
+              prepareFreshStack(root4, NoLanes);
+              markRootSuspended$1(root4, lanes);
+              ensureRootIsScheduled(root4, now4());
               throw fatalError;
             }
             if (exitStatus === RootDidNotComplete) {
-              markRootSuspended$1(root3, lanes);
+              markRootSuspended$1(root4, lanes);
             } else {
-              var renderWasConcurrent = !includesBlockingLane(root3, lanes);
-              var finishedWork = root3.current.alternate;
+              var renderWasConcurrent = !includesBlockingLane(root4, lanes);
+              var finishedWork = root4.current.alternate;
               if (renderWasConcurrent && !isRenderConsistentWithExternalStores(finishedWork)) {
-                exitStatus = renderRootSync(root3, lanes);
+                exitStatus = renderRootSync(root4, lanes);
                 if (exitStatus === RootErrored) {
-                  var _errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
+                  var _errorRetryLanes = getLanesToRetrySynchronouslyOnError(root4);
                   if (_errorRetryLanes !== NoLanes) {
                     lanes = _errorRetryLanes;
-                    exitStatus = recoverFromConcurrentError(root3, _errorRetryLanes);
+                    exitStatus = recoverFromConcurrentError(root4, _errorRetryLanes);
                   }
                 }
                 if (exitStatus === RootFatalErrored) {
                   var _fatalError = workInProgressRootFatalError;
-                  prepareFreshStack(root3, NoLanes);
-                  markRootSuspended$1(root3, lanes);
-                  ensureRootIsScheduled(root3, now4());
+                  prepareFreshStack(root4, NoLanes);
+                  markRootSuspended$1(root4, lanes);
+                  ensureRootIsScheduled(root4, now4());
                   throw _fatalError;
                 }
               }
-              root3.finishedWork = finishedWork;
-              root3.finishedLanes = lanes;
-              finishConcurrentRender(root3, exitStatus, lanes);
+              root4.finishedWork = finishedWork;
+              root4.finishedLanes = lanes;
+              finishConcurrentRender(root4, exitStatus, lanes);
             }
           }
-          ensureRootIsScheduled(root3, now4());
-          if (root3.callbackNode === originalCallbackNode) {
-            return performConcurrentWorkOnRoot.bind(null, root3);
+          ensureRootIsScheduled(root4, now4());
+          if (root4.callbackNode === originalCallbackNode) {
+            return performConcurrentWorkOnRoot.bind(null, root4);
           }
           return null;
         }
-        function recoverFromConcurrentError(root3, errorRetryLanes) {
+        function recoverFromConcurrentError(root4, errorRetryLanes) {
           var errorsFromFirstAttempt = workInProgressRootConcurrentErrors;
-          if (isRootDehydrated(root3)) {
-            var rootWorkInProgress = prepareFreshStack(root3, errorRetryLanes);
+          if (isRootDehydrated(root4)) {
+            var rootWorkInProgress = prepareFreshStack(root4, errorRetryLanes);
             rootWorkInProgress.flags |= ForceClientRender;
             {
-              errorHydratingContainer(root3.containerInfo);
+              errorHydratingContainer(root4.containerInfo);
             }
           }
-          var exitStatus = renderRootSync(root3, errorRetryLanes);
+          var exitStatus = renderRootSync(root4, errorRetryLanes);
           if (exitStatus !== RootErrored) {
             var errorsFromSecondAttempt = workInProgressRootRecoverableErrors;
             workInProgressRootRecoverableErrors = errorsFromFirstAttempt;
@@ -20654,59 +20654,59 @@ var require_react_dom_development = __commonJS({
             workInProgressRootRecoverableErrors.push.apply(workInProgressRootRecoverableErrors, errors);
           }
         }
-        function finishConcurrentRender(root3, exitStatus, lanes) {
+        function finishConcurrentRender(root4, exitStatus, lanes) {
           switch (exitStatus) {
             case RootInProgress:
             case RootFatalErrored: {
               throw new Error("Root did not complete. This is a bug in React.");
             }
             case RootErrored: {
-              commitRoot(root3, workInProgressRootRecoverableErrors, workInProgressTransitions);
+              commitRoot(root4, workInProgressRootRecoverableErrors, workInProgressTransitions);
               break;
             }
             case RootSuspended: {
-              markRootSuspended$1(root3, lanes);
+              markRootSuspended$1(root4, lanes);
               if (includesOnlyRetries(lanes) && // do not delay if we're inside an act() scope
               !shouldForceFlushFallbacksInDEV()) {
                 var msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS - now4();
                 if (msUntilTimeout > 10) {
-                  var nextLanes = getNextLanes(root3, NoLanes);
+                  var nextLanes = getNextLanes(root4, NoLanes);
                   if (nextLanes !== NoLanes) {
                     break;
                   }
-                  var suspendedLanes = root3.suspendedLanes;
+                  var suspendedLanes = root4.suspendedLanes;
                   if (!isSubsetOfLanes(suspendedLanes, lanes)) {
                     var eventTime = requestEventTime();
-                    markRootPinged(root3, suspendedLanes);
+                    markRootPinged(root4, suspendedLanes);
                     break;
                   }
-                  root3.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root3, workInProgressRootRecoverableErrors, workInProgressTransitions), msUntilTimeout);
+                  root4.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root4, workInProgressRootRecoverableErrors, workInProgressTransitions), msUntilTimeout);
                   break;
                 }
               }
-              commitRoot(root3, workInProgressRootRecoverableErrors, workInProgressTransitions);
+              commitRoot(root4, workInProgressRootRecoverableErrors, workInProgressTransitions);
               break;
             }
             case RootSuspendedWithDelay: {
-              markRootSuspended$1(root3, lanes);
+              markRootSuspended$1(root4, lanes);
               if (includesOnlyTransitions(lanes)) {
                 break;
               }
               if (!shouldForceFlushFallbacksInDEV()) {
-                var mostRecentEventTime = getMostRecentEventTime(root3, lanes);
+                var mostRecentEventTime = getMostRecentEventTime(root4, lanes);
                 var eventTimeMs = mostRecentEventTime;
                 var timeElapsedMs = now4() - eventTimeMs;
                 var _msUntilTimeout = jnd(timeElapsedMs) - timeElapsedMs;
                 if (_msUntilTimeout > 10) {
-                  root3.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root3, workInProgressRootRecoverableErrors, workInProgressTransitions), _msUntilTimeout);
+                  root4.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root4, workInProgressRootRecoverableErrors, workInProgressTransitions), _msUntilTimeout);
                   break;
                 }
               }
-              commitRoot(root3, workInProgressRootRecoverableErrors, workInProgressTransitions);
+              commitRoot(root4, workInProgressRootRecoverableErrors, workInProgressTransitions);
               break;
             }
             case RootCompleted: {
-              commitRoot(root3, workInProgressRootRecoverableErrors, workInProgressTransitions);
+              commitRoot(root4, workInProgressRootRecoverableErrors, workInProgressTransitions);
               break;
             }
             default: {
@@ -20757,12 +20757,12 @@ var require_react_dom_development = __commonJS({
           }
           return true;
         }
-        function markRootSuspended$1(root3, suspendedLanes) {
+        function markRootSuspended$1(root4, suspendedLanes) {
           suspendedLanes = removeLanes(suspendedLanes, workInProgressRootPingedLanes);
           suspendedLanes = removeLanes(suspendedLanes, workInProgressRootInterleavedUpdatedLanes);
-          markRootSuspended(root3, suspendedLanes);
+          markRootSuspended(root4, suspendedLanes);
         }
-        function performSyncWorkOnRoot(root3) {
+        function performSyncWorkOnRoot(root4) {
           {
             syncNestedUpdateFlag();
           }
@@ -20770,40 +20770,40 @@ var require_react_dom_development = __commonJS({
             throw new Error("Should not already be working.");
           }
           flushPassiveEffects();
-          var lanes = getNextLanes(root3, NoLanes);
+          var lanes = getNextLanes(root4, NoLanes);
           if (!includesSomeLane(lanes, SyncLane)) {
-            ensureRootIsScheduled(root3, now4());
+            ensureRootIsScheduled(root4, now4());
             return null;
           }
-          var exitStatus = renderRootSync(root3, lanes);
-          if (root3.tag !== LegacyRoot && exitStatus === RootErrored) {
-            var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
+          var exitStatus = renderRootSync(root4, lanes);
+          if (root4.tag !== LegacyRoot && exitStatus === RootErrored) {
+            var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root4);
             if (errorRetryLanes !== NoLanes) {
               lanes = errorRetryLanes;
-              exitStatus = recoverFromConcurrentError(root3, errorRetryLanes);
+              exitStatus = recoverFromConcurrentError(root4, errorRetryLanes);
             }
           }
           if (exitStatus === RootFatalErrored) {
             var fatalError = workInProgressRootFatalError;
-            prepareFreshStack(root3, NoLanes);
-            markRootSuspended$1(root3, lanes);
-            ensureRootIsScheduled(root3, now4());
+            prepareFreshStack(root4, NoLanes);
+            markRootSuspended$1(root4, lanes);
+            ensureRootIsScheduled(root4, now4());
             throw fatalError;
           }
           if (exitStatus === RootDidNotComplete) {
             throw new Error("Root did not complete. This is a bug in React.");
           }
-          var finishedWork = root3.current.alternate;
-          root3.finishedWork = finishedWork;
-          root3.finishedLanes = lanes;
-          commitRoot(root3, workInProgressRootRecoverableErrors, workInProgressTransitions);
-          ensureRootIsScheduled(root3, now4());
+          var finishedWork = root4.current.alternate;
+          root4.finishedWork = finishedWork;
+          root4.finishedLanes = lanes;
+          commitRoot(root4, workInProgressRootRecoverableErrors, workInProgressTransitions);
+          ensureRootIsScheduled(root4, now4());
           return null;
         }
-        function flushRoot(root3, lanes) {
+        function flushRoot(root4, lanes) {
           if (lanes !== NoLanes) {
-            markRootEntangled(root3, mergeLanes(lanes, SyncLane));
-            ensureRootIsScheduled(root3, now4());
+            markRootEntangled(root4, mergeLanes(lanes, SyncLane));
+            ensureRootIsScheduled(root4, now4());
             if ((executionContext & (RenderContext | CommitContext)) === NoContext) {
               resetRenderTimer();
               flushSyncCallbacks();
@@ -20876,12 +20876,12 @@ var require_react_dom_development = __commonJS({
           subtreeRenderLanes = subtreeRenderLanesCursor.current;
           pop(subtreeRenderLanesCursor, fiber);
         }
-        function prepareFreshStack(root3, lanes) {
-          root3.finishedWork = null;
-          root3.finishedLanes = NoLanes;
-          var timeoutHandle = root3.timeoutHandle;
+        function prepareFreshStack(root4, lanes) {
+          root4.finishedWork = null;
+          root4.finishedLanes = NoLanes;
+          var timeoutHandle = root4.timeoutHandle;
           if (timeoutHandle !== noTimeout) {
-            root3.timeoutHandle = noTimeout;
+            root4.timeoutHandle = noTimeout;
             cancelTimeout(timeoutHandle);
           }
           if (workInProgress !== null) {
@@ -20892,8 +20892,8 @@ var require_react_dom_development = __commonJS({
               interruptedWork = interruptedWork.return;
             }
           }
-          workInProgressRoot = root3;
-          var rootWorkInProgress = createWorkInProgress(root3.current, null);
+          workInProgressRoot = root4;
+          var rootWorkInProgress = createWorkInProgress(root4.current, null);
           workInProgress = rootWorkInProgress;
           workInProgressRootRenderLanes = subtreeRenderLanes = workInProgressRootIncludedLanes = lanes;
           workInProgressRootExitStatus = RootInProgress;
@@ -20909,7 +20909,7 @@ var require_react_dom_development = __commonJS({
           }
           return rootWorkInProgress;
         }
-        function handleError(root3, thrownValue) {
+        function handleError(root4, thrownValue) {
           do {
             var erroredWork = workInProgress;
             try {
@@ -20935,7 +20935,7 @@ var require_react_dom_development = __commonJS({
                   markComponentErrored(erroredWork, thrownValue, workInProgressRootRenderLanes);
                 }
               }
-              throwException(root3, erroredWork.return, erroredWork, thrownValue, workInProgressRootRenderLanes);
+              throwException(root4, erroredWork.return, erroredWork, thrownValue, workInProgressRootRenderLanes);
               completeUnitOfWork(erroredWork);
             } catch (yetAnotherThrownValue) {
               thrownValue = yetAnotherThrownValue;
@@ -20994,23 +20994,23 @@ var require_react_dom_development = __commonJS({
         function renderHasNotSuspendedYet() {
           return workInProgressRootExitStatus === RootInProgress;
         }
-        function renderRootSync(root3, lanes) {
+        function renderRootSync(root4, lanes) {
           var prevExecutionContext = executionContext;
           executionContext |= RenderContext;
           var prevDispatcher = pushDispatcher();
-          if (workInProgressRoot !== root3 || workInProgressRootRenderLanes !== lanes) {
+          if (workInProgressRoot !== root4 || workInProgressRootRenderLanes !== lanes) {
             {
               if (isDevToolsPresent) {
-                var memoizedUpdaters = root3.memoizedUpdaters;
+                var memoizedUpdaters = root4.memoizedUpdaters;
                 if (memoizedUpdaters.size > 0) {
-                  restorePendingUpdaters(root3, workInProgressRootRenderLanes);
+                  restorePendingUpdaters(root4, workInProgressRootRenderLanes);
                   memoizedUpdaters.clear();
                 }
-                movePendingFibersToMemoized(root3, lanes);
+                movePendingFibersToMemoized(root4, lanes);
               }
             }
             workInProgressTransitions = getTransitionsForLanes();
-            prepareFreshStack(root3, lanes);
+            prepareFreshStack(root4, lanes);
           }
           {
             markRenderStarted(lanes);
@@ -21020,7 +21020,7 @@ var require_react_dom_development = __commonJS({
               workLoopSync();
               break;
             } catch (thrownValue) {
-              handleError(root3, thrownValue);
+              handleError(root4, thrownValue);
             }
           } while (true);
           resetContextDependencies();
@@ -21041,24 +21041,24 @@ var require_react_dom_development = __commonJS({
             performUnitOfWork(workInProgress);
           }
         }
-        function renderRootConcurrent(root3, lanes) {
+        function renderRootConcurrent(root4, lanes) {
           var prevExecutionContext = executionContext;
           executionContext |= RenderContext;
           var prevDispatcher = pushDispatcher();
-          if (workInProgressRoot !== root3 || workInProgressRootRenderLanes !== lanes) {
+          if (workInProgressRoot !== root4 || workInProgressRootRenderLanes !== lanes) {
             {
               if (isDevToolsPresent) {
-                var memoizedUpdaters = root3.memoizedUpdaters;
+                var memoizedUpdaters = root4.memoizedUpdaters;
                 if (memoizedUpdaters.size > 0) {
-                  restorePendingUpdaters(root3, workInProgressRootRenderLanes);
+                  restorePendingUpdaters(root4, workInProgressRootRenderLanes);
                   memoizedUpdaters.clear();
                 }
-                movePendingFibersToMemoized(root3, lanes);
+                movePendingFibersToMemoized(root4, lanes);
               }
             }
             workInProgressTransitions = getTransitionsForLanes();
             resetRenderTimer();
-            prepareFreshStack(root3, lanes);
+            prepareFreshStack(root4, lanes);
           }
           {
             markRenderStarted(lanes);
@@ -21068,7 +21068,7 @@ var require_react_dom_development = __commonJS({
               workLoopConcurrent();
               break;
             } catch (thrownValue) {
-              handleError(root3, thrownValue);
+              handleError(root4, thrownValue);
             }
           } while (true);
           resetContextDependencies();
@@ -21172,20 +21172,20 @@ var require_react_dom_development = __commonJS({
             workInProgressRootExitStatus = RootCompleted;
           }
         }
-        function commitRoot(root3, recoverableErrors, transitions) {
+        function commitRoot(root4, recoverableErrors, transitions) {
           var previousUpdateLanePriority = getCurrentUpdatePriority();
           var prevTransition = ReactCurrentBatchConfig$3.transition;
           try {
             ReactCurrentBatchConfig$3.transition = null;
             setCurrentUpdatePriority(DiscreteEventPriority2);
-            commitRootImpl(root3, recoverableErrors, transitions, previousUpdateLanePriority);
+            commitRootImpl(root4, recoverableErrors, transitions, previousUpdateLanePriority);
           } finally {
             ReactCurrentBatchConfig$3.transition = prevTransition;
             setCurrentUpdatePriority(previousUpdateLanePriority);
           }
           return null;
         }
-        function commitRootImpl(root3, recoverableErrors, transitions, renderPriorityLevel) {
+        function commitRootImpl(root4, recoverableErrors, transitions, renderPriorityLevel) {
           do {
             flushPassiveEffects();
           } while (rootWithPendingPassiveEffects !== null);
@@ -21193,8 +21193,8 @@ var require_react_dom_development = __commonJS({
           if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
             throw new Error("Should not already be working.");
           }
-          var finishedWork = root3.finishedWork;
-          var lanes = root3.finishedLanes;
+          var finishedWork = root4.finishedWork;
+          var lanes = root4.finishedLanes;
           {
             markCommitStarted(lanes);
           }
@@ -21210,16 +21210,16 @@ var require_react_dom_development = __commonJS({
               }
             }
           }
-          root3.finishedWork = null;
-          root3.finishedLanes = NoLanes;
-          if (finishedWork === root3.current) {
+          root4.finishedWork = null;
+          root4.finishedLanes = NoLanes;
+          if (finishedWork === root4.current) {
             throw new Error("Cannot commit the same tree as before. This error is likely caused by a bug in React. Please file an issue.");
           }
-          root3.callbackNode = null;
-          root3.callbackPriority = NoLane;
+          root4.callbackNode = null;
+          root4.callbackPriority = NoLane;
           var remainingLanes = mergeLanes(finishedWork.lanes, finishedWork.childLanes);
-          markRootFinished(root3, remainingLanes);
-          if (root3 === workInProgressRoot) {
+          markRootFinished(root4, remainingLanes);
+          if (root4 === workInProgressRoot) {
             workInProgressRoot = null;
             workInProgress = null;
             workInProgressRootRenderLanes = NoLanes;
@@ -21244,17 +21244,17 @@ var require_react_dom_development = __commonJS({
             var prevExecutionContext = executionContext;
             executionContext |= CommitContext;
             ReactCurrentOwner$2.current = null;
-            var shouldFireAfterActiveInstanceBlur2 = commitBeforeMutationEffects(root3, finishedWork);
+            var shouldFireAfterActiveInstanceBlur2 = commitBeforeMutationEffects(root4, finishedWork);
             {
               recordCommitTime();
             }
-            commitMutationEffects(root3, finishedWork, lanes);
-            resetAfterCommit(root3.containerInfo);
-            root3.current = finishedWork;
+            commitMutationEffects(root4, finishedWork, lanes);
+            resetAfterCommit(root4.containerInfo);
+            root4.current = finishedWork;
             {
               markLayoutEffectsStarted(lanes);
             }
-            commitLayoutEffects(finishedWork, root3, lanes);
+            commitLayoutEffects(finishedWork, root4, lanes);
             {
               markLayoutEffectsStopped();
             }
@@ -21263,7 +21263,7 @@ var require_react_dom_development = __commonJS({
             setCurrentUpdatePriority(previousPriority);
             ReactCurrentBatchConfig$3.transition = prevTransition;
           } else {
-            root3.current = finishedWork;
+            root4.current = finishedWork;
             {
               recordCommitTime();
             }
@@ -21271,7 +21271,7 @@ var require_react_dom_development = __commonJS({
           var rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
           if (rootDoesHavePassiveEffects) {
             rootDoesHavePassiveEffects = false;
-            rootWithPendingPassiveEffects = root3;
+            rootWithPendingPassiveEffects = root4;
             pendingPassiveEffectsLanes = lanes;
           } else {
             {
@@ -21279,27 +21279,27 @@ var require_react_dom_development = __commonJS({
               rootWithPassiveNestedUpdates = null;
             }
           }
-          remainingLanes = root3.pendingLanes;
+          remainingLanes = root4.pendingLanes;
           if (remainingLanes === NoLanes) {
             legacyErrorBoundariesThatAlreadyFailed = null;
           }
           {
             if (!rootDidHavePassiveEffects) {
-              commitDoubleInvokeEffectsInDEV(root3.current, false);
+              commitDoubleInvokeEffectsInDEV(root4.current, false);
             }
           }
           onCommitRoot(finishedWork.stateNode, renderPriorityLevel);
           {
             if (isDevToolsPresent) {
-              root3.memoizedUpdaters.clear();
+              root4.memoizedUpdaters.clear();
             }
           }
           {
             onCommitRoot$1();
           }
-          ensureRootIsScheduled(root3, now4());
+          ensureRootIsScheduled(root4, now4());
           if (recoverableErrors !== null) {
-            var onRecoverableError = root3.onRecoverableError;
+            var onRecoverableError = root4.onRecoverableError;
             for (var i2 = 0; i2 < recoverableErrors.length; i2++) {
               var recoverableError = recoverableErrors[i2];
               var componentStack = recoverableError.stack;
@@ -21316,19 +21316,19 @@ var require_react_dom_development = __commonJS({
             firstUncaughtError = null;
             throw error$1;
           }
-          if (includesSomeLane(pendingPassiveEffectsLanes, SyncLane) && root3.tag !== LegacyRoot) {
+          if (includesSomeLane(pendingPassiveEffectsLanes, SyncLane) && root4.tag !== LegacyRoot) {
             flushPassiveEffects();
           }
-          remainingLanes = root3.pendingLanes;
+          remainingLanes = root4.pendingLanes;
           if (includesSomeLane(remainingLanes, SyncLane)) {
             {
               markNestedUpdateScheduled();
             }
-            if (root3 === rootWithNestedUpdates) {
+            if (root4 === rootWithNestedUpdates) {
               nestedUpdateCount++;
             } else {
               nestedUpdateCount = 0;
-              rootWithNestedUpdates = root3;
+              rootWithNestedUpdates = root4;
             }
           } else {
             nestedUpdateCount = 0;
@@ -21374,7 +21374,7 @@ var require_react_dom_development = __commonJS({
           }
           var transitions = pendingPassiveTransitions;
           pendingPassiveTransitions = null;
-          var root3 = rootWithPendingPassiveEffects;
+          var root4 = rootWithPendingPassiveEffects;
           var lanes = pendingPassiveEffectsLanes;
           rootWithPendingPassiveEffects = null;
           pendingPassiveEffectsLanes = NoLanes;
@@ -21390,31 +21390,31 @@ var require_react_dom_development = __commonJS({
           }
           var prevExecutionContext = executionContext;
           executionContext |= CommitContext;
-          commitPassiveUnmountEffects(root3.current);
-          commitPassiveMountEffects(root3, root3.current, lanes, transitions);
+          commitPassiveUnmountEffects(root4.current);
+          commitPassiveMountEffects(root4, root4.current, lanes, transitions);
           {
             var profilerEffects = pendingPassiveProfilerEffects;
             pendingPassiveProfilerEffects = [];
             for (var i2 = 0; i2 < profilerEffects.length; i2++) {
               var _fiber = profilerEffects[i2];
-              commitPassiveEffectDurations(root3, _fiber);
+              commitPassiveEffectDurations(root4, _fiber);
             }
           }
           {
             markPassiveEffectsStopped();
           }
           {
-            commitDoubleInvokeEffectsInDEV(root3.current, true);
+            commitDoubleInvokeEffectsInDEV(root4.current, true);
           }
           executionContext = prevExecutionContext;
           flushSyncCallbacks();
           {
             if (didScheduleUpdateDuringPassiveEffects) {
-              if (root3 === rootWithPassiveNestedUpdates) {
+              if (root4 === rootWithPassiveNestedUpdates) {
                 nestedPassiveUpdateCount++;
               } else {
                 nestedPassiveUpdateCount = 0;
-                rootWithPassiveNestedUpdates = root3;
+                rootWithPassiveNestedUpdates = root4;
               }
             } else {
               nestedPassiveUpdateCount = 0;
@@ -21422,9 +21422,9 @@ var require_react_dom_development = __commonJS({
             isFlushingPassiveEffects = false;
             didScheduleUpdateDuringPassiveEffects = false;
           }
-          onPostCommitRoot(root3);
+          onPostCommitRoot(root4);
           {
-            var stateNode = root3.current.stateNode;
+            var stateNode = root4.current.stateNode;
             stateNode.effectDuration = 0;
             stateNode.passiveEffectDuration = 0;
           }
@@ -21450,11 +21450,11 @@ var require_react_dom_development = __commonJS({
         function captureCommitPhaseErrorOnRoot(rootFiber, sourceFiber, error2) {
           var errorInfo = createCapturedValueAtFiber(error2, sourceFiber);
           var update3 = createRootErrorUpdate(rootFiber, errorInfo, SyncLane);
-          var root3 = enqueueUpdate(rootFiber, update3, SyncLane);
+          var root4 = enqueueUpdate(rootFiber, update3, SyncLane);
           var eventTime = requestEventTime();
-          if (root3 !== null) {
-            markRootUpdated(root3, SyncLane, eventTime);
-            ensureRootIsScheduled(root3, eventTime);
+          if (root4 !== null) {
+            markRootUpdated(root4, SyncLane, eventTime);
+            ensureRootIsScheduled(root4, eventTime);
           }
         }
         function captureCommitPhaseError(sourceFiber, nearestMountedAncestor, error$1) {
@@ -21480,11 +21480,11 @@ var require_react_dom_development = __commonJS({
               if (typeof ctor.getDerivedStateFromError === "function" || typeof instance.componentDidCatch === "function" && !isAlreadyFailedLegacyErrorBoundary(instance)) {
                 var errorInfo = createCapturedValueAtFiber(error$1, sourceFiber);
                 var update3 = createClassErrorUpdate(fiber, errorInfo, SyncLane);
-                var root3 = enqueueUpdate(fiber, update3, SyncLane);
+                var root4 = enqueueUpdate(fiber, update3, SyncLane);
                 var eventTime = requestEventTime();
-                if (root3 !== null) {
-                  markRootUpdated(root3, SyncLane, eventTime);
-                  ensureRootIsScheduled(root3, eventTime);
+                if (root4 !== null) {
+                  markRootUpdated(root4, SyncLane, eventTime);
+                  ensureRootIsScheduled(root4, eventTime);
                 }
                 return;
               }
@@ -21495,32 +21495,32 @@ var require_react_dom_development = __commonJS({
             error("Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.\n\nError message:\n\n%s", error$1);
           }
         }
-        function pingSuspendedRoot(root3, wakeable, pingedLanes) {
-          var pingCache = root3.pingCache;
+        function pingSuspendedRoot(root4, wakeable, pingedLanes) {
+          var pingCache = root4.pingCache;
           if (pingCache !== null) {
             pingCache.delete(wakeable);
           }
           var eventTime = requestEventTime();
-          markRootPinged(root3, pingedLanes);
-          warnIfSuspenseResolutionNotWrappedWithActDEV(root3);
-          if (workInProgressRoot === root3 && isSubsetOfLanes(workInProgressRootRenderLanes, pingedLanes)) {
+          markRootPinged(root4, pingedLanes);
+          warnIfSuspenseResolutionNotWrappedWithActDEV(root4);
+          if (workInProgressRoot === root4 && isSubsetOfLanes(workInProgressRootRenderLanes, pingedLanes)) {
             if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now4() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS) {
-              prepareFreshStack(root3, NoLanes);
+              prepareFreshStack(root4, NoLanes);
             } else {
               workInProgressRootPingedLanes = mergeLanes(workInProgressRootPingedLanes, pingedLanes);
             }
           }
-          ensureRootIsScheduled(root3, eventTime);
+          ensureRootIsScheduled(root4, eventTime);
         }
         function retryTimedOutBoundary(boundaryFiber, retryLane) {
           if (retryLane === NoLane) {
             retryLane = requestRetryLane(boundaryFiber);
           }
           var eventTime = requestEventTime();
-          var root3 = enqueueConcurrentRenderForLane(boundaryFiber, retryLane);
-          if (root3 !== null) {
-            markRootUpdated(root3, retryLane, eventTime);
-            ensureRootIsScheduled(root3, eventTime);
+          var root4 = enqueueConcurrentRenderForLane(boundaryFiber, retryLane);
+          if (root4 !== null) {
+            markRootUpdated(root4, retryLane, eventTime);
+            ensureRootIsScheduled(root4, eventTime);
           }
         }
         function retryDehydratedSuspenseBoundary(boundaryFiber) {
@@ -21709,12 +21709,12 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function restorePendingUpdaters(root3, lanes) {
+        function restorePendingUpdaters(root4, lanes) {
           {
             if (isDevToolsPresent) {
-              var memoizedUpdaters = root3.memoizedUpdaters;
+              var memoizedUpdaters = root4.memoizedUpdaters;
               memoizedUpdaters.forEach(function(schedulingFiber) {
-                addFiberToLanesMap(root3, schedulingFiber, lanes);
+                addFiberToLanesMap(root4, schedulingFiber, lanes);
               });
             }
           }
@@ -21772,9 +21772,9 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function warnIfSuspenseResolutionNotWrappedWithActDEV(root3) {
+        function warnIfSuspenseResolutionNotWrappedWithActDEV(root4) {
           {
-            if (root3.tag !== LegacyRoot && isConcurrentActEnvironment() && ReactCurrentActQueue$1.current === null) {
+            if (root4.tag !== LegacyRoot && isConcurrentActEnvironment() && ReactCurrentActQueue$1.current === null) {
               error("A suspended resource finished loading inside a test, but the event was not wrapped in act(...).\n\nWhen testing, code that resolves suspended data should be wrapped into act(...):\n\nact(() => {\n  /* finish loading suspended data */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act");
             }
           }
@@ -21898,7 +21898,7 @@ var require_react_dom_development = __commonJS({
             failedBoundaries.add(fiber);
           }
         }
-        var scheduleRefresh = function(root3, update3) {
+        var scheduleRefresh = function(root4, update3) {
           {
             if (resolveFamily === null) {
               return;
@@ -21906,18 +21906,18 @@ var require_react_dom_development = __commonJS({
             var staleFamilies = update3.staleFamilies, updatedFamilies = update3.updatedFamilies;
             flushPassiveEffects();
             flushSync(function() {
-              scheduleFibersWithFamiliesRecursively(root3.current, updatedFamilies, staleFamilies);
+              scheduleFibersWithFamiliesRecursively(root4.current, updatedFamilies, staleFamilies);
             });
           }
         };
-        var scheduleRoot = function(root3, element) {
+        var scheduleRoot = function(root4, element) {
           {
-            if (root3.context !== emptyContextObject) {
+            if (root4.context !== emptyContextObject) {
               return;
             }
             flushPassiveEffects();
             flushSync(function() {
-              updateContainer(element, root3, null, null);
+              updateContainer(element, root4, null, null);
             });
           }
         };
@@ -21963,9 +21963,9 @@ var require_react_dom_development = __commonJS({
               fiber._debugNeedsRemount = true;
             }
             if (needsRemount || needsRender) {
-              var _root = enqueueConcurrentRenderForLane(fiber, SyncLane);
-              if (_root !== null) {
-                scheduleUpdateOnFiber(_root, fiber, SyncLane, NoTimestamp);
+              var _root2 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+              if (_root2 !== null) {
+                scheduleUpdateOnFiber(_root2, fiber, SyncLane, NoTimestamp);
               }
             }
             if (child !== null && !needsRemount) {
@@ -21976,13 +21976,13 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        var findHostInstancesForRefresh = function(root3, families) {
+        var findHostInstancesForRefresh = function(root4, families) {
           {
             var hostInstances = /* @__PURE__ */ new Set();
             var types = new Set(families.map(function(family) {
               return family.current;
             }));
-            findHostInstancesForMatchingFibersRecursively(root3.current, types, hostInstances);
+            findHostInstancesForMatchingFibersRecursively(root4.current, types, hostInstances);
             return hostInstances;
           }
         };
@@ -22531,10 +22531,10 @@ var require_react_dom_development = __commonJS({
           }
         }
         function createFiberRoot(containerInfo, tag, hydrate2, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError, transitionCallbacks) {
-          var root3 = new FiberRootNode(containerInfo, tag, hydrate2, identifierPrefix, onRecoverableError);
+          var root4 = new FiberRootNode(containerInfo, tag, hydrate2, identifierPrefix, onRecoverableError);
           var uninitializedFiber = createHostRootFiber(tag, isStrictMode);
-          root3.current = uninitializedFiber;
-          uninitializedFiber.stateNode = root3;
+          root4.current = uninitializedFiber;
+          uninitializedFiber.stateNode = root4;
           {
             var _initialState = {
               element: initialChildren,
@@ -22547,7 +22547,7 @@ var require_react_dom_development = __commonJS({
             uninitializedFiber.memoizedState = _initialState;
           }
           initializeUpdateQueue(uninitializedFiber);
-          return root3;
+          return root4;
         }
         var ReactVersion = "18.2.0";
         function createPortal2(children, containerInfo, implementation) {
@@ -22574,7 +22574,7 @@ var require_react_dom_development = __commonJS({
           if (!parentComponent) {
             return emptyContextObject;
           }
-          var fiber = get2(parentComponent);
+          var fiber = get3(parentComponent);
           var parentContext = findCurrentUnmaskedContext(fiber);
           if (fiber.tag === ClassComponent) {
             var Component2 = fiber.type;
@@ -22586,13 +22586,13 @@ var require_react_dom_development = __commonJS({
         }
         function findHostInstanceWithWarning(component, methodName) {
           {
-            var fiber = get2(component);
+            var fiber = get3(component);
             if (fiber === void 0) {
               if (typeof component.render === "function") {
                 throw new Error("Unable to find node on an unmounted component.");
               } else {
-                var keys2 = Object.keys(component).join(",");
-                throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys2);
+                var keys3 = Object.keys(component).join(",");
+                throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys3);
               }
             }
             var hostFiber = findCurrentHostFiber(fiber);
@@ -22630,16 +22630,16 @@ var require_react_dom_development = __commonJS({
         }
         function createHydrationContainer(initialChildren, callback, containerInfo, tag, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError, transitionCallbacks) {
           var hydrate2 = true;
-          var root3 = createFiberRoot(containerInfo, tag, hydrate2, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
-          root3.context = getContextForSubtree(null);
-          var current2 = root3.current;
+          var root4 = createFiberRoot(containerInfo, tag, hydrate2, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
+          root4.context = getContextForSubtree(null);
+          var current2 = root4.current;
           var eventTime = requestEventTime();
           var lane = requestUpdateLane(current2);
           var update3 = createUpdate2(eventTime, lane);
           update3.callback = callback !== void 0 && callback !== null ? callback : null;
           enqueueUpdate(current2, update3, lane);
-          scheduleInitialHydrationOnRoot(root3, lane, eventTime);
-          return root3;
+          scheduleInitialHydrationOnRoot(root4, lane, eventTime);
+          return root4;
         }
         function updateContainer(element, container2, parentComponent, callback) {
           {
@@ -22676,10 +22676,10 @@ var require_react_dom_development = __commonJS({
             }
             update3.callback = callback;
           }
-          var root3 = enqueueUpdate(current$1, update3, lane);
-          if (root3 !== null) {
-            scheduleUpdateOnFiber(root3, current$1, lane, eventTime);
-            entangleTransitions(root3, current$1, lane);
+          var root4 = enqueueUpdate(current$1, update3, lane);
+          if (root4 !== null) {
+            scheduleUpdateOnFiber(root4, current$1, lane, eventTime);
+            entangleTransitions(root4, current$1, lane);
           }
           return lane;
         }
@@ -22698,19 +22698,19 @@ var require_react_dom_development = __commonJS({
         function attemptSynchronousHydration$1(fiber) {
           switch (fiber.tag) {
             case HostRoot: {
-              var root3 = fiber.stateNode;
-              if (isRootDehydrated(root3)) {
-                var lanes = getHighestPriorityPendingLanes(root3);
-                flushRoot(root3, lanes);
+              var root4 = fiber.stateNode;
+              if (isRootDehydrated(root4)) {
+                var lanes = getHighestPriorityPendingLanes(root4);
+                flushRoot(root4, lanes);
               }
               break;
             }
             case SuspenseComponent: {
               flushSync(function() {
-                var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-                if (root4 !== null) {
+                var root5 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+                if (root5 !== null) {
                   var eventTime = requestEventTime();
-                  scheduleUpdateOnFiber(root4, fiber, SyncLane, eventTime);
+                  scheduleUpdateOnFiber(root5, fiber, SyncLane, eventTime);
                 }
               });
               var retryLane = SyncLane;
@@ -22737,10 +22737,10 @@ var require_react_dom_development = __commonJS({
             return;
           }
           var lane = SelectiveHydrationLane;
-          var root3 = enqueueConcurrentRenderForLane(fiber, lane);
-          if (root3 !== null) {
+          var root4 = enqueueConcurrentRenderForLane(fiber, lane);
+          if (root4 !== null) {
             var eventTime = requestEventTime();
-            scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
+            scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
           }
           markRetryLaneIfNotHydrated(fiber, lane);
         }
@@ -22749,10 +22749,10 @@ var require_react_dom_development = __commonJS({
             return;
           }
           var lane = requestUpdateLane(fiber);
-          var root3 = enqueueConcurrentRenderForLane(fiber, lane);
-          if (root3 !== null) {
+          var root4 = enqueueConcurrentRenderForLane(fiber, lane);
+          if (root4 !== null) {
             var eventTime = requestEventTime();
-            scheduleUpdateOnFiber(root3, fiber, lane, eventTime);
+            scheduleUpdateOnFiber(root4, fiber, lane, eventTime);
           }
           markRetryLaneIfNotHydrated(fiber, lane);
         }
@@ -22785,30 +22785,30 @@ var require_react_dom_development = __commonJS({
         var setErrorHandler = null;
         var setSuspenseHandler = null;
         {
-          var copyWithDeleteImpl = function(obj, path, index3) {
-            var key = path[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
-            if (index3 + 1 === path.length) {
-              if (isArray(updated)) {
+          var copyWithDeleteImpl = function(obj, path2, index3) {
+            var key = path2[index3];
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
+            if (index3 + 1 === path2.length) {
+              if (isArray2(updated)) {
                 updated.splice(key, 1);
               } else {
                 delete updated[key];
               }
               return updated;
             }
-            updated[key] = copyWithDeleteImpl(obj[key], path, index3 + 1);
+            updated[key] = copyWithDeleteImpl(obj[key], path2, index3 + 1);
             return updated;
           };
-          var copyWithDelete = function(obj, path) {
-            return copyWithDeleteImpl(obj, path, 0);
+          var copyWithDelete = function(obj, path2) {
+            return copyWithDeleteImpl(obj, path2, 0);
           };
           var copyWithRenameImpl = function(obj, oldPath, newPath, index3) {
             var oldKey = oldPath[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
             if (index3 + 1 === oldPath.length) {
               var newKey = newPath[index3];
               updated[newKey] = updated[oldKey];
-              if (isArray(updated)) {
+              if (isArray2(updated)) {
                 updated.splice(oldKey, 1);
               } else {
                 delete updated[oldKey];
@@ -22838,17 +22838,17 @@ var require_react_dom_development = __commonJS({
             }
             return copyWithRenameImpl(obj, oldPath, newPath, 0);
           };
-          var copyWithSetImpl = function(obj, path, index3, value) {
-            if (index3 >= path.length) {
+          var copyWithSetImpl = function(obj, path2, index3, value) {
+            if (index3 >= path2.length) {
               return value;
             }
-            var key = path[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
-            updated[key] = copyWithSetImpl(obj[key], path, index3 + 1, value);
+            var key = path2[index3];
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
+            updated[key] = copyWithSetImpl(obj[key], path2, index3 + 1, value);
             return updated;
           };
-          var copyWithSet = function(obj, path, value) {
-            return copyWithSetImpl(obj, path, 0, value);
+          var copyWithSet = function(obj, path2, value) {
+            return copyWithSetImpl(obj, path2, 0, value);
           };
           var findHook = function(fiber, id2) {
             var currentHook2 = fiber.memoizedState;
@@ -22858,29 +22858,29 @@ var require_react_dom_development = __commonJS({
             }
             return currentHook2;
           };
-          overrideHookState = function(fiber, id2, path, value) {
+          overrideHookState = function(fiber, id2, path2, value) {
             var hook = findHook(fiber, id2);
             if (hook !== null) {
-              var newState = copyWithSet(hook.memoizedState, path, value);
+              var newState = copyWithSet(hook.memoizedState, path2, value);
               hook.memoizedState = newState;
               hook.baseState = newState;
               fiber.memoizedProps = assign4({}, fiber.memoizedProps);
-              var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-              if (root3 !== null) {
-                scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+              var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+              if (root4 !== null) {
+                scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
               }
             }
           };
-          overrideHookStateDeletePath = function(fiber, id2, path) {
+          overrideHookStateDeletePath = function(fiber, id2, path2) {
             var hook = findHook(fiber, id2);
             if (hook !== null) {
-              var newState = copyWithDelete(hook.memoizedState, path);
+              var newState = copyWithDelete(hook.memoizedState, path2);
               hook.memoizedState = newState;
               hook.baseState = newState;
               fiber.memoizedProps = assign4({}, fiber.memoizedProps);
-              var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-              if (root3 !== null) {
-                scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+              var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+              if (root4 !== null) {
+                scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
               }
             }
           };
@@ -22891,30 +22891,30 @@ var require_react_dom_development = __commonJS({
               hook.memoizedState = newState;
               hook.baseState = newState;
               fiber.memoizedProps = assign4({}, fiber.memoizedProps);
-              var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-              if (root3 !== null) {
-                scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+              var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+              if (root4 !== null) {
+                scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
               }
             }
           };
-          overrideProps = function(fiber, path, value) {
-            fiber.pendingProps = copyWithSet(fiber.memoizedProps, path, value);
+          overrideProps = function(fiber, path2, value) {
+            fiber.pendingProps = copyWithSet(fiber.memoizedProps, path2, value);
             if (fiber.alternate) {
               fiber.alternate.pendingProps = fiber.pendingProps;
             }
-            var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+            var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
             }
           };
-          overridePropsDeletePath = function(fiber, path) {
-            fiber.pendingProps = copyWithDelete(fiber.memoizedProps, path);
+          overridePropsDeletePath = function(fiber, path2) {
+            fiber.pendingProps = copyWithDelete(fiber.memoizedProps, path2);
             if (fiber.alternate) {
               fiber.alternate.pendingProps = fiber.pendingProps;
             }
-            var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+            var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
             }
           };
           overridePropsRenamePath = function(fiber, oldPath, newPath) {
@@ -22922,15 +22922,15 @@ var require_react_dom_development = __commonJS({
             if (fiber.alternate) {
               fiber.alternate.pendingProps = fiber.pendingProps;
             }
-            var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+            var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
             }
           };
           scheduleUpdate = function(fiber) {
-            var root3 = enqueueConcurrentRenderForLane(fiber, SyncLane);
-            if (root3 !== null) {
-              scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
+            var root4 = enqueueConcurrentRenderForLane(fiber, SyncLane);
+            if (root4 !== null) {
+              scheduleUpdateOnFiber(root4, fiber, SyncLane, NoTimestamp);
             }
           };
           setErrorHandler = function(newShouldErrorImpl) {
@@ -22996,8 +22996,8 @@ var require_react_dom_development = __commonJS({
           this._internalRoot = internalRoot;
         }
         ReactDOMHydrationRoot.prototype.render = ReactDOMRoot.prototype.render = function(children) {
-          var root3 = this._internalRoot;
-          if (root3 === null) {
+          var root4 = this._internalRoot;
+          if (root4 === null) {
             throw new Error("Cannot update an unmounted root.");
           }
           {
@@ -23008,9 +23008,9 @@ var require_react_dom_development = __commonJS({
             } else if (typeof arguments[1] !== "undefined") {
               error("You passed a second argument to root.render(...) but it only accepts one argument.");
             }
-            var container2 = root3.containerInfo;
+            var container2 = root4.containerInfo;
             if (container2.nodeType !== COMMENT_NODE) {
-              var hostInstance = findHostInstanceWithNoPortals(root3.current);
+              var hostInstance = findHostInstanceWithNoPortals(root4.current);
               if (hostInstance) {
                 if (hostInstance.parentNode !== container2) {
                   error("render(...): It looks like the React-rendered content of the root container was removed without using React. This is not supported and will cause errors. Instead, call root.unmount() to empty a root's container.");
@@ -23018,7 +23018,7 @@ var require_react_dom_development = __commonJS({
               }
             }
           }
-          updateContainer(children, root3, null, null);
+          updateContainer(children, root4, null, null);
         };
         ReactDOMHydrationRoot.prototype.unmount = ReactDOMRoot.prototype.unmount = function() {
           {
@@ -23026,17 +23026,17 @@ var require_react_dom_development = __commonJS({
               error("unmount(...): does not support a callback argument. To execute a side effect after rendering, declare it in a component body with useEffect().");
             }
           }
-          var root3 = this._internalRoot;
-          if (root3 !== null) {
+          var root4 = this._internalRoot;
+          if (root4 !== null) {
             this._internalRoot = null;
-            var container2 = root3.containerInfo;
+            var container2 = root4.containerInfo;
             {
               if (isAlreadyRendering()) {
                 error("Attempted to synchronously unmount a root while React was already rendering. React cannot finish unmounting the root until the current render has completed, which may lead to a race condition.");
               }
             }
             flushSync(function() {
-              updateContainer(null, root3, null, null);
+              updateContainer(null, root4, null, null);
             });
             unmarkContainerAsRoot(container2);
           }
@@ -23074,11 +23074,11 @@ var require_react_dom_development = __commonJS({
               transitionCallbacks = options2.transitionCallbacks;
             }
           }
-          var root3 = createContainer(container2, ConcurrentRoot2, null, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
-          markContainerAsRoot(root3.current, container2);
+          var root4 = createContainer(container2, ConcurrentRoot2, null, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
+          markContainerAsRoot(root4.current, container2);
           var rootContainerElement = container2.nodeType === COMMENT_NODE ? container2.parentNode : container2;
           listenToAllSupportedEvents(rootContainerElement);
-          return new ReactDOMRoot(root3);
+          return new ReactDOMRoot(root4);
         }
         function ReactDOMHydrationRoot(internalRoot) {
           this._internalRoot = internalRoot;
@@ -23116,16 +23116,16 @@ var require_react_dom_development = __commonJS({
               onRecoverableError = options2.onRecoverableError;
             }
           }
-          var root3 = createHydrationContainer(initialChildren, null, container2, ConcurrentRoot2, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
-          markContainerAsRoot(root3.current, container2);
+          var root4 = createHydrationContainer(initialChildren, null, container2, ConcurrentRoot2, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
+          markContainerAsRoot(root4.current, container2);
           listenToAllSupportedEvents(container2);
           if (mutableSources) {
             for (var i2 = 0; i2 < mutableSources.length; i2++) {
               var mutableSource = mutableSources[i2];
-              registerMutableSourceForHydration(root3, mutableSource);
+              registerMutableSourceForHydration(root4, mutableSource);
             }
           }
-          return new ReactDOMHydrationRoot(root3);
+          return new ReactDOMHydrationRoot(root4);
         }
         function isValidContainer(node) {
           return !!(node && (node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_NODE || node.nodeType === DOCUMENT_FRAGMENT_NODE || !disableCommentsAsDOMContainers));
@@ -23187,11 +23187,11 @@ var require_react_dom_development = __commonJS({
             if (typeof callback === "function") {
               var originalCallback = callback;
               callback = function() {
-                var instance = getPublicRootInstance(root3);
+                var instance = getPublicRootInstance(root4);
                 originalCallback.call(instance);
               };
             }
-            var root3 = createHydrationContainer(
+            var root4 = createHydrationContainer(
               initialChildren,
               callback,
               container2,
@@ -23206,12 +23206,12 @@ var require_react_dom_development = __commonJS({
               // identifierPrefix
               noopOnRecoverableError
             );
-            container2._reactRootContainer = root3;
-            markContainerAsRoot(root3.current, container2);
+            container2._reactRootContainer = root4;
+            markContainerAsRoot(root4.current, container2);
             var rootContainerElement = container2.nodeType === COMMENT_NODE ? container2.parentNode : container2;
             listenToAllSupportedEvents(rootContainerElement);
             flushSync();
-            return root3;
+            return root4;
           } else {
             var rootSibling;
             while (rootSibling = container2.lastChild) {
@@ -23220,11 +23220,11 @@ var require_react_dom_development = __commonJS({
             if (typeof callback === "function") {
               var _originalCallback = callback;
               callback = function() {
-                var instance = getPublicRootInstance(_root);
+                var instance = getPublicRootInstance(_root2);
                 _originalCallback.call(instance);
               };
             }
-            var _root = createContainer(
+            var _root2 = createContainer(
               container2,
               LegacyRoot,
               null,
@@ -23237,14 +23237,14 @@ var require_react_dom_development = __commonJS({
               // identifierPrefix
               noopOnRecoverableError
             );
-            container2._reactRootContainer = _root;
-            markContainerAsRoot(_root.current, container2);
+            container2._reactRootContainer = _root2;
+            markContainerAsRoot(_root2.current, container2);
             var _rootContainerElement = container2.nodeType === COMMENT_NODE ? container2.parentNode : container2;
             listenToAllSupportedEvents(_rootContainerElement);
             flushSync(function() {
-              updateContainer(initialChildren, _root, parentComponent, callback);
+              updateContainer(initialChildren, _root2, parentComponent, callback);
             });
-            return _root;
+            return _root2;
           }
         }
         function warnOnInvalidCallback$1(callback, callerName) {
@@ -23260,21 +23260,21 @@ var require_react_dom_development = __commonJS({
             warnOnInvalidCallback$1(callback === void 0 ? null : callback, "render");
           }
           var maybeRoot = container2._reactRootContainer;
-          var root3;
+          var root4;
           if (!maybeRoot) {
-            root3 = legacyCreateRootFromDOMContainer(container2, children, parentComponent, callback, forceHydrate);
+            root4 = legacyCreateRootFromDOMContainer(container2, children, parentComponent, callback, forceHydrate);
           } else {
-            root3 = maybeRoot;
+            root4 = maybeRoot;
             if (typeof callback === "function") {
               var originalCallback = callback;
               callback = function() {
-                var instance = getPublicRootInstance(root3);
+                var instance = getPublicRootInstance(root4);
                 originalCallback.call(instance);
               };
             }
-            updateContainer(children, root3, parentComponent, callback);
+            updateContainer(children, root4, parentComponent, callback);
           }
-          return getPublicRootInstance(root3);
+          return getPublicRootInstance(root4);
         }
         function findDOMNode(componentOrElement) {
           {
@@ -23915,7 +23915,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return "";
         }
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        var hasOwnProperty2 = Object.prototype.hasOwnProperty;
         var loggedTypeFailures = {};
         var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
         function setCurrentlyValidatingElement(element) {
@@ -23931,7 +23931,7 @@ var require_react_jsx_runtime_development = __commonJS({
         }
         function checkPropTypes(typeSpecs, values, location, componentName, element) {
           {
-            var has = Function.call.bind(hasOwnProperty);
+            var has = Function.call.bind(hasOwnProperty2);
             for (var typeSpecName in typeSpecs) {
               if (has(typeSpecs, typeSpecName)) {
                 var error$1 = void 0;
@@ -23961,7 +23961,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
         }
         var isArrayImpl = Array.isArray;
-        function isArray(a2) {
+        function isArray2(a2) {
           return isArrayImpl(a2);
         }
         function typeName(value) {
@@ -24007,7 +24007,7 @@ var require_react_jsx_runtime_development = __commonJS({
         }
         function hasValidRef(config2) {
           {
-            if (hasOwnProperty.call(config2, "ref")) {
+            if (hasOwnProperty2.call(config2, "ref")) {
               var getter = Object.getOwnPropertyDescriptor(config2, "ref").get;
               if (getter && getter.isReactWarning) {
                 return false;
@@ -24018,7 +24018,7 @@ var require_react_jsx_runtime_development = __commonJS({
         }
         function hasValidKey(config2) {
           {
-            if (hasOwnProperty.call(config2, "key")) {
+            if (hasOwnProperty2.call(config2, "key")) {
               var getter = Object.getOwnPropertyDescriptor(config2, "key").get;
               if (getter && getter.isReactWarning) {
                 return false;
@@ -24130,7 +24130,7 @@ var require_react_jsx_runtime_development = __commonJS({
               warnIfStringRefCannotBeAutoConverted(config2, self2);
             }
             for (propName in config2) {
-              if (hasOwnProperty.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
+              if (hasOwnProperty2.call(config2, propName) && !RESERVED_PROPS2.hasOwnProperty(propName)) {
                 props[propName] = config2[propName];
               }
             }
@@ -24235,7 +24235,7 @@ var require_react_jsx_runtime_development = __commonJS({
             if (typeof node !== "object") {
               return;
             }
-            if (isArray(node)) {
+            if (isArray2(node)) {
               for (var i2 = 0; i2 < node.length; i2++) {
                 var child = node[i2];
                 if (isValidElement(child)) {
@@ -24293,9 +24293,9 @@ var require_react_jsx_runtime_development = __commonJS({
         }
         function validateFragmentProps(fragment2) {
           {
-            var keys2 = Object.keys(fragment2.props);
-            for (var i2 = 0; i2 < keys2.length; i2++) {
-              var key = keys2[i2];
+            var keys3 = Object.keys(fragment2.props);
+            for (var i2 = 0; i2 < keys3.length; i2++) {
+              var key = keys3[i2];
               if (key !== "children" && key !== "key") {
                 setCurrentlyValidatingElement$1(fragment2);
                 error("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
@@ -24327,7 +24327,7 @@ var require_react_jsx_runtime_development = __commonJS({
               var typeString;
               if (type === null) {
                 typeString = "null";
-              } else if (isArray(type)) {
+              } else if (isArray2(type)) {
                 typeString = "array";
               } else if (type !== void 0 && type.$$typeof === REACT_ELEMENT_TYPE) {
                 typeString = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />";
@@ -24345,7 +24345,7 @@ var require_react_jsx_runtime_development = __commonJS({
               var children = props.children;
               if (children !== void 0) {
                 if (isStaticChildren) {
-                  if (isArray(children)) {
+                  if (isArray2(children)) {
                     for (var i2 = 0; i2 < children.length; i2++) {
                       validateChildKeys(children[i2], type);
                     }
@@ -24967,7 +24967,7 @@ var require_react_reconciler_development = __commonJS({
           }
         }
         var assign4 = Object.assign;
-        function get2(key) {
+        function get3(key) {
           return key._reactInternals;
         }
         function set2(key, value) {
@@ -25330,7 +25330,7 @@ var require_react_reconciler_development = __commonJS({
               instance._warnedAboutRefsInRender = true;
             }
           }
-          var fiber = get2(component);
+          var fiber = get3(component);
           if (!fiber) {
             return false;
           }
@@ -25478,7 +25478,7 @@ var require_react_reconciler_development = __commonJS({
           return null;
         }
         var isArrayImpl = Array.isArray;
-        function isArray(a2) {
+        function isArray2(a2) {
           return isArrayImpl(a2);
         }
         var getPublicInstance = $$$hostConfig.getPublicInstance;
@@ -25830,7 +25830,7 @@ var require_react_reconciler_development = __commonJS({
           }
           return "";
         }
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        var hasOwnProperty2 = Object.prototype.hasOwnProperty;
         var loggedTypeFailures = {};
         var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
         function setCurrentlyValidatingElement(element) {
@@ -25846,7 +25846,7 @@ var require_react_reconciler_development = __commonJS({
         }
         function checkPropTypes(typeSpecs, values, location, componentName, element) {
           {
-            var has = Function.call.bind(hasOwnProperty);
+            var has = Function.call.bind(hasOwnProperty2);
             for (var typeSpecName in typeSpecs) {
               if (has(typeSpecs, typeSpecName)) {
                 var error$1 = void 0;
@@ -26348,14 +26348,14 @@ var require_react_reconciler_development = __commonJS({
               return lanes;
           }
         }
-        function getNextLanes(root2, wipLanes) {
-          var pendingLanes = root2.pendingLanes;
+        function getNextLanes(root3, wipLanes) {
+          var pendingLanes = root3.pendingLanes;
           if (pendingLanes === NoLanes) {
             return NoLanes;
           }
           var nextLanes = NoLanes;
-          var suspendedLanes = root2.suspendedLanes;
-          var pingedLanes = root2.pingedLanes;
+          var suspendedLanes = root3.suspendedLanes;
+          var pingedLanes = root3.pingedLanes;
           var nonIdlePendingLanes = pendingLanes & NonIdleLanes;
           if (nonIdlePendingLanes !== NoLanes) {
             var nonIdleUnblockedLanes = nonIdlePendingLanes & ~suspendedLanes;
@@ -26399,9 +26399,9 @@ var require_react_reconciler_development = __commonJS({
           if ((nextLanes & InputContinuousLane) !== NoLanes) {
             nextLanes |= pendingLanes & DefaultLane;
           }
-          var entangledLanes = root2.entangledLanes;
+          var entangledLanes = root3.entangledLanes;
           if (entangledLanes !== NoLanes) {
-            var entanglements = root2.entanglements;
+            var entanglements = root3.entanglements;
             var lanes = nextLanes & entangledLanes;
             while (lanes > 0) {
               var index3 = pickArbitraryLaneIndex(lanes);
@@ -26412,8 +26412,8 @@ var require_react_reconciler_development = __commonJS({
           }
           return nextLanes;
         }
-        function getMostRecentEventTime(root2, lanes) {
-          var eventTimes = root2.eventTimes;
+        function getMostRecentEventTime(root3, lanes) {
+          var eventTimes = root3.eventTimes;
           var mostRecentEventTime = NoTimestamp;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -26470,11 +26470,11 @@ var require_react_reconciler_development = __commonJS({
               return NoTimestamp;
           }
         }
-        function markStarvedLanesAsExpired(root2, currentTime) {
-          var pendingLanes = root2.pendingLanes;
-          var suspendedLanes = root2.suspendedLanes;
-          var pingedLanes = root2.pingedLanes;
-          var expirationTimes = root2.expirationTimes;
+        function markStarvedLanesAsExpired(root3, currentTime) {
+          var pendingLanes = root3.pendingLanes;
+          var suspendedLanes = root3.suspendedLanes;
+          var pingedLanes = root3.pingedLanes;
+          var expirationTimes = root3.expirationTimes;
           var lanes = pendingLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -26485,16 +26485,16 @@ var require_react_reconciler_development = __commonJS({
                 expirationTimes[index3] = computeExpirationTime(lane, currentTime);
               }
             } else if (expirationTime <= currentTime) {
-              root2.expiredLanes |= lane;
+              root3.expiredLanes |= lane;
             }
             lanes &= ~lane;
           }
         }
-        function getHighestPriorityPendingLanes(root2) {
-          return getHighestPriorityLanes(root2.pendingLanes);
+        function getHighestPriorityPendingLanes(root3) {
+          return getHighestPriorityLanes(root3.pendingLanes);
         }
-        function getLanesToRetrySynchronouslyOnError(root2) {
-          var everythingButOffscreen = root2.pendingLanes & ~OffscreenLane;
+        function getLanesToRetrySynchronouslyOnError(root3) {
+          var everythingButOffscreen = root3.pendingLanes & ~OffscreenLane;
           if (everythingButOffscreen !== NoLanes) {
             return everythingButOffscreen;
           }
@@ -26515,12 +26515,12 @@ var require_react_reconciler_development = __commonJS({
         function includesOnlyTransitions(lanes) {
           return (lanes & TransitionLanes) === lanes;
         }
-        function includesBlockingLane(root2, lanes) {
+        function includesBlockingLane(root3, lanes) {
           var SyncDefaultLanes = InputContinuousHydrationLane | InputContinuousLane | DefaultHydrationLane | DefaultLane;
           return (lanes & SyncDefaultLanes) !== NoLanes;
         }
-        function includesExpiredLane(root2, lanes) {
-          return (lanes & root2.expiredLanes) !== NoLanes;
+        function includesExpiredLane(root3, lanes) {
+          return (lanes & root3.expiredLanes) !== NoLanes;
         }
         function isTransitionLane(lane) {
           return (lane & TransitionLanes) !== 0;
@@ -26581,20 +26581,20 @@ var require_react_reconciler_development = __commonJS({
           }
           return laneMap;
         }
-        function markRootUpdated(root2, updateLane, eventTime) {
-          root2.pendingLanes |= updateLane;
+        function markRootUpdated(root3, updateLane, eventTime) {
+          root3.pendingLanes |= updateLane;
           if (updateLane !== IdleLane) {
-            root2.suspendedLanes = NoLanes;
-            root2.pingedLanes = NoLanes;
+            root3.suspendedLanes = NoLanes;
+            root3.pingedLanes = NoLanes;
           }
-          var eventTimes = root2.eventTimes;
+          var eventTimes = root3.eventTimes;
           var index3 = laneToIndex(updateLane);
           eventTimes[index3] = eventTime;
         }
-        function markRootSuspended(root2, suspendedLanes) {
-          root2.suspendedLanes |= suspendedLanes;
-          root2.pingedLanes &= ~suspendedLanes;
-          var expirationTimes = root2.expirationTimes;
+        function markRootSuspended(root3, suspendedLanes) {
+          root3.suspendedLanes |= suspendedLanes;
+          root3.pingedLanes &= ~suspendedLanes;
+          var expirationTimes = root3.expirationTimes;
           var lanes = suspendedLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -26603,20 +26603,20 @@ var require_react_reconciler_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function markRootPinged(root2, pingedLanes, eventTime) {
-          root2.pingedLanes |= root2.suspendedLanes & pingedLanes;
+        function markRootPinged(root3, pingedLanes, eventTime) {
+          root3.pingedLanes |= root3.suspendedLanes & pingedLanes;
         }
-        function markRootFinished(root2, remainingLanes) {
-          var noLongerPendingLanes = root2.pendingLanes & ~remainingLanes;
-          root2.pendingLanes = remainingLanes;
-          root2.suspendedLanes = 0;
-          root2.pingedLanes = 0;
-          root2.expiredLanes &= remainingLanes;
-          root2.mutableReadLanes &= remainingLanes;
-          root2.entangledLanes &= remainingLanes;
-          var entanglements = root2.entanglements;
-          var eventTimes = root2.eventTimes;
-          var expirationTimes = root2.expirationTimes;
+        function markRootFinished(root3, remainingLanes) {
+          var noLongerPendingLanes = root3.pendingLanes & ~remainingLanes;
+          root3.pendingLanes = remainingLanes;
+          root3.suspendedLanes = 0;
+          root3.pingedLanes = 0;
+          root3.expiredLanes &= remainingLanes;
+          root3.mutableReadLanes &= remainingLanes;
+          root3.entangledLanes &= remainingLanes;
+          var entanglements = root3.entanglements;
+          var eventTimes = root3.eventTimes;
+          var expirationTimes = root3.expirationTimes;
           var lanes = noLongerPendingLanes;
           while (lanes > 0) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -26627,9 +26627,9 @@ var require_react_reconciler_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function markRootEntangled(root2, entangledLanes) {
-          var rootEntangledLanes = root2.entangledLanes |= entangledLanes;
-          var entanglements = root2.entanglements;
+        function markRootEntangled(root3, entangledLanes) {
+          var rootEntangledLanes = root3.entangledLanes |= entangledLanes;
+          var entanglements = root3.entanglements;
           var lanes = rootEntangledLanes;
           while (lanes) {
             var index3 = pickArbitraryLaneIndex(lanes);
@@ -26644,7 +26644,7 @@ var require_react_reconciler_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function getBumpedLaneForHydration(root2, renderLanes2) {
+        function getBumpedLaneForHydration(root3, renderLanes2) {
           var renderLane = getHighestPriorityLane(renderLanes2);
           var lane;
           switch (renderLane) {
@@ -26684,16 +26684,16 @@ var require_react_reconciler_development = __commonJS({
               lane = NoLane;
               break;
           }
-          if ((lane & (root2.suspendedLanes | renderLanes2)) !== NoLane) {
+          if ((lane & (root3.suspendedLanes | renderLanes2)) !== NoLane) {
             return NoLane;
           }
           return lane;
         }
-        function addFiberToLanesMap(root2, fiber, lanes) {
+        function addFiberToLanesMap(root3, fiber, lanes) {
           if (!isDevToolsPresent) {
             return;
           }
-          var pendingUpdatersLaneMap = root2.pendingUpdatersLaneMap;
+          var pendingUpdatersLaneMap = root3.pendingUpdatersLaneMap;
           while (lanes > 0) {
             var index3 = laneToIndex(lanes);
             var lane = 1 << index3;
@@ -26702,12 +26702,12 @@ var require_react_reconciler_development = __commonJS({
             lanes &= ~lane;
           }
         }
-        function movePendingFibersToMemoized(root2, lanes) {
+        function movePendingFibersToMemoized(root3, lanes) {
           if (!isDevToolsPresent) {
             return;
           }
-          var pendingUpdatersLaneMap = root2.pendingUpdatersLaneMap;
-          var memoizedUpdaters = root2.memoizedUpdaters;
+          var pendingUpdatersLaneMap = root3.pendingUpdatersLaneMap;
+          var memoizedUpdaters = root3.memoizedUpdaters;
           while (lanes > 0) {
             var index3 = laneToIndex(lanes);
             var lane = 1 << index3;
@@ -26816,11 +26816,11 @@ var require_react_reconciler_development = __commonJS({
             return false;
           }
         }
-        function onScheduleRoot(root2, children) {
+        function onScheduleRoot(root3, children) {
           {
             if (injectedHook && typeof injectedHook.onScheduleFiberRoot === "function") {
               try {
-                injectedHook.onScheduleFiberRoot(rendererID, root2, children);
+                injectedHook.onScheduleFiberRoot(rendererID, root3, children);
               } catch (err) {
                 if (!hasLoggedError) {
                   hasLoggedError = true;
@@ -26830,10 +26830,10 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function onCommitRoot(root2, eventPriority) {
+        function onCommitRoot(root3, eventPriority) {
           if (injectedHook && typeof injectedHook.onCommitFiberRoot === "function") {
             try {
-              var didError = (root2.current.flags & DidCapture) === DidCapture;
+              var didError = (root3.current.flags & DidCapture) === DidCapture;
               if (enableProfilerTimer) {
                 var schedulerPriority;
                 switch (eventPriority) {
@@ -26853,9 +26853,9 @@ var require_react_reconciler_development = __commonJS({
                     schedulerPriority = NormalPriority;
                     break;
                 }
-                injectedHook.onCommitFiberRoot(rendererID, root2, schedulerPriority, didError);
+                injectedHook.onCommitFiberRoot(rendererID, root3, schedulerPriority, didError);
               } else {
-                injectedHook.onCommitFiberRoot(rendererID, root2, void 0, didError);
+                injectedHook.onCommitFiberRoot(rendererID, root3, void 0, didError);
               }
             } catch (err) {
               {
@@ -26867,10 +26867,10 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function onPostCommitRoot(root2) {
+        function onPostCommitRoot(root3) {
           if (injectedHook && typeof injectedHook.onPostCommitFiberRoot === "function") {
             try {
-              injectedHook.onPostCommitFiberRoot(rendererID, root2);
+              injectedHook.onPostCommitFiberRoot(rendererID, root3);
             } catch (err) {
               {
                 if (!hasLoggedError) {
@@ -27151,8 +27151,8 @@ var require_react_reconciler_development = __commonJS({
           }
           return null;
         }
-        function isRootDehydrated(root2) {
-          var currentState = root2.current.memoizedState;
+        function isRootDehydrated(root3) {
+          var currentState = root3.current.memoizedState;
           return currentState.isDehydrated;
         }
         var ReactCurrentBatchConfig = ReactSharedInternals.ReactCurrentBatchConfig;
@@ -27174,7 +27174,7 @@ var require_react_reconciler_development = __commonJS({
           }
           for (var i2 = 0; i2 < keysA.length; i2++) {
             var currentKey = keysA[i2];
-            if (!hasOwnProperty.call(objB, currentKey) || !objectIs(objA[currentKey], objB[currentKey])) {
+            if (!hasOwnProperty2.call(objB, currentKey) || !objectIs(objA[currentKey], objB[currentKey])) {
               return false;
             }
           }
@@ -27822,7 +27822,7 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function entangleTransitions(root2, fiber, lane) {
+        function entangleTransitions(root3, fiber, lane) {
           var updateQueue2 = fiber.updateQueue;
           if (updateQueue2 === null) {
             return;
@@ -27830,10 +27830,10 @@ var require_react_reconciler_development = __commonJS({
           var sharedQueue = updateQueue2.shared;
           if (isTransitionLane(lane)) {
             var queueLanes = sharedQueue.lanes;
-            queueLanes = intersectLanes(queueLanes, root2.pendingLanes);
+            queueLanes = intersectLanes(queueLanes, root3.pendingLanes);
             var newQueueLanes = mergeLanes(queueLanes, lane);
             sharedQueue.lanes = newQueueLanes;
-            markRootEntangled(root2, newQueueLanes);
+            markRootEntangled(root3, newQueueLanes);
           }
         }
         function enqueueCapturedUpdate(workInProgress2, capturedUpdate) {
@@ -28180,7 +28180,7 @@ var require_react_reconciler_development = __commonJS({
         var classComponentUpdater = {
           isMounted,
           enqueueSetState: function(inst, payload, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -28192,16 +28192,16 @@ var require_react_reconciler_development = __commonJS({
               update3.callback = callback;
             }
             enqueueUpdate(fiber, update3);
-            var root2 = scheduleUpdateOnFiber(fiber, lane, eventTime);
-            if (root2 !== null) {
-              entangleTransitions(root2, fiber, lane);
+            var root3 = scheduleUpdateOnFiber(fiber, lane, eventTime);
+            if (root3 !== null) {
+              entangleTransitions(root3, fiber, lane);
             }
             {
               markStateUpdateScheduled(fiber, lane);
             }
           },
           enqueueReplaceState: function(inst, payload, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -28214,16 +28214,16 @@ var require_react_reconciler_development = __commonJS({
               update3.callback = callback;
             }
             enqueueUpdate(fiber, update3);
-            var root2 = scheduleUpdateOnFiber(fiber, lane, eventTime);
-            if (root2 !== null) {
-              entangleTransitions(root2, fiber, lane);
+            var root3 = scheduleUpdateOnFiber(fiber, lane, eventTime);
+            if (root3 !== null) {
+              entangleTransitions(root3, fiber, lane);
             }
             {
               markStateUpdateScheduled(fiber, lane);
             }
           },
           enqueueForceUpdate: function(inst, callback) {
-            var fiber = get2(inst);
+            var fiber = get3(inst);
             var eventTime = requestEventTime();
             var lane = requestUpdateLane(fiber);
             var update3 = createUpdate2(eventTime, lane);
@@ -28235,9 +28235,9 @@ var require_react_reconciler_development = __commonJS({
               update3.callback = callback;
             }
             enqueueUpdate(fiber, update3);
-            var root2 = scheduleUpdateOnFiber(fiber, lane, eventTime);
-            if (root2 !== null) {
-              entangleTransitions(root2, fiber, lane);
+            var root3 = scheduleUpdateOnFiber(fiber, lane, eventTime);
+            if (root3 !== null) {
+              entangleTransitions(root3, fiber, lane);
             }
             {
               markForceUpdateScheduled(fiber, lane);
@@ -28340,7 +28340,7 @@ var require_react_reconciler_development = __commonJS({
               error("%s: getSnapshotBeforeUpdate() is defined as a static method and will be ignored. Instead, declare it as an instance method.", name);
             }
             var _state = instance.state;
-            if (_state && (typeof _state !== "object" || isArray(_state))) {
+            if (_state && (typeof _state !== "object" || isArray2(_state))) {
               error("%s.state: must be set to an object or null", name);
             }
             if (typeof instance.getChildContext === "function" && typeof ctor.childContextTypes !== "object") {
@@ -29478,7 +29478,7 @@ var require_react_reconciler_development = __commonJS({
                   }
                 }
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 var _created3 = createFiberFromFragment(newChild, returnFiber.mode, lanes, null);
                 _created3.return = returnFiber;
                 return _created3;
@@ -29524,7 +29524,7 @@ var require_react_reconciler_development = __commonJS({
                   }
                 }
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 if (key !== null) {
                   return null;
                 }
@@ -29560,7 +29560,7 @@ var require_react_reconciler_development = __commonJS({
                   return updateFromMap(existingChildren, returnFiber, newIdx, init(payload), lanes);
                 }
               }
-              if (isArray(newChild) || getIteratorFn(newChild)) {
+              if (isArray2(newChild) || getIteratorFn(newChild)) {
                 var _matchedFiber3 = existingChildren.get(newIdx) || null;
                 return updateFragment2(returnFiber, _matchedFiber3, newChild, lanes, null);
               }
@@ -29936,7 +29936,7 @@ var require_react_reconciler_development = __commonJS({
                   return reconcileChildFibers2(returnFiber, currentFirstChild, init(payload), lanes);
                 }
               }
-              if (isArray(newChild)) {
+              if (isArray2(newChild)) {
                 return reconcileChildrenArray(returnFiber, currentFirstChild, newChild, lanes);
               }
               if (getIteratorFn(newChild)) {
@@ -30136,13 +30136,13 @@ var require_react_reconciler_development = __commonJS({
           }
           workInProgressSources.length = 0;
         }
-        function registerMutableSourceForHydration(root2, mutableSource) {
+        function registerMutableSourceForHydration(root3, mutableSource) {
           var getVersion = mutableSource._getVersion;
           var version2 = getVersion(mutableSource._source);
-          if (root2.mutableSourceEagerHydrationData == null) {
-            root2.mutableSourceEagerHydrationData = [mutableSource, version2];
+          if (root3.mutableSourceEagerHydrationData == null) {
+            root3.mutableSourceEagerHydrationData = [mutableSource, version2];
           } else {
-            root2.mutableSourceEagerHydrationData.push(mutableSource, version2);
+            root3.mutableSourceEagerHydrationData.push(mutableSource, version2);
           }
         }
         var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher, ReactCurrentBatchConfig$1 = ReactSharedInternals.ReactCurrentBatchConfig;
@@ -30187,7 +30187,7 @@ var require_react_reconciler_development = __commonJS({
         }
         function checkDepsAreArrayDev(deps) {
           {
-            if (deps !== void 0 && deps !== null && !isArray(deps)) {
+            if (deps !== void 0 && deps !== null && !isArray2(deps)) {
               error("%s received a final argument that is not an array (instead, received `%s`). When specified, the final argument must be an array.", currentHookNameInDev, typeof deps);
             }
           }
@@ -30611,11 +30611,11 @@ var require_react_reconciler_development = __commonJS({
                 }
               }
             }
-            var root2 = getWorkInProgressRoot();
-            if (root2 === null) {
+            var root3 = getWorkInProgressRoot();
+            if (root3 === null) {
               throw new Error("Expected a work-in-progress root. This is a bug in React. Please file an issue.");
             }
-            if (!includesBlockingLane(root2, renderLanes)) {
+            if (!includesBlockingLane(root3, renderLanes)) {
               pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
             }
           }
@@ -30656,11 +30656,11 @@ var require_react_reconciler_development = __commonJS({
           workInProgressHook !== null && workInProgressHook.memoizedState.tag & HasEffect) {
             fiber.flags |= Passive;
             pushEffect(HasEffect | Passive$1, updateStoreInstance.bind(null, fiber, inst, nextSnapshot, getSnapshot), void 0, null);
-            var root2 = getWorkInProgressRoot();
-            if (root2 === null) {
+            var root3 = getWorkInProgressRoot();
+            if (root3 === null) {
               throw new Error("Expected a work-in-progress root. This is a bug in React. Please file an issue.");
             }
-            if (!includesBlockingLane(root2, renderLanes)) {
+            if (!includesBlockingLane(root3, renderLanes)) {
               pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
             }
           }
@@ -31019,8 +31019,8 @@ var require_react_reconciler_development = __commonJS({
         }
         function mountId() {
           var hook = mountWorkInProgressHook();
-          var root2 = getWorkInProgressRoot();
-          var identifierPrefix = root2.identifierPrefix;
+          var root3 = getWorkInProgressRoot();
+          var identifierPrefix = root3.identifierPrefix;
           var id2;
           if (getIsHydrating()) {
             var treeId = getTreeId();
@@ -31061,9 +31061,9 @@ var require_react_reconciler_development = __commonJS({
           } else {
             enqueueUpdate$1(fiber, queue, update3);
             var eventTime = requestEventTime();
-            var root2 = scheduleUpdateOnFiber(fiber, lane, eventTime);
-            if (root2 !== null) {
-              entangleTransitionUpdate(root2, queue, lane);
+            var root3 = scheduleUpdateOnFiber(fiber, lane, eventTime);
+            if (root3 !== null) {
+              entangleTransitionUpdate(root3, queue, lane);
             }
           }
           markUpdateInDevTools(fiber, lane);
@@ -31112,9 +31112,9 @@ var require_react_reconciler_development = __commonJS({
               }
             }
             var eventTime = requestEventTime();
-            var root2 = scheduleUpdateOnFiber(fiber, lane, eventTime);
-            if (root2 !== null) {
-              entangleTransitionUpdate(root2, queue, lane);
+            var root3 = scheduleUpdateOnFiber(fiber, lane, eventTime);
+            if (root3 !== null) {
+              entangleTransitionUpdate(root3, queue, lane);
             }
           }
           markUpdateInDevTools(fiber, lane);
@@ -31156,13 +31156,13 @@ var require_react_reconciler_development = __commonJS({
             queue.pending = update3;
           }
         }
-        function entangleTransitionUpdate(root2, queue, lane) {
+        function entangleTransitionUpdate(root3, queue, lane) {
           if (isTransitionLane(lane)) {
             var queueLanes = queue.lanes;
-            queueLanes = intersectLanes(queueLanes, root2.pendingLanes);
+            queueLanes = intersectLanes(queueLanes, root3.pendingLanes);
             var newQueueLanes = mergeLanes(queueLanes, lane);
             queue.lanes = newQueueLanes;
-            markRootEntangled(root2, newQueueLanes);
+            markRootEntangled(root3, newQueueLanes);
           }
         }
         function markUpdateInDevTools(fiber, lane, action) {
@@ -32050,8 +32050,8 @@ var require_react_reconciler_development = __commonJS({
             while (parentFiber !== null) {
               switch (parentFiber.tag) {
                 case HostRoot:
-                  var root2 = parentFiber.stateNode;
-                  root2.effectDuration += elapsedTime;
+                  var root3 = parentFiber.stateNode;
+                  root3.effectDuration += elapsedTime;
                   return;
                 case Profiler:
                   var parentStateNode = parentFiber.stateNode;
@@ -32070,9 +32070,9 @@ var require_react_reconciler_development = __commonJS({
             while (parentFiber !== null) {
               switch (parentFiber.tag) {
                 case HostRoot:
-                  var root2 = parentFiber.stateNode;
-                  if (root2 !== null) {
-                    root2.passiveEffectDuration += elapsedTime;
+                  var root3 = parentFiber.stateNode;
+                  if (root3 !== null) {
+                    root3.passiveEffectDuration += elapsedTime;
                   }
                   return;
                 case Profiler:
@@ -32202,11 +32202,11 @@ var require_react_reconciler_development = __commonJS({
           }
           return update3;
         }
-        function attachPingListener(root2, wakeable, lanes) {
-          var pingCache = root2.pingCache;
+        function attachPingListener(root3, wakeable, lanes) {
+          var pingCache = root3.pingCache;
           var threadIDs;
           if (pingCache === null) {
-            pingCache = root2.pingCache = new PossiblyWeakMap$1();
+            pingCache = root3.pingCache = new PossiblyWeakMap$1();
             threadIDs = /* @__PURE__ */ new Set();
             pingCache.set(wakeable, threadIDs);
           } else {
@@ -32218,16 +32218,16 @@ var require_react_reconciler_development = __commonJS({
           }
           if (!threadIDs.has(lanes)) {
             threadIDs.add(lanes);
-            var ping = pingSuspendedRoot.bind(null, root2, wakeable, lanes);
+            var ping = pingSuspendedRoot.bind(null, root3, wakeable, lanes);
             {
               if (isDevToolsPresent) {
-                restorePendingUpdaters(root2, lanes);
+                restorePendingUpdaters(root3, lanes);
               }
             }
             wakeable.then(ping, ping);
           }
         }
-        function attachRetryListener(suspenseBoundary, root2, wakeable, lanes) {
+        function attachRetryListener(suspenseBoundary, root3, wakeable, lanes) {
           var wakeables = suspenseBoundary.updateQueue;
           if (wakeables === null) {
             var updateQueue2 = /* @__PURE__ */ new Set();
@@ -32261,7 +32261,7 @@ var require_react_reconciler_development = __commonJS({
           } while (node !== null);
           return null;
         }
-        function markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root2, rootRenderLanes) {
+        function markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes) {
           if ((suspenseBoundary.mode & ConcurrentMode) === NoMode) {
             if (suspenseBoundary === returnFiber) {
               suspenseBoundary.flags |= ShouldCapture;
@@ -32300,11 +32300,11 @@ var require_react_reconciler_development = __commonJS({
           suspenseBoundary.lanes = rootRenderLanes;
           return suspenseBoundary;
         }
-        function throwException(root2, returnFiber, sourceFiber, value, rootRenderLanes) {
+        function throwException(root3, returnFiber, sourceFiber, value, rootRenderLanes) {
           sourceFiber.flags |= Incomplete;
           {
             if (isDevToolsPresent) {
-              restorePendingUpdaters(root2, rootRenderLanes);
+              restorePendingUpdaters(root3, rootRenderLanes);
             }
           }
           if (value !== null && typeof value === "object" && typeof value.then === "function") {
@@ -32313,15 +32313,15 @@ var require_react_reconciler_development = __commonJS({
             var suspenseBoundary = getNearestSuspenseBoundaryToCapture(returnFiber);
             if (suspenseBoundary !== null) {
               suspenseBoundary.flags &= ~ForceClientRender;
-              markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root2, rootRenderLanes);
+              markSuspenseBoundaryShouldCapture(suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes);
               if (suspenseBoundary.mode & ConcurrentMode) {
-                attachPingListener(root2, wakeable, rootRenderLanes);
+                attachPingListener(root3, wakeable, rootRenderLanes);
               }
-              attachRetryListener(suspenseBoundary, root2, wakeable);
+              attachRetryListener(suspenseBoundary, root3, wakeable);
               return;
             } else {
               if (!includesSyncLane(rootRenderLanes)) {
-                attachPingListener(root2, wakeable, rootRenderLanes);
+                attachPingListener(root3, wakeable, rootRenderLanes);
                 renderDidSuspendDelayIfPossible();
                 return;
               }
@@ -32336,7 +32336,7 @@ var require_react_reconciler_development = __commonJS({
                 if ((_suspenseBoundary.flags & ShouldCapture) === NoFlags) {
                   _suspenseBoundary.flags |= ForceClientRender;
                 }
-                markSuspenseBoundaryShouldCapture(_suspenseBoundary, returnFiber, sourceFiber, root2, rootRenderLanes);
+                markSuspenseBoundaryShouldCapture(_suspenseBoundary, returnFiber, sourceFiber, root3, rootRenderLanes);
                 queueHydrationError(value);
                 return;
               }
@@ -33540,13 +33540,13 @@ var require_react_reconciler_development = __commonJS({
           return workInProgress2.child;
         }
         function pushHostRootContext(workInProgress2) {
-          var root2 = workInProgress2.stateNode;
-          if (root2.pendingContext) {
-            pushTopLevelContextObject(workInProgress2, root2.pendingContext, root2.pendingContext !== root2.context);
-          } else if (root2.context) {
-            pushTopLevelContextObject(workInProgress2, root2.context, false);
+          var root3 = workInProgress2.stateNode;
+          if (root3.pendingContext) {
+            pushTopLevelContextObject(workInProgress2, root3.pendingContext, root3.pendingContext !== root3.context);
+          } else if (root3.context) {
+            pushTopLevelContextObject(workInProgress2, root3.context, false);
           }
-          pushHostContainer(workInProgress2, root2.containerInfo);
+          pushHostContainer(workInProgress2, root3.containerInfo);
         }
         function updateHostRoot(current2, workInProgress2, renderLanes2) {
           pushHostRootContext(workInProgress2);
@@ -33559,7 +33559,7 @@ var require_react_reconciler_development = __commonJS({
           cloneUpdateQueue(current2, workInProgress2);
           processUpdateQueue(workInProgress2, nextProps, null, renderLanes2);
           var nextState = workInProgress2.memoizedState;
-          var root2 = workInProgress2.stateNode;
+          var root3 = workInProgress2.stateNode;
           var nextChildren = nextState.element;
           if (supportsHydration && prevState.isDehydrated) {
             var overrideState = {
@@ -34180,9 +34180,9 @@ var require_react_reconciler_development = __commonJS({
           }
           var hasContextChanged2 = includesSomeLane(renderLanes2, current2.childLanes);
           if (didReceiveUpdate || hasContextChanged2) {
-            var root2 = getWorkInProgressRoot();
-            if (root2 !== null) {
-              var attemptHydrationAtLane = getBumpedLaneForHydration(root2, renderLanes2);
+            var root3 = getWorkInProgressRoot();
+            if (root3 !== null) {
+              var attemptHydrationAtLane = getBumpedLaneForHydration(root3, renderLanes2);
               if (attemptHydrationAtLane !== NoLane && attemptHydrationAtLane !== suspenseState.retryLane) {
                 suspenseState.retryLane = attemptHydrationAtLane;
                 var eventTime = NoTimestamp;
@@ -34296,7 +34296,7 @@ var require_react_reconciler_development = __commonJS({
         }
         function validateSuspenseListNestedChild(childSlot, index3) {
           {
-            var isAnArray = isArray(childSlot);
+            var isAnArray = isArray2(childSlot);
             var isIterable = !isAnArray && typeof getIteratorFn(childSlot) === "function";
             if (isAnArray || isIterable) {
               var type = isAnArray ? "array" : "iterable";
@@ -34309,7 +34309,7 @@ var require_react_reconciler_development = __commonJS({
         function validateSuspenseListChildren(children, revealOrder) {
           {
             if ((revealOrder === "forwards" || revealOrder === "backwards") && children !== void 0 && children !== null && children !== false) {
-              if (isArray(children)) {
+              if (isArray2(children)) {
                 for (var i2 = 0; i2 < children.length; i2++) {
                   if (!validateSuspenseListNestedChild(children[i2], i2)) {
                     return;
@@ -34603,7 +34603,7 @@ var require_react_reconciler_development = __commonJS({
           switch (workInProgress2.tag) {
             case HostRoot:
               pushHostRootContext(workInProgress2);
-              var root2 = workInProgress2.stateNode;
+              var root3 = workInProgress2.stateNode;
               resetHydrationState();
               break;
             case HostComponent:
@@ -35140,8 +35140,8 @@ var require_react_reconciler_development = __commonJS({
         }
         var focusedInstanceHandle = null;
         var shouldFireAfterActiveInstanceBlur = false;
-        function commitBeforeMutationEffects(root2, firstChild) {
-          focusedInstanceHandle = prepareForCommit(root2.containerInfo);
+        function commitBeforeMutationEffects(root3, firstChild) {
+          focusedInstanceHandle = prepareForCommit(root3.containerInfo);
           nextEffect = firstChild;
           commitBeforeMutationEffects_begin();
           var shouldFire = shouldFireAfterActiveInstanceBlur;
@@ -35221,8 +35221,8 @@ var require_react_reconciler_development = __commonJS({
               }
               case HostRoot: {
                 if (supportsMutation) {
-                  var root2 = finishedWork.stateNode;
-                  clearContainer(root2.containerInfo);
+                  var root3 = finishedWork.stateNode;
+                  clearContainer(root3.containerInfo);
                 }
                 break;
               }
@@ -35343,8 +35343,8 @@ var require_react_reconciler_development = __commonJS({
                     while (parentFiber !== null) {
                       switch (parentFiber.tag) {
                         case HostRoot:
-                          var root2 = parentFiber.stateNode;
-                          root2.passiveEffectDuration += passiveEffectDuration;
+                          var root3 = parentFiber.stateNode;
+                          root3.passiveEffectDuration += passiveEffectDuration;
                           break outer;
                         case Profiler:
                           var parentStateNode = parentFiber.stateNode;
@@ -35503,8 +35503,8 @@ var require_react_reconciler_development = __commonJS({
                       while (parentFiber !== null) {
                         switch (parentFiber.tag) {
                           case HostRoot:
-                            var root2 = parentFiber.stateNode;
-                            root2.effectDuration += effectDuration;
+                            var root3 = parentFiber.stateNode;
+                            root3.effectDuration += effectDuration;
                             break outer;
                           case Profiler:
                             var parentStateNode = parentFiber.stateNode;
@@ -35748,8 +35748,8 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function commitNestedUnmounts(finishedRoot, root2, nearestMountedAncestor) {
-          var node = root2;
+        function commitNestedUnmounts(finishedRoot, root3, nearestMountedAncestor) {
+          var node = root3;
           while (true) {
             commitUnmount(finishedRoot, node, nearestMountedAncestor);
             if (node.child !== null && // If we use mutation we drill down into portals using commitUnmount above.
@@ -35759,11 +35759,11 @@ var require_react_reconciler_development = __commonJS({
               node = node.child;
               continue;
             }
-            if (node === root2) {
+            if (node === root3) {
               return;
             }
             while (node.sibling === null) {
-              if (node.return === null || node.return === root2) {
+              if (node.return === null || node.return === root3) {
                 return;
               }
               node = node.return;
@@ -36078,8 +36078,8 @@ var require_react_reconciler_development = __commonJS({
                   if (current2 !== null) {
                     var prevRootState = current2.memoizedState;
                     if (prevRootState.isDehydrated) {
-                      var root2 = finishedWork.stateNode;
-                      commitHydratedContainer(root2.containerInfo);
+                      var root3 = finishedWork.stateNode;
+                      commitHydratedContainer(root3.containerInfo);
                     }
                   }
                 }
@@ -36144,8 +36144,8 @@ var require_react_reconciler_development = __commonJS({
                 if (current2 !== null) {
                   var _prevRootState = current2.memoizedState;
                   if (_prevRootState.isDehydrated) {
-                    var _root = finishedWork.stateNode;
-                    commitHydratedContainer(_root.containerInfo);
+                    var _root2 = finishedWork.stateNode;
+                    commitHydratedContainer(_root2.containerInfo);
                   }
                 }
               }
@@ -36222,15 +36222,15 @@ var require_react_reconciler_development = __commonJS({
           }
           resetTextContent(current2.stateNode);
         }
-        function commitMutationEffects(root2, firstChild, committedLanes) {
+        function commitMutationEffects(root3, firstChild, committedLanes) {
           inProgressLanes = committedLanes;
-          inProgressRoot = root2;
+          inProgressRoot = root3;
           nextEffect = firstChild;
-          commitMutationEffects_begin(root2, committedLanes);
+          commitMutationEffects_begin(root3, committedLanes);
           inProgressLanes = null;
           inProgressRoot = null;
         }
-        function commitMutationEffects_begin(root2, lanes) {
+        function commitMutationEffects_begin(root3, lanes) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             var deletions = fiber.deletions;
@@ -36238,7 +36238,7 @@ var require_react_reconciler_development = __commonJS({
               for (var i2 = 0; i2 < deletions.length; i2++) {
                 var childToDelete = deletions[i2];
                 try {
-                  commitDeletion(root2, childToDelete, fiber);
+                  commitDeletion(root3, childToDelete, fiber);
                 } catch (error2) {
                   reportUncaughtErrorInDEV(error2);
                   captureCommitPhaseError(childToDelete, fiber, error2);
@@ -36250,16 +36250,16 @@ var require_react_reconciler_development = __commonJS({
               ensureCorrectReturnPointer(child, fiber);
               nextEffect = child;
             } else {
-              commitMutationEffects_complete(root2, lanes);
+              commitMutationEffects_complete(root3, lanes);
             }
           }
         }
-        function commitMutationEffects_complete(root2, lanes) {
+        function commitMutationEffects_complete(root3, lanes) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             setCurrentFiber(fiber);
             try {
-              commitMutationEffectsOnFiber(fiber, root2, lanes);
+              commitMutationEffectsOnFiber(fiber, root3, lanes);
             } catch (error2) {
               reportUncaughtErrorInDEV(error2);
               captureCommitPhaseError(fiber, fiber.return, error2);
@@ -36274,7 +36274,7 @@ var require_react_reconciler_development = __commonJS({
             nextEffect = fiber.return;
           }
         }
-        function commitMutationEffectsOnFiber(finishedWork, root2, lanes) {
+        function commitMutationEffectsOnFiber(finishedWork, root3, lanes) {
           var flags = finishedWork.flags;
           if (flags & ContentReset) {
             commitResetTextContent(finishedWork);
@@ -36358,15 +36358,15 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function commitLayoutEffects(finishedWork, root2, committedLanes) {
+        function commitLayoutEffects(finishedWork, root3, committedLanes) {
           inProgressLanes = committedLanes;
-          inProgressRoot = root2;
+          inProgressRoot = root3;
           nextEffect = finishedWork;
-          commitLayoutEffects_begin(finishedWork, root2, committedLanes);
+          commitLayoutEffects_begin(finishedWork, root3, committedLanes);
           inProgressLanes = null;
           inProgressRoot = null;
         }
-        function commitLayoutEffects_begin(subtreeRoot, root2, committedLanes) {
+        function commitLayoutEffects_begin(subtreeRoot, root3, committedLanes) {
           var isModernRoot = (subtreeRoot.mode & ConcurrentMode) !== NoMode;
           while (nextEffect !== null) {
             var fiber = nextEffect;
@@ -36375,7 +36375,7 @@ var require_react_reconciler_development = __commonJS({
               var isHidden = fiber.memoizedState !== null;
               var newOffscreenSubtreeIsHidden = isHidden || offscreenSubtreeIsHidden;
               if (newOffscreenSubtreeIsHidden) {
-                commitLayoutMountEffects_complete(subtreeRoot, root2, committedLanes);
+                commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
                 continue;
               } else {
                 var current2 = fiber.alternate;
@@ -36395,7 +36395,7 @@ var require_react_reconciler_development = __commonJS({
                   commitLayoutEffects_begin(
                     child,
                     // New root; bubble back up to here and stop.
-                    root2,
+                    root3,
                     committedLanes
                   );
                   child = child.sibling;
@@ -36403,7 +36403,7 @@ var require_react_reconciler_development = __commonJS({
                 nextEffect = fiber;
                 offscreenSubtreeIsHidden = prevOffscreenSubtreeIsHidden;
                 offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden;
-                commitLayoutMountEffects_complete(subtreeRoot, root2, committedLanes);
+                commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
                 continue;
               }
             }
@@ -36411,18 +36411,18 @@ var require_react_reconciler_development = __commonJS({
               ensureCorrectReturnPointer(firstChild, fiber);
               nextEffect = firstChild;
             } else {
-              commitLayoutMountEffects_complete(subtreeRoot, root2, committedLanes);
+              commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes);
             }
           }
         }
-        function commitLayoutMountEffects_complete(subtreeRoot, root2, committedLanes) {
+        function commitLayoutMountEffects_complete(subtreeRoot, root3, committedLanes) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             if ((fiber.flags & LayoutMask) !== NoFlags) {
               var current2 = fiber.alternate;
               setCurrentFiber(fiber);
               try {
-                commitLayoutEffectOnFiber(root2, current2, fiber, committedLanes);
+                commitLayoutEffectOnFiber(root3, current2, fiber, committedLanes);
               } catch (error2) {
                 reportUncaughtErrorInDEV(error2);
                 captureCommitPhaseError(fiber, fiber.return, error2);
@@ -36551,11 +36551,11 @@ var require_react_reconciler_development = __commonJS({
             nextEffect = fiber.return;
           }
         }
-        function commitPassiveMountEffects(root2, finishedWork) {
+        function commitPassiveMountEffects(root3, finishedWork) {
           nextEffect = finishedWork;
-          commitPassiveMountEffects_begin(finishedWork, root2);
+          commitPassiveMountEffects_begin(finishedWork, root3);
         }
-        function commitPassiveMountEffects_begin(subtreeRoot, root2) {
+        function commitPassiveMountEffects_begin(subtreeRoot, root3) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             var firstChild = fiber.child;
@@ -36563,17 +36563,17 @@ var require_react_reconciler_development = __commonJS({
               ensureCorrectReturnPointer(firstChild, fiber);
               nextEffect = firstChild;
             } else {
-              commitPassiveMountEffects_complete(subtreeRoot, root2);
+              commitPassiveMountEffects_complete(subtreeRoot, root3);
             }
           }
         }
-        function commitPassiveMountEffects_complete(subtreeRoot, root2) {
+        function commitPassiveMountEffects_complete(subtreeRoot, root3) {
           while (nextEffect !== null) {
             var fiber = nextEffect;
             if ((fiber.flags & Passive) !== NoFlags) {
               setCurrentFiber(fiber);
               try {
-                commitPassiveMountOnFiber(root2, fiber);
+                commitPassiveMountOnFiber(root3, fiber);
               } catch (error2) {
                 reportUncaughtErrorInDEV(error2);
                 captureCommitPhaseError(fiber, fiber.return, error2);
@@ -36944,9 +36944,9 @@ var require_react_reconciler_development = __commonJS({
               throw new Error("Invalid selector type specified.");
           }
         }
-        function findPaths(root2, selectors) {
+        function findPaths(root3, selectors) {
           var matchingFibers = [];
-          var stack = [root2, 0];
+          var stack = [root3, 0];
           var index3 = 0;
           while (index3 < stack.length) {
             var fiber = stack[index3++];
@@ -36972,8 +36972,8 @@ var require_react_reconciler_development = __commonJS({
           }
           return matchingFibers;
         }
-        function hasMatchingPaths(root2, selectors) {
-          var stack = [root2, 0];
+        function hasMatchingPaths(root3, selectors) {
+          var stack = [root3, 0];
           var index3 = 0;
           while (index3 < stack.length) {
             var fiber = stack[index3++];
@@ -37003,8 +37003,8 @@ var require_react_reconciler_development = __commonJS({
           if (!supportsTestSelectors) {
             throw new Error("Test selector API is not supported by this renderer.");
           }
-          var root2 = findFiberRootForHostRoot(hostRoot);
-          var matchingFibers = findPaths(root2, selectors);
+          var root3 = findFiberRootForHostRoot(hostRoot);
+          var matchingFibers = findPaths(root3, selectors);
           var instanceRoots = [];
           var stack = Array.from(matchingFibers);
           var index3 = 0;
@@ -37029,10 +37029,10 @@ var require_react_reconciler_development = __commonJS({
           if (!supportsTestSelectors) {
             throw new Error("Test selector API is not supported by this renderer.");
           }
-          var root2 = findFiberRootForHostRoot(hostRoot);
+          var root3 = findFiberRootForHostRoot(hostRoot);
           var maxSelectorIndex = 0;
           var matchedNames = [];
-          var stack = [root2, 0];
+          var stack = [root3, 0];
           var index3 = 0;
           while (index3 < stack.length) {
             var fiber = stack[index3++];
@@ -37119,8 +37119,8 @@ var require_react_reconciler_development = __commonJS({
           if (!supportsTestSelectors) {
             throw new Error("Test selector API is not supported by this renderer.");
           }
-          var root2 = findFiberRootForHostRoot(hostRoot);
-          var matchingFibers = findPaths(root2, selectors);
+          var root3 = findFiberRootForHostRoot(hostRoot);
+          var matchingFibers = findPaths(root3, selectors);
           var stack = Array.from(matchingFibers);
           var index3 = 0;
           while (index3 < stack.length) {
@@ -37316,42 +37316,42 @@ var require_react_reconciler_development = __commonJS({
         }
         function scheduleUpdateOnFiber(fiber, lane, eventTime) {
           checkForNestedUpdates();
-          var root2 = markUpdateLaneFromFiberToRoot(fiber, lane);
-          if (root2 === null) {
+          var root3 = markUpdateLaneFromFiberToRoot(fiber, lane);
+          if (root3 === null) {
             return null;
           }
-          markRootUpdated(root2, lane, eventTime);
-          if ((executionContext & RenderContext) !== NoLanes && root2 === workInProgressRoot) {
+          markRootUpdated(root3, lane, eventTime);
+          if ((executionContext & RenderContext) !== NoLanes && root3 === workInProgressRoot) {
             warnAboutRenderPhaseUpdatesInDEV(fiber);
           } else {
             {
               if (isDevToolsPresent) {
-                addFiberToLanesMap(root2, fiber, lane);
+                addFiberToLanesMap(root3, fiber, lane);
               }
             }
             warnIfUpdatesNotWrappedWithActDEV(fiber);
-            if (root2 === workInProgressRoot) {
+            if (root3 === workInProgressRoot) {
               if ((executionContext & RenderContext) === NoContext) {
                 workInProgressRootInterleavedUpdatedLanes = mergeLanes(workInProgressRootInterleavedUpdatedLanes, lane);
               }
               if (workInProgressRootExitStatus === RootSuspendedWithDelay) {
-                markRootSuspended$1(root2, workInProgressRootRenderLanes);
+                markRootSuspended$1(root3, workInProgressRootRenderLanes);
               }
             }
-            ensureRootIsScheduled(root2, eventTime);
+            ensureRootIsScheduled(root3, eventTime);
             if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
             !ReactCurrentActQueue$1.isBatchingLegacy) {
               resetRenderTimer();
               flushSyncCallbacksOnlyInLegacyMode();
             }
           }
-          return root2;
+          return root3;
         }
-        function scheduleInitialHydrationOnRoot(root2, lane, eventTime) {
-          var current2 = root2.current;
+        function scheduleInitialHydrationOnRoot(root3, lane, eventTime) {
+          var current2 = root3.current;
           current2.lanes = lane;
-          markRootUpdated(root2, lane, eventTime);
-          ensureRootIsScheduled(root2, eventTime);
+          markRootUpdated(root3, lane, eventTime);
+          ensureRootIsScheduled(root3, eventTime);
         }
         function markUpdateLaneFromFiberToRoot(sourceFiber, lane) {
           sourceFiber.lanes = mergeLanes(sourceFiber.lanes, lane);
@@ -37382,8 +37382,8 @@ var require_react_reconciler_development = __commonJS({
             parent = parent.return;
           }
           if (node.tag === HostRoot) {
-            var root2 = node.stateNode;
-            return root2;
+            var root3 = node.stateNode;
+            return root3;
           } else {
             return null;
           }
@@ -37400,20 +37400,20 @@ var require_react_reconciler_development = __commonJS({
             (executionContext & RenderContext) === NoContext
           );
         }
-        function ensureRootIsScheduled(root2, currentTime) {
-          var existingCallbackNode = root2.callbackNode;
-          markStarvedLanesAsExpired(root2, currentTime);
-          var nextLanes = getNextLanes(root2, root2 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
+        function ensureRootIsScheduled(root3, currentTime) {
+          var existingCallbackNode = root3.callbackNode;
+          markStarvedLanesAsExpired(root3, currentTime);
+          var nextLanes = getNextLanes(root3, root3 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
           if (nextLanes === NoLanes) {
             if (existingCallbackNode !== null) {
               cancelCallback$1(existingCallbackNode);
             }
-            root2.callbackNode = null;
-            root2.callbackPriority = NoLane;
+            root3.callbackNode = null;
+            root3.callbackPriority = NoLane;
             return;
           }
           var newCallbackPriority = getHighestPriorityLane(nextLanes);
-          var existingCallbackPriority = root2.callbackPriority;
+          var existingCallbackPriority = root3.callbackPriority;
           if (existingCallbackPriority === newCallbackPriority && // Special case related to `act`. If the currently scheduled task is a
           // Scheduler task, rather than an `act` task, cancel it and re-scheduled
           // on the `act` queue.
@@ -37430,13 +37430,13 @@ var require_react_reconciler_development = __commonJS({
           }
           var newCallbackNode;
           if (newCallbackPriority === SyncLane) {
-            if (root2.tag === LegacyRoot) {
+            if (root3.tag === LegacyRoot) {
               if (ReactCurrentActQueue$1.isBatchingLegacy !== null) {
                 ReactCurrentActQueue$1.didScheduleLegacyUpdate = true;
               }
-              scheduleLegacySyncCallback(performSyncWorkOnRoot.bind(null, root2));
+              scheduleLegacySyncCallback(performSyncWorkOnRoot.bind(null, root3));
             } else {
-              scheduleSyncCallback(performSyncWorkOnRoot.bind(null, root2));
+              scheduleSyncCallback(performSyncWorkOnRoot.bind(null, root3));
             }
             if (supportsMicrotasks) {
               if (ReactCurrentActQueue$1.current !== null) {
@@ -37471,12 +37471,12 @@ var require_react_reconciler_development = __commonJS({
                 schedulerPriorityLevel = NormalPriority;
                 break;
             }
-            newCallbackNode = scheduleCallback$1(schedulerPriorityLevel, performConcurrentWorkOnRoot.bind(null, root2));
+            newCallbackNode = scheduleCallback$1(schedulerPriorityLevel, performConcurrentWorkOnRoot.bind(null, root3));
           }
-          root2.callbackPriority = newCallbackPriority;
-          root2.callbackNode = newCallbackNode;
+          root3.callbackPriority = newCallbackPriority;
+          root3.callbackNode = newCallbackNode;
         }
-        function performConcurrentWorkOnRoot(root2, didTimeout) {
+        function performConcurrentWorkOnRoot(root3, didTimeout) {
           {
             resetNestedUpdateFlag();
           }
@@ -37485,77 +37485,77 @@ var require_react_reconciler_development = __commonJS({
           if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
             throw new Error("Should not already be working.");
           }
-          var originalCallbackNode = root2.callbackNode;
+          var originalCallbackNode = root3.callbackNode;
           var didFlushPassiveEffects = flushPassiveEffects();
           if (didFlushPassiveEffects) {
-            if (root2.callbackNode !== originalCallbackNode) {
+            if (root3.callbackNode !== originalCallbackNode) {
               return null;
             }
           }
-          var lanes = getNextLanes(root2, root2 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
+          var lanes = getNextLanes(root3, root3 === workInProgressRoot ? workInProgressRootRenderLanes : NoLanes);
           if (lanes === NoLanes) {
             return null;
           }
-          var shouldTimeSlice = !includesBlockingLane(root2, lanes) && !includesExpiredLane(root2, lanes) && !didTimeout;
-          var exitStatus = shouldTimeSlice ? renderRootConcurrent(root2, lanes) : renderRootSync(root2, lanes);
+          var shouldTimeSlice = !includesBlockingLane(root3, lanes) && !includesExpiredLane(root3, lanes) && !didTimeout;
+          var exitStatus = shouldTimeSlice ? renderRootConcurrent(root3, lanes) : renderRootSync(root3, lanes);
           if (exitStatus !== RootInProgress) {
             if (exitStatus === RootErrored) {
-              var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root2);
+              var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
               if (errorRetryLanes !== NoLanes) {
                 lanes = errorRetryLanes;
-                exitStatus = recoverFromConcurrentError(root2, errorRetryLanes);
+                exitStatus = recoverFromConcurrentError(root3, errorRetryLanes);
               }
             }
             if (exitStatus === RootFatalErrored) {
               var fatalError = workInProgressRootFatalError;
-              prepareFreshStack(root2, NoLanes);
-              markRootSuspended$1(root2, lanes);
-              ensureRootIsScheduled(root2, now$12());
+              prepareFreshStack(root3, NoLanes);
+              markRootSuspended$1(root3, lanes);
+              ensureRootIsScheduled(root3, now$12());
               throw fatalError;
             }
             if (exitStatus === RootDidNotComplete) {
-              markRootSuspended$1(root2, lanes);
+              markRootSuspended$1(root3, lanes);
             } else {
-              var renderWasConcurrent = !includesBlockingLane(root2, lanes);
-              var finishedWork = root2.current.alternate;
+              var renderWasConcurrent = !includesBlockingLane(root3, lanes);
+              var finishedWork = root3.current.alternate;
               if (renderWasConcurrent && !isRenderConsistentWithExternalStores(finishedWork)) {
-                exitStatus = renderRootSync(root2, lanes);
+                exitStatus = renderRootSync(root3, lanes);
                 if (exitStatus === RootErrored) {
-                  var _errorRetryLanes = getLanesToRetrySynchronouslyOnError(root2);
+                  var _errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
                   if (_errorRetryLanes !== NoLanes) {
                     lanes = _errorRetryLanes;
-                    exitStatus = recoverFromConcurrentError(root2, _errorRetryLanes);
+                    exitStatus = recoverFromConcurrentError(root3, _errorRetryLanes);
                   }
                 }
                 if (exitStatus === RootFatalErrored) {
                   var _fatalError = workInProgressRootFatalError;
-                  prepareFreshStack(root2, NoLanes);
-                  markRootSuspended$1(root2, lanes);
-                  ensureRootIsScheduled(root2, now$12());
+                  prepareFreshStack(root3, NoLanes);
+                  markRootSuspended$1(root3, lanes);
+                  ensureRootIsScheduled(root3, now$12());
                   throw _fatalError;
                 }
               }
-              root2.finishedWork = finishedWork;
-              root2.finishedLanes = lanes;
-              finishConcurrentRender(root2, exitStatus, lanes);
+              root3.finishedWork = finishedWork;
+              root3.finishedLanes = lanes;
+              finishConcurrentRender(root3, exitStatus, lanes);
             }
           }
-          ensureRootIsScheduled(root2, now$12());
-          if (root2.callbackNode === originalCallbackNode) {
-            return performConcurrentWorkOnRoot.bind(null, root2);
+          ensureRootIsScheduled(root3, now$12());
+          if (root3.callbackNode === originalCallbackNode) {
+            return performConcurrentWorkOnRoot.bind(null, root3);
           }
           return null;
         }
-        function recoverFromConcurrentError(root2, errorRetryLanes) {
+        function recoverFromConcurrentError(root3, errorRetryLanes) {
           var errorsFromFirstAttempt = workInProgressRootConcurrentErrors;
-          if (isRootDehydrated(root2)) {
-            var rootWorkInProgress = prepareFreshStack(root2, errorRetryLanes);
+          if (isRootDehydrated(root3)) {
+            var rootWorkInProgress = prepareFreshStack(root3, errorRetryLanes);
             rootWorkInProgress.flags |= ForceClientRender;
             {
-              errorHydratingContainer(root2.containerInfo);
+              errorHydratingContainer(root3.containerInfo);
             }
           }
-          var exitStatus = renderRootSync(root2, errorRetryLanes);
+          var exitStatus = renderRootSync(root3, errorRetryLanes);
           if (exitStatus !== RootErrored) {
             var errorsFromSecondAttempt = workInProgressRootRecoverableErrors;
             workInProgressRootRecoverableErrors = errorsFromFirstAttempt;
@@ -37572,59 +37572,59 @@ var require_react_reconciler_development = __commonJS({
             workInProgressRootRecoverableErrors.push.apply(workInProgressRootRecoverableErrors, errors);
           }
         }
-        function finishConcurrentRender(root2, exitStatus, lanes) {
+        function finishConcurrentRender(root3, exitStatus, lanes) {
           switch (exitStatus) {
             case RootInProgress:
             case RootFatalErrored: {
               throw new Error("Root did not complete. This is a bug in React.");
             }
             case RootErrored: {
-              commitRoot(root2, workInProgressRootRecoverableErrors);
+              commitRoot(root3, workInProgressRootRecoverableErrors);
               break;
             }
             case RootSuspended: {
-              markRootSuspended$1(root2, lanes);
+              markRootSuspended$1(root3, lanes);
               if (includesOnlyRetries(lanes) && // do not delay if we're inside an act() scope
               !shouldForceFlushFallbacksInDEV()) {
                 var msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS - now$12();
                 if (msUntilTimeout > 10) {
-                  var nextLanes = getNextLanes(root2, NoLanes);
+                  var nextLanes = getNextLanes(root3, NoLanes);
                   if (nextLanes !== NoLanes) {
                     break;
                   }
-                  var suspendedLanes = root2.suspendedLanes;
+                  var suspendedLanes = root3.suspendedLanes;
                   if (!isSubsetOfLanes(suspendedLanes, lanes)) {
                     var eventTime = requestEventTime();
-                    markRootPinged(root2, suspendedLanes);
+                    markRootPinged(root3, suspendedLanes);
                     break;
                   }
-                  root2.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root2, workInProgressRootRecoverableErrors), msUntilTimeout);
+                  root3.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root3, workInProgressRootRecoverableErrors), msUntilTimeout);
                   break;
                 }
               }
-              commitRoot(root2, workInProgressRootRecoverableErrors);
+              commitRoot(root3, workInProgressRootRecoverableErrors);
               break;
             }
             case RootSuspendedWithDelay: {
-              markRootSuspended$1(root2, lanes);
+              markRootSuspended$1(root3, lanes);
               if (includesOnlyTransitions(lanes)) {
                 break;
               }
               if (!shouldForceFlushFallbacksInDEV()) {
-                var mostRecentEventTime = getMostRecentEventTime(root2, lanes);
+                var mostRecentEventTime = getMostRecentEventTime(root3, lanes);
                 var eventTimeMs = mostRecentEventTime;
                 var timeElapsedMs = now$12() - eventTimeMs;
                 var _msUntilTimeout = jnd(timeElapsedMs) - timeElapsedMs;
                 if (_msUntilTimeout > 10) {
-                  root2.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root2, workInProgressRootRecoverableErrors), _msUntilTimeout);
+                  root3.timeoutHandle = scheduleTimeout(commitRoot.bind(null, root3, workInProgressRootRecoverableErrors), _msUntilTimeout);
                   break;
                 }
               }
-              commitRoot(root2, workInProgressRootRecoverableErrors);
+              commitRoot(root3, workInProgressRootRecoverableErrors);
               break;
             }
             case RootCompleted: {
-              commitRoot(root2, workInProgressRootRecoverableErrors);
+              commitRoot(root3, workInProgressRootRecoverableErrors);
               break;
             }
             default: {
@@ -37675,12 +37675,12 @@ var require_react_reconciler_development = __commonJS({
           }
           return true;
         }
-        function markRootSuspended$1(root2, suspendedLanes) {
+        function markRootSuspended$1(root3, suspendedLanes) {
           suspendedLanes = removeLanes(suspendedLanes, workInProgressRootPingedLanes);
           suspendedLanes = removeLanes(suspendedLanes, workInProgressRootInterleavedUpdatedLanes);
-          markRootSuspended(root2, suspendedLanes);
+          markRootSuspended(root3, suspendedLanes);
         }
-        function performSyncWorkOnRoot(root2) {
+        function performSyncWorkOnRoot(root3) {
           {
             syncNestedUpdateFlag();
           }
@@ -37688,40 +37688,40 @@ var require_react_reconciler_development = __commonJS({
             throw new Error("Should not already be working.");
           }
           flushPassiveEffects();
-          var lanes = getNextLanes(root2, NoLanes);
+          var lanes = getNextLanes(root3, NoLanes);
           if (!includesSomeLane(lanes, SyncLane)) {
-            ensureRootIsScheduled(root2, now$12());
+            ensureRootIsScheduled(root3, now$12());
             return null;
           }
-          var exitStatus = renderRootSync(root2, lanes);
-          if (root2.tag !== LegacyRoot && exitStatus === RootErrored) {
-            var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root2);
+          var exitStatus = renderRootSync(root3, lanes);
+          if (root3.tag !== LegacyRoot && exitStatus === RootErrored) {
+            var errorRetryLanes = getLanesToRetrySynchronouslyOnError(root3);
             if (errorRetryLanes !== NoLanes) {
               lanes = errorRetryLanes;
-              exitStatus = recoverFromConcurrentError(root2, errorRetryLanes);
+              exitStatus = recoverFromConcurrentError(root3, errorRetryLanes);
             }
           }
           if (exitStatus === RootFatalErrored) {
             var fatalError = workInProgressRootFatalError;
-            prepareFreshStack(root2, NoLanes);
-            markRootSuspended$1(root2, lanes);
-            ensureRootIsScheduled(root2, now$12());
+            prepareFreshStack(root3, NoLanes);
+            markRootSuspended$1(root3, lanes);
+            ensureRootIsScheduled(root3, now$12());
             throw fatalError;
           }
           if (exitStatus === RootDidNotComplete) {
             throw new Error("Root did not complete. This is a bug in React.");
           }
-          var finishedWork = root2.current.alternate;
-          root2.finishedWork = finishedWork;
-          root2.finishedLanes = lanes;
-          commitRoot(root2, workInProgressRootRecoverableErrors);
-          ensureRootIsScheduled(root2, now$12());
+          var finishedWork = root3.current.alternate;
+          root3.finishedWork = finishedWork;
+          root3.finishedLanes = lanes;
+          commitRoot(root3, workInProgressRootRecoverableErrors);
+          ensureRootIsScheduled(root3, now$12());
           return null;
         }
-        function flushRoot(root2, lanes) {
+        function flushRoot(root3, lanes) {
           if (lanes !== NoLanes) {
-            markRootEntangled(root2, mergeLanes(lanes, SyncLane));
-            ensureRootIsScheduled(root2, now$12());
+            markRootEntangled(root3, mergeLanes(lanes, SyncLane));
+            ensureRootIsScheduled(root3, now$12());
             if ((executionContext & (RenderContext | CommitContext)) === NoContext) {
               resetRenderTimer();
               flushSyncCallbacks();
@@ -37825,12 +37825,12 @@ var require_react_reconciler_development = __commonJS({
           subtreeRenderLanes = subtreeRenderLanesCursor.current;
           pop(subtreeRenderLanesCursor, fiber);
         }
-        function prepareFreshStack(root2, lanes) {
-          root2.finishedWork = null;
-          root2.finishedLanes = NoLanes;
-          var timeoutHandle = root2.timeoutHandle;
+        function prepareFreshStack(root3, lanes) {
+          root3.finishedWork = null;
+          root3.finishedLanes = NoLanes;
+          var timeoutHandle = root3.timeoutHandle;
           if (timeoutHandle !== noTimeout) {
-            root2.timeoutHandle = noTimeout;
+            root3.timeoutHandle = noTimeout;
             cancelTimeout(timeoutHandle);
           }
           if (workInProgress !== null) {
@@ -37841,8 +37841,8 @@ var require_react_reconciler_development = __commonJS({
               interruptedWork = interruptedWork.return;
             }
           }
-          workInProgressRoot = root2;
-          var rootWorkInProgress = createWorkInProgress(root2.current, null);
+          workInProgressRoot = root3;
+          var rootWorkInProgress = createWorkInProgress(root3.current, null);
           workInProgress = rootWorkInProgress;
           workInProgressRootRenderLanes = subtreeRenderLanes = workInProgressRootIncludedLanes = lanes;
           workInProgressRootExitStatus = RootInProgress;
@@ -37858,7 +37858,7 @@ var require_react_reconciler_development = __commonJS({
           }
           return rootWorkInProgress;
         }
-        function handleError(root2, thrownValue) {
+        function handleError(root3, thrownValue) {
           do {
             var erroredWork = workInProgress;
             try {
@@ -37884,7 +37884,7 @@ var require_react_reconciler_development = __commonJS({
                   markComponentErrored(erroredWork, thrownValue, workInProgressRootRenderLanes);
                 }
               }
-              throwException(root2, erroredWork.return, erroredWork, thrownValue, workInProgressRootRenderLanes);
+              throwException(root3, erroredWork.return, erroredWork, thrownValue, workInProgressRootRenderLanes);
               completeUnitOfWork(erroredWork);
             } catch (yetAnotherThrownValue) {
               thrownValue = yetAnotherThrownValue;
@@ -37943,22 +37943,22 @@ var require_react_reconciler_development = __commonJS({
         function renderHasNotSuspendedYet() {
           return workInProgressRootExitStatus === RootInProgress;
         }
-        function renderRootSync(root2, lanes) {
+        function renderRootSync(root3, lanes) {
           var prevExecutionContext = executionContext;
           executionContext |= RenderContext;
           var prevDispatcher = pushDispatcher();
-          if (workInProgressRoot !== root2 || workInProgressRootRenderLanes !== lanes) {
+          if (workInProgressRoot !== root3 || workInProgressRootRenderLanes !== lanes) {
             {
               if (isDevToolsPresent) {
-                var memoizedUpdaters = root2.memoizedUpdaters;
+                var memoizedUpdaters = root3.memoizedUpdaters;
                 if (memoizedUpdaters.size > 0) {
-                  restorePendingUpdaters(root2, workInProgressRootRenderLanes);
+                  restorePendingUpdaters(root3, workInProgressRootRenderLanes);
                   memoizedUpdaters.clear();
                 }
-                movePendingFibersToMemoized(root2, lanes);
+                movePendingFibersToMemoized(root3, lanes);
               }
             }
-            prepareFreshStack(root2, lanes);
+            prepareFreshStack(root3, lanes);
           }
           {
             markRenderStarted(lanes);
@@ -37968,7 +37968,7 @@ var require_react_reconciler_development = __commonJS({
               workLoopSync();
               break;
             } catch (thrownValue) {
-              handleError(root2, thrownValue);
+              handleError(root3, thrownValue);
             }
           } while (true);
           resetContextDependencies();
@@ -37989,23 +37989,23 @@ var require_react_reconciler_development = __commonJS({
             performUnitOfWork(workInProgress);
           }
         }
-        function renderRootConcurrent(root2, lanes) {
+        function renderRootConcurrent(root3, lanes) {
           var prevExecutionContext = executionContext;
           executionContext |= RenderContext;
           var prevDispatcher = pushDispatcher();
-          if (workInProgressRoot !== root2 || workInProgressRootRenderLanes !== lanes) {
+          if (workInProgressRoot !== root3 || workInProgressRootRenderLanes !== lanes) {
             {
               if (isDevToolsPresent) {
-                var memoizedUpdaters = root2.memoizedUpdaters;
+                var memoizedUpdaters = root3.memoizedUpdaters;
                 if (memoizedUpdaters.size > 0) {
-                  restorePendingUpdaters(root2, workInProgressRootRenderLanes);
+                  restorePendingUpdaters(root3, workInProgressRootRenderLanes);
                   memoizedUpdaters.clear();
                 }
-                movePendingFibersToMemoized(root2, lanes);
+                movePendingFibersToMemoized(root3, lanes);
               }
             }
             resetRenderTimer();
-            prepareFreshStack(root2, lanes);
+            prepareFreshStack(root3, lanes);
           }
           {
             markRenderStarted(lanes);
@@ -38015,7 +38015,7 @@ var require_react_reconciler_development = __commonJS({
               workLoopConcurrent();
               break;
             } catch (thrownValue) {
-              handleError(root2, thrownValue);
+              handleError(root3, thrownValue);
             }
           } while (true);
           resetContextDependencies();
@@ -38119,20 +38119,20 @@ var require_react_reconciler_development = __commonJS({
             workInProgressRootExitStatus = RootCompleted;
           }
         }
-        function commitRoot(root2, recoverableErrors) {
+        function commitRoot(root3, recoverableErrors) {
           var previousUpdateLanePriority = getCurrentUpdatePriority();
           var prevTransition = ReactCurrentBatchConfig$2.transition;
           try {
             ReactCurrentBatchConfig$2.transition = null;
             setCurrentUpdatePriority(DiscreteEventPriority2);
-            commitRootImpl(root2, recoverableErrors, previousUpdateLanePriority);
+            commitRootImpl(root3, recoverableErrors, previousUpdateLanePriority);
           } finally {
             ReactCurrentBatchConfig$2.transition = prevTransition;
             setCurrentUpdatePriority(previousUpdateLanePriority);
           }
           return null;
         }
-        function commitRootImpl(root2, recoverableErrors, renderPriorityLevel) {
+        function commitRootImpl(root3, recoverableErrors, renderPriorityLevel) {
           do {
             flushPassiveEffects();
           } while (rootWithPendingPassiveEffects !== null);
@@ -38140,8 +38140,8 @@ var require_react_reconciler_development = __commonJS({
           if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
             throw new Error("Should not already be working.");
           }
-          var finishedWork = root2.finishedWork;
-          var lanes = root2.finishedLanes;
+          var finishedWork = root3.finishedWork;
+          var lanes = root3.finishedLanes;
           {
             markCommitStarted(lanes);
           }
@@ -38157,16 +38157,16 @@ var require_react_reconciler_development = __commonJS({
               }
             }
           }
-          root2.finishedWork = null;
-          root2.finishedLanes = NoLanes;
-          if (finishedWork === root2.current) {
+          root3.finishedWork = null;
+          root3.finishedLanes = NoLanes;
+          if (finishedWork === root3.current) {
             throw new Error("Cannot commit the same tree as before. This error is likely caused by a bug in React. Please file an issue.");
           }
-          root2.callbackNode = null;
-          root2.callbackPriority = NoLane;
+          root3.callbackNode = null;
+          root3.callbackPriority = NoLane;
           var remainingLanes = mergeLanes(finishedWork.lanes, finishedWork.childLanes);
-          markRootFinished(root2, remainingLanes);
-          if (root2 === workInProgressRoot) {
+          markRootFinished(root3, remainingLanes);
+          if (root3 === workInProgressRoot) {
             workInProgressRoot = null;
             workInProgress = null;
             workInProgressRootRenderLanes = NoLanes;
@@ -38190,17 +38190,17 @@ var require_react_reconciler_development = __commonJS({
             var prevExecutionContext = executionContext;
             executionContext |= CommitContext;
             ReactCurrentOwner$2.current = null;
-            var shouldFireAfterActiveInstanceBlur2 = commitBeforeMutationEffects(root2, finishedWork);
+            var shouldFireAfterActiveInstanceBlur2 = commitBeforeMutationEffects(root3, finishedWork);
             {
               recordCommitTime();
             }
-            commitMutationEffects(root2, finishedWork, lanes);
-            resetAfterCommit(root2.containerInfo);
-            root2.current = finishedWork;
+            commitMutationEffects(root3, finishedWork, lanes);
+            resetAfterCommit(root3.containerInfo);
+            root3.current = finishedWork;
             {
               markLayoutEffectsStarted(lanes);
             }
-            commitLayoutEffects(finishedWork, root2, lanes);
+            commitLayoutEffects(finishedWork, root3, lanes);
             {
               markLayoutEffectsStopped();
             }
@@ -38209,7 +38209,7 @@ var require_react_reconciler_development = __commonJS({
             setCurrentUpdatePriority(previousPriority);
             ReactCurrentBatchConfig$2.transition = prevTransition;
           } else {
-            root2.current = finishedWork;
+            root3.current = finishedWork;
             {
               recordCommitTime();
             }
@@ -38217,30 +38217,30 @@ var require_react_reconciler_development = __commonJS({
           var rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
           if (rootDoesHavePassiveEffects) {
             rootDoesHavePassiveEffects = false;
-            rootWithPendingPassiveEffects = root2;
+            rootWithPendingPassiveEffects = root3;
             pendingPassiveEffectsLanes = lanes;
           }
-          remainingLanes = root2.pendingLanes;
+          remainingLanes = root3.pendingLanes;
           if (remainingLanes === NoLanes) {
             legacyErrorBoundariesThatAlreadyFailed = null;
           }
           {
             if (!rootDidHavePassiveEffects) {
-              commitDoubleInvokeEffectsInDEV(root2.current, false);
+              commitDoubleInvokeEffectsInDEV(root3.current, false);
             }
           }
           onCommitRoot(finishedWork.stateNode, renderPriorityLevel);
           {
             if (isDevToolsPresent) {
-              root2.memoizedUpdaters.clear();
+              root3.memoizedUpdaters.clear();
             }
           }
           {
             onCommitRoot$1();
           }
-          ensureRootIsScheduled(root2, now$12());
+          ensureRootIsScheduled(root3, now$12());
           if (recoverableErrors !== null) {
-            var onRecoverableError = root2.onRecoverableError;
+            var onRecoverableError = root3.onRecoverableError;
             for (var i2 = 0; i2 < recoverableErrors.length; i2++) {
               var recoverableError = recoverableErrors[i2];
               onRecoverableError(recoverableError);
@@ -38252,19 +38252,19 @@ var require_react_reconciler_development = __commonJS({
             firstUncaughtError = null;
             throw error$1;
           }
-          if (includesSomeLane(pendingPassiveEffectsLanes, SyncLane) && root2.tag !== LegacyRoot) {
+          if (includesSomeLane(pendingPassiveEffectsLanes, SyncLane) && root3.tag !== LegacyRoot) {
             flushPassiveEffects();
           }
-          remainingLanes = root2.pendingLanes;
+          remainingLanes = root3.pendingLanes;
           if (includesSomeLane(remainingLanes, SyncLane)) {
             {
               markNestedUpdateScheduled();
             }
-            if (root2 === rootWithNestedUpdates) {
+            if (root3 === rootWithNestedUpdates) {
               nestedUpdateCount++;
             } else {
               nestedUpdateCount = 0;
-              rootWithNestedUpdates = root2;
+              rootWithNestedUpdates = root3;
             }
           } else {
             nestedUpdateCount = 0;
@@ -38308,7 +38308,7 @@ var require_react_reconciler_development = __commonJS({
           if (rootWithPendingPassiveEffects === null) {
             return false;
           }
-          var root2 = rootWithPendingPassiveEffects;
+          var root3 = rootWithPendingPassiveEffects;
           var lanes = pendingPassiveEffectsLanes;
           rootWithPendingPassiveEffects = null;
           pendingPassiveEffectsLanes = NoLanes;
@@ -38320,28 +38320,28 @@ var require_react_reconciler_development = __commonJS({
           }
           var prevExecutionContext = executionContext;
           executionContext |= CommitContext;
-          commitPassiveUnmountEffects(root2.current);
-          commitPassiveMountEffects(root2, root2.current);
+          commitPassiveUnmountEffects(root3.current);
+          commitPassiveMountEffects(root3, root3.current);
           {
             var profilerEffects = pendingPassiveProfilerEffects;
             pendingPassiveProfilerEffects = [];
             for (var i2 = 0; i2 < profilerEffects.length; i2++) {
               var _fiber = profilerEffects[i2];
-              commitPassiveEffectDurations(root2, _fiber);
+              commitPassiveEffectDurations(root3, _fiber);
             }
           }
           {
             markPassiveEffectsStopped();
           }
           {
-            commitDoubleInvokeEffectsInDEV(root2.current, true);
+            commitDoubleInvokeEffectsInDEV(root3.current, true);
           }
           executionContext = prevExecutionContext;
           flushSyncCallbacks();
           nestedPassiveUpdateCount = rootWithPendingPassiveEffects === null ? 0 : nestedPassiveUpdateCount + 1;
-          onPostCommitRoot(root2);
+          onPostCommitRoot(root3);
           {
-            var stateNode = root2.current.stateNode;
+            var stateNode = root3.current.stateNode;
             stateNode.effectDuration = 0;
             stateNode.passiveEffectDuration = 0;
           }
@@ -38369,10 +38369,10 @@ var require_react_reconciler_development = __commonJS({
           var update3 = createRootErrorUpdate(rootFiber, errorInfo, SyncLane);
           enqueueUpdate(rootFiber, update3);
           var eventTime = requestEventTime();
-          var root2 = markUpdateLaneFromFiberToRoot(rootFiber, SyncLane);
-          if (root2 !== null) {
-            markRootUpdated(root2, SyncLane, eventTime);
-            ensureRootIsScheduled(root2, eventTime);
+          var root3 = markUpdateLaneFromFiberToRoot(rootFiber, SyncLane);
+          if (root3 !== null) {
+            markRootUpdated(root3, SyncLane, eventTime);
+            ensureRootIsScheduled(root3, eventTime);
           }
         }
         function captureCommitPhaseError(sourceFiber, nearestMountedAncestor, error$1) {
@@ -38396,10 +38396,10 @@ var require_react_reconciler_development = __commonJS({
                 var update3 = createClassErrorUpdate(fiber, errorInfo, SyncLane);
                 enqueueUpdate(fiber, update3);
                 var eventTime = requestEventTime();
-                var root2 = markUpdateLaneFromFiberToRoot(fiber, SyncLane);
-                if (root2 !== null) {
-                  markRootUpdated(root2, SyncLane, eventTime);
-                  ensureRootIsScheduled(root2, eventTime);
+                var root3 = markUpdateLaneFromFiberToRoot(fiber, SyncLane);
+                if (root3 !== null) {
+                  markRootUpdated(root3, SyncLane, eventTime);
+                  ensureRootIsScheduled(root3, eventTime);
                 }
                 return;
               }
@@ -38410,32 +38410,32 @@ var require_react_reconciler_development = __commonJS({
             error("Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.\n\nError message:\n\n%s", error$1);
           }
         }
-        function pingSuspendedRoot(root2, wakeable, pingedLanes) {
-          var pingCache = root2.pingCache;
+        function pingSuspendedRoot(root3, wakeable, pingedLanes) {
+          var pingCache = root3.pingCache;
           if (pingCache !== null) {
             pingCache.delete(wakeable);
           }
           var eventTime = requestEventTime();
-          markRootPinged(root2, pingedLanes);
-          warnIfSuspenseResolutionNotWrappedWithActDEV(root2);
-          if (workInProgressRoot === root2 && isSubsetOfLanes(workInProgressRootRenderLanes, pingedLanes)) {
+          markRootPinged(root3, pingedLanes);
+          warnIfSuspenseResolutionNotWrappedWithActDEV(root3);
+          if (workInProgressRoot === root3 && isSubsetOfLanes(workInProgressRootRenderLanes, pingedLanes)) {
             if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now$12() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS) {
-              prepareFreshStack(root2, NoLanes);
+              prepareFreshStack(root3, NoLanes);
             } else {
               workInProgressRootPingedLanes = mergeLanes(workInProgressRootPingedLanes, pingedLanes);
             }
           }
-          ensureRootIsScheduled(root2, eventTime);
+          ensureRootIsScheduled(root3, eventTime);
         }
         function retryTimedOutBoundary(boundaryFiber, retryLane) {
           if (retryLane === NoLane) {
             retryLane = requestRetryLane(boundaryFiber);
           }
           var eventTime = requestEventTime();
-          var root2 = markUpdateLaneFromFiberToRoot(boundaryFiber, retryLane);
-          if (root2 !== null) {
-            markRootUpdated(root2, retryLane, eventTime);
-            ensureRootIsScheduled(root2, eventTime);
+          var root3 = markUpdateLaneFromFiberToRoot(boundaryFiber, retryLane);
+          if (root3 !== null) {
+            markRootUpdated(root3, retryLane, eventTime);
+            ensureRootIsScheduled(root3, eventTime);
           }
         }
         function retryDehydratedSuspenseBoundary(boundaryFiber) {
@@ -38625,12 +38625,12 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function restorePendingUpdaters(root2, lanes) {
+        function restorePendingUpdaters(root3, lanes) {
           {
             if (isDevToolsPresent) {
-              var memoizedUpdaters = root2.memoizedUpdaters;
+              var memoizedUpdaters = root3.memoizedUpdaters;
               memoizedUpdaters.forEach(function(schedulingFiber) {
-                addFiberToLanesMap(root2, schedulingFiber, lanes);
+                addFiberToLanesMap(root3, schedulingFiber, lanes);
               });
             }
           }
@@ -38688,9 +38688,9 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        function warnIfSuspenseResolutionNotWrappedWithActDEV(root2) {
+        function warnIfSuspenseResolutionNotWrappedWithActDEV(root3) {
           {
-            if (root2.tag !== LegacyRoot && isConcurrentActEnvironment() && ReactCurrentActQueue$1.current === null) {
+            if (root3.tag !== LegacyRoot && isConcurrentActEnvironment() && ReactCurrentActQueue$1.current === null) {
               error("A suspended resource finished loading inside a test, but the event was not wrapped in act(...).\n\nWhen testing, code that resolves suspended data should be wrapped into act(...):\n\nact(() => {\n  /* finish loading suspended data */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act");
             }
           }
@@ -38809,7 +38809,7 @@ var require_react_reconciler_development = __commonJS({
             failedBoundaries.add(fiber);
           }
         }
-        var scheduleRefresh = function(root2, update3) {
+        var scheduleRefresh = function(root3, update3) {
           {
             if (resolveFamily === null) {
               return;
@@ -38817,18 +38817,18 @@ var require_react_reconciler_development = __commonJS({
             var staleFamilies = update3.staleFamilies, updatedFamilies = update3.updatedFamilies;
             flushPassiveEffects();
             flushSync(function() {
-              scheduleFibersWithFamiliesRecursively(root2.current, updatedFamilies, staleFamilies);
+              scheduleFibersWithFamiliesRecursively(root3.current, updatedFamilies, staleFamilies);
             });
           }
         };
-        var scheduleRoot = function(root2, element) {
+        var scheduleRoot = function(root3, element) {
           {
-            if (root2.context !== emptyContextObject) {
+            if (root3.context !== emptyContextObject) {
               return;
             }
             flushPassiveEffects();
             flushSync(function() {
-              updateContainer(element, root2, null, null);
+              updateContainer(element, root3, null, null);
             });
           }
         };
@@ -38884,13 +38884,13 @@ var require_react_reconciler_development = __commonJS({
             }
           }
         }
-        var findHostInstancesForRefresh = function(root2, families) {
+        var findHostInstancesForRefresh = function(root3, families) {
           {
             var hostInstances = /* @__PURE__ */ new Set();
             var types = new Set(families.map(function(family) {
               return family.current;
             }));
-            findHostInstancesForMatchingFibersRecursively(root2.current, types, hostInstances);
+            findHostInstancesForMatchingFibersRecursively(root3.current, types, hostInstances);
             return hostInstances;
           }
         };
@@ -39437,10 +39437,10 @@ var require_react_reconciler_development = __commonJS({
           }
         }
         function createFiberRoot(containerInfo, tag, hydrate, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError, transitionCallbacks) {
-          var root2 = new FiberRootNode(containerInfo, tag, hydrate, identifierPrefix, onRecoverableError);
+          var root3 = new FiberRootNode(containerInfo, tag, hydrate, identifierPrefix, onRecoverableError);
           var uninitializedFiber = createHostRootFiber(tag, isStrictMode);
-          root2.current = uninitializedFiber;
-          uninitializedFiber.stateNode = root2;
+          root3.current = uninitializedFiber;
+          uninitializedFiber.stateNode = root3;
           {
             var _initialState = {
               element: initialChildren,
@@ -39452,7 +39452,7 @@ var require_react_reconciler_development = __commonJS({
             uninitializedFiber.memoizedState = _initialState;
           }
           initializeUpdateQueue(uninitializedFiber);
-          return root2;
+          return root3;
         }
         var ReactVersion = "18.0.0-fc46dba67-20220329";
         function createPortal2(children, containerInfo, implementation) {
@@ -39479,7 +39479,7 @@ var require_react_reconciler_development = __commonJS({
           if (!parentComponent) {
             return emptyContextObject;
           }
-          var fiber = get2(parentComponent);
+          var fiber = get3(parentComponent);
           var parentContext = findCurrentUnmaskedContext(fiber);
           if (fiber.tag === ClassComponent) {
             var Component2 = fiber.type;
@@ -39490,13 +39490,13 @@ var require_react_reconciler_development = __commonJS({
           return parentContext;
         }
         function findHostInstance(component) {
-          var fiber = get2(component);
+          var fiber = get3(component);
           if (fiber === void 0) {
             if (typeof component.render === "function") {
               throw new Error("Unable to find node on an unmounted component.");
             } else {
-              var keys2 = Object.keys(component).join(",");
-              throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys2);
+              var keys3 = Object.keys(component).join(",");
+              throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys3);
             }
           }
           var hostFiber = findCurrentHostFiber(fiber);
@@ -39507,13 +39507,13 @@ var require_react_reconciler_development = __commonJS({
         }
         function findHostInstanceWithWarning(component, methodName) {
           {
-            var fiber = get2(component);
+            var fiber = get3(component);
             if (fiber === void 0) {
               if (typeof component.render === "function") {
                 throw new Error("Unable to find node on an unmounted component.");
               } else {
-                var keys2 = Object.keys(component).join(",");
-                throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys2);
+                var keys3 = Object.keys(component).join(",");
+                throw new Error("Argument appears to not be a ReactComponent. Keys: " + keys3);
               }
             }
             var hostFiber = findCurrentHostFiber(fiber);
@@ -39551,16 +39551,16 @@ var require_react_reconciler_development = __commonJS({
         }
         function createHydrationContainer(initialChildren, callback, containerInfo, tag, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError, transitionCallbacks) {
           var hydrate = true;
-          var root2 = createFiberRoot(containerInfo, tag, hydrate, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
-          root2.context = getContextForSubtree(null);
-          var current2 = root2.current;
+          var root3 = createFiberRoot(containerInfo, tag, hydrate, initialChildren, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride, identifierPrefix, onRecoverableError);
+          root3.context = getContextForSubtree(null);
+          var current2 = root3.current;
           var eventTime = requestEventTime();
           var lane = requestUpdateLane(current2);
           var update3 = createUpdate2(eventTime, lane);
           update3.callback = callback !== void 0 && callback !== null ? callback : null;
           enqueueUpdate(current2, update3);
-          scheduleInitialHydrationOnRoot(root2, lane, eventTime);
-          return root2;
+          scheduleInitialHydrationOnRoot(root3, lane, eventTime);
+          return root3;
         }
         function updateContainer(element, container2, parentComponent, callback) {
           {
@@ -39598,9 +39598,9 @@ var require_react_reconciler_development = __commonJS({
             update3.callback = callback;
           }
           enqueueUpdate(current$1, update3);
-          var root2 = scheduleUpdateOnFiber(current$1, lane, eventTime);
-          if (root2 !== null) {
-            entangleTransitions(root2, current$1, lane);
+          var root3 = scheduleUpdateOnFiber(current$1, lane, eventTime);
+          if (root3 !== null) {
+            entangleTransitions(root3, current$1, lane);
           }
           return lane;
         }
@@ -39619,10 +39619,10 @@ var require_react_reconciler_development = __commonJS({
         function attemptSynchronousHydration(fiber) {
           switch (fiber.tag) {
             case HostRoot:
-              var root2 = fiber.stateNode;
-              if (isRootDehydrated(root2)) {
-                var lanes = getHighestPriorityPendingLanes(root2);
-                flushRoot(root2, lanes);
+              var root3 = fiber.stateNode;
+              if (isRootDehydrated(root3)) {
+                var lanes = getHighestPriorityPendingLanes(root3);
+                flushRoot(root3, lanes);
               }
               break;
             case SuspenseComponent:
@@ -39695,30 +39695,30 @@ var require_react_reconciler_development = __commonJS({
         var setErrorHandler = null;
         var setSuspenseHandler = null;
         {
-          var copyWithDeleteImpl = function(obj, path, index3) {
-            var key = path[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
-            if (index3 + 1 === path.length) {
-              if (isArray(updated)) {
+          var copyWithDeleteImpl = function(obj, path2, index3) {
+            var key = path2[index3];
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
+            if (index3 + 1 === path2.length) {
+              if (isArray2(updated)) {
                 updated.splice(key, 1);
               } else {
                 delete updated[key];
               }
               return updated;
             }
-            updated[key] = copyWithDeleteImpl(obj[key], path, index3 + 1);
+            updated[key] = copyWithDeleteImpl(obj[key], path2, index3 + 1);
             return updated;
           };
-          var copyWithDelete = function(obj, path) {
-            return copyWithDeleteImpl(obj, path, 0);
+          var copyWithDelete = function(obj, path2) {
+            return copyWithDeleteImpl(obj, path2, 0);
           };
           var copyWithRenameImpl = function(obj, oldPath, newPath, index3) {
             var oldKey = oldPath[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
             if (index3 + 1 === oldPath.length) {
               var newKey = newPath[index3];
               updated[newKey] = updated[oldKey];
-              if (isArray(updated)) {
+              if (isArray2(updated)) {
                 updated.splice(oldKey, 1);
               } else {
                 delete updated[oldKey];
@@ -39748,17 +39748,17 @@ var require_react_reconciler_development = __commonJS({
             }
             return copyWithRenameImpl(obj, oldPath, newPath, 0);
           };
-          var copyWithSetImpl = function(obj, path, index3, value) {
-            if (index3 >= path.length) {
+          var copyWithSetImpl = function(obj, path2, index3, value) {
+            if (index3 >= path2.length) {
               return value;
             }
-            var key = path[index3];
-            var updated = isArray(obj) ? obj.slice() : assign4({}, obj);
-            updated[key] = copyWithSetImpl(obj[key], path, index3 + 1, value);
+            var key = path2[index3];
+            var updated = isArray2(obj) ? obj.slice() : assign4({}, obj);
+            updated[key] = copyWithSetImpl(obj[key], path2, index3 + 1, value);
             return updated;
           };
-          var copyWithSet = function(obj, path, value) {
-            return copyWithSetImpl(obj, path, 0, value);
+          var copyWithSet = function(obj, path2, value) {
+            return copyWithSetImpl(obj, path2, 0, value);
           };
           var findHook = function(fiber, id2) {
             var currentHook2 = fiber.memoizedState;
@@ -39768,20 +39768,20 @@ var require_react_reconciler_development = __commonJS({
             }
             return currentHook2;
           };
-          overrideHookState = function(fiber, id2, path, value) {
+          overrideHookState = function(fiber, id2, path2, value) {
             var hook = findHook(fiber, id2);
             if (hook !== null) {
-              var newState = copyWithSet(hook.memoizedState, path, value);
+              var newState = copyWithSet(hook.memoizedState, path2, value);
               hook.memoizedState = newState;
               hook.baseState = newState;
               fiber.memoizedProps = assign4({}, fiber.memoizedProps);
               scheduleUpdateOnFiber(fiber, SyncLane, NoTimestamp);
             }
           };
-          overrideHookStateDeletePath = function(fiber, id2, path) {
+          overrideHookStateDeletePath = function(fiber, id2, path2) {
             var hook = findHook(fiber, id2);
             if (hook !== null) {
-              var newState = copyWithDelete(hook.memoizedState, path);
+              var newState = copyWithDelete(hook.memoizedState, path2);
               hook.memoizedState = newState;
               hook.baseState = newState;
               fiber.memoizedProps = assign4({}, fiber.memoizedProps);
@@ -39798,15 +39798,15 @@ var require_react_reconciler_development = __commonJS({
               scheduleUpdateOnFiber(fiber, SyncLane, NoTimestamp);
             }
           };
-          overrideProps = function(fiber, path, value) {
-            fiber.pendingProps = copyWithSet(fiber.memoizedProps, path, value);
+          overrideProps = function(fiber, path2, value) {
+            fiber.pendingProps = copyWithSet(fiber.memoizedProps, path2, value);
             if (fiber.alternate) {
               fiber.alternate.pendingProps = fiber.pendingProps;
             }
             scheduleUpdateOnFiber(fiber, SyncLane, NoTimestamp);
           };
-          overridePropsDeletePath = function(fiber, path) {
-            fiber.pendingProps = copyWithDelete(fiber.memoizedProps, path);
+          overridePropsDeletePath = function(fiber, path2) {
+            fiber.pendingProps = copyWithDelete(fiber.memoizedProps, path2);
             if (fiber.alternate) {
               fiber.alternate.pendingProps = fiber.pendingProps;
             }
@@ -39980,1503 +39980,482 @@ var require_debounce = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/defaults.js
-var require_defaults = __commonJS({
-  "../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/defaults.js"(exports, module) {
-    function isLeaf(o) {
-      return !o || typeof o !== "object" || typeof o === "function" || Array.isArray(o) || o instanceof Set || o instanceof Map || o instanceof RegExp || o instanceof Date;
-    }
-    function resolveDefaults(target, defaults2) {
-      target = target || {};
-      var output = {};
-      for (var k in defaults2) {
-        var existing = target[k];
-        var def = defaults2[k];
-        if (!isLeaf(def)) {
-          output[k] = resolveDefaults(existing, def);
-          continue;
-        }
-        if (existing === void 0) {
-          output[k] = def;
-        } else {
-          output[k] = existing;
-        }
+// ../../node_modules/.pnpm/ngraph.circular.fixed@1.0.1/node_modules/ngraph.circular.fixed/index.js
+var require_ngraph_circular = __commonJS({
+  "../../node_modules/.pnpm/ngraph.circular.fixed@1.0.1/node_modules/ngraph.circular.fixed/index.js"(exports, module) {
+    module.exports = createLayout;
+    function createLayout(graph, settings) {
+      if (!graph) {
+        throw new Error("Graph structure cannot be undefined");
       }
-      return output;
-    }
-    module.exports = resolveDefaults;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/is-graph.js
-var require_is_graph = __commonJS({
-  "../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/is-graph.js"(exports, module) {
-    module.exports = function isGraph(value) {
-      return value !== null && typeof value === "object" && typeof value.addUndirectedEdgeWithKey === "function" && typeof value.dropNode === "function" && typeof value.multi === "boolean";
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout@0.6.1_graphology-types@0.24.7/node_modules/graphology-layout/circular.js
-var require_circular = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout@0.6.1_graphology-types@0.24.7/node_modules/graphology-layout/circular.js"(exports, module) {
-    var resolveDefaults = require_defaults();
-    var isGraph = require_is_graph();
-    var DEFAULTS = {
-      dimensions: ["x", "y"],
-      center: 0.5,
-      scale: 1
-    };
-    function genericCircularLayout(assign4, graph, options) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-layout/random: the given graph is not a valid graphology instance."
-        );
-      options = resolveDefaults(options, DEFAULTS);
-      var dimensions = options.dimensions;
-      if (!Array.isArray(dimensions) || dimensions.length !== 2)
-        throw new Error("graphology-layout/random: given dimensions are invalid.");
-      var center2 = options.center;
-      var scale = options.scale;
-      var tau = Math.PI * 2;
-      var offset = (center2 - 0.5) * scale;
-      var l = graph.order;
-      var x3 = dimensions[0];
-      var y3 = dimensions[1];
-      function assignPosition(i3, target) {
-        target[x3] = scale * Math.cos(i3 * tau / l) + offset;
-        target[y3] = scale * Math.sin(i3 * tau / l) + offset;
-        return target;
+      var nodes2 = {}, links = {};
+      resetAll();
+      listenToGraphEvents();
+      var api = {
+        /* All positions are already set and final */
+        step: function() {
+          return true;
+        },
+        /**
+         * For a given `nodeId` returns position
+         */
+        getNodePosition: function(nodeId) {
+          return nodes2[nodeId];
+        },
+        /**
+         * @returns {Object} area required to fit in the graph. Object contains
+         * `x1`, `y1` - top left coordinates
+         * `x2`, `y2` - bottom right coordinates
+         */
+        getGraphRect: function() {
+          return graphRect;
+        },
+        getLinkPosition: function(linkId) {
+          return links[linkId];
+        },
+        setNodesPositions: function() {
+        }
+      };
+      return api;
+      function resetAll() {
+        setNodesPositions();
+        setLinksPositions(nodes2);
       }
-      var i2 = 0;
-      if (!assign4) {
-        var positions = {};
+      function setNodesPositions() {
+        var nodesCount = graph.getNodesCount(), angleStep, angle = 0, radius = settings.radius, center2 = settings.center;
+        if (nodesCount === 0) {
+          return;
+        }
+        angleStep = 2 * Math.PI / nodesCount;
         graph.forEachNode(function(node) {
-          positions[node] = assignPosition(i2++, {});
-        });
-        return positions;
-      }
-      graph.updateEachNodeAttributes(
-        function(_, attr) {
-          assignPosition(i2++, attr);
-          return attr;
-        },
-        {
-          attributes: dimensions
-        }
-      );
-    }
-    var circularLayout = genericCircularLayout.bind(null, false);
-    circularLayout.assign = genericCircularLayout.bind(null, true);
-    module.exports = circularLayout;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/iterate.js
-var require_iterate = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/iterate.js"(exports, module) {
-    var NODE_X = 0;
-    var NODE_Y = 1;
-    var NODE_SIZE = 2;
-    var PPN = 3;
-    function hashPair(a2, b) {
-      return a2 + "\xA7" + b;
-    }
-    function jitter() {
-      return 0.01 * (0.5 - Math.random());
-    }
-    module.exports = function iterate(options, NodeMatrix) {
-      var margin = options.margin;
-      var ratio = options.ratio;
-      var expansion = options.expansion;
-      var gridSize = options.gridSize;
-      var speed = options.speed;
-      var i2, j, x3, y3, l, size;
-      var converged = true;
-      var length = NodeMatrix.length;
-      var order = length / PPN | 0;
-      var deltaX = new Float32Array(order);
-      var deltaY = new Float32Array(order);
-      var xMin = Infinity;
-      var yMin = Infinity;
-      var xMax = -Infinity;
-      var yMax = -Infinity;
-      for (i2 = 0; i2 < length; i2 += PPN) {
-        x3 = NodeMatrix[i2 + NODE_X];
-        y3 = NodeMatrix[i2 + NODE_Y];
-        size = NodeMatrix[i2 + NODE_SIZE] * ratio + margin;
-        xMin = Math.min(xMin, x3 - size);
-        xMax = Math.max(xMax, x3 + size);
-        yMin = Math.min(yMin, y3 - size);
-        yMax = Math.max(yMax, y3 + size);
-      }
-      var width = xMax - xMin;
-      var height = yMax - yMin;
-      var xCenter = (xMin + xMax) / 2;
-      var yCenter = (yMin + yMax) / 2;
-      xMin = xCenter - expansion * width / 2;
-      xMax = xCenter + expansion * width / 2;
-      yMin = yCenter - expansion * height / 2;
-      yMax = yCenter + expansion * height / 2;
-      var grid = new Array(gridSize * gridSize), gridLength = grid.length, c6;
-      for (c6 = 0; c6 < gridLength; c6++)
-        grid[c6] = [];
-      var nxMin, nxMax, nyMin, nyMax;
-      var xMinBox, xMaxBox, yMinBox, yMaxBox;
-      var col, row;
-      for (i2 = 0; i2 < length; i2 += PPN) {
-        x3 = NodeMatrix[i2 + NODE_X];
-        y3 = NodeMatrix[i2 + NODE_Y];
-        size = NodeMatrix[i2 + NODE_SIZE] * ratio + margin;
-        nxMin = x3 - size;
-        nxMax = x3 + size;
-        nyMin = y3 - size;
-        nyMax = y3 + size;
-        xMinBox = Math.floor(gridSize * (nxMin - xMin) / (xMax - xMin));
-        xMaxBox = Math.floor(gridSize * (nxMax - xMin) / (xMax - xMin));
-        yMinBox = Math.floor(gridSize * (nyMin - yMin) / (yMax - yMin));
-        yMaxBox = Math.floor(gridSize * (nyMax - yMin) / (yMax - yMin));
-        for (col = xMinBox; col <= xMaxBox; col++) {
-          for (row = yMinBox; row <= yMaxBox; row++) {
-            grid[col * gridSize + row].push(i2);
-          }
-        }
-      }
-      var cell;
-      var collisions = /* @__PURE__ */ new Set();
-      var n1, n2, x1, x22, y1, y22, s1, s2, h;
-      var xDist, yDist, dist, collision;
-      for (c6 = 0; c6 < gridLength; c6++) {
-        cell = grid[c6];
-        for (i2 = 0, l = cell.length; i2 < l; i2++) {
-          n1 = cell[i2];
-          x1 = NodeMatrix[n1 + NODE_X];
-          y1 = NodeMatrix[n1 + NODE_Y];
-          s1 = NodeMatrix[n1 + NODE_SIZE];
-          for (j = i2 + 1; j < l; j++) {
-            n2 = cell[j];
-            h = hashPair(n1, n2);
-            if (gridLength > 1 && collisions.has(h))
-              continue;
-            if (gridLength > 1)
-              collisions.add(h);
-            x22 = NodeMatrix[n2 + NODE_X];
-            y22 = NodeMatrix[n2 + NODE_Y];
-            s2 = NodeMatrix[n2 + NODE_SIZE];
-            xDist = x22 - x1;
-            yDist = y22 - y1;
-            dist = Math.sqrt(xDist * xDist + yDist * yDist);
-            collision = dist < s1 * ratio + margin + (s2 * ratio + margin);
-            if (collision) {
-              converged = false;
-              n2 = n2 / PPN | 0;
-              if (dist > 0) {
-                deltaX[n2] += xDist / dist * (1 + s1);
-                deltaY[n2] += yDist / dist * (1 + s1);
-              } else {
-                deltaX[n2] += width * jitter();
-                deltaY[n2] += height * jitter();
-              }
-            }
-          }
-        }
-      }
-      for (i2 = 0, j = 0; i2 < length; i2 += PPN, j++) {
-        NodeMatrix[i2 + NODE_X] += deltaX[j] * 0.1 * speed;
-        NodeMatrix[i2 + NODE_Y] += deltaY[j] * 0.1 * speed;
-      }
-      return { converged };
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/helpers.js
-var require_helpers = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/helpers.js"(exports) {
-    var PPN = 3;
-    exports.validateSettings = function(settings) {
-      if ("gridSize" in settings && typeof settings.gridSize !== "number" || settings.gridSize <= 0)
-        return { message: "the `gridSize` setting should be a positive number." };
-      if ("margin" in settings && typeof settings.margin !== "number" || settings.margin < 0)
-        return {
-          message: "the `margin` setting should be 0 or a positive number."
-        };
-      if ("expansion" in settings && typeof settings.expansion !== "number" || settings.expansion <= 0)
-        return { message: "the `expansion` setting should be a positive number." };
-      if ("ratio" in settings && typeof settings.ratio !== "number" || settings.ratio <= 0)
-        return { message: "the `ratio` setting should be a positive number." };
-      if ("speed" in settings && typeof settings.speed !== "number" || settings.speed <= 0)
-        return { message: "the `speed` setting should be a positive number." };
-      return null;
-    };
-    exports.graphToByteArray = function(graph, reducer) {
-      var order = graph.order;
-      var matrix = new Float32Array(order * PPN);
-      var j = 0;
-      graph.forEachNode(function(node, attr) {
-        if (typeof reducer === "function")
-          attr = reducer(node, attr);
-        matrix[j] = attr.x;
-        matrix[j + 1] = attr.y;
-        matrix[j + 2] = attr.size || 1;
-        j += PPN;
-      });
-      return matrix;
-    };
-    exports.assignLayoutChanges = function(graph, NodeMatrix, reducer) {
-      var i2 = 0;
-      graph.forEachNode(function(node) {
-        var pos = {
-          x: NodeMatrix[i2],
-          y: NodeMatrix[i2 + 1]
-        };
-        if (typeof reducer === "function")
-          pos = reducer(node, pos);
-        graph.mergeNodeAttributes(node, pos);
-        i2 += PPN;
-      });
-    };
-    exports.collectLayoutChanges = function(graph, NodeMatrix, reducer) {
-      var positions = {};
-      var i2 = 0;
-      graph.forEachNode(function(node) {
-        var pos = {
-          x: NodeMatrix[i2],
-          y: NodeMatrix[i2 + 1]
-        };
-        if (typeof reducer === "function")
-          pos = reducer(node, pos);
-        positions[node] = pos;
-        i2 += PPN;
-      });
-      return positions;
-    };
-    exports.createWorker = function createWorker(fn) {
-      var xURL = window.URL || window.webkitURL;
-      var code = fn.toString();
-      var objectUrl = xURL.createObjectURL(
-        new Blob(["(" + code + ").call(this);"], { type: "text/javascript" })
-      );
-      var worker = new Worker(objectUrl);
-      xURL.revokeObjectURL(objectUrl);
-      return worker;
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/defaults.js
-var require_defaults2 = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/defaults.js"(exports, module) {
-    module.exports = {
-      gridSize: 20,
-      margin: 5,
-      expansion: 1.1,
-      ratio: 1,
-      speed: 3
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/index.js
-var require_graphology_layout_noverlap = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-noverlap@0.4.2_graphology-types@0.24.7/node_modules/graphology-layout-noverlap/index.js"(exports, module) {
-    var isGraph = require_is_graph();
-    var iterate = require_iterate();
-    var helpers = require_helpers();
-    var DEFAULT_SETTINGS = require_defaults2();
-    var DEFAULT_MAX_ITERATIONS = 500;
-    function abstractSynchronousLayout(assign4, graph, params) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-layout-noverlap: the given graph is not a valid graphology instance."
-        );
-      if (typeof params === "number")
-        params = { maxIterations: params };
-      else
-        params = params || {};
-      var maxIterations = params.maxIterations || DEFAULT_MAX_ITERATIONS;
-      if (typeof maxIterations !== "number" || maxIterations <= 0)
-        throw new Error(
-          "graphology-layout-force: you should provide a positive number of maximum iterations."
-        );
-      var settings = Object.assign({}, DEFAULT_SETTINGS, params.settings), validationError = helpers.validateSettings(settings);
-      if (validationError)
-        throw new Error("graphology-layout-noverlap: " + validationError.message);
-      var matrix = helpers.graphToByteArray(graph, params.inputReducer), converged = false, i2;
-      for (i2 = 0; i2 < maxIterations && !converged; i2++)
-        converged = iterate(settings, matrix).converged;
-      if (assign4) {
-        helpers.assignLayoutChanges(graph, matrix, params.outputReducer);
-        return;
-      }
-      return helpers.collectLayoutChanges(graph, matrix, params.outputReducer);
-    }
-    var synchronousLayout = abstractSynchronousLayout.bind(null, false);
-    synchronousLayout.assign = abstractSynchronousLayout.bind(null, true);
-    module.exports = synchronousLayout;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/getters.js
-var require_getters = __commonJS({
-  "../../node_modules/.pnpm/graphology-utils@2.5.2_graphology-types@0.24.7/node_modules/graphology-utils/getters.js"(exports) {
-    function coerceWeight(value) {
-      if (typeof value !== "number" || isNaN(value))
-        return 1;
-      return value;
-    }
-    function createNodeValueGetter(nameOrFunction, defaultValue) {
-      var getter = {};
-      var coerceToDefault = function(v) {
-        if (typeof v === "undefined")
-          return defaultValue;
-        return v;
-      };
-      if (typeof defaultValue === "function")
-        coerceToDefault = defaultValue;
-      var get2 = function(attributes) {
-        return coerceToDefault(attributes[nameOrFunction]);
-      };
-      var returnDefault = function() {
-        return coerceToDefault(void 0);
-      };
-      if (typeof nameOrFunction === "string") {
-        getter.fromAttributes = get2;
-        getter.fromGraph = function(graph, node) {
-          return get2(graph.getNodeAttributes(node));
-        };
-        getter.fromEntry = function(node, attributes) {
-          return get2(attributes);
-        };
-      } else if (typeof nameOrFunction === "function") {
-        getter.fromAttributes = function() {
-          throw new Error(
-            "graphology-utils/getters/createNodeValueGetter: irrelevant usage."
-          );
-        };
-        getter.fromGraph = function(graph, node) {
-          return coerceToDefault(
-            nameOrFunction(node, graph.getNodeAttributes(node))
-          );
-        };
-        getter.fromEntry = function(node, attributes) {
-          return coerceToDefault(nameOrFunction(node, attributes));
-        };
-      } else {
-        getter.fromAttributes = returnDefault;
-        getter.fromGraph = returnDefault;
-        getter.fromEntry = returnDefault;
-      }
-      return getter;
-    }
-    function createEdgeValueGetter(nameOrFunction, defaultValue) {
-      var getter = {};
-      var coerceToDefault = function(v) {
-        if (typeof v === "undefined")
-          return defaultValue;
-        return v;
-      };
-      if (typeof defaultValue === "function")
-        coerceToDefault = defaultValue;
-      var get2 = function(attributes) {
-        return coerceToDefault(attributes[nameOrFunction]);
-      };
-      var returnDefault = function() {
-        return coerceToDefault(void 0);
-      };
-      if (typeof nameOrFunction === "string") {
-        getter.fromAttributes = get2;
-        getter.fromGraph = function(graph, edge) {
-          return get2(graph.getEdgeAttributes(edge));
-        };
-        getter.fromEntry = function(edge, attributes) {
-          return get2(attributes);
-        };
-        getter.fromPartialEntry = getter.fromEntry;
-        getter.fromMinimalEntry = getter.fromEntry;
-      } else if (typeof nameOrFunction === "function") {
-        getter.fromAttributes = function() {
-          throw new Error(
-            "graphology-utils/getters/createEdgeValueGetter: irrelevant usage."
-          );
-        };
-        getter.fromGraph = function(graph, edge) {
-          var extremities = graph.extremities(edge);
-          return coerceToDefault(
-            nameOrFunction(
-              edge,
-              graph.getEdgeAttributes(edge),
-              extremities[0],
-              extremities[1],
-              graph.getNodeAttributes(extremities[0]),
-              graph.getNodeAttributes(extremities[1]),
-              graph.isUndirected(edge)
-            )
-          );
-        };
-        getter.fromEntry = function(e, a2, s, t, sa, ta, u) {
-          return coerceToDefault(nameOrFunction(e, a2, s, t, sa, ta, u));
-        };
-        getter.fromPartialEntry = function(e, a2, s, t) {
-          return coerceToDefault(nameOrFunction(e, a2, s, t));
-        };
-        getter.fromMinimalEntry = function(e, a2) {
-          return coerceToDefault(nameOrFunction(e, a2));
-        };
-      } else {
-        getter.fromAttributes = returnDefault;
-        getter.fromGraph = returnDefault;
-        getter.fromEntry = returnDefault;
-        getter.fromMinimalEntry = returnDefault;
-      }
-      return getter;
-    }
-    exports.createNodeValueGetter = createNodeValueGetter;
-    exports.createEdgeValueGetter = createEdgeValueGetter;
-    exports.createEdgeWeightGetter = function(name) {
-      return createEdgeValueGetter(name, coerceWeight);
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/iterate.js
-var require_iterate2 = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/iterate.js"(exports, module) {
-    var NODE_X = 0;
-    var NODE_Y = 1;
-    var NODE_DX = 2;
-    var NODE_DY = 3;
-    var NODE_OLD_DX = 4;
-    var NODE_OLD_DY = 5;
-    var NODE_MASS = 6;
-    var NODE_CONVERGENCE = 7;
-    var NODE_SIZE = 8;
-    var NODE_FIXED = 9;
-    var EDGE_SOURCE = 0;
-    var EDGE_TARGET = 1;
-    var EDGE_WEIGHT = 2;
-    var REGION_NODE = 0;
-    var REGION_CENTER_X = 1;
-    var REGION_CENTER_Y = 2;
-    var REGION_SIZE = 3;
-    var REGION_NEXT_SIBLING = 4;
-    var REGION_FIRST_CHILD = 5;
-    var REGION_MASS = 6;
-    var REGION_MASS_CENTER_X = 7;
-    var REGION_MASS_CENTER_Y = 8;
-    var SUBDIVISION_ATTEMPTS = 3;
-    var PPN = 10;
-    var PPE = 3;
-    var PPR = 9;
-    var MAX_FORCE = 10;
-    module.exports = function iterate(options, NodeMatrix, EdgeMatrix) {
-      var l, r, n, n1, n2, rn, e, w, g, s;
-      var order = NodeMatrix.length, size = EdgeMatrix.length;
-      var adjustSizes = options.adjustSizes;
-      var thetaSquared = options.barnesHutTheta * options.barnesHutTheta;
-      var outboundAttCompensation, coefficient, xDist, yDist, ewc, distance, factor;
-      var RegionMatrix = [];
-      for (n = 0; n < order; n += PPN) {
-        NodeMatrix[n + NODE_OLD_DX] = NodeMatrix[n + NODE_DX];
-        NodeMatrix[n + NODE_OLD_DY] = NodeMatrix[n + NODE_DY];
-        NodeMatrix[n + NODE_DX] = 0;
-        NodeMatrix[n + NODE_DY] = 0;
-      }
-      if (options.outboundAttractionDistribution) {
-        outboundAttCompensation = 0;
-        for (n = 0; n < order; n += PPN) {
-          outboundAttCompensation += NodeMatrix[n + NODE_MASS];
-        }
-        outboundAttCompensation /= order / PPN;
-      }
-      if (options.barnesHutOptimize) {
-        var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, q, q2, subdivisionAttempts;
-        for (n = 0; n < order; n += PPN) {
-          minX = Math.min(minX, NodeMatrix[n + NODE_X]);
-          maxX = Math.max(maxX, NodeMatrix[n + NODE_X]);
-          minY = Math.min(minY, NodeMatrix[n + NODE_Y]);
-          maxY = Math.max(maxY, NodeMatrix[n + NODE_Y]);
-        }
-        var dx = maxX - minX, dy = maxY - minY;
-        if (dx > dy) {
-          minY -= (dx - dy) / 2;
-          maxY = minY + dx;
-        } else {
-          minX -= (dy - dx) / 2;
-          maxX = minX + dy;
-        }
-        RegionMatrix[0 + REGION_NODE] = -1;
-        RegionMatrix[0 + REGION_CENTER_X] = (minX + maxX) / 2;
-        RegionMatrix[0 + REGION_CENTER_Y] = (minY + maxY) / 2;
-        RegionMatrix[0 + REGION_SIZE] = Math.max(maxX - minX, maxY - minY);
-        RegionMatrix[0 + REGION_NEXT_SIBLING] = -1;
-        RegionMatrix[0 + REGION_FIRST_CHILD] = -1;
-        RegionMatrix[0 + REGION_MASS] = 0;
-        RegionMatrix[0 + REGION_MASS_CENTER_X] = 0;
-        RegionMatrix[0 + REGION_MASS_CENTER_Y] = 0;
-        l = 1;
-        for (n = 0; n < order; n += PPN) {
-          r = 0;
-          subdivisionAttempts = SUBDIVISION_ATTEMPTS;
-          while (true) {
-            if (RegionMatrix[r + REGION_FIRST_CHILD] >= 0) {
-              if (NodeMatrix[n + NODE_X] < RegionMatrix[r + REGION_CENTER_X]) {
-                if (NodeMatrix[n + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                  q = RegionMatrix[r + REGION_FIRST_CHILD];
-                } else {
-                  q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR;
-                }
-              } else {
-                if (NodeMatrix[n + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                  q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 2;
-                } else {
-                  q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 3;
-                }
-              }
-              RegionMatrix[r + REGION_MASS_CENTER_X] = (RegionMatrix[r + REGION_MASS_CENTER_X] * RegionMatrix[r + REGION_MASS] + NodeMatrix[n + NODE_X] * NodeMatrix[n + NODE_MASS]) / (RegionMatrix[r + REGION_MASS] + NodeMatrix[n + NODE_MASS]);
-              RegionMatrix[r + REGION_MASS_CENTER_Y] = (RegionMatrix[r + REGION_MASS_CENTER_Y] * RegionMatrix[r + REGION_MASS] + NodeMatrix[n + NODE_Y] * NodeMatrix[n + NODE_MASS]) / (RegionMatrix[r + REGION_MASS] + NodeMatrix[n + NODE_MASS]);
-              RegionMatrix[r + REGION_MASS] += NodeMatrix[n + NODE_MASS];
-              r = q;
-              continue;
-            } else {
-              if (RegionMatrix[r + REGION_NODE] < 0) {
-                RegionMatrix[r + REGION_NODE] = n;
-                break;
-              } else {
-                RegionMatrix[r + REGION_FIRST_CHILD] = l * PPR;
-                w = RegionMatrix[r + REGION_SIZE] / 2;
-                g = RegionMatrix[r + REGION_FIRST_CHILD];
-                RegionMatrix[g + REGION_NODE] = -1;
-                RegionMatrix[g + REGION_CENTER_X] = RegionMatrix[r + REGION_CENTER_X] - w;
-                RegionMatrix[g + REGION_CENTER_Y] = RegionMatrix[r + REGION_CENTER_Y] - w;
-                RegionMatrix[g + REGION_SIZE] = w;
-                RegionMatrix[g + REGION_NEXT_SIBLING] = g + PPR;
-                RegionMatrix[g + REGION_FIRST_CHILD] = -1;
-                RegionMatrix[g + REGION_MASS] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_X] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_Y] = 0;
-                g += PPR;
-                RegionMatrix[g + REGION_NODE] = -1;
-                RegionMatrix[g + REGION_CENTER_X] = RegionMatrix[r + REGION_CENTER_X] - w;
-                RegionMatrix[g + REGION_CENTER_Y] = RegionMatrix[r + REGION_CENTER_Y] + w;
-                RegionMatrix[g + REGION_SIZE] = w;
-                RegionMatrix[g + REGION_NEXT_SIBLING] = g + PPR;
-                RegionMatrix[g + REGION_FIRST_CHILD] = -1;
-                RegionMatrix[g + REGION_MASS] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_X] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_Y] = 0;
-                g += PPR;
-                RegionMatrix[g + REGION_NODE] = -1;
-                RegionMatrix[g + REGION_CENTER_X] = RegionMatrix[r + REGION_CENTER_X] + w;
-                RegionMatrix[g + REGION_CENTER_Y] = RegionMatrix[r + REGION_CENTER_Y] - w;
-                RegionMatrix[g + REGION_SIZE] = w;
-                RegionMatrix[g + REGION_NEXT_SIBLING] = g + PPR;
-                RegionMatrix[g + REGION_FIRST_CHILD] = -1;
-                RegionMatrix[g + REGION_MASS] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_X] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_Y] = 0;
-                g += PPR;
-                RegionMatrix[g + REGION_NODE] = -1;
-                RegionMatrix[g + REGION_CENTER_X] = RegionMatrix[r + REGION_CENTER_X] + w;
-                RegionMatrix[g + REGION_CENTER_Y] = RegionMatrix[r + REGION_CENTER_Y] + w;
-                RegionMatrix[g + REGION_SIZE] = w;
-                RegionMatrix[g + REGION_NEXT_SIBLING] = RegionMatrix[r + REGION_NEXT_SIBLING];
-                RegionMatrix[g + REGION_FIRST_CHILD] = -1;
-                RegionMatrix[g + REGION_MASS] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_X] = 0;
-                RegionMatrix[g + REGION_MASS_CENTER_Y] = 0;
-                l += 4;
-                if (NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_X] < RegionMatrix[r + REGION_CENTER_X]) {
-                  if (NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                    q = RegionMatrix[r + REGION_FIRST_CHILD];
-                  } else {
-                    q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR;
-                  }
-                } else {
-                  if (NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                    q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 2;
-                  } else {
-                    q = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 3;
-                  }
-                }
-                RegionMatrix[r + REGION_MASS] = NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_MASS];
-                RegionMatrix[r + REGION_MASS_CENTER_X] = NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_X];
-                RegionMatrix[r + REGION_MASS_CENTER_Y] = NodeMatrix[RegionMatrix[r + REGION_NODE] + NODE_Y];
-                RegionMatrix[q + REGION_NODE] = RegionMatrix[r + REGION_NODE];
-                RegionMatrix[r + REGION_NODE] = -1;
-                if (NodeMatrix[n + NODE_X] < RegionMatrix[r + REGION_CENTER_X]) {
-                  if (NodeMatrix[n + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                    q2 = RegionMatrix[r + REGION_FIRST_CHILD];
-                  } else {
-                    q2 = RegionMatrix[r + REGION_FIRST_CHILD] + PPR;
-                  }
-                } else {
-                  if (NodeMatrix[n + NODE_Y] < RegionMatrix[r + REGION_CENTER_Y]) {
-                    q2 = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 2;
-                  } else {
-                    q2 = RegionMatrix[r + REGION_FIRST_CHILD] + PPR * 3;
-                  }
-                }
-                if (q === q2) {
-                  if (subdivisionAttempts--) {
-                    r = q;
-                    continue;
-                  } else {
-                    subdivisionAttempts = SUBDIVISION_ATTEMPTS;
-                    break;
-                  }
-                }
-                RegionMatrix[q2 + REGION_NODE] = n;
-                break;
-              }
-            }
-          }
-        }
-      }
-      if (options.barnesHutOptimize) {
-        coefficient = options.scalingRatio;
-        for (n = 0; n < order; n += PPN) {
-          r = 0;
-          while (true) {
-            if (RegionMatrix[r + REGION_FIRST_CHILD] >= 0) {
-              distance = Math.pow(
-                NodeMatrix[n + NODE_X] - RegionMatrix[r + REGION_MASS_CENTER_X],
-                2
-              ) + Math.pow(
-                NodeMatrix[n + NODE_Y] - RegionMatrix[r + REGION_MASS_CENTER_Y],
-                2
-              );
-              s = RegionMatrix[r + REGION_SIZE];
-              if (4 * s * s / distance < thetaSquared) {
-                xDist = NodeMatrix[n + NODE_X] - RegionMatrix[r + REGION_MASS_CENTER_X];
-                yDist = NodeMatrix[n + NODE_Y] - RegionMatrix[r + REGION_MASS_CENTER_Y];
-                if (adjustSizes === true) {
-                  if (distance > 0) {
-                    factor = coefficient * NodeMatrix[n + NODE_MASS] * RegionMatrix[r + REGION_MASS] / distance;
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  } else if (distance < 0) {
-                    factor = -coefficient * NodeMatrix[n + NODE_MASS] * RegionMatrix[r + REGION_MASS] / Math.sqrt(distance);
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  }
-                } else {
-                  if (distance > 0) {
-                    factor = coefficient * NodeMatrix[n + NODE_MASS] * RegionMatrix[r + REGION_MASS] / distance;
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  }
-                }
-                r = RegionMatrix[r + REGION_NEXT_SIBLING];
-                if (r < 0)
-                  break;
-                continue;
-              } else {
-                r = RegionMatrix[r + REGION_FIRST_CHILD];
-                continue;
-              }
-            } else {
-              rn = RegionMatrix[r + REGION_NODE];
-              if (rn >= 0 && rn !== n) {
-                xDist = NodeMatrix[n + NODE_X] - NodeMatrix[rn + NODE_X];
-                yDist = NodeMatrix[n + NODE_Y] - NodeMatrix[rn + NODE_Y];
-                distance = xDist * xDist + yDist * yDist;
-                if (adjustSizes === true) {
-                  if (distance > 0) {
-                    factor = coefficient * NodeMatrix[n + NODE_MASS] * NodeMatrix[rn + NODE_MASS] / distance;
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  } else if (distance < 0) {
-                    factor = -coefficient * NodeMatrix[n + NODE_MASS] * NodeMatrix[rn + NODE_MASS] / Math.sqrt(distance);
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  }
-                } else {
-                  if (distance > 0) {
-                    factor = coefficient * NodeMatrix[n + NODE_MASS] * NodeMatrix[rn + NODE_MASS] / distance;
-                    NodeMatrix[n + NODE_DX] += xDist * factor;
-                    NodeMatrix[n + NODE_DY] += yDist * factor;
-                  }
-                }
-              }
-              r = RegionMatrix[r + REGION_NEXT_SIBLING];
-              if (r < 0)
-                break;
-              continue;
-            }
-          }
-        }
-      } else {
-        coefficient = options.scalingRatio;
-        for (n1 = 0; n1 < order; n1 += PPN) {
-          for (n2 = 0; n2 < n1; n2 += PPN) {
-            xDist = NodeMatrix[n1 + NODE_X] - NodeMatrix[n2 + NODE_X];
-            yDist = NodeMatrix[n1 + NODE_Y] - NodeMatrix[n2 + NODE_Y];
-            if (adjustSizes === true) {
-              distance = Math.sqrt(xDist * xDist + yDist * yDist) - NodeMatrix[n1 + NODE_SIZE] - NodeMatrix[n2 + NODE_SIZE];
-              if (distance > 0) {
-                factor = coefficient * NodeMatrix[n1 + NODE_MASS] * NodeMatrix[n2 + NODE_MASS] / distance / distance;
-                NodeMatrix[n1 + NODE_DX] += xDist * factor;
-                NodeMatrix[n1 + NODE_DY] += yDist * factor;
-                NodeMatrix[n2 + NODE_DX] -= xDist * factor;
-                NodeMatrix[n2 + NODE_DY] -= yDist * factor;
-              } else if (distance < 0) {
-                factor = 100 * coefficient * NodeMatrix[n1 + NODE_MASS] * NodeMatrix[n2 + NODE_MASS];
-                NodeMatrix[n1 + NODE_DX] += xDist * factor;
-                NodeMatrix[n1 + NODE_DY] += yDist * factor;
-                NodeMatrix[n2 + NODE_DX] -= xDist * factor;
-                NodeMatrix[n2 + NODE_DY] -= yDist * factor;
-              }
-            } else {
-              distance = Math.sqrt(xDist * xDist + yDist * yDist);
-              if (distance > 0) {
-                factor = coefficient * NodeMatrix[n1 + NODE_MASS] * NodeMatrix[n2 + NODE_MASS] / distance / distance;
-                NodeMatrix[n1 + NODE_DX] += xDist * factor;
-                NodeMatrix[n1 + NODE_DY] += yDist * factor;
-                NodeMatrix[n2 + NODE_DX] -= xDist * factor;
-                NodeMatrix[n2 + NODE_DY] -= yDist * factor;
-              }
-            }
-          }
-        }
-      }
-      g = options.gravity / options.scalingRatio;
-      coefficient = options.scalingRatio;
-      for (n = 0; n < order; n += PPN) {
-        factor = 0;
-        xDist = NodeMatrix[n + NODE_X];
-        yDist = NodeMatrix[n + NODE_Y];
-        distance = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-        if (options.strongGravityMode) {
-          if (distance > 0)
-            factor = coefficient * NodeMatrix[n + NODE_MASS] * g;
-        } else {
-          if (distance > 0)
-            factor = coefficient * NodeMatrix[n + NODE_MASS] * g / distance;
-        }
-        NodeMatrix[n + NODE_DX] -= xDist * factor;
-        NodeMatrix[n + NODE_DY] -= yDist * factor;
-      }
-      coefficient = 1 * (options.outboundAttractionDistribution ? outboundAttCompensation : 1);
-      for (e = 0; e < size; e += PPE) {
-        n1 = EdgeMatrix[e + EDGE_SOURCE];
-        n2 = EdgeMatrix[e + EDGE_TARGET];
-        w = EdgeMatrix[e + EDGE_WEIGHT];
-        ewc = Math.pow(w, options.edgeWeightInfluence);
-        xDist = NodeMatrix[n1 + NODE_X] - NodeMatrix[n2 + NODE_X];
-        yDist = NodeMatrix[n1 + NODE_Y] - NodeMatrix[n2 + NODE_Y];
-        if (adjustSizes === true) {
-          distance = Math.sqrt(xDist * xDist + yDist * yDist) - NodeMatrix[n1 + NODE_SIZE] - NodeMatrix[n2 + NODE_SIZE];
-          if (options.linLogMode) {
-            if (options.outboundAttractionDistribution) {
-              if (distance > 0) {
-                factor = -coefficient * ewc * Math.log(1 + distance) / distance / NodeMatrix[n1 + NODE_MASS];
-              }
-            } else {
-              if (distance > 0) {
-                factor = -coefficient * ewc * Math.log(1 + distance) / distance;
-              }
-            }
-          } else {
-            if (options.outboundAttractionDistribution) {
-              if (distance > 0) {
-                factor = -coefficient * ewc / NodeMatrix[n1 + NODE_MASS];
-              }
-            } else {
-              if (distance > 0) {
-                factor = -coefficient * ewc;
-              }
-            }
-          }
-        } else {
-          distance = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-          if (options.linLogMode) {
-            if (options.outboundAttractionDistribution) {
-              if (distance > 0) {
-                factor = -coefficient * ewc * Math.log(1 + distance) / distance / NodeMatrix[n1 + NODE_MASS];
-              }
-            } else {
-              if (distance > 0)
-                factor = -coefficient * ewc * Math.log(1 + distance) / distance;
-            }
-          } else {
-            if (options.outboundAttractionDistribution) {
-              distance = 1;
-              factor = -coefficient * ewc / NodeMatrix[n1 + NODE_MASS];
-            } else {
-              distance = 1;
-              factor = -coefficient * ewc;
-            }
-          }
-        }
-        if (distance > 0) {
-          NodeMatrix[n1 + NODE_DX] += xDist * factor;
-          NodeMatrix[n1 + NODE_DY] += yDist * factor;
-          NodeMatrix[n2 + NODE_DX] -= xDist * factor;
-          NodeMatrix[n2 + NODE_DY] -= yDist * factor;
-        }
-      }
-      var force, swinging, traction, nodespeed, newX, newY;
-      if (adjustSizes === true) {
-        for (n = 0; n < order; n += PPN) {
-          if (NodeMatrix[n + NODE_FIXED] !== 1) {
-            force = Math.sqrt(
-              Math.pow(NodeMatrix[n + NODE_DX], 2) + Math.pow(NodeMatrix[n + NODE_DY], 2)
-            );
-            if (force > MAX_FORCE) {
-              NodeMatrix[n + NODE_DX] = NodeMatrix[n + NODE_DX] * MAX_FORCE / force;
-              NodeMatrix[n + NODE_DY] = NodeMatrix[n + NODE_DY] * MAX_FORCE / force;
-            }
-            swinging = NodeMatrix[n + NODE_MASS] * Math.sqrt(
-              (NodeMatrix[n + NODE_OLD_DX] - NodeMatrix[n + NODE_DX]) * (NodeMatrix[n + NODE_OLD_DX] - NodeMatrix[n + NODE_DX]) + (NodeMatrix[n + NODE_OLD_DY] - NodeMatrix[n + NODE_DY]) * (NodeMatrix[n + NODE_OLD_DY] - NodeMatrix[n + NODE_DY])
-            );
-            traction = Math.sqrt(
-              (NodeMatrix[n + NODE_OLD_DX] + NodeMatrix[n + NODE_DX]) * (NodeMatrix[n + NODE_OLD_DX] + NodeMatrix[n + NODE_DX]) + (NodeMatrix[n + NODE_OLD_DY] + NodeMatrix[n + NODE_DY]) * (NodeMatrix[n + NODE_OLD_DY] + NodeMatrix[n + NODE_DY])
-            ) / 2;
-            nodespeed = 0.1 * Math.log(1 + traction) / (1 + Math.sqrt(swinging));
-            newX = NodeMatrix[n + NODE_X] + NodeMatrix[n + NODE_DX] * (nodespeed / options.slowDown);
-            NodeMatrix[n + NODE_X] = newX;
-            newY = NodeMatrix[n + NODE_Y] + NodeMatrix[n + NODE_DY] * (nodespeed / options.slowDown);
-            NodeMatrix[n + NODE_Y] = newY;
-          }
-        }
-      } else {
-        for (n = 0; n < order; n += PPN) {
-          if (NodeMatrix[n + NODE_FIXED] !== 1) {
-            swinging = NodeMatrix[n + NODE_MASS] * Math.sqrt(
-              (NodeMatrix[n + NODE_OLD_DX] - NodeMatrix[n + NODE_DX]) * (NodeMatrix[n + NODE_OLD_DX] - NodeMatrix[n + NODE_DX]) + (NodeMatrix[n + NODE_OLD_DY] - NodeMatrix[n + NODE_DY]) * (NodeMatrix[n + NODE_OLD_DY] - NodeMatrix[n + NODE_DY])
-            );
-            traction = Math.sqrt(
-              (NodeMatrix[n + NODE_OLD_DX] + NodeMatrix[n + NODE_DX]) * (NodeMatrix[n + NODE_OLD_DX] + NodeMatrix[n + NODE_DX]) + (NodeMatrix[n + NODE_OLD_DY] + NodeMatrix[n + NODE_DY]) * (NodeMatrix[n + NODE_OLD_DY] + NodeMatrix[n + NODE_DY])
-            ) / 2;
-            nodespeed = NodeMatrix[n + NODE_CONVERGENCE] * Math.log(1 + traction) / (1 + Math.sqrt(swinging));
-            NodeMatrix[n + NODE_CONVERGENCE] = Math.min(
-              1,
-              Math.sqrt(
-                nodespeed * (Math.pow(NodeMatrix[n + NODE_DX], 2) + Math.pow(NodeMatrix[n + NODE_DY], 2)) / (1 + Math.sqrt(swinging))
-              )
-            );
-            newX = NodeMatrix[n + NODE_X] + NodeMatrix[n + NODE_DX] * (nodespeed / options.slowDown);
-            NodeMatrix[n + NODE_X] = newX;
-            newY = NodeMatrix[n + NODE_Y] + NodeMatrix[n + NODE_DY] * (nodespeed / options.slowDown);
-            NodeMatrix[n + NODE_Y] = newY;
-          }
-        }
-      }
-      return {};
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/helpers.js
-var require_helpers2 = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/helpers.js"(exports) {
-    var PPN = 10;
-    var PPE = 3;
-    exports.assign = function(target) {
-      target = target || {};
-      var objects = Array.prototype.slice.call(arguments).slice(1), i2, k, l;
-      for (i2 = 0, l = objects.length; i2 < l; i2++) {
-        if (!objects[i2])
-          continue;
-        for (k in objects[i2])
-          target[k] = objects[i2][k];
-      }
-      return target;
-    };
-    exports.validateSettings = function(settings) {
-      if ("linLogMode" in settings && typeof settings.linLogMode !== "boolean")
-        return { message: "the `linLogMode` setting should be a boolean." };
-      if ("outboundAttractionDistribution" in settings && typeof settings.outboundAttractionDistribution !== "boolean")
-        return {
-          message: "the `outboundAttractionDistribution` setting should be a boolean."
-        };
-      if ("adjustSizes" in settings && typeof settings.adjustSizes !== "boolean")
-        return { message: "the `adjustSizes` setting should be a boolean." };
-      if ("edgeWeightInfluence" in settings && typeof settings.edgeWeightInfluence !== "number")
-        return {
-          message: "the `edgeWeightInfluence` setting should be a number."
-        };
-      if ("scalingRatio" in settings && !(typeof settings.scalingRatio === "number" && settings.scalingRatio >= 0))
-        return { message: "the `scalingRatio` setting should be a number >= 0." };
-      if ("strongGravityMode" in settings && typeof settings.strongGravityMode !== "boolean")
-        return { message: "the `strongGravityMode` setting should be a boolean." };
-      if ("gravity" in settings && !(typeof settings.gravity === "number" && settings.gravity >= 0))
-        return { message: "the `gravity` setting should be a number >= 0." };
-      if ("slowDown" in settings && !(typeof settings.slowDown === "number" || settings.slowDown >= 0))
-        return { message: "the `slowDown` setting should be a number >= 0." };
-      if ("barnesHutOptimize" in settings && typeof settings.barnesHutOptimize !== "boolean")
-        return { message: "the `barnesHutOptimize` setting should be a boolean." };
-      if ("barnesHutTheta" in settings && !(typeof settings.barnesHutTheta === "number" && settings.barnesHutTheta >= 0))
-        return { message: "the `barnesHutTheta` setting should be a number >= 0." };
-      return null;
-    };
-    exports.graphToByteArrays = function(graph, getEdgeWeight) {
-      var order = graph.order;
-      var size = graph.size;
-      var index2 = {};
-      var j;
-      var NodeMatrix = new Float32Array(order * PPN);
-      var EdgeMatrix = new Float32Array(size * PPE);
-      j = 0;
-      graph.forEachNode(function(node, attr) {
-        index2[node] = j;
-        NodeMatrix[j] = attr.x;
-        NodeMatrix[j + 1] = attr.y;
-        NodeMatrix[j + 2] = 0;
-        NodeMatrix[j + 3] = 0;
-        NodeMatrix[j + 4] = 0;
-        NodeMatrix[j + 5] = 0;
-        NodeMatrix[j + 6] = 1;
-        NodeMatrix[j + 7] = 1;
-        NodeMatrix[j + 8] = attr.size || 1;
-        NodeMatrix[j + 9] = attr.fixed ? 1 : 0;
-        j += PPN;
-      });
-      j = 0;
-      graph.forEachEdge(function(edge, attr, source, target, sa, ta, u) {
-        var sj = index2[source];
-        var tj = index2[target];
-        var weight = getEdgeWeight(edge, attr, source, target, sa, ta, u);
-        NodeMatrix[sj + 6] += weight;
-        NodeMatrix[tj + 6] += weight;
-        EdgeMatrix[j] = sj;
-        EdgeMatrix[j + 1] = tj;
-        EdgeMatrix[j + 2] = weight;
-        j += PPE;
-      });
-      return {
-        nodes: NodeMatrix,
-        edges: EdgeMatrix
-      };
-    };
-    exports.assignLayoutChanges = function(graph, NodeMatrix, outputReducer) {
-      var i2 = 0;
-      graph.updateEachNodeAttributes(function(node, attr) {
-        attr.x = NodeMatrix[i2];
-        attr.y = NodeMatrix[i2 + 1];
-        i2 += PPN;
-        return outputReducer ? outputReducer(node, attr) : attr;
-      });
-    };
-    exports.readGraphPositions = function(graph, NodeMatrix) {
-      var i2 = 0;
-      graph.forEachNode(function(node, attr) {
-        NodeMatrix[i2] = attr.x;
-        NodeMatrix[i2 + 1] = attr.y;
-        i2 += PPN;
-      });
-    };
-    exports.collectLayoutChanges = function(graph, NodeMatrix, outputReducer) {
-      var nodes2 = graph.nodes(), positions = {};
-      for (var i2 = 0, j = 0, l = NodeMatrix.length; i2 < l; i2 += PPN) {
-        if (outputReducer) {
-          var newAttr = Object.assign({}, graph.getNodeAttributes(nodes2[j]));
-          newAttr.x = NodeMatrix[i2];
-          newAttr.y = NodeMatrix[i2 + 1];
-          newAttr = outputReducer(nodes2[j], newAttr);
-          positions[nodes2[j]] = {
-            x: newAttr.x,
-            y: newAttr.y
+          var newPos = {
+            x: center2.x + radius * Math.sin(angle),
+            y: center2.y + radius * Math.cos(angle)
           };
-        } else {
-          positions[nodes2[j]] = {
-            x: NodeMatrix[i2],
-            y: NodeMatrix[i2 + 1]
-          };
-        }
-        j++;
-      }
-      return positions;
-    };
-    exports.createWorker = function createWorker(fn) {
-      var xURL = window.URL || window.webkitURL;
-      var code = fn.toString();
-      var objectUrl = xURL.createObjectURL(
-        new Blob(["(" + code + ").call(this);"], { type: "text/javascript" })
-      );
-      var worker = new Worker(objectUrl);
-      xURL.revokeObjectURL(objectUrl);
-      return worker;
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/defaults.js
-var require_defaults3 = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/defaults.js"(exports, module) {
-    module.exports = {
-      linLogMode: false,
-      outboundAttractionDistribution: false,
-      adjustSizes: false,
-      edgeWeightInfluence: 1,
-      scalingRatio: 1,
-      strongGravityMode: false,
-      gravity: 1,
-      slowDown: 1,
-      barnesHutOptimize: false,
-      barnesHutTheta: 0.5
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/index.js
-var require_graphology_layout_forceatlas2 = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout-forceatlas2@0.10.1_graphology-types@0.24.7/node_modules/graphology-layout-forceatlas2/index.js"(exports, module) {
-    var isGraph = require_is_graph();
-    var createEdgeWeightGetter = require_getters().createEdgeWeightGetter;
-    var iterate = require_iterate2();
-    var helpers = require_helpers2();
-    var DEFAULT_SETTINGS = require_defaults3();
-    function abstractSynchronousLayout(assign4, graph, params) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-layout-forceatlas2: the given graph is not a valid graphology instance."
-        );
-      if (typeof params === "number")
-        params = { iterations: params };
-      var iterations = params.iterations;
-      if (typeof iterations !== "number")
-        throw new Error(
-          "graphology-layout-forceatlas2: invalid number of iterations."
-        );
-      if (iterations <= 0)
-        throw new Error(
-          "graphology-layout-forceatlas2: you should provide a positive number of iterations."
-        );
-      var getEdgeWeight = createEdgeWeightGetter(
-        "getEdgeWeight" in params ? params.getEdgeWeight : "weight"
-      ).fromEntry;
-      var outputReducer = typeof params.outputReducer === "function" ? params.outputReducer : null;
-      var settings = helpers.assign({}, DEFAULT_SETTINGS, params.settings);
-      var validationError = helpers.validateSettings(settings);
-      if (validationError)
-        throw new Error(
-          "graphology-layout-forceatlas2: " + validationError.message
-        );
-      var matrices = helpers.graphToByteArrays(graph, getEdgeWeight);
-      var i2;
-      for (i2 = 0; i2 < iterations; i2++)
-        iterate(settings, matrices.nodes, matrices.edges);
-      if (assign4) {
-        helpers.assignLayoutChanges(graph, matrices.nodes, outputReducer);
-        return;
-      }
-      return helpers.collectLayoutChanges(graph, matrices.nodes);
-    }
-    function inferSettings(graph) {
-      var order = typeof graph === "number" ? graph : graph.order;
-      return {
-        barnesHutOptimize: order > 2e3,
-        strongGravityMode: true,
-        gravity: 0.05,
-        scalingRatio: 10,
-        slowDown: 1 + Math.log(order)
-      };
-    }
-    var synchronousLayout = abstractSynchronousLayout.bind(null, false);
-    synchronousLayout.assign = abstractSynchronousLayout.bind(null, true);
-    synchronousLayout.inferSettings = inferSettings;
-    module.exports = synchronousLayout;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-layout@0.6.1_graphology-types@0.24.7/node_modules/graphology-layout/random.js
-var require_random = __commonJS({
-  "../../node_modules/.pnpm/graphology-layout@0.6.1_graphology-types@0.24.7/node_modules/graphology-layout/random.js"(exports, module) {
-    var resolveDefaults = require_defaults();
-    var isGraph = require_is_graph();
-    var DEFAULTS = {
-      dimensions: ["x", "y"],
-      center: 0.5,
-      rng: Math.random,
-      scale: 1
-    };
-    function genericRandomLayout(assign4, graph, options) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-layout/random: the given graph is not a valid graphology instance."
-        );
-      options = resolveDefaults(options, DEFAULTS);
-      var dimensions = options.dimensions;
-      if (!Array.isArray(dimensions) || dimensions.length < 1)
-        throw new Error("graphology-layout/random: given dimensions are invalid.");
-      var d = dimensions.length;
-      var center2 = options.center;
-      var rng = options.rng;
-      var scale = options.scale;
-      var offset = (center2 - 0.5) * scale;
-      function assignPosition(target) {
-        for (var i2 = 0; i2 < d; i2++) {
-          target[dimensions[i2]] = rng() * scale + offset;
-        }
-        return target;
-      }
-      if (!assign4) {
-        var positions = {};
-        graph.forEachNode(function(node) {
-          positions[node] = assignPosition({});
-        });
-        return positions;
-      }
-      graph.updateEachNodeAttributes(
-        function(_, attr) {
-          assignPosition(attr);
-          return attr;
-        },
-        {
-          attributes: dimensions
-        }
-      );
-    }
-    var randomLayout = genericRandomLayout.bind(null, false);
-    randomLayout.assign = genericRandomLayout.bind(null, true);
-    module.exports = randomLayout;
-  }
-});
-
-// ../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/typed-arrays.js
-var require_typed_arrays = __commonJS({
-  "../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/typed-arrays.js"(exports) {
-    var MAX_8BIT_INTEGER = Math.pow(2, 8) - 1;
-    var MAX_16BIT_INTEGER = Math.pow(2, 16) - 1;
-    var MAX_32BIT_INTEGER = Math.pow(2, 32) - 1;
-    var MAX_SIGNED_8BIT_INTEGER = Math.pow(2, 7) - 1;
-    var MAX_SIGNED_16BIT_INTEGER = Math.pow(2, 15) - 1;
-    var MAX_SIGNED_32BIT_INTEGER = Math.pow(2, 31) - 1;
-    exports.getPointerArray = function(size) {
-      var maxIndex = size - 1;
-      if (maxIndex <= MAX_8BIT_INTEGER)
-        return Uint8Array;
-      if (maxIndex <= MAX_16BIT_INTEGER)
-        return Uint16Array;
-      if (maxIndex <= MAX_32BIT_INTEGER)
-        return Uint32Array;
-      throw new Error("mnemonist: Pointer Array of size > 4294967295 is not supported.");
-    };
-    exports.getSignedPointerArray = function(size) {
-      var maxIndex = size - 1;
-      if (maxIndex <= MAX_SIGNED_8BIT_INTEGER)
-        return Int8Array;
-      if (maxIndex <= MAX_SIGNED_16BIT_INTEGER)
-        return Int16Array;
-      if (maxIndex <= MAX_SIGNED_32BIT_INTEGER)
-        return Int32Array;
-      return Float64Array;
-    };
-    exports.getNumberType = function(value) {
-      if (value === (value | 0)) {
-        if (Math.sign(value) === -1) {
-          if (value <= 127 && value >= -128)
-            return Int8Array;
-          if (value <= 32767 && value >= -32768)
-            return Int16Array;
-          return Int32Array;
-        } else {
-          if (value <= 255)
-            return Uint8Array;
-          if (value <= 65535)
-            return Uint16Array;
-          return Uint32Array;
-        }
-      }
-      return Float64Array;
-    };
-    var TYPE_PRIORITY = {
-      Uint8Array: 1,
-      Int8Array: 2,
-      Uint16Array: 3,
-      Int16Array: 4,
-      Uint32Array: 5,
-      Int32Array: 6,
-      Float32Array: 7,
-      Float64Array: 8
-    };
-    exports.getMinimalRepresentation = function(array, getter) {
-      var maxType = null, maxPriority = 0, p, t, v, i2, l;
-      for (i2 = 0, l = array.length; i2 < l; i2++) {
-        v = getter ? getter(array[i2]) : array[i2];
-        t = exports.getNumberType(v);
-        p = TYPE_PRIORITY[t.name];
-        if (p > maxPriority) {
-          maxPriority = p;
-          maxType = t;
-        }
-      }
-      return maxType;
-    };
-    exports.isTypedArray = function(value) {
-      return typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView(value);
-    };
-    exports.concat = function() {
-      var length = 0, i2, o, l;
-      for (i2 = 0, l = arguments.length; i2 < l; i2++)
-        length += arguments[i2].length;
-      var array = new arguments[0].constructor(length);
-      for (i2 = 0, o = 0; i2 < l; i2++) {
-        array.set(arguments[i2], o);
-        o += arguments[i2].length;
-      }
-      return array;
-    };
-    exports.indices = function(length) {
-      var PointerArray = exports.getPointerArray(length);
-      var array = new PointerArray(length);
-      for (var i2 = 0; i2 < length; i2++)
-        array[i2] = i2;
-      return array;
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-indices@0.17.0_graphology-types@0.24.7/node_modules/graphology-indices/neighborhood.js
-var require_neighborhood = __commonJS({
-  "../../node_modules/.pnpm/graphology-indices@0.17.0_graphology-types@0.24.7/node_modules/graphology-indices/neighborhood.js"(exports) {
-    var typed = require_typed_arrays();
-    var createEdgeWeightGetter = require_getters().createEdgeWeightGetter;
-    function upperBoundPerMethod(method, graph) {
-      if (method === "outbound" || method === "inbound")
-        return graph.directedSize + graph.undirectedSize * 2;
-      if (method === "in" || method === "out" || method === "directed")
-        return graph.directedSize;
-      return graph.undirectedSize * 2;
-    }
-    function NeighborhoodIndex(graph, method) {
-      method = method || "outbound";
-      var getNeighbors = graph[method + "Neighbors"].bind(graph);
-      var upperBound = upperBoundPerMethod(method, graph);
-      var NeighborhoodPointerArray = typed.getPointerArray(upperBound);
-      var NodesPointerArray = typed.getPointerArray(graph.order);
-      this.graph = graph;
-      this.neighborhood = new NodesPointerArray(upperBound);
-      this.starts = new NeighborhoodPointerArray(graph.order + 1);
-      this.nodes = graph.nodes();
-      var ids = {};
-      var i2, l, j, m2, node, neighbors;
-      var n = 0;
-      for (i2 = 0, l = graph.order; i2 < l; i2++)
-        ids[this.nodes[i2]] = i2;
-      for (i2 = 0, l = graph.order; i2 < l; i2++) {
-        node = this.nodes[i2];
-        neighbors = getNeighbors(node);
-        this.starts[i2] = n;
-        for (j = 0, m2 = neighbors.length; j < m2; j++)
-          this.neighborhood[n++] = ids[neighbors[j]];
-      }
-      this.starts[i2] = upperBound;
-    }
-    NeighborhoodIndex.prototype.bounds = function(i2) {
-      return [this.starts[i2], this.starts[i2 + 1]];
-    };
-    NeighborhoodIndex.prototype.project = function() {
-      var self2 = this;
-      var projection = {};
-      self2.nodes.forEach(function(node, i2) {
-        projection[node] = Array.from(
-          self2.neighborhood.slice(self2.starts[i2], self2.starts[i2 + 1])
-        ).map(function(j) {
-          return self2.nodes[j];
-        });
-      });
-      return projection;
-    };
-    NeighborhoodIndex.prototype.collect = function(results) {
-      var i2, l;
-      var o = {};
-      for (i2 = 0, l = results.length; i2 < l; i2++)
-        o[this.nodes[i2]] = results[i2];
-      return o;
-    };
-    NeighborhoodIndex.prototype.assign = function(prop, results) {
-      var i2 = 0;
-      this.graph.updateEachNodeAttributes(
-        function(_, attr) {
-          attr[prop] = results[i2++];
-          return attr;
-        },
-        { attributes: [prop] }
-      );
-    };
-    exports.NeighborhoodIndex = NeighborhoodIndex;
-    function WeightedNeighborhoodIndex(graph, getEdgeWeight, method) {
-      method = method || "outbound";
-      var getEdges = graph[method + "Edges"].bind(graph);
-      var upperBound = upperBoundPerMethod(method, graph);
-      var NeighborhoodPointerArray = typed.getPointerArray(upperBound);
-      var NodesPointerArray = typed.getPointerArray(graph.order);
-      var weightGetter = createEdgeWeightGetter(getEdgeWeight).fromMinimalEntry;
-      this.graph = graph;
-      this.neighborhood = new NodesPointerArray(upperBound);
-      this.weights = new Float64Array(upperBound);
-      this.outDegrees = new Float64Array(graph.order);
-      this.starts = new NeighborhoodPointerArray(graph.order + 1);
-      this.nodes = graph.nodes();
-      var ids = {};
-      var i2, l, j, m2, node, neighbor, edges2, edge, weight;
-      var n = 0;
-      for (i2 = 0, l = graph.order; i2 < l; i2++)
-        ids[this.nodes[i2]] = i2;
-      for (i2 = 0, l = graph.order; i2 < l; i2++) {
-        node = this.nodes[i2];
-        edges2 = getEdges(node);
-        this.starts[i2] = n;
-        for (j = 0, m2 = edges2.length; j < m2; j++) {
-          edge = edges2[j];
-          neighbor = graph.opposite(node, edge);
-          weight = weightGetter(edge, graph.getEdgeAttributes(edge));
-          this.neighborhood[n] = ids[neighbor];
-          this.weights[n++] = weight;
-          this.outDegrees[i2] += weight;
-        }
-      }
-      this.starts[i2] = upperBound;
-    }
-    WeightedNeighborhoodIndex.prototype.bounds = NeighborhoodIndex.prototype.bounds;
-    WeightedNeighborhoodIndex.prototype.project = NeighborhoodIndex.prototype.project;
-    WeightedNeighborhoodIndex.prototype.collect = NeighborhoodIndex.prototype.collect;
-    WeightedNeighborhoodIndex.prototype.assign = NeighborhoodIndex.prototype.assign;
-    exports.WeightedNeighborhoodIndex = WeightedNeighborhoodIndex;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-metrics@2.1.0_graphology-types@0.24.7/node_modules/graphology-metrics/centrality/pagerank.js
-var require_pagerank = __commonJS({
-  "../../node_modules/.pnpm/graphology-metrics@2.1.0_graphology-types@0.24.7/node_modules/graphology-metrics/centrality/pagerank.js"(exports, module) {
-    var isGraph = require_is_graph();
-    var resolveDefaults = require_defaults();
-    var WeightedNeighborhoodIndex = require_neighborhood().WeightedNeighborhoodIndex;
-    var DEFAULTS = {
-      nodePagerankAttribute: "pagerank",
-      getEdgeWeight: "weight",
-      alpha: 0.85,
-      maxIterations: 100,
-      tolerance: 1e-6
-    };
-    function abstractPagerank(assign4, graph, options) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-metrics/centrality/pagerank: the given graph is not a valid graphology instance."
-        );
-      options = resolveDefaults(options, DEFAULTS);
-      var alpha = options.alpha;
-      var maxIterations = options.maxIterations;
-      var tolerance = options.tolerance;
-      var pagerankAttribute = options.nodePagerankAttribute;
-      var N = graph.order;
-      var p = 1 / N;
-      var index2 = new WeightedNeighborhoodIndex(graph, options.getEdgeWeight);
-      var i2, j, l, d;
-      var x3 = new Float64Array(graph.order);
-      var normalizedEdgeWeights = new Float64Array(index2.weights.length);
-      var danglingNodes = [];
-      for (i2 = 0; i2 < N; i2++) {
-        x3[i2] = p;
-        l = index2.starts[i2 + 1];
-        d = index2.outDegrees[i2];
-        if (d === 0)
-          danglingNodes.push(i2);
-        for (j = index2.starts[i2]; j < l; j++) {
-          normalizedEdgeWeights[j] = index2.weights[j] / d;
-        }
-      }
-      var iteration = 0;
-      var error = 0;
-      var dangleSum, neighbor, xLast;
-      var converged = false;
-      while (iteration < maxIterations) {
-        xLast = x3;
-        x3 = new Float64Array(graph.order);
-        dangleSum = 0;
-        for (i2 = 0, l = danglingNodes.length; i2 < l; i2++)
-          dangleSum += xLast[danglingNodes[i2]];
-        dangleSum *= alpha;
-        for (i2 = 0; i2 < N; i2++) {
-          l = index2.starts[i2 + 1];
-          for (j = index2.starts[i2]; j < l; j++) {
-            neighbor = index2.neighborhood[j];
-            x3[neighbor] += alpha * xLast[i2] * normalizedEdgeWeights[j];
+          if (nodes2[node.id]) {
+            nodes2[node.id].x = newPos.x;
+            nodes2[node.id].y = newPos.y;
+          } else {
+            nodes2[node.id] = newPos;
           }
-          x3[i2] += dangleSum * p + (1 - alpha) * p;
-        }
-        error = 0;
-        for (i2 = 0; i2 < N; i2++) {
-          error += Math.abs(x3[i2] - xLast[i2]);
-        }
-        if (error < N * tolerance) {
-          converged = true;
-          break;
-        }
-        iteration++;
+          angle += angleStep;
+        });
       }
-      if (!converged)
-        throw Error("graphology-metrics/centrality/pagerank: failed to converge.");
-      if (assign4) {
-        index2.assign(pagerankAttribute, x3);
-        return;
+      function setLinksPositions(nodes3) {
+        graph.forEachLink(function(link) {
+          var newPosition = getLinkPosition(link);
+          if (links[link.id]) {
+            links[link.id].from = newPosition.from;
+            links[link.id].to = newPosition.to;
+          } else {
+            links[link.id] = newPosition;
+          }
+        });
       }
-      return index2.collect(x3);
-    }
-    var pagerank2 = abstractPagerank.bind(null, false);
-    pagerank2.assign = abstractPagerank.bind(null, true);
-    module.exports = pagerank2;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-metrics@2.1.0_graphology-types@0.24.7/node_modules/graphology-metrics/centrality/degree.js
-var require_degree = __commonJS({
-  "../../node_modules/.pnpm/graphology-metrics@2.1.0_graphology-types@0.24.7/node_modules/graphology-metrics/centrality/degree.js"(exports) {
-    var isGraph = require_is_graph();
-    function abstractDegreeCentrality(assign4, method, graph, options) {
-      var name = method + "Centrality";
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-centrality/" + name + ": the given graph is not a valid graphology instance."
-        );
-      if (method !== "degree" && graph.type === "undirected")
-        throw new Error(
-          "graphology-centrality/" + name + ": cannot compute " + method + " centrality on an undirected graph."
-        );
-      options = options || {};
-      var centralityAttribute = options.nodeCentralityAttribute || name;
-      var ratio = graph.order - 1;
-      var getDegree = graph[method].bind(graph);
-      if (assign4) {
-        graph.updateEachNodeAttributes(
-          function(node, attr) {
-            attr[centralityAttribute] = getDegree(node) / ratio;
-            return attr;
+      function getLinkPosition(link) {
+        return {
+          from: {
+            x: nodes2[link.fromId].x,
+            y: nodes2[link.fromId].y
           },
-          { attributes: [centralityAttribute] }
-        );
-        return;
+          to: {
+            x: nodes2[link.toId].x,
+            y: nodes2[link.toId].y
+          }
+        };
       }
-      var centralities = {};
-      graph.forEachNode(function(node) {
-        centralities[node] = getDegree(node) / ratio;
-      });
-      return centralities;
+      function listenToGraphEvents() {
+        graph.on("changed", onGraphChanged);
+      }
+      function onGraphChanged(changes) {
+        for (var i2 = 0; i2 < changes.length; ++i2) {
+          var change = changes[i2];
+          if (change.changeType === "add") {
+            if (change.node) {
+              resetAll();
+            }
+            if (change.link) {
+              links[change.link.id] = getLinkPosition(change.link);
+            }
+          } else if (change.changeType === "remove") {
+            if (change.node) {
+              resetAll();
+            }
+            if (change.link) {
+              links[change.link.id] = null;
+            }
+          }
+        }
+      }
     }
-    var degreeCentrality2 = abstractDegreeCentrality.bind(null, false, "degree");
-    var inDegreeCentrality = abstractDegreeCentrality.bind(null, false, "inDegree");
-    var outDegreeCentrality = abstractDegreeCentrality.bind(
-      null,
-      false,
-      "outDegree"
-    );
-    degreeCentrality2.assign = abstractDegreeCentrality.bind(null, true, "degree");
-    inDegreeCentrality.assign = abstractDegreeCentrality.bind(
-      null,
-      true,
-      "inDegree"
-    );
-    outDegreeCentrality.assign = abstractDegreeCentrality.bind(
-      null,
-      true,
-      "outDegree"
-    );
-    exports.degreeCentrality = degreeCentrality2;
-    exports.inDegreeCentrality = inDegreeCentrality;
-    exports.outDegreeCentrality = outDegreeCentrality;
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.pagerank@2.1.1/node_modules/ngraph.pagerank/index.js
+var require_ngraph = __commonJS({
+  "../../node_modules/.pnpm/ngraph.pagerank@2.1.1/node_modules/ngraph.pagerank/index.js"(exports, module) {
+    module.exports = pageRank;
+    var elementsPerNode = 5;
+    function pageRank(graph, internalJumpProbability, epsilon2) {
+      if (typeof epsilon2 !== "number")
+        epsilon2 = 5e-3;
+      if (typeof internalJumpProbability !== "number")
+        internalJumpProbability = 0.85;
+      var nodesCount = graph.getNodesCount();
+      var asmGraph = initializeAsmGraph(graph);
+      var nodes2 = asmGraph.nodes;
+      var edges2 = asmGraph.edges;
+      computePageRank(nodes2, edges2, nodesCount, internalJumpProbability, epsilon2);
+      return finalResultsFromAsm(nodes2, asmGraph.numberToId);
+    }
+    function computePageRank(nodes2, edges2, nodesCount, internalJumpProbability, epsilon2) {
+      var done = false;
+      var distance = 0;
+      var leakedRank = 0;
+      var currentRank;
+      var idx;
+      do {
+        leakedRank = 0;
+        for (var j = 0; j < nodesCount; ++j) {
+          idx = j * elementsPerNode;
+          currentRank = 0;
+          var neighborsLength = nodes2[idx + 3];
+          if (neighborsLength === 0) {
+            nodes2[idx] = 0;
+          } else {
+            var neighborsStart = nodes2[idx + 4];
+            for (var i2 = neighborsStart; i2 < neighborsStart + neighborsLength; ++i2) {
+              var nIdx = edges2[i2];
+              currentRank += nodes2[nIdx + 1] / nodes2[nIdx + 2];
+            }
+            nodes2[idx] = internalJumpProbability * currentRank;
+            leakedRank += nodes2[idx];
+          }
+        }
+        leakedRank = (1 - leakedRank) / nodesCount;
+        distance = 0;
+        for (j = 0; j < nodesCount; ++j) {
+          idx = j * elementsPerNode;
+          currentRank = nodes2[idx] + leakedRank;
+          distance += Math.abs(currentRank - nodes2[idx + 1]);
+          nodes2[idx + 1] = currentRank;
+        }
+        done = distance < epsilon2;
+      } while (!done);
+    }
+    function finalResultsFromAsm(nodes2, idLookup) {
+      var result = /* @__PURE__ */ Object.create(null);
+      var length = nodes2.length / elementsPerNode;
+      for (var i2 = 0; i2 < length; ++i2) {
+        var idx = i2 * elementsPerNode;
+        result[idLookup[i2]] = nodes2[idx + 1];
+      }
+      return result;
+    }
+    function initializeAsmGraph(graph) {
+      var i2 = 0;
+      var lastEdge = 0;
+      var nodesCount = graph.getNodesCount();
+      var edgesCount = graph.getLinksCount();
+      var initialRank = 1 / nodesCount;
+      var nodes2 = new Float64Array(nodesCount * elementsPerNode);
+      var edges2 = new Float64Array(edgesCount);
+      var numberToId = new Array(nodesCount);
+      var idToNumber = /* @__PURE__ */ Object.create(null);
+      graph.forEachNode(addNode);
+      graph.forEachNode(initLinks);
+      return {
+        nodes: nodes2,
+        edges: edges2,
+        numberToId
+      };
+      function addNode(node) {
+        var idx = i2 * elementsPerNode;
+        nodes2[idx] = initialRank;
+        nodes2[idx + 1] = initialRank;
+        nodes2[idx + 2] = 0;
+        nodes2[idx + 3] = 0;
+        nodes2[idx + 4] = -1;
+        idToNumber[node.id] = i2;
+        numberToId[i2] = node.id;
+        i2 += 1;
+      }
+      function initLinks(node) {
+        var idx = idToNumber[node.id] * elementsPerNode;
+        var inDegree = 0;
+        var outDegree = 0;
+        var edgeStart = lastEdge;
+        graph.forEachLinkedNode(node.id, initLink);
+        nodes2[idx + 2] = outDegree;
+        nodes2[idx + 3] = inDegree;
+        if (edgeStart !== lastEdge) {
+          nodes2[idx + 4] = edgeStart;
+        }
+        function initLink(otherNode, link) {
+          if (link.fromId === node.id) {
+            outDegree += 1;
+          }
+          if (link.toId === node.id) {
+            inDegree += 1;
+            edges2[lastEdge++] = idToNumber[otherNode.id] * elementsPerNode;
+          }
+        }
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/degree.js
+var require_degree = __commonJS({
+  "../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/degree.js"(exports, module) {
+    module.exports = degree;
+    function degree(graph, kind) {
+      var getNodeDegree;
+      var result = /* @__PURE__ */ Object.create(null);
+      kind = (kind || "both").toLowerCase();
+      if (kind === "both" || kind === "inout") {
+        getNodeDegree = inoutDegreeCalculator;
+      } else if (kind === "in") {
+        getNodeDegree = inDegreeCalculator;
+      } else if (kind === "out") {
+        getNodeDegree = outDegreeCalculator;
+      } else {
+        throw new Error("Expected centrality degree kind is: in, out or both");
+      }
+      graph.forEachNode(calculateNodeDegree);
+      return result;
+      function calculateNodeDegree(node) {
+        var links = graph.getLinks(node.id);
+        result[node.id] = getNodeDegree(links, node.id);
+      }
+    }
+    function inDegreeCalculator(links, nodeId) {
+      var total = 0;
+      if (!links)
+        return total;
+      links.forEach(function(link) {
+        total += link.toId === nodeId ? 1 : 0;
+      });
+      return total;
+    }
+    function outDegreeCalculator(links, nodeId) {
+      var total = 0;
+      if (!links)
+        return total;
+      links.forEach(function(link) {
+        total += link.fromId === nodeId ? 1 : 0;
+      });
+      return total;
+    }
+    function inoutDegreeCalculator(links) {
+      if (!links)
+        return 0;
+      return links.size || links.length;
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/betweenness.js
+var require_betweenness = __commonJS({
+  "../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/betweenness.js"(exports, module) {
+    module.exports = betweennes;
+    function betweennes(graph, oriented) {
+      var Q = [], S = [];
+      var pred = /* @__PURE__ */ Object.create(null);
+      var dist = /* @__PURE__ */ Object.create(null);
+      var sigma = /* @__PURE__ */ Object.create(null);
+      var delta = /* @__PURE__ */ Object.create(null);
+      var currentNode;
+      var centrality2 = /* @__PURE__ */ Object.create(null);
+      graph.forEachNode(setCentralityToZero);
+      graph.forEachNode(calculateCentrality);
+      if (!oriented) {
+        Object.keys(centrality2).forEach(divideByTwo);
+      }
+      return centrality2;
+      function divideByTwo(key) {
+        centrality2[key] /= 2;
+      }
+      function setCentralityToZero(node) {
+        centrality2[node.id] = 0;
+      }
+      function calculateCentrality(node) {
+        currentNode = node.id;
+        singleSourceShortestPath(currentNode);
+        accumulate();
+      }
+      function accumulate() {
+        graph.forEachNode(setDeltaToZero);
+        while (S.length) {
+          var w = S.pop();
+          var coeff = (1 + delta[w]) / sigma[w];
+          var predecessors = pred[w];
+          for (var idx = 0; idx < predecessors.length; ++idx) {
+            var v = predecessors[idx];
+            delta[v] += sigma[v] * coeff;
+          }
+          if (w !== currentNode) {
+            centrality2[w] += delta[w];
+          }
+        }
+      }
+      function setDeltaToZero(node) {
+        delta[node.id] = 0;
+      }
+      function singleSourceShortestPath(source) {
+        graph.forEachNode(initNode);
+        dist[source] = 0;
+        sigma[source] = 1;
+        Q.push(source);
+        while (Q.length) {
+          var v = Q.shift();
+          S.push(v);
+          graph.forEachLinkedNode(v, toId, oriented);
+        }
+        function toId(otherNode) {
+          processNode(otherNode.id);
+        }
+        function initNode(node) {
+          var nodeId = node.id;
+          pred[nodeId] = [];
+          dist[nodeId] = -1;
+          sigma[nodeId] = 0;
+        }
+        function processNode(w) {
+          if (dist[w] === -1) {
+            dist[w] = dist[v] + 1;
+            Q.push(w);
+          }
+          if (dist[w] === dist[v] + 1) {
+            sigma[w] += sigma[v];
+            pred[w].push(v);
+          }
+        }
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/closeness.js
+var require_closeness = __commonJS({
+  "../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/closeness.js"(exports, module) {
+    module.exports = closeness;
+    function closeness(graph, oriented) {
+      var Q = [];
+      var dist = /* @__PURE__ */ Object.create(null);
+      var currentNode;
+      var centrality2 = /* @__PURE__ */ Object.create(null);
+      graph.forEachNode(setCentralityToZero);
+      graph.forEachNode(calculateCentrality);
+      return centrality2;
+      function setCentralityToZero(node) {
+        centrality2[node.id] = 0;
+      }
+      function calculateCentrality(node) {
+        currentNode = node.id;
+        singleSourceShortestPath(currentNode);
+        accumulate();
+      }
+      function accumulate() {
+        var distances = Object.keys(dist).map(function(key) {
+          return dist[key];
+        }).filter(function(val) {
+          return val !== -1;
+        });
+        var reachableNodesTotal = distances.length;
+        var totalDistance = distances.reduce(function(a2, b) {
+          return a2 + b;
+        }, 0);
+        if (totalDistance > 0) {
+          centrality2[currentNode] = (reachableNodesTotal - 1) / totalDistance;
+        } else {
+          centrality2[currentNode] = 0;
+        }
+      }
+      function singleSourceShortestPath(source) {
+        graph.forEachNode(initNode);
+        dist[source] = 0;
+        Q.push(source);
+        while (Q.length) {
+          var v = Q.shift();
+          graph.forEachLinkedNode(v, processNode, oriented);
+        }
+        function initNode(node) {
+          var nodeId = node.id;
+          dist[nodeId] = -1;
+        }
+        function processNode(otherNode) {
+          var w = otherNode.id;
+          if (dist[w] === -1) {
+            dist[w] = dist[v] + 1;
+            Q.push(w);
+          }
+        }
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/eccentricity.js
+var require_eccentricity = __commonJS({
+  "../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/src/eccentricity.js"(exports, module) {
+    module.exports = eccentricity;
+    function eccentricity(graph, oriented) {
+      var Q = [];
+      var dist = /* @__PURE__ */ Object.create(null);
+      var currentNode;
+      var centrality2 = /* @__PURE__ */ Object.create(null);
+      graph.forEachNode(setCentralityToZero);
+      graph.forEachNode(calculateCentrality);
+      return centrality2;
+      function setCentralityToZero(node) {
+        centrality2[node.id] = 0;
+      }
+      function calculateCentrality(node) {
+        currentNode = node.id;
+        singleSourceShortestPath(currentNode);
+        accumulate();
+      }
+      function accumulate() {
+        var maxDist = 0;
+        Object.keys(dist).forEach(function(key) {
+          var val = dist[key];
+          if (maxDist < val)
+            maxDist = val;
+        });
+        centrality2[currentNode] = maxDist;
+      }
+      function singleSourceShortestPath(source) {
+        graph.forEachNode(initNode);
+        dist[source] = 0;
+        Q.push(source);
+        while (Q.length) {
+          var v = Q.shift();
+          graph.forEachLinkedNode(v, processNode, oriented);
+        }
+        function initNode(node) {
+          var nodeId = node.id;
+          dist[nodeId] = -1;
+        }
+        function processNode(otherNode) {
+          var w = otherNode.id;
+          if (dist[w] === -1) {
+            dist[w] = dist[v] + 1;
+            Q.push(w);
+          }
+        }
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/index.js
+var require_ngraph2 = __commonJS({
+  "../../node_modules/.pnpm/ngraph.centrality@2.1.0/node_modules/ngraph.centrality/index.js"(exports, module) {
+    module.exports.degree = require_degree();
+    module.exports.betweenness = require_betweenness();
+    module.exports.closeness = require_closeness();
+    module.exports.eccentricity = require_eccentricity();
   }
 });
 
@@ -41716,1984 +40695,509 @@ var require_with_selector = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/graphology@0.25.1_graphology-types@0.24.7/node_modules/graphology/dist/graphology.umd.min.js
-var require_graphology_umd_min = __commonJS({
-  "../../node_modules/.pnpm/graphology@0.25.1_graphology-types@0.24.7/node_modules/graphology/dist/graphology.umd.min.js"(exports, module) {
-    !function(t, e) {
-      "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).graphology = e();
-    }(exports, function() {
-      "use strict";
-      function t(e3) {
-        return t = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(t2) {
-          return typeof t2;
-        } : function(t2) {
-          return t2 && "function" == typeof Symbol && t2.constructor === Symbol && t2 !== Symbol.prototype ? "symbol" : typeof t2;
-        }, t(e3);
-      }
-      function e(t2, e3) {
-        t2.prototype = Object.create(e3.prototype), t2.prototype.constructor = t2, r(t2, e3);
-      }
-      function n(t2) {
-        return n = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(t3) {
-          return t3.__proto__ || Object.getPrototypeOf(t3);
-        }, n(t2);
-      }
-      function r(t2, e3) {
-        return r = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(t3, e4) {
-          return t3.__proto__ = e4, t3;
-        }, r(t2, e3);
-      }
-      function i2() {
-        if ("undefined" == typeof Reflect || !Reflect.construct)
-          return false;
-        if (Reflect.construct.sham)
-          return false;
-        if ("function" == typeof Proxy)
-          return true;
-        try {
-          return Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-          })), true;
-        } catch (t2) {
-          return false;
-        }
-      }
-      function o(t2, e3, n2) {
-        return o = i2() ? Reflect.construct.bind() : function(t3, e4, n3) {
-          var i3 = [null];
-          i3.push.apply(i3, e4);
-          var o2 = new (Function.bind.apply(t3, i3))();
-          return n3 && r(o2, n3.prototype), o2;
-        }, o.apply(null, arguments);
-      }
-      function a2(t2) {
-        var e3 = "function" == typeof Map ? /* @__PURE__ */ new Map() : void 0;
-        return a2 = function(t3) {
-          if (null === t3 || (i3 = t3, -1 === Function.toString.call(i3).indexOf("[native code]")))
-            return t3;
-          var i3;
-          if ("function" != typeof t3)
-            throw new TypeError("Super expression must either be null or a function");
-          if (void 0 !== e3) {
-            if (e3.has(t3))
-              return e3.get(t3);
-            e3.set(t3, a3);
+// ../../node_modules/.pnpm/ngraph.events@1.2.2/node_modules/ngraph.events/index.js
+var require_ngraph3 = __commonJS({
+  "../../node_modules/.pnpm/ngraph.events@1.2.2/node_modules/ngraph.events/index.js"(exports, module) {
+    module.exports = function eventify(subject) {
+      validateSubject(subject);
+      var eventsStorage = createEventsStorage(subject);
+      subject.on = eventsStorage.on;
+      subject.off = eventsStorage.off;
+      subject.fire = eventsStorage.fire;
+      return subject;
+    };
+    function createEventsStorage(subject) {
+      var registeredEvents = /* @__PURE__ */ Object.create(null);
+      return {
+        on: function(eventName, callback, ctx2) {
+          if (typeof callback !== "function") {
+            throw new Error("callback is expected to be a function");
           }
-          function a3() {
-            return o(t3, arguments, n(this).constructor);
+          var handlers = registeredEvents[eventName];
+          if (!handlers) {
+            handlers = registeredEvents[eventName] = [];
           }
-          return a3.prototype = Object.create(t3.prototype, { constructor: { value: a3, enumerable: false, writable: true, configurable: true } }), r(a3, t3);
-        }, a2(t2);
-      }
-      function c6(t2) {
-        if (void 0 === t2)
-          throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-        return t2;
-      }
-      var u = function() {
-        for (var t2 = arguments[0], e3 = 1, n2 = arguments.length; e3 < n2; e3++)
-          if (arguments[e3])
-            for (var r2 in arguments[e3])
-              t2[r2] = arguments[e3][r2];
-        return t2;
-      };
-      function d(t2, e3, n2, r2) {
-        var i3 = t2._nodes.get(e3), o2 = null;
-        return i3 ? o2 = "mixed" === r2 ? i3.out && i3.out[n2] || i3.undirected && i3.undirected[n2] : "directed" === r2 ? i3.out && i3.out[n2] : i3.undirected && i3.undirected[n2] : o2;
-      }
-      function s(e3) {
-        return "object" === t(e3) && null !== e3 && e3.constructor === Object;
-      }
-      function h(t2) {
-        var e3;
-        for (e3 in t2)
-          return false;
-        return true;
-      }
-      function p(t2, e3, n2) {
-        Object.defineProperty(t2, e3, { enumerable: false, configurable: false, writable: true, value: n2 });
-      }
-      function f(t2, e3, n2) {
-        var r2 = { enumerable: true, configurable: true };
-        "function" == typeof n2 ? r2.get = n2 : (r2.value = n2, r2.writable = false), Object.defineProperty(t2, e3, r2);
-      }
-      function l(t2) {
-        return !!s(t2) && !(t2.attributes && !Array.isArray(t2.attributes));
-      }
-      "function" == typeof Object.assign && (u = Object.assign);
-      var g, y3 = { exports: {} }, w = "object" == typeof Reflect ? Reflect : null, v = w && "function" == typeof w.apply ? w.apply : function(t2, e3, n2) {
-        return Function.prototype.apply.call(t2, e3, n2);
-      };
-      g = w && "function" == typeof w.ownKeys ? w.ownKeys : Object.getOwnPropertySymbols ? function(t2) {
-        return Object.getOwnPropertyNames(t2).concat(Object.getOwnPropertySymbols(t2));
-      } : function(t2) {
-        return Object.getOwnPropertyNames(t2);
-      };
-      var b = Number.isNaN || function(t2) {
-        return t2 != t2;
-      };
-      function m2() {
-        m2.init.call(this);
-      }
-      y3.exports = m2, y3.exports.once = function(t2, e3) {
-        return new Promise(function(n2, r2) {
-          function i3(n3) {
-            t2.removeListener(e3, o2), r2(n3);
+          handlers.push({ callback, ctx: ctx2 });
+          return subject;
+        },
+        off: function(eventName, callback) {
+          var wantToRemoveAll = typeof eventName === "undefined";
+          if (wantToRemoveAll) {
+            registeredEvents = /* @__PURE__ */ Object.create(null);
+            return subject;
           }
-          function o2() {
-            "function" == typeof t2.removeListener && t2.removeListener("error", i3), n2([].slice.call(arguments));
-          }
-          U(t2, e3, o2, { once: true }), "error" !== e3 && function(t3, e4, n3) {
-            "function" == typeof t3.on && U(t3, "error", e4, n3);
-          }(t2, i3, { once: true });
-        });
-      }, m2.EventEmitter = m2, m2.prototype._events = void 0, m2.prototype._eventsCount = 0, m2.prototype._maxListeners = void 0;
-      var k = 10;
-      function _(t2) {
-        if ("function" != typeof t2)
-          throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof t2);
-      }
-      function G(t2) {
-        return void 0 === t2._maxListeners ? m2.defaultMaxListeners : t2._maxListeners;
-      }
-      function x3(t2, e3, n2, r2) {
-        var i3, o2, a3, c7;
-        if (_(n2), void 0 === (o2 = t2._events) ? (o2 = t2._events = /* @__PURE__ */ Object.create(null), t2._eventsCount = 0) : (void 0 !== o2.newListener && (t2.emit("newListener", e3, n2.listener ? n2.listener : n2), o2 = t2._events), a3 = o2[e3]), void 0 === a3)
-          a3 = o2[e3] = n2, ++t2._eventsCount;
-        else if ("function" == typeof a3 ? a3 = o2[e3] = r2 ? [n2, a3] : [a3, n2] : r2 ? a3.unshift(n2) : a3.push(n2), (i3 = G(t2)) > 0 && a3.length > i3 && !a3.warned) {
-          a3.warned = true;
-          var u2 = new Error("Possible EventEmitter memory leak detected. " + a3.length + " " + String(e3) + " listeners added. Use emitter.setMaxListeners() to increase limit");
-          u2.name = "MaxListenersExceededWarning", u2.emitter = t2, u2.type = e3, u2.count = a3.length, c7 = u2, console && console.warn && console.warn(c7);
-        }
-        return t2;
-      }
-      function E() {
-        if (!this.fired)
-          return this.target.removeListener(this.type, this.wrapFn), this.fired = true, 0 === arguments.length ? this.listener.call(this.target) : this.listener.apply(this.target, arguments);
-      }
-      function A(t2, e3, n2) {
-        var r2 = { fired: false, wrapFn: void 0, target: t2, type: e3, listener: n2 }, i3 = E.bind(r2);
-        return i3.listener = n2, r2.wrapFn = i3, i3;
-      }
-      function L(t2, e3, n2) {
-        var r2 = t2._events;
-        if (void 0 === r2)
-          return [];
-        var i3 = r2[e3];
-        return void 0 === i3 ? [] : "function" == typeof i3 ? n2 ? [i3.listener || i3] : [i3] : n2 ? function(t3) {
-          for (var e4 = new Array(t3.length), n3 = 0; n3 < e4.length; ++n3)
-            e4[n3] = t3[n3].listener || t3[n3];
-          return e4;
-        }(i3) : D(i3, i3.length);
-      }
-      function S(t2) {
-        var e3 = this._events;
-        if (void 0 !== e3) {
-          var n2 = e3[t2];
-          if ("function" == typeof n2)
-            return 1;
-          if (void 0 !== n2)
-            return n2.length;
-        }
-        return 0;
-      }
-      function D(t2, e3) {
-        for (var n2 = new Array(e3), r2 = 0; r2 < e3; ++r2)
-          n2[r2] = t2[r2];
-        return n2;
-      }
-      function U(t2, e3, n2, r2) {
-        if ("function" == typeof t2.on)
-          r2.once ? t2.once(e3, n2) : t2.on(e3, n2);
-        else {
-          if ("function" != typeof t2.addEventListener)
-            throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof t2);
-          t2.addEventListener(e3, function i3(o2) {
-            r2.once && t2.removeEventListener(e3, i3), n2(o2);
-          });
-        }
-      }
-      function N(t2) {
-        if ("function" != typeof t2)
-          throw new Error("obliterator/iterator: expecting a function!");
-        this.next = t2;
-      }
-      Object.defineProperty(m2, "defaultMaxListeners", { enumerable: true, get: function() {
-        return k;
-      }, set: function(t2) {
-        if ("number" != typeof t2 || t2 < 0 || b(t2))
-          throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + t2 + ".");
-        k = t2;
-      } }), m2.init = function() {
-        void 0 !== this._events && this._events !== Object.getPrototypeOf(this)._events || (this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0), this._maxListeners = this._maxListeners || void 0;
-      }, m2.prototype.setMaxListeners = function(t2) {
-        if ("number" != typeof t2 || t2 < 0 || b(t2))
-          throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + t2 + ".");
-        return this._maxListeners = t2, this;
-      }, m2.prototype.getMaxListeners = function() {
-        return G(this);
-      }, m2.prototype.emit = function(t2) {
-        for (var e3 = [], n2 = 1; n2 < arguments.length; n2++)
-          e3.push(arguments[n2]);
-        var r2 = "error" === t2, i3 = this._events;
-        if (void 0 !== i3)
-          r2 = r2 && void 0 === i3.error;
-        else if (!r2)
-          return false;
-        if (r2) {
-          var o2;
-          if (e3.length > 0 && (o2 = e3[0]), o2 instanceof Error)
-            throw o2;
-          var a3 = new Error("Unhandled error." + (o2 ? " (" + o2.message + ")" : ""));
-          throw a3.context = o2, a3;
-        }
-        var c7 = i3[t2];
-        if (void 0 === c7)
-          return false;
-        if ("function" == typeof c7)
-          v(c7, this, e3);
-        else {
-          var u2 = c7.length, d2 = D(c7, u2);
-          for (n2 = 0; n2 < u2; ++n2)
-            v(d2[n2], this, e3);
-        }
-        return true;
-      }, m2.prototype.addListener = function(t2, e3) {
-        return x3(this, t2, e3, false);
-      }, m2.prototype.on = m2.prototype.addListener, m2.prototype.prependListener = function(t2, e3) {
-        return x3(this, t2, e3, true);
-      }, m2.prototype.once = function(t2, e3) {
-        return _(e3), this.on(t2, A(this, t2, e3)), this;
-      }, m2.prototype.prependOnceListener = function(t2, e3) {
-        return _(e3), this.prependListener(t2, A(this, t2, e3)), this;
-      }, m2.prototype.removeListener = function(t2, e3) {
-        var n2, r2, i3, o2, a3;
-        if (_(e3), void 0 === (r2 = this._events))
-          return this;
-        if (void 0 === (n2 = r2[t2]))
-          return this;
-        if (n2 === e3 || n2.listener === e3)
-          0 == --this._eventsCount ? this._events = /* @__PURE__ */ Object.create(null) : (delete r2[t2], r2.removeListener && this.emit("removeListener", t2, n2.listener || e3));
-        else if ("function" != typeof n2) {
-          for (i3 = -1, o2 = n2.length - 1; o2 >= 0; o2--)
-            if (n2[o2] === e3 || n2[o2].listener === e3) {
-              a3 = n2[o2].listener, i3 = o2;
-              break;
+          if (registeredEvents[eventName]) {
+            var deleteAllCallbacksForEvent = typeof callback !== "function";
+            if (deleteAllCallbacksForEvent) {
+              delete registeredEvents[eventName];
+            } else {
+              var callbacks = registeredEvents[eventName];
+              for (var i2 = 0; i2 < callbacks.length; ++i2) {
+                if (callbacks[i2].callback === callback) {
+                  callbacks.splice(i2, 1);
+                }
+              }
             }
-          if (i3 < 0)
-            return this;
-          0 === i3 ? n2.shift() : function(t3, e4) {
-            for (; e4 + 1 < t3.length; e4++)
-              t3[e4] = t3[e4 + 1];
-            t3.pop();
-          }(n2, i3), 1 === n2.length && (r2[t2] = n2[0]), void 0 !== r2.removeListener && this.emit("removeListener", t2, a3 || e3);
-        }
-        return this;
-      }, m2.prototype.off = m2.prototype.removeListener, m2.prototype.removeAllListeners = function(t2) {
-        var e3, n2, r2;
-        if (void 0 === (n2 = this._events))
-          return this;
-        if (void 0 === n2.removeListener)
-          return 0 === arguments.length ? (this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0) : void 0 !== n2[t2] && (0 == --this._eventsCount ? this._events = /* @__PURE__ */ Object.create(null) : delete n2[t2]), this;
-        if (0 === arguments.length) {
-          var i3, o2 = Object.keys(n2);
-          for (r2 = 0; r2 < o2.length; ++r2)
-            "removeListener" !== (i3 = o2[r2]) && this.removeAllListeners(i3);
-          return this.removeAllListeners("removeListener"), this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0, this;
-        }
-        if ("function" == typeof (e3 = n2[t2]))
-          this.removeListener(t2, e3);
-        else if (void 0 !== e3)
-          for (r2 = e3.length - 1; r2 >= 0; r2--)
-            this.removeListener(t2, e3[r2]);
-        return this;
-      }, m2.prototype.listeners = function(t2) {
-        return L(this, t2, true);
-      }, m2.prototype.rawListeners = function(t2) {
-        return L(this, t2, false);
-      }, m2.listenerCount = function(t2, e3) {
-        return "function" == typeof t2.listenerCount ? t2.listenerCount(e3) : S.call(t2, e3);
-      }, m2.prototype.listenerCount = S, m2.prototype.eventNames = function() {
-        return this._eventsCount > 0 ? g(this._events) : [];
-      }, "undefined" != typeof Symbol && (N.prototype[Symbol.iterator] = function() {
-        return this;
-      }), N.of = function() {
-        var t2 = arguments, e3 = t2.length, n2 = 0;
-        return new N(function() {
-          return n2 >= e3 ? { done: true } : { done: false, value: t2[n2++] };
-        });
-      }, N.empty = function() {
-        return new N(function() {
-          return { done: true };
-        });
-      }, N.fromSequence = function(t2) {
-        var e3 = 0, n2 = t2.length;
-        return new N(function() {
-          return e3 >= n2 ? { done: true } : { done: false, value: t2[e3++] };
-        });
-      }, N.is = function(t2) {
-        return t2 instanceof N || "object" == typeof t2 && null !== t2 && "function" == typeof t2.next;
-      };
-      var O = N, j = {};
-      j.ARRAY_BUFFER_SUPPORT = "undefined" != typeof ArrayBuffer, j.SYMBOL_SUPPORT = "undefined" != typeof Symbol;
-      var C = O, M = j, z3 = M.ARRAY_BUFFER_SUPPORT, W = M.SYMBOL_SUPPORT;
-      var P = function(t2) {
-        var e3 = function(t3) {
-          return "string" == typeof t3 || Array.isArray(t3) || z3 && ArrayBuffer.isView(t3) ? C.fromSequence(t3) : "object" != typeof t3 || null === t3 ? null : W && "function" == typeof t3[Symbol.iterator] ? t3[Symbol.iterator]() : "function" == typeof t3.next ? t3 : null;
-        }(t2);
-        if (!e3)
-          throw new Error("obliterator: target is not iterable nor a valid iterator.");
-        return e3;
-      }, R = P, K = function(t2, e3) {
-        for (var n2, r2 = arguments.length > 1 ? e3 : 1 / 0, i3 = r2 !== 1 / 0 ? new Array(r2) : [], o2 = 0, a3 = R(t2); ; ) {
-          if (o2 === r2)
-            return i3;
-          if ((n2 = a3.next()).done)
-            return o2 !== e3 && (i3.length = o2), i3;
-          i3[o2++] = n2.value;
-        }
-      }, T = function(t2) {
-        function n2(e3) {
-          var n3;
-          return (n3 = t2.call(this) || this).name = "GraphError", n3.message = e3, n3;
-        }
-        return e(n2, t2), n2;
-      }(a2(Error)), B = function(t2) {
-        function n2(e3) {
-          var r2;
-          return (r2 = t2.call(this, e3) || this).name = "InvalidArgumentsGraphError", "function" == typeof Error.captureStackTrace && Error.captureStackTrace(c6(r2), n2.prototype.constructor), r2;
-        }
-        return e(n2, t2), n2;
-      }(T), F = function(t2) {
-        function n2(e3) {
-          var r2;
-          return (r2 = t2.call(this, e3) || this).name = "NotFoundGraphError", "function" == typeof Error.captureStackTrace && Error.captureStackTrace(c6(r2), n2.prototype.constructor), r2;
-        }
-        return e(n2, t2), n2;
-      }(T), I = function(t2) {
-        function n2(e3) {
-          var r2;
-          return (r2 = t2.call(this, e3) || this).name = "UsageGraphError", "function" == typeof Error.captureStackTrace && Error.captureStackTrace(c6(r2), n2.prototype.constructor), r2;
-        }
-        return e(n2, t2), n2;
-      }(T);
-      function Y(t2, e3) {
-        this.key = t2, this.attributes = e3, this.clear();
-      }
-      function q(t2, e3) {
-        this.key = t2, this.attributes = e3, this.clear();
-      }
-      function J(t2, e3) {
-        this.key = t2, this.attributes = e3, this.clear();
-      }
-      function V(t2, e3, n2, r2, i3) {
-        this.key = e3, this.attributes = i3, this.undirected = t2, this.source = n2, this.target = r2;
-      }
-      Y.prototype.clear = function() {
-        this.inDegree = 0, this.outDegree = 0, this.undirectedDegree = 0, this.undirectedLoops = 0, this.directedLoops = 0, this.in = {}, this.out = {}, this.undirected = {};
-      }, q.prototype.clear = function() {
-        this.inDegree = 0, this.outDegree = 0, this.directedLoops = 0, this.in = {}, this.out = {};
-      }, J.prototype.clear = function() {
-        this.undirectedDegree = 0, this.undirectedLoops = 0, this.undirected = {};
-      }, V.prototype.attach = function() {
-        var t2 = "out", e3 = "in";
-        this.undirected && (t2 = e3 = "undirected");
-        var n2 = this.source.key, r2 = this.target.key;
-        this.source[t2][r2] = this, this.undirected && n2 === r2 || (this.target[e3][n2] = this);
-      }, V.prototype.attachMulti = function() {
-        var t2 = "out", e3 = "in", n2 = this.source.key, r2 = this.target.key;
-        this.undirected && (t2 = e3 = "undirected");
-        var i3 = this.source[t2], o2 = i3[r2];
-        if (void 0 === o2)
-          return i3[r2] = this, void (this.undirected && n2 === r2 || (this.target[e3][n2] = this));
-        o2.previous = this, this.next = o2, i3[r2] = this, this.target[e3][n2] = this;
-      }, V.prototype.detach = function() {
-        var t2 = this.source.key, e3 = this.target.key, n2 = "out", r2 = "in";
-        this.undirected && (n2 = r2 = "undirected"), delete this.source[n2][e3], delete this.target[r2][t2];
-      }, V.prototype.detachMulti = function() {
-        var t2 = this.source.key, e3 = this.target.key, n2 = "out", r2 = "in";
-        this.undirected && (n2 = r2 = "undirected"), void 0 === this.previous ? void 0 === this.next ? (delete this.source[n2][e3], delete this.target[r2][t2]) : (this.next.previous = void 0, this.source[n2][e3] = this.next, this.target[r2][t2] = this.next) : (this.previous.next = this.next, void 0 !== this.next && (this.next.previous = this.previous));
-      };
-      function H(t2, e3, n2, r2, i3, o2, a3) {
-        var c7, u2, d2, s2;
-        if (r2 = "" + r2, 0 === n2) {
-          if (!(c7 = t2._nodes.get(r2)))
-            throw new F("Graph.".concat(e3, ': could not find the "').concat(r2, '" node in the graph.'));
-          d2 = i3, s2 = o2;
-        } else if (3 === n2) {
-          if (i3 = "" + i3, !(u2 = t2._edges.get(i3)))
-            throw new F("Graph.".concat(e3, ': could not find the "').concat(i3, '" edge in the graph.'));
-          var h2 = u2.source.key, p2 = u2.target.key;
-          if (r2 === h2)
-            c7 = u2.target;
-          else {
-            if (r2 !== p2)
-              throw new F("Graph.".concat(e3, ': the "').concat(r2, '" node is not attached to the "').concat(i3, '" edge (').concat(h2, ", ").concat(p2, ")."));
-            c7 = u2.source;
           }
-          d2 = o2, s2 = a3;
+          return subject;
+        },
+        fire: function(eventName) {
+          var callbacks = registeredEvents[eventName];
+          if (!callbacks) {
+            return subject;
+          }
+          var fireArguments;
+          if (arguments.length > 1) {
+            fireArguments = Array.prototype.splice.call(arguments, 1);
+          }
+          for (var i2 = 0; i2 < callbacks.length; ++i2) {
+            var callbackInfo = callbacks[i2];
+            callbackInfo.callback.apply(callbackInfo.ctx, fireArguments);
+          }
+          return subject;
+        }
+      };
+    }
+    function validateSubject(subject) {
+      if (!subject) {
+        throw new Error("Eventify cannot use falsy object as events subject");
+      }
+      var reservedWords = ["on", "fire", "off"];
+      for (var i2 = 0; i2 < reservedWords.length; ++i2) {
+        if (subject.hasOwnProperty(reservedWords[i2])) {
+          throw new Error("Subject cannot be eventified, since it already has property '" + reservedWords[i2] + "'");
+        }
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.graph@20.0.1/node_modules/ngraph.graph/index.js
+var require_ngraph4 = __commonJS({
+  "../../node_modules/.pnpm/ngraph.graph@20.0.1/node_modules/ngraph.graph/index.js"(exports, module) {
+    module.exports = createGraph;
+    var eventify = require_ngraph3();
+    function createGraph(options) {
+      options = options || {};
+      if ("uniqueLinkId" in options) {
+        console.warn(
+          "ngraph.graph: Starting from version 0.14 `uniqueLinkId` is deprecated.\nUse `multigraph` option instead\n",
+          "\n",
+          "Note: there is also change in default behavior: From now on each graph\nis considered to be not a multigraph by default (each edge is unique)."
+        );
+        options.multigraph = options.uniqueLinkId;
+      }
+      if (options.multigraph === void 0)
+        options.multigraph = false;
+      if (typeof Map !== "function") {
+        throw new Error("ngraph.graph requires `Map` to be defined. Please polyfill it before using ngraph");
+      }
+      var nodes2 = /* @__PURE__ */ new Map();
+      var links = /* @__PURE__ */ new Map();
+      var multiEdges = {};
+      var suspendEvents = 0;
+      var createLink = options.multigraph ? createUniqueLink : createSingleLink, changes = [], recordLinkChange = noop5, recordNodeChange = noop5, enterModification = noop5, exitModification = noop5;
+      var graphPart = {
+        /**
+         * Sometimes duck typing could be slow. Giving clients a hint about data structure
+         * via explicit version number here:
+         */
+        version: 20,
+        /**
+         * Adds node to the graph. If node with given id already exists in the graph
+         * its data is extended with whatever comes in 'data' argument.
+         *
+         * @param nodeId the node's identifier. A string or number is preferred.
+         * @param [data] additional data for the node being added. If node already
+         *   exists its data object is augmented with the new one.
+         *
+         * @return {node} The newly added node or node with given id if it already exists.
+         */
+        addNode,
+        /**
+         * Adds a link to the graph. The function always create a new
+         * link between two nodes. If one of the nodes does not exists
+         * a new node is created.
+         *
+         * @param fromId link start node id;
+         * @param toId link end node id;
+         * @param [data] additional data to be set on the new link;
+         *
+         * @return {link} The newly created link
+         */
+        addLink,
+        /**
+         * Removes link from the graph. If link does not exist does nothing.
+         *
+         * @param link - object returned by addLink() or getLinks() methods.
+         *
+         * @returns true if link was removed; false otherwise.
+         */
+        removeLink,
+        /**
+         * Removes node with given id from the graph. If node does not exist in the graph
+         * does nothing.
+         *
+         * @param nodeId node's identifier passed to addNode() function.
+         *
+         * @returns true if node was removed; false otherwise.
+         */
+        removeNode: removeNode2,
+        /**
+         * Gets node with given identifier. If node does not exist undefined value is returned.
+         *
+         * @param nodeId requested node identifier;
+         *
+         * @return {node} in with requested identifier or undefined if no such node exists.
+         */
+        getNode,
+        /**
+         * Gets number of nodes in this graph.
+         *
+         * @return number of nodes in the graph.
+         */
+        getNodeCount,
+        /**
+         * Gets total number of links in the graph.
+         */
+        getLinkCount,
+        /**
+         * Gets total number of links in the graph.
+         */
+        getEdgeCount: getLinkCount,
+        /**
+         * Synonym for `getLinkCount()`
+         */
+        getLinksCount: getLinkCount,
+        /**
+         * Synonym for `getNodeCount()`
+         */
+        getNodesCount: getNodeCount,
+        /**
+         * Gets all links (inbound and outbound) from the node with given id.
+         * If node with given id is not found null is returned.
+         *
+         * @param nodeId requested node identifier.
+         *
+         * @return Set of links from and to requested node if such node exists;
+         *   otherwise null is returned.
+         */
+        getLinks,
+        /**
+         * Invokes callback on each node of the graph.
+         *
+         * @param {Function(node)} callback Function to be invoked. The function
+         *   is passed one argument: visited node.
+         */
+        forEachNode,
+        /**
+         * Invokes callback on every linked (adjacent) node to the given one.
+         *
+         * @param nodeId Identifier of the requested node.
+         * @param {Function(node, link)} callback Function to be called on all linked nodes.
+         *   The function is passed two parameters: adjacent node and link object itself.
+         * @param oriented if true graph treated as oriented.
+         */
+        forEachLinkedNode,
+        /**
+         * Enumerates all links in the graph
+         *
+         * @param {Function(link)} callback Function to be called on all links in the graph.
+         *   The function is passed one parameter: graph's link object.
+         *
+         * Link object contains at least the following fields:
+         *  fromId - node id where link starts;
+         *  toId - node id where link ends,
+         *  data - additional data passed to graph.addLink() method.
+         */
+        forEachLink,
+        /**
+         * Suspend all notifications about graph changes until
+         * endUpdate is called.
+         */
+        beginUpdate: enterModification,
+        /**
+         * Resumes all notifications about graph changes and fires
+         * graph 'changed' event in case there are any pending changes.
+         */
+        endUpdate: exitModification,
+        /**
+         * Removes all nodes and links from the graph.
+         */
+        clear: clear2,
+        /**
+         * Detects whether there is a link between two nodes.
+         * Operation complexity is O(n) where n - number of links of a node.
+         * NOTE: this function is synonym for getLink()
+         *
+         * @returns link if there is one. null otherwise.
+         */
+        hasLink: getLink,
+        /**
+         * Detects whether there is a node with given id
+         * 
+         * Operation complexity is O(1)
+         * NOTE: this function is synonym for getNode()
+         *
+         * @returns node if there is one; Falsy value otherwise.
+         */
+        hasNode: getNode,
+        /**
+         * Gets an edge between two nodes.
+         * Operation complexity is O(n) where n - number of links of a node.
+         *
+         * @param {string} fromId link start identifier
+         * @param {string} toId link end identifier
+         *
+         * @returns link if there is one; undefined otherwise.
+         */
+        getLink
+      };
+      eventify(graphPart);
+      monitorSubscribers();
+      return graphPart;
+      function monitorSubscribers() {
+        var realOn = graphPart.on;
+        graphPart.on = on;
+        function on() {
+          graphPart.beginUpdate = enterModification = enterModificationReal;
+          graphPart.endUpdate = exitModification = exitModificationReal;
+          recordLinkChange = recordLinkChangeReal;
+          recordNodeChange = recordNodeChangeReal;
+          graphPart.on = realOn;
+          return realOn.apply(graphPart, arguments);
+        }
+      }
+      function recordLinkChangeReal(link, changeType) {
+        changes.push({
+          link,
+          changeType
+        });
+      }
+      function recordNodeChangeReal(node, changeType) {
+        changes.push({
+          node,
+          changeType
+        });
+      }
+      function addNode(nodeId, data) {
+        if (nodeId === void 0) {
+          throw new Error("Invalid node identifier");
+        }
+        enterModification();
+        var node = getNode(nodeId);
+        if (!node) {
+          node = new Node4(nodeId, data);
+          recordNodeChange(node, "add");
         } else {
-          if (!(u2 = t2._edges.get(r2)))
-            throw new F("Graph.".concat(e3, ': could not find the "').concat(r2, '" edge in the graph.'));
-          c7 = 1 === n2 ? u2.source : u2.target, d2 = i3, s2 = o2;
+          node.data = data;
+          recordNodeChange(node, "update");
         }
-        return [c7, d2, s2];
+        nodes2.set(nodeId, node);
+        exitModification();
+        return node;
       }
-      var Q = [{ name: function(t2) {
-        return "get".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          return a3.attributes[c7];
-        };
-      } }, { name: function(t2) {
-        return "get".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          return H(this, e3, n2, t3, r2)[0].attributes;
-        };
-      } }, { name: function(t2) {
-        return "has".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          return a3.attributes.hasOwnProperty(c7);
-        };
-      } }, { name: function(t2) {
-        return "set".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3, o2) {
-          var a3 = H(this, e3, n2, t3, r2, i3, o2), c7 = a3[0], u2 = a3[1], d2 = a3[2];
-          return c7.attributes[u2] = d2, this.emit("nodeAttributesUpdated", { key: c7.key, type: "set", attributes: c7.attributes, name: u2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "update".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3, o2) {
-          var a3 = H(this, e3, n2, t3, r2, i3, o2), c7 = a3[0], u2 = a3[1], d2 = a3[2];
-          if ("function" != typeof d2)
-            throw new B("Graph.".concat(e3, ": updater should be a function."));
-          var s2 = c7.attributes, h2 = d2(s2[u2]);
-          return s2[u2] = h2, this.emit("nodeAttributesUpdated", { key: c7.key, type: "set", attributes: c7.attributes, name: u2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "remove".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          return delete a3.attributes[c7], this.emit("nodeAttributesUpdated", { key: a3.key, type: "remove", attributes: a3.attributes, name: c7 }), this;
-        };
-      } }, { name: function(t2) {
-        return "replace".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          if (!s(c7))
-            throw new B("Graph.".concat(e3, ": provided attributes are not a plain object."));
-          return a3.attributes = c7, this.emit("nodeAttributesUpdated", { key: a3.key, type: "replace", attributes: a3.attributes }), this;
-        };
-      } }, { name: function(t2) {
-        return "merge".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          if (!s(c7))
-            throw new B("Graph.".concat(e3, ": provided attributes are not a plain object."));
-          return u(a3.attributes, c7), this.emit("nodeAttributesUpdated", { key: a3.key, type: "merge", attributes: a3.attributes, data: c7 }), this;
-        };
-      } }, { name: function(t2) {
-        return "update".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2 = H(this, e3, n2, t3, r2, i3), a3 = o2[0], c7 = o2[1];
-          if ("function" != typeof c7)
-            throw new B("Graph.".concat(e3, ": provided updater is not a function."));
-          return a3.attributes = c7(a3.attributes), this.emit("nodeAttributesUpdated", { key: a3.key, type: "update", attributes: a3.attributes }), this;
-        };
-      } }];
-      var X = [{ name: function(t2) {
-        return "get".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          return i3.attributes[r2];
-        };
-      } }, { name: function(t2) {
-        return "get".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3) {
-          var r2;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 1) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var i3 = "" + t3, o2 = "" + arguments[1];
-            if (!(r2 = d(this, i3, o2, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(i3, '" - "').concat(o2, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(r2 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          return r2.attributes;
-        };
-      } }, { name: function(t2) {
-        return "has".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          return i3.attributes.hasOwnProperty(r2);
-        };
-      } }, { name: function(t2) {
-        return "set".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 3) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var a3 = "" + t3, c7 = "" + r2;
-            if (r2 = arguments[2], i3 = arguments[3], !(o2 = d(this, a3, c7, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(a3, '" - "').concat(c7, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(o2 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          return o2.attributes[r2] = i3, this.emit("edgeAttributesUpdated", { key: o2.key, type: "set", attributes: o2.attributes, name: r2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "update".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2, i3) {
-          var o2;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 3) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var a3 = "" + t3, c7 = "" + r2;
-            if (r2 = arguments[2], i3 = arguments[3], !(o2 = d(this, a3, c7, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(a3, '" - "').concat(c7, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(o2 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          if ("function" != typeof i3)
-            throw new B("Graph.".concat(e3, ": updater should be a function."));
-          return o2.attributes[r2] = i3(o2.attributes[r2]), this.emit("edgeAttributesUpdated", { key: o2.key, type: "set", attributes: o2.attributes, name: r2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "remove".concat(t2, "Attribute");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          return delete i3.attributes[r2], this.emit("edgeAttributesUpdated", { key: i3.key, type: "remove", attributes: i3.attributes, name: r2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "replace".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          if (!s(r2))
-            throw new B("Graph.".concat(e3, ": provided attributes are not a plain object."));
-          return i3.attributes = r2, this.emit("edgeAttributesUpdated", { key: i3.key, type: "replace", attributes: i3.attributes }), this;
-        };
-      } }, { name: function(t2) {
-        return "merge".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          if (!s(r2))
-            throw new B("Graph.".concat(e3, ": provided attributes are not a plain object."));
-          return u(i3.attributes, r2), this.emit("edgeAttributesUpdated", { key: i3.key, type: "merge", attributes: i3.attributes, data: r2 }), this;
-        };
-      } }, { name: function(t2) {
-        return "update".concat(t2, "Attributes");
-      }, attacher: function(t2, e3, n2) {
-        t2.prototype[e3] = function(t3, r2) {
-          var i3;
-          if ("mixed" !== this.type && "mixed" !== n2 && n2 !== this.type)
-            throw new I("Graph.".concat(e3, ": cannot find this type of edges in your ").concat(this.type, " graph."));
-          if (arguments.length > 2) {
-            if (this.multi)
-              throw new I("Graph.".concat(e3, ": cannot use a {source,target} combo when asking about an edge's attributes in a MultiGraph since we cannot infer the one you want information about."));
-            var o2 = "" + t3, a3 = "" + r2;
-            if (r2 = arguments[2], !(i3 = d(this, o2, a3, n2)))
-              throw new F("Graph.".concat(e3, ': could not find an edge for the given path ("').concat(o2, '" - "').concat(a3, '").'));
-          } else {
-            if ("mixed" !== n2)
-              throw new I("Graph.".concat(e3, ": calling this method with only a key (vs. a source and target) does not make sense since an edge with this key could have the other type."));
-            if (t3 = "" + t3, !(i3 = this._edges.get(t3)))
-              throw new F("Graph.".concat(e3, ': could not find the "').concat(t3, '" edge in the graph.'));
-          }
-          if ("function" != typeof r2)
-            throw new B("Graph.".concat(e3, ": provided updater is not a function."));
-          return i3.attributes = r2(i3.attributes), this.emit("edgeAttributesUpdated", { key: i3.key, type: "update", attributes: i3.attributes }), this;
-        };
-      } }];
-      var Z = O, $ = P, tt = function() {
-        var t2 = arguments, e3 = null, n2 = -1;
-        return new Z(function() {
-          for (var r2 = null; ; ) {
-            if (null === e3) {
-              if (++n2 >= t2.length)
-                return { done: true };
-              e3 = $(t2[n2]);
-            }
-            if (true !== (r2 = e3.next()).done)
-              break;
-            e3 = null;
-          }
-          return r2;
-        });
-      }, et = [{ name: "edges", type: "mixed" }, { name: "inEdges", type: "directed", direction: "in" }, { name: "outEdges", type: "directed", direction: "out" }, { name: "inboundEdges", type: "mixed", direction: "in" }, { name: "outboundEdges", type: "mixed", direction: "out" }, { name: "directedEdges", type: "directed" }, { name: "undirectedEdges", type: "undirected" }];
-      function nt(t2, e3, n2, r2) {
-        var i3 = false;
-        for (var o2 in e3)
-          if (o2 !== r2) {
-            var a3 = e3[o2];
-            if (i3 = n2(a3.key, a3.attributes, a3.source.key, a3.target.key, a3.source.attributes, a3.target.attributes, a3.undirected), t2 && i3)
-              return a3.key;
-          }
+      function getNode(nodeId) {
+        return nodes2.get(nodeId);
       }
-      function rt(t2, e3, n2, r2) {
-        var i3, o2, a3, c7 = false;
-        for (var u2 in e3)
-          if (u2 !== r2) {
-            i3 = e3[u2];
-            do {
-              if (o2 = i3.source, a3 = i3.target, c7 = n2(i3.key, i3.attributes, o2.key, a3.key, o2.attributes, a3.attributes, i3.undirected), t2 && c7)
-                return i3.key;
-              i3 = i3.next;
-            } while (void 0 !== i3);
-          }
-      }
-      function it(t2, e3) {
-        var n2, r2 = Object.keys(t2), i3 = r2.length, o2 = 0;
-        return new O(function() {
-          do {
-            if (n2)
-              n2 = n2.next;
-            else {
-              if (o2 >= i3)
-                return { done: true };
-              var a3 = r2[o2++];
-              if (a3 === e3) {
-                n2 = void 0;
-                continue;
-              }
-              n2 = t2[a3];
-            }
-          } while (!n2);
-          return { done: false, value: { edge: n2.key, attributes: n2.attributes, source: n2.source.key, target: n2.target.key, sourceAttributes: n2.source.attributes, targetAttributes: n2.target.attributes, undirected: n2.undirected } };
-        });
-      }
-      function ot(t2, e3, n2, r2) {
-        var i3 = e3[n2];
-        if (i3) {
-          var o2 = i3.source, a3 = i3.target;
-          return r2(i3.key, i3.attributes, o2.key, a3.key, o2.attributes, a3.attributes, i3.undirected) && t2 ? i3.key : void 0;
-        }
-      }
-      function at(t2, e3, n2, r2) {
-        var i3 = e3[n2];
-        if (i3) {
-          var o2 = false;
-          do {
-            if (o2 = r2(i3.key, i3.attributes, i3.source.key, i3.target.key, i3.source.attributes, i3.target.attributes, i3.undirected), t2 && o2)
-              return i3.key;
-            i3 = i3.next;
-          } while (void 0 !== i3);
-        }
-      }
-      function ct(t2, e3) {
-        var n2 = t2[e3];
-        return void 0 !== n2.next ? new O(function() {
-          if (!n2)
-            return { done: true };
-          var t3 = { edge: n2.key, attributes: n2.attributes, source: n2.source.key, target: n2.target.key, sourceAttributes: n2.source.attributes, targetAttributes: n2.target.attributes, undirected: n2.undirected };
-          return n2 = n2.next, { done: false, value: t3 };
-        }) : O.of({ edge: n2.key, attributes: n2.attributes, source: n2.source.key, target: n2.target.key, sourceAttributes: n2.source.attributes, targetAttributes: n2.target.attributes, undirected: n2.undirected });
-      }
-      function ut(t2, e3) {
-        if (0 === t2.size)
-          return [];
-        if ("mixed" === e3 || e3 === t2.type)
-          return "function" == typeof Array.from ? Array.from(t2._edges.keys()) : K(t2._edges.keys(), t2._edges.size);
-        for (var n2, r2, i3 = "undirected" === e3 ? t2.undirectedSize : t2.directedSize, o2 = new Array(i3), a3 = "undirected" === e3, c7 = t2._edges.values(), u2 = 0; true !== (n2 = c7.next()).done; )
-          (r2 = n2.value).undirected === a3 && (o2[u2++] = r2.key);
-        return o2;
-      }
-      function dt(t2, e3, n2, r2) {
-        if (0 !== e3.size) {
-          for (var i3, o2, a3 = "mixed" !== n2 && n2 !== e3.type, c7 = "undirected" === n2, u2 = false, d2 = e3._edges.values(); true !== (i3 = d2.next()).done; )
-            if (o2 = i3.value, !a3 || o2.undirected === c7) {
-              var s2 = o2, h2 = s2.key, p2 = s2.attributes, f2 = s2.source, l2 = s2.target;
-              if (u2 = r2(h2, p2, f2.key, l2.key, f2.attributes, l2.attributes, o2.undirected), t2 && u2)
-                return h2;
-            }
-        }
-      }
-      function st(t2, e3) {
-        if (0 === t2.size)
-          return O.empty();
-        var n2 = "mixed" !== e3 && e3 !== t2.type, r2 = "undirected" === e3, i3 = t2._edges.values();
-        return new O(function() {
-          for (var t3, e4; ; ) {
-            if ((t3 = i3.next()).done)
-              return t3;
-            if (e4 = t3.value, !n2 || e4.undirected === r2)
-              break;
-          }
-          return { value: { edge: e4.key, attributes: e4.attributes, source: e4.source.key, target: e4.target.key, sourceAttributes: e4.source.attributes, targetAttributes: e4.target.attributes, undirected: e4.undirected }, done: false };
-        });
-      }
-      function ht(t2, e3, n2, r2, i3, o2) {
-        var a3, c7 = e3 ? rt : nt;
-        if ("undirected" !== n2) {
-          if ("out" !== r2 && (a3 = c7(t2, i3.in, o2), t2 && a3))
-            return a3;
-          if ("in" !== r2 && (a3 = c7(t2, i3.out, o2, r2 ? void 0 : i3.key), t2 && a3))
-            return a3;
-        }
-        if ("directed" !== n2 && (a3 = c7(t2, i3.undirected, o2), t2 && a3))
-          return a3;
-      }
-      function pt(t2, e3, n2, r2) {
-        var i3 = [];
-        return ht(false, t2, e3, n2, r2, function(t3) {
-          i3.push(t3);
-        }), i3;
-      }
-      function ft(t2, e3, n2) {
-        var r2 = O.empty();
-        return "undirected" !== t2 && ("out" !== e3 && void 0 !== n2.in && (r2 = tt(r2, it(n2.in))), "in" !== e3 && void 0 !== n2.out && (r2 = tt(r2, it(n2.out, e3 ? void 0 : n2.key)))), "directed" !== t2 && void 0 !== n2.undirected && (r2 = tt(r2, it(n2.undirected))), r2;
-      }
-      function lt(t2, e3, n2, r2, i3, o2, a3) {
-        var c7, u2 = n2 ? at : ot;
-        if ("undirected" !== e3) {
-          if (void 0 !== i3.in && "out" !== r2 && (c7 = u2(t2, i3.in, o2, a3), t2 && c7))
-            return c7;
-          if (void 0 !== i3.out && "in" !== r2 && (r2 || i3.key !== o2) && (c7 = u2(t2, i3.out, o2, a3), t2 && c7))
-            return c7;
-        }
-        if ("directed" !== e3 && void 0 !== i3.undirected && (c7 = u2(t2, i3.undirected, o2, a3), t2 && c7))
-          return c7;
-      }
-      function gt(t2, e3, n2, r2, i3) {
-        var o2 = [];
-        return lt(false, t2, e3, n2, r2, i3, function(t3) {
-          o2.push(t3);
-        }), o2;
-      }
-      function yt(t2, e3, n2, r2) {
-        var i3 = O.empty();
-        return "undirected" !== t2 && (void 0 !== n2.in && "out" !== e3 && r2 in n2.in && (i3 = tt(i3, ct(n2.in, r2))), void 0 !== n2.out && "in" !== e3 && r2 in n2.out && (e3 || n2.key !== r2) && (i3 = tt(i3, ct(n2.out, r2)))), "directed" !== t2 && void 0 !== n2.undirected && r2 in n2.undirected && (i3 = tt(i3, ct(n2.undirected, r2))), i3;
-      }
-      var wt = [{ name: "neighbors", type: "mixed" }, { name: "inNeighbors", type: "directed", direction: "in" }, { name: "outNeighbors", type: "directed", direction: "out" }, { name: "inboundNeighbors", type: "mixed", direction: "in" }, { name: "outboundNeighbors", type: "mixed", direction: "out" }, { name: "directedNeighbors", type: "directed" }, { name: "undirectedNeighbors", type: "undirected" }];
-      function vt() {
-        this.A = null, this.B = null;
-      }
-      function bt(t2, e3, n2, r2, i3) {
-        for (var o2 in r2) {
-          var a3 = r2[o2], c7 = a3.source, u2 = a3.target, d2 = c7 === n2 ? u2 : c7;
-          if (!e3 || !e3.has(d2.key)) {
-            var s2 = i3(d2.key, d2.attributes);
-            if (t2 && s2)
-              return d2.key;
-          }
-        }
-      }
-      function mt(t2, e3, n2, r2, i3) {
-        if ("mixed" !== e3) {
-          if ("undirected" === e3)
-            return bt(t2, null, r2, r2.undirected, i3);
-          if ("string" == typeof n2)
-            return bt(t2, null, r2, r2[n2], i3);
-        }
-        var o2, a3 = new vt();
-        if ("undirected" !== e3) {
-          if ("out" !== n2) {
-            if (o2 = bt(t2, null, r2, r2.in, i3), t2 && o2)
-              return o2;
-            a3.wrap(r2.in);
-          }
-          if ("in" !== n2) {
-            if (o2 = bt(t2, a3, r2, r2.out, i3), t2 && o2)
-              return o2;
-            a3.wrap(r2.out);
-          }
-        }
-        if ("directed" !== e3 && (o2 = bt(t2, a3, r2, r2.undirected, i3), t2 && o2))
-          return o2;
-      }
-      function kt(t2, e3, n2) {
-        var r2 = Object.keys(n2), i3 = r2.length, o2 = 0;
-        return new O(function() {
-          var a3 = null;
-          do {
-            if (o2 >= i3)
-              return t2 && t2.wrap(n2), { done: true };
-            var c7 = n2[r2[o2++]], u2 = c7.source, d2 = c7.target;
-            a3 = u2 === e3 ? d2 : u2, t2 && t2.has(a3.key) && (a3 = null);
-          } while (null === a3);
-          return { done: false, value: { neighbor: a3.key, attributes: a3.attributes } };
-        });
-      }
-      function _t(t2, e3) {
-        var n2 = e3.name, r2 = e3.type, i3 = e3.direction;
-        t2.prototype[n2] = function(t3) {
-          if ("mixed" !== r2 && "mixed" !== this.type && r2 !== this.type)
-            return [];
-          t3 = "" + t3;
-          var e4 = this._nodes.get(t3);
-          if (void 0 === e4)
-            throw new F("Graph.".concat(n2, ': could not find the "').concat(t3, '" node in the graph.'));
-          return function(t4, e6, n3) {
-            if ("mixed" !== t4) {
-              if ("undirected" === t4)
-                return Object.keys(n3.undirected);
-              if ("string" == typeof e6)
-                return Object.keys(n3[e6]);
-            }
-            var r3 = [];
-            return mt(false, t4, e6, n3, function(t5) {
-              r3.push(t5);
-            }), r3;
-          }("mixed" === r2 ? this.type : r2, i3, e4);
-        };
-      }
-      function Gt(t2, e3) {
-        var n2 = e3.name, r2 = e3.type, i3 = e3.direction, o2 = n2.slice(0, -1) + "Entries";
-        t2.prototype[o2] = function(t3) {
-          if ("mixed" !== r2 && "mixed" !== this.type && r2 !== this.type)
-            return O.empty();
-          t3 = "" + t3;
-          var e4 = this._nodes.get(t3);
-          if (void 0 === e4)
-            throw new F("Graph.".concat(o2, ': could not find the "').concat(t3, '" node in the graph.'));
-          return function(t4, e6, n3) {
-            if ("mixed" !== t4) {
-              if ("undirected" === t4)
-                return kt(null, n3, n3.undirected);
-              if ("string" == typeof e6)
-                return kt(null, n3, n3[e6]);
-            }
-            var r3 = O.empty(), i4 = new vt();
-            return "undirected" !== t4 && ("out" !== e6 && (r3 = tt(r3, kt(i4, n3, n3.in))), "in" !== e6 && (r3 = tt(r3, kt(i4, n3, n3.out)))), "directed" !== t4 && (r3 = tt(r3, kt(i4, n3, n3.undirected))), r3;
-          }("mixed" === r2 ? this.type : r2, i3, e4);
-        };
-      }
-      function xt(t2, e3, n2, r2, i3) {
-        for (var o2, a3, c7, u2, d2, s2, h2, p2 = r2._nodes.values(), f2 = r2.type; true !== (o2 = p2.next()).done; ) {
-          var l2 = false;
-          if (a3 = o2.value, "undirected" !== f2)
-            for (c7 in u2 = a3.out) {
-              d2 = u2[c7];
-              do {
-                if (s2 = d2.target, l2 = true, h2 = i3(a3.key, s2.key, a3.attributes, s2.attributes, d2.key, d2.attributes, d2.undirected), t2 && h2)
-                  return d2;
-                d2 = d2.next;
-              } while (d2);
-            }
-          if ("directed" !== f2) {
-            for (c7 in u2 = a3.undirected)
-              if (!(e3 && a3.key > c7)) {
-                d2 = u2[c7];
-                do {
-                  if ((s2 = d2.target).key !== c7 && (s2 = d2.source), l2 = true, h2 = i3(a3.key, s2.key, a3.attributes, s2.attributes, d2.key, d2.attributes, d2.undirected), t2 && h2)
-                    return d2;
-                  d2 = d2.next;
-                } while (d2);
-              }
-          }
-          if (n2 && !l2 && (h2 = i3(a3.key, null, a3.attributes, null, null, null, null), t2 && h2))
-            return null;
-        }
-      }
-      function Et(t2) {
-        if (!s(t2))
-          throw new B('Graph.import: invalid serialized node. A serialized node should be a plain object with at least a "key" property.');
-        if (!("key" in t2))
-          throw new B("Graph.import: serialized node is missing its key.");
-        if ("attributes" in t2 && (!s(t2.attributes) || null === t2.attributes))
-          throw new B("Graph.import: invalid attributes. Attributes should be a plain object, null or omitted.");
-      }
-      function At(t2) {
-        if (!s(t2))
-          throw new B('Graph.import: invalid serialized edge. A serialized edge should be a plain object with at least a "source" & "target" property.');
-        if (!("source" in t2))
-          throw new B("Graph.import: serialized edge is missing its source.");
-        if (!("target" in t2))
-          throw new B("Graph.import: serialized edge is missing its target.");
-        if ("attributes" in t2 && (!s(t2.attributes) || null === t2.attributes))
-          throw new B("Graph.import: invalid attributes. Attributes should be a plain object, null or omitted.");
-        if ("undirected" in t2 && "boolean" != typeof t2.undirected)
-          throw new B("Graph.import: invalid undirectedness information. Undirected should be boolean or omitted.");
-      }
-      vt.prototype.wrap = function(t2) {
-        null === this.A ? this.A = t2 : null === this.B && (this.B = t2);
-      }, vt.prototype.has = function(t2) {
-        return null !== this.A && t2 in this.A || null !== this.B && t2 in this.B;
-      };
-      var Lt, St = (Lt = 255 & Math.floor(256 * Math.random()), function() {
-        return Lt++;
-      }), Dt = /* @__PURE__ */ new Set(["directed", "undirected", "mixed"]), Ut = /* @__PURE__ */ new Set(["domain", "_events", "_eventsCount", "_maxListeners"]), Nt = { allowSelfLoops: true, multi: false, type: "mixed" };
-      function Ot(t2, e3, n2) {
-        var r2 = new t2.NodeDataClass(e3, n2);
-        return t2._nodes.set(e3, r2), t2.emit("nodeAdded", { key: e3, attributes: n2 }), r2;
-      }
-      function jt(t2, e3, n2, r2, i3, o2, a3, c7) {
-        if (!r2 && "undirected" === t2.type)
-          throw new I("Graph.".concat(e3, ": you cannot add a directed edge to an undirected graph. Use the #.addEdge or #.addUndirectedEdge instead."));
-        if (r2 && "directed" === t2.type)
-          throw new I("Graph.".concat(e3, ": you cannot add an undirected edge to a directed graph. Use the #.addEdge or #.addDirectedEdge instead."));
-        if (c7 && !s(c7))
-          throw new B("Graph.".concat(e3, ': invalid attributes. Expecting an object but got "').concat(c7, '"'));
-        if (o2 = "" + o2, a3 = "" + a3, c7 = c7 || {}, !t2.allowSelfLoops && o2 === a3)
-          throw new I("Graph.".concat(e3, ': source & target are the same ("').concat(o2, `"), thus creating a loop explicitly forbidden by this graph 'allowSelfLoops' option set to false.`));
-        var u2 = t2._nodes.get(o2), d2 = t2._nodes.get(a3);
-        if (!u2)
-          throw new F("Graph.".concat(e3, ': source node "').concat(o2, '" not found.'));
-        if (!d2)
-          throw new F("Graph.".concat(e3, ': target node "').concat(a3, '" not found.'));
-        var h2 = { key: null, undirected: r2, source: o2, target: a3, attributes: c7 };
-        if (n2)
-          i3 = t2._edgeKeyGenerator();
-        else if (i3 = "" + i3, t2._edges.has(i3))
-          throw new I("Graph.".concat(e3, ': the "').concat(i3, '" edge already exists in the graph.'));
-        if (!t2.multi && (r2 ? void 0 !== u2.undirected[a3] : void 0 !== u2.out[a3]))
-          throw new I("Graph.".concat(e3, ': an edge linking "').concat(o2, '" to "').concat(a3, `" already exists. If you really want to add multiple edges linking those nodes, you should create a multi graph by using the 'multi' option.`));
-        var p2 = new V(r2, i3, u2, d2, c7);
-        t2._edges.set(i3, p2);
-        var f2 = o2 === a3;
-        return r2 ? (u2.undirectedDegree++, d2.undirectedDegree++, f2 && (u2.undirectedLoops++, t2._undirectedSelfLoopCount++)) : (u2.outDegree++, d2.inDegree++, f2 && (u2.directedLoops++, t2._directedSelfLoopCount++)), t2.multi ? p2.attachMulti() : p2.attach(), r2 ? t2._undirectedSize++ : t2._directedSize++, h2.key = i3, t2.emit("edgeAdded", h2), i3;
-      }
-      function Ct(t2, e3, n2, r2, i3, o2, a3, c7, d2) {
-        if (!r2 && "undirected" === t2.type)
-          throw new I("Graph.".concat(e3, ": you cannot merge/update a directed edge to an undirected graph. Use the #.mergeEdge/#.updateEdge or #.addUndirectedEdge instead."));
-        if (r2 && "directed" === t2.type)
-          throw new I("Graph.".concat(e3, ": you cannot merge/update an undirected edge to a directed graph. Use the #.mergeEdge/#.updateEdge or #.addDirectedEdge instead."));
-        if (c7) {
-          if (d2) {
-            if ("function" != typeof c7)
-              throw new B("Graph.".concat(e3, ': invalid updater function. Expecting a function but got "').concat(c7, '"'));
-          } else if (!s(c7))
-            throw new B("Graph.".concat(e3, ': invalid attributes. Expecting an object but got "').concat(c7, '"'));
-        }
-        var h2;
-        if (o2 = "" + o2, a3 = "" + a3, d2 && (h2 = c7, c7 = void 0), !t2.allowSelfLoops && o2 === a3)
-          throw new I("Graph.".concat(e3, ': source & target are the same ("').concat(o2, `"), thus creating a loop explicitly forbidden by this graph 'allowSelfLoops' option set to false.`));
-        var p2, f2, l2 = t2._nodes.get(o2), g2 = t2._nodes.get(a3);
-        if (!n2 && (p2 = t2._edges.get(i3))) {
-          if (!(p2.source.key === o2 && p2.target.key === a3 || r2 && p2.source.key === a3 && p2.target.key === o2))
-            throw new I("Graph.".concat(e3, ': inconsistency detected when attempting to merge the "').concat(i3, '" edge with "').concat(o2, '" source & "').concat(a3, '" target vs. ("').concat(p2.source.key, '", "').concat(p2.target.key, '").'));
-          f2 = p2;
-        }
-        if (f2 || t2.multi || !l2 || (f2 = r2 ? l2.undirected[a3] : l2.out[a3]), f2) {
-          var y4 = [f2.key, false, false, false];
-          if (d2 ? !h2 : !c7)
-            return y4;
-          if (d2) {
-            var w2 = f2.attributes;
-            f2.attributes = h2(w2), t2.emit("edgeAttributesUpdated", { type: "replace", key: f2.key, attributes: f2.attributes });
-          } else
-            u(f2.attributes, c7), t2.emit("edgeAttributesUpdated", { type: "merge", key: f2.key, attributes: f2.attributes, data: c7 });
-          return y4;
-        }
-        c7 = c7 || {}, d2 && h2 && (c7 = h2(c7));
-        var v4 = { key: null, undirected: r2, source: o2, target: a3, attributes: c7 };
-        if (n2)
-          i3 = t2._edgeKeyGenerator();
-        else if (i3 = "" + i3, t2._edges.has(i3))
-          throw new I("Graph.".concat(e3, ': the "').concat(i3, '" edge already exists in the graph.'));
-        var b2 = false, m3 = false;
-        l2 || (l2 = Ot(t2, o2, {}), b2 = true, o2 === a3 && (g2 = l2, m3 = true)), g2 || (g2 = Ot(t2, a3, {}), m3 = true), p2 = new V(r2, i3, l2, g2, c7), t2._edges.set(i3, p2);
-        var k2 = o2 === a3;
-        return r2 ? (l2.undirectedDegree++, g2.undirectedDegree++, k2 && (l2.undirectedLoops++, t2._undirectedSelfLoopCount++)) : (l2.outDegree++, g2.inDegree++, k2 && (l2.directedLoops++, t2._directedSelfLoopCount++)), t2.multi ? p2.attachMulti() : p2.attach(), r2 ? t2._undirectedSize++ : t2._directedSize++, v4.key = i3, t2.emit("edgeAdded", v4), [i3, true, b2, m3];
-      }
-      function Mt(t2, e3) {
-        t2._edges.delete(e3.key);
-        var n2 = e3.source, r2 = e3.target, i3 = e3.attributes, o2 = e3.undirected, a3 = n2 === r2;
-        o2 ? (n2.undirectedDegree--, r2.undirectedDegree--, a3 && (n2.undirectedLoops--, t2._undirectedSelfLoopCount--)) : (n2.outDegree--, r2.inDegree--, a3 && (n2.directedLoops--, t2._directedSelfLoopCount--)), t2.multi ? e3.detachMulti() : e3.detach(), o2 ? t2._undirectedSize-- : t2._directedSize--, t2.emit("edgeDropped", { key: e3.key, attributes: i3, source: n2.key, target: r2.key, undirected: o2 });
-      }
-      var zt = function(n2) {
-        function r2(t2) {
-          var e3;
-          if (e3 = n2.call(this) || this, "boolean" != typeof (t2 = u({}, Nt, t2)).multi)
-            throw new B(`Graph.constructor: invalid 'multi' option. Expecting a boolean but got "`.concat(t2.multi, '".'));
-          if (!Dt.has(t2.type))
-            throw new B(`Graph.constructor: invalid 'type' option. Should be one of "mixed", "directed" or "undirected" but got "`.concat(t2.type, '".'));
-          if ("boolean" != typeof t2.allowSelfLoops)
-            throw new B(`Graph.constructor: invalid 'allowSelfLoops' option. Expecting a boolean but got "`.concat(t2.allowSelfLoops, '".'));
-          var r3 = "mixed" === t2.type ? Y : "directed" === t2.type ? q : J;
-          p(c6(e3), "NodeDataClass", r3);
-          var i4 = "geid_" + St() + "_", o2 = 0;
-          return p(c6(e3), "_attributes", {}), p(c6(e3), "_nodes", /* @__PURE__ */ new Map()), p(c6(e3), "_edges", /* @__PURE__ */ new Map()), p(c6(e3), "_directedSize", 0), p(c6(e3), "_undirectedSize", 0), p(c6(e3), "_directedSelfLoopCount", 0), p(c6(e3), "_undirectedSelfLoopCount", 0), p(c6(e3), "_edgeKeyGenerator", function() {
-            var t3;
-            do {
-              t3 = i4 + o2++;
-            } while (e3._edges.has(t3));
-            return t3;
-          }), p(c6(e3), "_options", t2), Ut.forEach(function(t3) {
-            return p(c6(e3), t3, e3[t3]);
-          }), f(c6(e3), "order", function() {
-            return e3._nodes.size;
-          }), f(c6(e3), "size", function() {
-            return e3._edges.size;
-          }), f(c6(e3), "directedSize", function() {
-            return e3._directedSize;
-          }), f(c6(e3), "undirectedSize", function() {
-            return e3._undirectedSize;
-          }), f(c6(e3), "selfLoopCount", function() {
-            return e3._directedSelfLoopCount + e3._undirectedSelfLoopCount;
-          }), f(c6(e3), "directedSelfLoopCount", function() {
-            return e3._directedSelfLoopCount;
-          }), f(c6(e3), "undirectedSelfLoopCount", function() {
-            return e3._undirectedSelfLoopCount;
-          }), f(c6(e3), "multi", e3._options.multi), f(c6(e3), "type", e3._options.type), f(c6(e3), "allowSelfLoops", e3._options.allowSelfLoops), f(c6(e3), "implementation", function() {
-            return "graphology";
-          }), e3;
-        }
-        e(r2, n2);
-        var i3 = r2.prototype;
-        return i3._resetInstanceCounters = function() {
-          this._directedSize = 0, this._undirectedSize = 0, this._directedSelfLoopCount = 0, this._undirectedSelfLoopCount = 0;
-        }, i3.hasNode = function(t2) {
-          return this._nodes.has("" + t2);
-        }, i3.hasDirectedEdge = function(t2, e3) {
-          if ("undirected" === this.type)
-            return false;
-          if (1 === arguments.length) {
-            var n3 = "" + t2, r3 = this._edges.get(n3);
-            return !!r3 && !r3.undirected;
-          }
-          if (2 === arguments.length) {
-            t2 = "" + t2, e3 = "" + e3;
-            var i4 = this._nodes.get(t2);
-            return !!i4 && i4.out.hasOwnProperty(e3);
-          }
-          throw new B("Graph.hasDirectedEdge: invalid arity (".concat(arguments.length, ", instead of 1 or 2). You can either ask for an edge id or for the existence of an edge between a source & a target."));
-        }, i3.hasUndirectedEdge = function(t2, e3) {
-          if ("directed" === this.type)
-            return false;
-          if (1 === arguments.length) {
-            var n3 = "" + t2, r3 = this._edges.get(n3);
-            return !!r3 && r3.undirected;
-          }
-          if (2 === arguments.length) {
-            t2 = "" + t2, e3 = "" + e3;
-            var i4 = this._nodes.get(t2);
-            return !!i4 && i4.undirected.hasOwnProperty(e3);
-          }
-          throw new B("Graph.hasDirectedEdge: invalid arity (".concat(arguments.length, ", instead of 1 or 2). You can either ask for an edge id or for the existence of an edge between a source & a target."));
-        }, i3.hasEdge = function(t2, e3) {
-          if (1 === arguments.length) {
-            var n3 = "" + t2;
-            return this._edges.has(n3);
-          }
-          if (2 === arguments.length) {
-            t2 = "" + t2, e3 = "" + e3;
-            var r3 = this._nodes.get(t2);
-            return !!r3 && (void 0 !== r3.out && r3.out.hasOwnProperty(e3) || void 0 !== r3.undirected && r3.undirected.hasOwnProperty(e3));
-          }
-          throw new B("Graph.hasEdge: invalid arity (".concat(arguments.length, ", instead of 1 or 2). You can either ask for an edge id or for the existence of an edge between a source & a target."));
-        }, i3.directedEdge = function(t2, e3) {
-          if ("undirected" !== this.type) {
-            if (t2 = "" + t2, e3 = "" + e3, this.multi)
-              throw new I("Graph.directedEdge: this method is irrelevant with multigraphs since there might be multiple edges between source & target. See #.directedEdges instead.");
-            var n3 = this._nodes.get(t2);
-            if (!n3)
-              throw new F('Graph.directedEdge: could not find the "'.concat(t2, '" source node in the graph.'));
-            if (!this._nodes.has(e3))
-              throw new F('Graph.directedEdge: could not find the "'.concat(e3, '" target node in the graph.'));
-            var r3 = n3.out && n3.out[e3] || void 0;
-            return r3 ? r3.key : void 0;
-          }
-        }, i3.undirectedEdge = function(t2, e3) {
-          if ("directed" !== this.type) {
-            if (t2 = "" + t2, e3 = "" + e3, this.multi)
-              throw new I("Graph.undirectedEdge: this method is irrelevant with multigraphs since there might be multiple edges between source & target. See #.undirectedEdges instead.");
-            var n3 = this._nodes.get(t2);
-            if (!n3)
-              throw new F('Graph.undirectedEdge: could not find the "'.concat(t2, '" source node in the graph.'));
-            if (!this._nodes.has(e3))
-              throw new F('Graph.undirectedEdge: could not find the "'.concat(e3, '" target node in the graph.'));
-            var r3 = n3.undirected && n3.undirected[e3] || void 0;
-            return r3 ? r3.key : void 0;
-          }
-        }, i3.edge = function(t2, e3) {
-          if (this.multi)
-            throw new I("Graph.edge: this method is irrelevant with multigraphs since there might be multiple edges between source & target. See #.edges instead.");
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.edge: could not find the "'.concat(t2, '" source node in the graph.'));
-          if (!this._nodes.has(e3))
-            throw new F('Graph.edge: could not find the "'.concat(e3, '" target node in the graph.'));
-          var r3 = n3.out && n3.out[e3] || n3.undirected && n3.undirected[e3] || void 0;
-          if (r3)
-            return r3.key;
-        }, i3.areDirectedNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areDirectedNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && (e3 in n3.in || e3 in n3.out);
-        }, i3.areOutNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areOutNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && e3 in n3.out;
-        }, i3.areInNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areInNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && e3 in n3.in;
-        }, i3.areUndirectedNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areUndirectedNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "directed" !== this.type && e3 in n3.undirected;
-        }, i3.areNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && (e3 in n3.in || e3 in n3.out) || "directed" !== this.type && e3 in n3.undirected;
-        }, i3.areInboundNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areInboundNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && e3 in n3.in || "directed" !== this.type && e3 in n3.undirected;
-        }, i3.areOutboundNeighbors = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.areOutboundNeighbors: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" !== this.type && e3 in n3.out || "directed" !== this.type && e3 in n3.undirected;
-        }, i3.inDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.inDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.inDegree;
-        }, i3.outDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.outDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.outDegree;
-        }, i3.directedDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.directedDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.inDegree + e3.outDegree;
-        }, i3.undirectedDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.undirectedDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          return "directed" === this.type ? 0 : e3.undirectedDegree;
-        }, i3.inboundDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.inboundDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree), "undirected" !== this.type && (n3 += e3.inDegree), n3;
-        }, i3.outboundDegree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.outboundDegree: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree), "undirected" !== this.type && (n3 += e3.outDegree), n3;
-        }, i3.degree = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.degree: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree), "undirected" !== this.type && (n3 += e3.inDegree + e3.outDegree), n3;
-        }, i3.inDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.inDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.inDegree - e3.directedLoops;
-        }, i3.outDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.outDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.outDegree - e3.directedLoops;
-        }, i3.directedDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.directedDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          return "undirected" === this.type ? 0 : e3.inDegree + e3.outDegree - 2 * e3.directedLoops;
-        }, i3.undirectedDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.undirectedDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          return "directed" === this.type ? 0 : e3.undirectedDegree - 2 * e3.undirectedLoops;
-        }, i3.inboundDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.inboundDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0, r3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree, r3 += 2 * e3.undirectedLoops), "undirected" !== this.type && (n3 += e3.inDegree, r3 += e3.directedLoops), n3 - r3;
-        }, i3.outboundDegreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.outboundDegreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0, r3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree, r3 += 2 * e3.undirectedLoops), "undirected" !== this.type && (n3 += e3.outDegree, r3 += e3.directedLoops), n3 - r3;
-        }, i3.degreeWithoutSelfLoops = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._nodes.get(t2);
-          if (!e3)
-            throw new F('Graph.degreeWithoutSelfLoops: could not find the "'.concat(t2, '" node in the graph.'));
-          var n3 = 0, r3 = 0;
-          return "directed" !== this.type && (n3 += e3.undirectedDegree, r3 += 2 * e3.undirectedLoops), "undirected" !== this.type && (n3 += e3.inDegree + e3.outDegree, r3 += 2 * e3.directedLoops), n3 - r3;
-        }, i3.source = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.source: could not find the "'.concat(t2, '" edge in the graph.'));
-          return e3.source.key;
-        }, i3.target = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.target: could not find the "'.concat(t2, '" edge in the graph.'));
-          return e3.target.key;
-        }, i3.extremities = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.extremities: could not find the "'.concat(t2, '" edge in the graph.'));
-          return [e3.source.key, e3.target.key];
-        }, i3.opposite = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._edges.get(e3);
-          if (!n3)
-            throw new F('Graph.opposite: could not find the "'.concat(e3, '" edge in the graph.'));
-          var r3 = n3.source.key, i4 = n3.target.key;
-          if (t2 === r3)
-            return i4;
-          if (t2 === i4)
-            return r3;
-          throw new F('Graph.opposite: the "'.concat(t2, '" node is not attached to the "').concat(e3, '" edge (').concat(r3, ", ").concat(i4, ")."));
-        }, i3.hasExtremity = function(t2, e3) {
-          t2 = "" + t2, e3 = "" + e3;
-          var n3 = this._edges.get(t2);
-          if (!n3)
-            throw new F('Graph.hasExtremity: could not find the "'.concat(t2, '" edge in the graph.'));
-          return n3.source.key === e3 || n3.target.key === e3;
-        }, i3.isUndirected = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.isUndirected: could not find the "'.concat(t2, '" edge in the graph.'));
-          return e3.undirected;
-        }, i3.isDirected = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.isDirected: could not find the "'.concat(t2, '" edge in the graph.'));
-          return !e3.undirected;
-        }, i3.isSelfLoop = function(t2) {
-          t2 = "" + t2;
-          var e3 = this._edges.get(t2);
-          if (!e3)
-            throw new F('Graph.isSelfLoop: could not find the "'.concat(t2, '" edge in the graph.'));
-          return e3.source === e3.target;
-        }, i3.addNode = function(t2, e3) {
-          var n3 = function(t3, e4, n4) {
-            if (n4 && !s(n4))
-              throw new B('Graph.addNode: invalid attributes. Expecting an object but got "'.concat(n4, '"'));
-            if (e4 = "" + e4, n4 = n4 || {}, t3._nodes.has(e4))
-              throw new I('Graph.addNode: the "'.concat(e4, '" node already exist in the graph.'));
-            var r3 = new t3.NodeDataClass(e4, n4);
-            return t3._nodes.set(e4, r3), t3.emit("nodeAdded", { key: e4, attributes: n4 }), r3;
-          }(this, t2, e3);
-          return n3.key;
-        }, i3.mergeNode = function(t2, e3) {
-          if (e3 && !s(e3))
-            throw new B('Graph.mergeNode: invalid attributes. Expecting an object but got "'.concat(e3, '"'));
-          t2 = "" + t2, e3 = e3 || {};
-          var n3 = this._nodes.get(t2);
-          return n3 ? (e3 && (u(n3.attributes, e3), this.emit("nodeAttributesUpdated", { type: "merge", key: t2, attributes: n3.attributes, data: e3 })), [t2, false]) : (n3 = new this.NodeDataClass(t2, e3), this._nodes.set(t2, n3), this.emit("nodeAdded", { key: t2, attributes: e3 }), [t2, true]);
-        }, i3.updateNode = function(t2, e3) {
-          if (e3 && "function" != typeof e3)
-            throw new B('Graph.updateNode: invalid updater function. Expecting a function but got "'.concat(e3, '"'));
-          t2 = "" + t2;
-          var n3 = this._nodes.get(t2);
-          if (n3) {
-            if (e3) {
-              var r3 = n3.attributes;
-              n3.attributes = e3(r3), this.emit("nodeAttributesUpdated", { type: "replace", key: t2, attributes: n3.attributes });
-            }
-            return [t2, false];
-          }
-          var i4 = e3 ? e3({}) : {};
-          return n3 = new this.NodeDataClass(t2, i4), this._nodes.set(t2, n3), this.emit("nodeAdded", { key: t2, attributes: i4 }), [t2, true];
-        }, i3.dropNode = function(t2) {
-          t2 = "" + t2;
-          var e3, n3 = this._nodes.get(t2);
-          if (!n3)
-            throw new F('Graph.dropNode: could not find the "'.concat(t2, '" node in the graph.'));
-          if ("undirected" !== this.type) {
-            for (var r3 in n3.out) {
-              e3 = n3.out[r3];
-              do {
-                Mt(this, e3), e3 = e3.next;
-              } while (e3);
-            }
-            for (var i4 in n3.in) {
-              e3 = n3.in[i4];
-              do {
-                Mt(this, e3), e3 = e3.next;
-              } while (e3);
-            }
-          }
-          if ("directed" !== this.type)
-            for (var o2 in n3.undirected) {
-              e3 = n3.undirected[o2];
-              do {
-                Mt(this, e3), e3 = e3.next;
-              } while (e3);
-            }
-          this._nodes.delete(t2), this.emit("nodeDropped", { key: t2, attributes: n3.attributes });
-        }, i3.dropEdge = function(t2) {
-          var e3;
-          if (arguments.length > 1) {
-            var n3 = "" + arguments[0], r3 = "" + arguments[1];
-            if (!(e3 = d(this, n3, r3, this.type)))
-              throw new F('Graph.dropEdge: could not find the "'.concat(n3, '" -> "').concat(r3, '" edge in the graph.'));
-          } else if (t2 = "" + t2, !(e3 = this._edges.get(t2)))
-            throw new F('Graph.dropEdge: could not find the "'.concat(t2, '" edge in the graph.'));
-          return Mt(this, e3), this;
-        }, i3.dropDirectedEdge = function(t2, e3) {
-          if (arguments.length < 2)
-            throw new I("Graph.dropDirectedEdge: it does not make sense to try and drop a directed edge by key. What if the edge with this key is undirected? Use #.dropEdge for this purpose instead.");
-          if (this.multi)
-            throw new I("Graph.dropDirectedEdge: cannot use a {source,target} combo when dropping an edge in a MultiGraph since we cannot infer the one you want to delete as there could be multiple ones.");
-          var n3 = d(this, t2 = "" + t2, e3 = "" + e3, "directed");
-          if (!n3)
-            throw new F('Graph.dropDirectedEdge: could not find a "'.concat(t2, '" -> "').concat(e3, '" edge in the graph.'));
-          return Mt(this, n3), this;
-        }, i3.dropUndirectedEdge = function(t2, e3) {
-          if (arguments.length < 2)
-            throw new I("Graph.dropUndirectedEdge: it does not make sense to drop a directed edge by key. What if the edge with this key is undirected? Use #.dropEdge for this purpose instead.");
-          if (this.multi)
-            throw new I("Graph.dropUndirectedEdge: cannot use a {source,target} combo when dropping an edge in a MultiGraph since we cannot infer the one you want to delete as there could be multiple ones.");
-          var n3 = d(this, t2, e3, "undirected");
-          if (!n3)
-            throw new F('Graph.dropUndirectedEdge: could not find a "'.concat(t2, '" -> "').concat(e3, '" edge in the graph.'));
-          return Mt(this, n3), this;
-        }, i3.clear = function() {
-          this._edges.clear(), this._nodes.clear(), this._resetInstanceCounters(), this.emit("cleared");
-        }, i3.clearEdges = function() {
-          for (var t2, e3 = this._nodes.values(); true !== (t2 = e3.next()).done; )
-            t2.value.clear();
-          this._edges.clear(), this._resetInstanceCounters(), this.emit("edgesCleared");
-        }, i3.getAttribute = function(t2) {
-          return this._attributes[t2];
-        }, i3.getAttributes = function() {
-          return this._attributes;
-        }, i3.hasAttribute = function(t2) {
-          return this._attributes.hasOwnProperty(t2);
-        }, i3.setAttribute = function(t2, e3) {
-          return this._attributes[t2] = e3, this.emit("attributesUpdated", { type: "set", attributes: this._attributes, name: t2 }), this;
-        }, i3.updateAttribute = function(t2, e3) {
-          if ("function" != typeof e3)
-            throw new B("Graph.updateAttribute: updater should be a function.");
-          var n3 = this._attributes[t2];
-          return this._attributes[t2] = e3(n3), this.emit("attributesUpdated", { type: "set", attributes: this._attributes, name: t2 }), this;
-        }, i3.removeAttribute = function(t2) {
-          return delete this._attributes[t2], this.emit("attributesUpdated", { type: "remove", attributes: this._attributes, name: t2 }), this;
-        }, i3.replaceAttributes = function(t2) {
-          if (!s(t2))
-            throw new B("Graph.replaceAttributes: provided attributes are not a plain object.");
-          return this._attributes = t2, this.emit("attributesUpdated", { type: "replace", attributes: this._attributes }), this;
-        }, i3.mergeAttributes = function(t2) {
-          if (!s(t2))
-            throw new B("Graph.mergeAttributes: provided attributes are not a plain object.");
-          return u(this._attributes, t2), this.emit("attributesUpdated", { type: "merge", attributes: this._attributes, data: t2 }), this;
-        }, i3.updateAttributes = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.updateAttributes: provided updater is not a function.");
-          return this._attributes = t2(this._attributes), this.emit("attributesUpdated", { type: "update", attributes: this._attributes }), this;
-        }, i3.updateEachNodeAttributes = function(t2, e3) {
-          if ("function" != typeof t2)
-            throw new B("Graph.updateEachNodeAttributes: expecting an updater function.");
-          if (e3 && !l(e3))
-            throw new B("Graph.updateEachNodeAttributes: invalid hints. Expecting an object having the following shape: {attributes?: [string]}");
-          for (var n3, r3, i4 = this._nodes.values(); true !== (n3 = i4.next()).done; )
-            (r3 = n3.value).attributes = t2(r3.key, r3.attributes);
-          this.emit("eachNodeAttributesUpdated", { hints: e3 || null });
-        }, i3.updateEachEdgeAttributes = function(t2, e3) {
-          if ("function" != typeof t2)
-            throw new B("Graph.updateEachEdgeAttributes: expecting an updater function.");
-          if (e3 && !l(e3))
-            throw new B("Graph.updateEachEdgeAttributes: invalid hints. Expecting an object having the following shape: {attributes?: [string]}");
-          for (var n3, r3, i4, o2, a3 = this._edges.values(); true !== (n3 = a3.next()).done; )
-            i4 = (r3 = n3.value).source, o2 = r3.target, r3.attributes = t2(r3.key, r3.attributes, i4.key, o2.key, i4.attributes, o2.attributes, r3.undirected);
-          this.emit("eachEdgeAttributesUpdated", { hints: e3 || null });
-        }, i3.forEachAdjacencyEntry = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.forEachAdjacencyEntry: expecting a callback.");
-          xt(false, false, false, this, t2);
-        }, i3.forEachAdjacencyEntryWithOrphans = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.forEachAdjacencyEntryWithOrphans: expecting a callback.");
-          xt(false, false, true, this, t2);
-        }, i3.forEachAssymetricAdjacencyEntry = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.forEachAssymetricAdjacencyEntry: expecting a callback.");
-          xt(false, true, false, this, t2);
-        }, i3.forEachAssymetricAdjacencyEntryWithOrphans = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.forEachAssymetricAdjacencyEntryWithOrphans: expecting a callback.");
-          xt(false, true, true, this, t2);
-        }, i3.nodes = function() {
-          return "function" == typeof Array.from ? Array.from(this._nodes.keys()) : K(this._nodes.keys(), this._nodes.size);
-        }, i3.forEachNode = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.forEachNode: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(); true !== (e3 = r3.next()).done; )
-            t2((n3 = e3.value).key, n3.attributes);
-        }, i3.findNode = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.findNode: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(); true !== (e3 = r3.next()).done; )
-            if (t2((n3 = e3.value).key, n3.attributes))
-              return n3.key;
-        }, i3.mapNodes = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.mapNode: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(), i4 = new Array(this.order), o2 = 0; true !== (e3 = r3.next()).done; )
-            n3 = e3.value, i4[o2++] = t2(n3.key, n3.attributes);
-          return i4;
-        }, i3.someNode = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.someNode: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(); true !== (e3 = r3.next()).done; )
-            if (t2((n3 = e3.value).key, n3.attributes))
-              return true;
+      function removeNode2(nodeId) {
+        var node = getNode(nodeId);
+        if (!node) {
           return false;
-        }, i3.everyNode = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.everyNode: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(); true !== (e3 = r3.next()).done; )
-            if (!t2((n3 = e3.value).key, n3.attributes))
-              return false;
-          return true;
-        }, i3.filterNodes = function(t2) {
-          if ("function" != typeof t2)
-            throw new B("Graph.filterNodes: expecting a callback.");
-          for (var e3, n3, r3 = this._nodes.values(), i4 = []; true !== (e3 = r3.next()).done; )
-            t2((n3 = e3.value).key, n3.attributes) && i4.push(n3.key);
-          return i4;
-        }, i3.reduceNodes = function(t2, e3) {
-          if ("function" != typeof t2)
-            throw new B("Graph.reduceNodes: expecting a callback.");
-          if (arguments.length < 2)
-            throw new B("Graph.reduceNodes: missing initial value. You must provide it because the callback takes more than one argument and we cannot infer the initial value from the first iteration, as you could with a simple array.");
-          for (var n3, r3, i4 = e3, o2 = this._nodes.values(); true !== (n3 = o2.next()).done; )
-            i4 = t2(i4, (r3 = n3.value).key, r3.attributes);
-          return i4;
-        }, i3.nodeEntries = function() {
-          var t2 = this._nodes.values();
-          return new O(function() {
-            var e3 = t2.next();
-            if (e3.done)
-              return e3;
-            var n3 = e3.value;
-            return { value: { node: n3.key, attributes: n3.attributes }, done: false };
-          });
-        }, i3.export = function() {
-          var t2 = this, e3 = new Array(this._nodes.size), n3 = 0;
-          this._nodes.forEach(function(t3, r4) {
-            e3[n3++] = function(t4, e4) {
-              var n4 = { key: t4 };
-              return h(e4.attributes) || (n4.attributes = u({}, e4.attributes)), n4;
-            }(r4, t3);
-          });
-          var r3 = new Array(this._edges.size);
-          return n3 = 0, this._edges.forEach(function(e4, i4) {
-            r3[n3++] = function(t3, e6, n4) {
-              var r4 = { key: e6, source: n4.source.key, target: n4.target.key };
-              return h(n4.attributes) || (r4.attributes = u({}, n4.attributes)), "mixed" === t3 && n4.undirected && (r4.undirected = true), r4;
-            }(t2.type, i4, e4);
-          }), { options: { type: this.type, multi: this.multi, allowSelfLoops: this.allowSelfLoops }, attributes: this.getAttributes(), nodes: e3, edges: r3 };
-        }, i3.import = function(t2) {
-          var e3, n3, i4, o2, a3, c7 = this, u2 = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
-          if (t2 instanceof r2)
-            return t2.forEachNode(function(t3, e4) {
-              u2 ? c7.mergeNode(t3, e4) : c7.addNode(t3, e4);
-            }), t2.forEachEdge(function(t3, e4, n4, r3, i5, o3, a4) {
-              u2 ? a4 ? c7.mergeUndirectedEdgeWithKey(t3, n4, r3, e4) : c7.mergeDirectedEdgeWithKey(t3, n4, r3, e4) : a4 ? c7.addUndirectedEdgeWithKey(t3, n4, r3, e4) : c7.addDirectedEdgeWithKey(t3, n4, r3, e4);
-            }), this;
-          if (!s(t2))
-            throw new B("Graph.import: invalid argument. Expecting a serialized graph or, alternatively, a Graph instance.");
-          if (t2.attributes) {
-            if (!s(t2.attributes))
-              throw new B("Graph.import: invalid attributes. Expecting a plain object.");
-            u2 ? this.mergeAttributes(t2.attributes) : this.replaceAttributes(t2.attributes);
-          }
-          if (t2.nodes) {
-            if (i4 = t2.nodes, !Array.isArray(i4))
-              throw new B("Graph.import: invalid nodes. Expecting an array.");
-            for (e3 = 0, n3 = i4.length; e3 < n3; e3++) {
-              Et(o2 = i4[e3]);
-              var d2 = o2, h2 = d2.key, p2 = d2.attributes;
-              u2 ? this.mergeNode(h2, p2) : this.addNode(h2, p2);
-            }
-          }
-          if (t2.edges) {
-            var f2 = false;
-            if ("undirected" === this.type && (f2 = true), i4 = t2.edges, !Array.isArray(i4))
-              throw new B("Graph.import: invalid edges. Expecting an array.");
-            for (e3 = 0, n3 = i4.length; e3 < n3; e3++) {
-              At(a3 = i4[e3]);
-              var l2 = a3, g2 = l2.source, y4 = l2.target, w2 = l2.attributes, v4 = l2.undirected, b2 = void 0 === v4 ? f2 : v4;
-              "key" in a3 ? (u2 ? b2 ? this.mergeUndirectedEdgeWithKey : this.mergeDirectedEdgeWithKey : b2 ? this.addUndirectedEdgeWithKey : this.addDirectedEdgeWithKey).call(this, a3.key, g2, y4, w2) : (u2 ? b2 ? this.mergeUndirectedEdge : this.mergeDirectedEdge : b2 ? this.addUndirectedEdge : this.addDirectedEdge).call(this, g2, y4, w2);
-            }
-          }
-          return this;
-        }, i3.nullCopy = function(t2) {
-          var e3 = new r2(u({}, this._options, t2));
-          return e3.replaceAttributes(u({}, this.getAttributes())), e3;
-        }, i3.emptyCopy = function(t2) {
-          var e3 = this.nullCopy(t2);
-          return this._nodes.forEach(function(t3, n3) {
-            var r3 = u({}, t3.attributes);
-            t3 = new e3.NodeDataClass(n3, r3), e3._nodes.set(n3, t3);
-          }), e3;
-        }, i3.copy = function(t2) {
-          if ("string" == typeof (t2 = t2 || {}).type && t2.type !== this.type && "mixed" !== t2.type)
-            throw new I('Graph.copy: cannot create an incompatible copy from "'.concat(this.type, '" type to "').concat(t2.type, '" because this would mean losing information about the current graph.'));
-          if ("boolean" == typeof t2.multi && t2.multi !== this.multi && true !== t2.multi)
-            throw new I("Graph.copy: cannot create an incompatible copy by downgrading a multi graph to a simple one because this would mean losing information about the current graph.");
-          if ("boolean" == typeof t2.allowSelfLoops && t2.allowSelfLoops !== this.allowSelfLoops && true !== t2.allowSelfLoops)
-            throw new I("Graph.copy: cannot create an incompatible copy from a graph allowing self loops to one that does not because this would mean losing information about the current graph.");
-          for (var e3, n3, r3 = this.emptyCopy(t2), i4 = this._edges.values(); true !== (e3 = i4.next()).done; )
-            jt(r3, "copy", false, (n3 = e3.value).undirected, n3.key, n3.source.key, n3.target.key, u({}, n3.attributes));
-          return r3;
-        }, i3.toJSON = function() {
-          return this.export();
-        }, i3.toString = function() {
-          return "[object Graph]";
-        }, i3.inspect = function() {
-          var e3 = this, n3 = {};
-          this._nodes.forEach(function(t2, e4) {
-            n3[e4] = t2.attributes;
-          });
-          var r3 = {}, i4 = {};
-          this._edges.forEach(function(t2, n4) {
-            var o3, a4 = t2.undirected ? "--" : "->", c7 = "", u2 = t2.source.key, d2 = t2.target.key;
-            t2.undirected && u2 > d2 && (o3 = u2, u2 = d2, d2 = o3);
-            var s2 = "(".concat(u2, ")").concat(a4, "(").concat(d2, ")");
-            n4.startsWith("geid_") ? e3.multi && (void 0 === i4[s2] ? i4[s2] = 0 : i4[s2]++, c7 += "".concat(i4[s2], ". ")) : c7 += "[".concat(n4, "]: "), r3[c7 += s2] = t2.attributes;
-          });
-          var o2 = {};
-          for (var a3 in this)
-            this.hasOwnProperty(a3) && !Ut.has(a3) && "function" != typeof this[a3] && "symbol" !== t(a3) && (o2[a3] = this[a3]);
-          return o2.attributes = this._attributes, o2.nodes = n3, o2.edges = r3, p(o2, "constructor", this.constructor), o2;
-        }, r2;
-      }(y3.exports.EventEmitter);
-      "undefined" != typeof Symbol && (zt.prototype[Symbol.for("nodejs.util.inspect.custom")] = zt.prototype.inspect), [{ name: function(t2) {
-        return "".concat(t2, "Edge");
-      }, generateKey: true }, { name: function(t2) {
-        return "".concat(t2, "DirectedEdge");
-      }, generateKey: true, type: "directed" }, { name: function(t2) {
-        return "".concat(t2, "UndirectedEdge");
-      }, generateKey: true, type: "undirected" }, { name: function(t2) {
-        return "".concat(t2, "EdgeWithKey");
-      } }, { name: function(t2) {
-        return "".concat(t2, "DirectedEdgeWithKey");
-      }, type: "directed" }, { name: function(t2) {
-        return "".concat(t2, "UndirectedEdgeWithKey");
-      }, type: "undirected" }].forEach(function(t2) {
-        ["add", "merge", "update"].forEach(function(e3) {
-          var n2 = t2.name(e3), r2 = "add" === e3 ? jt : Ct;
-          t2.generateKey ? zt.prototype[n2] = function(i3, o2, a3) {
-            return r2(this, n2, true, "undirected" === (t2.type || this.type), null, i3, o2, a3, "update" === e3);
-          } : zt.prototype[n2] = function(i3, o2, a3, c7) {
-            return r2(this, n2, false, "undirected" === (t2.type || this.type), i3, o2, a3, c7, "update" === e3);
-          };
-        });
-      }), function(t2) {
-        Q.forEach(function(e3) {
-          var n2 = e3.name, r2 = e3.attacher;
-          r2(t2, n2("Node"), 0), r2(t2, n2("Source"), 1), r2(t2, n2("Target"), 2), r2(t2, n2("Opposite"), 3);
-        });
-      }(zt), function(t2) {
-        X.forEach(function(e3) {
-          var n2 = e3.name, r2 = e3.attacher;
-          r2(t2, n2("Edge"), "mixed"), r2(t2, n2("DirectedEdge"), "directed"), r2(t2, n2("UndirectedEdge"), "undirected");
-        });
-      }(zt), function(t2) {
-        et.forEach(function(e3) {
-          !function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction;
-            t3.prototype[n2] = function(t4, e6) {
-              if ("mixed" !== r2 && "mixed" !== this.type && r2 !== this.type)
-                return [];
-              if (!arguments.length)
-                return ut(this, r2);
-              if (1 === arguments.length) {
-                t4 = "" + t4;
-                var o2 = this._nodes.get(t4);
-                if (void 0 === o2)
-                  throw new F("Graph.".concat(n2, ': could not find the "').concat(t4, '" node in the graph.'));
-                return pt(this.multi, "mixed" === r2 ? this.type : r2, i3, o2);
-              }
-              if (2 === arguments.length) {
-                t4 = "" + t4, e6 = "" + e6;
-                var a3 = this._nodes.get(t4);
-                if (!a3)
-                  throw new F("Graph.".concat(n2, ':  could not find the "').concat(t4, '" source node in the graph.'));
-                if (!this._nodes.has(e6))
-                  throw new F("Graph.".concat(n2, ':  could not find the "').concat(e6, '" target node in the graph.'));
-                return gt(r2, this.multi, i3, a3, e6);
-              }
-              throw new B("Graph.".concat(n2, ": too many arguments (expecting 0, 1 or 2 and got ").concat(arguments.length, ")."));
-            };
-          }(t2, e3), function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction, o2 = "forEach" + n2[0].toUpperCase() + n2.slice(1, -1);
-            t3.prototype[o2] = function(t4, e6, n3) {
-              if ("mixed" === r2 || "mixed" === this.type || r2 === this.type) {
-                if (1 === arguments.length)
-                  return dt(false, this, r2, n3 = t4);
-                if (2 === arguments.length) {
-                  t4 = "" + t4, n3 = e6;
-                  var a4 = this._nodes.get(t4);
-                  if (void 0 === a4)
-                    throw new F("Graph.".concat(o2, ': could not find the "').concat(t4, '" node in the graph.'));
-                  return ht(false, this.multi, "mixed" === r2 ? this.type : r2, i3, a4, n3);
-                }
-                if (3 === arguments.length) {
-                  t4 = "" + t4, e6 = "" + e6;
-                  var c8 = this._nodes.get(t4);
-                  if (!c8)
-                    throw new F("Graph.".concat(o2, ':  could not find the "').concat(t4, '" source node in the graph.'));
-                  if (!this._nodes.has(e6))
-                    throw new F("Graph.".concat(o2, ':  could not find the "').concat(e6, '" target node in the graph.'));
-                  return lt(false, r2, this.multi, i3, c8, e6, n3);
-                }
-                throw new B("Graph.".concat(o2, ": too many arguments (expecting 1, 2 or 3 and got ").concat(arguments.length, ")."));
-              }
-            };
-            var a3 = "map" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[a3] = function() {
-              var t4, e6 = Array.prototype.slice.call(arguments), n3 = e6.pop();
-              if (0 === e6.length) {
-                var i4 = 0;
-                "directed" !== r2 && (i4 += this.undirectedSize), "undirected" !== r2 && (i4 += this.directedSize), t4 = new Array(i4);
-                var a4 = 0;
-                e6.push(function(e7, r3, i5, o3, c8, u3, d2) {
-                  t4[a4++] = n3(e7, r3, i5, o3, c8, u3, d2);
-                });
-              } else
-                t4 = [], e6.push(function(e7, r3, i5, o3, a5, c8, u3) {
-                  t4.push(n3(e7, r3, i5, o3, a5, c8, u3));
-                });
-              return this[o2].apply(this, e6), t4;
-            };
-            var c7 = "filter" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[c7] = function() {
-              var t4 = Array.prototype.slice.call(arguments), e6 = t4.pop(), n3 = [];
-              return t4.push(function(t5, r3, i4, o3, a4, c8, u3) {
-                e6(t5, r3, i4, o3, a4, c8, u3) && n3.push(t5);
-              }), this[o2].apply(this, t4), n3;
-            };
-            var u2 = "reduce" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[u2] = function() {
-              var t4, e6, n3 = Array.prototype.slice.call(arguments);
-              if (n3.length < 2 || n3.length > 4)
-                throw new B("Graph.".concat(u2, ": invalid number of arguments (expecting 2, 3 or 4 and got ").concat(n3.length, ")."));
-              if ("function" == typeof n3[n3.length - 1] && "function" != typeof n3[n3.length - 2])
-                throw new B("Graph.".concat(u2, ": missing initial value. You must provide it because the callback takes more than one argument and we cannot infer the initial value from the first iteration, as you could with a simple array."));
-              2 === n3.length ? (t4 = n3[0], e6 = n3[1], n3 = []) : 3 === n3.length ? (t4 = n3[1], e6 = n3[2], n3 = [n3[0]]) : 4 === n3.length && (t4 = n3[2], e6 = n3[3], n3 = [n3[0], n3[1]]);
-              var r3 = e6;
-              return n3.push(function(e7, n4, i4, o3, a4, c8, u3) {
-                r3 = t4(r3, e7, n4, i4, o3, a4, c8, u3);
-              }), this[o2].apply(this, n3), r3;
-            };
-          }(t2, e3), function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction, o2 = "find" + n2[0].toUpperCase() + n2.slice(1, -1);
-            t3.prototype[o2] = function(t4, e6, n3) {
-              if ("mixed" !== r2 && "mixed" !== this.type && r2 !== this.type)
-                return false;
-              if (1 === arguments.length)
-                return dt(true, this, r2, n3 = t4);
-              if (2 === arguments.length) {
-                t4 = "" + t4, n3 = e6;
-                var a4 = this._nodes.get(t4);
-                if (void 0 === a4)
-                  throw new F("Graph.".concat(o2, ': could not find the "').concat(t4, '" node in the graph.'));
-                return ht(true, this.multi, "mixed" === r2 ? this.type : r2, i3, a4, n3);
-              }
-              if (3 === arguments.length) {
-                t4 = "" + t4, e6 = "" + e6;
-                var c8 = this._nodes.get(t4);
-                if (!c8)
-                  throw new F("Graph.".concat(o2, ':  could not find the "').concat(t4, '" source node in the graph.'));
-                if (!this._nodes.has(e6))
-                  throw new F("Graph.".concat(o2, ':  could not find the "').concat(e6, '" target node in the graph.'));
-                return lt(true, r2, this.multi, i3, c8, e6, n3);
-              }
-              throw new B("Graph.".concat(o2, ": too many arguments (expecting 1, 2 or 3 and got ").concat(arguments.length, ")."));
-            };
-            var a3 = "some" + n2[0].toUpperCase() + n2.slice(1, -1);
-            t3.prototype[a3] = function() {
-              var t4 = Array.prototype.slice.call(arguments), e6 = t4.pop();
-              return t4.push(function(t5, n3, r3, i4, o3, a4, c8) {
-                return e6(t5, n3, r3, i4, o3, a4, c8);
-              }), !!this[o2].apply(this, t4);
-            };
-            var c7 = "every" + n2[0].toUpperCase() + n2.slice(1, -1);
-            t3.prototype[c7] = function() {
-              var t4 = Array.prototype.slice.call(arguments), e6 = t4.pop();
-              return t4.push(function(t5, n3, r3, i4, o3, a4, c8) {
-                return !e6(t5, n3, r3, i4, o3, a4, c8);
-              }), !this[o2].apply(this, t4);
-            };
-          }(t2, e3), function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction, o2 = n2.slice(0, -1) + "Entries";
-            t3.prototype[o2] = function(t4, e6) {
-              if ("mixed" !== r2 && "mixed" !== this.type && r2 !== this.type)
-                return O.empty();
-              if (!arguments.length)
-                return st(this, r2);
-              if (1 === arguments.length) {
-                t4 = "" + t4;
-                var n3 = this._nodes.get(t4);
-                if (!n3)
-                  throw new F("Graph.".concat(o2, ': could not find the "').concat(t4, '" node in the graph.'));
-                return ft(r2, i3, n3);
-              }
-              if (2 === arguments.length) {
-                t4 = "" + t4, e6 = "" + e6;
-                var a3 = this._nodes.get(t4);
-                if (!a3)
-                  throw new F("Graph.".concat(o2, ':  could not find the "').concat(t4, '" source node in the graph.'));
-                if (!this._nodes.has(e6))
-                  throw new F("Graph.".concat(o2, ':  could not find the "').concat(e6, '" target node in the graph.'));
-                return yt(r2, i3, a3, e6);
-              }
-              throw new B("Graph.".concat(o2, ": too many arguments (expecting 0, 1 or 2 and got ").concat(arguments.length, ")."));
-            };
-          }(t2, e3);
-        });
-      }(zt), function(t2) {
-        wt.forEach(function(e3) {
-          _t(t2, e3), function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction, o2 = "forEach" + n2[0].toUpperCase() + n2.slice(1, -1);
-            t3.prototype[o2] = function(t4, e6) {
-              if ("mixed" === r2 || "mixed" === this.type || r2 === this.type) {
-                t4 = "" + t4;
-                var n3 = this._nodes.get(t4);
-                if (void 0 === n3)
-                  throw new F("Graph.".concat(o2, ': could not find the "').concat(t4, '" node in the graph.'));
-                mt(false, "mixed" === r2 ? this.type : r2, i3, n3, e6);
-              }
-            };
-            var a3 = "map" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[a3] = function(t4, e6) {
-              var n3 = [];
-              return this[o2](t4, function(t5, r3) {
-                n3.push(e6(t5, r3));
-              }), n3;
-            };
-            var c7 = "filter" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[c7] = function(t4, e6) {
-              var n3 = [];
-              return this[o2](t4, function(t5, r3) {
-                e6(t5, r3) && n3.push(t5);
-              }), n3;
-            };
-            var u2 = "reduce" + n2[0].toUpperCase() + n2.slice(1);
-            t3.prototype[u2] = function(t4, e6, n3) {
-              if (arguments.length < 3)
-                throw new B("Graph.".concat(u2, ": missing initial value. You must provide it because the callback takes more than one argument and we cannot infer the initial value from the first iteration, as you could with a simple array."));
-              var r3 = n3;
-              return this[o2](t4, function(t5, n4) {
-                r3 = e6(r3, t5, n4);
-              }), r3;
-            };
-          }(t2, e3), function(t3, e4) {
-            var n2 = e4.name, r2 = e4.type, i3 = e4.direction, o2 = n2[0].toUpperCase() + n2.slice(1, -1), a3 = "find" + o2;
-            t3.prototype[a3] = function(t4, e6) {
-              if ("mixed" === r2 || "mixed" === this.type || r2 === this.type) {
-                t4 = "" + t4;
-                var n3 = this._nodes.get(t4);
-                if (void 0 === n3)
-                  throw new F("Graph.".concat(a3, ': could not find the "').concat(t4, '" node in the graph.'));
-                return mt(true, "mixed" === r2 ? this.type : r2, i3, n3, e6);
-              }
-            };
-            var c7 = "some" + o2;
-            t3.prototype[c7] = function(t4, e6) {
-              return !!this[a3](t4, e6);
-            };
-            var u2 = "every" + o2;
-            t3.prototype[u2] = function(t4, e6) {
-              return !this[a3](t4, function(t5, n3) {
-                return !e6(t5, n3);
-              });
-            };
-          }(t2, e3), Gt(t2, e3);
-        });
-      }(zt);
-      var Wt = function(t2) {
-        function n2(e3) {
-          var n3 = u({ type: "directed" }, e3);
-          if ("multi" in n3 && false !== n3.multi)
-            throw new B("DirectedGraph.from: inconsistent indication that the graph should be multi in given options!");
-          if ("directed" !== n3.type)
-            throw new B('DirectedGraph.from: inconsistent "' + n3.type + '" type in given options!');
-          return t2.call(this, n3) || this;
         }
-        return e(n2, t2), n2;
-      }(zt), Pt = function(t2) {
-        function n2(e3) {
-          var n3 = u({ type: "undirected" }, e3);
-          if ("multi" in n3 && false !== n3.multi)
-            throw new B("UndirectedGraph.from: inconsistent indication that the graph should be multi in given options!");
-          if ("undirected" !== n3.type)
-            throw new B('UndirectedGraph.from: inconsistent "' + n3.type + '" type in given options!');
-          return t2.call(this, n3) || this;
+        enterModification();
+        var prevLinks = node.links;
+        if (prevLinks) {
+          prevLinks.forEach(removeLinkInstance);
+          node.links = null;
         }
-        return e(n2, t2), n2;
-      }(zt), Rt = function(t2) {
-        function n2(e3) {
-          var n3 = u({ multi: true }, e3);
-          if ("multi" in n3 && true !== n3.multi)
-            throw new B("MultiGraph.from: inconsistent indication that the graph should be simple in given options!");
-          return t2.call(this, n3) || this;
-        }
-        return e(n2, t2), n2;
-      }(zt), Kt = function(t2) {
-        function n2(e3) {
-          var n3 = u({ type: "directed", multi: true }, e3);
-          if ("multi" in n3 && true !== n3.multi)
-            throw new B("MultiDirectedGraph.from: inconsistent indication that the graph should be simple in given options!");
-          if ("directed" !== n3.type)
-            throw new B('MultiDirectedGraph.from: inconsistent "' + n3.type + '" type in given options!');
-          return t2.call(this, n3) || this;
-        }
-        return e(n2, t2), n2;
-      }(zt), Tt = function(t2) {
-        function n2(e3) {
-          var n3 = u({ type: "undirected", multi: true }, e3);
-          if ("multi" in n3 && true !== n3.multi)
-            throw new B("MultiUndirectedGraph.from: inconsistent indication that the graph should be simple in given options!");
-          if ("undirected" !== n3.type)
-            throw new B('MultiUndirectedGraph.from: inconsistent "' + n3.type + '" type in given options!');
-          return t2.call(this, n3) || this;
-        }
-        return e(n2, t2), n2;
-      }(zt);
-      function Bt(t2) {
-        t2.from = function(e3, n2) {
-          var r2 = u({}, e3.options, n2), i3 = new t2(r2);
-          return i3.import(e3), i3;
-        };
+        nodes2.delete(nodeId);
+        recordNodeChange(node, "remove");
+        exitModification();
+        return true;
       }
-      return Bt(zt), Bt(Wt), Bt(Pt), Bt(Rt), Bt(Kt), Bt(Tt), zt.Graph = zt, zt.DirectedGraph = Wt, zt.UndirectedGraph = Pt, zt.MultiGraph = Rt, zt.MultiDirectedGraph = Kt, zt.MultiUndirectedGraph = Tt, zt.InvalidArgumentsGraphError = B, zt.NotFoundGraphError = F, zt.UsageGraphError = I, zt;
-    });
+      function addLink(fromId, toId, data) {
+        enterModification();
+        var fromNode = getNode(fromId) || addNode(fromId);
+        var toNode = getNode(toId) || addNode(toId);
+        var link = createLink(fromId, toId, data);
+        var isUpdate = links.has(link.id);
+        links.set(link.id, link);
+        addLinkToNode(fromNode, link);
+        if (fromId !== toId) {
+          addLinkToNode(toNode, link);
+        }
+        recordLinkChange(link, isUpdate ? "update" : "add");
+        exitModification();
+        return link;
+      }
+      function createSingleLink(fromId, toId, data) {
+        var linkId = makeLinkId(fromId, toId);
+        var prevLink = links.get(linkId);
+        if (prevLink) {
+          prevLink.data = data;
+          return prevLink;
+        }
+        return new Link(fromId, toId, data, linkId);
+      }
+      function createUniqueLink(fromId, toId, data) {
+        var linkId = makeLinkId(fromId, toId);
+        var isMultiEdge = multiEdges.hasOwnProperty(linkId);
+        if (isMultiEdge || getLink(fromId, toId)) {
+          if (!isMultiEdge) {
+            multiEdges[linkId] = 0;
+          }
+          var suffix = "@" + ++multiEdges[linkId];
+          linkId = makeLinkId(fromId + suffix, toId + suffix);
+        }
+        return new Link(fromId, toId, data, linkId);
+      }
+      function getNodeCount() {
+        return nodes2.size;
+      }
+      function getLinkCount() {
+        return links.size;
+      }
+      function getLinks(nodeId) {
+        var node = getNode(nodeId);
+        return node ? node.links : null;
+      }
+      function removeLink(link, otherId) {
+        if (otherId !== void 0) {
+          link = getLink(link, otherId);
+        }
+        return removeLinkInstance(link);
+      }
+      function removeLinkInstance(link) {
+        if (!link) {
+          return false;
+        }
+        if (!links.get(link.id))
+          return false;
+        enterModification();
+        links.delete(link.id);
+        var fromNode = getNode(link.fromId);
+        var toNode = getNode(link.toId);
+        if (fromNode) {
+          fromNode.links.delete(link);
+        }
+        if (toNode) {
+          toNode.links.delete(link);
+        }
+        recordLinkChange(link, "remove");
+        exitModification();
+        return true;
+      }
+      function getLink(fromNodeId, toNodeId) {
+        if (fromNodeId === void 0 || toNodeId === void 0)
+          return void 0;
+        return links.get(makeLinkId(fromNodeId, toNodeId));
+      }
+      function clear2() {
+        enterModification();
+        forEachNode(function(node) {
+          removeNode2(node.id);
+        });
+        exitModification();
+      }
+      function forEachLink(callback) {
+        if (typeof callback === "function") {
+          var valuesIterator = links.values();
+          var nextValue = valuesIterator.next();
+          while (!nextValue.done) {
+            if (callback(nextValue.value)) {
+              return true;
+            }
+            nextValue = valuesIterator.next();
+          }
+        }
+      }
+      function forEachLinkedNode(nodeId, callback, oriented) {
+        var node = getNode(nodeId);
+        if (node && node.links && typeof callback === "function") {
+          if (oriented) {
+            return forEachOrientedLink(node.links, nodeId, callback);
+          } else {
+            return forEachNonOrientedLink(node.links, nodeId, callback);
+          }
+        }
+      }
+      function forEachNonOrientedLink(links2, nodeId, callback) {
+        var quitFast;
+        var valuesIterator = links2.values();
+        var nextValue = valuesIterator.next();
+        while (!nextValue.done) {
+          var link = nextValue.value;
+          var linkedNodeId = link.fromId === nodeId ? link.toId : link.fromId;
+          quitFast = callback(nodes2.get(linkedNodeId), link);
+          if (quitFast) {
+            return true;
+          }
+          nextValue = valuesIterator.next();
+        }
+      }
+      function forEachOrientedLink(links2, nodeId, callback) {
+        var quitFast;
+        var valuesIterator = links2.values();
+        var nextValue = valuesIterator.next();
+        while (!nextValue.done) {
+          var link = nextValue.value;
+          if (link.fromId === nodeId) {
+            quitFast = callback(nodes2.get(link.toId), link);
+            if (quitFast) {
+              return true;
+            }
+          }
+          nextValue = valuesIterator.next();
+        }
+      }
+      function noop5() {
+      }
+      function enterModificationReal() {
+        suspendEvents += 1;
+      }
+      function exitModificationReal() {
+        suspendEvents -= 1;
+        if (suspendEvents === 0 && changes.length > 0) {
+          graphPart.fire("changed", changes);
+          changes.length = 0;
+        }
+      }
+      function forEachNode(callback) {
+        if (typeof callback !== "function") {
+          throw new Error("Function is expected to iterate over graph nodes. You passed " + callback);
+        }
+        var valuesIterator = nodes2.values();
+        var nextValue = valuesIterator.next();
+        while (!nextValue.done) {
+          if (callback(nextValue.value)) {
+            return true;
+          }
+          nextValue = valuesIterator.next();
+        }
+      }
+    }
+    function Node4(id2, data) {
+      this.id = id2;
+      this.links = null;
+      this.data = data;
+    }
+    function addLinkToNode(node, link) {
+      if (node.links) {
+        node.links.add(link);
+      } else {
+        node.links = /* @__PURE__ */ new Set([link]);
+      }
+    }
+    function Link(fromId, toId, data, id2) {
+      this.fromId = fromId;
+      this.toId = toId;
+      this.data = data;
+      this.id = id2;
+    }
+    function makeLinkId(fromId, toId) {
+      return fromId.toString() + "\u{1F449} " + toId.toString();
+    }
   }
 });
 
@@ -43937,13 +41441,13 @@ var require_mousetrap = __commonJS({
         return combination.split("+");
       }
       function _getKeyInfo(combination, action) {
-        var keys2;
+        var keys3;
         var key;
         var i3;
         var modifiers = [];
-        keys2 = _keysFromString(combination);
-        for (i3 = 0; i3 < keys2.length; ++i3) {
-          key = keys2[i3];
+        keys3 = _keysFromString(combination);
+        for (i3 = 0; i3 < keys3.length; ++i3) {
+          key = keys3[i3];
           if (_SPECIAL_ALIASES[key]) {
             key = _SPECIAL_ALIASES[key];
           }
@@ -44087,7 +41591,7 @@ var require_mousetrap = __commonJS({
           clearTimeout(_resetTimer);
           _resetTimer = setTimeout(_resetSequences, 1e3);
         }
-        function _bindSequence(combo, keys2, callback, action) {
+        function _bindSequence(combo, keys3, callback, action) {
           _sequenceLevels[combo] = 0;
           function _increaseSequence(nextAction) {
             return function() {
@@ -44103,10 +41607,10 @@ var require_mousetrap = __commonJS({
             }
             setTimeout(_resetSequences, 10);
           }
-          for (var i3 = 0; i3 < keys2.length; ++i3) {
-            var isFinal = i3 + 1 === keys2.length;
-            var wrappedCallback = isFinal ? _callbackAndReset : _increaseSequence(action || _getKeyInfo(keys2[i3 + 1]).action);
-            _bindSingle(keys2[i3], wrappedCallback, action, combo, i3);
+          for (var i3 = 0; i3 < keys3.length; ++i3) {
+            var isFinal = i3 + 1 === keys3.length;
+            var wrappedCallback = isFinal ? _callbackAndReset : _increaseSequence(action || _getKeyInfo(keys3[i3 + 1]).action);
+            _bindSingle(keys3[i3], wrappedCallback, action, combo, i3);
           }
         }
         function _bindSingle(combination, callback, action, sequenceName, level) {
@@ -44139,21 +41643,21 @@ var require_mousetrap = __commonJS({
         _addEvent(targetElement, "keydown", _handleKeyEvent);
         _addEvent(targetElement, "keyup", _handleKeyEvent);
       }
-      Mousetrap2.prototype.bind = function(keys2, callback, action) {
+      Mousetrap2.prototype.bind = function(keys3, callback, action) {
         var self2 = this;
-        keys2 = keys2 instanceof Array ? keys2 : [keys2];
-        self2._bindMultiple.call(self2, keys2, callback, action);
+        keys3 = keys3 instanceof Array ? keys3 : [keys3];
+        self2._bindMultiple.call(self2, keys3, callback, action);
         return self2;
       };
-      Mousetrap2.prototype.unbind = function(keys2, action) {
+      Mousetrap2.prototype.unbind = function(keys3, action) {
         var self2 = this;
-        return self2.bind.call(self2, keys2, function() {
+        return self2.bind.call(self2, keys3, function() {
         }, action);
       };
-      Mousetrap2.prototype.trigger = function(keys2, action) {
+      Mousetrap2.prototype.trigger = function(keys3, action) {
         var self2 = this;
-        if (self2._directMap[keys2 + ":" + action]) {
-          self2._directMap[keys2 + ":" + action]({}, keys2);
+        if (self2._directMap[keys3 + ":" + action]) {
+          self2._directMap[keys3 + ":" + action]({}, keys3);
         }
         return self2;
       };
@@ -44217,1063 +41721,714 @@ var require_mousetrap = __commonJS({
   }
 });
 
-// ../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/iterator.js
-var require_iterator = __commonJS({
-  "../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/iterator.js"(exports, module) {
-    function Iterator(next) {
-      if (typeof next !== "function")
-        throw new Error("obliterator/iterator: expecting a function!");
-      this.next = next;
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/NodeHeap.js
+var require_NodeHeap = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/NodeHeap.js"(exports, module) {
+    module.exports = NodeHeap;
+    function NodeHeap(data, options) {
+      if (!(this instanceof NodeHeap))
+        return new NodeHeap(data, options);
+      if (!Array.isArray(data)) {
+        options = data;
+        data = [];
+      }
+      options = options || {};
+      this.data = data || [];
+      this.length = this.data.length;
+      this.compare = options.compare || defaultCompare;
+      this.setNodeId = options.setNodeId || noop5;
+      if (this.length > 0) {
+        for (var i2 = this.length >> 1; i2 >= 0; i2--)
+          this._down(i2);
+      }
+      if (options.setNodeId) {
+        for (var i2 = 0; i2 < this.length; ++i2) {
+          this.setNodeId(this.data[i2], i2);
+        }
+      }
     }
-    if (typeof Symbol !== "undefined")
-      Iterator.prototype[Symbol.iterator] = function() {
-        return this;
+    function noop5() {
+    }
+    function defaultCompare(a2, b) {
+      return a2 - b;
+    }
+    NodeHeap.prototype = {
+      push: function(item) {
+        this.data.push(item);
+        this.setNodeId(item, this.length);
+        this.length++;
+        this._up(this.length - 1);
+      },
+      pop: function() {
+        if (this.length === 0)
+          return void 0;
+        var top = this.data[0];
+        this.length--;
+        if (this.length > 0) {
+          this.data[0] = this.data[this.length];
+          this.setNodeId(this.data[0], 0);
+          this._down(0);
+        }
+        this.data.pop();
+        return top;
+      },
+      peek: function() {
+        return this.data[0];
+      },
+      updateItem: function(pos) {
+        this._down(pos);
+        this._up(pos);
+      },
+      _up: function(pos) {
+        var data = this.data;
+        var compare = this.compare;
+        var setNodeId = this.setNodeId;
+        var item = data[pos];
+        while (pos > 0) {
+          var parent = pos - 1 >> 1;
+          var current = data[parent];
+          if (compare(item, current) >= 0)
+            break;
+          data[pos] = current;
+          setNodeId(current, pos);
+          pos = parent;
+        }
+        data[pos] = item;
+        setNodeId(item, pos);
+      },
+      _down: function(pos) {
+        var data = this.data;
+        var compare = this.compare;
+        var halfLength = this.length >> 1;
+        var item = data[pos];
+        var setNodeId = this.setNodeId;
+        while (pos < halfLength) {
+          var left = (pos << 1) + 1;
+          var right = left + 1;
+          var best = data[left];
+          if (right < this.length && compare(data[right], best) < 0) {
+            left = right;
+            best = data[right];
+          }
+          if (compare(best, item) >= 0)
+            break;
+          data[pos] = best;
+          setNodeId(best, pos);
+          pos = left;
+        }
+        data[pos] = item;
+        setNodeId(item, pos);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/makeSearchStatePool.js
+var require_makeSearchStatePool = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/makeSearchStatePool.js"(exports, module) {
+    function NodeSearchState(node) {
+      this.node = node;
+      this.parent = null;
+      this.closed = false;
+      this.open = 0;
+      this.distanceToSource = Number.POSITIVE_INFINITY;
+      this.fScore = Number.POSITIVE_INFINITY;
+      this.heapIndex = -1;
+    }
+    function makeSearchStatePool() {
+      var currentInCache = 0;
+      var nodeCache = [];
+      return {
+        createNewState,
+        reset
       };
-    Iterator.of = function() {
-      var args = arguments, l = args.length, i2 = 0;
-      return new Iterator(function() {
-        if (i2 >= l)
-          return { done: true };
-        return { done: false, value: args[i2++] };
-      });
-    };
-    Iterator.empty = function() {
-      var iterator = new Iterator(function() {
-        return { done: true };
-      });
-      return iterator;
-    };
-    Iterator.fromSequence = function(sequence) {
-      var i2 = 0, l = sequence.length;
-      return new Iterator(function() {
-        if (i2 >= l)
-          return { done: true };
-        return { done: false, value: sequence[i2++] };
-      });
-    };
-    Iterator.is = function(value) {
-      if (value instanceof Iterator)
-        return true;
-      return typeof value === "object" && value !== null && typeof value.next === "function";
-    };
-    module.exports = Iterator;
-  }
-});
-
-// ../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/support.js
-var require_support = __commonJS({
-  "../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/support.js"(exports) {
-    exports.ARRAY_BUFFER_SUPPORT = typeof ArrayBuffer !== "undefined";
-    exports.SYMBOL_SUPPORT = typeof Symbol !== "undefined";
-  }
-});
-
-// ../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/foreach.js
-var require_foreach = __commonJS({
-  "../../node_modules/.pnpm/obliterator@2.0.4/node_modules/obliterator/foreach.js"(exports, module) {
-    var support = require_support();
-    var ARRAY_BUFFER_SUPPORT = support.ARRAY_BUFFER_SUPPORT;
-    var SYMBOL_SUPPORT = support.SYMBOL_SUPPORT;
-    module.exports = function forEach(iterable, callback) {
-      var iterator, k, i2, l, s;
-      if (!iterable)
-        throw new Error("obliterator/forEach: invalid iterable.");
-      if (typeof callback !== "function")
-        throw new Error("obliterator/forEach: expecting a callback.");
-      if (Array.isArray(iterable) || ARRAY_BUFFER_SUPPORT && ArrayBuffer.isView(iterable) || typeof iterable === "string" || iterable.toString() === "[object Arguments]") {
-        for (i2 = 0, l = iterable.length; i2 < l; i2++)
-          callback(iterable[i2], i2);
-        return;
+      function reset() {
+        currentInCache = 0;
       }
-      if (typeof iterable.forEach === "function") {
-        iterable.forEach(callback);
-        return;
-      }
-      if (SYMBOL_SUPPORT && Symbol.iterator in iterable && typeof iterable.next !== "function") {
-        iterable = iterable[Symbol.iterator]();
-      }
-      if (typeof iterable.next === "function") {
-        iterator = iterable;
-        i2 = 0;
-        while (s = iterator.next(), s.done !== true) {
-          callback(s.value, i2);
-          i2++;
+      function createNewState(node) {
+        var cached = nodeCache[currentInCache];
+        if (cached) {
+          cached.node = node;
+          cached.parent = null;
+          cached.closed = false;
+          cached.open = 0;
+          cached.distanceToSource = Number.POSITIVE_INFINITY;
+          cached.fScore = Number.POSITIVE_INFINITY;
+          cached.heapIndex = -1;
+        } else {
+          cached = new NodeSearchState(node);
+          nodeCache[currentInCache] = cached;
         }
-        return;
+        currentInCache++;
+        return cached;
       }
-      for (k in iterable) {
-        if (iterable.hasOwnProperty(k)) {
-          callback(iterable[k], k);
-        }
-      }
-      return;
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/queue.js
-var require_queue = __commonJS({
-  "../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/queue.js"(exports, module) {
-    var Iterator = require_iterator();
-    var forEach = require_foreach();
-    function Queue() {
-      this.clear();
     }
-    Queue.prototype.clear = function() {
-      this.items = [];
-      this.offset = 0;
-      this.size = 0;
-    };
-    Queue.prototype.enqueue = function(item) {
-      this.items.push(item);
-      return ++this.size;
-    };
-    Queue.prototype.dequeue = function() {
-      if (!this.size)
-        return;
-      var item = this.items[this.offset];
-      if (++this.offset * 2 >= this.items.length) {
-        this.items = this.items.slice(this.offset);
-        this.offset = 0;
-      }
-      this.size--;
-      return item;
-    };
-    Queue.prototype.peek = function() {
-      if (!this.size)
-        return;
-      return this.items[this.offset];
-    };
-    Queue.prototype.forEach = function(callback, scope) {
-      scope = arguments.length > 1 ? scope : this;
-      for (var i2 = this.offset, j = 0, l = this.items.length; i2 < l; i2++, j++)
-        callback.call(scope, this.items[i2], j, this);
-    };
-    Queue.prototype.toArray = function() {
-      return this.items.slice(this.offset);
-    };
-    Queue.prototype.values = function() {
-      var items = this.items, i2 = this.offset;
-      return new Iterator(function() {
-        if (i2 >= items.length)
-          return {
-            done: true
-          };
-        var value = items[i2];
-        i2++;
-        return {
-          value,
-          done: false
-        };
-      });
-    };
-    Queue.prototype.entries = function() {
-      var items = this.items, i2 = this.offset, j = 0;
-      return new Iterator(function() {
-        if (i2 >= items.length)
-          return {
-            done: true
-          };
-        var value = items[i2];
-        i2++;
-        return {
-          value: [j++, value],
-          done: false
-        };
-      });
-    };
-    if (typeof Symbol !== "undefined")
-      Queue.prototype[Symbol.iterator] = Queue.prototype.values;
-    Queue.prototype.toString = function() {
-      return this.toArray().join(",");
-    };
-    Queue.prototype.toJSON = function() {
-      return this.toArray();
-    };
-    Queue.prototype.inspect = function() {
-      var array = this.toArray();
-      Object.defineProperty(array, "constructor", {
-        value: Queue,
-        enumerable: false
-      });
-      return array;
-    };
-    if (typeof Symbol !== "undefined")
-      Queue.prototype[Symbol.for("nodejs.util.inspect.custom")] = Queue.prototype.inspect;
-    Queue.from = function(iterable) {
-      var queue = new Queue();
-      forEach(iterable, function(value) {
-        queue.enqueue(value);
-      });
-      return queue;
-    };
-    Queue.of = function() {
-      return Queue.from(arguments);
-    };
-    module.exports = Queue;
+    module.exports = makeSearchStatePool;
   }
 });
 
-// ../../node_modules/.pnpm/@yomguithereal+helpers@1.1.1/node_modules/@yomguithereal/helpers/extend.js
-var require_extend = __commonJS({
-  "../../node_modules/.pnpm/@yomguithereal+helpers@1.1.1/node_modules/@yomguithereal/helpers/extend.js"(exports, module) {
-    module.exports = function extend3(array, values) {
-      var l2 = values.length;
-      if (l2 === 0)
-        return;
-      var l1 = array.length;
-      array.length += l2;
-      for (var i2 = 0; i2 < l2; i2++)
-        array[l1 + i2] = values[i2];
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/heuristics.js
+var require_heuristics = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/heuristics.js"(exports, module) {
+    module.exports = {
+      l2,
+      l1
     };
+    function l2(a2, b) {
+      var dx = a2.x - b.x;
+      var dy = a2.y - b.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+    function l1(a2, b) {
+      var dx = a2.x - b.x;
+      var dy = a2.y - b.y;
+      return Math.abs(dx) + Math.abs(dy);
+    }
   }
 });
 
-// ../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/unweighted.js
-var require_unweighted = __commonJS({
-  "../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/unweighted.js"(exports) {
-    var isGraph = require_is_graph();
-    var Queue = require_queue();
-    var extend3 = require_extend();
-    function bidirectional2(graph, source, target) {
-      if (!isGraph(graph))
-        throw new Error("graphology-shortest-path: invalid graphology instance.");
-      if (arguments.length < 3)
-        throw new Error(
-          "graphology-shortest-path: invalid number of arguments. Expecting at least 3."
-        );
-      if (!graph.hasNode(source))
-        throw new Error(
-          'graphology-shortest-path: the "' + source + '" source node does not exist in the given graph.'
-        );
-      if (!graph.hasNode(target))
-        throw new Error(
-          'graphology-shortest-path: the "' + target + '" target node does not exist in the given graph.'
-        );
-      source = "" + source;
-      target = "" + target;
-      if (source === target) {
-        return [source];
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/defaultSettings.js
+var require_defaultSettings = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/defaultSettings.js"(exports, module) {
+    var NO_PATH = [];
+    if (typeof Object.freeze === "function")
+      Object.freeze(NO_PATH);
+    module.exports = {
+      // Path search settings
+      heuristic: blindHeuristic,
+      distance: constantDistance,
+      compareFScore,
+      NO_PATH,
+      // heap settings
+      setHeapIndex,
+      // nba:
+      setH1,
+      setH2,
+      compareF1Score,
+      compareF2Score
+    };
+    function blindHeuristic() {
+      return 0;
+    }
+    function constantDistance() {
+      return 1;
+    }
+    function compareFScore(a2, b) {
+      var result = a2.fScore - b.fScore;
+      return result;
+    }
+    function setHeapIndex(nodeSearchState, heapIndex) {
+      nodeSearchState.heapIndex = heapIndex;
+    }
+    function compareF1Score(a2, b) {
+      return a2.f1 - b.f1;
+    }
+    function compareF2Score(a2, b) {
+      return a2.f2 - b.f2;
+    }
+    function setH1(node, heapIndex) {
+      node.h1 = heapIndex;
+    }
+    function setH2(node, heapIndex) {
+      node.h2 = heapIndex;
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/a-star.js
+var require_a_star = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/a-star.js"(exports, module) {
+    module.exports = aStarPathSearch;
+    var NodeHeap = require_NodeHeap();
+    var makeSearchStatePool = require_makeSearchStatePool();
+    var heuristics = require_heuristics();
+    var defaultSettings = require_defaultSettings();
+    var NO_PATH = defaultSettings.NO_PATH;
+    module.exports.l2 = heuristics.l2;
+    module.exports.l1 = heuristics.l1;
+    function aStarPathSearch(graph, options) {
+      options = options || {};
+      var oriented = options.oriented;
+      var heuristic = options.heuristic;
+      if (!heuristic)
+        heuristic = defaultSettings.heuristic;
+      var distance = options.distance;
+      if (!distance)
+        distance = defaultSettings.distance;
+      var pool = makeSearchStatePool();
+      return {
+        /**
+         * Finds a path between node `fromId` and `toId`.
+         * @returns {Array} of nodes between `toId` and `fromId`. Empty array is returned
+         * if no path is found.
+         */
+        find: find2
+      };
+      function find2(fromId, toId) {
+        var from = graph.getNode(fromId);
+        if (!from)
+          throw new Error("fromId is not defined in this graph: " + fromId);
+        var to2 = graph.getNode(toId);
+        if (!to2)
+          throw new Error("toId is not defined in this graph: " + toId);
+        pool.reset();
+        var nodeState = /* @__PURE__ */ new Map();
+        var openSet = new NodeHeap({
+          compare: defaultSettings.compareFScore,
+          setNodeId: defaultSettings.setHeapIndex
+        });
+        var startNode = pool.createNewState(from);
+        nodeState.set(fromId, startNode);
+        startNode.fScore = heuristic(from, to2);
+        startNode.distanceToSource = 0;
+        openSet.push(startNode);
+        startNode.open = 1;
+        var cameFrom;
+        while (openSet.length > 0) {
+          cameFrom = openSet.pop();
+          if (goalReached(cameFrom, to2))
+            return reconstructPath(cameFrom);
+          cameFrom.closed = true;
+          graph.forEachLinkedNode(cameFrom.node.id, visitNeighbour, oriented);
+        }
+        return NO_PATH;
+        function visitNeighbour(otherNode, link) {
+          var otherSearchState = nodeState.get(otherNode.id);
+          if (!otherSearchState) {
+            otherSearchState = pool.createNewState(otherNode);
+            nodeState.set(otherNode.id, otherSearchState);
+          }
+          if (otherSearchState.closed) {
+            return;
+          }
+          if (otherSearchState.open === 0) {
+            openSet.push(otherSearchState);
+            otherSearchState.open = 1;
+          }
+          var tentativeDistance = cameFrom.distanceToSource + distance(otherNode, cameFrom.node, link);
+          if (tentativeDistance >= otherSearchState.distanceToSource) {
+            return;
+          }
+          otherSearchState.parent = cameFrom;
+          otherSearchState.distanceToSource = tentativeDistance;
+          otherSearchState.fScore = tentativeDistance + heuristic(otherSearchState.node, to2);
+          openSet.updateItem(otherSearchState.heapIndex);
+        }
       }
-      var getPredecessors = graph.inboundNeighbors.bind(graph), getSuccessors = graph.outboundNeighbors.bind(graph);
-      var predecessor = {}, successor = {};
-      predecessor[source] = null;
-      successor[target] = null;
-      var forwardFringe = [source], reverseFringe = [target], currentFringe, node, neighbors, neighbor, i2, j, l, m2;
-      var found = false;
-      outer:
-        while (forwardFringe.length && reverseFringe.length) {
-          if (forwardFringe.length <= reverseFringe.length) {
-            currentFringe = forwardFringe;
-            forwardFringe = [];
-            for (i2 = 0, l = currentFringe.length; i2 < l; i2++) {
-              node = currentFringe[i2];
-              neighbors = getSuccessors(node);
-              for (j = 0, m2 = neighbors.length; j < m2; j++) {
-                neighbor = neighbors[j];
-                if (!(neighbor in predecessor)) {
-                  forwardFringe.push(neighbor);
-                  predecessor[neighbor] = node;
-                }
-                if (neighbor in successor) {
-                  found = true;
-                  break outer;
-                }
-              }
-            }
+    }
+    function goalReached(searchState, targetNode) {
+      return searchState.node === targetNode;
+    }
+    function reconstructPath(searchState) {
+      var path2 = [searchState.node];
+      var parent = searchState.parent;
+      while (parent) {
+        path2.push(parent.node);
+        parent = parent.parent;
+      }
+      return path2;
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/a-greedy-star.js
+var require_a_greedy_star = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/a-greedy-star.js"(exports, module) {
+    module.exports = aStarBi;
+    var NodeHeap = require_NodeHeap();
+    var makeSearchStatePool = require_makeSearchStatePool();
+    var heuristics = require_heuristics();
+    var defaultSettings = require_defaultSettings();
+    var BY_FROM = 1;
+    var BY_TO = 2;
+    var NO_PATH = defaultSettings.NO_PATH;
+    module.exports.l2 = heuristics.l2;
+    module.exports.l1 = heuristics.l1;
+    function aStarBi(graph, options) {
+      options = options || {};
+      var oriented = options.oriented;
+      var heuristic = options.heuristic;
+      if (!heuristic)
+        heuristic = defaultSettings.heuristic;
+      var distance = options.distance;
+      if (!distance)
+        distance = defaultSettings.distance;
+      var pool = makeSearchStatePool();
+      return {
+        find: find2
+      };
+      function find2(fromId, toId) {
+        var from = graph.getNode(fromId);
+        if (!from)
+          throw new Error("fromId is not defined in this graph: " + fromId);
+        var to2 = graph.getNode(toId);
+        if (!to2)
+          throw new Error("toId is not defined in this graph: " + toId);
+        if (from === to2)
+          return [from];
+        pool.reset();
+        var callVisitor = oriented ? orientedVisitor : nonOrientedVisitor;
+        var nodeState = /* @__PURE__ */ new Map();
+        var openSetFrom = new NodeHeap({
+          compare: defaultSettings.compareFScore,
+          setNodeId: defaultSettings.setHeapIndex
+        });
+        var openSetTo = new NodeHeap({
+          compare: defaultSettings.compareFScore,
+          setNodeId: defaultSettings.setHeapIndex
+        });
+        var startNode = pool.createNewState(from);
+        nodeState.set(fromId, startNode);
+        startNode.fScore = heuristic(from, to2);
+        startNode.distanceToSource = 0;
+        openSetFrom.push(startNode);
+        startNode.open = BY_FROM;
+        var endNode = pool.createNewState(to2);
+        endNode.fScore = heuristic(to2, from);
+        endNode.distanceToSource = 0;
+        openSetTo.push(endNode);
+        endNode.open = BY_TO;
+        var lMin = Number.POSITIVE_INFINITY;
+        var minFrom;
+        var minTo;
+        var currentSet = openSetFrom;
+        var currentOpener = BY_FROM;
+        while (openSetFrom.length > 0 && openSetTo.length > 0) {
+          if (openSetFrom.length < openSetTo.length) {
+            currentOpener = BY_FROM;
+            currentSet = openSetFrom;
           } else {
-            currentFringe = reverseFringe;
-            reverseFringe = [];
-            for (i2 = 0, l = currentFringe.length; i2 < l; i2++) {
-              node = currentFringe[i2];
-              neighbors = getPredecessors(node);
-              for (j = 0, m2 = neighbors.length; j < m2; j++) {
-                neighbor = neighbors[j];
-                if (!(neighbor in successor)) {
-                  reverseFringe.push(neighbor);
-                  successor[neighbor] = node;
-                }
-                if (neighbor in predecessor) {
-                  found = true;
-                  break outer;
-                }
-              }
-            }
+            currentOpener = BY_TO;
+            currentSet = openSetTo;
           }
-        }
-      if (!found)
-        return null;
-      var path = [];
-      while (neighbor) {
-        path.unshift(neighbor);
-        neighbor = predecessor[neighbor];
-      }
-      neighbor = successor[path[path.length - 1]];
-      while (neighbor) {
-        path.push(neighbor);
-        neighbor = successor[neighbor];
-      }
-      return path.length ? path : null;
-    }
-    function singleSource(graph, source) {
-      if (!isGraph(graph))
-        throw new Error("graphology-shortest-path: invalid graphology instance.");
-      if (arguments.length < 2)
-        throw new Error(
-          "graphology-shortest-path: invalid number of arguments. Expecting at least 2."
-        );
-      if (!graph.hasNode(source))
-        throw new Error(
-          'graphology-shortest-path: the "' + source + '" source node does not exist in the given graph.'
-        );
-      source = "" + source;
-      var nextLevel = {}, paths = {}, currentLevel, neighbors, v, w, i2, l;
-      nextLevel[source] = true;
-      paths[source] = [source];
-      while (Object.keys(nextLevel).length) {
-        currentLevel = nextLevel;
-        nextLevel = {};
-        for (v in currentLevel) {
-          neighbors = graph.outboundNeighbors(v);
-          for (i2 = 0, l = neighbors.length; i2 < l; i2++) {
-            w = neighbors[i2];
-            if (!paths[w]) {
-              paths[w] = paths[v].concat(w);
-              nextLevel[w] = true;
-            }
-          }
-        }
-      }
-      return paths;
-    }
-    function asbtractSingleSourceLength(method, graph, source) {
-      if (!isGraph(graph))
-        throw new Error("graphology-shortest-path: invalid graphology instance.");
-      if (!graph.hasNode(source))
-        throw new Error(
-          'graphology-shortest-path: the "' + source + '" source node does not exist in the given graph.'
-        );
-      source = "" + source;
-      var seen = /* @__PURE__ */ new Set();
-      var lengths = {}, level = 0;
-      lengths[source] = 0;
-      var currentLevel = [source];
-      var i2, l, node;
-      while (currentLevel.length !== 0) {
-        var nextLevel = [];
-        for (i2 = 0, l = currentLevel.length; i2 < l; i2++) {
-          node = currentLevel[i2];
-          if (seen.has(node))
+          var current = currentSet.pop();
+          current.closed = true;
+          if (current.distanceToSource > lMin)
             continue;
-          seen.add(node);
-          extend3(nextLevel, graph[method](node));
-          lengths[node] = level;
-        }
-        level++;
-        currentLevel = nextLevel;
-      }
-      return lengths;
-    }
-    var singleSourceLength = asbtractSingleSourceLength.bind(
-      null,
-      "outboundNeighbors"
-    );
-    var undirectedSingleSourceLength = asbtractSingleSourceLength.bind(
-      null,
-      "neighbors"
-    );
-    function brandes(graph, source) {
-      source = "" + source;
-      var S = [], P = {}, sigma = {};
-      var nodes2 = graph.nodes(), Dv, sigmav, neighbors, v, w, i2, j, l, m2;
-      for (i2 = 0, l = nodes2.length; i2 < l; i2++) {
-        v = nodes2[i2];
-        P[v] = [];
-        sigma[v] = 0;
-      }
-      var D = {};
-      sigma[source] = 1;
-      D[source] = 0;
-      var queue = Queue.of(source);
-      while (queue.size) {
-        v = queue.dequeue();
-        S.push(v);
-        Dv = D[v];
-        sigmav = sigma[v];
-        neighbors = graph.outboundNeighbors(v);
-        for (j = 0, m2 = neighbors.length; j < m2; j++) {
-          w = neighbors[j];
-          if (!(w in D)) {
-            queue.enqueue(w);
-            D[w] = Dv + 1;
-          }
-          if (D[w] === Dv + 1) {
-            sigma[w] += sigmav;
-            P[w].push(v);
+          graph.forEachLinkedNode(current.node.id, callVisitor);
+          if (minFrom && minTo) {
+            return reconstructBiDirectionalPath(minFrom, minTo);
           }
         }
+        return NO_PATH;
+        function nonOrientedVisitor(otherNode, link) {
+          return visitNode(otherNode, link, current);
+        }
+        function orientedVisitor(otherNode, link) {
+          if (currentOpener === BY_FROM) {
+            if (link.fromId === current.node.id)
+              return visitNode(otherNode, link, current);
+          } else if (currentOpener === BY_TO) {
+            if (link.toId === current.node.id)
+              return visitNode(otherNode, link, current);
+          }
+        }
+        function canExit(currentNode) {
+          var opener = currentNode.open;
+          if (opener && opener !== currentOpener) {
+            return true;
+          }
+          return false;
+        }
+        function reconstructBiDirectionalPath(a2, b) {
+          var pathOfNodes = [];
+          var aParent = a2;
+          while (aParent) {
+            pathOfNodes.push(aParent.node);
+            aParent = aParent.parent;
+          }
+          var bParent = b;
+          while (bParent) {
+            pathOfNodes.unshift(bParent.node);
+            bParent = bParent.parent;
+          }
+          return pathOfNodes;
+        }
+        function visitNode(otherNode, link, cameFrom) {
+          var otherSearchState = nodeState.get(otherNode.id);
+          if (!otherSearchState) {
+            otherSearchState = pool.createNewState(otherNode);
+            nodeState.set(otherNode.id, otherSearchState);
+          }
+          if (otherSearchState.closed) {
+            return;
+          }
+          if (canExit(otherSearchState, cameFrom)) {
+            var potentialLMin = otherSearchState.distanceToSource + cameFrom.distanceToSource;
+            if (potentialLMin < lMin) {
+              minFrom = otherSearchState;
+              minTo = cameFrom;
+              lMin = potentialLMin;
+            }
+            return;
+          }
+          var tentativeDistance = cameFrom.distanceToSource + distance(otherSearchState.node, cameFrom.node, link);
+          if (tentativeDistance >= otherSearchState.distanceToSource) {
+            return;
+          }
+          var target = currentOpener === BY_FROM ? to2 : from;
+          var newFScore = tentativeDistance + heuristic(otherSearchState.node, target);
+          if (newFScore >= lMin) {
+            return;
+          }
+          otherSearchState.fScore = newFScore;
+          if (otherSearchState.open === 0) {
+            currentSet.push(otherSearchState);
+            currentSet.updateItem(otherSearchState.heapIndex);
+            otherSearchState.open = currentOpener;
+          }
+          otherSearchState.parent = cameFrom;
+          otherSearchState.distanceToSource = tentativeDistance;
+        }
       }
-      return [S, P, sigma];
     }
-    exports.bidirectional = bidirectional2;
-    exports.singleSource = singleSource;
-    exports.singleSourceLength = singleSourceLength;
-    exports.undirectedSingleSourceLength = undirectedSingleSourceLength;
-    exports.brandes = brandes;
   }
 });
 
-// ../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/utils.js
-var require_utils = __commonJS({
-  "../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/utils.js"(exports) {
-    var returnTrue = function() {
-      return true;
-    };
-    exports.edgePathFromNodePath = function(graph, nodePath) {
-      var l = nodePath.length;
-      var i2, source, target, edge;
-      if (l < 2) {
-        source = nodePath[0];
-        edge = graph.multi ? graph.findEdge(source, source, returnTrue) : graph.edge(source, source);
-        if (edge)
-          return [edge];
-        return [];
-      }
-      l--;
-      var edgePath = new Array(l);
-      for (i2 = 0; i2 < l; i2++) {
-        source = nodePath[i2];
-        target = nodePath[i2 + 1];
-        edge = graph.multi ? graph.findOutboundEdge(source, target, returnTrue) : graph.edge(source, target);
-        if (edge === void 0)
-          throw new Error(
-            "graphology-shortest-path: given path is impossible in given graph."
-          );
-        edgePath[i2] = edge;
-      }
-      return edgePath;
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/comparators.js
-var require_comparators = __commonJS({
-  "../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/comparators.js"(exports) {
-    var DEFAULT_COMPARATOR = function(a2, b) {
-      if (a2 < b)
-        return -1;
-      if (a2 > b)
-        return 1;
-      return 0;
-    };
-    var DEFAULT_REVERSE_COMPARATOR = function(a2, b) {
-      if (a2 < b)
-        return 1;
-      if (a2 > b)
-        return -1;
-      return 0;
-    };
-    function reverseComparator(comparator) {
-      return function(a2, b) {
-        return comparator(b, a2);
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/nba/makeNBASearchStatePool.js
+var require_makeNBASearchStatePool = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/nba/makeNBASearchStatePool.js"(exports, module) {
+    module.exports = makeNBASearchStatePool;
+    function NBASearchState(node) {
+      this.node = node;
+      this.p1 = null;
+      this.p2 = null;
+      this.closed = false;
+      this.g1 = Number.POSITIVE_INFINITY;
+      this.g2 = Number.POSITIVE_INFINITY;
+      this.f1 = Number.POSITIVE_INFINITY;
+      this.f2 = Number.POSITIVE_INFINITY;
+      this.h1 = -1;
+      this.h2 = -1;
+    }
+    function makeNBASearchStatePool() {
+      var currentInCache = 0;
+      var nodeCache = [];
+      return {
+        /**
+         * Creates a new NBASearchState instance
+         */
+        createNewState,
+        /**
+         * Marks all created instances available for recycling.
+         */
+        reset
       };
-    }
-    function createTupleComparator(size) {
-      if (size === 2) {
-        return function(a2, b) {
-          if (a2[0] < b[0])
-            return -1;
-          if (a2[0] > b[0])
-            return 1;
-          if (a2[1] < b[1])
-            return -1;
-          if (a2[1] > b[1])
-            return 1;
-          return 0;
-        };
+      function reset() {
+        currentInCache = 0;
       }
-      return function(a2, b) {
-        var i2 = 0;
-        while (i2 < size) {
-          if (a2[i2] < b[i2])
-            return -1;
-          if (a2[i2] > b[i2])
-            return 1;
-          i2++;
+      function createNewState(node) {
+        var cached = nodeCache[currentInCache];
+        if (cached) {
+          cached.node = node;
+          cached.p1 = null;
+          cached.p2 = null;
+          cached.closed = false;
+          cached.g1 = Number.POSITIVE_INFINITY;
+          cached.g2 = Number.POSITIVE_INFINITY;
+          cached.f1 = Number.POSITIVE_INFINITY;
+          cached.f2 = Number.POSITIVE_INFINITY;
+          cached.h1 = -1;
+          cached.h2 = -1;
+        } else {
+          cached = new NBASearchState(node);
+          nodeCache[currentInCache] = cached;
         }
-        return 0;
+        currentInCache++;
+        return cached;
+      }
+    }
+  }
+});
+
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/nba/index.js
+var require_nba = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/a-star/nba/index.js"(exports, module) {
+    module.exports = nba;
+    var NodeHeap = require_NodeHeap();
+    var heuristics = require_heuristics();
+    var defaultSettings = require_defaultSettings();
+    var makeNBASearchStatePool = require_makeNBASearchStatePool();
+    var NO_PATH = defaultSettings.NO_PATH;
+    module.exports.l2 = heuristics.l2;
+    module.exports.l1 = heuristics.l1;
+    function nba(graph, options) {
+      options = options || {};
+      var oriented = options.oriented;
+      var quitFast = options.quitFast;
+      var heuristic = options.heuristic;
+      if (!heuristic)
+        heuristic = defaultSettings.heuristic;
+      var distance = options.distance;
+      if (!distance)
+        distance = defaultSettings.distance;
+      var pool = makeNBASearchStatePool();
+      return {
+        /**
+         * Finds a path between node `fromId` and `toId`.
+         * @returns {Array} of nodes between `toId` and `fromId`. Empty array is returned
+         * if no path is found.
+         */
+        find: find2
       };
-    }
-    exports.DEFAULT_COMPARATOR = DEFAULT_COMPARATOR;
-    exports.DEFAULT_REVERSE_COMPARATOR = DEFAULT_REVERSE_COMPARATOR;
-    exports.reverseComparator = reverseComparator;
-    exports.createTupleComparator = createTupleComparator;
-  }
-});
-
-// ../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/iterables.js
-var require_iterables = __commonJS({
-  "../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/utils/iterables.js"(exports) {
-    var forEach = require_foreach();
-    var typed = require_typed_arrays();
-    function isArrayLike(target) {
-      return Array.isArray(target) || typed.isTypedArray(target);
-    }
-    function guessLength(target) {
-      if (typeof target.length === "number")
-        return target.length;
-      if (typeof target.size === "number")
-        return target.size;
-      return;
-    }
-    function toArray2(target) {
-      var l = guessLength(target);
-      var array = typeof l === "number" ? new Array(l) : [];
-      var i2 = 0;
-      forEach(target, function(value) {
-        array[i2++] = value;
-      });
-      return array;
-    }
-    function toArrayWithIndices(target) {
-      var l = guessLength(target);
-      var IndexArray = typeof l === "number" ? typed.getPointerArray(l) : Array;
-      var array = typeof l === "number" ? new Array(l) : [];
-      var indices = typeof l === "number" ? new IndexArray(l) : [];
-      var i2 = 0;
-      forEach(target, function(value) {
-        array[i2] = value;
-        indices[i2] = i2++;
-      });
-      return [array, indices];
-    }
-    exports.isArrayLike = isArrayLike;
-    exports.guessLength = guessLength;
-    exports.toArray = toArray2;
-    exports.toArrayWithIndices = toArrayWithIndices;
-  }
-});
-
-// ../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/heap.js
-var require_heap = __commonJS({
-  "../../node_modules/.pnpm/mnemonist@0.39.5/node_modules/mnemonist/heap.js"(exports, module) {
-    var forEach = require_foreach();
-    var comparators = require_comparators();
-    var iterables = require_iterables();
-    var DEFAULT_COMPARATOR = comparators.DEFAULT_COMPARATOR;
-    var reverseComparator = comparators.reverseComparator;
-    function siftDown(compare, heap, startIndex, i2) {
-      var item = heap[i2], parentIndex, parent;
-      while (i2 > startIndex) {
-        parentIndex = i2 - 1 >> 1;
-        parent = heap[parentIndex];
-        if (compare(item, parent) < 0) {
-          heap[i2] = parent;
-          i2 = parentIndex;
-          continue;
-        }
-        break;
-      }
-      heap[i2] = item;
-    }
-    function siftUp(compare, heap, i2) {
-      var endIndex = heap.length, startIndex = i2, item = heap[i2], childIndex = 2 * i2 + 1, rightIndex;
-      while (childIndex < endIndex) {
-        rightIndex = childIndex + 1;
-        if (rightIndex < endIndex && compare(heap[childIndex], heap[rightIndex]) >= 0) {
-          childIndex = rightIndex;
-        }
-        heap[i2] = heap[childIndex];
-        i2 = childIndex;
-        childIndex = 2 * i2 + 1;
-      }
-      heap[i2] = item;
-      siftDown(compare, heap, startIndex, i2);
-    }
-    function push(compare, heap, item) {
-      heap.push(item);
-      siftDown(compare, heap, 0, heap.length - 1);
-    }
-    function pop(compare, heap) {
-      var lastItem = heap.pop();
-      if (heap.length !== 0) {
-        var item = heap[0];
-        heap[0] = lastItem;
-        siftUp(compare, heap, 0);
-        return item;
-      }
-      return lastItem;
-    }
-    function replace(compare, heap, item) {
-      if (heap.length === 0)
-        throw new Error("mnemonist/heap.replace: cannot pop an empty heap.");
-      var popped = heap[0];
-      heap[0] = item;
-      siftUp(compare, heap, 0);
-      return popped;
-    }
-    function pushpop(compare, heap, item) {
-      var tmp2;
-      if (heap.length !== 0 && compare(heap[0], item) < 0) {
-        tmp2 = heap[0];
-        heap[0] = item;
-        item = tmp2;
-        siftUp(compare, heap, 0);
-      }
-      return item;
-    }
-    function heapify(compare, array) {
-      var n = array.length, l = n >> 1, i2 = l;
-      while (--i2 >= 0)
-        siftUp(compare, array, i2);
-    }
-    function consume(compare, heap) {
-      var l = heap.length, i2 = 0;
-      var array = new Array(l);
-      while (i2 < l)
-        array[i2++] = pop(compare, heap);
-      return array;
-    }
-    function nsmallest(compare, n, iterable) {
-      if (arguments.length === 2) {
-        iterable = n;
-        n = compare;
-        compare = DEFAULT_COMPARATOR;
-      }
-      var reverseCompare = reverseComparator(compare);
-      var i2, l, v;
-      var min = Infinity;
-      var result;
-      if (n === 1) {
-        if (iterables.isArrayLike(iterable)) {
-          for (i2 = 0, l = iterable.length; i2 < l; i2++) {
-            v = iterable[i2];
-            if (min === Infinity || compare(v, min) < 0)
-              min = v;
-          }
-          result = new iterable.constructor(1);
-          result[0] = min;
-          return result;
-        }
-        forEach(iterable, function(value) {
-          if (min === Infinity || compare(value, min) < 0)
-            min = value;
+      function find2(fromId, toId) {
+        var from = graph.getNode(fromId);
+        if (!from)
+          throw new Error("fromId is not defined in this graph: " + fromId);
+        var to2 = graph.getNode(toId);
+        if (!to2)
+          throw new Error("toId is not defined in this graph: " + toId);
+        pool.reset();
+        var forwardVisitor = oriented ? visitN1Oriented : visitN1;
+        var reverseVisitor = oriented ? visitN2Oriented : visitN2;
+        var nodeState = /* @__PURE__ */ new Map();
+        var open1Set = new NodeHeap({
+          compare: defaultSettings.compareF1Score,
+          setNodeId: defaultSettings.setH1
         });
-        return [min];
-      }
-      if (iterables.isArrayLike(iterable)) {
-        if (n >= iterable.length)
-          return iterable.slice().sort(compare);
-        result = iterable.slice(0, n);
-        heapify(reverseCompare, result);
-        for (i2 = n, l = iterable.length; i2 < l; i2++)
-          if (reverseCompare(iterable[i2], result[0]) > 0)
-            replace(reverseCompare, result, iterable[i2]);
-        return result.sort(compare);
-      }
-      var size = iterables.guessLength(iterable);
-      if (size !== null && size < n)
-        n = size;
-      result = new Array(n);
-      i2 = 0;
-      forEach(iterable, function(value) {
-        if (i2 < n) {
-          result[i2] = value;
-        } else {
-          if (i2 === n)
-            heapify(reverseCompare, result);
-          if (reverseCompare(value, result[0]) > 0)
-            replace(reverseCompare, result, value);
-        }
-        i2++;
-      });
-      if (result.length > i2)
-        result.length = i2;
-      return result.sort(compare);
-    }
-    function nlargest(compare, n, iterable) {
-      if (arguments.length === 2) {
-        iterable = n;
-        n = compare;
-        compare = DEFAULT_COMPARATOR;
-      }
-      var reverseCompare = reverseComparator(compare);
-      var i2, l, v;
-      var max = -Infinity;
-      var result;
-      if (n === 1) {
-        if (iterables.isArrayLike(iterable)) {
-          for (i2 = 0, l = iterable.length; i2 < l; i2++) {
-            v = iterable[i2];
-            if (max === -Infinity || compare(v, max) > 0)
-              max = v;
-          }
-          result = new iterable.constructor(1);
-          result[0] = max;
-          return result;
-        }
-        forEach(iterable, function(value) {
-          if (max === -Infinity || compare(value, max) > 0)
-            max = value;
+        var open2Set = new NodeHeap({
+          compare: defaultSettings.compareF2Score,
+          setNodeId: defaultSettings.setH2
         });
-        return [max];
-      }
-      if (iterables.isArrayLike(iterable)) {
-        if (n >= iterable.length)
-          return iterable.slice().sort(reverseCompare);
-        result = iterable.slice(0, n);
-        heapify(compare, result);
-        for (i2 = n, l = iterable.length; i2 < l; i2++)
-          if (compare(iterable[i2], result[0]) > 0)
-            replace(compare, result, iterable[i2]);
-        return result.sort(reverseCompare);
-      }
-      var size = iterables.guessLength(iterable);
-      if (size !== null && size < n)
-        n = size;
-      result = new Array(n);
-      i2 = 0;
-      forEach(iterable, function(value) {
-        if (i2 < n) {
-          result[i2] = value;
-        } else {
-          if (i2 === n)
-            heapify(compare, result);
-          if (compare(value, result[0]) > 0)
-            replace(compare, result, value);
+        var minNode;
+        var lMin = Number.POSITIVE_INFINITY;
+        var startNode = pool.createNewState(from);
+        nodeState.set(fromId, startNode);
+        startNode.g1 = 0;
+        var f1 = heuristic(from, to2);
+        startNode.f1 = f1;
+        open1Set.push(startNode);
+        var endNode = pool.createNewState(to2);
+        nodeState.set(toId, endNode);
+        endNode.g2 = 0;
+        var f2 = f1;
+        endNode.f2 = f2;
+        open2Set.push(endNode);
+        var cameFrom;
+        while (open2Set.length && open1Set.length) {
+          if (open1Set.length < open2Set.length) {
+            forwardSearch();
+          } else {
+            reverseSearch();
+          }
+          if (quitFast && minNode)
+            break;
         }
-        i2++;
-      });
-      if (result.length > i2)
-        result.length = i2;
-      return result.sort(reverseCompare);
-    }
-    function Heap(comparator) {
-      this.clear();
-      this.comparator = comparator || DEFAULT_COMPARATOR;
-      if (typeof this.comparator !== "function")
-        throw new Error("mnemonist/Heap.constructor: given comparator should be a function.");
-    }
-    Heap.prototype.clear = function() {
-      this.items = [];
-      this.size = 0;
-    };
-    Heap.prototype.push = function(item) {
-      push(this.comparator, this.items, item);
-      return ++this.size;
-    };
-    Heap.prototype.peek = function() {
-      return this.items[0];
-    };
-    Heap.prototype.pop = function() {
-      if (this.size !== 0)
-        this.size--;
-      return pop(this.comparator, this.items);
-    };
-    Heap.prototype.replace = function(item) {
-      return replace(this.comparator, this.items, item);
-    };
-    Heap.prototype.pushpop = function(item) {
-      return pushpop(this.comparator, this.items, item);
-    };
-    Heap.prototype.consume = function() {
-      this.size = 0;
-      return consume(this.comparator, this.items);
-    };
-    Heap.prototype.toArray = function() {
-      return consume(this.comparator, this.items.slice());
-    };
-    Heap.prototype.inspect = function() {
-      var proxy = this.toArray();
-      Object.defineProperty(proxy, "constructor", {
-        value: Heap,
-        enumerable: false
-      });
-      return proxy;
-    };
-    if (typeof Symbol !== "undefined")
-      Heap.prototype[Symbol.for("nodejs.util.inspect.custom")] = Heap.prototype.inspect;
-    function MaxHeap(comparator) {
-      this.clear();
-      this.comparator = comparator || DEFAULT_COMPARATOR;
-      if (typeof this.comparator !== "function")
-        throw new Error("mnemonist/MaxHeap.constructor: given comparator should be a function.");
-      this.comparator = reverseComparator(this.comparator);
-    }
-    MaxHeap.prototype = Heap.prototype;
-    Heap.from = function(iterable, comparator) {
-      var heap = new Heap(comparator);
-      var items;
-      if (iterables.isArrayLike(iterable))
-        items = iterable.slice();
-      else
-        items = iterables.toArray(iterable);
-      heapify(heap.comparator, items);
-      heap.items = items;
-      heap.size = items.length;
-      return heap;
-    };
-    MaxHeap.from = function(iterable, comparator) {
-      var heap = new MaxHeap(comparator);
-      var items;
-      if (iterables.isArrayLike(iterable))
-        items = iterable.slice();
-      else
-        items = iterables.toArray(iterable);
-      heapify(heap.comparator, items);
-      heap.items = items;
-      heap.size = items.length;
-      return heap;
-    };
-    Heap.siftUp = siftUp;
-    Heap.siftDown = siftDown;
-    Heap.push = push;
-    Heap.pop = pop;
-    Heap.replace = replace;
-    Heap.pushpop = pushpop;
-    Heap.heapify = heapify;
-    Heap.consume = consume;
-    Heap.nsmallest = nsmallest;
-    Heap.nlargest = nlargest;
-    Heap.MinHeap = Heap;
-    Heap.MaxHeap = MaxHeap;
-    module.exports = Heap;
-  }
-});
-
-// ../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/dijkstra.js
-var require_dijkstra = __commonJS({
-  "../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/dijkstra.js"(exports) {
-    var isGraph = require_is_graph();
-    var createEdgeWeightGetter = require_getters().createEdgeWeightGetter;
-    var Heap = require_heap();
-    var DEFAULT_WEIGHT_ATTRIBUTE = "weight";
-    function DIJKSTRA_HEAP_COMPARATOR(a2, b) {
-      if (a2[0] > b[0])
-        return 1;
-      if (a2[0] < b[0])
-        return -1;
-      if (a2[1] > b[1])
-        return 1;
-      if (a2[1] < b[1])
-        return -1;
-      if (a2[2] > b[2])
-        return 1;
-      if (a2[2] < b[2])
-        return -1;
-      return 0;
-    }
-    function BRANDES_DIJKSTRA_HEAP_COMPARATOR(a2, b) {
-      if (a2[0] > b[0])
-        return 1;
-      if (a2[0] < b[0])
-        return -1;
-      if (a2[1] > b[1])
-        return 1;
-      if (a2[1] < b[1])
-        return -1;
-      if (a2[2] > b[2])
-        return 1;
-      if (a2[2] < b[2])
-        return -1;
-      if (a2[3] > b[3])
-        return 1;
-      if (a2[3] < b[3])
-        return -1;
-      return 0;
-    }
-    function abstractBidirectionalDijkstra(graph, source, target, getEdgeWeight) {
-      source = "" + source;
-      target = "" + target;
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-shortest-path/dijkstra: invalid graphology instance."
-        );
-      if (source && !graph.hasNode(source))
-        throw new Error(
-          'graphology-shortest-path/dijkstra: the "' + source + '" source node does not exist in the given graph.'
-        );
-      if (target && !graph.hasNode(target))
-        throw new Error(
-          'graphology-shortest-path/dijkstra: the "' + target + '" target node does not exist in the given graph.'
-        );
-      getEdgeWeight = createEdgeWeightGetter(
-        getEdgeWeight || DEFAULT_WEIGHT_ATTRIBUTE
-      ).fromMinimalEntry;
-      if (source === target)
-        return [0, [source]];
-      var distances = [{}, {}], paths = [{}, {}], fringe = [
-        new Heap(DIJKSTRA_HEAP_COMPARATOR),
-        new Heap(DIJKSTRA_HEAP_COMPARATOR)
-      ], seen = [{}, {}];
-      paths[0][source] = [source];
-      paths[1][target] = [target];
-      seen[0][source] = 0;
-      seen[1][target] = 0;
-      var finalPath = [], finalDistance = Infinity;
-      var count2 = 0, dir = 1, item, edges2, cost, d, v, u, e, i2, l;
-      fringe[0].push([0, count2++, source]);
-      fringe[1].push([0, count2++, target]);
-      while (fringe[0].size && fringe[1].size) {
-        dir = 1 - dir;
-        item = fringe[dir].pop();
-        d = item[0];
-        v = item[2];
-        if (v in distances[dir])
-          continue;
-        distances[dir][v] = d;
-        if (v in distances[1 - dir])
-          return [finalDistance, finalPath];
-        edges2 = dir === 1 ? graph.inboundEdges(v) : graph.outboundEdges(v);
-        for (i2 = 0, l = edges2.length; i2 < l; i2++) {
-          e = edges2[i2];
-          u = graph.opposite(v, e);
-          cost = distances[dir][v] + getEdgeWeight(e, graph.getEdgeAttributes(e));
-          if (u in distances[dir] && cost < distances[dir][u]) {
-            throw Error(
-              "graphology-shortest-path/dijkstra: contradictory paths found. Do some of your edges have a negative weight?"
-            );
-          } else if (!(u in seen[dir]) || cost < seen[dir][u]) {
-            seen[dir][u] = cost;
-            fringe[dir].push([cost, count2++, u]);
-            paths[dir][u] = paths[dir][v].concat(u);
-            if (u in seen[0] && u in seen[1]) {
-              d = seen[0][u] + seen[1][u];
-              if (finalPath.length === 0 || finalDistance > d) {
-                finalDistance = d;
-                finalPath = paths[0][u].concat(paths[1][u].slice(0, -1).reverse());
-              }
+        var path2 = reconstructPath(minNode);
+        return path2;
+        function forwardSearch() {
+          cameFrom = open1Set.pop();
+          if (cameFrom.closed) {
+            return;
+          }
+          cameFrom.closed = true;
+          if (cameFrom.f1 < lMin && cameFrom.g1 + f2 - heuristic(from, cameFrom.node) < lMin) {
+            graph.forEachLinkedNode(cameFrom.node.id, forwardVisitor);
+          }
+          if (open1Set.length > 0) {
+            f1 = open1Set.peek().f1;
+          }
+        }
+        function reverseSearch() {
+          cameFrom = open2Set.pop();
+          if (cameFrom.closed) {
+            return;
+          }
+          cameFrom.closed = true;
+          if (cameFrom.f2 < lMin && cameFrom.g2 + f1 - heuristic(cameFrom.node, to2) < lMin) {
+            graph.forEachLinkedNode(cameFrom.node.id, reverseVisitor);
+          }
+          if (open2Set.length > 0) {
+            f2 = open2Set.peek().f2;
+          }
+        }
+        function visitN1(otherNode, link) {
+          var otherSearchState = nodeState.get(otherNode.id);
+          if (!otherSearchState) {
+            otherSearchState = pool.createNewState(otherNode);
+            nodeState.set(otherNode.id, otherSearchState);
+          }
+          if (otherSearchState.closed)
+            return;
+          var tentativeDistance = cameFrom.g1 + distance(cameFrom.node, otherNode, link);
+          if (tentativeDistance < otherSearchState.g1) {
+            otherSearchState.g1 = tentativeDistance;
+            otherSearchState.f1 = tentativeDistance + heuristic(otherSearchState.node, to2);
+            otherSearchState.p1 = cameFrom;
+            if (otherSearchState.h1 < 0) {
+              open1Set.push(otherSearchState);
+            } else {
+              open1Set.updateItem(otherSearchState.h1);
             }
           }
-        }
-      }
-      return [Infinity, null];
-    }
-    function abstractDijkstraMultisource(graph, sources, getEdgeWeight, cutoff, target, paths) {
-      if (!isGraph(graph))
-        throw new Error(
-          "graphology-shortest-path/dijkstra: invalid graphology instance."
-        );
-      if (target && !graph.hasNode(target))
-        throw new Error(
-          'graphology-shortest-path/dijkstra: the "' + target + '" target node does not exist in the given graph.'
-        );
-      getEdgeWeight = createEdgeWeightGetter(
-        getEdgeWeight || DEFAULT_WEIGHT_ATTRIBUTE
-      ).fromMinimalEntry;
-      var distances = {}, seen = {}, fringe = new Heap(DIJKSTRA_HEAP_COMPARATOR);
-      var count2 = 0, edges2, item, cost, v, u, e, d, i2, j, l, m2;
-      for (i2 = 0, l = sources.length; i2 < l; i2++) {
-        v = sources[i2];
-        seen[v] = 0;
-        fringe.push([0, count2++, v]);
-        if (paths)
-          paths[v] = [v];
-      }
-      while (fringe.size) {
-        item = fringe.pop();
-        d = item[0];
-        v = item[2];
-        if (v in distances)
-          continue;
-        distances[v] = d;
-        if (v === target)
-          break;
-        edges2 = graph.outboundEdges(v);
-        for (j = 0, m2 = edges2.length; j < m2; j++) {
-          e = edges2[j];
-          u = graph.opposite(v, e);
-          cost = getEdgeWeight(e, graph.getEdgeAttributes(e)) + distances[v];
-          if (cutoff && cost > cutoff)
-            continue;
-          if (u in distances && cost < distances[u]) {
-            throw Error(
-              "graphology-shortest-path/dijkstra: contradictory paths found. Do some of your edges have a negative weight?"
-            );
-          } else if (!(u in seen) || cost < seen[u]) {
-            seen[u] = cost;
-            fringe.push([cost, count2++, u]);
-            if (paths)
-              paths[u] = paths[v].concat(u);
+          var potentialMin = otherSearchState.g1 + otherSearchState.g2;
+          if (potentialMin < lMin) {
+            lMin = potentialMin;
+            minNode = otherSearchState;
           }
         }
-      }
-      return distances;
-    }
-    function singleSourceDijkstra(graph, source, getEdgeWeight) {
-      var paths = {};
-      abstractDijkstraMultisource(graph, [source], getEdgeWeight, 0, null, paths);
-      return paths;
-    }
-    function bidirectionalDijkstra(graph, source, target, getEdgeWeight) {
-      return abstractBidirectionalDijkstra(graph, source, target, getEdgeWeight)[1];
-    }
-    function brandes(graph, source, getEdgeWeight) {
-      source = "" + source;
-      getEdgeWeight = createEdgeWeightGetter(
-        getEdgeWeight || DEFAULT_WEIGHT_ATTRIBUTE
-      ).fromMinimalEntry;
-      var S = [], P = {}, sigma = {};
-      var nodes2 = graph.nodes(), edges2, item, pred, dist, cost, v, w, e, i2, l;
-      for (i2 = 0, l = nodes2.length; i2 < l; i2++) {
-        v = nodes2[i2];
-        P[v] = [];
-        sigma[v] = 0;
-      }
-      var D = {};
-      sigma[source] = 1;
-      var seen = {};
-      seen[source] = 0;
-      var count2 = 0;
-      var Q = new Heap(BRANDES_DIJKSTRA_HEAP_COMPARATOR);
-      Q.push([0, count2++, source, source]);
-      while (Q.size) {
-        item = Q.pop();
-        dist = item[0];
-        pred = item[2];
-        v = item[3];
-        if (v in D)
-          continue;
-        sigma[v] += sigma[pred];
-        S.push(v);
-        D[v] = dist;
-        edges2 = graph.outboundEdges(v);
-        for (i2 = 0, l = edges2.length; i2 < l; i2++) {
-          e = edges2[i2];
-          w = graph.opposite(v, e);
-          cost = dist + getEdgeWeight(e, graph.getEdgeAttributes(e));
-          if (!(w in D) && (!(w in seen) || cost < seen[w])) {
-            seen[w] = cost;
-            Q.push([cost, count2++, v, w]);
-            sigma[w] = 0;
-            P[w] = [v];
-          } else if (cost === seen[w]) {
-            sigma[w] += sigma[v];
-            P[w].push(v);
+        function visitN2(otherNode, link) {
+          var otherSearchState = nodeState.get(otherNode.id);
+          if (!otherSearchState) {
+            otherSearchState = pool.createNewState(otherNode);
+            nodeState.set(otherNode.id, otherSearchState);
+          }
+          if (otherSearchState.closed)
+            return;
+          var tentativeDistance = cameFrom.g2 + distance(cameFrom.node, otherNode, link);
+          if (tentativeDistance < otherSearchState.g2) {
+            otherSearchState.g2 = tentativeDistance;
+            otherSearchState.f2 = tentativeDistance + heuristic(from, otherSearchState.node);
+            otherSearchState.p2 = cameFrom;
+            if (otherSearchState.h2 < 0) {
+              open2Set.push(otherSearchState);
+            } else {
+              open2Set.updateItem(otherSearchState.h2);
+            }
+          }
+          var potentialMin = otherSearchState.g1 + otherSearchState.g2;
+          if (potentialMin < lMin) {
+            lMin = potentialMin;
+            minNode = otherSearchState;
           }
         }
+        function visitN2Oriented(otherNode, link) {
+          if (link.toId === cameFrom.node.id)
+            return visitN2(otherNode, link);
+        }
+        function visitN1Oriented(otherNode, link) {
+          if (link.fromId === cameFrom.node.id)
+            return visitN1(otherNode, link);
+        }
       }
-      return [S, P, sigma];
     }
-    exports.bidirectional = bidirectionalDijkstra;
-    exports.singleSource = singleSourceDijkstra;
-    exports.brandes = brandes;
+    function reconstructPath(searchState) {
+      if (!searchState)
+        return NO_PATH;
+      var path2 = [searchState.node];
+      var parent = searchState.p1;
+      while (parent) {
+        path2.push(parent.node);
+        parent = parent.p1;
+      }
+      var child = searchState.p2;
+      while (child) {
+        path2.unshift(child.node);
+        child = child.p2;
+      }
+      return path2;
+    }
   }
 });
 
-// ../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/index.js
-var require_graphology_shortest_path = __commonJS({
-  "../../node_modules/.pnpm/graphology-shortest-path@2.0.2_graphology-types@0.24.7/node_modules/graphology-shortest-path/index.js"(exports) {
-    var unweighted = require_unweighted();
-    var utils = require_utils();
-    exports.unweighted = unweighted;
-    exports.dijkstra = require_dijkstra();
-    exports.bidirectional = unweighted.bidirectional;
-    exports.singleSource = unweighted.singleSource;
-    exports.singleSourceLength = unweighted.singleSourceLength;
-    exports.undirectedSingleSourceLength = unweighted.undirectedSingleSourceLength;
-    exports.brandes = unweighted.brandes;
-    exports.edgePathFromNodePath = utils.edgePathFromNodePath;
+// ../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/index.js
+var require_ngraph5 = __commonJS({
+  "../../node_modules/.pnpm/ngraph.path@1.4.0/node_modules/ngraph.path/index.js"(exports, module) {
+    module.exports = {
+      aStar: require_a_star(),
+      aGreedy: require_a_greedy_star(),
+      nba: require_nba()
+    };
   }
 });
 
@@ -45332,7 +42487,7 @@ var require_classnames = __commonJS({
 var import_client = __toESM(require_client());
 var import_react11 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var import_react10 = __toESM(require_react(), 1);
 
@@ -52472,9 +49627,9 @@ var Mesh = class extends Object3D {
   updateMorphTargets() {
     const geometry = this.geometry;
     const morphAttributes = geometry.morphAttributes;
-    const keys2 = Object.keys(morphAttributes);
-    if (keys2.length > 0) {
-      const morphAttribute = morphAttributes[keys2[0]];
+    const keys3 = Object.keys(morphAttributes);
+    if (keys3.length > 0) {
+      const morphAttribute = morphAttributes[keys3[0]];
       if (morphAttribute !== void 0) {
         this.morphTargetInfluences = [];
         this.morphTargetDictionary = {};
@@ -52749,13 +49904,13 @@ function cloneUniforms(src) {
   for (const u in src) {
     dst[u] = {};
     for (const p in src[u]) {
-      const property = src[u][p];
-      if (property && (property.isColor || property.isMatrix3 || property.isMatrix4 || property.isVector2 || property.isVector3 || property.isVector4 || property.isTexture || property.isQuaternion)) {
-        dst[u][p] = property.clone();
-      } else if (Array.isArray(property)) {
-        dst[u][p] = property.slice();
+      const property2 = src[u][p];
+      if (property2 && (property2.isColor || property2.isMatrix3 || property2.isMatrix4 || property2.isVector2 || property2.isVector3 || property2.isVector4 || property2.isTexture || property2.isQuaternion)) {
+        dst[u][p] = property2.clone();
+      } else if (Array.isArray(property2)) {
+        dst[u][p] = property2.slice();
       } else {
-        dst[u][p] = property;
+        dst[u][p] = property2;
       }
     }
   }
@@ -53564,7 +50719,7 @@ function WebGLAttributes(gl, capabilities) {
       updateRange.count = -1;
     }
   }
-  function get2(attribute) {
+  function get3(attribute) {
     if (attribute.isInterleavedBufferAttribute)
       attribute = attribute.data;
     return buffers.get(attribute);
@@ -53602,7 +50757,7 @@ function WebGLAttributes(gl, capabilities) {
     }
   }
   return {
-    get: get2,
+    get: get3,
     remove,
     update: update3
   };
@@ -55008,7 +52163,7 @@ function WebGLCubeMaps(renderer) {
     }
     return texture;
   }
-  function get2(texture) {
+  function get3(texture) {
     if (texture && texture.isTexture && texture.isRenderTargetTexture === false) {
       const mapping = texture.mapping;
       if (mapping === EquirectangularReflectionMapping || mapping === EquirectangularRefractionMapping) {
@@ -55044,7 +52199,7 @@ function WebGLCubeMaps(renderer) {
     cubemaps = /* @__PURE__ */ new WeakMap();
   }
   return {
-    get: get2,
+    get: get3,
     dispose: dispose2
   };
 }
@@ -55768,7 +52923,7 @@ function _getCommonVertexShader() {
 function WebGLCubeUVMaps(renderer) {
   let cubeUVmaps = /* @__PURE__ */ new WeakMap();
   let pmremGenerator = null;
-  function get2(texture) {
+  function get3(texture) {
     if (texture && texture.isTexture) {
       const mapping = texture.mapping;
       const isEquirectMap = mapping === EquirectangularReflectionMapping || mapping === EquirectangularRefractionMapping;
@@ -55829,7 +52984,7 @@ function WebGLCubeUVMaps(renderer) {
     }
   }
   return {
-    get: get2,
+    get: get3,
     dispose: dispose2
   };
 }
@@ -55913,7 +53068,7 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
     }
     info.memory.geometries--;
   }
-  function get2(object, geometry) {
+  function get3(object, geometry) {
     if (geometries[geometry.id] === true)
       return geometry;
     geometry.addEventListener("dispose", onGeometryDispose);
@@ -55980,7 +53135,7 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
     return wireframeAttributes.get(geometry);
   }
   return {
-    get: get2,
+    get: get3,
     update: update3,
     getWireframeAttribute
   };
@@ -56785,10 +53940,10 @@ function addUniform(container2, uniformObject) {
   container2.map[uniformObject.id] = uniformObject;
 }
 function parseUniform(activeInfo, addr, container2) {
-  const path = activeInfo.name, pathLength = path.length;
+  const path2 = activeInfo.name, pathLength = path2.length;
   RePathPart.lastIndex = 0;
   while (true) {
-    const match = RePathPart.exec(path), matchEnd = RePathPart.lastIndex;
+    const match = RePathPart.exec(path2), matchEnd = RePathPart.lastIndex;
     let id2 = match[1];
     const idIsIndex = match[2] === "]", subscript = match[3];
     if (idIsIndex)
@@ -57835,7 +54990,7 @@ function WebGLPrograms(renderer, cubemaps, cubeuvmaps, extensions, capabilities,
 }
 function WebGLProperties() {
   let properties = /* @__PURE__ */ new WeakMap();
-  function get2(object) {
+  function get3(object) {
     let map2 = properties.get(object);
     if (map2 === void 0) {
       map2 = {};
@@ -57853,7 +55008,7 @@ function WebGLProperties() {
     properties = /* @__PURE__ */ new WeakMap();
   }
   return {
-    get: get2,
+    get: get3,
     remove,
     update: update3,
     dispose: dispose2
@@ -57975,7 +55130,7 @@ function WebGLRenderList() {
 }
 function WebGLRenderLists() {
   let lists = /* @__PURE__ */ new WeakMap();
-  function get2(scene, renderCallDepth) {
+  function get3(scene, renderCallDepth) {
     let list;
     if (lists.has(scene) === false) {
       list = new WebGLRenderList();
@@ -57994,7 +55149,7 @@ function WebGLRenderLists() {
     lists = /* @__PURE__ */ new WeakMap();
   }
   return {
-    get: get2,
+    get: get3,
     dispose: dispose2
   };
 }
@@ -58379,7 +55534,7 @@ function WebGLRenderState(extensions, capabilities) {
 }
 function WebGLRenderStates(extensions, capabilities) {
   let renderStates = /* @__PURE__ */ new WeakMap();
-  function get2(scene, renderCallDepth = 0) {
+  function get3(scene, renderCallDepth = 0) {
     let renderState;
     if (renderStates.has(scene) === false) {
       renderState = new WebGLRenderState(extensions, capabilities);
@@ -58398,7 +55553,7 @@ function WebGLRenderStates(extensions, capabilities) {
     renderStates = /* @__PURE__ */ new WeakMap();
   }
   return {
-    get: get2,
+    get: get3,
     dispose: dispose2
   };
 }
@@ -63899,9 +61054,9 @@ var Line = class extends Object3D {
   updateMorphTargets() {
     const geometry = this.geometry;
     const morphAttributes = geometry.morphAttributes;
-    const keys2 = Object.keys(morphAttributes);
-    if (keys2.length > 0) {
-      const morphAttribute = morphAttributes[keys2[0]];
+    const keys3 = Object.keys(morphAttributes);
+    if (keys3.length > 0) {
+      const morphAttribute = morphAttributes[keys3[0]];
       if (morphAttribute !== void 0) {
         this.morphTargetInfluences = [];
         this.morphTargetDictionary = {};
@@ -64029,9 +61184,9 @@ var Points = class extends Object3D {
   updateMorphTargets() {
     const geometry = this.geometry;
     const morphAttributes = geometry.morphAttributes;
-    const keys2 = Object.keys(morphAttributes);
-    if (keys2.length > 0) {
-      const morphAttribute = morphAttributes[keys2[0]];
+    const keys3 = Object.keys(morphAttributes);
+    if (keys3.length > 0) {
+      const morphAttribute = morphAttributes[keys3[0]];
       if (morphAttribute !== void 0) {
         this.morphTargetInfluences = [];
         this.morphTargetDictionary = {};
@@ -65232,10 +62387,10 @@ var LatheGeometry = class extends BufferGeometry {
 };
 var CapsuleGeometry = class extends LatheGeometry {
   constructor(radius = 1, length = 1, capSegments = 4, radialSegments = 8) {
-    const path = new Path();
-    path.absarc(0, -length / 2, radius, Math.PI * 1.5, 0);
-    path.absarc(0, length / 2, radius, 0, Math.PI * 0.5);
-    super(path.getPoints(capSegments), radialSegments);
+    const path2 = new Path();
+    path2.absarc(0, -length / 2, radius, Math.PI * 1.5, 0);
+    path2.absarc(0, length / 2, radius, 0, Math.PI * 0.5);
+    super(path2.getPoints(capSegments), radialSegments);
     this.type = "CapsuleGeometry";
     this.parameters = {
       radius,
@@ -67334,17 +64489,17 @@ var TorusKnotGeometry = class extends BufferGeometry {
   }
 };
 var TubeGeometry = class extends BufferGeometry {
-  constructor(path = new QuadraticBezierCurve3(new Vector3(-1, -1, 0), new Vector3(-1, 1, 0), new Vector3(1, 1, 0)), tubularSegments = 64, radius = 1, radialSegments = 8, closed = false) {
+  constructor(path2 = new QuadraticBezierCurve3(new Vector3(-1, -1, 0), new Vector3(-1, 1, 0), new Vector3(1, 1, 0)), tubularSegments = 64, radius = 1, radialSegments = 8, closed = false) {
     super();
     this.type = "TubeGeometry";
     this.parameters = {
-      path,
+      path: path2,
       tubularSegments,
       radius,
       radialSegments,
       closed
     };
-    const frames = path.computeFrenetFrames(tubularSegments, closed);
+    const frames = path2.computeFrenetFrames(tubularSegments, closed);
     this.tangents = frames.tangents;
     this.normals = frames.normals;
     this.binormals = frames.binormals;
@@ -67370,7 +64525,7 @@ var TubeGeometry = class extends BufferGeometry {
       generateIndices();
     }
     function generateSegment(i2) {
-      P = path.getPointAt(i2 / tubularSegments, P);
+      P = path2.getPointAt(i2 / tubularSegments, P);
       const N = frames.normals[i2];
       const B = frames.binormals[i2];
       for (let j = 0; j <= radialSegments; j++) {
@@ -69066,8 +66221,8 @@ var Loader = class {
     this.withCredentials = value;
     return this;
   }
-  setPath(path) {
-    this.path = path;
+  setPath(path2) {
+    this.path = path2;
     return this;
   }
   setResourcePath(resourcePath) {
@@ -70328,11 +67483,11 @@ var LoaderUtils = class {
       return "./";
     return url.slice(0, index2 + 1);
   }
-  static resolveURL(url, path) {
+  static resolveURL(url, path2) {
     if (typeof url !== "string" || url === "")
       return "";
-    if (/^https?:\/\//i.test(path) && /^\//.test(url)) {
-      path = path.replace(/(^https?:\/\/[^\/]+).*/i, "$1");
+    if (/^https?:\/\//i.test(path2) && /^\//.test(url)) {
+      path2 = path2.replace(/(^https?:\/\/[^\/]+).*/i, "$1");
     }
     if (/^(https?:)?\/\//i.test(url))
       return url;
@@ -70340,7 +67495,7 @@ var LoaderUtils = class {
       return url;
     if (/^blob:.*$/i.test(url))
       return url;
-    return path + url;
+    return path2 + url;
   }
 };
 var InstancedBufferGeometry = class extends BufferGeometry {
@@ -70494,8 +67649,8 @@ var ObjectLoader = class extends Loader {
   }
   load(url, onLoad, onProgress, onError) {
     const scope = this;
-    const path = this.path === "" ? LoaderUtils.extractUrlBase(url) : this.path;
-    this.resourcePath = this.resourcePath || path;
+    const path2 = this.path === "" ? LoaderUtils.extractUrlBase(url) : this.path;
+    this.resourcePath = this.resourcePath || path2;
     const loader = new FileLoader(this.manager);
     loader.setPath(this.path);
     loader.setRequestHeader(this.requestHeader);
@@ -70520,8 +67675,8 @@ var ObjectLoader = class extends Loader {
   }
   async loadAsync(url, onProgress) {
     const scope = this;
-    const path = this.path === "" ? LoaderUtils.extractUrlBase(url) : this.path;
-    this.resourcePath = this.resourcePath || path;
+    const path2 = this.path === "" ? LoaderUtils.extractUrlBase(url) : this.path;
+    this.resourcePath = this.resourcePath || path2;
     const loader = new FileLoader(this.manager);
     loader.setPath(this.path);
     loader.setRequestHeader(this.requestHeader);
@@ -70684,8 +67839,8 @@ var ObjectLoader = class extends Loader {
     function deserializeImage(image) {
       if (typeof image === "string") {
         const url = image;
-        const path = /^(\/\/)|([a-z]+:(\/\/)?)/i.test(url) ? url : scope.resourcePath + url;
-        return loadImage(path);
+        const path2 = /^(\/\/)|([a-z]+:(\/\/)?)/i.test(url) ? url : scope.resourcePath + url;
+        return loadImage(path2);
       } else {
         if (image.data) {
           return {
@@ -70734,8 +67889,8 @@ var ObjectLoader = class extends Loader {
     async function deserializeImage(image) {
       if (typeof image === "string") {
         const url = image;
-        const path = /^(\/\/)|([a-z]+:(\/\/)?)/i.test(url) ? url : scope.resourcePath + url;
-        return await loader.loadAsync(path);
+        const path2 = /^(\/\/)|([a-z]+:(\/\/)?)/i.test(url) ? url : scope.resourcePath + url;
+        return await loader.loadAsync(path2);
       } else {
         if (image.data) {
           return {
@@ -71873,10 +69028,10 @@ var _trackRe = new RegExp(
 );
 var _supportedObjectNames = ["material", "materials", "bones"];
 var Composite = class {
-  constructor(targetGroup, path, optionalParsedPath) {
-    const parsedPath = optionalParsedPath || PropertyBinding.parseTrackName(path);
+  constructor(targetGroup, path2, optionalParsedPath) {
+    const parsedPath = optionalParsedPath || PropertyBinding.parseTrackName(path2);
     this._targetGroup = targetGroup;
-    this._bindings = targetGroup.subscribe_(path, parsedPath);
+    this._bindings = targetGroup.subscribe_(path2, parsedPath);
   }
   getValue(array, offset) {
     this.bind();
@@ -71904,19 +69059,19 @@ var Composite = class {
   }
 };
 var PropertyBinding = class {
-  constructor(rootNode, path, parsedPath) {
-    this.path = path;
-    this.parsedPath = parsedPath || PropertyBinding.parseTrackName(path);
+  constructor(rootNode, path2, parsedPath) {
+    this.path = path2;
+    this.parsedPath = parsedPath || PropertyBinding.parseTrackName(path2);
     this.node = PropertyBinding.findNode(rootNode, this.parsedPath.nodeName) || rootNode;
     this.rootNode = rootNode;
     this.getValue = this._getValue_unbound;
     this.setValue = this._setValue_unbound;
   }
-  static create(root2, path, parsedPath) {
-    if (!(root2 && root2.isAnimationObjectGroup)) {
-      return new PropertyBinding(root2, path, parsedPath);
+  static create(root3, path2, parsedPath) {
+    if (!(root3 && root3.isAnimationObjectGroup)) {
+      return new PropertyBinding(root3, path2, parsedPath);
     } else {
-      return new PropertyBinding.Composite(root2, path, parsedPath);
+      return new PropertyBinding.Composite(root3, path2, parsedPath);
     }
   }
   /**
@@ -71956,17 +69111,17 @@ var PropertyBinding = class {
     }
     return results;
   }
-  static findNode(root2, nodeName) {
-    if (nodeName === void 0 || nodeName === "" || nodeName === "." || nodeName === -1 || nodeName === root2.name || nodeName === root2.uuid) {
-      return root2;
+  static findNode(root3, nodeName) {
+    if (nodeName === void 0 || nodeName === "" || nodeName === "." || nodeName === -1 || nodeName === root3.name || nodeName === root3.uuid) {
+      return root3;
     }
-    if (root2.skeleton) {
-      const bone = root2.skeleton.getBoneByName(nodeName);
+    if (root3.skeleton) {
+      const bone = root3.skeleton.getBoneByName(nodeName);
       if (bone !== void 0) {
         return bone;
       }
     }
-    if (root2.children) {
+    if (root3.children) {
       const searchNodeSubtree = function(children) {
         for (let i2 = 0; i2 < children.length; i2++) {
           const childNode = children[i2];
@@ -71979,7 +69134,7 @@ var PropertyBinding = class {
         }
         return null;
       };
-      const subTreeNode = searchNodeSubtree(root2.children);
+      const subTreeNode = searchNodeSubtree(root3.children);
       if (subTreeNode) {
         return subTreeNode;
       }
@@ -72348,28 +69503,28 @@ var AnimationObjectGroup = class {
     this.nCachedObjects_ = nCachedObjects;
   }
   // Internal interface used by befriended PropertyBinding.Composite:
-  subscribe_(path, parsedPath) {
+  subscribe_(path2, parsedPath) {
     const indicesByPath = this._bindingsIndicesByPath;
-    let index2 = indicesByPath[path];
+    let index2 = indicesByPath[path2];
     const bindings = this._bindings;
     if (index2 !== void 0)
       return bindings[index2];
     const paths = this._paths, parsedPaths = this._parsedPaths, objects = this._objects, nObjects = objects.length, nCachedObjects = this.nCachedObjects_, bindingsForPath = new Array(nObjects);
     index2 = bindings.length;
-    indicesByPath[path] = index2;
-    paths.push(path);
+    indicesByPath[path2] = index2;
+    paths.push(path2);
     parsedPaths.push(parsedPath);
     bindings.push(bindingsForPath);
     for (let i2 = nCachedObjects, n = objects.length; i2 !== n; ++i2) {
       const object = objects[i2];
-      bindingsForPath[i2] = new PropertyBinding(object, path, parsedPath);
+      bindingsForPath[i2] = new PropertyBinding(object, path2, parsedPath);
     }
     return bindingsForPath;
   }
-  unsubscribe_(path) {
-    const indicesByPath = this._bindingsIndicesByPath, index2 = indicesByPath[path];
+  unsubscribe_(path2) {
+    const indicesByPath = this._bindingsIndicesByPath, index2 = indicesByPath[path2];
     if (index2 !== void 0) {
-      const paths = this._paths, parsedPaths = this._parsedPaths, bindings = this._bindings, lastBindingsIndex = bindings.length - 1, lastBindings = bindings[lastBindingsIndex], lastBindingsPath = path[lastBindingsIndex];
+      const paths = this._paths, parsedPaths = this._parsedPaths, bindings = this._bindings, lastBindingsIndex = bindings.length - 1, lastBindings = bindings[lastBindingsIndex], lastBindingsPath = path2[lastBindingsIndex];
       indicesByPath[lastBindingsPath] = index2;
       bindings[index2] = lastBindings;
       bindings.pop();
@@ -72746,16 +69901,16 @@ var AnimationAction = class {
 };
 var _controlInterpolantsResultBuffer = new Float32Array(1);
 var AnimationMixer = class extends EventDispatcher {
-  constructor(root2) {
+  constructor(root3) {
     super();
-    this._root = root2;
+    this._root = root3;
     this._initMemoryManager();
     this._accuIndex = 0;
     this.time = 0;
     this.timeScale = 1;
   }
   _bindAction(action, prototypeAction) {
-    const root2 = action._localRoot || this._root, tracks = action._clip.tracks, nTracks = tracks.length, bindings = action._propertyBindings, interpolants = action._interpolants, rootUuid = root2.uuid, bindingsByRoot = this._bindingsByRootAndName;
+    const root3 = action._localRoot || this._root, tracks = action._clip.tracks, nTracks = tracks.length, bindings = action._propertyBindings, interpolants = action._interpolants, rootUuid = root3.uuid, bindingsByRoot = this._bindingsByRootAndName;
     let bindingsByName = bindingsByRoot[rootUuid];
     if (bindingsByName === void 0) {
       bindingsByName = {};
@@ -72776,9 +69931,9 @@ var AnimationMixer = class extends EventDispatcher {
           }
           continue;
         }
-        const path = prototypeAction && prototypeAction._propertyBindings[i2].binding.parsedPath;
+        const path2 = prototypeAction && prototypeAction._propertyBindings[i2].binding.parsedPath;
         binding = new PropertyMixer(
-          PropertyBinding.create(root2, trackName, path),
+          PropertyBinding.create(root3, trackName, path2),
           track.ValueTypeName,
           track.getValueSize()
         );
@@ -72989,8 +70144,8 @@ var AnimationMixer = class extends EventDispatcher {
   // object (this method allocates a lot of dynamic memory in case a
   // previously unknown clip/root combination is specified)
   clipAction(clip, optionalRoot, blendMode) {
-    const root2 = optionalRoot || this._root, rootUuid = root2.uuid;
-    let clipObject = typeof clip === "string" ? AnimationClip.findByName(root2, clip) : clip;
+    const root3 = optionalRoot || this._root, rootUuid = root3.uuid;
+    let clipObject = typeof clip === "string" ? AnimationClip.findByName(root3, clip) : clip;
     const clipUuid = clipObject !== null ? clipObject.uuid : clip;
     const actionsForClip = this._actionsByClip[clipUuid];
     let prototypeAction = null;
@@ -73019,7 +70174,7 @@ var AnimationMixer = class extends EventDispatcher {
   }
   // get an existing action
   existingAction(clip, optionalRoot) {
-    const root2 = optionalRoot || this._root, rootUuid = root2.uuid, clipObject = typeof clip === "string" ? AnimationClip.findByName(root2, clip) : clip, clipUuid = clipObject ? clipObject.uuid : clip, actionsForClip = this._actionsByClip[clipUuid];
+    const root3 = optionalRoot || this._root, rootUuid = root3.uuid, clipObject = typeof clip === "string" ? AnimationClip.findByName(root3, clip) : clip, clipUuid = clipObject ? clipObject.uuid : clip, actionsForClip = this._actionsByClip[clipUuid];
     if (actionsForClip !== void 0) {
       return actionsForClip.actionByRoot[rootUuid] || null;
     }
@@ -73079,8 +70234,8 @@ var AnimationMixer = class extends EventDispatcher {
     }
   }
   // free all resources specific to a particular root target object
-  uncacheRoot(root2) {
-    const rootUuid = root2.uuid, actionsByClip = this._actionsByClip;
+  uncacheRoot(root3) {
+    const rootUuid = root3.uuid, actionsByClip = this._actionsByClip;
     for (const clipUuid in actionsByClip) {
       const actionByRoot = actionsByClip[clipUuid].actionByRoot, action = actionByRoot[rootUuid];
       if (action !== void 0) {
@@ -74562,7 +71717,7 @@ if (typeof window !== "undefined") {
   }
 }
 
-// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
+// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_f72olm6mn3unzgg4exeiaoxanm/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
 var React = __toESM(require_react());
 var import_constants = __toESM(require_constants());
 
@@ -74675,7 +71830,7 @@ function create(createState) {
   return useStore4;
 }
 
-// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
+// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_f72olm6mn3unzgg4exeiaoxanm/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
 var import_react_reconciler = __toESM(require_react_reconciler());
 var import_scheduler = __toESM(require_scheduler2());
 
@@ -74694,9 +71849,9 @@ function shallowEqualArrays(arrA, arrB, equal = (a2, b) => a2 === b) {
   return true;
 }
 var globalCache = [];
-function query(fn, keys2, preload2 = false, config2 = {}) {
+function query(fn, keys3, preload2 = false, config2 = {}) {
   for (const entry2 of globalCache) {
-    if (shallowEqualArrays(keys2, entry2.keys, entry2.equal)) {
+    if (shallowEqualArrays(keys3, entry2.keys, entry2.equal)) {
       if (preload2)
         return void 0;
       if (Object.prototype.hasOwnProperty.call(entry2, "error"))
@@ -74708,11 +71863,11 @@ function query(fn, keys2, preload2 = false, config2 = {}) {
     }
   }
   const entry = {
-    keys: keys2,
+    keys: keys3,
     equal: config2.equal,
     promise: (
       // Execute the promise
-      fn(...keys2).then((response) => entry.response = response).then(() => {
+      fn(...keys3).then((response) => entry.response = response).then(() => {
         if (config2.lifespan && config2.lifespan > 0) {
           setTimeout(() => {
             const index2 = globalCache.indexOf(entry);
@@ -74728,13 +71883,13 @@ function query(fn, keys2, preload2 = false, config2 = {}) {
     throw entry.promise;
   return void 0;
 }
-var suspend = (fn, keys2, config2) => query(fn, keys2, false, config2);
-var preload = (fn, keys2, config2) => void query(fn, keys2, true, config2);
-var clear = (keys2) => {
-  if (keys2 === void 0 || keys2.length === 0)
+var suspend = (fn, keys3, config2) => query(fn, keys3, false, config2);
+var preload = (fn, keys3, config2) => void query(fn, keys3, true, config2);
+var clear = (keys3) => {
+  if (keys3 === void 0 || keys3.length === 0)
     globalCache.splice(0, globalCache.length);
   else {
-    const entry = globalCache.find((entry2) => shallowEqualArrays(keys2, entry2.keys, entry2.equal));
+    const entry = globalCache.find((entry2) => shallowEqualArrays(keys3, entry2.keys, entry2.equal));
     if (entry) {
       const index2 = globalCache.indexOf(entry);
       if (index2 !== -1)
@@ -74743,7 +71898,7 @@ var clear = (keys2) => {
   }
 };
 
-// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
+// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_f72olm6mn3unzgg4exeiaoxanm/node_modules/@react-three/fiber/dist/index-6279214a.esm.js
 var isOrthographicCamera = (def) => def && def.isOrthographicCamera;
 var isSSR2 = typeof window === "undefined" || !window.navigator || /ServerSideRendering|^Deno\//.test(window.navigator.userAgent);
 var useIsomorphicLayoutEffect2 = isSSR2 ? React.useEffect : React.useLayoutEffect;
@@ -74890,11 +72045,11 @@ var INDEX_REGEX = /-\d+$/;
 function attach(parent, child, type) {
   if (is.str(type)) {
     if (INDEX_REGEX.test(type)) {
-      const root2 = type.replace(INDEX_REGEX, "");
+      const root3 = type.replace(INDEX_REGEX, "");
       const {
         target: target2,
         key: key2
-      } = resolve(parent, root2);
+      } = resolve(parent, root3);
       if (!Array.isArray(target2[key2]))
         target2[key2] = [];
     }
@@ -74973,8 +72128,8 @@ function diffProps(instance, {
 function applyProps$1(instance, data) {
   var _instance$__r3f3, _root$getState;
   const localState = (_instance$__r3f3 = instance.__r3f) != null ? _instance$__r3f3 : {};
-  const root2 = localState.root;
-  const rootState = (_root$getState = root2 == null ? void 0 : root2.getState == null ? void 0 : root2.getState()) != null ? _root$getState : {};
+  const root3 = localState.root;
+  const rootState = (_root$getState = root3 == null ? void 0 : root3.getState == null ? void 0 : root3.getState()) != null ? _root$getState : {};
   const {
     memoized,
     changes
@@ -74982,13 +72137,13 @@ function applyProps$1(instance, data) {
   const prevHandlers = localState.eventCount;
   if (instance.__r3f)
     instance.__r3f.memoizedProps = memoized;
-  changes.forEach(([key, value, isEvent, keys2]) => {
+  changes.forEach(([key, value, isEvent, keys3]) => {
     let currentInstance = instance;
     let targetProp = currentInstance[key];
-    if (keys2.length) {
-      targetProp = keys2.reduce((acc, key2) => acc[key2], instance);
+    if (keys3.length) {
+      targetProp = keys3.reduce((acc, key2) => acc[key2], instance);
       if (!(targetProp && targetProp.set)) {
-        const [name, ...reverseEntries] = keys2.reverse();
+        const [name, ...reverseEntries] = keys3.reverse();
         currentInstance = reverseEntries.reverse().reduce((acc, key2) => acc[key2], instance);
         key = name;
       }
@@ -75075,9 +72230,9 @@ function updateCamera(camera, size) {
     camera.updateMatrixWorld();
   }
 }
-function setDeep(obj, value, keys2) {
-  const key = keys2.pop();
-  const target = keys2.reduce((acc, key2) => acc[key2], obj);
+function setDeep(obj, value, keys3) {
+  const key = keys3.pop();
+  const target = keys3.reduce((acc, key2) => acc[key2], obj);
   return target[key] = value;
 }
 function makeId(event) {
@@ -75242,9 +72397,9 @@ function createEvents(store) {
         };
         let extractEventProps = {};
         for (let prop in event) {
-          let property = event[prop];
-          if (typeof property !== "function")
-            extractEventProps[prop] = property;
+          let property2 = event[prop];
+          if (typeof property2 !== "function")
+            extractEventProps[prop] = property2;
         }
         let raycastEvent = {
           ...hit,
@@ -75407,7 +72562,7 @@ function createRenderer(_roots, _getEventPriority) {
     args = [],
     attach: attach2,
     ...props
-  }, root2) {
+  }, root3) {
     let name = `${type[0].toUpperCase()}${type.slice(1)}`;
     let instance;
     if (attach2 === void 0) {
@@ -75422,7 +72577,7 @@ function createRenderer(_roots, _getEventPriority) {
       const object = props.object;
       instance = prepare(object, {
         type,
-        root: root2,
+        root: root3,
         attach: attach2,
         primitive: true
       });
@@ -75435,7 +72590,7 @@ function createRenderer(_roots, _getEventPriority) {
         throw "The args prop must be an array!";
       instance = prepare(new target(...args), {
         type,
-        root: root2,
+        root: root3,
         attach: attach2,
         // Save args in case we need to reconstruct later for HMR
         memoizedProps: {
@@ -75690,11 +72845,11 @@ function createRenderer(_roots, _getEventPriority) {
 var isRenderer = (def) => !!(def != null && def.render);
 var context = /* @__PURE__ */ React.createContext(null);
 var createStore2 = (invalidate2, advance3) => {
-  const rootState = create((set2, get2) => {
+  const rootState = create((set2, get3) => {
     const position = new Vector3();
     const defaultTarget = new Vector3();
     const tempTarget = new Vector3();
-    function getCurrentViewport(camera = get2().camera, target = defaultTarget, size = get2().size) {
+    function getCurrentViewport(camera = get3().camera, target = defaultTarget, size = get3().size) {
       const {
         width,
         height,
@@ -75742,7 +72897,7 @@ var createStore2 = (invalidate2, advance3) => {
     const pointer = new Vector2();
     const rootState2 = {
       set: set2,
-      get: get2,
+      get: get3,
       // Mock objects that have to be configured
       gl: null,
       camera: null,
@@ -75753,8 +72908,8 @@ var createStore2 = (invalidate2, advance3) => {
         connected: false
       },
       xr: null,
-      invalidate: (frames = 1) => invalidate2(get2(), frames),
-      advance: (timestamp, runGlobalEffects) => advance3(timestamp, runGlobalEffects, get2()),
+      invalidate: (frames = 1) => invalidate2(get3(), frames),
+      advance: (timestamp, runGlobalEffects) => advance3(timestamp, runGlobalEffects, get3()),
       legacy: false,
       linear: false,
       flat: false,
@@ -75771,12 +72926,12 @@ var createStore2 = (invalidate2, advance3) => {
         max: 1,
         debounce: 200,
         regress: () => {
-          const state2 = get2();
+          const state2 = get3();
           if (performanceTimeout)
             clearTimeout(performanceTimeout);
           if (state2.performance.current !== state2.performance.min)
             setPerformanceCurrent(state2.performance.min);
-          performanceTimeout = setTimeout(() => setPerformanceCurrent(get2().performance.max), state2.performance.debounce);
+          performanceTimeout = setTimeout(() => setPerformanceCurrent(get3().performance.max), state2.performance.debounce);
         }
       },
       size: {
@@ -75806,7 +72961,7 @@ var createStore2 = (invalidate2, advance3) => {
         }
       })),
       setSize: (width, height, updateStyle, top, left) => {
-        const camera = get2().camera;
+        const camera = get3().camera;
         const size = {
           width,
           height,
@@ -75833,7 +72988,7 @@ var createStore2 = (invalidate2, advance3) => {
         };
       }),
       setFrameloop: (frameloop = "always") => {
-        const clock2 = get2().clock;
+        const clock2 = get3().clock;
         clock2.stop();
         clock2.elapsedTime = 0;
         if (frameloop !== "never") {
@@ -75857,7 +73012,7 @@ var createStore2 = (invalidate2, advance3) => {
         initialHits: [],
         capturedMap: /* @__PURE__ */ new Map(),
         subscribe: (ref, priority2, store) => {
-          const internal = get2().internal;
+          const internal = get3().internal;
           internal.priority = internal.priority + (priority2 > 0 ? 1 : 0);
           internal.subscribers.push({
             ref,
@@ -75866,7 +73021,7 @@ var createStore2 = (invalidate2, advance3) => {
           });
           internal.subscribers = internal.subscribers.sort((a2, b) => a2.priority - b.priority);
           return () => {
-            const internal2 = get2().internal;
+            const internal2 = get3().internal;
             if (internal2 != null && internal2.subscribers) {
               internal2.priority = internal2.priority - (priority2 > 0 ? 1 : 0);
               internal2.subscribers = internal2.subscribers.filter((s) => s.ref !== ref);
@@ -75956,9 +73111,9 @@ function createLoop(roots2) {
     repeat = 0;
     if (globalEffects.size)
       run(globalEffects, timestamp);
-    roots2.forEach((root2) => {
+    roots2.forEach((root3) => {
       var _state$gl$xr;
-      state = root2.store.getState();
+      state = root3.store.getState();
       if (state.internal.active && (state.frameloop === "always" || state.internal.frames > 0) && !((_state$gl$xr = state.gl.xr) != null && _state$gl$xr.isPresenting)) {
         repeat += render$1(timestamp, state);
       }
@@ -75975,7 +73130,7 @@ function createLoop(roots2) {
   function invalidate2(state2, frames = 1) {
     var _state$gl$xr2;
     if (!state2)
-      return roots2.forEach((root2) => invalidate2(root2.store.getState()), frames);
+      return roots2.forEach((root3) => invalidate2(root3.store.getState()), frames);
     if ((_state$gl$xr2 = state2.gl.xr) != null && _state$gl$xr2.isPresenting || !state2.internal.active || state2.frameloop === "never")
       return;
     state2.internal.frames = Math.min(60, state2.internal.frames + frames);
@@ -75988,7 +73143,7 @@ function createLoop(roots2) {
     if (runGlobalEffects)
       run(globalEffects, timestamp);
     if (!state2)
-      roots2.forEach((root2) => render$1(timestamp, root2.store.getState()));
+      roots2.forEach((root3) => render$1(timestamp, root3.store.getState()));
     else
       render$1(timestamp, state2, frame3);
     if (runGlobalEffects)
@@ -76037,19 +73192,19 @@ function loadingFn(extensions, onProgress) {
   };
 }
 function useLoader(Proto, input, extensions, onProgress) {
-  const keys2 = Array.isArray(input) ? input : [input];
-  const results = suspend(loadingFn(extensions, onProgress), [Proto, ...keys2], {
+  const keys3 = Array.isArray(input) ? input : [input];
+  const results = suspend(loadingFn(extensions, onProgress), [Proto, ...keys3], {
     equal: is.equ
   });
   return Array.isArray(input) ? results : results[0];
 }
 useLoader.preload = function(Proto, input, extensions) {
-  const keys2 = Array.isArray(input) ? input : [input];
-  return preload(loadingFn(extensions), [Proto, ...keys2]);
+  const keys3 = Array.isArray(input) ? input : [input];
+  return preload(loadingFn(extensions), [Proto, ...keys3]);
 };
 useLoader.clear = function(Proto, input) {
-  const keys2 = Array.isArray(input) ? input : [input];
-  return clear([Proto, ...keys2]);
+  const keys3 = Array.isArray(input) ? input : [input];
+  return clear([Proto, ...keys3]);
 };
 var roots = /* @__PURE__ */ new Map();
 var {
@@ -76304,10 +73459,10 @@ function Provider({
   }, children);
 }
 function unmountComponentAtNode(canvas2, callback) {
-  const root2 = roots.get(canvas2);
-  const fiber = root2 == null ? void 0 : root2.fiber;
+  const root3 = roots.get(canvas2);
+  const fiber = root3 == null ? void 0 : root3.fiber;
   if (fiber) {
-    const state = root2 == null ? void 0 : root2.store.getState();
+    const state = root3 == null ? void 0 : root3.store.getState();
     if (state)
       state.internal.active = false;
     reconciler.updateContainer(null, fiber, null, () => {
@@ -76337,7 +73492,7 @@ reconciler.injectIntoDevTools({
   version: React.version
 });
 
-// ../../node_modules/.pnpm/@babel+runtime@7.22.6/node_modules/@babel/runtime/helpers/esm/extends.js
+// ../../node_modules/.pnpm/@babel+runtime@7.21.5/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function(target) {
     for (var i2 = 1; i2 < arguments.length; i2++) {
@@ -76353,10 +73508,10 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/fiber/dist/react-three-fiber.esm.js
+// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_f72olm6mn3unzgg4exeiaoxanm/node_modules/@react-three/fiber/dist/react-three-fiber.esm.js
 var React2 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/react-use-measure@2.1.1_react-dom@18.2.0_react@18.2.0/node_modules/react-use-measure/dist/web.js
+// ../../node_modules/.pnpm/react-use-measure@2.1.1_biqbaboplfbrettd7655fr4n2y/node_modules/react-use-measure/dist/web.js
 var import_react2 = __toESM(require_react());
 var import_debounce = __toESM(require_debounce());
 function useMeasure(_temp) {
@@ -76506,7 +73661,7 @@ function findScrollContainers(element) {
 var keys = ["x", "y", "top", "bottom", "left", "right", "width", "height"];
 var areBoundsEqual = (a2, b) => keys.every((key) => a2[key] === b[key]);
 
-// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/fiber/dist/react-three-fiber.esm.js
+// ../../node_modules/.pnpm/@react-three+fiber@8.2.0_f72olm6mn3unzgg4exeiaoxanm/node_modules/@react-three/fiber/dist/react-three-fiber.esm.js
 var import_constants2 = __toESM(require_constants());
 var import_react_reconciler2 = __toESM(require_react_reconciler());
 var import_scheduler2 = __toESM(require_scheduler2());
@@ -76622,11 +73777,11 @@ var Canvas = /* @__PURE__ */ React2.forwardRef(function Canvas2({
     throw block;
   if (error)
     throw error;
-  const root2 = React2.useRef(null);
+  const root3 = React2.useRef(null);
   if (containerRect.width > 0 && containerRect.height > 0 && canvas2) {
-    if (!root2.current)
-      root2.current = createRoot(canvas2);
-    root2.current.configure({
+    if (!root3.current)
+      root3.current = createRoot(canvas2);
+    root3.current.configure({
       gl,
       events,
       shadows,
@@ -76647,7 +73802,7 @@ var Canvas = /* @__PURE__ */ React2.forwardRef(function Canvas2({
         onCreated == null ? void 0 : onCreated(state);
       }
     });
-    root2.current.render(/* @__PURE__ */ React2.createElement(ErrorBoundary, {
+    root3.current.render(/* @__PURE__ */ React2.createElement(ErrorBoundary, {
       set: setError
     }, /* @__PURE__ */ React2.createElement(React2.Suspense, {
       fallback: /* @__PURE__ */ React2.createElement(Block, {
@@ -77777,8 +74932,8 @@ function constant_default(x3) {
 }
 
 // ../../node_modules/.pnpm/d3-force-3d@3.0.5/node_modules/d3-force-3d/src/jiggle.js
-function jiggle_default(random2) {
-  return (random2() - 0.5) * 1e-6;
+function jiggle_default(random) {
+  return (random() - 0.5) * 1e-6;
 }
 
 // ../../node_modules/.pnpm/d3-force-3d@3.0.5/node_modules/d3-force-3d/src/collide.js
@@ -77792,7 +74947,7 @@ function z(d) {
   return d.z + d.vz;
 }
 function collide_default(radius) {
-  var nodes2, nDim, radii, random2, strength = 1, iterations = 1;
+  var nodes2, nDim, radii, random, strength = 1, iterations = 1;
   if (typeof radius !== "function")
     radius = constant_default(radius == null ? 1 : +radius);
   function force() {
@@ -77821,11 +74976,11 @@ function collide_default(radius) {
           var x3 = xi - data.x - data.vx, y3 = nDim > 1 ? yi - data.y - data.vy : 0, z3 = nDim > 2 ? zi - data.z - data.vz : 0, l = x3 * x3 + y3 * y3 + z3 * z3;
           if (l < r * r) {
             if (x3 === 0)
-              x3 = jiggle_default(random2), l += x3 * x3;
+              x3 = jiggle_default(random), l += x3 * x3;
             if (nDim > 1 && y3 === 0)
-              y3 = jiggle_default(random2), l += y3 * y3;
+              y3 = jiggle_default(random), l += y3 * y3;
             if (nDim > 2 && z3 === 0)
-              z3 = jiggle_default(random2), l += z3 * z3;
+              z3 = jiggle_default(random), l += z3 * z3;
             l = (r - (l = Math.sqrt(l))) / l * strength;
             node.vx += (x3 *= l) * (r = (rj *= rj) / (ri2 + rj));
             if (nDim > 1) {
@@ -77867,7 +75022,7 @@ function collide_default(radius) {
   }
   force.initialize = function(_nodes, ...args) {
     nodes2 = _nodes;
-    random2 = args.find((arg) => typeof arg === "function") || Math.random;
+    random = args.find((arg) => typeof arg === "function") || Math.random;
     nDim = args.find((arg) => [1, 2, 3].includes(arg)) || 2;
     initialize();
   };
@@ -77894,7 +75049,7 @@ function find(nodeById, nodeId) {
   return node;
 }
 function link_default(links) {
-  var id2 = index, strength = defaultStrength, strengths, distance = constant_default(30), distances, nodes2, nDim, count2, bias, random2, iterations = 1;
+  var id2 = index, strength = defaultStrength, strengths, distance = constant_default(30), distances, nodes2, nDim, count2, bias, random, iterations = 1;
   if (links == null)
     links = [];
   function defaultStrength(link) {
@@ -77904,12 +75059,12 @@ function link_default(links) {
     for (var k = 0, n = links.length; k < iterations; ++k) {
       for (var i2 = 0, link, source, target, x3 = 0, y3 = 0, z3 = 0, l, b; i2 < n; ++i2) {
         link = links[i2], source = link.source, target = link.target;
-        x3 = target.x + target.vx - source.x - source.vx || jiggle_default(random2);
+        x3 = target.x + target.vx - source.x - source.vx || jiggle_default(random);
         if (nDim > 1) {
-          y3 = target.y + target.vy - source.y - source.vy || jiggle_default(random2);
+          y3 = target.y + target.vy - source.y - source.vy || jiggle_default(random);
         }
         if (nDim > 2) {
-          z3 = target.z + target.vz - source.z - source.vz || jiggle_default(random2);
+          z3 = target.z + target.vz - source.z - source.vz || jiggle_default(random);
         }
         l = Math.sqrt(x3 * x3 + y3 * y3 + z3 * z3);
         l = (l - distances[i2]) / l * alpha * strengths[i2];
@@ -77966,7 +75121,7 @@ function link_default(links) {
   }
   force.initialize = function(_nodes, ...args) {
     nodes2 = _nodes;
-    random2 = args.find((arg) => typeof arg === "function") || Math.random;
+    random = args.find((arg) => typeof arg === "function") || Math.random;
     nDim = args.find((arg) => [1, 2, 3].includes(arg)) || 2;
     initialize();
   };
@@ -78213,7 +75368,7 @@ var initialAngleRoll = Math.PI * (3 - Math.sqrt(5));
 var initialAngleYaw = Math.PI * 20 / (9 + Math.sqrt(221));
 function simulation_default(nodes2, numDimensions) {
   numDimensions = numDimensions || 2;
-  var nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(numDimensions))), simulation, alpha = 1, alphaMin = 1e-3, alphaDecay = 1 - Math.pow(alphaMin, 1 / 300), alphaTarget = 0, velocityDecay = 0.6, forces = /* @__PURE__ */ new Map(), stepper = timer(step), event = dispatch_default("tick", "end"), random2 = lcg_default();
+  var nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(numDimensions))), simulation, alpha = 1, alphaMin = 1e-3, alphaDecay = 1 - Math.pow(alphaMin, 1 / 300), alphaTarget = 0, velocityDecay = 0.6, forces = /* @__PURE__ */ new Map(), stepper = timer(step), event = dispatch_default("tick", "end"), random = lcg_default();
   if (nodes2 == null)
     nodes2 = [];
   function step() {
@@ -78290,7 +75445,7 @@ function simulation_default(nodes2, numDimensions) {
   }
   function initializeForce(force) {
     if (force.initialize)
-      force.initialize(nodes2, random2, nDim);
+      force.initialize(nodes2, random, nDim);
     return force;
   }
   initializeNodes();
@@ -78324,7 +75479,7 @@ function simulation_default(nodes2, numDimensions) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
     },
     randomSource: function(_) {
-      return arguments.length ? (random2 = _, forces.forEach(initializeForce), simulation) : random2;
+      return arguments.length ? (random = _, forces.forEach(initializeForce), simulation) : random;
     },
     force: function(name, _) {
       return arguments.length > 1 ? (_ == null ? forces.delete(name) : forces.set(name, initializeForce(_)), simulation) : forces.get(name);
@@ -78353,7 +75508,7 @@ function simulation_default(nodes2, numDimensions) {
 
 // ../../node_modules/.pnpm/d3-force-3d@3.0.5/node_modules/d3-force-3d/src/manyBody.js
 function manyBody_default() {
-  var nodes2, nDim, node, random2, alpha, strength = constant_default(-30), strengths, distanceMin2 = 1, distanceMax2 = Infinity, theta2 = 0.81;
+  var nodes2, nDim, node, random, alpha, strength = constant_default(-30), strengths, distanceMin2 = 1, distanceMax2 = Infinity, theta2 = 0.81;
   function force(_) {
     var i2, n = nodes2.length, tree = (nDim === 1 ? binarytree(nodes2, x2) : nDim === 2 ? quadtree(nodes2, x2, y2) : nDim === 3 ? octree(nodes2, x2, y2, z2) : null).visitAfter(accumulate);
     for (alpha = _, i2 = 0; i2 < n; ++i2)
@@ -78407,11 +75562,11 @@ function manyBody_default() {
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
         if (x3 === 0)
-          x3 = jiggle_default(random2), l += x3 * x3;
+          x3 = jiggle_default(random), l += x3 * x3;
         if (nDim > 1 && y3 === 0)
-          y3 = jiggle_default(random2), l += y3 * y3;
+          y3 = jiggle_default(random), l += y3 * y3;
         if (nDim > 2 && z3 === 0)
-          z3 = jiggle_default(random2), l += z3 * z3;
+          z3 = jiggle_default(random), l += z3 * z3;
         if (l < distanceMin2)
           l = Math.sqrt(distanceMin2 * l);
         node.vx += x3 * treeNode.value * alpha / l;
@@ -78427,11 +75582,11 @@ function manyBody_default() {
       return;
     if (treeNode.data !== node || treeNode.next) {
       if (x3 === 0)
-        x3 = jiggle_default(random2), l += x3 * x3;
+        x3 = jiggle_default(random), l += x3 * x3;
       if (nDim > 1 && y3 === 0)
-        y3 = jiggle_default(random2), l += y3 * y3;
+        y3 = jiggle_default(random), l += y3 * y3;
       if (nDim > 2 && z3 === 0)
-        z3 = jiggle_default(random2), l += z3 * z3;
+        z3 = jiggle_default(random), l += z3 * z3;
       if (l < distanceMin2)
         l = Math.sqrt(distanceMin2 * l);
     }
@@ -78450,7 +75605,7 @@ function manyBody_default() {
   }
   force.initialize = function(_nodes, ...args) {
     nodes2 = _nodes;
-    random2 = args.find((arg) => typeof arg === "function") || Math.random;
+    random = args.find((arg) => typeof arg === "function") || Math.random;
     nDim = args.find((arg) => [1, 2, 3].includes(arg)) || 2;
     initialize();
   };
@@ -78687,8 +75842,8 @@ function cluster() {
   return force;
 }
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
-var import_circular = __toESM(require_circular(), 1);
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
+var import_ngraph_circular = __toESM(require_ngraph_circular(), 1);
 
 // ../../node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/count.js
 function count(node) {
@@ -78828,9 +75983,9 @@ function leaves_default() {
 
 // ../../node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/links.js
 function links_default() {
-  var root2 = this, links = [];
-  root2.each(function(node) {
-    if (node !== root2) {
+  var root3 = this, links = [];
+  root3.each(function(node) {
+    if (node !== root3) {
       links.push({ source: node.parent, target: node });
     }
   });
@@ -78862,7 +76017,7 @@ function hierarchy(data, children) {
   } else if (children === void 0) {
     children = objectChildren;
   }
-  var root2 = new Node2(data), node, nodes2 = [root2], child, childs, i2, n;
+  var root3 = new Node2(data), node, nodes2 = [root3], child, childs, i2, n;
   while (node = nodes2.pop()) {
     if ((childs = children(node.data)) && (n = (childs = Array.from(childs)).length)) {
       node.children = childs;
@@ -78873,7 +76028,7 @@ function hierarchy(data, children) {
       }
     }
   }
-  return root2.eachBefore(computeHeight);
+  return root3.eachBefore(computeHeight);
 }
 function node_copy() {
   return hierarchy(this).eachBefore(copyData);
@@ -78939,11 +76094,11 @@ function defaultParentId(d) {
   return d.parentId;
 }
 function stratify_default() {
-  var id2 = defaultId, parentId = defaultParentId, path;
+  var id2 = defaultId, parentId = defaultParentId, path2;
   function stratify(data) {
-    var nodes2 = Array.from(data), currentId = id2, currentParentId = parentId, n, d, i2, root2, parent, node, nodeId, nodeKey, nodeByKey = /* @__PURE__ */ new Map();
-    if (path != null) {
-      const I = nodes2.map((d2, i3) => normalize2(path(d2, i3, data)));
+    var nodes2 = Array.from(data), currentId = id2, currentParentId = parentId, n, d, i2, root3, parent, node, nodeId, nodeKey, nodeByKey = /* @__PURE__ */ new Map();
+    if (path2 != null) {
+      const I = nodes2.map((d2, i3) => normalize2(path2(d2, i3, data)));
       const P = I.map(parentof);
       const S = new Set(I).add("");
       for (const i3 of P) {
@@ -78981,16 +76136,16 @@ function stratify_default() {
           parent.children = [node];
         node.parent = parent;
       } else {
-        if (root2)
+        if (root3)
           throw new Error("multiple roots");
-        root2 = node;
+        root3 = node;
       }
     }
-    if (!root2)
+    if (!root3)
       throw new Error("no root");
-    if (path != null) {
-      while (root2.data === imputed && root2.children.length === 1) {
-        root2 = root2.children[0], --n;
+    if (path2 != null) {
+      while (root3.data === imputed && root3.children.length === 1) {
+        root3 = root3.children[0], --n;
       }
       for (let i3 = nodes2.length - 1; i3 >= 0; --i3) {
         node = nodes2[i3];
@@ -78999,15 +76154,15 @@ function stratify_default() {
         node.data = null;
       }
     }
-    root2.parent = preroot;
-    root2.eachBefore(function(node2) {
+    root3.parent = preroot;
+    root3.eachBefore(function(node2) {
       node2.depth = node2.parent.depth + 1;
       --n;
     }).eachBefore(computeHeight);
-    root2.parent = null;
+    root3.parent = null;
     if (n > 0)
       throw new Error("cycle");
-    return root2;
+    return root3;
   }
   stratify.id = function(x3) {
     return arguments.length ? (id2 = optional(x3), stratify) : id2;
@@ -79016,30 +76171,30 @@ function stratify_default() {
     return arguments.length ? (parentId = optional(x3), stratify) : parentId;
   };
   stratify.path = function(x3) {
-    return arguments.length ? (path = optional(x3), stratify) : path;
+    return arguments.length ? (path2 = optional(x3), stratify) : path2;
   };
   return stratify;
 }
-function normalize2(path) {
-  path = `${path}`;
-  let i2 = path.length;
-  if (slash(path, i2 - 1) && !slash(path, i2 - 2))
-    path = path.slice(0, -1);
-  return path[0] === "/" ? path : `/${path}`;
+function normalize2(path2) {
+  path2 = `${path2}`;
+  let i2 = path2.length;
+  if (slash(path2, i2 - 1) && !slash(path2, i2 - 2))
+    path2 = path2.slice(0, -1);
+  return path2[0] === "/" ? path2 : `/${path2}`;
 }
-function parentof(path) {
-  let i2 = path.length;
+function parentof(path2) {
+  let i2 = path2.length;
   if (i2 < 2)
     return "";
   while (--i2 > 1)
-    if (slash(path, i2))
+    if (slash(path2, i2))
       break;
-  return path.slice(0, i2);
+  return path2.slice(0, i2);
 }
-function slash(path, i2) {
-  if (path[i2] === "/") {
+function slash(path2, i2) {
+  if (path2[i2] === "/") {
     let k = 0;
-    while (i2 > 0 && path[--i2] === "\\")
+    while (i2 > 0 && path2[--i2] === "\\")
       ++k;
     if ((k & 1) === 0)
       return true;
@@ -79093,8 +76248,8 @@ function TreeNode(node, i2) {
   this.i = i2;
 }
 TreeNode.prototype = Object.create(Node2.prototype);
-function treeRoot(root2) {
-  var tree = new TreeNode(root2, 0), node, nodes2 = [tree], child, children, i2, n;
+function treeRoot(root3) {
+  var tree = new TreeNode(root3, 0), node, nodes2 = [tree], child, children, i2, n;
   while (node = nodes2.pop()) {
     if (children = node._.children) {
       node.children = new Array(n = children.length);
@@ -79109,15 +76264,15 @@ function treeRoot(root2) {
 }
 function tree_default() {
   var separation = defaultSeparation, dx = 1, dy = 1, nodeSize = null;
-  function tree(root2) {
-    var t = treeRoot(root2);
+  function tree(root3) {
+    var t = treeRoot(root3);
     t.eachAfter(firstWalk), t.parent.m = -t.z;
     t.eachBefore(secondWalk);
     if (nodeSize)
-      root2.eachBefore(sizeNode);
+      root3.eachBefore(sizeNode);
     else {
-      var left = root2, right = root2, bottom = root2;
-      root2.eachBefore(function(node) {
+      var left = root3, right = root3, bottom = root3;
+      root3.eachBefore(function(node) {
         if (node.x < left.x)
           left = node;
         if (node.x > right.x)
@@ -79126,12 +76281,12 @@ function tree_default() {
           bottom = node;
       });
       var s = left === right ? 1 : separation(left, right) / 2, tx = s - left.x, kx = dx / (right.x + s + tx), ky = dy / (bottom.depth || 1);
-      root2.eachBefore(function(node) {
+      root3.eachBefore(function(node) {
         node.x = (node.x + tx) * kx;
         node.y = node.depth * ky;
       });
     }
-    return root2;
+    return root3;
   }
   function firstWalk(v) {
     var children = v.children, siblings = v.parent.children, w = v.i ? siblings[v.i - 1] : null;
@@ -79199,12 +76354,9 @@ function tree_default() {
   return tree;
 }
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
-var import_graphology_layout_noverlap = __toESM(require_graphology_layout_noverlap(), 1);
-var import_graphology_layout_forceatlas2 = __toESM(require_graphology_layout_forceatlas2(), 1);
-var import_random = __toESM(require_random(), 1);
-var import_pagerank = __toESM(require_pagerank(), 1);
-var import_degree = __toESM(require_degree(), 1);
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
+var import_ngraph = __toESM(require_ngraph(), 1);
+var import_ngraph2 = __toESM(require_ngraph2(), 1);
 
 // ../../node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ascending.js
 function ascending(a2, b) {
@@ -80486,10 +77638,10 @@ function createContext2() {
   };
 }
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
-var import_graphology = __toESM(require_graphology_umd_min(), 1);
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
+var import_ngraph3 = __toESM(require_ngraph4(), 1);
 
-// ../../node_modules/.pnpm/@react-three+drei@9.17.1_@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/drei/web/Html.js
+// ../../node_modules/.pnpm/@react-three+drei@9.17.1_vnr756pd6qiopewlbivqw7hzci/node_modules/@react-three/drei/web/Html.js
 var React3 = __toESM(require_react());
 var ReactDOM = __toESM(require_client());
 var v1 = new Vector3();
@@ -80599,7 +77751,7 @@ var Html = /* @__PURE__ */ React3.forwardRef(({
     raycaster: raycaster2
   }) => raycaster2);
   const [el] = React3.useState(() => document.createElement(as));
-  const root2 = React3.useRef();
+  const root3 = React3.useRef();
   const group = React3.useRef(null);
   const oldZoom = React3.useRef(0);
   const oldPosition = React3.useRef([0, 0]);
@@ -80608,7 +77760,7 @@ var Html = /* @__PURE__ */ React3.forwardRef(({
   const target = (_portal$current = portal == null ? void 0 : portal.current) !== null && _portal$current !== void 0 ? _portal$current : gl.domElement.parentNode;
   React3.useLayoutEffect(() => {
     if (group.current) {
-      const currentRoot = root2.current = ReactDOM.createRoot(el);
+      const currentRoot = root3.current = ReactDOM.createRoot(el);
       scene.updateMatrixWorld();
       if (transform) {
         el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;overflow:hidden;`;
@@ -80665,7 +77817,7 @@ var Html = /* @__PURE__ */ React3.forwardRef(({
   React3.useLayoutEffect(() => {
     if (transform) {
       var _root$current;
-      (_root$current = root2.current) == null ? void 0 : _root$current.render(/* @__PURE__ */ React3.createElement("div", {
+      (_root$current = root3.current) == null ? void 0 : _root$current.render(/* @__PURE__ */ React3.createElement("div", {
         ref: transformOuterRef,
         style: styles
       }, /* @__PURE__ */ React3.createElement("div", {
@@ -80679,7 +77831,7 @@ var Html = /* @__PURE__ */ React3.forwardRef(({
       }))));
     } else {
       var _root$current2;
-      (_root$current2 = root2.current) == null ? void 0 : _root$current2.render(/* @__PURE__ */ React3.createElement("div", {
+      (_root$current2 = root3.current) == null ? void 0 : _root$current2.render(/* @__PURE__ */ React3.createElement("div", {
         ref,
         style: styles,
         className,
@@ -80756,7 +77908,7 @@ var Html = /* @__PURE__ */ React3.forwardRef(({
   }));
 });
 
-// ../../node_modules/.pnpm/@react-three+drei@9.17.1_@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/drei/web/useCursor.js
+// ../../node_modules/.pnpm/@react-three+drei@9.17.1_vnr756pd6qiopewlbivqw7hzci/node_modules/@react-three/drei/web/useCursor.js
 var React4 = __toESM(require_react());
 function useCursor(hovered, onPointerOver = "pointer", onPointerOut = "auto") {
   React4.useEffect(() => {
@@ -81460,16 +78612,16 @@ function callFluidObservers(target, event) {
   }
 }
 var FluidValue = class {
-  constructor(get2) {
+  constructor(get3) {
     this[$get] = void 0;
     this[$observers] = void 0;
-    if (!get2 && !(get2 = this.get)) {
+    if (!get3 && !(get3 = this.get)) {
       throw Error("Unknown getter");
     }
-    setFluidGetter(this, get2);
+    setFluidGetter(this, get3);
   }
 };
-var setFluidGetter = (target, get2) => setHidden(target, $get, get2);
+var setFluidGetter = (target, get3) => setHidden(target, $get, get3);
 function addFluidObserver(target, observer) {
   if (target[$get]) {
     let observers = target[$observers];
@@ -81989,13 +79141,13 @@ var resolveProp = (prop, key) => is2.obj(prop) ? key && prop[key] : prop;
 var getDefaultProp = (props, key) => props.default === true ? props[key] : props.default ? props.default[key] : void 0;
 var noopTransform = (value) => value;
 var getDefaultProps = (props, transform = noopTransform) => {
-  let keys2 = DEFAULT_PROPS;
+  let keys3 = DEFAULT_PROPS;
   if (props.default && props.default !== true) {
     props = props.default;
-    keys2 = Object.keys(props);
+    keys3 = Object.keys(props);
   }
   const defaults2 = {};
-  for (const key of keys2) {
+  for (const key of keys3) {
     const value = transform(props[key], key);
     if (!is2.und(value)) {
       defaults2[key] = value;
@@ -83119,12 +80271,12 @@ function createUpdate(props) {
     to: to2,
     from
   } = props = inferTo(props);
-  const keys2 = /* @__PURE__ */ new Set();
+  const keys3 = /* @__PURE__ */ new Set();
   if (is2.obj(to2))
-    findDefined(to2, keys2);
+    findDefined(to2, keys3);
   if (is2.obj(from))
-    findDefined(from, keys2);
-  props.keys = keys2.size ? Array.from(keys2) : null;
+    findDefined(from, keys3);
+  props.keys = keys3.size ? Array.from(keys3) : null;
   return props;
 }
 function declareUpdate(props) {
@@ -83134,8 +80286,8 @@ function declareUpdate(props) {
   }
   return update3;
 }
-function findDefined(values, keys2) {
-  eachProp(values, (value, key) => value != null && keys2.add(key));
+function findDefined(values, keys3) {
+  eachProp(values, (value, key) => value != null && keys3.add(key));
 }
 var ACTIVE_EVENTS = ["onStart", "onRest", "onChange", "onPause", "onResume"];
 function mergeActiveFn(target, props, type) {
@@ -83227,38 +80379,38 @@ var Controller = class {
     prepareKeys(this, queue);
     return flushUpdateQueue(this, queue);
   }
-  stop(arg, keys2) {
+  stop(arg, keys3) {
     if (arg !== !!arg) {
-      keys2 = arg;
+      keys3 = arg;
     }
-    if (keys2) {
+    if (keys3) {
       const springs = this.springs;
-      each(toArray(keys2), (key) => springs[key].stop(!!arg));
+      each(toArray(keys3), (key) => springs[key].stop(!!arg));
     } else {
       stopAsync(this._state, this._lastAsyncId);
       this.each((spring) => spring.stop(!!arg));
     }
     return this;
   }
-  pause(keys2) {
-    if (is2.und(keys2)) {
+  pause(keys3) {
+    if (is2.und(keys3)) {
       this.start({
         pause: true
       });
     } else {
       const springs = this.springs;
-      each(toArray(keys2), (key) => springs[key].pause());
+      each(toArray(keys3), (key) => springs[key].pause());
     }
     return this;
   }
-  resume(keys2) {
-    if (is2.und(keys2)) {
+  resume(keys3) {
+    if (is2.und(keys3)) {
       this.start({
         pause: false
       });
     } else {
       const springs = this.springs;
-      each(toArray(keys2), (key) => springs[key].resume());
+      each(toArray(keys3), (key) => springs[key].resume());
     }
     return this;
   }
@@ -83314,7 +80466,7 @@ function flushUpdateQueue(ctrl, queue) {
 }
 async function flushUpdate(ctrl, props, isLoop) {
   const {
-    keys: keys2,
+    keys: keys3,
     to: to2,
     from,
     loop: loop2,
@@ -83372,7 +80524,7 @@ async function flushUpdate(ctrl, props, isLoop) {
   } else if (state.paused) {
     props.pause = true;
   }
-  const promises = (keys2 || Object.keys(ctrl.springs)).map((key) => ctrl.springs[key].start(props));
+  const promises = (keys3 || Object.keys(ctrl.springs)).map((key) => ctrl.springs[key].start(props));
   const cancel = props.cancel === true || getDefaultProp(props, "cancel") === true;
   if (asyncTo || cancel && state.asyncId) {
     promises.push(scheduleProps(++ctrl["_lastAsyncId"], {
@@ -83771,7 +80923,7 @@ globals.assign({
 });
 var update2 = frameLoop.advance;
 
-// ../../node_modules/.pnpm/@react-spring+three@9.4.4_@react-three+fiber@8.2.0_react@18.2.0_three@0.143.0/node_modules/@react-spring/three/dist/react-spring-three.esm.js
+// ../../node_modules/.pnpm/@react-spring+three@9.4.4_d4rjenk6zway2byjygmidpycvq/node_modules/@react-spring/three/dist/react-spring-three.esm.js
 var primitives = ["primitive"].concat(Object.keys(three_module_exports).filter((key) => /^[A-Z]/.test(key)).map((key) => key[0].toLowerCase() + key.slice(1)));
 globals.assign({
   createStringInterpolator,
@@ -83786,7 +80938,7 @@ var host = createHost(primitives, {
 });
 var animated = host.animated;
 
-// ../../node_modules/.pnpm/three-stdlib@2.23.13_three@0.143.0/node_modules/three-stdlib/utils/BufferGeometryUtils.js
+// ../../node_modules/.pnpm/three-stdlib@2.23.10_three@0.143.0/node_modules/three-stdlib/utils/BufferGeometryUtils.js
 var mergeBufferGeometries = (geometries, useGroups) => {
   const isIndexed = geometries[0].index !== null;
   const attributesUsed = new Set(Object.keys(geometries[0].attributes));
@@ -83947,7 +81099,7 @@ var mergeBufferAttributes = (attributes) => {
   }
 };
 
-// ../../node_modules/.pnpm/three-stdlib@2.23.13_three@0.143.0/node_modules/three-stdlib/interactive/SelectionBox.js
+// ../../node_modules/.pnpm/three-stdlib@2.23.10_three@0.143.0/node_modules/three-stdlib/interactive/SelectionBox.js
 var frustum = /* @__PURE__ */ new Frustum();
 var center = /* @__PURE__ */ new Vector3();
 var tmpPoint = /* @__PURE__ */ new Vector3();
@@ -84079,7 +81231,7 @@ var SelectionBox = class {
   }
 };
 
-// ../../node_modules/.pnpm/@react-three+drei@9.17.1_@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/drei/core/Billboard.js
+// ../../node_modules/.pnpm/@react-three+drei@9.17.1_vnr756pd6qiopewlbivqw7hzci/node_modules/@react-three/drei/core/Billboard.js
 var React8 = __toESM(require_react());
 var Billboard = /* @__PURE__ */ React8.forwardRef(function Billboard2({
   follow = true,
@@ -84108,7 +81260,7 @@ var Billboard = /* @__PURE__ */ React8.forwardRef(function Billboard2({
   }, props));
 });
 
-// ../../node_modules/.pnpm/@react-three+drei@9.17.1_@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/drei/core/Text.js
+// ../../node_modules/.pnpm/@react-three+drei@9.17.1_vnr756pd6qiopewlbivqw7hzci/node_modules/@react-three/drei/core/Text.js
 var React9 = __toESM(require_react());
 
 // ../../node_modules/.pnpm/troika-worker-utils@0.46.0/node_modules/troika-worker-utils/dist/troika-worker-utils.esm.js
@@ -84884,14 +82036,14 @@ function SDFGenerator() {
       renderImageData,
       resizeWebGLCanvasWithoutClearing: resizeWebGLCanvasWithoutClearing2
     });
-    function generate$2(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent) {
+    function generate$2(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       var textureData = new Uint8Array(sdfWidth * sdfHeight);
       var viewBoxWidth = viewBox[2] - viewBox[0];
       var viewBoxHeight = viewBox[3] - viewBox[1];
       var segments = [];
-      pathToLineSegments(path, function(x1, y1, x22, y22) {
+      pathToLineSegments(path2, function(x1, y1, x22, y22) {
         segments.push({
           x1,
           y1,
@@ -84957,7 +82109,7 @@ function SDFGenerator() {
         return winding !== 0;
       }
     }
-    function generateIntoCanvas$2(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
+    function generateIntoCanvas$2(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       if (x3 === void 0)
@@ -84966,9 +82118,9 @@ function SDFGenerator() {
         y3 = 0;
       if (channel === void 0)
         channel = 0;
-      generateIntoFramebuffer$1(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, canvas2, null, x3, y3, channel);
+      generateIntoFramebuffer$1(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, canvas2, null, x3, y3, channel);
     }
-    function generateIntoFramebuffer$1(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, glOrCanvas, framebuffer, x3, y3, channel) {
+    function generateIntoFramebuffer$1(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, glOrCanvas, framebuffer, x3, y3, channel) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       if (x3 === void 0)
@@ -84977,7 +82129,7 @@ function SDFGenerator() {
         y3 = 0;
       if (channel === void 0)
         channel = 0;
-      var data = generate$2(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent);
+      var data = generate$2(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent);
       var rgbaData = new Uint8Array(data.length * 4);
       for (var i2 = 0; i2 < data.length; i2++) {
         rgbaData[i2 * 4 + channel] = data[i2];
@@ -85012,7 +82164,7 @@ function SDFGenerator() {
         throw new Error("WebGL generation not supported");
       }
     }
-    function generate$1(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, glOrCanvas) {
+    function generate$1(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, glOrCanvas) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       if (glOrCanvas === void 0)
@@ -85039,7 +82191,7 @@ function SDFGenerator() {
             generateIntoFramebuffer(
               sdfWidth,
               sdfHeight,
-              path,
+              path2,
               viewBox,
               maxDistance,
               sdfExponent,
@@ -85060,7 +82212,7 @@ function SDFGenerator() {
       }
       return data;
     }
-    function generateIntoCanvas$1(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
+    function generateIntoCanvas$1(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       if (x3 === void 0)
@@ -85069,9 +82221,9 @@ function SDFGenerator() {
         y3 = 0;
       if (channel === void 0)
         channel = 0;
-      generateIntoFramebuffer(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, canvas2, null, x3, y3, channel);
+      generateIntoFramebuffer(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, canvas2, null, x3, y3, channel);
     }
-    function generateIntoFramebuffer(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, glOrCanvas, framebuffer, x3, y3, channel) {
+    function generateIntoFramebuffer(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, glOrCanvas, framebuffer, x3, y3, channel) {
       if (sdfExponent === void 0)
         sdfExponent = 1;
       if (x3 === void 0)
@@ -85082,7 +82234,7 @@ function SDFGenerator() {
         channel = 0;
       validateSupport(glOrCanvas);
       var lineSegmentCoords = [];
-      pathToLineSegments(path, function(x1, y1, x22, y22) {
+      pathToLineSegments(path2, function(x1, y1, x22, y22) {
         lineSegmentCoords.push(x1, y1, x22, y22);
       });
       lineSegmentCoords = new Float32Array(lineSegmentCoords);
@@ -85210,7 +82362,7 @@ function SDFGenerator() {
       generateIntoFramebuffer,
       isSupported
     });
-    function generate(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent) {
+    function generate(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent) {
       if (maxDistance === void 0)
         maxDistance = Math.max(viewBox[2] - viewBox[0], viewBox[3] - viewBox[1]) / 2;
       if (sdfExponent === void 0)
@@ -85222,7 +82374,7 @@ function SDFGenerator() {
         return generate$2.apply(javascript, arguments);
       }
     }
-    function generateIntoCanvas(sdfWidth, sdfHeight, path, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
+    function generateIntoCanvas(sdfWidth, sdfHeight, path2, viewBox, maxDistance, sdfExponent, canvas2, x3, y3, channel) {
       if (maxDistance === void 0)
         maxDistance = Math.max(viewBox[2] - viewBox[0], viewBox[3] - viewBox[1]) / 2;
       if (sdfExponent === void 0)
@@ -86804,18 +83956,18 @@ function createTypesetter(fontParser, bidi, config2) {
 var now3 = () => (self.performance || Date).now();
 var mainThreadGenerator = SDFGenerator();
 var warned;
-function generateSDF(width, height, path, viewBox, distance, exponent, canvas2, x3, y3, channel, useWebGL = true) {
+function generateSDF(width, height, path2, viewBox, distance, exponent, canvas2, x3, y3, channel, useWebGL = true) {
   if (!useWebGL) {
-    return generateSDF_JS_Worker(width, height, path, viewBox, distance, exponent, canvas2, x3, y3, channel);
+    return generateSDF_JS_Worker(width, height, path2, viewBox, distance, exponent, canvas2, x3, y3, channel);
   }
-  return generateSDF_GL(width, height, path, viewBox, distance, exponent, canvas2, x3, y3, channel).then(
+  return generateSDF_GL(width, height, path2, viewBox, distance, exponent, canvas2, x3, y3, channel).then(
     null,
     (err) => {
       if (!warned) {
         console.warn(`WebGL SDF generation failed, falling back to JS`, err);
         warned = true;
       }
-      return generateSDF_JS_Worker(width, height, path, viewBox, distance, exponent, canvas2, x3, y3, channel);
+      return generateSDF_JS_Worker(width, height, path2, viewBox, distance, exponent, canvas2, x3, y3, channel);
     }
   );
 }
@@ -86852,7 +84004,7 @@ var generateSDF_JS_Worker = /* @__PURE__ */ function() {
   const idleTimeout = 2e3;
   const threads = {};
   let callNum = 0;
-  return function(width, height, path, viewBox, distance, exponent, canvas2, x3, y3, channel) {
+  return function(width, height, path2, viewBox, distance, exponent, canvas2, x3, y3, channel) {
     const workerId = "TroikaTextSDFGenerator_JS_" + callNum++ % threadCount;
     let thread = threads[workerId];
     if (!thread) {
@@ -86885,7 +84037,7 @@ var generateSDF_JS_Worker = /* @__PURE__ */ function() {
     }
     thread.requests++;
     clearTimeout(thread.idleTimer);
-    return thread.workerModule(width, height, path, viewBox, distance, exponent).then(({ textureData, timing }) => {
+    return thread.workerModule(width, height, path2, viewBox, distance, exponent).then(({ textureData, timing }) => {
       const start2 = now3();
       const imageData = new Uint8Array(textureData.length * 4);
       for (let i2 = 0; i2 < textureData.length; i2++) {
@@ -88353,13 +85505,13 @@ function parserFactory(Typr, woff2otf) {
             let glyphObj = glyphMap[glyphIndex];
             if (!glyphObj) {
               const { cmds, crds } = Typr.U.glyphToPath(typrFont, glyphIndex);
-              let path = "";
+              let path2 = "";
               let crdsIdx = 0;
               for (let i3 = 0, len = cmds.length; i3 < len; i3++) {
                 const numArgs = cmdArgLengths[cmds[i3]];
-                path += cmds[i3];
+                path2 += cmds[i3];
                 for (let j = 1; j <= numArgs; j++) {
-                  path += (j > 1 ? "," : "") + crds[crdsIdx++];
+                  path2 += (j > 1 ? "," : "") + crds[crdsIdx++];
                 }
               }
               let xMin, yMin, xMax, yMax;
@@ -88388,7 +85540,7 @@ function parserFactory(Typr, woff2otf) {
                 yMin,
                 xMax,
                 yMax,
-                path,
+                path: path2,
                 pathCommandCount: cmds.length
                 // forEachPathCommand(callback) {
                 //   let argsIndex = 0
@@ -88521,7 +85673,7 @@ function getTextRenderInfo(args, callback) {
     glyphIds.forEach((glyphId, i2) => {
       let glyphInfo = fontGlyphs.get(glyphId);
       if (!glyphInfo) {
-        const { path, pathBounds } = result.glyphData[glyphId];
+        const { path: path2, pathBounds } = result.glyphData[glyphId];
         const fontUnitsMargin = Math.max(pathBounds[2] - pathBounds[0], pathBounds[3] - pathBounds[1]) / sdfGlyphSize * (CONFIG.sdfMargin * sdfGlyphSize + 0.5);
         const atlasIndex = atlas.glyphCount++;
         const sdfViewBox2 = [
@@ -88530,7 +85682,7 @@ function getTextRenderInfo(args, callback) {
           pathBounds[2] + fontUnitsMargin,
           pathBounds[3] + fontUnitsMargin
         ];
-        fontGlyphs.set(glyphId, glyphInfo = { path, atlasIndex, sdfViewBox: sdfViewBox2 });
+        fontGlyphs.set(glyphId, glyphInfo = { path: path2, atlasIndex, sdfViewBox: sdfViewBox2 });
         neededSDFs.push(glyphInfo);
       }
       const { sdfViewBox } = glyphInfo;
@@ -88600,7 +85752,7 @@ function getTextRenderInfo(args, callback) {
     }
   });
 }
-function generateGlyphSDF({ path, atlasIndex, sdfViewBox }, { sdfGlyphSize, sdfCanvas, contextLost }, useGPU) {
+function generateGlyphSDF({ path: path2, atlasIndex, sdfViewBox }, { sdfGlyphSize, sdfCanvas, contextLost }, useGPU) {
   if (contextLost) {
     return Promise.resolve({ timing: -1 });
   }
@@ -88610,7 +85762,7 @@ function generateGlyphSDF({ path, atlasIndex, sdfViewBox }, { sdfGlyphSize, sdfC
   const x3 = squareIndex % (textureWidth / sdfGlyphSize) * sdfGlyphSize;
   const y3 = Math.floor(squareIndex / (textureWidth / sdfGlyphSize)) * sdfGlyphSize;
   const channel = atlasIndex % 4;
-  return generateSDF(sdfGlyphSize, sdfGlyphSize, path, sdfViewBox, maxDist, sdfExponent, sdfCanvas, x3, y3, channel, useGPU);
+  return generateSDF(sdfGlyphSize, sdfGlyphSize, path2, sdfViewBox, maxDist, sdfExponent, sdfCanvas, x3, y3, channel, useGPU);
 }
 function initContextLossHandling(atlas) {
   const canvas2 = atlas.sdfCanvas;
@@ -88647,11 +85799,11 @@ function assign3(toObj, fromObj) {
   return toObj;
 }
 var linkEl;
-function toAbsoluteURL(path) {
+function toAbsoluteURL(path2) {
   if (!linkEl) {
     linkEl = typeof document === "undefined" ? {} : document.createElement("a");
   }
-  linkEl.href = path;
+  linkEl.href = path2;
   return linkEl.href;
 }
 function safariPre15Workaround(atlas) {
@@ -89566,7 +86718,7 @@ var Text = /* @__PURE__ */ (() => {
   return Text3;
 })();
 
-// ../../node_modules/.pnpm/@react-three+drei@9.17.1_@react-three+fiber@8.2.0_react-dom@18.2.0_react@18.2.0_three@0.143.0/node_modules/@react-three/drei/core/Text.js
+// ../../node_modules/.pnpm/@react-three+drei@9.17.1_vnr756pd6qiopewlbivqw7hzci/node_modules/@react-three/drei/core/Text.js
 var Text2 = /* @__PURE__ */ React9.forwardRef(({
   anchorX = "center",
   anchorY = "middle",
@@ -89614,10 +86766,10 @@ var Text2 = /* @__PURE__ */ React9.forwardRef(({
   }, props), nodes2);
 });
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
 var import_ellipsize = __toESM(require_src(), 1);
 
-// ../../node_modules/.pnpm/camera-controls@2.7.0_three@0.143.0/node_modules/camera-controls/dist/camera-controls.module.js
+// ../../node_modules/.pnpm/camera-controls@2.5.0_three@0.143.0/node_modules/camera-controls/dist/camera-controls.module.js
 var MOUSE_BUTTON = {
   LEFT: 1,
   RIGHT: 2,
@@ -89642,11 +86794,6 @@ var ACTION = Object.freeze({
   TOUCH_ZOOM_OFFSET: 16384,
   TOUCH_ZOOM_ROTATE: 32768
 });
-var DOLLY_DIRECTION = {
-  NONE: 0,
-  IN: 1,
-  OUT: -1
-};
 function isPerspectiveCamera(camera) {
   return camera.isPerspectiveCamera;
 }
@@ -89839,7 +86986,7 @@ var EventDispatcher2 = class {
     }
   }
 };
-var VERSION = "2.7.0";
+var VERSION = "2.5.0";
 var TOUCH_DOLLY_FACTOR = 1 / 8;
 var isBrowser = typeof window !== "undefined";
 var isMac = isBrowser && /Mac/.test(navigator.platform);
@@ -89997,13 +87144,11 @@ var CameraControls = class extends EventDispatcher2 {
     this._isDragging = false;
     this._activePointers = [];
     this._lockedPointer = null;
-    this._interactiveArea = new DOMRect(0, 0, 1, 1);
     this._isUserControllingRotate = false;
     this._isUserControllingDolly = false;
     this._isUserControllingTruck = false;
     this._isUserControllingOffset = false;
     this._isUserControllingZoom = false;
-    this._lastDollyDirection = DOLLY_DIRECTION.NONE;
     this._thetaVelocity = { value: 0 };
     this._phiVelocity = { value: 0 };
     this._radiusVelocity = { value: 0 };
@@ -90043,20 +87188,16 @@ var CameraControls = class extends EventDispatcher2 {
       const lastDistance = this._sphericalEnd.radius;
       const distance = this._sphericalEnd.radius * dollyScale;
       const clampedDistance = THREE.MathUtils.clamp(distance, this.minDistance, this.maxDistance);
-      const overflowedDistance = clampedDistance - distance;
-      if (this.infinityDolly && this.dollyToCursor) {
-        this._dollyToNoClamp(distance, true);
-      } else if (this.infinityDolly && !this.dollyToCursor) {
-        this.dollyInFixed(overflowedDistance, true);
-        this._dollyToNoClamp(clampedDistance, true);
+      if (this.infinityDolly && !this.dollyToCursor) {
+        this._targetEnd.add(this._getTargetDirection(_cameraDirection).multiplyScalar(distance - lastDistance));
+        this._boundary.clampPoint(this._targetEnd, this._targetEnd);
       } else {
-        this._dollyToNoClamp(clampedDistance, true);
+        this.dollyTo(distance, true);
       }
       if (this.dollyToCursor) {
         this._changedDolly += (this.infinityDolly ? distance : clampedDistance) - lastDistance;
         this._dollyControlCoord.set(x3, y3);
       }
-      this._lastDollyDirection = Math.sign(-delta);
     };
     this._zoomInternal = (delta, x3, y3) => {
       const zoomScale = Math.pow(0.95, delta * this.dollySpeed);
@@ -90116,13 +87257,6 @@ var CameraControls = class extends EventDispatcher2 {
     const onPointerDown = (event) => {
       if (!this._enabled || !this._domElement)
         return;
-      if (this._interactiveArea.left !== 0 || this._interactiveArea.top !== 0 || this._interactiveArea.width !== 1 || this._interactiveArea.height !== 1) {
-        const elRect = this._domElement.getBoundingClientRect();
-        const left = event.clientX / elRect.width;
-        const top = event.clientY / elRect.height;
-        if (left < this._interactiveArea.left || left > this._interactiveArea.right || top < this._interactiveArea.top || top > this._interactiveArea.bottom)
-          return;
-      }
       const mouseButton = event.pointerType !== "mouse" ? null : (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT ? MOUSE_BUTTON.LEFT : (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE ? MOUSE_BUTTON.MIDDLE : (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT ? MOUSE_BUTTON.RIGHT : null;
       if (mouseButton !== null) {
         const zombiePointer = this._findPointerByMouseButton(mouseButton);
@@ -90149,13 +87283,6 @@ var CameraControls = class extends EventDispatcher2 {
     const onMouseDown = (event) => {
       if (!this._enabled || !this._domElement || this._lockedPointer)
         return;
-      if (this._interactiveArea.left !== 0 || this._interactiveArea.top !== 0 || this._interactiveArea.width !== 1 || this._interactiveArea.height !== 1) {
-        const elRect = this._domElement.getBoundingClientRect();
-        const left = event.clientX / elRect.width;
-        const top = event.clientY / elRect.height;
-        if (left < this._interactiveArea.left || left > this._interactiveArea.right || top < this._interactiveArea.top || top > this._interactiveArea.bottom)
-          return;
-      }
       const mouseButton = (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT ? MOUSE_BUTTON.LEFT : (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE ? MOUSE_BUTTON.MIDDLE : (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT ? MOUSE_BUTTON.RIGHT : null;
       if (mouseButton !== null) {
         const zombiePointer = this._findPointerByMouseButton(mouseButton);
@@ -90269,17 +87396,8 @@ var CameraControls = class extends EventDispatcher2 {
     };
     let lastScrollTimeStamp = -1;
     const onMouseWheel = (event) => {
-      if (!this._domElement)
-        return;
       if (!this._enabled || this.mouseButtons.wheel === ACTION.NONE)
         return;
-      if (this._interactiveArea.left !== 0 || this._interactiveArea.top !== 0 || this._interactiveArea.width !== 1 || this._interactiveArea.height !== 1) {
-        const elRect = this._domElement.getBoundingClientRect();
-        const left = event.clientX / elRect.width;
-        const top = event.clientY / elRect.height;
-        if (left < this._interactiveArea.left || left > this._interactiveArea.right || top < this._interactiveArea.top || top > this._interactiveArea.bottom)
-          return;
-      }
       event.preventDefault();
       if (this.dollyToCursor || this.mouseButtons.wheel === ACTION.ROTATE || this.mouseButtons.wheel === ACTION.TRUCK) {
         const now4 = performance.now();
@@ -90660,18 +87778,6 @@ var CameraControls = class extends EventDispatcher2 {
     this._needsUpdate = true;
   }
   /**
-   * Set drag-start, touches and wheel enable area in the domElement.
-   * each values are between `0` and `1` inclusive, where `0` is left/top and `1` is right/bottom of the screen.
-   * e.g. `{ x: 0, y: 0, width: 1, height: 1 }` for entire area.
-   * @category Properties
-   */
-  set interactiveArea(interactiveArea) {
-    this._interactiveArea.width = clamp2(interactiveArea.width, 0, 1);
-    this._interactiveArea.height = clamp2(interactiveArea.height, 0, 1);
-    this._interactiveArea.x = clamp2(interactiveArea.x, 0, 1 - this._interactiveArea.width);
-    this._interactiveArea.y = clamp2(interactiveArea.x, 0, 1 - this._interactiveArea.height);
-  }
-  /**
    * Adds the specified event listener.
    * Applicable event types (which is `K`) are:
    * | Event name          | Timing |
@@ -90821,22 +87927,18 @@ var CameraControls = class extends EventDispatcher2 {
    */
   dollyTo(distance, enableTransition = false) {
     this._isUserControllingDolly = false;
-    this._lastDollyDirection = DOLLY_DIRECTION.NONE;
-    this._changedDolly = 0;
-    return this._dollyToNoClamp(clamp2(distance, this.minDistance, this.maxDistance), enableTransition);
-  }
-  _dollyToNoClamp(distance, enableTransition = false) {
     const lastRadius = this._sphericalEnd.radius;
+    const newRadius = clamp2(distance, this.minDistance, this.maxDistance);
     const hasCollider = this.colliderMeshes.length >= 1;
     if (hasCollider) {
       const maxDistanceByCollisionTest = this._collisionTest();
       const isCollided = approxEquals(maxDistanceByCollisionTest, this._spherical.radius);
-      const isDollyIn = lastRadius > distance;
+      const isDollyIn = lastRadius > newRadius;
       if (!isDollyIn && isCollided)
         return Promise.resolve();
-      this._sphericalEnd.radius = Math.min(distance, maxDistanceByCollisionTest);
+      this._sphericalEnd.radius = Math.min(newRadius, maxDistanceByCollisionTest);
     } else {
-      this._sphericalEnd.radius = distance;
+      this._sphericalEnd.radius = newRadius;
     }
     this._needsUpdate = true;
     if (!enableTransition) {
@@ -90852,13 +87954,8 @@ var CameraControls = class extends EventDispatcher2 {
    * @param enableTransition Whether to move smoothly or immediately.
    * @category Methods
    */
-  dollyInFixed(distance, enableTransition = false) {
+  dollyInFixed(distance) {
     this._targetEnd.add(this._getCameraDirection(_cameraDirection).multiplyScalar(distance));
-    if (!enableTransition) {
-      this._target.copy(this._targetEnd);
-    }
-    const resolveImmediately = !enableTransition || approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) && approxEquals(this._target.y, this._targetEnd.y, this.restThreshold) && approxEquals(this._target.z, this._targetEnd.z, this.restThreshold);
-    return this._createOnRestPromise(resolveImmediately);
   }
   /**
    * Zoom in/out camera. The value is added to camera zoom.
@@ -90885,7 +87982,6 @@ var CameraControls = class extends EventDispatcher2 {
       this._zoom = this._zoomEnd;
     }
     const resolveImmediately = !enableTransition || approxEquals(this._zoom, this._zoomEnd, this.restThreshold);
-    this._changedZoom = 0;
     return this._createOnRestPromise(resolveImmediately);
   }
   /**
@@ -91083,8 +88179,6 @@ var CameraControls = class extends EventDispatcher2 {
     this._isUserControllingRotate = false;
     this._isUserControllingDolly = false;
     this._isUserControllingTruck = false;
-    this._lastDollyDirection = DOLLY_DIRECTION.NONE;
-    this._changedDolly = 0;
     const target = _v3B.set(targetX, targetY, targetZ);
     const position = _v3A.set(positionX, positionY, positionZ);
     this._targetEnd.copy(target);
@@ -91120,8 +88214,6 @@ var CameraControls = class extends EventDispatcher2 {
     this._isUserControllingRotate = false;
     this._isUserControllingDolly = false;
     this._isUserControllingTruck = false;
-    this._lastDollyDirection = DOLLY_DIRECTION.NONE;
-    this._changedDolly = 0;
     const targetA = _v3A.set(targetAX, targetAY, targetAZ);
     const positionA = _v3B.set(positionAX, positionAY, positionAZ);
     _sphericalA.setFromVector3(positionA.sub(targetA).applyQuaternion(this._yAxisUpSpace));
@@ -91457,9 +88549,7 @@ var CameraControls = class extends EventDispatcher2 {
         const lerpRatio = (prevRadius - this._sphericalEnd.radius) / this._sphericalEnd.radius;
         const cursor = _v3C.copy(this._targetEnd).add(planeX.multiplyScalar(this._dollyControlCoord.x * worldToScreen * camera.aspect)).add(planeY.multiplyScalar(this._dollyControlCoord.y * worldToScreen));
         const newTargetEnd = _v3A.copy(this._targetEnd).lerp(cursor, lerpRatio);
-        const isMin = this._lastDollyDirection === DOLLY_DIRECTION.IN && this._spherical.radius <= this.minDistance;
-        const isMax = this._lastDollyDirection === DOLLY_DIRECTION.OUT && this.maxDistance <= this._spherical.radius;
-        if (this.infinityDolly && (isMin || isMax)) {
+        if (this.infinityDolly) {
           this._sphericalEnd.radius -= dollyControlAmount;
           this._spherical.radius -= dollyControlAmount;
           const dollyAmount = _v3B.copy(cameraDirection).multiplyScalar(-dollyControlAmount);
@@ -91823,12 +88913,12 @@ var CameraControls = class extends EventDispatcher2 {
   }
 };
 
-// ../../node_modules/.pnpm/reakeys@1.3.1_react-dom@18.2.0_react@18.2.0/node_modules/reakeys/dist/index.js
+// ../../node_modules/.pnpm/reakeys@1.3.1_biqbaboplfbrettd7655fr4n2y/node_modules/reakeys/dist/index.js
 var import_react8 = __toESM(require_react(), 1);
 var import_mousetrap = __toESM(require_mousetrap(), 1);
 var createStateHook = () => {
   const mousetraps = /* @__PURE__ */ new Map();
-  let keys2 = [];
+  let keys3 = [];
   const bindKeys = (nextKeys) => {
     nextKeys.forEach((k) => {
       if (k.disabled) {
@@ -91852,11 +88942,11 @@ var createStateHook = () => {
     });
   };
   const addKeys = (nextKeys) => {
-    keys2 = [...keys2, ...nextKeys];
+    keys3 = [...keys3, ...nextKeys];
     bindKeys(nextKeys);
   };
   const removeKeys = (nextKeys) => {
-    keys2 = keys2.filter((k) => !nextKeys.includes(k));
+    keys3 = keys3.filter((k) => !nextKeys.includes(k));
     nextKeys.forEach((k) => {
       var _a2, _b2;
       if (k.ref) {
@@ -91870,11 +88960,11 @@ var createStateHook = () => {
     });
     for (const [element] of mousetraps) {
       if (element === void 0) {
-        if (keys2.some((k) => k.ref === void 0)) {
+        if (keys3.some((k) => k.ref === void 0)) {
           continue;
         }
       } else {
-        if (keys2.some((k) => {
+        if (keys3.some((k) => {
           var _a2;
           return ((_a2 = k.ref) == null ? void 0 : _a2.current) === element;
         })) {
@@ -91883,19 +88973,19 @@ var createStateHook = () => {
       }
       mousetraps.delete(element);
     }
-    bindKeys(keys2);
+    bindKeys(keys3);
   };
   return () => {
     const [state, setState] = (0, import_react8.useState)([]);
     (0, import_react8.useEffect)(() => {
-      setState(keys2);
+      setState(keys3);
     }, []);
     return [state, addKeys, removeKeys];
   };
 };
 var useHotkeyState = createStateHook();
 var useHotkeys = (shortcuts) => {
-  const [keys2, addKeys, removeKeys] = useHotkeyState();
+  const [keys3, addKeys, removeKeys] = useHotkeyState();
   (0, import_react8.useLayoutEffect)(() => {
     if (shortcuts) {
       addKeys(shortcuts);
@@ -91907,13 +88997,13 @@ var useHotkeys = (shortcuts) => {
     };
   }, [addKeys, removeKeys, shortcuts]);
   return (0, import_react8.useMemo)(
-    () => keys2.reduce((agg, cur) => {
+    () => keys3.reduce((agg, cur) => {
       if (!agg.find((a2) => a2.keys === cur.keys && a2.ref && cur.ref)) {
         agg.push(cur);
       }
       return agg;
     }, []),
-    [keys2]
+    [keys3]
   );
 };
 var isMac2 = false;
@@ -92845,30 +89935,30 @@ var Recognizer = /* @__PURE__ */ function() {
   };
   _createClass(Recognizer2, [{
     key: "config",
-    get: function get2() {
+    get: function get3() {
       return this.controller.config[this.stateKey];
     }
     // Is the gesture enabled
   }, {
     key: "enabled",
-    get: function get2() {
+    get: function get3() {
       return this.controller.config.enabled && this.config.enabled;
     }
     // Returns the controller state for a given gesture
   }, {
     key: "state",
-    get: function get2() {
+    get: function get3() {
       return this.controller.state[this.stateKey];
     }
     // Returns the gesture handler
   }, {
     key: "handler",
-    get: function get2() {
+    get: function get3() {
       return this.controller.handlers[this.stateKey];
     }
   }, {
     key: "transform",
-    get: function get2() {
+    get: function get3() {
       return this.config.transform || this.controller.config.transform || identity$1;
     }
   }]);
@@ -93876,8 +90966,8 @@ function includeStartEndHandlers(handlers, handlerKey) {
   return fn;
 }
 
-// ../../node_modules/.pnpm/reagraph@4.9.2_graphology-types@0.24.7_react-dom@18.2.0_react@18.2.0/node_modules/reagraph/dist/index.js
-var import_graphology_shortest_path = __toESM(require_graphology_shortest_path(), 1);
+// ../../node_modules/.pnpm/reagraph@4.8.3_biqbaboplfbrettd7655fr4n2y/node_modules/reagraph/dist/index.js
+var import_ngraph4 = __toESM(require_ngraph5(), 1);
 var import_classnames = __toESM(require_classnames(), 1);
 (function() {
   "use strict";
@@ -93924,9 +91014,9 @@ function getNodeDepth(nodes2, links) {
     {}
   );
   try {
-    for (const link of links) {
-      const from = link.source;
-      const to2 = link.target;
+    links.forEach((link) => {
+      const from = link.fromId || link.source;
+      const to2 = link.toId || link.target;
       if (!graph.hasOwnProperty(from)) {
         throw new Error(`Missing source Node ${from}`);
       }
@@ -93937,7 +91027,7 @@ function getNodeDepth(nodes2, links) {
       const targetNode = graph[to2];
       targetNode.ins.push(sourceNode);
       sourceNode.out.push(targetNode);
-    }
+    });
     traverseGraph(Object.values(graph));
   } catch (e) {
     invalid = true;
@@ -93953,11 +91043,11 @@ function getNodeDepth(nodes2, links) {
 var RADIALS = ["radialin", "radialout"];
 function forceRadial({
   nodes: nodes2,
-  edges: edges2,
+  links,
   mode = "lr",
   nodeLevelRatio = 2
 }) {
-  const { depths, maxDepth, invalid } = getNodeDepth(nodes2, edges2);
+  const { depths, maxDepth, invalid } = getNodeDepth(nodes2, links);
   if (invalid) {
     return null;
   }
@@ -93993,22 +91083,22 @@ function forceDirected({
   drags,
   clusterAttribute
 }) {
-  const cluster2 = /* @__PURE__ */ new Map();
   const nodes2 = [];
-  const edges2 = [];
-  graph.forEachNode((id2, n) => {
+  const links = [];
+  const cluster2 = /* @__PURE__ */ new Map();
+  graph.forEachNode((n) => {
+    var _a2;
     nodes2.push({
       ...n,
-      id: id2,
       // This is for the clustering
-      radius: n.size || 1
+      radius: ((_a2 = n.data) == null ? void 0 : _a2.size) || 1
     });
   });
-  graph.forEachEdge((id2, l) => {
-    edges2.push({ ...l, id: id2 });
+  graph.forEachLink((l) => {
+    links.push({ ...l, id: l.data.id, source: l.fromId, target: l.toId });
   });
   const is2d = dimensions === 2;
-  const nodeStrengthAdjustment = is2d && edges2.length > 25 ? nodeStrength * 2 : nodeStrength;
+  const nodeStrengthAdjustment = is2d && links.length > 25 ? nodeStrength * 2 : nodeStrength;
   const sim = simulation_default().force("link", link_default()).force("charge", manyBody_default().strength(nodeStrengthAdjustment)).force("x", x_default4()).force("y", y_default3()).force("z", z_default2()).force(
     "collide",
     collide_default((d) => d.radius + clusterPadding)
@@ -94016,7 +91106,7 @@ function forceDirected({
     "dagRadial",
     forceRadial({
       nodes: nodes2,
-      edges: edges2,
+      links,
       mode,
       nodeLevelRatio
     })
@@ -94024,14 +91114,14 @@ function forceDirected({
   const layout = sim.numDimensions(dimensions).nodes(nodes2).force(
     "cluster",
     cluster().centers((node) => {
-      var _a2;
+      var _a2, _b2;
       if (clusterAttribute) {
-        const nodeClusterAttr = (_a2 = node == null ? void 0 : node.data) == null ? void 0 : _a2[clusterAttribute];
+        const nodeClusterAttr = (_b2 = (_a2 = node.data) == null ? void 0 : _a2.data) == null ? void 0 : _b2[clusterAttribute];
         const centerNode = cluster2.get(nodeClusterAttr);
         if (!centerNode) {
           const largestNode = nodes2.reduce((last, cur) => {
-            var _a3;
-            if (((_a3 = cur == null ? void 0 : cur.data) == null ? void 0 : _a3[clusterAttribute]) === nodeClusterAttr) {
+            var _a3, _b3;
+            if (((_b3 = (_a3 = cur.data) == null ? void 0 : _a3.data) == null ? void 0 : _b3[clusterAttribute]) === nodeClusterAttr) {
               return cur.radius > last.radius ? cur : last;
             }
             return last;
@@ -94045,7 +91135,7 @@ function forceDirected({
   );
   const linkForce = layout.force("link");
   if (linkForce) {
-    linkForce.id((d) => d.id).links(edges2).distance(linkDistance);
+    linkForce.id((d) => d.id).links(links).distance(linkDistance);
   }
   const nodeMap = new Map(nodes2.map((n) => [n.id, n]));
   return {
@@ -94054,25 +91144,14 @@ function forceDirected({
       return true;
     },
     getNodePosition(id2) {
-      var _a2;
-      return ((_a2 = drags == null ? void 0 : drags[id2]) == null ? void 0 : _a2.position) || nodeMap.get(id2);
+      return (drags == null ? void 0 : drags[id2]) || nodeMap.get(id2);
     }
   };
 }
-function circular2d({ graph, radius, drags }) {
-  const layout = (0, import_circular.default)(graph, {
-    scale: radius
-  });
-  return {
-    step() {
-      return true;
-    },
-    getNodePosition(id2) {
-      var _a2;
-      return ((_a2 = drags == null ? void 0 : drags[id2]) == null ? void 0 : _a2.position) || (layout == null ? void 0 : layout[id2]);
-    }
-  };
-}
+var circular2d = ({ graph, radius = 300 }) => (0, import_ngraph_circular.default)(graph, {
+  radius,
+  center: { x: 0, y: 0 }
+});
 var DIRECTION_MAP = {
   td: {
     x: "x",
@@ -94087,35 +91166,39 @@ var DIRECTION_MAP = {
 };
 function hierarchical({
   graph,
-  drags,
   mode = "td"
 }) {
   const nodes2 = [];
-  const edges2 = [];
-  graph.forEachNode((id2, n) => {
-    nodes2.push({ ...n, id: id2 });
+  const links = [];
+  graph.forEachNode((n) => {
+    nodes2.push({ ...n });
   });
-  graph.forEachEdge((id2, l) => {
-    edges2.push({ ...l, id: id2 });
+  graph.forEachLink((l) => {
+    links.push({
+      ...l,
+      id: l.data.id,
+      source: l.fromId,
+      target: l.toId
+    });
   });
-  const { depths } = getNodeDepth(nodes2, edges2);
+  const { depths } = getNodeDepth(nodes2, links);
   const rootNodes = Object.keys(depths).map((d) => depths[d]);
-  const root2 = stratify_default().id((d) => d.data.id).parentId((d) => {
+  const root22 = stratify_default().id((d) => d.data.id).parentId((d) => {
     var _a2, _b2, _c;
     return (_c = (_b2 = (_a2 = d.ins) == null ? void 0 : _a2[0]) == null ? void 0 : _b2.data) == null ? void 0 : _c.id;
   })(rootNodes);
-  const treeRoot2 = tree_default().separation(() => 1).nodeSize([50, 50])(hierarchy(root2));
+  const treeRoot2 = tree_default().separation(() => 1).nodeSize([50, 50])(hierarchy(root22));
   const treeNodes = treeRoot2.descendants();
-  const path = DIRECTION_MAP[mode];
+  const path2 = DIRECTION_MAP[mode];
   const mappedNodes = new Map(
     nodes2.map((n) => {
-      const { x: x3, y: y3 } = treeNodes.find((t) => t.data.id === n.id);
+      let { x: x3, y: y3 } = treeNodes.find((t) => t.data.id === n.id);
       return [
         n.id,
         {
           ...n,
-          [path.x]: x3 * path.factor,
-          [path.y]: y3 * path.factor,
+          [path2.x]: x3 * path2.factor,
+          [path2.y]: y3 * path2.factor,
           z: 0
         }
       ];
@@ -94126,61 +91209,7 @@ function hierarchical({
       return true;
     },
     getNodePosition(id2) {
-      var _a2;
-      return ((_a2 = drags == null ? void 0 : drags[id2]) == null ? void 0 : _a2.position) || mappedNodes.get(id2);
-    }
-  };
-}
-function nooverlap({
-  graph,
-  margin,
-  drags,
-  ratio,
-  gridSize,
-  maxIterations
-}) {
-  const layout = (0, import_graphology_layout_noverlap.default)(graph, {
-    maxIterations,
-    inputReducer: (_key, attr) => ({
-      ...attr,
-      // Have to specify defaults for the engine
-      x: attr.x || 0,
-      y: attr.y || 0
-    }),
-    settings: {
-      ratio,
-      margin,
-      gridSize
-    }
-  });
-  return {
-    step() {
-      return true;
-    },
-    getNodePosition(id2) {
-      var _a2;
-      return ((_a2 = drags == null ? void 0 : drags[id2]) == null ? void 0 : _a2.position) || (layout == null ? void 0 : layout[id2]);
-    }
-  };
-}
-function forceAtlas2({
-  graph,
-  drags,
-  iterations,
-  ...rest
-}) {
-  import_random.default.assign(graph);
-  const layout = (0, import_graphology_layout_forceatlas2.default)(graph, {
-    iterations,
-    settings: rest
-  });
-  return {
-    step() {
-      return true;
-    },
-    getNodePosition(id2) {
-      var _a2;
-      return ((_a2 = drags == null ? void 0 : drags[id2]) == null ? void 0 : _a2.position) || (layout == null ? void 0 : layout[id2]);
+      return mappedNodes.get(id2);
     }
   };
 }
@@ -94289,26 +91318,6 @@ function layoutProvider({
     return hierarchical({ ...rest, mode: "td" });
   } else if (type === "hierarchicalLr") {
     return hierarchical({ ...rest, mode: "lr" });
-  } else if (type === "nooverlap") {
-    const { graph, maxIterations, ratio, margin, gridSize } = rest;
-    return nooverlap({
-      type: "nooverlap",
-      graph,
-      margin: margin || 10,
-      maxIterations: maxIterations || 50,
-      ratio: ratio || 10,
-      gridSize: gridSize || 20
-    });
-  } else if (type === "forceatlas2") {
-    const { graph, iterations, gravity, scalingRatio, ...settings } = rest;
-    return forceAtlas2({
-      type: "forceatlas2",
-      graph,
-      ...settings,
-      scalingRatio: scalingRatio || 100,
-      gravity: gravity || 10,
-      iterations: iterations || 50
-    });
   }
   throw new Error(`Layout ${type} not found.`);
 }
@@ -94339,16 +91348,18 @@ function recommendLayout(nodes2, edges2) {
 function pageRankSizing({
   graph
 }) {
-  const ranks = (0, import_pagerank.default)(graph);
+  const ranks = (0, import_ngraph.default)(graph);
   return {
     ranks,
     getSizeForNode: (nodeID) => ranks[nodeID] * 80
   };
 }
 function centralitySizing({
-  graph
+  graph,
+  minSize,
+  maxSize
 }) {
-  const ranks = (0, import_degree.degreeCentrality)(graph);
+  const ranks = import_ngraph2.default.closeness(graph);
   return {
     ranks,
     getSizeForNode: (nodeID) => ranks[nodeID] * 20
@@ -94361,13 +91372,12 @@ function attributeSizing({
 }) {
   const map2 = /* @__PURE__ */ new Map();
   if (attribute) {
-    graph.forEachNode((id2, node) => {
-      var _a2;
-      const size = (_a2 = node.data) == null ? void 0 : _a2[attribute];
+    graph.forEachNode((node) => {
+      const size = node.data.data[attribute];
       if (isNaN(size)) {
         console.warn(`Attribute ${size} is not a number for node ${node.id}`);
       }
-      map2.set(id2, size || 0);
+      map2.set(node.id, size || 0);
     });
   } else {
     console.warn("Attribute sizing configured but no attribute provided");
@@ -94399,15 +91409,16 @@ function nodeSizeProvider({ type, ...rest }) {
   const sizes = /* @__PURE__ */ new Map();
   let min;
   let max;
-  graph.forEachNode((id2, node) => {
-    const size = (node == null ? void 0 : node.size) || provider.getSizeForNode(id2);
+  graph.forEachNode((node) => {
+    var _a3;
+    const size = ((_a3 = node.data) == null ? void 0 : _a3.size) || provider.getSizeForNode(node.id);
     if (min === void 0 || size < min) {
       min = size;
     }
     if (max === void 0 || size > max) {
       max = size;
     }
-    sizes.set(id2, size);
+    sizes.set(node.id, size);
   });
   if (type !== "none") {
     const scale = linear2().domain([min, max]).rangeRound([minSize, maxSize]);
@@ -94450,21 +91461,14 @@ function getLabelOffsetByType(offset, position) {
 }
 function buildGraph2(graph, nodes2, edges2) {
   graph.clear();
+  graph.beginUpdate();
   for (const node of nodes2) {
-    try {
-      graph.addNode(node.id, node);
-    } catch ({ message }) {
-      console.error(`[Graph] ${message}`);
-    }
+    graph.addNode(node.id, node);
   }
   for (const edge of edges2) {
-    try {
-      graph.addEdge(edge.source, edge.target, edge);
-    } catch ({ message }) {
-      console.error(`[Graph] ${message}`);
-    }
+    graph.addLink(edge.source, edge.target, edge);
   }
-  return graph;
+  graph.endUpdate();
 }
 function transformGraph({
   graph,
@@ -94487,43 +91491,43 @@ function transformGraph({
     maxSize: maxNodeSize,
     defaultSize: defaultNodeSize
   });
-  const nodeCount = graph.nodes.length;
+  const nodeCount = graph.getNodesCount();
   const checkVisibility = calcLabelVisibility(nodeCount, labelType);
-  graph.forEachNode((id2, node) => {
-    const position = layout.getNodePosition(id2);
-    const { data, fill, icon, label, size, ...rest } = node;
-    const nodeSize = sizes.get(node.id);
-    const labelVisible = checkVisibility("node", nodeSize);
-    const nodeLinks = graph.inboundNeighbors(node.id) || [];
-    const parents = nodeLinks.map((n2) => graph.getNodeAttributes(n2));
-    const n = {
-      ...node,
-      size: nodeSize,
-      labelVisible,
-      label,
-      icon,
-      fill,
-      parents,
-      data: {
-        ...rest,
-        ...data ?? {}
-      },
-      position: {
-        ...position,
-        x: position.x || 0,
-        y: position.y || 0,
-        z: position.z || 1
-      }
-    };
-    map2.set(node.id, n);
-    nodes2.push(n);
+  graph.forEachNode((node) => {
+    if (node.data) {
+      const position = layout.getNodePosition(node.id);
+      const { data, fill, icon, label, size, ...rest } = node.data;
+      const nodeSize = sizes.get(node.id);
+      const labelVisible = checkVisibility("node", nodeSize);
+      const nodeLinks = graph.getLinks(node.id);
+      const parents = nodeLinks ? [...nodeLinks].filter((l) => l.toId === node.id).map((l) => l.fromId) : null;
+      const n = {
+        ...node,
+        size: nodeSize,
+        labelVisible,
+        label,
+        icon,
+        fill,
+        parents,
+        data: {
+          ...rest,
+          ...data || {}
+        },
+        position: {
+          ...position,
+          z: position.z || 1
+        }
+      };
+      map2.set(node.id, n);
+      nodes2.push(n);
+    }
   });
-  graph.forEachEdge((_id2, link) => {
-    const from = map2.get(link.source);
-    const to2 = map2.get(link.target);
+  graph.forEachLink((link) => {
+    const from = map2.get(link.fromId);
+    const to2 = map2.get(link.toId);
     if (from && to2) {
-      const { data, id: id2, label, size, ...rest } = link;
-      const labelVisible = checkVisibility("edge", size);
+      const { data, id: id2, label, size, ...rest } = link.data;
+      const labelVisible = checkVisibility("edge", link.size);
       edges2.push({
         ...link,
         id: id2,
@@ -94642,7 +91646,7 @@ var createStore4 = ({
   setEdgeMeshes: (edgeMeshes) => set2((state) => ({ ...state, edgeMeshes })),
   selections,
   drags: {},
-  graph: new import_graphology.default(),
+  graph: (0, import_ngraph3.default)(),
   setPanning: (panning) => set2((state) => ({ ...state, panning })),
   setDrags: (drags) => set2((state) => ({ ...state, drags })),
   setDraggingId: (draggingId) => set2((state) => ({ ...state, draggingId })),
@@ -94671,10 +91675,7 @@ var createStore4 = ({
     }
     return {
       ...state,
-      drags: {
-        ...state.drags,
-        [id2]: node
-      },
+      drags: { ...state.drags, [id2]: node },
       nodes: nodes2
     };
   }),
@@ -94691,6 +91692,1416 @@ function updateNodePosition(node, offset) {
     }
   };
 }
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getDefaultExportFromCjs(x3) {
+  return x3 && x3.__esModule && Object.prototype.hasOwnProperty.call(x3, "default") ? x3["default"] : x3;
+}
+function listCacheClear$1() {
+  this.__data__ = [];
+  this.size = 0;
+}
+var _listCacheClear = listCacheClear$1;
+function eq$2(value, other) {
+  return value === other || value !== value && other !== other;
+}
+var eq_1 = eq$2;
+var eq$1 = eq_1;
+function assocIndexOf$4(array, key) {
+  var length = array.length;
+  while (length--) {
+    if (eq$1(array[length][0], key)) {
+      return length;
+    }
+  }
+  return -1;
+}
+var _assocIndexOf = assocIndexOf$4;
+var assocIndexOf$3 = _assocIndexOf;
+var arrayProto = Array.prototype;
+var splice = arrayProto.splice;
+function listCacheDelete$1(key) {
+  var data = this.__data__, index2 = assocIndexOf$3(data, key);
+  if (index2 < 0) {
+    return false;
+  }
+  var lastIndex = data.length - 1;
+  if (index2 == lastIndex) {
+    data.pop();
+  } else {
+    splice.call(data, index2, 1);
+  }
+  --this.size;
+  return true;
+}
+var _listCacheDelete = listCacheDelete$1;
+var assocIndexOf$2 = _assocIndexOf;
+function listCacheGet$1(key) {
+  var data = this.__data__, index2 = assocIndexOf$2(data, key);
+  return index2 < 0 ? void 0 : data[index2][1];
+}
+var _listCacheGet = listCacheGet$1;
+var assocIndexOf$1 = _assocIndexOf;
+function listCacheHas$1(key) {
+  return assocIndexOf$1(this.__data__, key) > -1;
+}
+var _listCacheHas = listCacheHas$1;
+var assocIndexOf = _assocIndexOf;
+function listCacheSet$1(key, value) {
+  var data = this.__data__, index2 = assocIndexOf(data, key);
+  if (index2 < 0) {
+    ++this.size;
+    data.push([key, value]);
+  } else {
+    data[index2][1] = value;
+  }
+  return this;
+}
+var _listCacheSet = listCacheSet$1;
+var listCacheClear = _listCacheClear;
+var listCacheDelete = _listCacheDelete;
+var listCacheGet = _listCacheGet;
+var listCacheHas = _listCacheHas;
+var listCacheSet = _listCacheSet;
+function ListCache$4(entries) {
+  var index2 = -1, length = entries == null ? 0 : entries.length;
+  this.clear();
+  while (++index2 < length) {
+    var entry = entries[index2];
+    this.set(entry[0], entry[1]);
+  }
+}
+ListCache$4.prototype.clear = listCacheClear;
+ListCache$4.prototype["delete"] = listCacheDelete;
+ListCache$4.prototype.get = listCacheGet;
+ListCache$4.prototype.has = listCacheHas;
+ListCache$4.prototype.set = listCacheSet;
+var _ListCache = ListCache$4;
+var ListCache$3 = _ListCache;
+function stackClear$1() {
+  this.__data__ = new ListCache$3();
+  this.size = 0;
+}
+var _stackClear = stackClear$1;
+function stackDelete$1(key) {
+  var data = this.__data__, result = data["delete"](key);
+  this.size = data.size;
+  return result;
+}
+var _stackDelete = stackDelete$1;
+function stackGet$1(key) {
+  return this.__data__.get(key);
+}
+var _stackGet = stackGet$1;
+function stackHas$1(key) {
+  return this.__data__.has(key);
+}
+var _stackHas = stackHas$1;
+var freeGlobal$1 = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+var _freeGlobal = freeGlobal$1;
+var freeGlobal = _freeGlobal;
+var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+var root$8 = freeGlobal || freeSelf || Function("return this")();
+var _root = root$8;
+var root$7 = _root;
+var Symbol$5 = root$7.Symbol;
+var _Symbol = Symbol$5;
+var Symbol$4 = _Symbol;
+var objectProto$b = Object.prototype;
+var hasOwnProperty$8 = objectProto$b.hasOwnProperty;
+var nativeObjectToString$1 = objectProto$b.toString;
+var symToStringTag$1 = Symbol$4 ? Symbol$4.toStringTag : void 0;
+function getRawTag$1(value) {
+  var isOwn = hasOwnProperty$8.call(value, symToStringTag$1), tag = value[symToStringTag$1];
+  try {
+    value[symToStringTag$1] = void 0;
+    var unmasked = true;
+  } catch (e) {
+  }
+  var result = nativeObjectToString$1.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag$1] = tag;
+    } else {
+      delete value[symToStringTag$1];
+    }
+  }
+  return result;
+}
+var _getRawTag = getRawTag$1;
+var objectProto$a = Object.prototype;
+var nativeObjectToString = objectProto$a.toString;
+function objectToString$1(value) {
+  return nativeObjectToString.call(value);
+}
+var _objectToString = objectToString$1;
+var Symbol$3 = _Symbol;
+var getRawTag = _getRawTag;
+var objectToString = _objectToString;
+var nullTag = "[object Null]";
+var undefinedTag = "[object Undefined]";
+var symToStringTag = Symbol$3 ? Symbol$3.toStringTag : void 0;
+function baseGetTag$5(value) {
+  if (value == null) {
+    return value === void 0 ? undefinedTag : nullTag;
+  }
+  return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+}
+var _baseGetTag = baseGetTag$5;
+function isObject$3(value) {
+  var type = typeof value;
+  return value != null && (type == "object" || type == "function");
+}
+var isObject_1 = isObject$3;
+var baseGetTag$4 = _baseGetTag;
+var isObject$2 = isObject_1;
+var asyncTag = "[object AsyncFunction]";
+var funcTag$1 = "[object Function]";
+var genTag = "[object GeneratorFunction]";
+var proxyTag = "[object Proxy]";
+function isFunction$2(value) {
+  if (!isObject$2(value)) {
+    return false;
+  }
+  var tag = baseGetTag$4(value);
+  return tag == funcTag$1 || tag == genTag || tag == asyncTag || tag == proxyTag;
+}
+var isFunction_1 = isFunction$2;
+var root$6 = _root;
+var coreJsData$1 = root$6["__core-js_shared__"];
+var _coreJsData = coreJsData$1;
+var coreJsData = _coreJsData;
+var maskSrcKey = function() {
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+  return uid ? "Symbol(src)_1." + uid : "";
+}();
+function isMasked$1(func) {
+  return !!maskSrcKey && maskSrcKey in func;
+}
+var _isMasked = isMasked$1;
+var funcProto$1 = Function.prototype;
+var funcToString$1 = funcProto$1.toString;
+function toSource$2(func) {
+  if (func != null) {
+    try {
+      return funcToString$1.call(func);
+    } catch (e) {
+    }
+    try {
+      return func + "";
+    } catch (e) {
+    }
+  }
+  return "";
+}
+var _toSource = toSource$2;
+var isFunction$1 = isFunction_1;
+var isMasked = _isMasked;
+var isObject$1 = isObject_1;
+var toSource$1 = _toSource;
+var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
+var funcProto = Function.prototype;
+var objectProto$9 = Object.prototype;
+var funcToString = funcProto.toString;
+var hasOwnProperty$7 = objectProto$9.hasOwnProperty;
+var reIsNative = RegExp(
+  "^" + funcToString.call(hasOwnProperty$7).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+);
+function baseIsNative$1(value) {
+  if (!isObject$1(value) || isMasked(value)) {
+    return false;
+  }
+  var pattern = isFunction$1(value) ? reIsNative : reIsHostCtor;
+  return pattern.test(toSource$1(value));
+}
+var _baseIsNative = baseIsNative$1;
+function getValue$1(object, key) {
+  return object == null ? void 0 : object[key];
+}
+var _getValue = getValue$1;
+var baseIsNative = _baseIsNative;
+var getValue = _getValue;
+function getNative$6(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : void 0;
+}
+var _getNative = getNative$6;
+var getNative$5 = _getNative;
+var root$5 = _root;
+var Map$4 = getNative$5(root$5, "Map");
+var _Map = Map$4;
+var getNative$4 = _getNative;
+var nativeCreate$4 = getNative$4(Object, "create");
+var _nativeCreate = nativeCreate$4;
+var nativeCreate$3 = _nativeCreate;
+function hashClear$1() {
+  this.__data__ = nativeCreate$3 ? nativeCreate$3(null) : {};
+  this.size = 0;
+}
+var _hashClear = hashClear$1;
+function hashDelete$1(key) {
+  var result = this.has(key) && delete this.__data__[key];
+  this.size -= result ? 1 : 0;
+  return result;
+}
+var _hashDelete = hashDelete$1;
+var nativeCreate$2 = _nativeCreate;
+var HASH_UNDEFINED$2 = "__lodash_hash_undefined__";
+var objectProto$8 = Object.prototype;
+var hasOwnProperty$6 = objectProto$8.hasOwnProperty;
+function hashGet$1(key) {
+  var data = this.__data__;
+  if (nativeCreate$2) {
+    var result = data[key];
+    return result === HASH_UNDEFINED$2 ? void 0 : result;
+  }
+  return hasOwnProperty$6.call(data, key) ? data[key] : void 0;
+}
+var _hashGet = hashGet$1;
+var nativeCreate$1 = _nativeCreate;
+var objectProto$7 = Object.prototype;
+var hasOwnProperty$5 = objectProto$7.hasOwnProperty;
+function hashHas$1(key) {
+  var data = this.__data__;
+  return nativeCreate$1 ? data[key] !== void 0 : hasOwnProperty$5.call(data, key);
+}
+var _hashHas = hashHas$1;
+var nativeCreate = _nativeCreate;
+var HASH_UNDEFINED$1 = "__lodash_hash_undefined__";
+function hashSet$1(key, value) {
+  var data = this.__data__;
+  this.size += this.has(key) ? 0 : 1;
+  data[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED$1 : value;
+  return this;
+}
+var _hashSet = hashSet$1;
+var hashClear = _hashClear;
+var hashDelete = _hashDelete;
+var hashGet = _hashGet;
+var hashHas = _hashHas;
+var hashSet = _hashSet;
+function Hash$1(entries) {
+  var index2 = -1, length = entries == null ? 0 : entries.length;
+  this.clear();
+  while (++index2 < length) {
+    var entry = entries[index2];
+    this.set(entry[0], entry[1]);
+  }
+}
+Hash$1.prototype.clear = hashClear;
+Hash$1.prototype["delete"] = hashDelete;
+Hash$1.prototype.get = hashGet;
+Hash$1.prototype.has = hashHas;
+Hash$1.prototype.set = hashSet;
+var _Hash = Hash$1;
+var Hash = _Hash;
+var ListCache$2 = _ListCache;
+var Map$3 = _Map;
+function mapCacheClear$1() {
+  this.size = 0;
+  this.__data__ = {
+    "hash": new Hash(),
+    "map": new (Map$3 || ListCache$2)(),
+    "string": new Hash()
+  };
+}
+var _mapCacheClear = mapCacheClear$1;
+function isKeyable$1(value) {
+  var type = typeof value;
+  return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+}
+var _isKeyable = isKeyable$1;
+var isKeyable = _isKeyable;
+function getMapData$4(map2, key) {
+  var data = map2.__data__;
+  return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+}
+var _getMapData = getMapData$4;
+var getMapData$3 = _getMapData;
+function mapCacheDelete$1(key) {
+  var result = getMapData$3(this, key)["delete"](key);
+  this.size -= result ? 1 : 0;
+  return result;
+}
+var _mapCacheDelete = mapCacheDelete$1;
+var getMapData$2 = _getMapData;
+function mapCacheGet$1(key) {
+  return getMapData$2(this, key).get(key);
+}
+var _mapCacheGet = mapCacheGet$1;
+var getMapData$1 = _getMapData;
+function mapCacheHas$1(key) {
+  return getMapData$1(this, key).has(key);
+}
+var _mapCacheHas = mapCacheHas$1;
+var getMapData = _getMapData;
+function mapCacheSet$1(key, value) {
+  var data = getMapData(this, key), size = data.size;
+  data.set(key, value);
+  this.size += data.size == size ? 0 : 1;
+  return this;
+}
+var _mapCacheSet = mapCacheSet$1;
+var mapCacheClear = _mapCacheClear;
+var mapCacheDelete = _mapCacheDelete;
+var mapCacheGet = _mapCacheGet;
+var mapCacheHas = _mapCacheHas;
+var mapCacheSet = _mapCacheSet;
+function MapCache$3(entries) {
+  var index2 = -1, length = entries == null ? 0 : entries.length;
+  this.clear();
+  while (++index2 < length) {
+    var entry = entries[index2];
+    this.set(entry[0], entry[1]);
+  }
+}
+MapCache$3.prototype.clear = mapCacheClear;
+MapCache$3.prototype["delete"] = mapCacheDelete;
+MapCache$3.prototype.get = mapCacheGet;
+MapCache$3.prototype.has = mapCacheHas;
+MapCache$3.prototype.set = mapCacheSet;
+var _MapCache = MapCache$3;
+var ListCache$1 = _ListCache;
+var Map$2 = _Map;
+var MapCache$2 = _MapCache;
+var LARGE_ARRAY_SIZE$1 = 200;
+function stackSet$1(key, value) {
+  var data = this.__data__;
+  if (data instanceof ListCache$1) {
+    var pairs = data.__data__;
+    if (!Map$2 || pairs.length < LARGE_ARRAY_SIZE$1 - 1) {
+      pairs.push([key, value]);
+      this.size = ++data.size;
+      return this;
+    }
+    data = this.__data__ = new MapCache$2(pairs);
+  }
+  data.set(key, value);
+  this.size = data.size;
+  return this;
+}
+var _stackSet = stackSet$1;
+var ListCache = _ListCache;
+var stackClear = _stackClear;
+var stackDelete = _stackDelete;
+var stackGet = _stackGet;
+var stackHas = _stackHas;
+var stackSet = _stackSet;
+function Stack$2(entries) {
+  var data = this.__data__ = new ListCache(entries);
+  this.size = data.size;
+}
+Stack$2.prototype.clear = stackClear;
+Stack$2.prototype["delete"] = stackDelete;
+Stack$2.prototype.get = stackGet;
+Stack$2.prototype.has = stackHas;
+Stack$2.prototype.set = stackSet;
+var _Stack = Stack$2;
+var HASH_UNDEFINED = "__lodash_hash_undefined__";
+function setCacheAdd$1(value) {
+  this.__data__.set(value, HASH_UNDEFINED);
+  return this;
+}
+var _setCacheAdd = setCacheAdd$1;
+function setCacheHas$1(value) {
+  return this.__data__.has(value);
+}
+var _setCacheHas = setCacheHas$1;
+var MapCache$1 = _MapCache;
+var setCacheAdd = _setCacheAdd;
+var setCacheHas = _setCacheHas;
+function SetCache$2(values) {
+  var index2 = -1, length = values == null ? 0 : values.length;
+  this.__data__ = new MapCache$1();
+  while (++index2 < length) {
+    this.add(values[index2]);
+  }
+}
+SetCache$2.prototype.add = SetCache$2.prototype.push = setCacheAdd;
+SetCache$2.prototype.has = setCacheHas;
+var _SetCache = SetCache$2;
+function arraySome$1(array, predicate) {
+  var index2 = -1, length = array == null ? 0 : array.length;
+  while (++index2 < length) {
+    if (predicate(array[index2], index2, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+var _arraySome = arraySome$1;
+function cacheHas$2(cache, key) {
+  return cache.has(key);
+}
+var _cacheHas = cacheHas$2;
+var SetCache$1 = _SetCache;
+var arraySome = _arraySome;
+var cacheHas$1 = _cacheHas;
+var COMPARE_PARTIAL_FLAG$5 = 1;
+var COMPARE_UNORDERED_FLAG$3 = 2;
+function equalArrays$2(array, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$5, arrLength = array.length, othLength = other.length;
+  if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+    return false;
+  }
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
+  }
+  var index2 = -1, result = true, seen = bitmask & COMPARE_UNORDERED_FLAG$3 ? new SetCache$1() : void 0;
+  stack.set(array, other);
+  stack.set(other, array);
+  while (++index2 < arrLength) {
+    var arrValue = array[index2], othValue = other[index2];
+    if (customizer) {
+      var compared = isPartial ? customizer(othValue, arrValue, index2, other, array, stack) : customizer(arrValue, othValue, index2, array, other, stack);
+    }
+    if (compared !== void 0) {
+      if (compared) {
+        continue;
+      }
+      result = false;
+      break;
+    }
+    if (seen) {
+      if (!arraySome(other, function(othValue2, othIndex) {
+        if (!cacheHas$1(seen, othIndex) && (arrValue === othValue2 || equalFunc(arrValue, othValue2, bitmask, customizer, stack))) {
+          return seen.push(othIndex);
+        }
+      })) {
+        result = false;
+        break;
+      }
+    } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+      result = false;
+      break;
+    }
+  }
+  stack["delete"](array);
+  stack["delete"](other);
+  return result;
+}
+var _equalArrays = equalArrays$2;
+var root$4 = _root;
+var Uint8Array$1 = root$4.Uint8Array;
+var _Uint8Array = Uint8Array$1;
+function mapToArray$1(map2) {
+  var index2 = -1, result = Array(map2.size);
+  map2.forEach(function(value, key) {
+    result[++index2] = [key, value];
+  });
+  return result;
+}
+var _mapToArray = mapToArray$1;
+function setToArray$3(set2) {
+  var index2 = -1, result = Array(set2.size);
+  set2.forEach(function(value) {
+    result[++index2] = value;
+  });
+  return result;
+}
+var _setToArray = setToArray$3;
+var Symbol$2 = _Symbol;
+var Uint8Array2 = _Uint8Array;
+var eq = eq_1;
+var equalArrays$1 = _equalArrays;
+var mapToArray = _mapToArray;
+var setToArray$2 = _setToArray;
+var COMPARE_PARTIAL_FLAG$4 = 1;
+var COMPARE_UNORDERED_FLAG$2 = 2;
+var boolTag$1 = "[object Boolean]";
+var dateTag$1 = "[object Date]";
+var errorTag$1 = "[object Error]";
+var mapTag$2 = "[object Map]";
+var numberTag$1 = "[object Number]";
+var regexpTag$1 = "[object RegExp]";
+var setTag$2 = "[object Set]";
+var stringTag$1 = "[object String]";
+var symbolTag$1 = "[object Symbol]";
+var arrayBufferTag$1 = "[object ArrayBuffer]";
+var dataViewTag$2 = "[object DataView]";
+var symbolProto$1 = Symbol$2 ? Symbol$2.prototype : void 0;
+var symbolValueOf = symbolProto$1 ? symbolProto$1.valueOf : void 0;
+function equalByTag$1(object, other, tag, bitmask, customizer, equalFunc, stack) {
+  switch (tag) {
+    case dataViewTag$2:
+      if (object.byteLength != other.byteLength || object.byteOffset != other.byteOffset) {
+        return false;
+      }
+      object = object.buffer;
+      other = other.buffer;
+    case arrayBufferTag$1:
+      if (object.byteLength != other.byteLength || !equalFunc(new Uint8Array2(object), new Uint8Array2(other))) {
+        return false;
+      }
+      return true;
+    case boolTag$1:
+    case dateTag$1:
+    case numberTag$1:
+      return eq(+object, +other);
+    case errorTag$1:
+      return object.name == other.name && object.message == other.message;
+    case regexpTag$1:
+    case stringTag$1:
+      return object == other + "";
+    case mapTag$2:
+      var convert = mapToArray;
+    case setTag$2:
+      var isPartial = bitmask & COMPARE_PARTIAL_FLAG$4;
+      convert || (convert = setToArray$2);
+      if (object.size != other.size && !isPartial) {
+        return false;
+      }
+      var stacked = stack.get(object);
+      if (stacked) {
+        return stacked == other;
+      }
+      bitmask |= COMPARE_UNORDERED_FLAG$2;
+      stack.set(object, other);
+      var result = equalArrays$1(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
+      stack["delete"](object);
+      return result;
+    case symbolTag$1:
+      if (symbolValueOf) {
+        return symbolValueOf.call(object) == symbolValueOf.call(other);
+      }
+  }
+  return false;
+}
+var _equalByTag = equalByTag$1;
+function arrayPush$1(array, values) {
+  var index2 = -1, length = values.length, offset = array.length;
+  while (++index2 < length) {
+    array[offset + index2] = values[index2];
+  }
+  return array;
+}
+var _arrayPush = arrayPush$1;
+var isArray$8 = Array.isArray;
+var isArray_1 = isArray$8;
+var arrayPush = _arrayPush;
+var isArray$7 = isArray_1;
+function baseGetAllKeys$1(object, keysFunc, symbolsFunc) {
+  var result = keysFunc(object);
+  return isArray$7(object) ? result : arrayPush(result, symbolsFunc(object));
+}
+var _baseGetAllKeys = baseGetAllKeys$1;
+function arrayFilter$1(array, predicate) {
+  var index2 = -1, length = array == null ? 0 : array.length, resIndex = 0, result = [];
+  while (++index2 < length) {
+    var value = array[index2];
+    if (predicate(value, index2, array)) {
+      result[resIndex++] = value;
+    }
+  }
+  return result;
+}
+var _arrayFilter = arrayFilter$1;
+function stubArray$1() {
+  return [];
+}
+var stubArray_1 = stubArray$1;
+var arrayFilter = _arrayFilter;
+var stubArray = stubArray_1;
+var objectProto$6 = Object.prototype;
+var propertyIsEnumerable$1 = objectProto$6.propertyIsEnumerable;
+var nativeGetSymbols = Object.getOwnPropertySymbols;
+var getSymbols$1 = !nativeGetSymbols ? stubArray : function(object) {
+  if (object == null) {
+    return [];
+  }
+  object = Object(object);
+  return arrayFilter(nativeGetSymbols(object), function(symbol) {
+    return propertyIsEnumerable$1.call(object, symbol);
+  });
+};
+var _getSymbols = getSymbols$1;
+function baseTimes$1(n, iteratee) {
+  var index2 = -1, result = Array(n);
+  while (++index2 < n) {
+    result[index2] = iteratee(index2);
+  }
+  return result;
+}
+var _baseTimes = baseTimes$1;
+function isObjectLike$5(value) {
+  return value != null && typeof value == "object";
+}
+var isObjectLike_1 = isObjectLike$5;
+var baseGetTag$3 = _baseGetTag;
+var isObjectLike$4 = isObjectLike_1;
+var argsTag$2 = "[object Arguments]";
+function baseIsArguments$1(value) {
+  return isObjectLike$4(value) && baseGetTag$3(value) == argsTag$2;
+}
+var _baseIsArguments = baseIsArguments$1;
+var baseIsArguments = _baseIsArguments;
+var isObjectLike$3 = isObjectLike_1;
+var objectProto$5 = Object.prototype;
+var hasOwnProperty$4 = objectProto$5.hasOwnProperty;
+var propertyIsEnumerable = objectProto$5.propertyIsEnumerable;
+var isArguments$2 = baseIsArguments(function() {
+  return arguments;
+}()) ? baseIsArguments : function(value) {
+  return isObjectLike$3(value) && hasOwnProperty$4.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
+};
+var isArguments_1 = isArguments$2;
+var isBuffer$2 = { exports: {} };
+function stubFalse() {
+  return false;
+}
+var stubFalse_1 = stubFalse;
+isBuffer$2.exports;
+(function(module, exports) {
+  var root22 = _root, stubFalse2 = stubFalse_1;
+  var freeExports = exports && !exports.nodeType && exports;
+  var freeModule = freeExports && true && module && !module.nodeType && module;
+  var moduleExports = freeModule && freeModule.exports === freeExports;
+  var Buffer2 = moduleExports ? root22.Buffer : void 0;
+  var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
+  var isBuffer2 = nativeIsBuffer || stubFalse2;
+  module.exports = isBuffer2;
+})(isBuffer$2, isBuffer$2.exports);
+var isBufferExports = isBuffer$2.exports;
+var MAX_SAFE_INTEGER$1 = 9007199254740991;
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+function isIndex$2(value, length) {
+  var type = typeof value;
+  length = length == null ? MAX_SAFE_INTEGER$1 : length;
+  return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+}
+var _isIndex = isIndex$2;
+var MAX_SAFE_INTEGER = 9007199254740991;
+function isLength$3(value) {
+  return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+var isLength_1 = isLength$3;
+var baseGetTag$2 = _baseGetTag;
+var isLength$2 = isLength_1;
+var isObjectLike$2 = isObjectLike_1;
+var argsTag$1 = "[object Arguments]";
+var arrayTag$1 = "[object Array]";
+var boolTag = "[object Boolean]";
+var dateTag = "[object Date]";
+var errorTag = "[object Error]";
+var funcTag = "[object Function]";
+var mapTag$1 = "[object Map]";
+var numberTag = "[object Number]";
+var objectTag$2 = "[object Object]";
+var regexpTag = "[object RegExp]";
+var setTag$1 = "[object Set]";
+var stringTag = "[object String]";
+var weakMapTag$1 = "[object WeakMap]";
+var arrayBufferTag = "[object ArrayBuffer]";
+var dataViewTag$1 = "[object DataView]";
+var float32Tag = "[object Float32Array]";
+var float64Tag = "[object Float64Array]";
+var int8Tag = "[object Int8Array]";
+var int16Tag = "[object Int16Array]";
+var int32Tag = "[object Int32Array]";
+var uint8Tag = "[object Uint8Array]";
+var uint8ClampedTag = "[object Uint8ClampedArray]";
+var uint16Tag = "[object Uint16Array]";
+var uint32Tag = "[object Uint32Array]";
+var typedArrayTags = {};
+typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+typedArrayTags[argsTag$1] = typedArrayTags[arrayTag$1] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag$1] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag$1] = typedArrayTags[numberTag] = typedArrayTags[objectTag$2] = typedArrayTags[regexpTag] = typedArrayTags[setTag$1] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag$1] = false;
+function baseIsTypedArray$1(value) {
+  return isObjectLike$2(value) && isLength$2(value.length) && !!typedArrayTags[baseGetTag$2(value)];
+}
+var _baseIsTypedArray = baseIsTypedArray$1;
+function baseUnary$1(func) {
+  return function(value) {
+    return func(value);
+  };
+}
+var _baseUnary = baseUnary$1;
+var _nodeUtil = { exports: {} };
+_nodeUtil.exports;
+(function(module, exports) {
+  var freeGlobal2 = _freeGlobal;
+  var freeExports = exports && !exports.nodeType && exports;
+  var freeModule = freeExports && true && module && !module.nodeType && module;
+  var moduleExports = freeModule && freeModule.exports === freeExports;
+  var freeProcess = moduleExports && freeGlobal2.process;
+  var nodeUtil2 = function() {
+    try {
+      var types = freeModule && freeModule.require && freeModule.require("util").types;
+      if (types) {
+        return types;
+      }
+      return freeProcess && freeProcess.binding && freeProcess.binding("util");
+    } catch (e) {
+    }
+  }();
+  module.exports = nodeUtil2;
+})(_nodeUtil, _nodeUtil.exports);
+var _nodeUtilExports = _nodeUtil.exports;
+var baseIsTypedArray = _baseIsTypedArray;
+var baseUnary = _baseUnary;
+var nodeUtil = _nodeUtilExports;
+var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+var isTypedArray$2 = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+var isTypedArray_1 = isTypedArray$2;
+var baseTimes = _baseTimes;
+var isArguments$1 = isArguments_1;
+var isArray$6 = isArray_1;
+var isBuffer$1 = isBufferExports;
+var isIndex$1 = _isIndex;
+var isTypedArray$1 = isTypedArray_1;
+var objectProto$4 = Object.prototype;
+var hasOwnProperty$3 = objectProto$4.hasOwnProperty;
+function arrayLikeKeys$1(value, inherited) {
+  var isArr = isArray$6(value), isArg = !isArr && isArguments$1(value), isBuff = !isArr && !isArg && isBuffer$1(value), isType = !isArr && !isArg && !isBuff && isTypedArray$1(value), skipIndexes = isArr || isArg || isBuff || isType, result = skipIndexes ? baseTimes(value.length, String) : [], length = result.length;
+  for (var key in value) {
+    if ((inherited || hasOwnProperty$3.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
+    (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
+    isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
+    isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
+    isIndex$1(key, length)))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+var _arrayLikeKeys = arrayLikeKeys$1;
+var objectProto$3 = Object.prototype;
+function isPrototype$1(value) {
+  var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto$3;
+  return value === proto;
+}
+var _isPrototype = isPrototype$1;
+function overArg$1(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+var _overArg = overArg$1;
+var overArg = _overArg;
+var nativeKeys$1 = overArg(Object.keys, Object);
+var _nativeKeys = nativeKeys$1;
+var isPrototype = _isPrototype;
+var nativeKeys = _nativeKeys;
+var objectProto$2 = Object.prototype;
+var hasOwnProperty$2 = objectProto$2.hasOwnProperty;
+function baseKeys$1(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty$2.call(object, key) && key != "constructor") {
+      result.push(key);
+    }
+  }
+  return result;
+}
+var _baseKeys = baseKeys$1;
+var isFunction = isFunction_1;
+var isLength$1 = isLength_1;
+function isArrayLike$1(value) {
+  return value != null && isLength$1(value.length) && !isFunction(value);
+}
+var isArrayLike_1 = isArrayLike$1;
+var arrayLikeKeys = _arrayLikeKeys;
+var baseKeys = _baseKeys;
+var isArrayLike = isArrayLike_1;
+function keys$2(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+var keys_1 = keys$2;
+var baseGetAllKeys = _baseGetAllKeys;
+var getSymbols = _getSymbols;
+var keys$1 = keys_1;
+function getAllKeys$1(object) {
+  return baseGetAllKeys(object, keys$1, getSymbols);
+}
+var _getAllKeys = getAllKeys$1;
+var getAllKeys = _getAllKeys;
+var COMPARE_PARTIAL_FLAG$3 = 1;
+var objectProto$1 = Object.prototype;
+var hasOwnProperty$1 = objectProto$1.hasOwnProperty;
+function equalObjects$1(object, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$3, objProps = getAllKeys(object), objLength = objProps.length, othProps = getAllKeys(other), othLength = othProps.length;
+  if (objLength != othLength && !isPartial) {
+    return false;
+  }
+  var index2 = objLength;
+  while (index2--) {
+    var key = objProps[index2];
+    if (!(isPartial ? key in other : hasOwnProperty$1.call(other, key))) {
+      return false;
+    }
+  }
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
+  }
+  var result = true;
+  stack.set(object, other);
+  stack.set(other, object);
+  var skipCtor = isPartial;
+  while (++index2 < objLength) {
+    key = objProps[index2];
+    var objValue = object[key], othValue = other[key];
+    if (customizer) {
+      var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
+    }
+    if (!(compared === void 0 ? objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack) : compared)) {
+      result = false;
+      break;
+    }
+    skipCtor || (skipCtor = key == "constructor");
+  }
+  if (result && !skipCtor) {
+    var objCtor = object.constructor, othCtor = other.constructor;
+    if (objCtor != othCtor && ("constructor" in object && "constructor" in other) && !(typeof objCtor == "function" && objCtor instanceof objCtor && typeof othCtor == "function" && othCtor instanceof othCtor)) {
+      result = false;
+    }
+  }
+  stack["delete"](object);
+  stack["delete"](other);
+  return result;
+}
+var _equalObjects = equalObjects$1;
+var getNative$3 = _getNative;
+var root$3 = _root;
+var DataView$1 = getNative$3(root$3, "DataView");
+var _DataView = DataView$1;
+var getNative$2 = _getNative;
+var root$2 = _root;
+var Promise$2 = getNative$2(root$2, "Promise");
+var _Promise = Promise$2;
+var getNative$1 = _getNative;
+var root$1 = _root;
+var Set$3 = getNative$1(root$1, "Set");
+var _Set = Set$3;
+var getNative = _getNative;
+var root = _root;
+var WeakMap$1 = getNative(root, "WeakMap");
+var _WeakMap = WeakMap$1;
+var DataView2 = _DataView;
+var Map$1 = _Map;
+var Promise$1 = _Promise;
+var Set$2 = _Set;
+var WeakMap2 = _WeakMap;
+var baseGetTag$1 = _baseGetTag;
+var toSource = _toSource;
+var mapTag = "[object Map]";
+var objectTag$1 = "[object Object]";
+var promiseTag = "[object Promise]";
+var setTag = "[object Set]";
+var weakMapTag = "[object WeakMap]";
+var dataViewTag = "[object DataView]";
+var dataViewCtorString = toSource(DataView2);
+var mapCtorString = toSource(Map$1);
+var promiseCtorString = toSource(Promise$1);
+var setCtorString = toSource(Set$2);
+var weakMapCtorString = toSource(WeakMap2);
+var getTag$1 = baseGetTag$1;
+if (DataView2 && getTag$1(new DataView2(new ArrayBuffer(1))) != dataViewTag || Map$1 && getTag$1(new Map$1()) != mapTag || Promise$1 && getTag$1(Promise$1.resolve()) != promiseTag || Set$2 && getTag$1(new Set$2()) != setTag || WeakMap2 && getTag$1(new WeakMap2()) != weakMapTag) {
+  getTag$1 = function(value) {
+    var result = baseGetTag$1(value), Ctor = result == objectTag$1 ? value.constructor : void 0, ctorString = Ctor ? toSource(Ctor) : "";
+    if (ctorString) {
+      switch (ctorString) {
+        case dataViewCtorString:
+          return dataViewTag;
+        case mapCtorString:
+          return mapTag;
+        case promiseCtorString:
+          return promiseTag;
+        case setCtorString:
+          return setTag;
+        case weakMapCtorString:
+          return weakMapTag;
+      }
+    }
+    return result;
+  };
+}
+var _getTag = getTag$1;
+var Stack$1 = _Stack;
+var equalArrays = _equalArrays;
+var equalByTag = _equalByTag;
+var equalObjects = _equalObjects;
+var getTag = _getTag;
+var isArray$5 = isArray_1;
+var isBuffer = isBufferExports;
+var isTypedArray2 = isTypedArray_1;
+var COMPARE_PARTIAL_FLAG$2 = 1;
+var argsTag = "[object Arguments]";
+var arrayTag = "[object Array]";
+var objectTag = "[object Object]";
+var objectProto = Object.prototype;
+var hasOwnProperty = objectProto.hasOwnProperty;
+function baseIsEqualDeep$1(object, other, bitmask, customizer, equalFunc, stack) {
+  var objIsArr = isArray$5(object), othIsArr = isArray$5(other), objTag = objIsArr ? arrayTag : getTag(object), othTag = othIsArr ? arrayTag : getTag(other);
+  objTag = objTag == argsTag ? objectTag : objTag;
+  othTag = othTag == argsTag ? objectTag : othTag;
+  var objIsObj = objTag == objectTag, othIsObj = othTag == objectTag, isSameTag = objTag == othTag;
+  if (isSameTag && isBuffer(object)) {
+    if (!isBuffer(other)) {
+      return false;
+    }
+    objIsArr = true;
+    objIsObj = false;
+  }
+  if (isSameTag && !objIsObj) {
+    stack || (stack = new Stack$1());
+    return objIsArr || isTypedArray2(object) ? equalArrays(object, other, bitmask, customizer, equalFunc, stack) : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+  }
+  if (!(bitmask & COMPARE_PARTIAL_FLAG$2)) {
+    var objIsWrapped = objIsObj && hasOwnProperty.call(object, "__wrapped__"), othIsWrapped = othIsObj && hasOwnProperty.call(other, "__wrapped__");
+    if (objIsWrapped || othIsWrapped) {
+      var objUnwrapped = objIsWrapped ? object.value() : object, othUnwrapped = othIsWrapped ? other.value() : other;
+      stack || (stack = new Stack$1());
+      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
+    }
+  }
+  if (!isSameTag) {
+    return false;
+  }
+  stack || (stack = new Stack$1());
+  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
+}
+var _baseIsEqualDeep = baseIsEqualDeep$1;
+var baseIsEqualDeep = _baseIsEqualDeep;
+var isObjectLike$1 = isObjectLike_1;
+function baseIsEqual$2(value, other, bitmask, customizer, stack) {
+  if (value === other) {
+    return true;
+  }
+  if (value == null || other == null || !isObjectLike$1(value) && !isObjectLike$1(other)) {
+    return value !== value && other !== other;
+  }
+  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual$2, stack);
+}
+var _baseIsEqual = baseIsEqual$2;
+var Stack = _Stack;
+var baseIsEqual$1 = _baseIsEqual;
+var COMPARE_PARTIAL_FLAG$1 = 1;
+var COMPARE_UNORDERED_FLAG$1 = 2;
+function baseIsMatch$1(object, source, matchData, customizer) {
+  var index2 = matchData.length, length = index2, noCustomizer = !customizer;
+  if (object == null) {
+    return !length;
+  }
+  object = Object(object);
+  while (index2--) {
+    var data = matchData[index2];
+    if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
+      return false;
+    }
+  }
+  while (++index2 < length) {
+    data = matchData[index2];
+    var key = data[0], objValue = object[key], srcValue = data[1];
+    if (noCustomizer && data[2]) {
+      if (objValue === void 0 && !(key in object)) {
+        return false;
+      }
+    } else {
+      var stack = new Stack();
+      if (customizer) {
+        var result = customizer(objValue, srcValue, key, object, source, stack);
+      }
+      if (!(result === void 0 ? baseIsEqual$1(srcValue, objValue, COMPARE_PARTIAL_FLAG$1 | COMPARE_UNORDERED_FLAG$1, customizer, stack) : result)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+var _baseIsMatch = baseIsMatch$1;
+var isObject = isObject_1;
+function isStrictComparable$2(value) {
+  return value === value && !isObject(value);
+}
+var _isStrictComparable = isStrictComparable$2;
+var isStrictComparable$1 = _isStrictComparable;
+var keys2 = keys_1;
+function getMatchData$1(object) {
+  var result = keys2(object), length = result.length;
+  while (length--) {
+    var key = result[length], value = object[key];
+    result[length] = [key, value, isStrictComparable$1(value)];
+  }
+  return result;
+}
+var _getMatchData = getMatchData$1;
+function matchesStrictComparable$2(key, srcValue) {
+  return function(object) {
+    if (object == null) {
+      return false;
+    }
+    return object[key] === srcValue && (srcValue !== void 0 || key in Object(object));
+  };
+}
+var _matchesStrictComparable = matchesStrictComparable$2;
+var baseIsMatch = _baseIsMatch;
+var getMatchData = _getMatchData;
+var matchesStrictComparable$1 = _matchesStrictComparable;
+function baseMatches$1(source) {
+  var matchData = getMatchData(source);
+  if (matchData.length == 1 && matchData[0][2]) {
+    return matchesStrictComparable$1(matchData[0][0], matchData[0][1]);
+  }
+  return function(object) {
+    return object === source || baseIsMatch(object, source, matchData);
+  };
+}
+var _baseMatches = baseMatches$1;
+var baseGetTag = _baseGetTag;
+var isObjectLike = isObjectLike_1;
+var symbolTag = "[object Symbol]";
+function isSymbol$3(value) {
+  return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
+}
+var isSymbol_1 = isSymbol$3;
+var isArray$4 = isArray_1;
+var isSymbol$2 = isSymbol_1;
+var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
+var reIsPlainProp = /^\w*$/;
+function isKey$3(value, object) {
+  if (isArray$4(value)) {
+    return false;
+  }
+  var type = typeof value;
+  if (type == "number" || type == "symbol" || type == "boolean" || value == null || isSymbol$2(value)) {
+    return true;
+  }
+  return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
+}
+var _isKey = isKey$3;
+var MapCache = _MapCache;
+var FUNC_ERROR_TEXT = "Expected a function";
+function memoize$1(func, resolver) {
+  if (typeof func != "function" || resolver != null && typeof resolver != "function") {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var memoized = function() {
+    var args = arguments, key = resolver ? resolver.apply(this, args) : args[0], cache = memoized.cache;
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result) || cache;
+    return result;
+  };
+  memoized.cache = new (memoize$1.Cache || MapCache)();
+  return memoized;
+}
+memoize$1.Cache = MapCache;
+var memoize_1 = memoize$1;
+var memoize = memoize_1;
+var MAX_MEMOIZE_SIZE = 500;
+function memoizeCapped$1(func) {
+  var result = memoize(func, function(key) {
+    if (cache.size === MAX_MEMOIZE_SIZE) {
+      cache.clear();
+    }
+    return key;
+  });
+  var cache = result.cache;
+  return result;
+}
+var _memoizeCapped = memoizeCapped$1;
+var memoizeCapped = _memoizeCapped;
+var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+var reEscapeChar = /\\(\\)?/g;
+var stringToPath$1 = memoizeCapped(function(string) {
+  var result = [];
+  if (string.charCodeAt(0) === 46) {
+    result.push("");
+  }
+  string.replace(rePropName, function(match, number3, quote, subString) {
+    result.push(quote ? subString.replace(reEscapeChar, "$1") : number3 || match);
+  });
+  return result;
+});
+var _stringToPath = stringToPath$1;
+function arrayMap$1(array, iteratee) {
+  var index2 = -1, length = array == null ? 0 : array.length, result = Array(length);
+  while (++index2 < length) {
+    result[index2] = iteratee(array[index2], index2, array);
+  }
+  return result;
+}
+var _arrayMap = arrayMap$1;
+var Symbol$1 = _Symbol;
+var arrayMap = _arrayMap;
+var isArray$3 = isArray_1;
+var isSymbol$1 = isSymbol_1;
+var INFINITY$2 = 1 / 0;
+var symbolProto = Symbol$1 ? Symbol$1.prototype : void 0;
+var symbolToString = symbolProto ? symbolProto.toString : void 0;
+function baseToString$1(value) {
+  if (typeof value == "string") {
+    return value;
+  }
+  if (isArray$3(value)) {
+    return arrayMap(value, baseToString$1) + "";
+  }
+  if (isSymbol$1(value)) {
+    return symbolToString ? symbolToString.call(value) : "";
+  }
+  var result = value + "";
+  return result == "0" && 1 / value == -INFINITY$2 ? "-0" : result;
+}
+var _baseToString = baseToString$1;
+var baseToString = _baseToString;
+function toString$1(value) {
+  return value == null ? "" : baseToString(value);
+}
+var toString_1 = toString$1;
+var isArray$2 = isArray_1;
+var isKey$2 = _isKey;
+var stringToPath = _stringToPath;
+var toString = toString_1;
+function castPath$2(value, object) {
+  if (isArray$2(value)) {
+    return value;
+  }
+  return isKey$2(value, object) ? [value] : stringToPath(toString(value));
+}
+var _castPath = castPath$2;
+var isSymbol = isSymbol_1;
+var INFINITY$1 = 1 / 0;
+function toKey$4(value) {
+  if (typeof value == "string" || isSymbol(value)) {
+    return value;
+  }
+  var result = value + "";
+  return result == "0" && 1 / value == -INFINITY$1 ? "-0" : result;
+}
+var _toKey = toKey$4;
+var castPath$1 = _castPath;
+var toKey$3 = _toKey;
+function baseGet$2(object, path2) {
+  path2 = castPath$1(path2, object);
+  var index2 = 0, length = path2.length;
+  while (object != null && index2 < length) {
+    object = object[toKey$3(path2[index2++])];
+  }
+  return index2 && index2 == length ? object : void 0;
+}
+var _baseGet = baseGet$2;
+var baseGet$1 = _baseGet;
+function get$1(object, path2, defaultValue) {
+  var result = object == null ? void 0 : baseGet$1(object, path2);
+  return result === void 0 ? defaultValue : result;
+}
+var get_1 = get$1;
+function baseHasIn$1(object, key) {
+  return object != null && key in Object(object);
+}
+var _baseHasIn = baseHasIn$1;
+var castPath = _castPath;
+var isArguments = isArguments_1;
+var isArray$1 = isArray_1;
+var isIndex = _isIndex;
+var isLength = isLength_1;
+var toKey$2 = _toKey;
+function hasPath$1(object, path2, hasFunc) {
+  path2 = castPath(path2, object);
+  var index2 = -1, length = path2.length, result = false;
+  while (++index2 < length) {
+    var key = toKey$2(path2[index2]);
+    if (!(result = object != null && hasFunc(object, key))) {
+      break;
+    }
+    object = object[key];
+  }
+  if (result || ++index2 != length) {
+    return result;
+  }
+  length = object == null ? 0 : object.length;
+  return !!length && isLength(length) && isIndex(key, length) && (isArray$1(object) || isArguments(object));
+}
+var _hasPath = hasPath$1;
+var baseHasIn = _baseHasIn;
+var hasPath = _hasPath;
+function hasIn$1(object, path2) {
+  return object != null && hasPath(object, path2, baseHasIn);
+}
+var hasIn_1 = hasIn$1;
+var baseIsEqual = _baseIsEqual;
+var get2 = get_1;
+var hasIn = hasIn_1;
+var isKey$1 = _isKey;
+var isStrictComparable = _isStrictComparable;
+var matchesStrictComparable = _matchesStrictComparable;
+var toKey$1 = _toKey;
+var COMPARE_PARTIAL_FLAG = 1;
+var COMPARE_UNORDERED_FLAG = 2;
+function baseMatchesProperty$1(path2, srcValue) {
+  if (isKey$1(path2) && isStrictComparable(srcValue)) {
+    return matchesStrictComparable(toKey$1(path2), srcValue);
+  }
+  return function(object) {
+    var objValue = get2(object, path2);
+    return objValue === void 0 && objValue === srcValue ? hasIn(object, path2) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+  };
+}
+var _baseMatchesProperty = baseMatchesProperty$1;
+function identity$12(value) {
+  return value;
+}
+var identity_1 = identity$12;
+function baseProperty$1(key) {
+  return function(object) {
+    return object == null ? void 0 : object[key];
+  };
+}
+var _baseProperty = baseProperty$1;
+var baseGet = _baseGet;
+function basePropertyDeep$1(path2) {
+  return function(object) {
+    return baseGet(object, path2);
+  };
+}
+var _basePropertyDeep = basePropertyDeep$1;
+var baseProperty = _baseProperty;
+var basePropertyDeep = _basePropertyDeep;
+var isKey = _isKey;
+var toKey = _toKey;
+function property$1(path2) {
+  return isKey(path2) ? baseProperty(toKey(path2)) : basePropertyDeep(path2);
+}
+var property_1 = property$1;
+var baseMatches = _baseMatches;
+var baseMatchesProperty = _baseMatchesProperty;
+var identity5 = identity_1;
+var isArray = isArray_1;
+var property = property_1;
+function baseIteratee$1(value) {
+  if (typeof value == "function") {
+    return value;
+  }
+  if (value == null) {
+    return identity5;
+  }
+  if (typeof value == "object") {
+    return isArray(value) ? baseMatchesProperty(value[0], value[1]) : baseMatches(value);
+  }
+  return property(value);
+}
+var _baseIteratee = baseIteratee$1;
+function baseFindIndex$1(array, predicate, fromIndex, fromRight) {
+  var length = array.length, index2 = fromIndex + (fromRight ? 1 : -1);
+  while (fromRight ? index2-- : ++index2 < length) {
+    if (predicate(array[index2], index2, array)) {
+      return index2;
+    }
+  }
+  return -1;
+}
+var _baseFindIndex = baseFindIndex$1;
+function baseIsNaN$1(value) {
+  return value !== value;
+}
+var _baseIsNaN = baseIsNaN$1;
+function strictIndexOf$1(array, value, fromIndex) {
+  var index2 = fromIndex - 1, length = array.length;
+  while (++index2 < length) {
+    if (array[index2] === value) {
+      return index2;
+    }
+  }
+  return -1;
+}
+var _strictIndexOf = strictIndexOf$1;
+var baseFindIndex = _baseFindIndex;
+var baseIsNaN = _baseIsNaN;
+var strictIndexOf = _strictIndexOf;
+function baseIndexOf$1(array, value, fromIndex) {
+  return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
+}
+var _baseIndexOf = baseIndexOf$1;
+var baseIndexOf = _baseIndexOf;
+function arrayIncludes$1(array, value) {
+  var length = array == null ? 0 : array.length;
+  return !!length && baseIndexOf(array, value, 0) > -1;
+}
+var _arrayIncludes = arrayIncludes$1;
+function arrayIncludesWith$1(array, value, comparator) {
+  var index2 = -1, length = array == null ? 0 : array.length;
+  while (++index2 < length) {
+    if (comparator(value, array[index2])) {
+      return true;
+    }
+  }
+  return false;
+}
+var _arrayIncludesWith = arrayIncludesWith$1;
+function noop$1() {
+}
+var noop_1 = noop$1;
+var Set$1 = _Set;
+var noop4 = noop_1;
+var setToArray$1 = _setToArray;
+var INFINITY = 1 / 0;
+var createSet$1 = !(Set$1 && 1 / setToArray$1(new Set$1([, -0]))[1] == INFINITY) ? noop4 : function(values) {
+  return new Set$1(values);
+};
+var _createSet = createSet$1;
+var SetCache = _SetCache;
+var arrayIncludes = _arrayIncludes;
+var arrayIncludesWith = _arrayIncludesWith;
+var cacheHas = _cacheHas;
+var createSet = _createSet;
+var setToArray = _setToArray;
+var LARGE_ARRAY_SIZE = 200;
+function baseUniq$1(array, iteratee, comparator) {
+  var index2 = -1, includes = arrayIncludes, length = array.length, isCommon = true, result = [], seen = result;
+  if (comparator) {
+    isCommon = false;
+    includes = arrayIncludesWith;
+  } else if (length >= LARGE_ARRAY_SIZE) {
+    var set2 = iteratee ? null : createSet(array);
+    if (set2) {
+      return setToArray(set2);
+    }
+    isCommon = false;
+    includes = cacheHas;
+    seen = new SetCache();
+  } else {
+    seen = iteratee ? [] : result;
+  }
+  outer:
+    while (++index2 < length) {
+      var value = array[index2], computed = iteratee ? iteratee(value) : value;
+      value = comparator || value !== 0 ? value : 0;
+      if (isCommon && computed === computed) {
+        var seenIndex = seen.length;
+        while (seenIndex--) {
+          if (seen[seenIndex] === computed) {
+            continue outer;
+          }
+        }
+        if (iteratee) {
+          seen.push(computed);
+        }
+        result.push(value);
+      } else if (!includes(seen, computed, comparator)) {
+        if (seen !== result) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
+  return result;
+}
+var _baseUniq = baseUniq$1;
+var baseIteratee = _baseIteratee;
+var baseUniq = _baseUniq;
+function uniqBy(array, iteratee) {
+  return array && array.length ? baseUniq(array, baseIteratee(iteratee)) : [];
+}
+var uniqBy_1 = uniqBy;
+var uniqBy$1 = /* @__PURE__ */ getDefaultExportFromCjs(uniqBy_1);
 function getHiddenChildren({
   nodeId,
   nodes: nodes2,
@@ -94734,27 +93145,9 @@ function getHiddenChildren({
       hiddenNodes.push(...nested.hiddenNodes);
     }
   }
-  const uniqueEdges = Object.values(
-    hiddenEdges.reduce(
-      (acc, next) => ({
-        ...acc,
-        [next.id]: next
-      }),
-      {}
-    )
-  );
-  const uniqueNodes = Object.values(
-    hiddenNodes.reduce(
-      (acc, next) => ({
-        ...acc,
-        [next.id]: next
-      }),
-      {}
-    )
-  );
   return {
-    hiddenEdges: uniqueEdges,
-    hiddenNodes: uniqueNodes
+    hiddenEdges: uniqBy$1(hiddenEdges, "id"),
+    hiddenNodes: uniqBy$1(hiddenNodes, "id")
   };
 }
 var getVisibleEntities = ({
@@ -94979,7 +93372,8 @@ var Sphere2 = ({
 };
 Sphere2.defaultProps = {
   opacity: 1,
-  active: false
+  active: false,
+  selected: false
 };
 var Ring = ({ color: color2, size, opacity, animated: animated2 }) => {
   const normalizedColor = (0, import_react10.useMemo)(() => new Color(color2), [color2]);
@@ -95194,7 +93588,6 @@ var CameraControls2 = (0, import_react10.forwardRef)(
     useHotkeys([
       {
         name: "Zoom In",
-        category: "Graph",
         keys: "command+shift+i",
         callback: (event) => {
           event.preventDefault();
@@ -95203,7 +93596,6 @@ var CameraControls2 = (0, import_react10.forwardRef)(
       },
       {
         name: "Zoom Out",
-        category: "Graph",
         keys: "command+shift+o",
         callback: (event) => {
           event.preventDefault();
@@ -95305,7 +93697,6 @@ var useCenterGraph = ({
   useHotkeys([
     {
       name: "Center",
-      category: "Graph",
       keys: ["command+shift+c"],
       callback: () => centerNodes(nodes2)
     }
@@ -95403,37 +93794,66 @@ var SphereWithIcon = ({
   id: id2,
   size,
   opacity,
-  node,
-  active,
   animated: animated2,
   image
-}) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    Sphere2,
-    {
-      id: id2,
-      size,
-      opacity,
-      animated: animated2,
-      color: color2,
-      node,
-      active
+}) => {
+  const { scale, nodeOpacity } = useSpring({
+    from: {
+      // Note: This prevents incorrect scaling w/ 0
+      scale: [1e-5, 1e-5, 1e-5],
+      nodeOpacity: 0
+    },
+    to: {
+      scale: [size, size, size],
+      nodeOpacity: opacity
+    },
+    config: {
+      ...animationConfig,
+      duration: animated2 ? void 0 : 0
     }
-  ),
-  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    Icon,
-    {
-      id: id2,
-      image,
-      size: size + 8,
-      opacity,
-      animated: animated2,
-      color: color2,
-      node,
-      active
-    }
-  )
-] });
+  });
+  const normalizedColor = (0, import_react10.useMemo)(() => new Color(color2), [color2]);
+  const iconTexture = useLoader(TextureLoader, image);
+  const meshRef = (0, import_react10.useRef)();
+  const camera = useThree((state) => state.camera);
+  useFrame(() => {
+    meshRef.current.lookAt(camera.position);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(animated.group, { ref: meshRef, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(animated.mesh, { userData: { id: id2 }, scale, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "sphereBufferGeometry",
+        {
+          attach: "geometry",
+          args: [1, 25, 25, Math.PI, Math.PI]
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        animated.meshPhongMaterial,
+        {
+          attach: "material",
+          side: DoubleSide,
+          transparent: true,
+          fog: true,
+          opacity: nodeOpacity,
+          color: normalizedColor
+        }
+      )
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(animated.mesh, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("planeBufferGeometry", { attach: "geometry", args: [10, 10] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        animated.meshBasicMaterial,
+        {
+          attach: "material",
+          map: iconTexture,
+          opacity: nodeOpacity,
+          transparent: true
+        }
+      )
+    ] })
+  ] });
+};
 SphereWithIcon.defaultProps = {
   opacity: 1,
   active: false,
@@ -95559,7 +93979,7 @@ var Node3 = ({
   const [menuVisible, setMenuVisible] = (0, import_react10.useState)(false);
   const selectionOpacity = hasSelections ? isSelected || active || isActive ? theme.node.selectedOpacity : theme.node.inactiveOpacity : theme.node.opacity;
   const canCollapse = (0, import_react10.useMemo)(() => {
-    const outboundLinks = edges2.filter((l) => l.source === id2);
+    const outboundLinks = edges2.filter((l) => l.data.source === id2);
     return outboundLinks.length > 0 || isCollapsed;
   }, [edges2, id2, isCollapsed]);
   const onCollapse = (0, import_react10.useCallback)(() => {
@@ -95897,17 +94317,16 @@ var Edge$1 = ({
   id: id2,
   interpolation,
   theme,
-  labelFontUrl,
   onContextMenu,
   onClick,
   onPointerOver,
   onPointerOut
 }) => {
   const edge = useStore3((state) => state.edges.find((e) => e.id === id2));
-  const { target, source, label, labelVisible = false, size = 1 } = edge;
+  const { toId, fromId, label, labelVisible = false, size = 1 } = edge;
   const curved = interpolation === "curved";
-  const from = useStore3((store) => store.nodes.find((node) => node.id === source));
-  const to2 = useStore3((store) => store.nodes.find((node) => node.id === target));
+  const from = useStore3((store) => store.nodes.find((node) => node.id === fromId));
+  const to2 = useStore3((store) => store.nodes.find((node) => node.id === toId));
   const draggingId = useStore3((state) => state.draggingId);
   const [active, setActive] = (0, import_react10.useState)(false);
   const [menuVisible, setMenuVisible] = (0, import_react10.useState)(false);
@@ -96043,7 +94462,6 @@ var Edge$1 = ({
       {
         text: label,
         ellipsis: 15,
-        fontUrl: labelFontUrl,
         stroke: theme.edge.label.stroke,
         color: isSelected || active || isActive ? theme.edge.label.activeColor : theme.edge.label.color,
         opacity: selectionOpacity,
@@ -96071,9 +94489,9 @@ function useEdgeGeometry(arrowPlacement, interpolation) {
       const cache = geometryCacheRef.current;
       const { nodes: nodes2 } = stateRef.current;
       edges2.forEach((edge) => {
-        const { target, source, size = 1 } = edge;
-        const from = nodes2.find((node) => node.id === source);
-        const to2 = nodes2.find((node) => node.id === target);
+        const { toId, fromId, size = 1 } = edge;
+        const from = nodes2.find((node) => node.id === fromId);
+        const to2 = nodes2.find((node) => node.id === toId);
         if (!from || !to2) {
           return;
         }
@@ -96298,10 +94716,10 @@ var Edge = ({
   opacity,
   theme
 }) => {
-  const { target, source, label, labelVisible = false, size = 1 } = edge;
+  const { toId, fromId, label, labelVisible = false, size = 1 } = edge;
   const nodes2 = useStore3((store) => store.nodes);
-  const from = nodes2.find((node) => node.id === source);
-  const to2 = nodes2.find((node) => node.id === target);
+  const from = nodes2.find((node) => node.id === fromId);
+  const to2 = nodes2.find((node) => node.id === toId);
   const draggingId = useStore3((state) => state.draggingId);
   const labelOffset = (size + LABEL_FONT_SIZE) / 2;
   const midPoint = (0, import_react10.useMemo)(
@@ -96402,7 +94820,7 @@ var Edges = ({
     const draggingActive2 = [];
     const draggingInactive2 = [];
     edges2.forEach((edge) => {
-      if (draggingId === edge.source || draggingId === edge.target) {
+      if (draggingId === edge.fromId || draggingId === edge.toId) {
         if (selections.includes(edge.id) || actives.includes(edge.id)) {
           draggingActive2.push(edge);
         } else {
@@ -96622,7 +95040,6 @@ var GraphScene = (0, import_react10.forwardRef)(
           id: e,
           disabled: disabled2,
           animated: animated2,
-          labelFontUrl,
           labelPlacement: edgeLabelPosition,
           arrowPlacement: edgeArrowPosition,
           interpolation: edgeInterpolation,
@@ -96702,21 +95119,18 @@ function getAdjacents(graph, nodeIds, type) {
   const nodes2 = [];
   const edges2 = [];
   for (const nodeId of nodeIds) {
-    const graphLinks = [
-      ...graph.inEdgeEntries(nodeId) ?? [],
-      ...graph.outEdgeEntries(nodeId) ?? []
-    ];
+    const graphLinks = graph.getLinks(nodeId);
     if (!graphLinks) {
       continue;
     }
-    for (const link of graphLinks) {
-      const linkId = link.attributes.id;
+    graphLinks.forEach((link) => {
+      const linkId = link.data.id;
       if (type === "in") {
-        if (link.target === nodeId && !edges2.includes(linkId)) {
+        if (link.toId === nodeId && !edges2.includes(linkId)) {
           edges2.push(linkId);
         }
       } else if (type === "out") {
-        if (link.source === nodeId && !edges2.includes(linkId)) {
+        if (link.fromId === nodeId && !edges2.includes(linkId)) {
           edges2.push(linkId);
         }
       } else {
@@ -96725,17 +95139,18 @@ function getAdjacents(graph, nodeIds, type) {
         }
       }
       if (type === "out" || type === "all") {
-        const toId = link.target;
+        const toId = link.toId;
         if (!nodes2.includes(toId)) {
           nodes2.push(toId);
         }
       }
       if (type === "in" || type === "all") {
-        if (!nodes2.includes(link.source)) {
-          nodes2.push(link.source);
+        const fromId = link.fromId;
+        if (!nodes2.includes(fromId)) {
+          nodes2.push(fromId);
         }
       }
-    }
+    });
   }
   return {
     nodes: nodes2,
@@ -96768,7 +95183,7 @@ var Lasso = ({
   const gl = useThree((state) => state.gl);
   const setEvents = useThree((state) => state.setEvents);
   const size = useThree((state) => state.size);
-  const get2 = useThree((state) => state.get);
+  const get22 = useThree((state) => state.get);
   const scene = useThree((state) => state.scene);
   const cameraControls = useCameraControls();
   const actives = useStore3((state) => state.actives);
@@ -96781,7 +95196,7 @@ var Lasso = ({
   const elementRef = (0, import_react10.useRef)(createElement9(theme));
   const vectorsRef = (0, import_react10.useRef)(null);
   const isDownRef = (0, import_react10.useRef)(false);
-  const oldRaycasterEnabledRef = (0, import_react10.useRef)(get2().events.enabled);
+  const oldRaycasterEnabledRef = (0, import_react10.useRef)(get22().events.enabled);
   const oldControlsEnabledRef = (0, import_react10.useRef)(
     (_a2 = cameraControls.controls) == null ? void 0 : _a2.enabled
   );
@@ -96845,7 +95260,7 @@ var Lasso = ({
     (event) => {
       var _a3, _b2;
       if (event.shiftKey) {
-        oldRaycasterEnabledRef.current = get2().events.enabled;
+        oldRaycasterEnabledRef.current = get22().events.enabled;
         oldControlsEnabledRef.current = (_a3 = cameraControls.controls) == null ? void 0 : _a3.enabled;
         selectionBoxRef.current = new SelectionBox(camera, scene);
         const edgeScene = new Scene();
@@ -96886,7 +95301,7 @@ var Lasso = ({
       camera,
       cameraControls.controls,
       edgeMeshes,
-      get2,
+      get22,
       gl.domElement.parentElement,
       onPointerMove,
       onPointerUp,
@@ -96910,8 +95325,10 @@ var Lasso = ({
   }, [type, disabled2, onPointerDown, onPointerMove, onPointerUp]);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("group", { children });
 };
-function findPath(graph, source, target) {
-  return (0, import_graphology_shortest_path.bidirectional)(graph, source, target);
+function findPath(graph, fromId, toId) {
+  const pathFinder = import_ngraph4.default.aStar(graph);
+  const foundPath = pathFinder.find(fromId, toId);
+  return foundPath;
 }
 var useSelection = ({
   selections = [],
@@ -97031,23 +95448,23 @@ var useSelection = ({
     ]
   );
   const selectNodePaths = (0, import_react10.useCallback)(
-    (source, target) => {
+    (fromId, toId) => {
       const graph = ref.current.getGraph();
       if (!graph) {
         throw new Error("Graph is not initialized");
       }
-      const path = findPath(graph, source, target);
-      clearSelections([source, target]);
+      const path2 = findPath(graph, fromId, toId);
+      clearSelections([fromId, toId]);
       const result = [];
-      for (let i2 = 0; i2 < path.length - 1; i2++) {
-        const from = path[i2];
-        const to2 = path[i2 + 1];
-        const edge = graph.getEdgeAttributes(from, to2);
+      for (let i2 = 0; i2 < path2.length - 1; i2++) {
+        const from = path2[i2];
+        const to2 = path2[i2 + 1];
+        const edge = graph.getLink(to2.data.id, from.data.id);
         if (edge) {
-          result.push(edge.id);
+          result.push(edge.data.id);
         }
       }
-      setInternalActives([...path.map((p) => p), ...result]);
+      setInternalActives([...path2.map((p) => p.id), ...result]);
     },
     [clearSelections, ref]
   );
@@ -97134,7 +95551,7 @@ var useSelection = ({
       name: "Select All",
       keys: "mod+a",
       disabled: !hotkeys.includes("selectAll"),
-      category: "Graph",
+      category: "Canvas",
       description: "Select all nodes and edges",
       callback: (event) => {
         event.preventDefault();
@@ -97147,7 +95564,7 @@ var useSelection = ({
     },
     {
       name: "Deselect Selections",
-      category: "Graph",
+      category: "Canvas",
       disabled: !hotkeys.includes("deselect"),
       description: "Deselect selected nodes and edges",
       keys: "escape",
@@ -99187,8 +97604,8 @@ var App = () => {
     }
   );
 };
-var root = (0, import_client.createRoot)(document.getElementById("app"));
-root.render(/* @__PURE__ */ (0, import_jsx_runtime2.jsx)(App, {}));
+var root2 = (0, import_client.createRoot)(document.getElementById("app"));
+root2.render(/* @__PURE__ */ (0, import_jsx_runtime2.jsx)(App, {}));
 /*! Bundled license information:
 
 react/cjs/react.development.js:

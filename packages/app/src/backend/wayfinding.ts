@@ -44,6 +44,7 @@ class Wayfinding {
             this.dijkstra.addVertex(system.symbol)
             this.jumpDijkstra.addVertex(system.symbol)
         })
+        let edges = 0;
 
         systems.forEach(system => {
             const nearbySystems = systems.filter(nearbySystem => {
@@ -57,6 +58,7 @@ class Wayfinding {
             nearbySystems.forEach(nearbySystem => {
                 // increase cost function by fuel cost
                 this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, nearbySystem.distance+nearbySystem.distance)
+                edges++
             })
 
             if (system.hasJumpGate) {
@@ -68,11 +70,12 @@ class Wayfinding {
 
                     this.dijkstra.addEdge(systemSymbol, toSystemSymbol, Math.max(getDistance(system, connection), 600))
                     this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, Math.max(getDistance(system, connection), 600))
+                    edges++
                 })
             }
         })
 
-        console.log(`Reloaded edges for ${systems.length} systems`)
+        console.log(`Reloaded edges for ${systems.length} systems, ${edges} edges`)
     }
 }
 

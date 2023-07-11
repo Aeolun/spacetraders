@@ -2,12 +2,16 @@ import {Ship} from "@app/ship/ship";
 import {ExtractResources201Response, Survey} from "spacetraders-sdk";
 import {logShipAction} from "@app/lib/log";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
-import {prisma} from "@app/prisma";
+import {prisma, Prisma} from "@app/prisma";
 import {storeWaypoint} from "@app/ship/storeResults";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 import {BehaviorParameters} from "@app/ship/shipBehavior";
 
 const updateTaken = new Set([] as string[])
+const shitList: { system: string, expire: number }[] = [{
+    system: 'garbage',
+    expire: Number.MAX_SAFE_INTEGER
+}]
 
 export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorParameters) => {
     const system = await prisma.system.findFirstOrThrow({
@@ -43,12 +47,12 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
             and s.x < ${system.x + parameters.range}
             and s.y > ${system.y - parameters.range}
             and s.y < ${system.y + parameters.range}
+            and s.symbol NOT IN(${Prisma.join(shitList.map(s => s.system))})
         GROUP BY s.symbol
         HAVING MIN(mp.updatedOn) IS NULL OR MIN(mp.updatedOn) < NOW() - INTERVAL 2 HOUR
         ORDER BY lastUpdated DESC, distance ASC LIMIT 50;`
 
-    console.log(list)
-    ship.log(`Found ${list.length} systems that haven't been updated in the past 3 hours`)
+    ship.log(`Found ${list.length} systems that haven't been updated in the past 2 hours`)
 
     let updatable = list.filter(system => {
         return !updateTaken.has(system.symbol)
@@ -96,7 +100,15 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
     updateTaken.add(updateSystem.symbol)
     await ship.setOverallGoal(`Updating market waypoints in ${updateSystem.symbol}`)
 
-    await travelBehavior(updateSystem.symbol, ship)
+    const success = await travelBehavior(updateSystem.symbol, ship)
+    if (!success) {
+        ship.log(`Cannot navigate to ${updateSystem.symbol}`)
+        shitList.push({
+            system: updateSystem.symbol,
+            expire: Date.now()+86400*30*1000
+        })
+        return;
+    }
 
     ship.log(`Arrived at ${updateSystem.symbol} for updating ${updateSystem.waypointCount} markets.`)
 

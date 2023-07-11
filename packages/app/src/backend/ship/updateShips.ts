@@ -315,15 +315,21 @@ export async function processAgent(agent: Agent, token?: string) {
             accountId: agent.accountId,
         }
     })
-    return await prisma.agent.updateMany({
+    const existingAgent = await prisma.agent.findUnique({
         where: {
-            symbol: agent.symbol,
-            token: null
-        },
-        data: {
-            token: token
+            symbol: agent.symbol
         }
-    })
+    });
+    if (!existingAgent.token) {
+        return await prisma.agent.updateMany({
+            where: {
+                symbol: agent.symbol,
+            },
+            data: {
+                token: token
+            }
+        })
+    }
 }
 
 export async function processCooldown(shipSymbol: string, cooldown: Cooldown) {
