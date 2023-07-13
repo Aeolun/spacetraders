@@ -27,7 +27,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@aeolun/dijkstra-calculator": "^1.1.0",
+    "@aeolun/dijkstra-calculator": "^1.2.1",
     "@aeolun/yoga-layout-prebuilt": "^1.10.0",
     "@arwes/animated": "1.0.0-next.7",
     "@arwes/animator": "1.0.0-next.7",

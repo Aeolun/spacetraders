@@ -1,8 +1,9 @@
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import {Ship} from "@app/ship/ship";
 import {prisma} from "@app/prisma";
-import {defaultWayfinder} from "@app/wayfinding";
+import {defaultWayfinder, printRoute} from "@app/wayfinding";
 import {LinkedListItem} from "@aeolun/dijkstra-calculator";
+import {ShipNavFlightMode} from "spacetraders-sdk";
 
 export async function travelBehavior(toSystem: string, ship: Ship, preferredWaypointSymbol?: string, options?: {
     executeEveryStop?: () => Promise<void>
@@ -20,11 +21,21 @@ export async function travelBehavior(toSystem: string, ship: Ship, preferredWayp
             await options?.executeEveryStop?.()
 
             if (ship.currentSystemSymbol !== toSystem) {
-                let route: LinkedListItem[]
+                let route: LinkedListItem[] = []
                 if (ship.hasWarpDrive && !options?.jumpOnly) {
-                    route = (await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem)).finalPath
+                    const result = await defaultWayfinder.findRoute(ship.currentSystemSymbol, toSystem, {
+                        max: ship.maxFuel,
+                        current: ship.fuel
+                    })
+                    route = result.finalPath
+                    printRoute(route, result.pathProperties)
                 } else {
-                    route = (await defaultWayfinder.findJumpRoute(ship.currentSystemSymbol, toSystem)).finalPath
+                    const result = await defaultWayfinder.findJumpRoute(ship.currentSystemSymbol, toSystem, {
+                        max: ship.maxFuel,
+                        current: ship.fuel
+                    })
+                    route = result.finalPath
+                    printRoute(route, result.pathProperties)
                 }
 
                 if (route.length <= 0) {
@@ -33,24 +44,32 @@ export async function travelBehavior(toSystem: string, ship: Ship, preferredWayp
                 }
 
                 for (const nextSystem of route) {
-                    // make sure we're always at the jump gate if one exists
-                    const systemJumpgateWaypoint = await prisma.waypoint.findFirst({
-                        where: {
-                            systemSymbol: ship.currentSystemSymbol,
-                            type: 'JUMP_GATE'
-                        }
-                    })
-                    const targetJumpgateWaypoint = await prisma.waypoint.findFirst({
-                        where: {
-                            systemSymbol: nextSystem.target,
-                            type: 'JUMP_GATE'
-                        }
-                    })
-                    if (systemJumpgateWaypoint && targetJumpgateWaypoint && ship.currentWaypointSymbol !== systemJumpgateWaypoint.symbol) {
-                        await ship.navigate(systemJumpgateWaypoint.symbol)
+                    if (nextSystem.edge === 'burn' && ship.navMode !== ShipNavFlightMode.Burn) {
+                        await ship.navigateMode(ShipNavFlightMode.Burn)
+                    } else if (nextSystem.edge === 'cruise' && ship.navMode !== ShipNavFlightMode.Cruise) {
+                        await ship.navigateMode(ShipNavFlightMode.Cruise)
+                    } else if (nextSystem.edge === 'drift' && ship.navMode !== ShipNavFlightMode.Drift) {
+                        await ship.navigateMode(ShipNavFlightMode.Drift)
                     }
 
-                    if (systemJumpgateWaypoint && targetJumpgateWaypoint) {
+                    if (nextSystem.edge === 'jump') {
+                        // make sure we're always at the jump gate if one exists
+                        const systemJumpgateWaypoint = await prisma.waypoint.findFirst({
+                            where: {
+                                systemSymbol: ship.currentSystemSymbol,
+                                type: 'JUMP_GATE'
+                            }
+                        })
+                        const targetJumpgateWaypoint = await prisma.waypoint.findFirst({
+                            where: {
+                                systemSymbol: nextSystem.target,
+                                type: 'JUMP_GATE'
+                            }
+                        })
+                        if (systemJumpgateWaypoint && targetJumpgateWaypoint && ship.currentWaypointSymbol !== systemJumpgateWaypoint.symbol) {
+                            await ship.navigate(systemJumpgateWaypoint.symbol)
+                        }
+
                         await ship.jump(nextSystem.target)
                         await options?.executeEveryStop?.()
                     } else {

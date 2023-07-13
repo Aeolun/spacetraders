@@ -9,7 +9,10 @@ process.argv.forEach(item => {
     }
 })
 defaultWayfinder.loadWaypoints().then(() => {
-    defaultWayfinder.findRoute('X1-CQ39', 'X1-UD48').then(async stuff => {
+    defaultWayfinder.findRoute('X1-CQ39', 'X1-UD48', {
+        max: 100,
+        current: 100
+    }).then(async stuff => {
         const allWaypoints = await prisma.waypoint.findMany({
             where: {
                 type: 'JUMP_GATE'
@@ -28,13 +31,16 @@ defaultWayfinder.loadWaypoints().then(() => {
         const totalCount = slicedGates.length * allJumpGates.length
         for(const source of slicedGates) {
             for (const target of allJumpGates) {
-                const route = await defaultWayfinder.findJumpRoute(source.systemSymbol, target.systemSymbol)
+                const route = await defaultWayfinder.findJumpRoute(source.systemSymbol, target.systemSymbol, {
+                    max: 100,
+                    current: 100
+                })
                 if (route.finalPath.length > 0) {
                     routes.push({
                         fromSystemSymbol: source.systemSymbol,
                         toSystemSymbol: target.systemSymbol,
                         jumps: route.finalPath.length,
-                        totalDistance: route.totalWeight
+                        totalDistance: route.pathProperties.priority
                     })
                     if (routes.length >= batchSize) {
                         await prisma.jumpDistance.createMany({

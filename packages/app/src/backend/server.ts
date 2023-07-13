@@ -59,9 +59,15 @@ export const appRouter = router({
         jumpOnly: z.boolean().optional()
     })).query(async ({input}) => {
         if (input.jumpOnly) {
-            return defaultWayfinder.findJumpRoute(input.fromSystemSymbol, input.toSystemSymbol)
+            return defaultWayfinder.findJumpRoute(input.fromSystemSymbol, input.toSystemSymbol, {
+                current: 1000,
+                max: 1000
+            })
         } else {
-            return defaultWayfinder.findRoute(input.fromSystemSymbol, input.toSystemSymbol)
+            return defaultWayfinder.findRoute(input.fromSystemSymbol, input.toSystemSymbol, {
+                current: 1000,
+                max: 1000
+            })
         }
     }),
     cancelBehaviorForShip: publicProcedure.input(z.object({

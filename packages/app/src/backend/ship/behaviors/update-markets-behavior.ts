@@ -50,7 +50,7 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
             and s.symbol NOT IN(${Prisma.join(shitList.map(s => s.system))})
         GROUP BY s.symbol
         HAVING MIN(mp.updatedOn) IS NULL OR MIN(mp.updatedOn) < NOW() - INTERVAL 2 HOUR
-        ORDER BY lastUpdated DESC, distance ASC LIMIT 50;`
+        ORDER BY ROUND(distance/500) ASC, lastUpdated ASC LIMIT 50;`
 
     ship.log(`Found ${list.length} systems that haven't been updated in the past 2 hours`)
 

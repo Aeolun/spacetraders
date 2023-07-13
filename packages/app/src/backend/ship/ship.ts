@@ -48,6 +48,7 @@ export class Ship {
 
     public hasWarpDrive = false
     public engineSpeed = 0
+    public navMode: ShipNavFlightMode = ShipNavFlightMode.Cruise
 
     public fuel = 0
     public maxFuel = 0
@@ -73,6 +74,7 @@ export class Ship {
         this.currentSystemSymbol = shipInfo.data.data.nav.systemSymbol
 
         this.navigationUntil = shipInfo.data.data.nav.status === 'IN_TRANSIT' ? shipInfo.data.data.nav.route.arrival : undefined
+        this.navMode = shipInfo.data.data.nav.flightMode
 
         this.fuel = shipInfo.data.data.fuel.current
         this.maxFuel = shipInfo.data.data.fuel.capacity

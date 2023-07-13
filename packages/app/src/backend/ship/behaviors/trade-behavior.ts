@@ -21,7 +21,7 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
         }
     })
 
-    const minProfit = 100
+    const minProfit = 2000
 
     const currentMoneyResult = await ship.api.agents.getMyAgent()
     let currentMoney = currentMoneyResult.data.data.credits
@@ -173,8 +173,15 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
         const fullRoute = []
 
         try {
-            const route = await defaultWayfinder.findJumpRoute(currentSystem.symbol, bestTrade.buySystem);
-            const extraRoute = await defaultWayfinder.findJumpRoute(bestTrade.buySystem, bestTrade.sellSystem);
+            const routeAlgo = ship.hasWarpDrive ? defaultWayfinder.findRoute.bind(defaultWayfinder) : defaultWayfinder.findJumpRoute.bind(defaultWayfinder)
+            const route = await routeAlgo(currentSystem.symbol, bestTrade.buySystem, {
+                current: ship.fuel,
+                max: ship.maxFuel
+            });
+            const extraRoute = await routeAlgo(bestTrade.buySystem, bestTrade.sellSystem, {
+                current: ship.fuel,
+                max: ship.maxFuel
+            });
 
 
             route.finalPath.forEach(p => {
@@ -209,7 +216,6 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
         const madeTrades = []
 
         await travelBehavior(bestTrade.buySystem, ship, bestTrade.buyAt, {
-            jumpOnly: true,
             executeEveryStop: async () => {
                 const initialLocation = ship.currentWaypointSymbol
 

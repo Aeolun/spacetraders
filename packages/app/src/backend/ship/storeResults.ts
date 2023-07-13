@@ -199,8 +199,14 @@ export async function storeMarketInformation(data: GetMarket200Response) {
     const exportGoods = data.data.exports.map(i => i.symbol)
     //const exhangeGoods = data.data.exchange.map(i => i.symbol)
 
+    let hasFuel = false
+
     const marketData = []
     data.data.tradeGoods?.map(good => {
+        if (good.symbol === 'FUEL') {
+            hasFuel = true
+        }
+
         marketData.push({
             tradeGoodSymbol: good.symbol,
             kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
@@ -212,6 +218,21 @@ export async function storeMarketInformation(data: GetMarket200Response) {
         })
     })
 
+    if (hasFuel) {
+        const waypoint = await prisma.waypoint.findFirstOrThrow({
+            where: {
+                symbol: data.data.symbol
+            }
+        })
+        await prisma.system.update({
+            where: {
+                symbol: waypoint.systemSymbol
+            },
+            data: {
+                hasFuel: true
+            }
+        })
+    }
     const existingGoods = await prisma.tradeGood.findMany({
         where: {
             symbol: {

@@ -77,6 +77,7 @@ model System {
   hasJumpGate     Boolean    @default(false)
   jumpgateRange   Int?
   hasMarket       Boolean    @default(false)
+  hasFuel         Boolean    @default(false)
   hasShipyard     Boolean    @default(false)
   hasBelt         Boolean    @default(false)
   hasUncharted    Boolean    @default(false)
