@@ -89,6 +89,7 @@
     "reagraph": "^4.9.2",
     "spacetraders-sdk": "workspace:^",
     "throttled-queue": "^2.1.4",
+    "ws": "^8.13.0",
     "zod": "^3.21.4"
   }
 }

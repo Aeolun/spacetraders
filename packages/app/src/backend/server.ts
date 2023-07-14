@@ -13,7 +13,22 @@ import {availableLogic} from "@app/ship/behaviors";
 import {shipBehaviors, startBehaviorForShip} from "@app/ship/shipBehavior";
 import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 
+import { observable } from '@trpc/server/observable';
+import {ee} from "@app/event-emitter";
+
 export const appRouter = router({
+    event: publicProcedure.subscription(() => {
+        return observable<any>(emit => {
+            const onEvent = (data) => {
+                emit.next(data)
+            }
+            ee.on('event', onEvent)
+
+            return () => {
+                ee.off('event', onEvent)
+            }
+        })
+    }),
     initUserData: publicProcedure.mutation(async ({input, ctx}) => {
         await initAgent(ctx.token)
 

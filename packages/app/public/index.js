@@ -30439,6 +30439,26 @@ function createChain(opts) {
     return obs$.subscribe(observer);
   });
 }
+function asArray(value) {
+  return Array.isArray(value) ? value : [
+    value
+  ];
+}
+function splitLink(opts) {
+  return (runtime) => {
+    const yes = asArray(opts.true).map((link) => link(runtime));
+    const no = asArray(opts.false).map((link) => link(runtime));
+    return (props) => {
+      return observable((observer) => {
+        const links = opts.condition(props.op) ? yes : no;
+        return createChain({
+          op: props.op,
+          links
+        }).subscribe(observer);
+      });
+    };
+  };
+}
 
 // ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/TRPCClientError-fef6cf44.mjs
 function isTRPCClientError(cause) {
@@ -31020,6 +31040,257 @@ var httpLink = httpLinkFactory({
   requester: jsonHttpRequester
 });
 
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/links/wsLink.mjs
+var retryDelay = (attemptIndex) => attemptIndex === 0 ? 0 : Math.min(1e3 * 2 ** attemptIndex, 3e4);
+function createWSClient(opts) {
+  const { url, WebSocket: WebSocketImpl = WebSocket, retryDelayMs: retryDelayFn = retryDelay, onOpen, onClose } = opts;
+  if (!WebSocketImpl) {
+    throw new Error("No WebSocket implementation found - you probably don't want to use this on the server, but if you do you need to pass a `WebSocket`-ponyfill");
+  }
+  let outgoing = [];
+  const pendingRequests = /* @__PURE__ */ Object.create(null);
+  let connectAttempt = 0;
+  let dispatchTimer = null;
+  let connectTimer = null;
+  let activeConnection = createWS();
+  let state = "connecting";
+  function dispatch() {
+    if (state !== "open" || dispatchTimer) {
+      return;
+    }
+    dispatchTimer = setTimeout(() => {
+      dispatchTimer = null;
+      if (outgoing.length === 1) {
+        activeConnection.send(JSON.stringify(outgoing.pop()));
+      } else {
+        activeConnection.send(JSON.stringify(outgoing));
+      }
+      outgoing = [];
+    });
+  }
+  function tryReconnect() {
+    if (connectTimer !== null || state === "closed") {
+      return;
+    }
+    const timeout = retryDelayFn(connectAttempt++);
+    reconnectInMs(timeout);
+  }
+  function reconnect() {
+    state = "connecting";
+    const oldConnection = activeConnection;
+    activeConnection = createWS();
+    closeIfNoPending(oldConnection);
+  }
+  function reconnectInMs(ms) {
+    if (connectTimer) {
+      return;
+    }
+    state = "connecting";
+    connectTimer = setTimeout(reconnect, ms);
+  }
+  function closeIfNoPending(conn) {
+    const hasPendingRequests = Object.values(pendingRequests).some((p) => p.ws === conn);
+    if (!hasPendingRequests) {
+      conn.close();
+    }
+  }
+  function closeActiveSubscriptions() {
+    Object.values(pendingRequests).forEach((req) => {
+      if (req.type === "subscription") {
+        req.callbacks.complete();
+      }
+    });
+  }
+  function resumeSubscriptionOnReconnect(req) {
+    if (outgoing.some((r) => r.id === req.op.id)) {
+      return;
+    }
+    request(req.op, req.callbacks);
+  }
+  function createWS() {
+    const urlString = typeof url === "function" ? url() : url;
+    const conn = new WebSocketImpl(urlString);
+    clearTimeout(connectTimer);
+    connectTimer = null;
+    conn.addEventListener("open", () => {
+      if (conn !== activeConnection) {
+        return;
+      }
+      connectAttempt = 0;
+      state = "open";
+      onOpen?.();
+      dispatch();
+    });
+    conn.addEventListener("error", () => {
+      if (conn === activeConnection) {
+        tryReconnect();
+      }
+    });
+    const handleIncomingRequest = (req) => {
+      if (req.method === "reconnect" && conn === activeConnection) {
+        if (state === "open") {
+          onClose?.();
+        }
+        reconnect();
+        for (const pendingReq of Object.values(pendingRequests)) {
+          if (pendingReq.type === "subscription") {
+            resumeSubscriptionOnReconnect(pendingReq);
+          }
+        }
+      }
+    };
+    const handleIncomingResponse = (data2) => {
+      const req = data2.id !== null && pendingRequests[data2.id];
+      if (!req) {
+        return;
+      }
+      req.callbacks.next?.(data2);
+      if (req.ws !== activeConnection && conn === activeConnection) {
+        const oldWs = req.ws;
+        req.ws = activeConnection;
+        closeIfNoPending(oldWs);
+      }
+      if ("result" in data2 && data2.result.type === "stopped" && conn === activeConnection) {
+        req.callbacks.complete();
+      }
+    };
+    conn.addEventListener("message", ({ data: data2 }) => {
+      const msg = JSON.parse(data2);
+      if ("method" in msg) {
+        handleIncomingRequest(msg);
+      } else {
+        handleIncomingResponse(msg);
+      }
+      if (conn !== activeConnection || state === "closed") {
+        closeIfNoPending(conn);
+      }
+    });
+    conn.addEventListener("close", ({ code }) => {
+      if (state === "open") {
+        onClose?.({
+          code
+        });
+      }
+      if (activeConnection === conn) {
+        tryReconnect();
+      }
+      for (const [key, req] of Object.entries(pendingRequests)) {
+        if (req.ws !== conn) {
+          continue;
+        }
+        if (state === "closed") {
+          delete pendingRequests[key];
+          req.callbacks.complete?.();
+          continue;
+        }
+        if (req.type === "subscription") {
+          resumeSubscriptionOnReconnect(req);
+        } else {
+          delete pendingRequests[key];
+          req.callbacks.error?.(TRPCClientError.from(new TRPCWebSocketClosedError("WebSocket closed prematurely")));
+        }
+      }
+    });
+    return conn;
+  }
+  function request(op, callbacks) {
+    const { type, input, path, id } = op;
+    const envelope = {
+      id,
+      method: type,
+      params: {
+        input,
+        path
+      }
+    };
+    pendingRequests[id] = {
+      ws: activeConnection,
+      type,
+      callbacks,
+      op
+    };
+    outgoing.push(envelope);
+    dispatch();
+    return () => {
+      const callbacks2 = pendingRequests[id]?.callbacks;
+      delete pendingRequests[id];
+      outgoing = outgoing.filter((msg) => msg.id !== id);
+      callbacks2?.complete?.();
+      if (activeConnection.readyState === WebSocketImpl.OPEN && op.type === "subscription") {
+        outgoing.push({
+          id,
+          method: "subscription.stop"
+        });
+        dispatch();
+      }
+    };
+  }
+  return {
+    close: () => {
+      state = "closed";
+      onClose?.();
+      closeActiveSubscriptions();
+      closeIfNoPending(activeConnection);
+      clearTimeout(connectTimer);
+      connectTimer = null;
+    },
+    request,
+    getConnection() {
+      return activeConnection;
+    }
+  };
+}
+var TRPCWebSocketClosedError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "TRPCWebSocketClosedError";
+    Object.setPrototypeOf(this, TRPCWebSocketClosedError.prototype);
+  }
+};
+function wsLink(opts) {
+  return (runtime) => {
+    const { client } = opts;
+    return ({ op }) => {
+      return observable((observer) => {
+        const { type, path, id, context } = op;
+        const input = runtime.transformer.serialize(op.input);
+        const unsub = client.request({
+          type,
+          path,
+          input,
+          id,
+          context
+        }, {
+          error(err) {
+            observer.error(err);
+            unsub();
+          },
+          complete() {
+            observer.complete();
+          },
+          next(message) {
+            const transformed = transformResult(message, runtime);
+            if (!transformed.ok) {
+              observer.error(TRPCClientError.from(transformed.error));
+              return;
+            }
+            observer.next({
+              result: transformed.result
+            });
+            if (op.type !== "subscription") {
+              unsub();
+              observer.complete();
+            }
+          }
+        });
+        return () => {
+          unsub();
+        };
+      });
+    };
+  };
+}
+
 // ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/index.mjs
 var TRPCUntypedClient = class {
   $request({ type, input, path, context = {} }) {
@@ -31314,15 +31585,37 @@ var experimental_formDataLink = httpLinkFactory({
 });
 
 // src/frontend/lib/trpc.ts
+var wsClient = createWSClient({
+  // * put ws instead of http on the url
+  url: "ws://localhost:4002/trpc",
+  retryDelayMs: (attempt) => {
+    if (attempt > 10) {
+      return null;
+    } else {
+      return 1e3;
+    }
+  }
+});
 var trpc = createTRPCProxyClient({
   links: [
-    httpBatchLink({
-      url: "http://" + window.location.hostname + ":4001",
-      async headers() {
-        return {
-          authorization: "Bearer " + localStorage.getItem("agent-token")
-        };
-      }
+    splitLink({
+      // * only use the web socket link if the operation is a subscription
+      condition: (operation) => {
+        return operation.type === "subscription";
+      },
+      true: wsLink({
+        client: wsClient
+        // * <- use the web socket client
+      }),
+      // * use the httpBatchLink for everything else (query, mutation)
+      false: httpBatchLink({
+        url: "http://" + window.location.hostname + ":4001",
+        async headers() {
+          return {
+            authorization: "Bearer " + localStorage.getItem("agent-token")
+          };
+        }
+      })
     })
   ]
 });

@@ -14,6 +14,9 @@ import {prisma, ShipBehavior} from "@app/prisma";
 import fs from "fs";
 import {initializeShipBehaviors} from "@app/ship/initializeShipBehaviors";
 import {initAgent} from "@app/agent/init-agent";
+import {applyWSSHandler} from "@trpc/server/adapters/ws";
+import ws from 'ws'
+
 
 export type { AppRouter } from '@app/server'
 
@@ -107,8 +110,21 @@ const httpServer = createHTTPServer({
     createContext: createContext
 })
 
+
+const wss = new ws.Server({
+    port: 4002,
+});
+applyWSSHandler({ wss, router: appRouter, createContext })
+wss.on('connection', (ws) => {
+    console.log(`➕➕ Connection (${wss.clients.size})`);
+    ws.once('close', () => {
+        console.log(`➖➖ Connection (${wss.clients.size})`);
+    });
+});
+
 httpServer.listen(4001)
-console.log("Listening at port 4001")
+console.log("✅ Listening at port 4001")
+console.log('✅ WebSocket Server listening on ws://localhost:4002');
 init().catch(error => {
     console.error("Issue during initialization, server probably broken", error)
     process.exit(1)

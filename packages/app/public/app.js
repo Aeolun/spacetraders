@@ -54501,6 +54501,26 @@ function createChain(opts) {
     return obs$.subscribe(observer);
   });
 }
+function asArray(value) {
+  return Array.isArray(value) ? value : [
+    value
+  ];
+}
+function splitLink(opts) {
+  return (runtime) => {
+    const yes = asArray(opts.true).map((link) => link(runtime));
+    const no = asArray(opts.false).map((link) => link(runtime));
+    return (props) => {
+      return observable((observer) => {
+        const links = opts.condition(props.op) ? yes : no;
+        return createChain({
+          op: props.op,
+          links
+        }).subscribe(observer);
+      });
+    };
+  };
+}
 
 // ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/TRPCClientError-fef6cf44.mjs
 function isTRPCClientError(cause) {
@@ -55082,6 +55102,257 @@ var httpLink = httpLinkFactory({
   requester: jsonHttpRequester
 });
 
+// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/links/wsLink.mjs
+var retryDelay = (attemptIndex) => attemptIndex === 0 ? 0 : Math.min(1e3 * 2 ** attemptIndex, 3e4);
+function createWSClient(opts) {
+  const { url: url2, WebSocket: WebSocketImpl = WebSocket, retryDelayMs: retryDelayFn = retryDelay, onOpen, onClose } = opts;
+  if (!WebSocketImpl) {
+    throw new Error("No WebSocket implementation found - you probably don't want to use this on the server, but if you do you need to pass a `WebSocket`-ponyfill");
+  }
+  let outgoing = [];
+  const pendingRequests = /* @__PURE__ */ Object.create(null);
+  let connectAttempt = 0;
+  let dispatchTimer = null;
+  let connectTimer = null;
+  let activeConnection = createWS();
+  let state = "connecting";
+  function dispatch() {
+    if (state !== "open" || dispatchTimer) {
+      return;
+    }
+    dispatchTimer = setTimeout(() => {
+      dispatchTimer = null;
+      if (outgoing.length === 1) {
+        activeConnection.send(JSON.stringify(outgoing.pop()));
+      } else {
+        activeConnection.send(JSON.stringify(outgoing));
+      }
+      outgoing = [];
+    });
+  }
+  function tryReconnect() {
+    if (connectTimer !== null || state === "closed") {
+      return;
+    }
+    const timeout = retryDelayFn(connectAttempt++);
+    reconnectInMs(timeout);
+  }
+  function reconnect() {
+    state = "connecting";
+    const oldConnection = activeConnection;
+    activeConnection = createWS();
+    closeIfNoPending(oldConnection);
+  }
+  function reconnectInMs(ms) {
+    if (connectTimer) {
+      return;
+    }
+    state = "connecting";
+    connectTimer = setTimeout(reconnect, ms);
+  }
+  function closeIfNoPending(conn) {
+    const hasPendingRequests = Object.values(pendingRequests).some((p3) => p3.ws === conn);
+    if (!hasPendingRequests) {
+      conn.close();
+    }
+  }
+  function closeActiveSubscriptions() {
+    Object.values(pendingRequests).forEach((req) => {
+      if (req.type === "subscription") {
+        req.callbacks.complete();
+      }
+    });
+  }
+  function resumeSubscriptionOnReconnect(req) {
+    if (outgoing.some((r2) => r2.id === req.op.id)) {
+      return;
+    }
+    request(req.op, req.callbacks);
+  }
+  function createWS() {
+    const urlString = typeof url2 === "function" ? url2() : url2;
+    const conn = new WebSocketImpl(urlString);
+    clearTimeout(connectTimer);
+    connectTimer = null;
+    conn.addEventListener("open", () => {
+      if (conn !== activeConnection) {
+        return;
+      }
+      connectAttempt = 0;
+      state = "open";
+      onOpen?.();
+      dispatch();
+    });
+    conn.addEventListener("error", () => {
+      if (conn === activeConnection) {
+        tryReconnect();
+      }
+    });
+    const handleIncomingRequest = (req) => {
+      if (req.method === "reconnect" && conn === activeConnection) {
+        if (state === "open") {
+          onClose?.();
+        }
+        reconnect();
+        for (const pendingReq of Object.values(pendingRequests)) {
+          if (pendingReq.type === "subscription") {
+            resumeSubscriptionOnReconnect(pendingReq);
+          }
+        }
+      }
+    };
+    const handleIncomingResponse = (data) => {
+      const req = data.id !== null && pendingRequests[data.id];
+      if (!req) {
+        return;
+      }
+      req.callbacks.next?.(data);
+      if (req.ws !== activeConnection && conn === activeConnection) {
+        const oldWs = req.ws;
+        req.ws = activeConnection;
+        closeIfNoPending(oldWs);
+      }
+      if ("result" in data && data.result.type === "stopped" && conn === activeConnection) {
+        req.callbacks.complete();
+      }
+    };
+    conn.addEventListener("message", ({ data }) => {
+      const msg = JSON.parse(data);
+      if ("method" in msg) {
+        handleIncomingRequest(msg);
+      } else {
+        handleIncomingResponse(msg);
+      }
+      if (conn !== activeConnection || state === "closed") {
+        closeIfNoPending(conn);
+      }
+    });
+    conn.addEventListener("close", ({ code }) => {
+      if (state === "open") {
+        onClose?.({
+          code
+        });
+      }
+      if (activeConnection === conn) {
+        tryReconnect();
+      }
+      for (const [key2, req] of Object.entries(pendingRequests)) {
+        if (req.ws !== conn) {
+          continue;
+        }
+        if (state === "closed") {
+          delete pendingRequests[key2];
+          req.callbacks.complete?.();
+          continue;
+        }
+        if (req.type === "subscription") {
+          resumeSubscriptionOnReconnect(req);
+        } else {
+          delete pendingRequests[key2];
+          req.callbacks.error?.(TRPCClientError.from(new TRPCWebSocketClosedError("WebSocket closed prematurely")));
+        }
+      }
+    });
+    return conn;
+  }
+  function request(op, callbacks) {
+    const { type: type2, input, path: path2, id } = op;
+    const envelope = {
+      id,
+      method: type2,
+      params: {
+        input,
+        path: path2
+      }
+    };
+    pendingRequests[id] = {
+      ws: activeConnection,
+      type: type2,
+      callbacks,
+      op
+    };
+    outgoing.push(envelope);
+    dispatch();
+    return () => {
+      const callbacks2 = pendingRequests[id]?.callbacks;
+      delete pendingRequests[id];
+      outgoing = outgoing.filter((msg) => msg.id !== id);
+      callbacks2?.complete?.();
+      if (activeConnection.readyState === WebSocketImpl.OPEN && op.type === "subscription") {
+        outgoing.push({
+          id,
+          method: "subscription.stop"
+        });
+        dispatch();
+      }
+    };
+  }
+  return {
+    close: () => {
+      state = "closed";
+      onClose?.();
+      closeActiveSubscriptions();
+      closeIfNoPending(activeConnection);
+      clearTimeout(connectTimer);
+      connectTimer = null;
+    },
+    request,
+    getConnection() {
+      return activeConnection;
+    }
+  };
+}
+var TRPCWebSocketClosedError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "TRPCWebSocketClosedError";
+    Object.setPrototypeOf(this, TRPCWebSocketClosedError.prototype);
+  }
+};
+function wsLink(opts) {
+  return (runtime) => {
+    const { client } = opts;
+    return ({ op }) => {
+      return observable((observer) => {
+        const { type: type2, path: path2, id, context: context2 } = op;
+        const input = runtime.transformer.serialize(op.input);
+        const unsub = client.request({
+          type: type2,
+          path: path2,
+          input,
+          id,
+          context: context2
+        }, {
+          error(err2) {
+            observer.error(err2);
+            unsub();
+          },
+          complete() {
+            observer.complete();
+          },
+          next(message) {
+            const transformed = transformResult(message, runtime);
+            if (!transformed.ok) {
+              observer.error(TRPCClientError.from(transformed.error));
+              return;
+            }
+            observer.next({
+              result: transformed.result
+            });
+            if (op.type !== "subscription") {
+              unsub();
+              observer.complete();
+            }
+          }
+        });
+        return () => {
+          unsub();
+        };
+      });
+    };
+  };
+}
+
 // ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/index.mjs
 var TRPCUntypedClient = class {
   $request({ type: type2, input, path: path2, context: context2 = {} }) {
@@ -55376,15 +55647,37 @@ var experimental_formDataLink = httpLinkFactory({
 });
 
 // src/frontend/lib/trpc.ts
+var wsClient = createWSClient({
+  // * put ws instead of http on the url
+  url: "ws://localhost:4002/trpc",
+  retryDelayMs: (attempt) => {
+    if (attempt > 10) {
+      return null;
+    } else {
+      return 1e3;
+    }
+  }
+});
 var trpc = createTRPCProxyClient({
   links: [
-    httpBatchLink({
-      url: "http://" + window.location.hostname + ":4001",
-      async headers() {
-        return {
-          authorization: "Bearer " + localStorage.getItem("agent-token")
-        };
-      }
+    splitLink({
+      // * only use the web socket link if the operation is a subscription
+      condition: (operation) => {
+        return operation.type === "subscription";
+      },
+      true: wsLink({
+        client: wsClient
+        // * <- use the web socket client
+      }),
+      // * use the httpBatchLink for everything else (query, mutation)
+      false: httpBatchLink({
+        url: "http://" + window.location.hostname + ":4001",
+        async headers() {
+          return {
+            authorization: "Bearer " + localStorage.getItem("agent-token")
+          };
+        }
+      })
     })
   ]
 });
@@ -59789,14 +60082,18 @@ var format2 = Intl.NumberFormat("en");
 var lastRefresh = Date.now();
 var hidingLabels = false;
 var currentRoute;
+trpc.event.subscribe(void 0, {
+  onData: (data) => {
+    console.log("event", data);
+    if (data.type == "NAVIGATE") {
+      GameState.shipData[data.data.symbol] = data.data;
+    }
+  }
+});
 app.ticker.add((dt) => {
   const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 20);
   const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth;
   credits.displayObject.bitmapText.text = `${format2.format(GameState.agent.credits)}`;
-  if (Date.now() - lastRefresh > 5e3) {
-    lastRefresh = Date.now();
-    loadPlayerData();
-  }
   if (GameState.currentView == "universe") {
     Object.values(loadedUniverse.systems).forEach((ref) => {
       ref.scale = { x: sizeMultiplier, y: sizeMultiplier };

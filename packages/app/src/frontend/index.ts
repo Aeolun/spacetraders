@@ -62,6 +62,15 @@ let hidingLabels = false;
 
 let currentRoute
 
+trpc.event.subscribe(undefined, {
+    onData: (data) => {
+        console.log('event', data);
+        if (data.type == 'NAVIGATE') {
+            GameState.shipData[data.data.symbol] = data.data
+        }
+    }
+})
+
 app.ticker.add((dt) => {
     const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 20)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
@@ -70,10 +79,10 @@ app.ticker.add((dt) => {
 
     credits.displayObject.bitmapText.text = `${format.format(GameState.agent.credits)}`
 
-    if (Date.now() - lastRefresh > 5000) {
-        lastRefresh = Date.now()
-        loadPlayerData()
-    }
+    // if (Date.now() - lastRefresh > 5000) {
+    //     lastRefresh = Date.now()
+    //     loadPlayerData()
+    // }
 
 
     if (GameState.currentView == 'universe') {

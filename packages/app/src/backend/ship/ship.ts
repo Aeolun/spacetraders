@@ -32,6 +32,7 @@ import throttledQueue from "throttled-queue";
 import {prisma} from "@app/prisma";
 import {getDistance} from "@common/lib/getDistance";
 import {tradeLogic} from "@app/ship/behaviors/trade-behavior";
+import {ee} from "@app/event-emitter";
 
 type CooldownKind = 'reactor'
 
@@ -216,6 +217,11 @@ export class Ship {
 
             await processFuel(this.symbol, res.data.data.fuel);
             const navResult = await processNav(this.symbol, res.data.data.nav)
+
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
 
             if (waitForTimeout) {
                 await this.waitUntil(res.data.data.nav.route.arrival)

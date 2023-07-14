@@ -17,7 +17,10 @@ export async function createContext({
             version: 'v2'
         }
         token: string
-    }> {
+    } | {}> {
+        if (!req.headers.authorization) {
+            return {};
+        }
         let token = req.headers.authorization.split(' ')[1]
         if (req.headers.authorization) {
             const user: any = await jwtDecode(
