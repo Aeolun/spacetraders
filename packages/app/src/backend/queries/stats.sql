@@ -1,0 +1,1 @@
+select tl.tradeGoodSymbol, SUM(tl.purchaseAmount) purchased, SUM(tl.sellAmount) sold, AVG(tl.purchasePrice) purchasePrice, AVG(tl.sellPrice) sellPrice, AVG(tl.sellPrice)-AVG(tl.purchasePrice) spread, ROUND(LEAST(SUM(tl.purchaseAmount), SUM(tl.sellAmount))*AVG(tl.sellPrice)-AVG(tl.purchasePrice)) totalProfit from TradeLog tl group by tl.tradeGoodSymbol order by totalProfit desc
