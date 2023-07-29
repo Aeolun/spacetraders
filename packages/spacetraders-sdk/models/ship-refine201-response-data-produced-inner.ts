@@ -25,12 +25,12 @@ export interface ShipRefine201ResponseDataProducedInner {
      * @type {string}
      * @memberof ShipRefine201ResponseDataProducedInner
      */
-    'tradeSymbol'?: string;
+    'tradeSymbol': string;
     /**
      * Amount of units of the good.
      * @type {number}
      * @memberof ShipRefine201ResponseDataProducedInner
      */
-    'units'?: number;
+    'units': number;
 }
 

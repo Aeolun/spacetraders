@@ -124,6 +124,14 @@ export const exploreBehavior = async (ship: Ship, parameters: BehaviorParameters
     })
     if (!hasUnchartedTraits) {
         ship.log(`${exploreSystem.symbol} has no more uncharted waypoints, continuing with next system.`)
+        await prisma.system.update({
+            where: {
+                symbol: exploreSystem.symbol
+            },
+            data: {
+                hasUncharted: false
+            }
+        })
         await ship.setOverallGoal(null)
         return;
     }

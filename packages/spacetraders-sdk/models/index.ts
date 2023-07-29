@@ -31,6 +31,7 @@ export * from './faction';
 export * from './faction-symbols';
 export * from './faction-trait';
 export * from './fulfill-contract200-response';
+export * from './get-agents200-response';
 export * from './get-contract200-response';
 export * from './get-contracts200-response';
 export * from './get-faction200-response';

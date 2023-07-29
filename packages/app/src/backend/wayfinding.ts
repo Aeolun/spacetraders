@@ -6,6 +6,7 @@ import {Ship} from "@app/ship/ship";
 class Wayfinding {
     dijkstra?: DijkstraCalculator
     jumpDijkstra?: DijkstraCalculator
+    noDriftDijkstra?: DijkstraCalculator
     init: Promise<void>
     constructor() {
         this.init = this.loadWaypoints().catch(error => {
@@ -40,9 +41,6 @@ class Wayfinding {
     }
 
     async loadWaypoints() {
-        this.dijkstra = new DijkstraCalculator()
-        this.jumpDijkstra = new DijkstraCalculator()
-
         const systems = await prisma.system.findMany({
             where: {
                 waypoints: {
@@ -53,6 +51,24 @@ class Wayfinding {
                     }
                 }
             }
+        })
+
+        const systemMap: Record<string, {x: number, y: number}> = {}
+        systems.forEach(system => {
+            systemMap[system.symbol] = {
+                x: system.x,
+                y: system.y
+            }
+        });
+        console.log("loaded systems", systems.length)
+
+        this.dijkstra = new DijkstraCalculator((current, target) => {
+            //return 0
+            return getDistance(systemMap[current], systemMap[target]) * 0.999;
+        })
+        this.jumpDijkstra = new DijkstraCalculator((current, target) => {
+            //return 0
+            return getDistance(systemMap[current], systemMap[target]) * 0.999;
         })
 
         systems.forEach(system => {
@@ -69,61 +85,98 @@ class Wayfinding {
         })
         let edges = 0;
 
+        let furthestDistance = 0, furthest = ''
         systems.forEach(system => {
-            const nearbySystems = systems.filter(nearbySystem => {
-                return getDistance(system, nearbySystem) < 2000
-            }).map(nearbySystem => {
-                return {
-                    system: nearbySystem,
-                    distance: getDistance(system, nearbySystem)
+            let closestSystem = 100000000
+            systems.forEach(nearbySystem => {
+                if (system.symbol !== nearbySystem.symbol) {
+                    const distance = getDistance(system, nearbySystem)
+                    if (distance <= closestSystem) {
+                        closestSystem = distance
+                    }
                 }
             })
-            nearbySystems.forEach(nearbySystem => {
-                // increase cost function by fuel cost
-                this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
-                    weight: ((Math.round(nearbySystem.distance) * (30 / 30) + 15) * 10) + (nearbySystem.distance / 100 * 120),
-                    id: 'cruise',
-                    consumes: {
-                        fuel: nearbySystem.distance
-                    }
-                })
-                edges++
-                this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
-                    weight: ((Math.round(nearbySystem.distance) * (15 / 30) + 15) * 10) + (nearbySystem.distance*2 / 100 * 120),
-                    id: 'burn',
-                    consumes: {
-                        fuel: nearbySystem.distance*2
-                    }
-                })
-                edges++
-                this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
-                    weight: ((Math.round(nearbySystem.distance) * (300 / 30) + 15) * 10) + (1 / 100 * 120),
-                    id: 'drift',
-                    consumes: {
-                        fuel: 1
-                    }
-                })
-                edges++
-            })
+
+            if (closestSystem > furthestDistance) {
+                furthestDistance = closestSystem
+                furthest = system.symbol
+            }
+        })
+        console.log("furthest distance", furthestDistance, ' at ', furthest)
+
+        const alreadyConnected = new Set<string>()
+        systems.forEach(system => {
 
             if (system.hasJumpGate) {
                 systems.filter(nearbySystem => {
                     return nearbySystem.hasJumpGate && getDistance(system, nearbySystem) <= system.jumpgateRange && system.symbol !== nearbySystem.symbol
                 }).forEach(connection => {
+                    const connectionId = [system.symbol, connection.symbol].sort().join('-')+'jump'
+                    if (alreadyConnected.has(connectionId)) {
+                        return;
+                    }
+                    alreadyConnected.add(connectionId)
+
                     const systemSymbol = system.symbol
                     const toSystemSymbol = connection.symbol
 
                     this.dijkstra.addEdge(systemSymbol, toSystemSymbol, {
                         id: 'jump',
-                        weight: Math.max(getDistance(system, connection) / 10, 60) * 10
+                        weight: getDistance(system, connection),
                     })
                     this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, {
                         id: 'jump',
-                        weight: Math.max(getDistance(system, connection) / 10, 60) * 10
+                        weight: getDistance(system, connection)
                     })
                     edges++
                 })
             }
+            const nearbySystems = systems.filter(nearbySystem => {
+                return getDistance(system, nearbySystem) <= furthestDistance+1
+            }).map(nearbySystem => {
+                return {
+                    system: nearbySystem,
+                    hasJumpGate: nearbySystem.hasJumpGate,
+                    distance: getDistance(system, nearbySystem)
+                }
+            })
+            nearbySystems.forEach(nearbySystem => {
+                const connectionId = [system.symbol, nearbySystem.system.symbol].sort().join('-')
+                if (alreadyConnected.has(connectionId)) {
+                    return;
+                }
+                alreadyConnected.add(connectionId)
+                if (!nearbySystem.hasJumpGate || nearbySystem.distance > 2000) {
+                    // increase cost function by fuel cost
+                    this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
+                        weight: nearbySystem.distance * 1.2,
+                        // weight: ((Math.round(nearbySystem.distance) * (30 / 30) + 15) * 10) + (nearbySystem.distance / 100 * 120),
+                        id: 'cruise',
+                        consumes: {
+                            fuel: nearbySystem.distance
+                        }
+                    })
+                    edges++
+                    this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
+                        weight: nearbySystem.distance * 2,
+                        // weight: ((Math.round(nearbySystem.distance) * (15 / 30) + 15) * 10) + (nearbySystem.distance * 2 / 100 * 120),
+                        id: 'burn',
+                        consumes: {
+                            fuel: nearbySystem.distance * 2
+                        }
+                    })
+                    edges++
+                    this.dijkstra.addEdge(system.symbol, nearbySystem.system.symbol, {
+                        weight: nearbySystem.distance * 100,
+                        // weight: ((Math.round(nearbySystem.distance) * (300 / 30) + 15) * 10) + (1 / 100 * 120),
+                        id: 'drift',
+                        consumes: {
+                            fuel: 1
+                        }
+                    })
+                    edges++
+                }
+            })
         })
 
         console.log(`Reloaded edges for ${systems.length} systems, ${edges} edges`)

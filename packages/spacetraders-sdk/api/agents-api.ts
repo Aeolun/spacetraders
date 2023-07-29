@@ -22,6 +22,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { GetAgents200Response } from '../models';
+// @ts-ignore
 import { GetMyAgent200Response } from '../models';
 /**
  * AgentsApi - axios parameter creator
@@ -29,6 +31,88 @@ import { GetMyAgent200Response } from '../models';
  */
 export const AgentsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Fetch agent details.
+         * @summary Get Public Agent
+         * @param {string} agentSymbol The agent symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAgent: async (agentSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'agentSymbol' is not null or undefined
+            assertParamExists('getAgent', 'agentSymbol', agentSymbol)
+            const localVarPath = `/agents/{agentSymbol}`
+                .replace(`{${"agentSymbol"}}`, encodeURIComponent(String(agentSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Fetch agents details.
+         * @summary List Agents
+         * @param {number} [page] What entry offset to request
+         * @param {number} [limit] How many entries to return per page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAgents: async (page?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/agents`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Fetch your agent\'s details.
          * @summary Get Agent
@@ -74,6 +158,29 @@ export const AgentsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AgentsApiAxiosParamCreator(configuration)
     return {
         /**
+         * Fetch agent details.
+         * @summary Get Public Agent
+         * @param {string} agentSymbol The agent symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAgent(agentSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMyAgent200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAgent(agentSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Fetch agents details.
+         * @summary List Agents
+         * @param {number} [page] What entry offset to request
+         * @param {number} [limit] How many entries to return per page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAgents(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAgents200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAgents(page, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Fetch your agent\'s details.
          * @summary Get Agent
          * @param {*} [options] Override http request option.
@@ -94,6 +201,27 @@ export const AgentsApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = AgentsApiFp(configuration)
     return {
         /**
+         * Fetch agent details.
+         * @summary Get Public Agent
+         * @param {string} agentSymbol The agent symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAgent(agentSymbol: string, options?: any): AxiosPromise<GetMyAgent200Response> {
+            return localVarFp.getAgent(agentSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Fetch agents details.
+         * @summary List Agents
+         * @param {number} [page] What entry offset to request
+         * @param {number} [limit] How many entries to return per page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAgents(page?: number, limit?: number, options?: any): AxiosPromise<GetAgents200Response> {
+            return localVarFp.getAgents(page, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Fetch your agent\'s details.
          * @summary Get Agent
          * @param {*} [options] Override http request option.
@@ -112,6 +240,31 @@ export const AgentsApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class AgentsApi extends BaseAPI {
+    /**
+     * Fetch agent details.
+     * @summary Get Public Agent
+     * @param {string} agentSymbol The agent symbol
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AgentsApi
+     */
+    public getAgent(agentSymbol: string, options?: AxiosRequestConfig) {
+        return AgentsApiFp(this.configuration).getAgent(agentSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Fetch agents details.
+     * @summary List Agents
+     * @param {number} [page] What entry offset to request
+     * @param {number} [limit] How many entries to return per page
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AgentsApi
+     */
+    public getAgents(page?: number, limit?: number, options?: AxiosRequestConfig) {
+        return AgentsApiFp(this.configuration).getAgents(page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Fetch your agent\'s details.
      * @summary Get Agent

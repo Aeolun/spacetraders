@@ -5,7 +5,7 @@ import {defaultShipStore} from "@app/ship/shipStore";
 import {ShipNavFlightMode, ShipType} from "spacetraders-sdk";
 import {initAgent} from "@app/agent/init-agent";
 import createApi from "@app/lib/createApi";
-import {processShip} from "@app/ship/updateShips";
+import {processShip, returnShipData} from "@app/ship/updateShips";
 import {storeJumpGateInformation} from "@app/ship/storeResults";
 import {createOrGetAgentQueue} from "@app/lib/queue";
 import {defaultWayfinder} from "@app/wayfinding";
@@ -139,7 +139,8 @@ export const appRouter = router({
                 reactor: true,
                 engine: true,
                 mounts: true,
-                modules: true
+                modules: true,
+                cargo: true
             }
         })
     }),
@@ -171,7 +172,8 @@ export const appRouter = router({
                reactor: true,
                engine: true,
                mounts: true,
-               modules: true
+               modules: true,
+               cargo: true
            }
        })
     }),
@@ -189,6 +191,13 @@ export const appRouter = router({
             shipType: input.shipConfigurationSymbol as ShipType
         })
         await processShip(newShip.data.data.ship)
+    }),
+    instructRefine: publicProcedure.input(z.object({
+        shipSymbol: z.string()
+    })).mutation(async ({ctx, input}) => {
+        const ship = defaultShipStore.constructShipFor(ctx.token, ctx.payload.identifier, input.shipSymbol)
+        await ship.refine()
+        return returnShipData(input.shipSymbol)
     }),
     getShipyard: publicProcedure.input(z.object({
         waypointSymbol: z.string()

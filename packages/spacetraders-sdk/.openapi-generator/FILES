@@ -46,6 +46,7 @@ models/faction-symbols.ts
 models/faction-trait.ts
 models/faction.ts
 models/fulfill-contract200-response.ts
+models/get-agents200-response.ts
 models/get-contract200-response.ts
 models/get-contracts200-response.ts
 models/get-faction200-response.ts

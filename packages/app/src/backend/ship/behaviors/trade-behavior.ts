@@ -160,7 +160,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
         if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
             ship.log(`No more profitable trades found.`)
             await ship.setOverallGoal('Wait for trades')
-            await ship.waitUntil(new Date(Date.now() + 1000 * 60).toISOString())
+            await ship.waitFor(1000 * 60)
             return;
         } else if(Array.isArray(bestTrades)) {
             console.log(`Found ${bestTrades.length} trades`)
@@ -168,11 +168,19 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
 
         const allowedTrades = bestTrades.filter(t => !tradeTaken.has(t.buyAt+t.sellAt+t.tradeGoodSymbol))
 
+        if (allowedTrades.length <= 0) {
+            ship.log(`All profitable trades already taken.`)
+            await ship.setOverallGoal('Wait for trades')
+            await ship.waitFor(1000 * 60)
+            return;
+        }
+
         const bestTrade = allowedTrades[0]
 
         const fullRoute = []
 
         try {
+            console.log('best trade', bestTrade)
             const routeAlgo = ship.hasWarpDrive ? defaultWayfinder.findRoute.bind(defaultWayfinder) : defaultWayfinder.findJumpRoute.bind(defaultWayfinder)
             const route = await routeAlgo(currentSystem.symbol, bestTrade.buySystem, {
                 current: ship.fuel,
@@ -201,200 +209,205 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
             await ship.waitFor(60000)
             return;
         }
-        console.log(JSON.stringify(fullRoute))
 
-        ship.log(`Going to trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol}, sold at ${bestTrade.purchasePrice}, purchased at ${bestTrade.sellPrice}, total profit ${bestTrade.totalProfit}, tprd ${bestTrade.totalPerRunDistance}, dissta ${bestTrade.disStart}`)
+        try {
 
-        tradeTaken.add(bestTrade.buyAt+bestTrade.sellAt+bestTrade.tradeGoodSymbol)
-        await ship.setOverallGoal(`Trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol} from ${bestTrade.buyAt} to ${bestTrade.sellAt}`)
+            ship.log(`Going to trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol}, sold at ${bestTrade.purchasePrice}, purchased at ${bestTrade.sellPrice}, total profit ${bestTrade.totalProfit}, tprd ${bestTrade.totalPerRunDistance}, dissta ${bestTrade.disStart}`)
 
-        const good = bestTrade.tradeGoodSymbol
+            tradeTaken.add(bestTrade.buyAt + bestTrade.sellAt + bestTrade.tradeGoodSymbol)
+            await ship.setOverallGoal(`Trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol} from ${bestTrade.buyAt} to ${bestTrade.sellAt}`)
 
-        const extraTrades = await findTradesBetweenSystems(fullRoute);
-        ship.log(`Found ${extraTrades.length} extra trades we can potentially make along route.`)
+            const good = bestTrade.tradeGoodSymbol
 
-        const madeTrades = []
+            const extraTrades = await findTradesBetweenSystems(fullRoute);
+            ship.log(`Found ${extraTrades.length} extra trades we can potentially make along route.`)
 
-        await travelBehavior(bestTrade.buySystem, ship, bestTrade.buyAt, {
-            executeEveryStop: async () => {
-                const initialLocation = ship.currentWaypointSymbol
+            const madeTrades = []
 
-
-                const sellInThisSystem = extraTrades.filter(t => t.to === ship.currentSystemSymbol)
-                for(const sys of sellInThisSystem) {
-                    for (const trade of sys.trades) {
-                        const cargo = await prisma.shipCargo.findMany({
-                            where: {
-                                shipSymbol: ship.symbol
-                            }
-                        })
-                        const inCargo = cargo.find(c => c.tradeGoodSymbol == trade.tradeGoodSymbol)
-                        if (inCargo) {
-                            ship.log(`Extra stop in ${ship.currentSystemSymbol} to sell ${trade.tradeGoodSymbol}`)
-                            await ship.navigate(trade.sellWaypoint)
-                            await ship.dock()
-                            await ship.attemptRefuel()
-                            await ship.sellCargo(trade.tradeGoodSymbol, Math.min(trade.buyVolume, trade.sellVolume, inCargo.units))
-                        }
-                    }
-                }
+            await travelBehavior(bestTrade.buySystem, ship, bestTrade.buyAt, {
+                executeEveryStop: async () => {
+                    const initialLocation = ship.currentWaypointSymbol
 
 
-                const purchaseInThisSystem = extraTrades.filter(t => t.from === ship.currentSystemSymbol)
-                for(const sys of purchaseInThisSystem) {
-                    for (const trade of sys.trades) {
-                        const newCargo = await prisma.shipCargo.findMany({
-                            where: {
-                                shipSymbol: ship.symbol
-                            }
-                        })
-
-                        const spaceAvailable = cargoCapacity - newCargo.reduce((total, c) => total + c.units, 0) - bestTrade.buyVolume
-                        const buyAmount = Math.min(trade.buyVolume, trade.sellVolume, spaceAvailable)
-
-                        const currentWaypoint = await prisma.waypoint.findFirst({
-                            where: {
-                                symbol: ship.currentWaypointSymbol
-                            }
-                        })
-                        const purchaseWaypoint = await prisma.waypoint.findFirst({
-                            where: {
-                                symbol: trade.purchaseWaypoint
-                            }
-                        })
-                        const sellWaypoint = await prisma.waypoint.findFirst({
-                            where: {
-                                symbol: trade.sellWaypoint
-                            }
-                        })
-                        const sellJumpGate = await prisma.waypoint.findFirst({
-                            where: {
-                                symbol: trade.sellSystem,
-                                type: "JUMP_GATE"
-                            }
-                        })
-
-                        if ((currentWaypoint && purchaseWaypoint && sellJumpGate && sellWaypoint) &&
-                            spaceAvailable > 0 && buyAmount * (trade.sellPrice - trade.purchasePrice) > getFuelCost(currentWaypoint, purchaseWaypoint) + getFuelCost(sellJumpGate, sellWaypoint)) {
-                            ship.log(`Extra stop in ${ship.currentSystemSymbol} to purchase ${trade.tradeGoodSymbol}`)
-                            await ship.navigate(trade.purchaseWaypoint)
-                            await ship.dock()
-                            await ship.attemptRefuel()
-
-                            const market = await ship.market()
-                            const whatToBuy = market.tradeGoods.find(item => item.symbol === trade.tradeGoodSymbol);
-                            if (whatToBuy.purchasePrice < trade.sellPrice) {
-                                await ship.purchaseCargo(trade.tradeGoodSymbol, Math.min(trade.buyVolume, trade.sellVolume, spaceAvailable))
+                    const sellInThisSystem = extraTrades.filter(t => t.to === ship.currentSystemSymbol)
+                    for (const sys of sellInThisSystem) {
+                        for (const trade of sys.trades) {
+                            const cargo = await prisma.shipCargo.findMany({
+                                where: {
+                                    shipSymbol: ship.symbol
+                                }
+                            })
+                            const inCargo = cargo.find(c => c.tradeGoodSymbol == trade.tradeGoodSymbol)
+                            if (inCargo) {
+                                ship.log(`Extra stop in ${ship.currentSystemSymbol} to sell ${trade.tradeGoodSymbol}`)
+                                await ship.navigate(trade.sellWaypoint)
+                                await ship.dock()
+                                await ship.attemptRefuel()
+                                await ship.sellCargo(trade.tradeGoodSymbol, Math.min(trade.buyVolume, trade.sellVolume, inCargo.units))
                             }
                         }
                     }
+
+
+                    const purchaseInThisSystem = extraTrades.filter(t => t.from === ship.currentSystemSymbol)
+                    for (const sys of purchaseInThisSystem) {
+                        for (const trade of sys.trades) {
+                            const newCargo = await prisma.shipCargo.findMany({
+                                where: {
+                                    shipSymbol: ship.symbol
+                                }
+                            })
+
+                            const spaceAvailable = cargoCapacity - newCargo.reduce((total, c) => total + c.units, 0) - bestTrade.buyVolume
+                            const buyAmount = Math.min(trade.buyVolume, trade.sellVolume, spaceAvailable)
+
+                            const currentWaypoint = await prisma.waypoint.findFirst({
+                                where: {
+                                    symbol: ship.currentWaypointSymbol
+                                }
+                            })
+                            const purchaseWaypoint = await prisma.waypoint.findFirst({
+                                where: {
+                                    symbol: trade.purchaseWaypoint
+                                }
+                            })
+                            const sellWaypoint = await prisma.waypoint.findFirst({
+                                where: {
+                                    symbol: trade.sellWaypoint
+                                }
+                            })
+                            const sellJumpGate = await prisma.waypoint.findFirst({
+                                where: {
+                                    symbol: trade.sellSystem,
+                                    type: "JUMP_GATE"
+                                }
+                            })
+
+                            if ((currentWaypoint && purchaseWaypoint && sellJumpGate && sellWaypoint) &&
+                              spaceAvailable > 0 && buyAmount * (trade.sellPrice - trade.purchasePrice) > getFuelCost(currentWaypoint, purchaseWaypoint) + getFuelCost(sellJumpGate, sellWaypoint)) {
+                                ship.log(`Extra stop in ${ship.currentSystemSymbol} to purchase ${trade.tradeGoodSymbol}`)
+                                await ship.navigate(trade.purchaseWaypoint)
+                                await ship.dock()
+                                await ship.attemptRefuel()
+
+                                const market = await ship.market()
+                                const whatToBuy = market.tradeGoods.find(item => item.symbol === trade.tradeGoodSymbol);
+                                if (whatToBuy.purchasePrice < trade.sellPrice) {
+                                    await ship.purchaseCargo(trade.tradeGoodSymbol, Math.min(trade.buyVolume, trade.sellVolume, spaceAvailable))
+                                }
+                            }
+                        }
+                    }
+                    // go back to where you came from
+                    await ship.navigate(initialLocation)
                 }
-                // go back to where you came from
-                await ship.navigate(initialLocation)
-            }
-        })
-        await ship.navigate(bestTrade.buyAt)
-        await ship.dock()
-        const buyMarketInfo = await ship.market()
-        let shipData = await prisma.ship.findFirstOrThrow({
-            where: {
-                symbol: ship.symbol
-            }
-        })
-        await ship.attemptRefuel()
-        const thingToBuy = buyMarketInfo.tradeGoods.find(i => i.symbol == good)
-
-        let totalCount = 0
-        let maxPurchaseAmount = 0
-        let thingBought: MarketTradeGood | undefined
-        let firstPurchase: MarketTradeGood | undefined = thingToBuy
-        let availableCargoSpace = cargo.cargoCapacity - cargo.cargoUsed
-        const buyTransactions: MarketTransaction[] = []
-        do {
-            const newCurrentMoneyResult = await ship.queue(() => ship.api.agents.getMyAgent())
-            currentMoney = newCurrentMoneyResult.data.data.credits
-
-            maxPurchaseAmount = Math.min(availableCargoSpace, thingToBuy.tradeVolume, thingToBuy.purchasePrice > 10000 ? bestTrade.sellVolume * 3 : thingToBuy.tradeVolume, Math.floor(currentMoney / thingToBuy.purchasePrice))
-            if (maxPurchaseAmount > 0) {
-                ship.log("Maximum to buy is " + maxPurchaseAmount)
-                buyTransactions.push(await ship.purchaseCargo(good, maxPurchaseAmount))
-
-                const marketInfoAfter = await ship.market()
-                thingBought = marketInfoAfter.tradeGoods.find(i => i.symbol == good)
-                ship.log(`Price changed from ${thingToBuy.purchasePrice} -> ${thingBought.purchasePrice}`)
-                totalCount += maxPurchaseAmount
-                availableCargoSpace -= maxPurchaseAmount
-            }
-        } while(thingBought && maxPurchaseAmount > 0 && thingBought.purchasePrice < bestTrade.sellPrice && totalCount < bestTrade.sellVolume)
-
-        await travelBehavior(bestTrade.sellSystem, ship, bestTrade.sellAt, {
-            jumpOnly: true
-        })
-        await ship.navigate(bestTrade.sellAt)
-
-
-        let thingToSell
-        do {
-            const saleMarketInfo = await ship.market()
-            thingToSell = saleMarketInfo.tradeGoods.find(good => good.symbol === bestTrade.tradeGoodSymbol)
-
-            if (thingToSell.sellPrice < firstPurchase.purchasePrice) {
-                ship.log(`Crap, price changed while traveling bought ${bestTrade.tradeGoodSymbol} for ${firstPurchase.purchasePrice}, but selling at ${saleMarketInfo.symbol} for ${thingToSell.sellPrice}`)
-
-                // allow selling at a slight loss to get unstuck
-                const alternativeSaleLocation = await prisma.$queryRaw<{
-                            waypointSymbol: string
-                            systemSymbol: string
-                            sellPrice: number
-                        }[]>`select mp.waypointSymbol,
-                           mp.sellPrice,
-                           wp.systemSymbol,
-                           jd.totalDistance,
-                           mp.sellPrice / jd.totalDistance priceToDistance
-                    from MarketPrice mp
-                             inner join Waypoint wp on
-                        wp.symbol = mp.waypointSymbol
-                             inner join \`System\` s on
-                        s.symbol = wp.systemSymbol
-                             inner join JumpDistance jd on
-                        jd.fromSystemSymbol = ${currentSystem.symbol} and jd.toSystemSymbol = s.symbol
-                    where mp.tradeGoodSymbol = ${bestTrade.tradeGoodSymbol}
-                      and s.hasJumpGate = true
-                      and mp.sellPrice > ${firstPurchase.purchasePrice} * 0.9
-                      and mp.updatedOn > NOW() - INTERVAL 4 HOUR
-                    order by
-                        priceToDistance desc
-                        limit 10`
-
-                if (alternativeSaleLocation.length > 0 && alternativeSaleLocation[0].sellPrice > thingToSell.sellPrice) {
-                    ship.log(`Going to ${alternativeSaleLocation[0].waypointSymbol} to sell there for ${alternativeSaleLocation[0].sellPrice} instead.`)
-                    await travelBehavior(alternativeSaleLocation[0].systemSymbol, ship, alternativeSaleLocation[0].waypointSymbol, {
-                        jumpOnly: true
-                    })
-                } else {
-                    ship.log(`No alternative sale location found for a decent enough price.`)
-                    await ship.setOverallGoal("Waiting for price increase.")
-                    await ship.waitFor(120000)
+            })
+            await ship.navigate(bestTrade.buyAt)
+            await ship.dock()
+            const buyMarketInfo = await ship.market()
+            let shipData = await prisma.ship.findFirstOrThrow({
+                where: {
+                    symbol: ship.symbol
                 }
-            }
-        } while(thingToSell.sellPrice < thingToBuy.purchasePrice*0.9)
+            })
+            await ship.attemptRefuel()
+            const thingToBuy = buyMarketInfo.tradeGoods.find(i => i.symbol == good)
 
-        await ship.dock()
-        const sellTransactions = await ship.sellAllCargo()
-        //generateLogsFromBuyAndSell(buyTransactions, sellTransactions)
+            let totalCount = 0
+            let maxPurchaseAmount = 0
+            let thingBought: MarketTradeGood | undefined
+            let firstPurchase: MarketTradeGood | undefined = thingToBuy
+            let availableCargoSpace = cargo.cargoCapacity - cargo.cargoUsed
+            const buyTransactions: MarketTransaction[] = []
+            do {
+                const newCurrentMoneyResult = await ship.queue(() => ship.api.agents.getMyAgent())
+                currentMoney = newCurrentMoneyResult.data.data.credits
+
+                maxPurchaseAmount = Math.min(availableCargoSpace, thingToBuy.tradeVolume, thingToBuy.purchasePrice > 10000 ? bestTrade.sellVolume * 3 : thingToBuy.tradeVolume, Math.floor(currentMoney / thingToBuy.purchasePrice))
+                if (maxPurchaseAmount > 0) {
+                    ship.log("Maximum to buy is " + maxPurchaseAmount)
+                    buyTransactions.push(await ship.purchaseCargo(good, maxPurchaseAmount))
+
+                    const marketInfoAfter = await ship.market()
+                    thingBought = marketInfoAfter.tradeGoods.find(i => i.symbol == good)
+                    ship.log(`Price changed from ${thingToBuy.purchasePrice} -> ${thingBought.purchasePrice}`)
+                    totalCount += maxPurchaseAmount
+                    availableCargoSpace -= maxPurchaseAmount
+                }
+            } while (thingBought && maxPurchaseAmount > 0 && thingBought.purchasePrice < bestTrade.sellPrice && totalCount < bestTrade.sellVolume)
+
+            await travelBehavior(bestTrade.sellSystem, ship, bestTrade.sellAt, {
+                jumpOnly: true
+            })
+            await ship.navigate(bestTrade.sellAt)
 
 
-        shipData = await prisma.ship.findFirstOrThrow({
-            where: {
-                symbol: ship.symbol
-            }
-        })
-        await ship.attemptRefuel()
+            let thingToSell
+            do {
+                const saleMarketInfo = await ship.market()
+                thingToSell = saleMarketInfo.tradeGoods.find(good => good.symbol === bestTrade.tradeGoodSymbol)
 
-        const soldMarket = await ship.market()
-        const thingSold = soldMarket.tradeGoods.find(i => i.symbol == good)
-        console.log(`Sell price of item is now ${thingSold.sellPrice}`)
-        tradeTaken.delete(bestTrade.buyAt+bestTrade.sellAt+bestTrade.tradeGoodSymbol)
-        await ship.setOverallGoal(null)
+                if (thingToSell.sellPrice < firstPurchase.purchasePrice) {
+                    ship.log(`Crap, price changed while traveling bought ${bestTrade.tradeGoodSymbol} for ${firstPurchase.purchasePrice}, but selling at ${saleMarketInfo.symbol} for ${thingToSell.sellPrice}`)
+
+                    // allow selling at a slight loss to get unstuck
+                    const alternativeSaleLocation = await prisma.$queryRaw<{
+                        waypointSymbol: string
+                        systemSymbol: string
+                        sellPrice: number
+                    }[]>`select mp.waypointSymbol,
+                                mp.sellPrice,
+                                wp.systemSymbol,
+                                jd.totalDistance,
+                                mp.sellPrice / jd.totalDistance priceToDistance
+                         from MarketPrice mp
+                                  inner join Waypoint wp on
+                             wp.symbol = mp.waypointSymbol
+                                  inner join \`System\` s on
+                             s.symbol = wp.systemSymbol
+                                  inner join JumpDistance jd on
+                             jd.fromSystemSymbol = ${currentSystem.symbol} and jd.toSystemSymbol = s.symbol
+                         where mp.tradeGoodSymbol = ${bestTrade.tradeGoodSymbol}
+                           and s.hasJumpGate = true
+                           and mp.sellPrice > ${firstPurchase.purchasePrice} * 0.9
+                           and mp.updatedOn > NOW() - INTERVAL 4 HOUR
+                         order by
+                             priceToDistance desc
+                             limit 10`
+
+                    if (alternativeSaleLocation.length > 0 && alternativeSaleLocation[0].sellPrice > thingToSell.sellPrice) {
+                        ship.log(`Going to ${alternativeSaleLocation[0].waypointSymbol} to sell there for ${alternativeSaleLocation[0].sellPrice} instead.`)
+                        await travelBehavior(alternativeSaleLocation[0].systemSymbol, ship, alternativeSaleLocation[0].waypointSymbol, {
+                            jumpOnly: true
+                        })
+                    } else {
+                        ship.log(`No alternative sale location found for a decent enough price.`)
+                        await ship.setOverallGoal("Waiting for price increase.")
+                        await ship.waitFor(120000)
+                    }
+                }
+            } while (thingToSell.sellPrice < thingToBuy.purchasePrice * 0.9)
+
+            await ship.dock()
+            const sellTransactions = await ship.sellAllCargo()
+            //generateLogsFromBuyAndSell(buyTransactions, sellTransactions)
+
+
+            shipData = await prisma.ship.findFirstOrThrow({
+                where: {
+                    symbol: ship.symbol
+                }
+            })
+            await ship.attemptRefuel()
+
+            const soldMarket = await ship.market()
+            const thingSold = soldMarket.tradeGoods.find(i => i.symbol == good)
+            console.log(`Sell price of item is now ${thingSold.sellPrice}`)
+            tradeTaken.delete(bestTrade.buyAt + bestTrade.sellAt + bestTrade.tradeGoodSymbol)
+            await ship.setOverallGoal(null)
+        } catch(e) {
+            tradeTaken.delete(bestTrade.buyAt+bestTrade.sellAt+bestTrade.tradeGoodSymbol)
+            throw e
+        }
     }
 }

@@ -11,6 +11,7 @@ import {Button} from "@front/lib/ui-elements/button";
 import {Text} from "@front/lib/ui-elements/text";
 import {systemView, universeView} from "@front/lib/UIElements";
 import {gameHeight} from "@front/lib/consts";
+import {app} from "@front/lib/application";
 
 
 export let credits: Text
@@ -104,9 +105,6 @@ export const createSidebar = () => {
   statsBlock.height = 200
   sidebarContainer.addChild(statsBlock)
 
-  const highlightButtons = createHighlightButtons()
-  sidebarContainer.addChild(highlightButtons)
-
   entityInfo = new Text('Entity Information', {
     font: {
       fontName: 'buttontext_white',
@@ -119,6 +117,44 @@ export const createSidebar = () => {
   })
 
   statsBlock.addChild(entityInfo)
+
+  const cargo = new UIContainer({
+    variant: 'default',
+  })
+  cargo.padding = 16
+  cargo.height = 100
+  const cargoInfo = new Text('Cargo', {
+    font: {
+      fontName: 'buttontext_white',
+      fontSize: 16,
+      align: 'left',
+      maxWidth: 368,
+      tint: 0x00CC00,
+    },
+    align: 'left',
+  })
+  cargo.addChild(cargoInfo)
+  app.ticker.add(() => {
+    if (GameState.selected && GameState.selected.type === 'ship') {
+      const shipData = GameState.shipData[GameState.selected.symbol]
+      if (shipData.cargo) {
+        cargoInfo.displayObject.bitmapText.text = `Cargo:\n${shipData.cargo.map((cargo) => `- ${cargo.tradeGoodSymbol} ${cargo.units}`).join('\n')}`
+      } else {
+        cargoInfo.displayObject.bitmapText.text = `Cargo: No data\n`
+      }
+    } else {
+      cargoInfo.displayObject.bitmapText.text = `Cargo:\n`
+    }
+  })
+  sidebarContainer.addChild(cargo)
+
+  const highlightButtons = createHighlightButtons()
+  sidebarContainer.addChild(highlightButtons)
+
+
+
+
+
   sidebarContainer.updateLayout()
 
 

@@ -59477,8 +59477,6 @@ var createSidebar = () => {
   statsBlock.width = "100%";
   statsBlock.height = 200;
   sidebarContainer.addChild(statsBlock);
-  const highlightButtons = createHighlightButtons();
-  sidebarContainer.addChild(highlightButtons);
   entityInfo = new Text2("Entity Information", {
     font: {
       fontName: "buttontext_white",
@@ -59490,6 +59488,40 @@ var createSidebar = () => {
     align: "left"
   });
   statsBlock.addChild(entityInfo);
+  const cargo = new Container4({
+    variant: "default"
+  });
+  cargo.padding = 16;
+  cargo.height = 100;
+  const cargoInfo = new Text2("Cargo", {
+    font: {
+      fontName: "buttontext_white",
+      fontSize: 16,
+      align: "left",
+      maxWidth: 368,
+      tint: 52224
+    },
+    align: "left"
+  });
+  cargo.addChild(cargoInfo);
+  app.ticker.add(() => {
+    if (GameState.selected && GameState.selected.type === "ship") {
+      const shipData = GameState.shipData[GameState.selected.symbol];
+      if (shipData.cargo) {
+        cargoInfo.displayObject.bitmapText.text = `Cargo:
+${shipData.cargo.map((cargo2) => `- ${cargo2.tradeGoodSymbol} ${cargo2.units}`).join("\n")}`;
+      } else {
+        cargoInfo.displayObject.bitmapText.text = `Cargo: No data
+`;
+      }
+    } else {
+      cargoInfo.displayObject.bitmapText.text = `Cargo:
+`;
+    }
+  });
+  sidebarContainer.addChild(cargo);
+  const highlightButtons = createHighlightButtons();
+  sidebarContainer.addChild(highlightButtons);
   sidebarContainer.updateLayout();
   return sidebarContainer;
 };

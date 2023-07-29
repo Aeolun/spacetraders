@@ -48,7 +48,7 @@ export interface GetStatus200Response {
      */
     'version': string;
     /**
-     * The date and time when the game server was last reset.
+     * The date when the game server was last reset.
      * @type {string}
      * @memberof GetStatus200Response
      */

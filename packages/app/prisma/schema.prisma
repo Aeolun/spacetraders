@@ -66,6 +66,16 @@ enum SystemType {
   UNSTABLE
 }
 
+model Leaderboard {
+  agentSymbol String
+  reset       String
+  dateTime    DateTime
+  credits     Int
+  ships       Int
+
+  @@id([agentSymbol, reset, dateTime])
+}
+
 model System {
   symbol          String     @id
   sectorSymbol    String

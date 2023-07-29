@@ -16,6 +16,8 @@ import {initializeShipBehaviors} from "@app/ship/initializeShipBehaviors";
 import {initAgent} from "@app/agent/init-agent";
 import {applyWSSHandler} from "@trpc/server/adapters/ws";
 import ws from 'ws'
+import {scheduleLeaderboardUpdate, updateLeaderboard} from "@app/leaderboard";
+import {backgroundQueue} from "@app/lib/queue";
 
 
 export type { AppRouter } from '@app/server'
@@ -69,16 +71,13 @@ const init = async () => {
     let resetYetInterval;
     const resetTimeout = () => {
         resetYetInterval = setInterval(async () => {
-            const serverStatus = await axios.get<StatusResponse>(process.env.API_ENDPOINT)
+            const serverStatus = await backgroundQueue(() => axios.get<StatusResponse>(process.env.API_ENDPOINT))
 
             if (serverStatus.data.resetDate !== currentInstance) {
                 // yay! reset completed
-
-                await initWorld(serverStatus.data.resetDate)
-
-                clearInterval(resetYetInterval)
-                const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
-                setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
+                console.log("Reset completed! Restarting client.")
+                // need to exit with non zero code so concurrently will restart
+                process.exit(1);
             }
         }, 5000)
     }
@@ -86,22 +85,25 @@ const init = async () => {
     let agentToken;
     console.log('Current data reset date: ', currentInstance)
     console.log('API reset date', serverStatus.data.resetDate)
+    const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
     if (serverStatus.data.resetDate === currentInstance) {
-        const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
         console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
-        setTimeout(resetTimeout, timeUntilReset - 3600 * 1000)
         agentToken = await getBackgroundAgentToken(serverStatus.data.resetDate)
         await initAgent(agentToken);
 
         loadWaypoint().then(() => {
             console.log('Waypoint load complete')
         })
+        // start checking for reset one hour before indicated
     } else {
         console.log("Server already reset or never initialized.")
         agentToken = await initWorld(serverStatus.data.resetDate)
     }
 
+    setTimeout(resetTimeout, Math.max(timeUntilReset - 3600 * 1000, 0))
     await initializeShipBehaviors()
+    
+    scheduleLeaderboardUpdate()
 }
 
 const httpServer = createHTTPServer({

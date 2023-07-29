@@ -287,7 +287,8 @@ export async function processFuel(shipSymbol: string, fuel: ShipFuel) {
             reactor: true,
             engine: true,
             mounts: true,
-            modules: true
+            modules: true,
+            cargo: true,
         },
         data: {
             fuelCapacity: fuel.capacity,

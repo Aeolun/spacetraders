@@ -13,48 +13,30 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { Agent } from './agent';
+// May contain unused imports in some cases
+// @ts-ignore
+import { Meta } from './meta';
 
 /**
- * Agent details.
+ * 
  * @export
- * @interface Agent
+ * @interface GetAgents200Response
  */
-export interface Agent {
+export interface GetAgents200Response {
     /**
-     * Account ID that is tied to this agent. Only included on your own agent.
-     * @type {string}
-     * @memberof Agent
+     * 
+     * @type {Array<Agent>}
+     * @memberof GetAgents200Response
      */
-    'accountId'?: string;
+    'data': Array<Agent>;
     /**
-     * Symbol of the agent.
-     * @type {string}
-     * @memberof Agent
+     * 
+     * @type {Meta}
+     * @memberof GetAgents200Response
      */
-    'symbol': string;
-    /**
-     * The headquarters of the agent.
-     * @type {string}
-     * @memberof Agent
-     */
-    'headquarters': string;
-    /**
-     * The number of credits the agent has available. Credits can be negative if funds have been overdrawn.
-     * @type {number}
-     * @memberof Agent
-     */
-    'credits': number;
-    /**
-     * The faction the agent started with.
-     * @type {string}
-     * @memberof Agent
-     */
-    'startingFaction': string;
-    /**
-     * How many ships are owned by the agent.
-     * @type {number}
-     * @memberof Agent
-     */
-    'shipCount'?: number;
+    'meta': Meta;
 }
 

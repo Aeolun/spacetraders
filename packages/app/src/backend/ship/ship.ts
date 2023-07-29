@@ -13,8 +13,8 @@ import fs from "fs";
 import {
     ExtractResources201Response,
     ExtractResources201ResponseData, GetMarket200Response, Market, MarketTransaction,
-    ShipNavFlightMode,
-    Survey
+    ShipNavFlightMode, ShipRefineRequestProduceEnum,
+    Survey, TradeSymbol
 } from "spacetraders-sdk";
 import {
     processAgent,
@@ -273,6 +273,11 @@ export class Ship {
             await processFuel(this.symbol, res.data.data.fuel);
             const navResult = await processNav(this.symbol, res.data.data.nav)
 
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
+
             try {
                 const departureSystem = await prisma.system.findFirst({
                     where: {
@@ -365,6 +370,11 @@ export class Ship {
             const waitTime = expiry.getTime() - Date.now() + 200
             this.setCooldown('reactor', waitTime)
 
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
+
             try {
                 const departureSystem = await prisma.system.findFirst({
                     where: {
@@ -441,6 +451,11 @@ export class Ship {
             const waitTime = expiry.getTime() - Date.now() + 200
             this.setCooldown('reactor', waitTime)
 
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
+
             return {
                 ship: newShipInfo,
                 extract: res.data
@@ -453,7 +468,7 @@ export class Ship {
                     data: {
                         extraction: {
                             ["yield"]: {
-                                symbol: '',
+                                symbol: 'FUEL',
                                 units: 0,
                             },
                             shipSymbol: this.symbol,
@@ -501,7 +516,14 @@ export class Ship {
             this.log(`New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`)
             await this.navigateMode('CRUISE')
 
-            return processFuel(this.symbol, res.data.data.fuel)
+            const result = await processFuel(this.symbol, res.data.data.fuel)
+
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
+
+            return result
         } catch(error) {
             this.log(`error refueling at ${this.currentWaypointSymbol}`)
             console.log(error.response?.data ? error.response.data : error)
@@ -633,7 +655,7 @@ export class Ship {
         try {
             const result = await this.queue(() => this.api.fleet.jettison(this.symbol, {
                 units: quantity,
-                symbol: good
+                symbol: good as TradeSymbol
             }))
             this.log(`Jettisoned ${quantity} ${good}`)
             return result
@@ -648,7 +670,7 @@ export class Ship {
             const marketBefore = await this.queue(() => this.api.systems.getMarket(this.currentSystemSymbol, this.currentWaypointSymbol))
             const boughtGoodBefore = marketBefore.data.data.tradeGoods.find(g => g.symbol === good)
             const result = await this.queue(() => this.api.fleet.purchaseCargo(this.symbol, {
-                symbol: good,
+                symbol: good as TradeSymbol,
                 units: quantity
             }))
             const marketAfter = await this.queue(() => this.api.systems.getMarket(this.currentSystemSymbol, this.currentWaypointSymbol))
@@ -671,6 +693,11 @@ export class Ship {
 
             await storeMarketInformation(marketAfter.data)
             await processCargo(this.symbol, result.data.data.cargo)
+
+            ee.emit('event', {
+                type: 'NAVIGATE',
+                data: await returnShipData(this.symbol)
+            })
 
             return result.data.data.transaction
         } catch(error) {
@@ -697,7 +724,7 @@ export class Ship {
                 const result = await this.queue(() => {
                     this.log(`Selling ${units} of ${tradeGoodSymbol}`)
                     return this.api.fleet.sellCargo(this.symbol, {
-                        symbol: tradeGoodSymbol,
+                        symbol: tradeGoodSymbol as TradeSymbol,
                         units: Math.min(units, tradeVolume)
                     })
                 })
@@ -723,12 +750,52 @@ export class Ship {
                 await processAgent(result.data.data.agent)
                 await processCargo(this.symbol, result.data.data.cargo)
 
+                ee.emit('event', {
+                    type: 'NAVIGATE',
+                    data: await returnShipData(this.symbol)
+                })
+
                 return result.data.data.transaction
             } while (leftToSell > 0)
         } catch(error) {
             console.error(`failed to sell ${tradeGoodSymbol}`, error.response?.data ? error.response.data : error)
             throw error
         }
+    }
+
+    async refine() {
+        await this.waitForCooldown('reactor')
+
+        this.log(`Refining`)
+
+        const cargo = await prisma.shipCargo.findMany({
+            where: {
+                shipSymbol: this.symbol
+            }
+        })
+
+        if (cargo.length === 0) {
+            throw new Error("Cannot refine without cargo")
+        }
+
+        const firstOre = cargo.find(c => c.tradeGoodSymbol.endsWith("_ORE"))
+        if (!firstOre) {
+            throw new Error("Cannot refine without ore")
+        }
+
+        const produceSymbol = firstOre.tradeGoodSymbol.replace('_ORE', '')
+
+        const res = await this.queue(() => this.api.fleet.shipRefine(this.symbol, {
+            produce: produceSymbol as ShipRefineRequestProduceEnum,
+        }))
+
+        const afterCargo = await processCargo(this.symbol, res.data.data.cargo)
+
+        const expiry = new Date(res.data.data.cooldown.expiration)
+        const waitTime = expiry.getTime() - Date.now() + 200
+        this.setCooldown('reactor', waitTime)
+
+        return afterCargo
     }
 
     async attemptRefuel() {
