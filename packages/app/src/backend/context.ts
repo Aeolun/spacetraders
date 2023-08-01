@@ -9,15 +9,15 @@ export async function createContext({
     // Will be available as `ctx` in all your resolvers
     // This is just an example of something you might want to do in your ctx fn
     async function getUserFromHeader(): Promise<{
-        payload: {
+        payload?: {
             identifier: string
             iat: number
             sub: string
             reset_date: string
             version: 'v2'
         }
-        token: string
-    } | {}> {
+        token?: string
+    }> {
         if (!req.headers.authorization) {
             return {};
         }

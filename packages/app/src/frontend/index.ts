@@ -269,7 +269,7 @@ app.ticker.add((dt) => {
                     marketWindow.clearGoods()
                     marketWindow.setGoods(data)
                     marketWindow.container.displayObject.x = 400
-                    marketWindow.container.displayObject.y = gameHeight - 200
+                    marketWindow.container.displayObject.y = gameHeight - 300
                     marketWindow.container.displayObject.visible = true
                 })
             }

@@ -11,7 +11,6 @@ import {createOrGetAgentQueue} from "@app/lib/queue";
 import {defaultWayfinder} from "@app/wayfinding";
 import {availableLogic} from "@app/ship/behaviors";
 import {shipBehaviors, startBehaviorForShip} from "@app/ship/shipBehavior";
-import {travelBehavior} from "@app/ship/behaviors/travel-behavior";
 
 import { observable } from '@trpc/server/observable';
 import {ee} from "@app/event-emitter";
@@ -117,6 +116,49 @@ export const appRouter = router({
         })
 
         return waypoints
+    }),
+    getWaypoints: publicProcedure.input(z.object({
+        systemSymbol: z.string()
+    })).query(async ({input, ctx}) => {
+        const system = await prisma.system.findFirstOrThrow({
+            where: {
+                symbol: input.systemSymbol
+            }
+        })
+        const waypoints = await prisma.waypoint.findMany({
+            where: {
+                systemSymbol: input.systemSymbol
+            },
+            include: {
+                traits: true,
+                tradeGoods: true,
+                jumpgate: true,
+            }
+        })
+
+
+        return {
+            system,
+            waypoints: await Promise.all(waypoints.map(async wp => {
+                const shipyardModels = await prisma.shipyardModel.findMany({
+                    where: {
+                        waypointSymbol: wp.symbol
+                    }
+                })
+
+                return {
+                    ...wp,
+                    traits: wp.traits.map(t => t.symbol),
+                    tradeGoods: wp.tradeGoods.map(tg => ({
+                        symbol: tg.tradeGoodSymbol,
+                        kind: tg.kind
+                    })),
+                    shipyardModels: shipyardModels.map(sm => ({
+                        symbol: sm.shipConfigurationSymbol,
+                    })),
+                }
+            }))
+        }
     }),
     getFactions: publicProcedure.query(async () => {
         return prisma.faction.findMany()

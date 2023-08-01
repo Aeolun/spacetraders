@@ -58304,7 +58304,7 @@ var MarketWindow = class {
   constructor() {
     this.container = new Container4();
     this.container.width = gameWidth - 400;
-    this.container.height = 200;
+    this.container.height = 300;
     const names = ["IMPORT", "EXPORT", "EXCHANGE"];
     const columnHeaders = new Container4();
     columnHeaders.width = "100%";
@@ -60306,7 +60306,7 @@ Chart: ${waypointInfo.chartSubmittedBy ? `${waypointInfo.chartSubmittedBy} at ${
           marketWindow.clearGoods();
           marketWindow.setGoods(data);
           marketWindow.container.displayObject.x = 400;
-          marketWindow.container.displayObject.y = gameHeight - 200;
+          marketWindow.container.displayObject.y = gameHeight - 300;
           marketWindow.container.displayObject.visible = true;
         });
       }

@@ -15,7 +15,7 @@ export class MarketWindow {
     constructor() {
         this.container = new Container()
         this.container.width = gameWidth - 400
-        this.container.height = 200
+        this.container.height = 300
 
         const names: MarketGoodKind[] = ['IMPORT', 'EXPORT', 'EXCHANGE']
 
