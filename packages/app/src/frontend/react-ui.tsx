@@ -11,11 +11,14 @@ import {
     FrameSVGCorners,
     Text,
     Animated,
-    aaVisibility, aa, useBleeps, FrameSVGNefrex, Illuminator
+    aaVisibility, aa, useBleeps, FrameSVGNefrex, Illuminator, createAppTheme, createAppStylesBaseline
 } from '@arwes/react';
+const theme = createAppTheme();
+const stylesBaseline = createAppStylesBaseline(theme);
 import {BleepsManagerProps} from "@arwes/bleeps";
 import {trpc} from "@front/lib/trpc";
 import {Faction} from "spacetraders-sdk";
+import {CSSObject, Global} from "@emotion/react";
 
 const animatorsSettings: AnimatorGeneralProviderSettings = {
     // Durations in seconds.
@@ -75,16 +78,18 @@ const Card = (props: PropsWithChildren<ReactNode>) => {
     return (
         <Animator merge combine manager='stagger'>
             <Animated
+              className='card'
                 style={{
                     position: 'relative',
                     display: 'block',
                     padding: '2rem',
                     textAlign: 'left',
+                    fill: 'black',
                     color: '#fff',
                     ...props.style
                 }}
                 // Effects for entering and exiting animation transitions.
-                animated={[aaVisibility(), aa('y', 24, 0)]}
+                animated={[aaVisibility(), aa('y', '2rem', 0)]}
                 // Play a bleep when the card is clicked.
             >
                 <Animator >
@@ -155,7 +160,9 @@ const App = () => {
         })
     }, [])
 
-    return <AnimatorGeneralProvider {...animatorsSettings}>
+    return <><Global styles={stylesBaseline as Record<string, CSSObject>} />
+        <AnimatorGeneralProvider {...animatorsSettings}>
+
         <BleepsProvider {...bleepsSettings}>
             <Animator>
                 <Background />
@@ -167,6 +174,7 @@ const App = () => {
             <style>{`
             body {
                 font-family: sans-serif;
+                overflow: auto;
             }
             select {
                 background: hsla(170deg, 100%, 20%, 0.2);
@@ -174,19 +182,17 @@ const App = () => {
                 color: white;
                 padding: 8px;
             }
-            .arwes-react-frames-framesvg path[data-name="decoration"] {
-              color: hsla(150deg, 100%, 50%);
-            }
-            .arwes-react-frames-framesvg path[data-name="shape"] {
-              color: hsla(150deg, 100%, 75%, 0.05)
-            }
-            .arwes-react-frames-framesvg.button path[data-name="shape"]:hover {
-              color: hsla(150deg, 100%, 75%, 0.1)
-            }
+          .card .arwes-react-frames-framesvg [data-name=bg] {
+            color: ${theme.colors.primary.deco(1)};
+          }
+          .card .arwes-react-frames-framesvg [data-name=line] {
+            color: ${theme.colors.primary.main(4)};
+          }
             code {
                 line-break: anywhere;
             }
           `}</style>
+            <div style={{ height: '100vh', overflow:'auto'}}>
             <Card style={{
                 margin: '1rem',
             }}>
@@ -281,8 +287,9 @@ const App = () => {
 
                 </Animated>
             </Animated>
+            </div>
         </BleepsProvider>
-    </AnimatorGeneralProvider>
+    </AnimatorGeneralProvider></>
 }
 
 const root = createRoot(document.getElementById('app'))

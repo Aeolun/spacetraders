@@ -1,9 +1,9 @@
 import fs from "fs";
 import createApi from "@app/lib/createApi";
 import jwtDecode from "jwt-decode";
-import {RegisterRequestFactionEnum} from "spacetraders-sdk";
 import {processAgent, processShip} from "@app/ship/updateShips";
 import {prisma} from "@app/prisma";
+import {RegisterRequest} from "spacetraders-sdk";
 
 export const getBackgroundAgentToken = async (resetDate?: string) => {
     let agentToken, agentTokenData
@@ -19,34 +19,30 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
 
     console.log("Agent token reset date", agentTokenData?.reset_date, resetDate)
     if (!agent || !agent.token || (resetDate && agentTokenData.reset_date !== resetDate)) {
+        console.log("No agent in database, no token for agent, or reset_date on token is not the same as server. Obtaining new token.")
         let existingToken;
         try {
             existingToken = fs.readFileSync('.agent-token', 'utf-8')
+            console.log("Loading token from .agent-token file.")
         } catch(error) {
             // no token
         }
 
-        if (existingToken) {
-            console.log("Loading token from .agent-token file.")
-            const api = createApi(existingToken)
-            const existingData = await api.agents.getMyAgent()
+        if (!existingToken) {
+            console.log("Registering agent on server.")
+            const registerApi = createApi('')
 
-            await processAgent(existingData.data.data, existingToken)
-
-            agentToken = existingToken
-        } else {
-            console.log("No agent token or agent token for older reset.")
-            const api = createApi('')
-
-            const result = await api.default.register({
+            const result = await registerApi.default.register({
                 symbol: process.env.AGENT_NAME,
                 email: process.env.AGENT_EMAIL,
-                faction: process.env.AGENT_FACTION as RegisterRequestFactionEnum
+                faction: process.env.AGENT_FACTION as RegisterRequest['faction'],
             })
-            await processAgent(result.data.data.agent, result.data.data.token)
-
-            agentToken = result.data.data.token
+            await processAgent(result.data.data.agent, result.data.data.token, true)
+            console.log("Updated token in database")
+            existingToken = result.data.data.token
         }
+
+        agentToken = existingToken
     } else {
         agentToken = agent.token
     }

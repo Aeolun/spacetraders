@@ -297,7 +297,7 @@ export async function processFuel(shipSymbol: string, fuel: ShipFuel) {
     })
 }
 
-export async function processAgent(agent: Agent, token?: string) {
+export async function processAgent(agent: Agent, token?: string, overrideToken: boolean = false) {
 
     await prisma.agent.upsert({
         where: {
@@ -316,13 +316,13 @@ export async function processAgent(agent: Agent, token?: string) {
             accountId: agent.accountId,
         }
     })
-    const existingAgent = await prisma.agent.findUnique({
+    const agentEntity = await prisma.agent.findFirstOrThrow({
         where: {
             symbol: agent.symbol
         }
-    });
-    if (!existingAgent.token) {
-        return await prisma.agent.updateMany({
+    })
+    if (!agentEntity.token || overrideToken) {
+        return await prisma.agent.update({
             where: {
                 symbol: agent.symbol,
             },

@@ -42512,7 +42512,7 @@ Object.defineProperties(settings, {
   }
 });
 
-// ../../node_modules/.pnpm/@pixi+sprite@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/sprite/lib/Sprite.mjs
+// ../../node_modules/.pnpm/@pixi+sprite@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/sprite/lib/Sprite.mjs
 var tempPoint = new Point();
 var indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
 var Sprite = class extends Container {
@@ -42767,7 +42767,7 @@ var Sprite = class extends Container {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mixin-cache-as-bitmap@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/mixin-cache-as-bitmap/lib/index.mjs
+// ../../node_modules/.pnpm/@pixi+mixin-cache-as-bitmap@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/mixin-cache-as-bitmap/lib/index.mjs
 var _tempMatrix = new Matrix();
 DisplayObject.prototype._cacheAsBitmap = false;
 DisplayObject.prototype._cacheData = null;
@@ -43030,7 +43030,7 @@ Container.prototype.getChildByName = function getChildByName(name, deep) {
   return null;
 };
 
-// ../../node_modules/.pnpm/@pixi+mixin-get-global-position@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mixin-get-global-position/lib/index.mjs
+// ../../node_modules/.pnpm/@pixi+mixin-get-global-position@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mixin-get-global-position/lib/index.mjs
 DisplayObject.prototype.getGlobalPosition = function getGlobalPosition(point = new Point(), skipUpdate = false) {
   if (this.parent) {
     this.parent.toGlobal(this.position, point, skipUpdate);
@@ -44139,7 +44139,7 @@ Object.entries(filters).forEach(([key2, FilterClass]) => {
   });
 });
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventTicker.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventTicker.mjs
 var EventsTickerClass = class {
   constructor() {
     this.interactionFrequency = 10;
@@ -44208,7 +44208,7 @@ var EventsTickerClass = class {
 };
 var EventsTicker = new EventsTickerClass();
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedEvent.mjs
 var FederatedEvent = class {
   constructor(manager) {
     this.bubbles = true;
@@ -44268,7 +44268,7 @@ var FederatedEvent = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedMouseEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedMouseEvent.mjs
 var FederatedMouseEvent = class extends FederatedEvent {
   constructor() {
     super(...arguments);
@@ -44325,7 +44325,7 @@ var FederatedMouseEvent = class extends FederatedEvent {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedPointerEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedPointerEvent.mjs
 var FederatedPointerEvent = class extends FederatedMouseEvent {
   constructor() {
     super(...arguments);
@@ -44344,7 +44344,7 @@ var FederatedPointerEvent = class extends FederatedMouseEvent {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedWheelEvent.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedWheelEvent.mjs
 var FederatedWheelEvent = class extends FederatedMouseEvent {
   constructor() {
     super(...arguments);
@@ -44357,7 +44357,7 @@ FederatedWheelEvent.DOM_DELTA_PIXEL = 0;
 FederatedWheelEvent.DOM_DELTA_LINE = 1;
 FederatedWheelEvent.DOM_DELTA_PAGE = 2;
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventBoundary.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventBoundary.mjs
 var PROPAGATION_LIMIT = 2048;
 var tempHitLocation = new Point();
 var tempLocalMapping = new Point();
@@ -44997,7 +44997,7 @@ var EventBoundary = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/EventSystem.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/EventSystem.mjs
 var MOUSE_POINTER_ID = 1;
 var TOUCH_TO_POINTER = {
   touchstart: "pointerdown",
@@ -45405,7 +45405,7 @@ EventSystem.defaultEventFeatures = {
 };
 extensions.add(EventSystem);
 
-// ../../node_modules/.pnpm/@pixi+events@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/events/lib/FederatedEventTarget.mjs
+// ../../node_modules/.pnpm/@pixi+events@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/events/lib/FederatedEventTarget.mjs
 function convertEventModeToInteractiveMode(mode) {
   return mode === "dynamic" || mode === "static";
 }
@@ -45492,7 +45492,7 @@ var FederatedDisplayObject = {
 };
 DisplayObject.mixin(FederatedDisplayObject);
 
-// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_apmmhdndg7szcc4swgeztfmmb4/node_modules/@pixi/accessibility/lib/accessibleTarget.mjs
+// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+events@7.2.4/node_modules/@pixi/accessibility/lib/accessibleTarget.mjs
 var accessibleTarget = {
   accessible: false,
   accessibleTitle: null,
@@ -45506,7 +45506,7 @@ var accessibleTarget = {
   renderId: -1
 };
 
-// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_apmmhdndg7szcc4swgeztfmmb4/node_modules/@pixi/accessibility/lib/AccessibilityManager.mjs
+// ../../node_modules/.pnpm/@pixi+accessibility@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+events@7.2.4/node_modules/@pixi/accessibility/lib/AccessibilityManager.mjs
 DisplayObject.mixin(accessibleTarget);
 var KEY_CODE_TAB = 9;
 var DIV_TOUCH_SIZE = 100;
@@ -45791,7 +45791,7 @@ AccessibilityManager.extension = {
 };
 extensions.add(AccessibilityManager);
 
-// ../../node_modules/.pnpm/@pixi+app@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/app/lib/Application.mjs
+// ../../node_modules/.pnpm/@pixi+app@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/app/lib/Application.mjs
 var _Application = class {
   constructor(options) {
     this.stage = new Container();
@@ -45828,7 +45828,7 @@ var Application = _Application;
 Application._plugins = [];
 extensions.handleByList(ExtensionType.Application, Application._plugins);
 
-// ../../node_modules/.pnpm/@pixi+app@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/app/lib/ResizePlugin.mjs
+// ../../node_modules/.pnpm/@pixi+app@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/app/lib/ResizePlugin.mjs
 var ResizePlugin = class {
   static init(options) {
     Object.defineProperty(this, "resizeTo", {
@@ -45891,7 +45891,7 @@ var ResizePlugin = class {
 ResizePlugin.extension = ExtensionType.Application;
 extensions.add(ResizePlugin);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/AssetExtension.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/AssetExtension.mjs
 var assetKeyMap = {
   loader: ExtensionType.LoadParser,
   resolver: ExtensionType.ResolveParser,
@@ -45906,7 +45906,7 @@ extensions.handle(ExtensionType.Asset, (extension) => {
   Object.keys(assetKeyMap).filter((key2) => !!ref[key2]).forEach((key2) => extensions.remove(ref[key2]));
 });
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/BackgroundLoader.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/BackgroundLoader.mjs
 var BackgroundLoader = class {
   constructor(loader, verbose = false) {
     this._loader = loader;
@@ -45951,7 +45951,7 @@ var BackgroundLoader = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/checkDataUrl.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/checkDataUrl.mjs
 function checkDataUrl(url2, mimes) {
   if (Array.isArray(mimes)) {
     for (const mime of mimes) {
@@ -45963,7 +45963,7 @@ function checkDataUrl(url2, mimes) {
   return url2.startsWith(`data:${mimes}`);
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/checkExtension.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/checkExtension.mjs
 function checkExtension(url2, extension) {
   const tempURL = url2.split("?")[0];
   const ext = lib_exports.path.extname(tempURL).toLowerCase();
@@ -45973,7 +45973,7 @@ function checkExtension(url2, extension) {
   return ext === extension;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/convertToList.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/convertToList.mjs
 var convertToList = (input, transform) => {
   if (!Array.isArray(input)) {
     input = [input];
@@ -45989,7 +45989,7 @@ var convertToList = (input, transform) => {
   });
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/copySearchParams.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/copySearchParams.mjs
 var copySearchParams = (targetUrl, sourceUrl) => {
   const searchParams = sourceUrl.split("?")[1];
   if (searchParams) {
@@ -45998,7 +45998,7 @@ var copySearchParams = (targetUrl, sourceUrl) => {
   return targetUrl;
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/createStringVariations.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/createStringVariations.mjs
 function processX(base, ids, depth, result, tags) {
   const id = ids[depth];
   for (let i3 = 0; i3 < id.length; i3++) {
@@ -46027,10 +46027,10 @@ function createStringVariations(string) {
   return tags;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/utils/isSingleItem.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/utils/isSingleItem.mjs
 var isSingleItem = (item) => !Array.isArray(item);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/cache/Cache.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/cache/Cache.mjs
 var CacheClass = class {
   constructor() {
     this._parsers = [];
@@ -46112,7 +46112,7 @@ var CacheClass = class {
 };
 var Cache = new CacheClass();
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/Loader.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/Loader.mjs
 var Loader = class {
   constructor() {
     this._parsers = [];
@@ -46230,7 +46230,7 @@ ${e3}`);
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/LoaderParser.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/LoaderParser.mjs
 var LoaderParserPriority = /* @__PURE__ */ ((LoaderParserPriority2) => {
   LoaderParserPriority2[LoaderParserPriority2["Low"] = 0] = "Low";
   LoaderParserPriority2[LoaderParserPriority2["Normal"] = 1] = "Normal";
@@ -46238,7 +46238,7 @@ var LoaderParserPriority = /* @__PURE__ */ ((LoaderParserPriority2) => {
   return LoaderParserPriority2;
 })(LoaderParserPriority || {});
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadJson.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadJson.mjs
 var validJSONExtension = ".json";
 var validJSONMIME = "application/json";
 var loadJson = {
@@ -46258,7 +46258,7 @@ var loadJson = {
 };
 extensions.add(loadJson);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadTxt.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadTxt.mjs
 var validTXTExtension = ".txt";
 var validTXTMIME = "text/plain";
 var loadTxt = {
@@ -46278,7 +46278,7 @@ var loadTxt = {
 };
 extensions.add(loadTxt);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/loadWebFont.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/loadWebFont.mjs
 var validWeights = [
   "normal",
   "bold",
@@ -46355,7 +46355,7 @@ var loadWebFont = {
 };
 extensions.add(loadWebFont);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/WorkerManager.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/WorkerManager.mjs
 var UUID = 0;
 var MAX_WORKERS;
 var WHITE_PNG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=";
@@ -46510,7 +46510,7 @@ var WorkerManagerClass = class {
 };
 var WorkerManager = new WorkerManagerClass();
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/utils/createTexture.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/utils/createTexture.mjs
 function createTexture(base, loader, url2) {
   const texture = new Texture(base);
   texture.baseTexture.on("dispose", () => {
@@ -46519,7 +46519,7 @@ function createTexture(base, loader, url2) {
   return texture;
 }
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/loadTextures.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/loadTextures.mjs
 var validImageExtensions = [".jpeg", ".jpg", ".png", ".webp", ".avif"];
 var validImageMIMEs = [
   "image/jpeg",
@@ -46585,7 +46585,7 @@ var loadTextures = {
 };
 extensions.add(loadTextures);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/loader/parsers/textures/loadSVG.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/loader/parsers/textures/loadSVG.mjs
 var validSVGExtension = ".svg";
 var validSVGMIME = "image/svg+xml";
 var loadSVG = {
@@ -46619,7 +46619,7 @@ var loadSVG = {
 };
 extensions.add(loadSVG);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/resolver/Resolver.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/resolver/Resolver.mjs
 var Resolver = class {
   constructor() {
     this._defaultBundleIdentifierOptions = {
@@ -46861,7 +46861,7 @@ var Resolver = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/Assets.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/Assets.mjs
 var AssetsClass = class {
   constructor() {
     this._detections = [];
@@ -47078,7 +47078,7 @@ var AssetsClass = class {
 var Assets = new AssetsClass();
 extensions.handleByList(ExtensionType.LoadParser, Assets.loader.parsers).handleByList(ExtensionType.ResolveParser, Assets.resolver.parsers).handleByList(ExtensionType.CacheParser, Assets.cache.parsers).handleByList(ExtensionType.DetectionParser, Assets.detections);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/cache/parsers/cacheTextureArray.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/cache/parsers/cacheTextureArray.mjs
 var cacheTextureArray = {
   extension: ExtensionType.CacheParser,
   test: (asset) => Array.isArray(asset) && asset.every((t2) => t2 instanceof Texture),
@@ -47094,7 +47094,7 @@ var cacheTextureArray = {
 };
 extensions.add(cacheTextureArray);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectAvif.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectAvif.mjs
 var detectAvif = {
   extension: {
     type: ExtensionType.DetectionParser,
@@ -47112,7 +47112,7 @@ var detectAvif = {
 };
 extensions.add(detectAvif);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectWebp.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectWebp.mjs
 var detectWebp = {
   extension: {
     type: ExtensionType.DetectionParser,
@@ -47130,7 +47130,7 @@ var detectWebp = {
 };
 extensions.add(detectWebp);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/detections/parsers/detectDefaults.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/detections/parsers/detectDefaults.mjs
 var imageFormats = ["png", "jpg", "jpeg"];
 var detectDefaults = {
   extension: {
@@ -47143,7 +47143,7 @@ var detectDefaults = {
 };
 extensions.add(detectDefaults);
 
-// ../../node_modules/.pnpm/@pixi+assets@7.2.4_g6kcrvjte5opnujtwgun74ym6y/node_modules/@pixi/assets/lib/resolver/parsers/resolveTextureUrl.mjs
+// ../../node_modules/.pnpm/@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+utils@7.2.4/node_modules/@pixi/assets/lib/resolver/parsers/resolveTextureUrl.mjs
 var resolveTextureUrl = {
   extension: ExtensionType.ResolveParser,
   test: loadTextures.test,
@@ -47155,7 +47155,7 @@ var resolveTextureUrl = {
 };
 extensions.add(resolveTextureUrl);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/const.mjs
 var INTERNAL_FORMATS = /* @__PURE__ */ ((INTERNAL_FORMATS2) => {
   INTERNAL_FORMATS2[INTERNAL_FORMATS2["COMPRESSED_RGB_S3TC_DXT1_EXT"] = 33776] = "COMPRESSED_RGB_S3TC_DXT1_EXT";
   INTERNAL_FORMATS2[INTERNAL_FORMATS2["COMPRESSED_RGBA_S3TC_DXT1_EXT"] = 33777] = "COMPRESSED_RGBA_S3TC_DXT1_EXT";
@@ -47297,7 +47297,7 @@ var INTERNAL_FORMAT_TO_BYTES_PER_PIXEL = {
   ]: 1
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/detectCompressedTextures.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/detectCompressedTextures.mjs
 var storedGl;
 var extensions2;
 function getCompressedTextureExtensions() {
@@ -47347,7 +47347,7 @@ var detectCompressedTextures = {
 };
 extensions.add(detectCompressedTextures);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/resources/BlobResource.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/resources/BlobResource.mjs
 var BlobResource = class extends BufferResource {
   constructor(source, options = { width: 1, height: 1, autoLoad: true }) {
     let origin;
@@ -47391,7 +47391,7 @@ var BlobResource = class extends BufferResource {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/resources/CompressedTextureResource.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/resources/CompressedTextureResource.mjs
 var CompressedTextureResource = class extends BlobResource {
   constructor(source, options) {
     super(source, options);
@@ -47462,7 +47462,7 @@ var CompressedTextureResource = class extends BlobResource {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/parsers/parseDDS.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/parsers/parseDDS.mjs
 var DDS_MAGIC_SIZE = 4;
 var DDS_HEADER_SIZE = 124;
 var DDS_HEADER_PF_SIZE = 32;
@@ -47634,7 +47634,7 @@ function parseDDS(arrayBuffer) {
   throw new Error("DDSParser failed to load a texture file due to an unknown reason!");
 }
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/parsers/parseKTX.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/parsers/parseKTX.mjs
 var FILE_IDENTIFIER = [171, 75, 84, 88, 32, 49, 49, 187, 13, 10, 26, 10];
 var ENDIANNESS = 67305985;
 var KTX_FIELDS = {
@@ -47844,7 +47844,7 @@ function parseKvData(dataView, bytesOfKeyValueData, littleEndian) {
   return kvData;
 }
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/loadDDS.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/loadDDS.mjs
 var loadDDS = {
   extension: {
     type: ExtensionType.LoadParser,
@@ -47879,7 +47879,7 @@ var loadDDS = {
 };
 extensions.add(loadDDS);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/loadKTX.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/loadKTX.mjs
 var loadKTX = {
   extension: {
     type: ExtensionType.LoadParser,
@@ -47923,7 +47923,7 @@ var loadKTX = {
 };
 extensions.add(loadKTX);
 
-// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/compressed-textures/lib/loaders/resolveCompressedTextureUrl.mjs
+// ../../node_modules/.pnpm/@pixi+compressed-textures@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/compressed-textures/lib/loaders/resolveCompressedTextureUrl.mjs
 var resolveCompressedTextureUrl = {
   extension: ExtensionType.ResolveParser,
   test: (value) => {
@@ -48111,7 +48111,7 @@ Extract.extension = {
 };
 extensions.add(Extract);
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildCircle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildCircle.mjs
 var buildCircle = {
   build(graphicsData) {
     const points = graphicsData.points;
@@ -48252,7 +48252,7 @@ var buildCircle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildPoly.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildPoly.mjs
 function fixOrientation(points, hole = false) {
   const m2 = points.length;
   if (m2 < 6) {
@@ -48313,7 +48313,7 @@ var buildPoly = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildRectangle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildRectangle.mjs
 var buildRectangle = {
   build(graphicsData) {
     const rectData = graphicsData.shape;
@@ -48340,7 +48340,7 @@ var buildRectangle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildRoundedRectangle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildRoundedRectangle.mjs
 var buildRoundedRectangle = {
   build(graphicsData) {
     buildCircle.build(graphicsData);
@@ -48350,7 +48350,7 @@ var buildRoundedRectangle = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/const.mjs
 var LINE_JOIN = /* @__PURE__ */ ((LINE_JOIN2) => {
   LINE_JOIN2["MITER"] = "miter";
   LINE_JOIN2["BEVEL"] = "bevel";
@@ -48383,7 +48383,7 @@ var curves = {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/ArcUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/ArcUtils.mjs
 var ArcUtils = class {
   static curveTo(x1, y1, x2, y2, radius, points) {
     const fromX = points[points.length - 2];
@@ -48442,7 +48442,7 @@ var ArcUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/BatchPart.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/BatchPart.mjs
 var BatchPart = class {
   constructor() {
     this.reset();
@@ -48466,7 +48466,7 @@ var BatchPart = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/BezierUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/BezierUtils.mjs
 var BezierUtils = class {
   static curveLength(fromX, fromY, cpX, cpY, cpX2, cpY2, toX, toY) {
     const n2 = 10;
@@ -48523,7 +48523,7 @@ var BezierUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/buildLine.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/buildLine.mjs
 function square(x2, y2, nx, ny, innerWeight, outerWeight, clockwise, verts) {
   const ix = x2 - nx * innerWeight;
   const iy = y2 - ny * innerWeight;
@@ -48808,7 +48808,7 @@ function buildLine(graphicsData, graphicsGeometry) {
   }
 }
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/QuadraticUtils.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/QuadraticUtils.mjs
 var QuadraticUtils = class {
   static curveLength(fromX, fromY, cpX, cpY, toX, toY) {
     const ax = fromX - 2 * cpX + toX;
@@ -48840,7 +48840,7 @@ var QuadraticUtils = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/utils/index.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/utils/index.mjs
 var FILL_COMMANDS = {
   [SHAPES.POLY]: buildPoly,
   [SHAPES.CIRC]: buildCircle,
@@ -48851,7 +48851,7 @@ var FILL_COMMANDS = {
 var BATCH_POOL = [];
 var DRAW_CALL_POOL = [];
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/GraphicsData.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/GraphicsData.mjs
 var GraphicsData = class {
   constructor(shape, fillStyle = null, lineStyle = null, matrix = null) {
     this.points = [];
@@ -48876,7 +48876,7 @@ var GraphicsData = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/GraphicsGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/GraphicsGeometry.mjs
 var tmpPoint = new Point();
 var _GraphicsGeometry = class extends BatchGeometry {
   constructor() {
@@ -49338,7 +49338,7 @@ var _GraphicsGeometry = class extends BatchGeometry {
 var GraphicsGeometry = _GraphicsGeometry;
 GraphicsGeometry.BATCHABLE_SIZE = 100;
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/styles/FillStyle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/styles/FillStyle.mjs
 var FillStyle = class {
   constructor() {
     this.color = 16777215;
@@ -49370,7 +49370,7 @@ var FillStyle = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/styles/LineStyle.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/styles/LineStyle.mjs
 var LineStyle = class extends FillStyle {
   constructor() {
     super(...arguments);
@@ -49405,7 +49405,7 @@ var LineStyle = class extends FillStyle {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/graphics/lib/Graphics.mjs
+// ../../node_modules/.pnpm/@pixi+graphics@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/graphics/lib/Graphics.mjs
 var DEFAULT_SHADERS = {};
 var _Graphics = class extends Container {
   constructor(geometry = null) {
@@ -49873,7 +49873,7 @@ var Graphics = _Graphics;
 Graphics.curves = curves;
 Graphics._TEMP_POINT = new Point();
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshBatchUvs.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshBatchUvs.mjs
 var MeshBatchUvs = class {
   constructor(uvBuffer, uvMatrix) {
     this.uvBuffer = uvBuffer;
@@ -49898,7 +49898,7 @@ var MeshBatchUvs = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/Mesh.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/Mesh.mjs
 var tempPoint2 = new Point();
 var tempPolygon = new Polygon();
 var _Mesh = class extends Container {
@@ -50110,7 +50110,7 @@ var _Mesh = class extends Container {
 var Mesh = _Mesh;
 Mesh.BATCHABLE_SIZE = 100;
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshGeometry.mjs
 var MeshGeometry = class extends Geometry {
   constructor(vertices, uvs, index) {
     super();
@@ -50125,13 +50125,13 @@ var MeshGeometry = class extends Geometry {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/shader/mesh.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/shader/mesh.mjs
 var fragment7 = "varying vec2 vTextureCoord;\nuniform vec4 uColor;\n\nuniform sampler2D uSampler;\n\nvoid main(void)\n{\n    gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/shader/mesh2.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/shader/mesh2.mjs
 var vertex4 = "attribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTextureMatrix;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_itsaoqwq56fcz2brnb773dvv24/node_modules/@pixi/mesh/lib/MeshMaterial.mjs
+// ../../node_modules/.pnpm/@pixi+mesh@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4/node_modules/@pixi/mesh/lib/MeshMaterial.mjs
 var MeshMaterial = class extends Shader {
   constructor(uSampler, options) {
     const uniforms = {
@@ -50205,7 +50205,7 @@ var MeshMaterial = class extends Shader {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/geometry/PlaneGeometry.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/geometry/PlaneGeometry.mjs
 var PlaneGeometry = class extends MeshGeometry {
   constructor(width = 100, height = 100, segWidth = 10, segHeight = 10) {
     super();
@@ -50249,7 +50249,7 @@ var PlaneGeometry = class extends MeshGeometry {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/SimplePlane.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/SimplePlane.mjs
 var SimplePlane = class extends Mesh {
   constructor(texture, verticesX, verticesY) {
     const planeGeometry = new PlaneGeometry(texture.width, texture.height, verticesX, verticesY);
@@ -50295,7 +50295,7 @@ var SimplePlane = class extends Mesh {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_n7n5oqwl6kgh5ivuymthtudfje/node_modules/@pixi/mesh-extras/lib/NineSlicePlane.mjs
+// ../../node_modules/.pnpm/@pixi+mesh-extras@7.2.4_@pixi+core@7.2.4_@pixi+mesh@7.2.4/node_modules/@pixi/mesh-extras/lib/NineSlicePlane.mjs
 var DEFAULT_BORDER_SIZE = 10;
 var NineSlicePlane = class extends SimplePlane {
   constructor(texture, leftWidth, topHeight, rightWidth, bottomHeight) {
@@ -50406,7 +50406,7 @@ var NineSlicePlane = class extends SimplePlane {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/ParticleBuffer.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/ParticleBuffer.mjs
 var ParticleBuffer = class {
   constructor(properties, dynamicPropertyFlags, size) {
     this.geometry = new Geometry();
@@ -50505,13 +50505,13 @@ var ParticleBuffer = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/particles.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/particles.mjs
 var fragment8 = "varying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nuniform sampler2D uSampler;\n\nvoid main(void){\n    vec4 color = texture2D(uSampler, vTextureCoord) * vColor;\n    gl_FragColor = color;\n}";
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/particles2.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/particles2.mjs
 var vertex5 = "attribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\nattribute vec4 aColor;\n\nattribute vec2 aPositionCoord;\nattribute float aRotation;\n\nuniform mat3 translationMatrix;\nuniform vec4 uColor;\n\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nvoid main(void){\n    float x = (aVertexPosition.x) * cos(aRotation) - (aVertexPosition.y) * sin(aRotation);\n    float y = (aVertexPosition.x) * sin(aRotation) + (aVertexPosition.y) * cos(aRotation);\n\n    vec2 v = vec2(x, y);\n    v = v + aPositionCoord;\n\n    gl_Position = vec4((translationMatrix * vec3(v, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = aTextureCoord;\n    vColor = aColor * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/particle-container/lib/ParticleRenderer.mjs
+// ../../node_modules/.pnpm/@pixi+particle-container@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/particle-container/lib/ParticleRenderer.mjs
 var ParticleRenderer = class extends ObjectRenderer {
   constructor(renderer) {
     super(renderer);
@@ -50726,14 +50726,14 @@ ParticleRenderer.extension = {
 };
 extensions.add(ParticleRenderer);
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/const.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/const.mjs
 var TEXT_GRADIENT = /* @__PURE__ */ ((TEXT_GRADIENT2) => {
   TEXT_GRADIENT2[TEXT_GRADIENT2["LINEAR_VERTICAL"] = 0] = "LINEAR_VERTICAL";
   TEXT_GRADIENT2[TEXT_GRADIENT2["LINEAR_HORIZONTAL"] = 1] = "LINEAR_HORIZONTAL";
   return TEXT_GRADIENT2;
 })(TEXT_GRADIENT || {});
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/TextMetrics.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/TextMetrics.mjs
 var contextSettings = {
   willReadFrequently: true
 };
@@ -51117,7 +51117,7 @@ TextMetrics._breakingSpaces = [
   12288
 ];
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/TextStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/TextStyle.mjs
 var genericFontFamilies = [
   "serif",
   "sans-serif",
@@ -51484,7 +51484,7 @@ function deepCopyProperties(target, source, propertyObj) {
   }
 }
 
-// ../../node_modules/.pnpm/@pixi+text@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/text/lib/Text.mjs
+// ../../node_modules/.pnpm/@pixi+text@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/text/lib/Text.mjs
 var defaultDestroyOptions = {
   texture: true,
   children: false,
@@ -51836,7 +51836,7 @@ var _Text = class extends Sprite {
 var Text = _Text;
 Text.defaultAutoResolution = true;
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/CountLimiter.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/CountLimiter.mjs
 var CountLimiter = class {
   constructor(maxItemsPerFrame) {
     this.maxItemsPerFrame = maxItemsPerFrame;
@@ -51850,7 +51850,7 @@ var CountLimiter = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/BasePrepare.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/BasePrepare.mjs
 function findMultipleBaseTextures(item, queue) {
   let result = false;
   if (item?._textures?.length) {
@@ -52040,7 +52040,7 @@ var _BasePrepare = class {
 var BasePrepare = _BasePrepare;
 BasePrepare.uploadsPerFrame = 4;
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/settings.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/settings.mjs
 Object.defineProperties(settings, {
   UPLOADS_PER_FRAME: {
     get() {
@@ -52053,7 +52053,7 @@ Object.defineProperties(settings, {
   }
 });
 
-// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_fce7w7a3bxhcl7pwxsiqqk5t2a/node_modules/@pixi/prepare/lib/Prepare.mjs
+// ../../node_modules/.pnpm/@pixi+prepare@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+graphics@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/prepare/lib/Prepare.mjs
 function uploadBaseTextures(renderer, item) {
   if (item instanceof BaseTexture) {
     if (!item._glTextures[renderer.CONTEXT_UID]) {
@@ -52104,7 +52104,7 @@ Prepare.extension = {
 };
 extensions.add(Prepare);
 
-// ../../node_modules/.pnpm/@pixi+sprite-animated@7.2.4_g5gcporgeyvj6eoj7ipdn3ry3a/node_modules/@pixi/sprite-animated/lib/AnimatedSprite.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-animated@7.2.4_@pixi+core@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-animated/lib/AnimatedSprite.mjs
 var AnimatedSprite = class extends Sprite {
   constructor(textures, autoUpdate = true) {
     super(textures[0] instanceof Texture ? textures[0] : textures[0].texture);
@@ -52291,7 +52291,7 @@ var AnimatedSprite = class extends Sprite {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
 var tempPoint3 = new Point();
 var TilingSprite = class extends Sprite {
   constructor(texture, width = 100, height = 100) {
@@ -52397,22 +52397,22 @@ var TilingSprite = class extends Sprite {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling.mjs
 var gl2FragmentSrc = "#version 300 es\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nin vec2 vTextureCoord;\n\nout vec4 fragmentColor;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord + ceil(uClampOffset - vTextureCoord);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    vec2 unclamped = coord;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    vec4 texSample = texture(uSampler, coord, unclamped == coord ? 0.0f : -32.0f);// lod-bias very negative to force lod 0\n\n    fragmentColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling2.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling2.mjs
 var gl2VertexSrc = "#version 300 es\n#define SHADER_NAME Tiling-Sprite-300\n\nprecision lowp float;\n\nin vec2 aVertexPosition;\nin vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nout vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback.mjs
 var gl1FragmentSrc = "#version 100\n#ifdef GL_EXT_shader_texture_lod\n    #extension GL_EXT_shader_texture_lod : enable\n#endif\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord + ceil(uClampOffset - vTextureCoord);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    vec2 unclamped = coord;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    #ifdef GL_EXT_shader_texture_lod\n        vec4 texSample = unclamped == coord\n            ? texture2D(uSampler, coord) \n            : texture2DLodEXT(uSampler, coord, 0);\n    #else\n        vec4 texSample = texture2D(uSampler, coord);\n    #endif\n\n    gl_FragColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback2.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-fallback2.mjs
 var gl1VertexSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nattribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-simple.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/sprite-tiling-simple.mjs
 var fragmentSimpleSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-Simple-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\n\nvoid main(void)\n{\n    vec4 texSample = texture2D(uSampler, vTextureCoord);\n    gl_FragColor = texSample * uColor;\n}\n";
 
-// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_egijvkz2mf6h4shwf5d3fpgilu/node_modules/@pixi/sprite-tiling/lib/TilingSpriteRenderer.mjs
+// ../../node_modules/.pnpm/@pixi+sprite-tiling@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4/node_modules/@pixi/sprite-tiling/lib/TilingSpriteRenderer.mjs
 var tempMat2 = new Matrix();
 var TilingSpriteRenderer = class extends ObjectRenderer {
   constructor(renderer) {
@@ -52489,7 +52489,7 @@ TilingSpriteRenderer.extension = {
 };
 extensions.add(TilingSpriteRenderer);
 
-// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/spritesheet/lib/Spritesheet.mjs
+// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/spritesheet/lib/Spritesheet.mjs
 var _Spritesheet = class {
   constructor(texture, data, resolutionFilename = null) {
     this.linkedSheets = [];
@@ -52603,7 +52603,7 @@ var _Spritesheet = class {
 var Spritesheet = _Spritesheet;
 Spritesheet.BATCH_SIZE = 1e3;
 
-// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_aghqcd5tse5cazfsjow2c4mnti/node_modules/@pixi/spritesheet/lib/spritesheetAsset.mjs
+// ../../node_modules/.pnpm/@pixi+spritesheet@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4/node_modules/@pixi/spritesheet/lib/spritesheetAsset.mjs
 var validImages = ["jpg", "png", "jpeg", "avif", "webp"];
 function getCacheableAssets(keys, asset, ignoreMultiPack) {
   const out = {};
@@ -52699,7 +52699,7 @@ var spritesheetAsset = {
 };
 extensions.add(spritesheetAsset);
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapFontData.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapFontData.mjs
 var BitmapFontData = class {
   constructor() {
     this.info = [];
@@ -52711,7 +52711,7 @@ var BitmapFontData = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/TextFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/TextFormat.mjs
 var TextFormat = class {
   static test(data) {
     return typeof data === "string" && data.startsWith("info face=");
@@ -52778,7 +52778,7 @@ var TextFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/XMLFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/XMLFormat.mjs
 var XMLFormat = class {
   static test(data) {
     const xml = data;
@@ -52840,7 +52840,7 @@ var XMLFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/XMLStringFormat.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/XMLStringFormat.mjs
 var XMLStringFormat = class {
   static test(data) {
     if (typeof data === "string" && data.includes("<font>")) {
@@ -52853,7 +52853,7 @@ var XMLStringFormat = class {
   }
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/formats/index.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/formats/index.mjs
 var formats = [
   TextFormat,
   XMLFormat,
@@ -52868,7 +52868,7 @@ function autoDetectFormat(data) {
   return null;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/generateFillStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/generateFillStyle.mjs
 function generateFillStyle(canvas, context2, style, resolution, lines, metrics) {
   const fillStyle = style.fill;
   if (!Array.isArray(fillStyle)) {
@@ -52932,7 +52932,7 @@ function generateFillStyle(canvas, context2, style, resolution, lines, metrics) 
   return gradient;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/drawGlyph.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/drawGlyph.mjs
 function drawGlyph(canvas, context2, metrics, x2, y2, resolution, style) {
   const char = metrics.text;
   const fontProperties = metrics.fontProperties;
@@ -52971,17 +52971,17 @@ function drawGlyph(canvas, context2, metrics, x2, y2, resolution, style) {
   context2.fillStyle = "rgba(0, 0, 0, 0)";
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/extractCharCode.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/extractCharCode.mjs
 function extractCharCode(str) {
   return str.codePointAt ? str.codePointAt(0) : str.charCodeAt(0);
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/splitTextToCharacters.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/splitTextToCharacters.mjs
 function splitTextToCharacters(text) {
   return Array.from ? Array.from(text) : text.split("");
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/utils/resolveCharacters.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/utils/resolveCharacters.mjs
 function resolveCharacters(chars) {
   if (typeof chars === "string") {
     chars = [chars];
@@ -53011,7 +53011,7 @@ function resolveCharacters(chars) {
   return result;
 }
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapFont.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapFont.mjs
 var _BitmapFont = class {
   constructor(data, textures, ownsTextures) {
     const [info] = data.info;
@@ -53236,13 +53236,13 @@ BitmapFont.defaultOptions = {
 };
 BitmapFont.available = {};
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/shader/msdf.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/shader/msdf.mjs
 var msdfFrag = "// Pixi texture info\r\nvarying vec2 vTextureCoord;\r\nuniform sampler2D uSampler;\r\n\r\n// Tint\r\nuniform vec4 uColor;\r\n\r\n// on 2D applications fwidth is screenScale / glyphAtlasScale * distanceFieldRange\r\nuniform float uFWidth;\r\n\r\nvoid main(void) {\r\n\r\n  // To stack MSDF and SDF we need a non-pre-multiplied-alpha texture.\r\n  vec4 texColor = texture2D(uSampler, vTextureCoord);\r\n\r\n  // MSDF\r\n  float median = texColor.r + texColor.g + texColor.b -\r\n                  min(texColor.r, min(texColor.g, texColor.b)) -\r\n                  max(texColor.r, max(texColor.g, texColor.b));\r\n  // SDF\r\n  median = min(median, texColor.a);\r\n\r\n  float screenPxDistance = uFWidth * (median - 0.5);\r\n  float alpha = clamp(screenPxDistance + 0.5, 0.0, 1.0);\r\n  if (median < 0.01) {\r\n    alpha = 0.0;\r\n  } else if (median > 0.99) {\r\n    alpha = 1.0;\r\n  }\r\n\r\n  // Gamma correction for coverage-like alpha\r\n  float luma = dot(uColor.rgb, vec3(0.299, 0.587, 0.114));\r\n  float gamma = mix(1.0, 1.0 / 2.2, luma);\r\n  float coverage = pow(uColor.a * alpha, gamma);  \r\n\r\n  // NPM Textures, NPM outputs\r\n  gl_FragColor = vec4(uColor.rgb, coverage);\r\n}\r\n";
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/shader/msdf2.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/shader/msdf2.mjs
 var msdfVert = "// Mesh material default fragment\r\nattribute vec2 aVertexPosition;\r\nattribute vec2 aTextureCoord;\r\n\r\nuniform mat3 projectionMatrix;\r\nuniform mat3 translationMatrix;\r\nuniform mat3 uTextureMatrix;\r\n\r\nvarying vec2 vTextureCoord;\r\n\r\nvoid main(void)\r\n{\r\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\r\n\r\n    vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\r\n}\r\n";
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/BitmapText.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/BitmapText.mjs
 var pageMeshDataDefaultPageMeshData = [];
 var pageMeshDataMSDFPageMeshData = [];
 var charRenderDataPool = [];
@@ -53707,7 +53707,7 @@ BitmapText.styleDefaults = {
   letterSpacing: 0
 };
 
-// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_dsi4gm5h5qzs5nunlxaa2p7fmq/node_modules/@pixi/text-bitmap/lib/loadBitmapFont.mjs
+// ../../node_modules/.pnpm/@pixi+text-bitmap@7.2.4_@pixi+assets@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+mesh@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-bitmap/lib/loadBitmapFont.mjs
 var validExtensions = [".xml", ".fnt"];
 var loadBitmapFont = {
   extension: {
@@ -53746,7 +53746,7 @@ var loadBitmapFont = {
 };
 extensions.add(loadBitmapFont);
 
-// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_pfkygx3sh74zn4sfwd3cwz7as4/node_modules/@pixi/text-html/lib/HTMLTextStyle.mjs
+// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-html/lib/HTMLTextStyle.mjs
 var _HTMLTextStyle = class extends TextStyle {
   constructor() {
     super(...arguments);
@@ -53989,7 +53989,7 @@ HTMLTextStyle.defaultOptions = {
   wordWrapWidth: 100
 };
 
-// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_pfkygx3sh74zn4sfwd3cwz7as4/node_modules/@pixi/text-html/lib/HTMLText.mjs
+// ../../node_modules/.pnpm/@pixi+text-html@7.2.4_@pixi+core@7.2.4_@pixi+display@7.2.4_@pixi+sprite@7.2.4_@pixi+text@7.2.4/node_modules/@pixi/text-html/lib/HTMLText.mjs
 var _HTMLText = class extends Sprite {
   constructor(text = "", style = {}) {
     super(Texture.EMPTY);

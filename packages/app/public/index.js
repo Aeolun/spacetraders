@@ -1111,7 +1111,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo16(create, deps) {
+        function useMemo14(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1882,7 +1882,7 @@ var require_react_development = __commonJS({
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect3;
         exports.useLayoutEffect = useLayoutEffect2;
-        exports.useMemo = useMemo16;
+        exports.useMemo = useMemo14;
         exports.useReducer = useReducer;
         exports.useRef = useRef17;
         exports.useState = useState5;
@@ -2432,7 +2432,7 @@ var require_react_dom_development = __commonJS({
         var HostPortal = 4;
         var HostComponent = 5;
         var HostText = 6;
-        var Fragment3 = 7;
+        var Fragment4 = 7;
         var Mode = 8;
         var ContextConsumer = 9;
         var ContextProvider = 10;
@@ -3588,7 +3588,7 @@ var require_react_dom_development = __commonJS({
               return "DehydratedFragment";
             case ForwardRef:
               return getWrappedName$1(type, type.render, "ForwardRef");
-            case Fragment3:
+            case Fragment4:
               return "Fragment";
             case HostComponent:
               return type;
@@ -13259,7 +13259,7 @@ var require_react_dom_development = __commonJS({
             }
           }
           function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-            if (current2 === null || current2.tag !== Fragment3) {
+            if (current2 === null || current2.tag !== Fragment4) {
               var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
               created.return = returnFiber;
               return created;
@@ -13662,7 +13662,7 @@ var require_react_dom_development = __commonJS({
               if (child.key === key) {
                 var elementType = element.type;
                 if (elementType === REACT_FRAGMENT_TYPE) {
-                  if (child.tag === Fragment3) {
+                  if (child.tag === Fragment4) {
                     deleteRemainingChildren(returnFiber, child.sibling);
                     var existing = useFiber(child, element.props.children);
                     existing.return = returnFiber;
@@ -17837,7 +17837,7 @@ var require_react_dom_development = __commonJS({
               var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
               return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
             }
-            case Fragment3:
+            case Fragment4:
               return updateFragment(current2, workInProgress2, renderLanes2);
             case Mode:
               return updateMode(current2, workInProgress2, renderLanes2);
@@ -18110,7 +18110,7 @@ var require_react_dom_development = __commonJS({
             case SimpleMemoComponent:
             case FunctionComponent:
             case ForwardRef:
-            case Fragment3:
+            case Fragment4:
             case Mode:
             case Profiler:
             case ContextConsumer:
@@ -22369,7 +22369,7 @@ var require_react_dom_development = __commonJS({
           return fiber;
         }
         function createFiberFromFragment(elements, mode, lanes, key) {
-          var fiber = createFiber(Fragment3, elements, key, mode);
+          var fiber = createFiber(Fragment4, elements, key, mode);
           fiber.lanes = lanes;
           return fiber;
         }
@@ -23575,7 +23575,7 @@ var require_react_is_development = __commonJS({
         var ContextProvider = REACT_PROVIDER_TYPE;
         var Element2 = REACT_ELEMENT_TYPE;
         var ForwardRef = REACT_FORWARD_REF_TYPE;
-        var Fragment3 = REACT_FRAGMENT_TYPE;
+        var Fragment4 = REACT_FRAGMENT_TYPE;
         var Lazy = REACT_LAZY_TYPE;
         var Memo = REACT_MEMO_TYPE;
         var Portal = REACT_PORTAL_TYPE;
@@ -23634,7 +23634,7 @@ var require_react_is_development = __commonJS({
         exports.ContextProvider = ContextProvider;
         exports.Element = Element2;
         exports.ForwardRef = ForwardRef;
-        exports.Fragment = Fragment3;
+        exports.Fragment = Fragment4;
         exports.Lazy = Lazy;
         exports.Memo = Memo;
         exports.Portal = Portal;
@@ -24653,65 +24653,383 @@ var require_jsx_runtime = __commonJS({
 
 // src/frontend/react-ui.tsx
 var import_client2 = __toESM(require_client());
-var import_react38 = __toESM(require_react());
+var import_react36 = __toESM(require_react());
 
 // ../../node_modules/.pnpm/@arwes+tools@1.0.0-next.7/node_modules/@arwes/tools/build/esm/constants.js
 var IS_BROWSER = typeof window !== "undefined";
 var IS_BROWSER_SAFARI = IS_BROWSER && window.navigator.userAgent.includes("Safari") && !window.navigator.userAgent.includes("Chrome");
 
-// ../../node_modules/.pnpm/@arwes+tools@1.0.0-next.7/node_modules/@arwes/tools/build/esm/cx/cx.js
-var cx = (...classNames) => {
-  return classNames.filter(Boolean).join(" ");
-};
-
-// ../../node_modules/.pnpm/@arwes+tools@1.0.0-next.7/node_modules/@arwes/tools/build/esm/createTOScheduler/createTOScheduler.js
-var ID_DEFAULT = "";
-function createTOScheduler() {
-  const ledger = /* @__PURE__ */ new Map();
-  const isPending = (id = ID_DEFAULT) => {
-    return ledger.has(id);
-  };
-  const stop = (id = ID_DEFAULT) => {
-    const cancelSchedule = ledger.get(id);
-    if (cancelSchedule) {
-      cancelSchedule();
-    }
-    ledger.delete(id);
-  };
-  const stopAll = () => {
-    Array.from(ledger.keys()).forEach(stop);
-  };
-  const start = (a, b, c) => {
-    const id = c ? a : ID_DEFAULT;
-    const delay = (c ? b : a) * 1e3;
-    const callback = c || b;
-    stop(id);
-    const timeoutId = setTimeout(() => {
-      ledger.delete(id);
-      callback();
-    }, delay);
-    ledger.set(id, () => {
-      clearTimeout(timeoutId);
-    });
-  };
-  return Object.freeze({ isPending, stop, stopAll, start });
-}
-
-// ../../node_modules/.pnpm/@arwes+tools@1.0.0-next.7/node_modules/@arwes/tools/build/esm/randomizeList/randomizeList.js
-var randomizeList = (providedList) => {
-  const list = providedList.slice(0);
-  for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [list[i], list[j]] = [list[j], list[i]];
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createThemeMultiplier/createThemeMultiplier.js
+var createThemeMultiplier = (settings) => (index) => {
+  if (Number.isFinite(settings)) {
+    const baseValue = settings;
+    return baseValue * index;
   }
-  return list;
+  if (Array.isArray(settings)) {
+    if (!settings.length) {
+      return 0;
+    }
+    const series = settings;
+    const seriesIndex = Math.round(index);
+    return series[seriesIndex > series.length - 1 ? series.length - 1 : seriesIndex];
+  }
+  const multiplier = settings;
+  return multiplier(index);
 };
 
-// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-next.7/node_modules/@arwes/theme/build/esm/createThemeColor/createThemeColor.js
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createThemeUnit/createThemeUnit.js
+var getSeriesItem = (list, indexProvided) => {
+  const index = Math.round(indexProvided);
+  return list[index > list.length - 1 ? list.length - 1 : index];
+};
+var createThemeUnit = (settings) => (index) => {
+  if (typeof index === "string") {
+    return index;
+  }
+  const indexes = Array.isArray(index) ? index : [index];
+  if (Array.isArray(settings)) {
+    if (!settings.length) {
+      return "";
+    }
+    return indexes.map((subIndex) => {
+      if (typeof subIndex === "string") {
+        return subIndex;
+      }
+      return getSeriesItem(settings, subIndex);
+    }).join(" ");
+  }
+  return indexes.map((subIndex) => {
+    if (typeof subIndex === "string") {
+      return subIndex;
+    }
+    return settings(subIndex);
+  }).join(" ");
+};
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createThemeColor/createThemeColor.js
 var minMax = (min, max) => (value) => Math.min(max, Math.max(min, value));
 var minMax0to360 = minMax(0, 360);
 var minMax0to100 = minMax(0, 100);
 var minMax0to1 = minMax(0, 1);
+var searchRegExp = (string, regexp) => {
+  const result = string.match(regexp);
+  if (Array.isArray(result)) {
+    return String(result[0]);
+  }
+  return null;
+};
+var colorOptionsDefault = {};
+var fromHSLAArrayToHSLAString = (src, options = colorOptionsDefault) => {
+  var _a;
+  const { alpha = 1 } = options;
+  const alphaAdjust = minMax0to1(alpha);
+  const h = minMax0to360(src[0]);
+  const s = minMax0to100(src[1]);
+  const l = minMax0to100(src[2]);
+  const a = minMax0to1(((_a = src[3]) !== null && _a !== void 0 ? _a : 1) * alphaAdjust);
+  return `hsla(${h},${s}%,${l}%,${a})`;
+};
+var formatColor = (color, options = colorOptionsDefault) => {
+  if (typeof color !== "string") {
+    return fromHSLAArrayToHSLAString(color, options);
+  }
+  const { alpha } = options;
+  if (alpha === void 0 || alpha === null) {
+    return color;
+  }
+  if (!/^(hsla?|rgba?)\(\d+(\.\d+)?(%|deg)?(,\s?|\s)\d+(\.\d+)?%?(,\s?|\s)\d+(\.\d+)?%?((,\s?|\s?\/\s?)\d+(\.\d+)?%?)?\)$/.test(color)) {
+    return color;
+  }
+  const separators = Array.from(color.matchAll(/(,\s?|\s?\/\s?|\s)/g));
+  const hasCurrentAlpha = separators.length === 3;
+  const isCommaSeparated = color.includes(",");
+  const alphaAdjust = minMax0to1(alpha);
+  if (hasCurrentAlpha) {
+    const alphaCurrentMatch = searchRegExp(color, /\d+(\.\d+)?%?\)$/);
+    const isPercentage = alphaCurrentMatch.includes("%");
+    const alphaCurrent = Number(alphaCurrentMatch.replace(/%?\)$/g, ""));
+    return color.replace(/\d+(\.\d+)?%?\)$/, `${alphaCurrent * alphaAdjust}${isPercentage ? "%" : ""})`);
+  }
+  return color.replace(/\)$/, isCommaSeparated ? `,${alphaAdjust})` : ` / ${alphaAdjust})`);
+};
+var createThemeColor = (settings) => {
+  if (typeof settings === "function") {
+    const createColor = settings;
+    return (indexProvided, options) => {
+      const index = Math.round(indexProvided);
+      const color = createColor(index);
+      return formatColor(color, options);
+    };
+  }
+  const series = settings;
+  return (indexProvided, options) => {
+    if (!series.length) {
+      return "";
+    }
+    const index = Math.round(indexProvided);
+    const color = series[index > series.length - 1 ? series.length - 1 : index];
+    return formatColor(color, options);
+  };
+};
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createThemeStyle/createThemeStyle.js
+var createThemeStyle = (series) => {
+  return (indexProvided) => {
+    if (!series.length) {
+      return {};
+    }
+    const index = Math.round(indexProvided);
+    return series[index] || series[series.length - 1];
+  };
+};
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createThemeBreakpoints/createThemeBreakpoints.js
+var createThemeBreakpoints = (settings = []) => {
+  const getBreakpointValue = (key) => {
+    if (typeof key === "string") {
+      for (const item2 of settings) {
+        if (typeof item2 !== "string" && item2.key === key) {
+          return item2.value;
+        }
+      }
+      return key;
+    }
+    const item = settings[key > settings.length - 1 ? settings.length - 1 : key];
+    return typeof item === "string" ? item : item.value;
+  };
+  const up = (key, opts) => {
+    const media = (opts === null || opts === void 0 ? void 0 : opts.strip) ? "" : "@media ";
+    return `${media}(min-width: ${getBreakpointValue(key)})`;
+  };
+  const down = (key, opts) => {
+    const media = (opts === null || opts === void 0 ? void 0 : opts.strip) ? "" : "@media ";
+    return `${media}(max-width: calc(${getBreakpointValue(key)} - 1px))`;
+  };
+  const between = (startKey, endKey, opts) => {
+    const media = (opts === null || opts === void 0 ? void 0 : opts.strip) ? "" : "@media ";
+    const min = getBreakpointValue(startKey);
+    const max = getBreakpointValue(endKey);
+    return `${media}(min-width: ${min}) and (max-width: calc(${max} - 1px))`;
+  };
+  return Object.freeze({
+    settings,
+    up,
+    down,
+    between
+  });
+};
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createCreateTheme/createCreateTheme.js
+var extendDeepObject = (structure, defaults2, extension) => {
+  const newObject = {};
+  Object.keys(structure).forEach((key) => {
+    var _a;
+    if (typeof structure[key] === "object") {
+      if (structure[key] === null) {
+        throw new Error("Theme structure values can not be null.");
+      }
+      if (!defaults2[key] || typeof defaults2[key] !== "object") {
+        throw new Error("Theme default value should match theme structure object.");
+      }
+      newObject[key] = extendDeepObject(structure[key], defaults2[key], extension === null || extension === void 0 ? void 0 : extension[key]);
+    } else {
+      newObject[key] = (_a = extension === null || extension === void 0 ? void 0 : extension[key]) !== null && _a !== void 0 ? _a : defaults2[key];
+    }
+  });
+  return newObject;
+};
+var createDeepThemeSetup = (structure, settings) => {
+  const newObject = {};
+  Object.keys(structure).forEach((key) => {
+    if (typeof structure[key] === "object") {
+      newObject[key] = createDeepThemeSetup(structure[key], settings[key]);
+    } else {
+      switch (structure[key]) {
+        case "multiplier":
+          newObject[key] = createThemeMultiplier(settings[key]);
+          break;
+        case "unit":
+          newObject[key] = createThemeUnit(settings[key]);
+          break;
+        case "color":
+          newObject[key] = createThemeColor(settings[key]);
+          break;
+        case "style":
+          newObject[key] = createThemeStyle(settings[key]);
+          break;
+        case "breakpoints":
+          newObject[key] = createThemeBreakpoints(settings[key]);
+          break;
+        case "other":
+          newObject[key] = settings[key];
+          break;
+        default:
+          throw new Error(`Invalid theme structure key "${structure[key]}" provided.`);
+      }
+    }
+  });
+  return newObject;
+};
+var createCreateTheme = (themeStructure, themeSettingsDefaults) => {
+  const createTheme = (themeSettingsExtensions = {}) => {
+    let themeSettings;
+    if (Array.isArray(themeSettingsExtensions)) {
+      themeSettings = themeSettingsExtensions.reduce((settingsTotal, settingsItem) => {
+        if (!settingsItem) {
+          return settingsTotal;
+        }
+        return extendDeepObject(themeStructure, settingsTotal, settingsItem);
+      }, themeSettingsDefaults);
+    } else {
+      themeSettings = extendDeepObject(themeStructure, themeSettingsDefaults, themeSettingsExtensions);
+    }
+    return createDeepThemeSetup(themeStructure, themeSettings);
+  };
+  return createTheme;
+};
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createAppTheme/deepExtend.js
+function deepExtend(target = {}, extension = {}) {
+  for (const key in extension) {
+    if (typeof extension[key] === "object" && !Array.isArray(extension[key]) && extension[key] !== null) {
+      if (target[key] === void 0 || target[key] === null) {
+        target[key] = {};
+      }
+      deepExtend(target[key], extension[key]);
+    } else {
+      target[key] = extension[key];
+    }
+  }
+  return target;
+}
+
+// ../../node_modules/.pnpm/@arwes+theme@1.0.0-next.10_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/theme/build/esm/createAppTheme/createAppTheme.js
+var APP_THEME_STRUCTURE_PALETTE = {
+  main: "color",
+  text: "color",
+  deco: "color",
+  bg: "color",
+  ol: "color"
+};
+var APP_THEME_STRUCTURE = {
+  dark: "other",
+  space: "unit",
+  spaceN: "multiplier",
+  hues: {
+    primary: "other",
+    secondary: "other",
+    success: "other",
+    info: "other",
+    warning: "other",
+    error: "other"
+  },
+  colors: {
+    primary: APP_THEME_STRUCTURE_PALETTE,
+    secondary: APP_THEME_STRUCTURE_PALETTE,
+    success: APP_THEME_STRUCTURE_PALETTE,
+    info: APP_THEME_STRUCTURE_PALETTE,
+    warning: APP_THEME_STRUCTURE_PALETTE,
+    error: APP_THEME_STRUCTURE_PALETTE
+  },
+  fontFamilies: {
+    title: "other",
+    body: "other",
+    cta: "other",
+    input: "other",
+    code: "other"
+  },
+  typography: {
+    title: "style",
+    body: "style",
+    cta: "style",
+    input: "style",
+    code: "style"
+  },
+  transitions: {
+    duration: "unit",
+    durationN: "multiplier"
+  }
+};
+var createAppThemePalette = (hue, dark = true) => ({
+  main: (i) => [hue, 80 + i, 92.5 - i * 9.44],
+  text: (i) => [hue, 40 + i, 92.5 - i * 9.44],
+  deco: (i) => [hue, 80 + i, 50, 0.05 + i * 0.05],
+  bg: (i) => [hue, 40 + i, dark ? 2 + i * 2 : 98 - i * 2],
+  ol: (i) => [hue, 80 + i, dark ? 2 + i * 2 : 98 - i * 2]
+});
+var createAppTheme = (props = {}) => {
+  var _a, _b, _c, _d;
+  const dark = ((_a = props.settings) === null || _a === void 0 ? void 0 : _a.dark) === void 0 ? true : !!((_b = props.settings) === null || _b === void 0 ? void 0 : _b.dark);
+  const hues = {
+    primary: 200,
+    secondary: 80,
+    success: 120,
+    info: 220,
+    warning: 40,
+    error: 0,
+    ...(_c = props.settings) === null || _c === void 0 ? void 0 : _c.hues
+  };
+  const fontFamilies = {
+    title: '"Segoe UI Web (West European)","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif',
+    body: '"Segoe UI Web (West European)","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif',
+    cta: '"Segoe UI Web (West European)","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif',
+    input: '"Segoe UI Web (West European)","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif',
+    code: "JetBrains Mono,Menlo,Monaco,Consolas,Courier New,monospace",
+    ...(_d = props.settings) === null || _d === void 0 ? void 0 : _d.fontFamilies
+  };
+  const appThemeSettingsBase = {
+    dark,
+    space: (index) => `${index * 0.25}rem`,
+    spaceN: (index) => index * 4,
+    hues,
+    colors: {
+      primary: createAppThemePalette(hues.primary, dark),
+      secondary: createAppThemePalette(hues.secondary, dark),
+      success: createAppThemePalette(hues.success, dark),
+      info: createAppThemePalette(hues.info, dark),
+      warning: createAppThemePalette(hues.warning, dark),
+      error: createAppThemePalette(hues.error, dark)
+    },
+    fontFamilies,
+    typography: {
+      title: [
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.75rem" },
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.625rem" },
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.5rem" },
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.375rem" },
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.25rem" },
+        { fontFamily: fontFamilies.title, fontWeight: "600", fontSize: "1.125rem" }
+      ],
+      body: [
+        { fontFamily: fontFamilies.body, fontWeight: "400", fontSize: "1.125rem" },
+        { fontFamily: fontFamilies.body, fontWeight: "400", fontSize: "1rem" },
+        { fontFamily: fontFamilies.body, fontWeight: "400", fontSize: "0.875rem" }
+      ],
+      cta: [
+        { fontFamily: fontFamilies.cta, fontWeight: "500", fontSize: "1rem", textTransform: "uppercase" },
+        { fontFamily: fontFamilies.cta, fontWeight: "500", fontSize: "0.875rem", textTransform: "uppercase" },
+        { fontFamily: fontFamilies.cta, fontWeight: "500", fontSize: "0.75rem", textTransform: "uppercase" }
+      ],
+      input: [
+        { fontFamily: fontFamilies.input, fontWeight: "400", fontSize: "1rem" },
+        { fontFamily: fontFamilies.input, fontWeight: "400", fontSize: "0.875rem" },
+        { fontFamily: fontFamilies.input, fontWeight: "400", fontSize: "0.75rem" }
+      ],
+      code: [
+        { fontFamily: fontFamilies.code, fontWeight: "400", fontSize: "1rem" },
+        { fontFamily: fontFamilies.code, fontWeight: "400", fontSize: "0.875rem" },
+        { fontFamily: fontFamilies.code, fontWeight: "400", fontSize: "0.75rem" }
+      ]
+    },
+    transitions: {
+      duration: (index) => `${index * 0.15}s`,
+      durationN: (index) => index * 0.15
+    }
+  };
+  const createTheme = createCreateTheme(deepExtend(APP_THEME_STRUCTURE, props.structure), deepExtend(appThemeSettingsBase, props.settings));
+  const theme2 = createTheme();
+  return theme2;
+};
 
 // ../../node_modules/.pnpm/@arwes+animator@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/animator/build/esm/constants.js
 var ANIMATOR_STATES = Object.freeze({
@@ -24753,661 +25071,13 @@ var ANIMATOR_DEFAULT_SETTINGS = Object.freeze({
   initialState: "exited"
 });
 
-// ../../node_modules/.pnpm/@arwes+animator@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/animator/build/esm/internal/createAnimatorManager/createAnimatorManager.js
-var createAnimatorManagerParallel = (node2) => {
-  const getChildren = (childrenProvided) => {
-    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
-    return children.filter((child) => {
-      const { condition } = child.control.getSettings();
-      return condition ? condition(child) : true;
-    });
-  };
-  const getDurationEnter = (childrenProvided) => {
-    const children = getChildren(childrenProvided);
-    return children.reduce((total, child) => Math.max(total, child.duration.enter), 0);
-  };
-  const enterChildren = (childrenProvided) => {
-    const children = getChildren(childrenProvided);
-    for (const child of children) {
-      child.send(ANIMATOR_ACTIONS.enter);
-    }
-  };
-  return Object.freeze({
-    name: ANIMATOR_MANAGER_NAMES.parallel,
-    getDurationEnter,
-    enterChildren
-  });
-};
-var createAnimatorManagerStagger = (node2, name) => {
-  let reservedUntilTime = 0;
-  const getChildren = (childrenProvided) => {
-    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
-    return children.filter((child) => {
-      const { condition } = child.control.getSettings();
-      return condition ? condition(child) : true;
-    });
-  };
-  const getDurationEnter = (childrenProvided) => {
-    const children = getChildren(childrenProvided);
-    if (!children.length) {
-      return 0;
-    }
-    const { duration } = node2.control.getSettings();
-    const lastChild = children[children.length - 1];
-    return duration.stagger * (children.length - 1) + lastChild.duration.enter;
-  };
-  const enterChildren = (childrenProvided) => {
-    let children = getChildren(childrenProvided);
-    const parentSettings = node2.control.getSettings();
-    const stagger = (parentSettings.duration.stagger || 0) * 1e3;
-    if (name === ANIMATOR_MANAGER_NAMES.staggerReverse) {
-      children = children.reverse();
-    }
-    const now = Date.now();
-    reservedUntilTime = Math.max(reservedUntilTime, now);
-    for (const child of children) {
-      const childSettings = child.control.getSettings();
-      const offset = (childSettings.duration.offset || 0) * 1e3;
-      reservedUntilTime = reservedUntilTime + offset;
-      const time2 = (reservedUntilTime - now) / 1e3;
-      const delay = childSettings.duration.delay || 0;
-      reservedUntilTime = reservedUntilTime + stagger;
-      child.scheduler.start(time2 + delay, () => child.send(ANIMATOR_ACTIONS.enter));
-    }
-  };
-  return Object.freeze({
-    name,
-    getDurationEnter,
-    enterChildren
-  });
-};
-var createAnimatorManagerSequence = (node2, name) => {
-  let reservedUntilTime = 0;
-  const getChildren = (childrenProvided) => {
-    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
-    return children.filter((child) => {
-      const { condition } = child.control.getSettings();
-      return condition ? condition(child) : true;
-    });
-  };
-  const getDurationEnter = (childrenProvided) => {
-    const children = getChildren(childrenProvided);
-    return children.reduce((total, child) => total + child.duration.enter, 0);
-  };
-  const enterChildren = (childrenProvided) => {
-    let children = getChildren(childrenProvided);
-    const now = Date.now();
-    if (name === ANIMATOR_MANAGER_NAMES.sequenceReverse) {
-      children = children.reverse();
-    }
-    reservedUntilTime = Math.max(reservedUntilTime, now);
-    for (const child of children) {
-      const childSettings = child.control.getSettings();
-      const offset = (childSettings.duration.offset || 0) * 1e3;
-      const durationEnter = child.duration.enter * 1e3;
-      reservedUntilTime = reservedUntilTime + offset;
-      const time2 = (reservedUntilTime - now) / 1e3;
-      const delay = childSettings.duration.delay || 0;
-      reservedUntilTime += durationEnter;
-      child.scheduler.start(time2 + delay, () => child.send(ANIMATOR_ACTIONS.enter));
-    }
-  };
-  return Object.freeze({
-    name,
-    getDurationEnter,
-    enterChildren
-  });
-};
-var createAnimatorManagerSwitch = (node2) => {
-  let nodeHiding;
-  let nodeVisible;
-  let nodeSubscriberUnsubscribe;
-  const getDurationEnter = () => {
-    if (nodeVisible) {
-      return nodeVisible.duration.enter;
-    }
-    const nodeVisibleCurrent = Array.from(node2.children).find((child) => {
-      const { condition } = child.control.getSettings();
-      return condition ? condition(child) : true;
-    });
-    if (nodeVisibleCurrent) {
-      return nodeVisibleCurrent.duration.enter;
-    }
-    return 0;
-  };
-  const enterChildren = () => {
-    nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
-    nodeSubscriberUnsubscribe = void 0;
-    const children = Array.from(node2.children);
-    const nodeVisibleNew = children.find((child) => {
-      const { condition } = child.control.getSettings();
-      return condition ? condition(child) : true;
-    });
-    const onNextEnter = () => {
-      if (nodeVisibleNew) {
-        if (nodeVisibleNew === nodeVisible) {
-          nodeVisibleNew.send(ANIMATOR_ACTIONS.enter);
-        } else {
-          if (nodeVisible) {
-            nodeHiding = nodeVisible;
-            nodeSubscriberUnsubscribe = nodeHiding.subscribe((nodeHidingSubscribed) => {
-              if (nodeHidingSubscribed.state === ANIMATOR_STATES.exited) {
-                nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
-                nodeSubscriberUnsubscribe = void 0;
-                nodeHiding = void 0;
-                nodeVisibleNew.send(ANIMATOR_ACTIONS.enter);
-              }
-            });
-            nodeHiding === null || nodeHiding === void 0 ? void 0 : nodeHiding.send(ANIMATOR_ACTIONS.exit);
-          } else {
-            nodeVisibleNew.send(ANIMATOR_ACTIONS.enter);
-            nodeHiding = void 0;
-          }
-          nodeVisible = nodeVisibleNew;
-        }
-      } else {
-        nodeHiding = nodeVisible;
-        nodeVisible = void 0;
-      }
-    };
-    if (nodeHiding) {
-      nodeSubscriberUnsubscribe = nodeHiding.subscribe((nodeHiding2) => {
-        if (nodeHiding2.state === ANIMATOR_STATES.exited) {
-          onNextEnter();
-        }
-      });
-    } else {
-      onNextEnter();
-    }
-    children.filter((child) => child !== nodeVisibleNew).forEach((child) => child.send(ANIMATOR_ACTIONS.exit));
-  };
-  const destroy = () => {
-    nodeHiding = void 0;
-    nodeVisible = void 0;
-    nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
-    nodeSubscriberUnsubscribe = void 0;
-  };
-  return Object.freeze({
-    name: ANIMATOR_MANAGER_NAMES.switch,
-    getDurationEnter,
-    enterChildren,
-    destroy
-  });
-};
-var createAnimatorManager = (node2, manager) => {
-  switch (manager) {
-    case ANIMATOR_MANAGER_NAMES.stagger:
-      return createAnimatorManagerStagger(node2, ANIMATOR_MANAGER_NAMES.stagger);
-    case ANIMATOR_MANAGER_NAMES.staggerReverse:
-      return createAnimatorManagerStagger(node2, ANIMATOR_MANAGER_NAMES.staggerReverse);
-    case ANIMATOR_MANAGER_NAMES.sequence:
-      return createAnimatorManagerSequence(node2, ANIMATOR_MANAGER_NAMES.sequence);
-    case ANIMATOR_MANAGER_NAMES.sequenceReverse:
-      return createAnimatorManagerSequence(node2, ANIMATOR_MANAGER_NAMES.sequenceReverse);
-    case ANIMATOR_MANAGER_NAMES.switch:
-      return createAnimatorManagerSwitch(node2, ANIMATOR_MANAGER_NAMES.switch);
-    default:
-      return createAnimatorManagerParallel(node2, ANIMATOR_MANAGER_NAMES.parallel);
-  }
-};
-
-// ../../node_modules/.pnpm/@arwes+animator@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/animator/build/esm/internal/createAnimatorMachine/createAnimatorMachine.js
-var createAnimatorMachine = (node2, initialState) => {
-  let state = initialState;
-  const statesMap = {
-    [ANIMATOR_STATES.exited]: {
-      onActions: {
-        [ANIMATOR_ACTIONS.enter]: ANIMATOR_STATES.entering,
-        [ANIMATOR_ACTIONS.setup]: () => {
-          const settings = node2.control.getSettings();
-          if (node2.parent) {
-            const parentSettings = node2.parent.control.getSettings();
-            switch (node2.parent.state) {
-              case ANIMATOR_STATES.entering: {
-                if (parentSettings.combine || settings.merge) {
-                  node2.parent.manager.enterChildren([node2]);
-                }
-                break;
-              }
-              case ANIMATOR_STATES.entered: {
-                node2.parent.manager.enterChildren([node2]);
-                break;
-              }
-            }
-          } else {
-            const isActive = settings.active === void 0 || settings.active;
-            if (isActive) {
-              return ANIMATOR_STATES.entering;
-            }
-          }
-        }
-      }
-    },
-    [ANIMATOR_STATES.entering]: {
-      onEntry: {
-        execute: () => {
-          const { combine: combine2 } = node2.control.getSettings();
-          const children = combine2 ? Array.from(node2.children) : Array.from(node2.children).filter((child) => child.control.getSettings().merge);
-          node2.manager.enterChildren(children);
-        },
-        schedule: () => {
-          const { duration } = node2.control.getSettings();
-          return {
-            duration: duration.delay + duration.enter || 0,
-            action: ANIMATOR_ACTIONS.enterEnd
-          };
-        }
-      },
-      onActions: {
-        [ANIMATOR_ACTIONS.enterEnd]: ANIMATOR_STATES.entered,
-        [ANIMATOR_ACTIONS.exit]: ANIMATOR_STATES.exiting,
-        [ANIMATOR_ACTIONS.refresh]: () => {
-          const settings = node2.control.getSettings();
-          const childrenExited = Array.from(node2.children).filter((child) => child.state === ANIMATOR_STATES.exited);
-          if (settings.combine) {
-            node2.manager.enterChildren(childrenExited);
-          } else {
-            const childrenMerged = childrenExited.filter((child) => child.control.getSettings().merge);
-            node2.manager.enterChildren(childrenMerged);
-          }
-        }
-      }
-    },
-    [ANIMATOR_STATES.entered]: {
-      onEntry: {
-        execute: () => {
-          const { combine: combine2 } = node2.control.getSettings();
-          if (combine2) {
-            return;
-          }
-          const children = Array.from(node2.children).filter((child) => !child.control.getSettings().merge);
-          node2.manager.enterChildren(children);
-        }
-      },
-      onActions: {
-        [ANIMATOR_ACTIONS.exit]: ANIMATOR_STATES.exiting,
-        [ANIMATOR_ACTIONS.refresh]: () => {
-          const childrenExited = Array.from(node2.children).filter((child) => child.state === ANIMATOR_STATES.exited);
-          node2.manager.enterChildren(childrenExited);
-        }
-      }
-    },
-    [ANIMATOR_STATES.exiting]: {
-      onEntry: {
-        execute: () => {
-          Array.from(node2.children).forEach((child) => {
-            if (child.state === ANIMATOR_STATES.entering || child.state === ANIMATOR_STATES.entered) {
-              child.send(ANIMATOR_ACTIONS.exit);
-            } else if (child.state === ANIMATOR_STATES.exited) {
-              child.scheduler.stopAll();
-            }
-          });
-        },
-        schedule: () => ({
-          duration: node2.control.getSettings().duration.exit || 0,
-          action: ANIMATOR_ACTIONS.exitEnd
-        })
-      },
-      onActions: {
-        [ANIMATOR_ACTIONS.exitEnd]: ANIMATOR_STATES.exited,
-        [ANIMATOR_ACTIONS.enter]: ANIMATOR_STATES.entering
-      }
-    },
-    "*": {
-      onActions: {
-        [ANIMATOR_ACTIONS.update]: () => {
-          var _a, _b;
-          const settings = node2.control.getSettings();
-          if (settings.manager !== node2.manager.name) {
-            (_b = (_a = node2.manager).destroy) === null || _b === void 0 ? void 0 : _b.call(_a);
-            node2.manager = createAnimatorManager(node2, settings.manager);
-          }
-          if (!node2.parent) {
-            const isActive = settings.active === true || settings.active === void 0;
-            if ((state === ANIMATOR_STATES.exited || state === ANIMATOR_STATES.exiting) && isActive) {
-              return ANIMATOR_STATES.entering;
-            } else if ((state === ANIMATOR_STATES.entered || state === ANIMATOR_STATES.entering) && !isActive) {
-              return ANIMATOR_STATES.exiting;
-            }
-          }
-        }
-      }
-    }
-  };
-  const transition = (newState) => {
-    if (!newState || state === newState) {
-      return;
-    }
-    state = newState;
-    const { onEntry } = statesMap[state] || {};
-    const { onTransition } = node2.control.getSettings();
-    node2.scheduler.stopAll();
-    if (onEntry === null || onEntry === void 0 ? void 0 : onEntry.execute) {
-      onEntry.execute();
-    }
-    if (onEntry === null || onEntry === void 0 ? void 0 : onEntry.schedule) {
-      const task = onEntry.schedule();
-      node2.scheduler.start(task.duration, () => send(task.action));
-    }
-    onTransition === null || onTransition === void 0 ? void 0 : onTransition(node2);
-    for (const subscriber of node2.subscribers) {
-      subscriber(node2);
-    }
-  };
-  const processAction = (procedure) => {
-    if (procedure === void 0) {
-      return;
-    }
-    if (typeof procedure === "string") {
-      transition(procedure);
-    } else {
-      const newState = procedure();
-      if (newState) {
-        transition(newState);
-      }
-    }
-  };
-  const getState = () => state;
-  const send = (action) => {
-    var _a, _b, _c, _d;
-    if (!IS_BROWSER) {
-      return;
-    }
-    processAction((_b = (_a = statesMap[state]) === null || _a === void 0 ? void 0 : _a.onActions) === null || _b === void 0 ? void 0 : _b[action]);
-    processAction((_d = (_c = statesMap["*"]) === null || _c === void 0 ? void 0 : _c.onActions) === null || _d === void 0 ? void 0 : _d[action]);
-  };
-  const machine = Object.freeze({ getState, send });
-  return machine;
-};
-
-// ../../node_modules/.pnpm/@arwes+animator@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/animator/build/esm/createAnimatorSystem/createAnimatorSystem.js
-var createAnimatorSystem = () => {
-  const systemId = `s${Math.random()}`.replace(".", "");
-  let nodeIdCounter = 0;
-  let root2;
-  const createNode = (parent, control) => {
-    const nodeId = `${systemId}-n${nodeIdCounter++}`;
-    const node2 = { id: nodeId };
-    const settings = control.getSettings();
-    const machine = createAnimatorMachine(node2, settings.initialState);
-    const manager = createAnimatorManager(node2, settings.manager);
-    const nodeProps = {
-      id: {
-        value: nodeId,
-        enumerable: true
-      },
-      control: {
-        value: control,
-        enumerable: true
-      },
-      parent: {
-        value: parent,
-        enumerable: true
-      },
-      children: {
-        value: /* @__PURE__ */ new Set(),
-        enumerable: true
-      },
-      subscribers: {
-        value: /* @__PURE__ */ new Set(),
-        enumerable: true
-      },
-      scheduler: {
-        value: createTOScheduler(),
-        enumerable: true
-      },
-      duration: {
-        get: () => {
-          const { duration, combine: combine2 } = node2.control.getSettings();
-          const enter = combine2 ? node2.manager.getDurationEnter(Array.from(node2.children)) : duration.enter || 0;
-          const exit = duration.exit || 0;
-          return { enter, exit };
-        },
-        enumerable: true
-      },
-      state: {
-        get: () => machine.getState(),
-        enumerable: true
-      },
-      subscribe: {
-        value: (subscriber) => {
-          node2.subscribers.add(subscriber);
-          subscriber(node2);
-          return () => node2.subscribers.delete(subscriber);
-        },
-        enumerable: true
-      },
-      unsubscribe: {
-        value: (subscriber) => {
-          node2.subscribers.delete(subscriber);
-        },
-        enumerable: true
-      },
-      send: {
-        value: machine.send,
-        enumerable: true
-      },
-      manager: {
-        value: manager,
-        enumerable: true,
-        writable: true
-      }
-    };
-    Object.defineProperties(node2, nodeProps);
-    if (parent) {
-      parent.children.add(node2);
-    }
-    return node2;
-  };
-  const removeNode = (node2) => {
-    node2.scheduler.stopAll();
-    for (const child of node2.children) {
-      removeNode(child);
-    }
-    if (node2.parent) {
-      node2.parent.children.delete(node2);
-    }
-    node2.children.clear();
-    node2.subscribers.clear();
-  };
-  const register = (parentNode, control) => {
-    if (parentNode === void 0 || parentNode === null) {
-      if (root2) {
-        throw new Error("The root node must be unregistered before registering another root node.");
-      }
-      root2 = createNode(void 0, control);
-      return root2;
-    }
-    if (!root2) {
-      throw new Error("A root node needs to be registered first in the system before registering children nodes.");
-    }
-    return createNode(parentNode, control);
-  };
-  const unregister = (node2) => {
-    if (!root2) {
-      return;
-    }
-    removeNode(node2);
-    if (root2.id === node2.id) {
-      root2 = void 0;
-    }
-  };
-  const system = {};
-  const systemProps = {
-    id: {
-      value: systemId,
-      enumerable: true
-    },
-    root: {
-      get: () => root2,
-      enumerable: true
-    },
-    register: {
-      value: register,
-      enumerable: true
-    },
-    unregister: {
-      value: unregister,
-      enumerable: true
-    }
-  };
-  Object.defineProperties(system, systemProps);
-  return system;
-};
-
 // ../../node_modules/.pnpm/@arwes+animated@1.0.0-next.7/node_modules/@arwes/animated/build/esm/easing/easing.js
-var pow = Math.pow;
-var sqrt = Math.sqrt;
-var sin = Math.sin;
-var cos = Math.cos;
 var PI = Math.PI;
 var c1 = 1.70158;
 var c2 = c1 * 1.525;
 var c3 = c1 + 1;
 var c4 = 2 * PI / 3;
 var c5 = 2 * PI / 4.5;
-var bounceOut = (x) => {
-  const n1 = 7.5625;
-  const d1 = 2.75;
-  if (x < 1 / d1) {
-    return n1 * x * x;
-  } else if (x < 2 / d1) {
-    return n1 * (x -= 1.5 / d1) * x + 0.75;
-  } else if (x < 2.5 / d1) {
-    return n1 * (x -= 2.25 / d1) * x + 0.9375;
-  }
-  return n1 * (x -= 2.625 / d1) * x + 0.984375;
-};
-var easing = {
-  linear: (x) => x,
-  inQuad: (x) => {
-    return x * x;
-  },
-  outQuad: (x) => {
-    return 1 - (1 - x) * (1 - x);
-  },
-  inOutQuad: (x) => {
-    return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
-  },
-  inCubic: (x) => {
-    return x * x * x;
-  },
-  outCubic: (x) => {
-    return 1 - pow(1 - x, 3);
-  },
-  inOutCubic: (x) => {
-    return x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2;
-  },
-  inQuart: (x) => {
-    return x * x * x * x;
-  },
-  outQuart: (x) => {
-    return 1 - pow(1 - x, 4);
-  },
-  inOutQuart: (x) => {
-    return x < 0.5 ? 8 * x * x * x * x : 1 - pow(-2 * x + 2, 4) / 2;
-  },
-  inQuint: (x) => {
-    return x * x * x * x * x;
-  },
-  outQuint: (x) => {
-    return 1 - pow(1 - x, 5);
-  },
-  inOutQuint: (x) => {
-    return x < 0.5 ? 16 * x * x * x * x * x : 1 - pow(-2 * x + 2, 5) / 2;
-  },
-  inSine: (x) => {
-    return 1 - cos(x * PI / 2);
-  },
-  outSine: (x) => {
-    return sin(x * PI / 2);
-  },
-  inOutSine: (x) => {
-    return -(cos(PI * x) - 1) / 2;
-  },
-  inExpo: (x) => {
-    return x === 0 ? 0 : pow(2, 10 * x - 10);
-  },
-  outExpo: (x) => {
-    return x === 1 ? 1 : 1 - pow(2, -10 * x);
-  },
-  inOutExpo: (x) => {
-    return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? pow(2, 20 * x - 10) / 2 : (2 - pow(2, -20 * x + 10)) / 2;
-  },
-  inCirc: (x) => {
-    return 1 - sqrt(1 - pow(x, 2));
-  },
-  outCirc: (x) => {
-    return sqrt(1 - pow(x - 1, 2));
-  },
-  inOutCirc: (x) => {
-    return x < 0.5 ? (1 - sqrt(1 - pow(2 * x, 2))) / 2 : (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2;
-  },
-  inBack: (x) => {
-    return c3 * x * x * x - c1 * x * x;
-  },
-  outBack: (x) => {
-    return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
-  },
-  inOutBack: (x) => {
-    return x < 0.5 ? pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2) / 2 : (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
-  },
-  inElastic: (x) => {
-    return x === 0 ? 0 : x === 1 ? 1 : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
-  },
-  outElastic: (x) => {
-    return x === 0 ? 0 : x === 1 ? 1 : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
-  },
-  inOutElastic: (x) => {
-    return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2 : pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5) / 2 + 1;
-  },
-  inBounce: (x) => {
-    return 1 - bounceOut(1 - x);
-  },
-  outBounce: bounceOut,
-  inOutBounce: (x) => {
-    return x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2;
-  }
-};
-
-// ../../node_modules/.pnpm/@arwes+animated@1.0.0-next.7/node_modules/@arwes/animated/build/esm/createAnimation/createAnimation.js
-var createAnimation = (props) => {
-  const { duration: durationProvided, easing: easingName = "outSine", direction = "normal", onUpdate, onComplete, onCancel } = props;
-  const ease = typeof easingName === "function" ? easingName : easing[easingName];
-  const duration = durationProvided * 1e3;
-  let currentAnimationFrame = null;
-  let start = window.performance.now();
-  let slapsed = 0;
-  const nextAnimation = (timestamp) => {
-    if (!start) {
-      start = timestamp;
-    }
-    slapsed = Math.max(timestamp - start, 0);
-    if (direction === "reverse") {
-      slapsed = duration - slapsed;
-    }
-    const progress2 = Math.min(1, Math.max(0, ease(slapsed / duration)));
-    const continueAnimation = direction === "normal" ? slapsed < duration : slapsed > 0;
-    onUpdate(progress2);
-    if (continueAnimation) {
-      currentAnimationFrame = window.requestAnimationFrame(nextAnimation);
-    } else {
-      currentAnimationFrame = null;
-      onComplete === null || onComplete === void 0 ? void 0 : onComplete();
-    }
-  };
-  currentAnimationFrame = window.requestAnimationFrame(nextAnimation);
-  const isPending = () => {
-    return currentAnimationFrame !== null;
-  };
-  const cancel = () => {
-    if (currentAnimationFrame !== null) {
-      window.cancelAnimationFrame(currentAnimationFrame);
-      onCancel === null || onCancel === void 0 ? void 0 : onCancel();
-    }
-  };
-  return { isPending, cancel };
-};
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/array.es.js
 function addUniqueItem(array, item) {
@@ -25434,7 +25104,7 @@ var defaults = {
 var isNumber = (value) => typeof value === "number";
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/is-easing-list.es.js
-var isEasingList = (easing2) => Array.isArray(easing2) && !isNumber(easing2[0]);
+var isEasingList = (easing3) => Array.isArray(easing3) && !isNumber(easing3[0]);
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/wrap.es.js
 var wrap = (min, max, v) => {
@@ -25443,8 +25113,8 @@ var wrap = (min, max, v) => {
 };
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/easing.es.js
-function getEasingForSegment(easing2, i) {
-  return isEasingList(easing2) ? easing2[wrap(0, easing2.length, i)] : easing2;
+function getEasingForSegment(easing3, i) {
+  return isEasingList(easing3) ? easing3[wrap(0, easing3.length, i)] : easing3;
 }
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/mix.es.js
@@ -25473,7 +25143,7 @@ function defaultOffset(length2) {
 }
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/interpolate.es.js
-function interpolate(output, input = defaultOffset(output.length), easing2 = noopReturn) {
+function interpolate(output, input = defaultOffset(output.length), easing3 = noopReturn) {
   const length2 = output.length;
   const remainder = length2 - input.length;
   remainder > 0 && fillOffset(input, remainder);
@@ -25484,17 +25154,17 @@ function interpolate(output, input = defaultOffset(output.length), easing2 = noo
         break;
     }
     let progressInRange = clamp(0, 1, progress(input[i], input[i + 1], t));
-    const segmentEasing = getEasingForSegment(easing2, i);
+    const segmentEasing = getEasingForSegment(easing3, i);
     progressInRange = segmentEasing(progressInRange);
     return mix(output[i], output[i + 1], progressInRange);
   };
 }
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/is-cubic-bezier.es.js
-var isCubicBezier = (easing2) => Array.isArray(easing2) && isNumber(easing2[0]);
+var isCubicBezier = (easing3) => Array.isArray(easing3) && isNumber(easing3[0]);
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/is-easing-generator.es.js
-var isEasingGenerator = (easing2) => typeof easing2 === "object" && Boolean(easing2.createAnimation);
+var isEasingGenerator = (easing3) => typeof easing3 === "object" && Boolean(easing3.createAnimation);
 
 // ../../node_modules/.pnpm/@motionone+utils@10.15.1/node_modules/@motionone/utils/dist/is-function.es.js
 var isFunction = (value) => typeof value === "function";
@@ -25569,7 +25239,7 @@ function getEasingFunction(definition) {
 
 // ../../node_modules/.pnpm/@motionone+animation@10.15.1/node_modules/@motionone/animation/dist/Animation.es.js
 var Animation = class {
-  constructor(output, keyframes = [0, 1], { easing: easing2, duration: initialDuration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, offset, direction = "normal" } = {}) {
+  constructor(output, keyframes = [0, 1], { easing: easing3, duration: initialDuration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, offset, direction = "normal" } = {}) {
     this.startTime = null;
     this.rate = 1;
     this.t = 0;
@@ -25583,17 +25253,17 @@ var Animation = class {
       this.resolve = resolve;
       this.reject = reject;
     });
-    easing2 = easing2 || defaults.easing;
-    if (isEasingGenerator(easing2)) {
-      const custom = easing2.createAnimation(keyframes);
-      easing2 = custom.easing;
+    easing3 = easing3 || defaults.easing;
+    if (isEasingGenerator(easing3)) {
+      const custom = easing3.createAnimation(keyframes);
+      easing3 = custom.easing;
       keyframes = custom.keyframes || keyframes;
       initialDuration = custom.duration || initialDuration;
     }
     this.repeat = repeat;
-    this.easing = isEasingList(easing2) ? noopReturn : getEasingFunction(easing2);
+    this.easing = isEasingList(easing3) ? noopReturn : getEasingFunction(easing3);
     this.updateDuration(initialDuration);
-    const interpolate$1 = interpolate(keyframes, offset, isEasingList(easing2) ? easing2.map(getEasingFunction) : noopReturn);
+    const interpolate$1 = interpolate(keyframes, offset, isEasingList(easing3) ? easing3.map(getEasingFunction) : noopReturn);
     this.tick = (timestamp) => {
       var _a;
       delay = delay;
@@ -25843,19 +25513,19 @@ for (const key in featureTests) {
 
 // ../../node_modules/.pnpm/@motionone+dom@10.16.2/node_modules/@motionone/dom/dist/animate/utils/easing.es.js
 var resolution = 0.015;
-var generateLinearEasingPoints = (easing2, duration) => {
+var generateLinearEasingPoints = (easing3, duration) => {
   let points = "";
   const numPoints = Math.round(duration / resolution);
   for (let i = 0; i < numPoints; i++) {
-    points += easing2(progress(0, numPoints - 1, i)) + ", ";
+    points += easing3(progress(0, numPoints - 1, i)) + ", ";
   }
   return points.substring(0, points.length - 2);
 };
-var convertEasing = (easing2, duration) => {
-  if (isFunction(easing2)) {
-    return supports.linearEasing() ? `linear(${generateLinearEasingPoints(easing2, duration)})` : defaults.easing;
+var convertEasing = (easing3, duration) => {
+  if (isFunction(easing3)) {
+    return supports.linearEasing() ? `linear(${generateLinearEasingPoints(easing3, duration)})` : defaults.easing;
   } else {
-    return isCubicBezier(easing2) ? cubicBezierAsString(easing2) : easing2;
+    return isCubicBezier(easing3) ? cubicBezierAsString(easing3) : easing3;
   }
 };
 var cubicBezierAsString = ([a, b, c, d]) => `cubic-bezier(${a}, ${b}, ${c}, ${d})`;
@@ -25936,7 +25606,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
   const record = getDevToolsRecord();
   const isRecording = options.record !== false && record;
   let animation;
-  let { duration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, easing: easing2 = defaults.easing, persist = false, direction, offset, allowWebkitAcceleration = false } = options;
+  let { duration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, easing: easing3 = defaults.easing, persist = false, direction, offset, allowWebkitAcceleration = false } = options;
   const data2 = getAnimationData(element);
   const valueIsTransform = isTransform(key);
   let canAnimateNatively = supports.waapi();
@@ -25944,7 +25614,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
   const name = getStyleName(key);
   const motionValue = getMotionValue(data2.values, name);
   const definition = transformDefinitions.get(name);
-  stopAnimation(motionValue.animation, !(isEasingGenerator(easing2) && motionValue.generator) && options.record !== false);
+  stopAnimation(motionValue.animation, !(isEasingGenerator(easing3) && motionValue.generator) && options.record !== false);
   return () => {
     const readInitialValue = () => {
       var _a, _b;
@@ -25952,9 +25622,9 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
     };
     let keyframes = hydrateKeyframes(keyframesList(keyframesDefinition), readInitialValue);
     const toUnit = getUnitConverter(keyframes, definition);
-    if (isEasingGenerator(easing2)) {
-      const custom = easing2.createAnimation(keyframes, key !== "opacity", readInitialValue, name, motionValue);
-      easing2 = custom.easing;
+    if (isEasingGenerator(easing3)) {
+      const custom = easing3.createAnimation(keyframes, key !== "opacity", readInitialValue, name, motionValue);
+      easing3 = custom.easing;
       keyframes = custom.keyframes || keyframes;
       duration = custom.duration || duration;
     }
@@ -25965,7 +25635,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
         canAnimateNatively = false;
       }
     }
-    if (valueIsTransform && !supports.linearEasing() && (isFunction(easing2) || isEasingList(easing2) && easing2.some(isFunction))) {
+    if (valueIsTransform && !supports.linearEasing() && (isFunction(easing3) || isEasingList(easing3) && easing3.some(isFunction))) {
       canAnimateNatively = false;
     }
     if (canAnimateNatively) {
@@ -25979,7 +25649,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
         delay: time.ms(delay),
         duration: time.ms(duration),
         endDelay: time.ms(endDelay),
-        easing: !isEasingList(easing2) ? convertEasing(easing2, duration) : void 0,
+        easing: !isEasingList(easing3) ? convertEasing(easing3, duration) : void 0,
         direction,
         iterations: repeat + 1,
         fill: "both"
@@ -25987,7 +25657,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
       animation = element.animate({
         [name]: keyframes,
         offset,
-        easing: isEasingList(easing2) ? easing2.map((thisEasing) => convertEasing(thisEasing, duration)) : void 0
+        easing: isEasingList(easing3) ? easing3.map((thisEasing) => convertEasing(thisEasing, duration)) : void 0
       }, animationOptions);
       if (!animation.finished) {
         animation.finished = new Promise((resolve, reject) => {
@@ -26013,7 +25683,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
         style.set(element, name, toUnit ? toUnit(latest) : latest);
       }, keyframes, Object.assign(Object.assign({}, options), {
         duration,
-        easing: easing2
+        easing: easing3
       }));
     } else {
       const target = keyframes[keyframes.length - 1];
@@ -26023,7 +25693,7 @@ function animateStyle(element, key, keyframesDefinition, options = {}, Animation
       record(element, key, keyframes, {
         duration,
         delay,
-        easing: easing2,
+        easing: easing3,
         repeat,
         offset
       }, "motion-one");
@@ -26060,10 +25730,10 @@ function resolveElements(elements, selectorCache) {
 }
 
 // ../../node_modules/.pnpm/@motionone+dom@10.16.2/node_modules/@motionone/dom/dist/animate/utils/controls.es.js
-var createAnimation2 = (factory) => factory();
+var createAnimation = (factory) => factory();
 var withControls = (animationFactory, options, duration = defaults.duration) => {
   return new Proxy({
-    animations: animationFactory.map(createAnimation2).filter(Boolean),
+    animations: animationFactory.map(createAnimation).filter(Boolean),
     duration,
     options
   }, controls);
@@ -26193,13 +25863,13 @@ function eraseKeyframes(sequence, startTime, endTime) {
     }
   }
 }
-function addKeyframes(sequence, keyframes, easing2, offset, startTime, endTime) {
+function addKeyframes(sequence, keyframes, easing3, offset, startTime, endTime) {
   eraseKeyframes(sequence, startTime, endTime);
   for (let i = 0; i < keyframes.length; i++) {
     sequence.push({
       value: keyframes[i],
       at: mix(startTime, endTime, offset[i]),
-      easing: getEasingForSegment(easing2, i)
+      easing: getEasingForSegment(easing3, i)
     });
   }
 }
@@ -26257,11 +25927,11 @@ function createAnimationsFromTimeline(definition, _a = {}) {
         const valueSequence = getValueSequence(key, elementSequence);
         let valueKeyframes = keyframesList(keyframes[key]);
         const valueOptions = getOptions(options, key);
-        let { duration = defaultOptions.duration || defaults.duration, easing: easing2 = defaultOptions.easing || defaults.easing } = valueOptions;
-        if (isEasingGenerator(easing2)) {
+        let { duration = defaultOptions.duration || defaults.duration, easing: easing3 = defaultOptions.easing || defaults.easing } = valueOptions;
+        if (isEasingGenerator(easing3)) {
           invariant(key === "opacity" || valueKeyframes.length > 1, "spring must be provided 2 keyframes within timeline()");
-          const custom = easing2.createAnimation(valueKeyframes, key !== "opacity", () => 0, key);
-          easing2 = custom.easing;
+          const custom = easing3.createAnimation(valueKeyframes, key !== "opacity", () => 0, key);
+          easing3 = custom.easing;
           valueKeyframes = custom.keyframes || valueKeyframes;
           duration = custom.duration || duration;
         }
@@ -26275,7 +25945,7 @@ function createAnimationsFromTimeline(definition, _a = {}) {
         const remainder = offset.length - valueKeyframes.length;
         remainder > 0 && fillOffset(offset, remainder);
         valueKeyframes.length === 1 && valueKeyframes.unshift(null);
-        addKeyframes(valueSequence, valueKeyframes, easing2, offset, startTime, targetTime);
+        addKeyframes(valueSequence, valueKeyframes, easing3, offset, startTime, targetTime);
         maxDuration = Math.max(delay + duration, maxDuration);
         totalDuration = Math.max(targetTime, totalDuration);
       }
@@ -26291,10 +25961,10 @@ function createAnimationsFromTimeline(definition, _a = {}) {
       const valueOffset = [];
       const valueEasing = [];
       for (let i = 0; i < valueSequence.length; i++) {
-        const { at, value, easing: easing2 } = valueSequence[i];
+        const { at, value, easing: easing3 } = valueSequence[i];
         keyframes.push(value);
         valueOffset.push(progress(0, totalDuration, at));
-        valueEasing.push(easing2 || defaults.easing);
+        valueEasing.push(easing3 || defaults.easing);
       }
       if (valueOffset[0] !== 0) {
         valueOffset.unshift(0);
@@ -26341,263 +26011,295 @@ function animate2(target, keyframesOrOptions, options) {
   return factory(target, keyframesOrOptions, options);
 }
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/internal/walkTextNodes/walkTextNodes.js
-var walkTextNodes = (node2, callback) => {
-  Array.from(node2.childNodes).forEach((child) => {
-    if (child.nodeType === Node.TEXT_NODE) {
-      callback(child);
-    } else if (child.nodeType === Node.ELEMENT_NODE) {
-      walkTextNodes(child, callback);
-    }
-  });
+// ../../node_modules/.pnpm/@arwes+frames@1.0.0-next.8/node_modules/@arwes/frames/build/esm/createFrameOctagonClip/createFrameOctagonClip.js
+var createFrameOctagonClip = (props) => {
+  const { squareSize = "16px", leftTop = true, leftBottom = true, rightTop = true, rightBottom = true } = props !== null && props !== void 0 ? props : {};
+  const ss = typeof squareSize === "number" ? `${squareSize}px` : squareSize;
+  const leftTopPoints = leftTop ? `0 ${ss},
+${ss} 0,` : "0 0,";
+  const rightTopPoints = rightTop ? `calc(100% - ${ss}) 0,
+100% ${ss},` : "100% 0,";
+  const rightBottomPoints = rightBottom ? `100% calc(100% - ${ss}),
+calc(100% - ${ss}) 100%,` : "100% 100%,";
+  const leftBottomPoints = leftBottom ? `${ss} 100%,
+0 calc(100% - ${ss})` : "0 100%";
+  return `polygon(
+${leftTopPoints}
+${rightTopPoints}
+${rightBottomPoints}
+${leftBottomPoints}
+)`;
 };
 
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/internal/setTextNodesContent/setTextNodesContent.js
-var setTextNodesContent = (textNodes, texts, contentLength) => {
-  let markerLength = 0;
-  for (let index = 0; index < textNodes.length; index++) {
-    const textNode = textNodes[index];
-    const text = texts[index];
-    const newMarkerLength = markerLength + text.length;
-    if (newMarkerLength <= contentLength) {
-      if (textNode.textContent !== text) {
-        textNode.textContent = text;
-      }
-    } else if (markerLength <= contentLength) {
-      const currentTextNodeLengthPortion = contentLength - markerLength;
-      const currentTextNodeText = text.substring(0, currentTextNodeLengthPortion);
-      if (textNode.textContent !== currentTextNodeText) {
-        textNode.textContent = currentTextNodeText;
-      }
-    } else {
-      if (textNode.textContent !== "") {
-        textNode.textContent = "";
-      }
-    }
-    markerLength = newMarkerLength;
-  }
-};
-
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/transitionTextSequence/transitionTextSequence.js
-var transitionTextSequence = (props) => {
-  const { rootElement, contentElement, duration, easing: easing2 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
-  if (!rootElement || !contentElement) {
-    return {
-      isPending: () => false,
-      cancel: () => {
-      }
+// ../../node_modules/.pnpm/@arwes+core@1.0.0-next.10_@arwes+frames@1.0.0-next.8_@arwes+theme@1.0.0-next.10/node_modules/@arwes/core/build/esm/createAppStylesBaseline/createAppStylesBaseline.js
+var createAppStylesBaseline = (theme2) => {
+  const { dark, space, colors, fontFamilies, typography, transitions } = theme2;
+  const { fontSize: _typographyMainStylesFontSize, ...typographyMainStyles } = typography.body(1);
+  const themeNames = Object.keys(theme2.colors);
+  const blockquotesThemes = themeNames.reduce((themes, themeName) => {
+    const palette = colors[themeName];
+    themes[`blockquote[data-arwes-global-palette=${String(themeName)}]`] = {
+      borderColor: palette.main(4),
+      background: `linear-gradient(
+        to right,
+        ${palette.main(4, { alpha: 0.15 })},
+        ${palette.main(4, { alpha: 0.05 })}
+      )`
     };
-  }
-  const cloneElement = contentElement.cloneNode(true);
-  Object.assign(cloneElement.style, {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    visibility: "visible",
-    opacity: 1
-  });
-  const blinkElement = document.createElement("span");
-  blinkElement.classList.add("arwes-text__blink");
-  blinkElement.innerHTML = "&#9614;";
-  Object.assign(blinkElement.style, {
-    position: "relative",
-    display: "inline-block",
-    width: 0,
-    height: 0,
-    lineHeight: "0",
-    color: "inherit"
-  });
-  const textNodes = [];
-  const texts = [];
-  walkTextNodes(cloneElement, (child) => {
-    textNodes.push(child);
-    texts.push(child.textContent || "");
-    if (isEntering) {
-      child.textContent = "";
-    }
-  });
-  const length2 = texts.join("").length;
-  rootElement.appendChild(cloneElement);
-  cloneElement.appendChild(blinkElement);
-  contentElement.style.visibility = "hidden";
-  const blinkAnimation = animate2(blinkElement, { color: ["transparent", "inherit", "transparent"] }, { duration: 0.1, easing: "steps(2, end)", repeat: Infinity });
-  return createAnimation({
-    duration,
-    easing: easing2,
-    direction: isEntering ? "normal" : "reverse",
-    onUpdate: (progress2) => {
-      const newLength = Math.round(progress2 * length2);
-      setTextNodesContent(textNodes, texts, newLength);
+    return themes;
+  }, {});
+  return {
+    "*, *::before, *::after": {
+      boxSizing: "border-box",
+      margin: 0,
+      padding: 0
     },
-    onComplete: () => {
-      contentElement.style.visibility = isEntering && hideOnEntered || !isEntering && hideOnExited ? "hidden" : "visible";
-      cloneElement.remove();
-      blinkAnimation.cancel();
+    "html, body": {
+      // Prevent adjustments of font size after orientation changes in iOS.
+      WebkitTextSizeAdjust: "100%",
+      WebkitFontSmoothing: "antialiased",
+      fontFamily: "sans-serif",
+      fontSize: "100%",
+      fontStyle: "normal",
+      fontWeight: 400,
+      lineHeight: "1.5",
+      color: colors.primary.text(dark ? 2 : 7),
+      ...typographyMainStyles,
+      backgroundColor: dark ? colors.primary.bg(2) : "white",
+      scrollbarWidth: "auto",
+      scrollbarColor: `${colors.secondary.main(7)} transparent`
     },
-    onCancel: () => {
-      contentElement.style.visibility = "";
-      cloneElement.remove();
-      blinkAnimation.cancel();
-    }
-  });
-};
-
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/transitionTextDecipher/transitionTextDecipher.js
-var LETTERS = "abcdefghijklmn\xF1opqrstuvwxyzABCDEFGHIJKLMN\xD1OPQRSTUVWXYZ>!\xB7$%&/()=?\xBF\u2264|@#";
-var transitionTextDecipher = (props) => {
-  const { rootElement, contentElement, duration, easing: easing2 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
-  if (!rootElement || !contentElement) {
-    return {
-      isPending: () => false,
-      cancel: () => {
-      }
-    };
-  }
-  const cloneElement = contentElement.cloneNode(true);
-  Object.assign(cloneElement.style, {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    visibility: "visible",
-    opacity: 1
-  });
-  const textNodes = [];
-  const textsReal = [];
-  walkTextNodes(cloneElement, (child) => {
-    textNodes.push(child);
-    textsReal.push(child.textContent || "");
-  });
-  const length2 = textsReal.join("").length;
-  const indexes = randomizeList(Array(length2).fill(null).map((_, i) => i));
-  const deciphered = {};
-  rootElement.appendChild(cloneElement);
-  contentElement.style.visibility = "hidden";
-  return createAnimation({
-    duration,
-    easing: easing2,
-    direction: isEntering ? "normal" : "reverse",
-    onUpdate: (progress2) => {
-      const newPositionsLength = Math.round(length2 * progress2);
-      for (let index = 0; index < length2; index++) {
-        deciphered[indexes[index]] = index < newPositionsLength;
-      }
-      const textsCurrent = textsReal.map((text) => text.split("").map((char2, index) => {
-        if (char2 === " ")
-          return " ";
-        if (deciphered[index])
-          return char2;
-        return LETTERS[Math.round(Math.random() * (LETTERS.length - 1))];
-      }).join(""));
-      setTextNodesContent(textNodes, textsCurrent, length2);
+    "::-webkit-scrollbar": {
+      width: "0.625rem",
+      height: "0.625rem"
     },
-    onComplete: () => {
-      contentElement.style.visibility = isEntering && hideOnEntered || !isEntering && hideOnExited ? "hidden" : "visible";
-      cloneElement.remove();
+    "::-webkit-scrollbar-track, ::-webkit-scrollbar-corner": {
+      background: dark ? colors.primary.bg(4) : "white"
     },
-    onCancel: () => {
-      contentElement.style.visibility = "";
-      cloneElement.remove();
+    "::-webkit-scrollbar-thumb": {
+      border: `0.2rem solid ${dark ? colors.primary.bg(4) : "white"}`,
+      background: colors.secondary.main(7),
+      transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, outline",
+      transitionTimingFunction: "ease-out",
+      transitionDuration: transitions.duration(1)
+    },
+    "::-webkit-scrollbar-thumb:hover": {
+      background: colors.secondary.main(5)
+    },
+    "::selection": {
+      backgroundColor: colors.secondary.deco(dark ? 2 : 4)
+    },
+    // TEXTS
+    [`:where(
+      [data-arwes-global-block],
+      h1:not(:last-child),
+      h2:not(:last-child),
+      h3:not(:last-child),
+      h4:not(:last-child),
+      h5:not(:last-child),
+      h6:not(:last-child),
+      p:not(:last-child),
+      blockquote:not(:last-child),
+      pre:not(:last-child),
+      figure:not(:last-child),
+      table:not(:last-child),
+      hr:not(:last-child),
+      ul:not(:last-child),
+      ol:not(:last-child)
+    )`]: {
+      marginBottom: space(6)
+    },
+    "h1, h2, h3, h4, h5, h6": {
+      scrollMarginTop: space(12),
+      fontStyle: "normal",
+      color: colors.primary.main(dark ? 4 : 9),
+      textShadow: dark ? `0 0 1px ${colors.primary.main(4)}` : void 0
+    },
+    h1: typography.title(0),
+    h2: typography.title(1),
+    h3: typography.title(2),
+    h4: typography.title(3),
+    h5: typography.title(4),
+    h6: typography.title(5),
+    p: typography.body(1),
+    "b, strong": {
+      fontWeight: "bolder"
+    },
+    small: {
+      fontSize: "75%"
+    },
+    // Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+    "sub, sup": {
+      position: "relative",
+      fontSize: "75%",
+      lineHeight: 0,
+      verticalAlign: "baseline"
+    },
+    sub: {
+      bottom: "-0.25em"
+    },
+    sup: {
+      top: "-0.5em"
+    },
+    // Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+    "abbr[title]": {
+      borderBottom: "none",
+      textDecoration: "underline dotted"
+    },
+    // Correct the inheritance and scaling of font size in all browsers.
+    "kbd, samp": {
+      ...typography.body(1),
+      fontFamily: "monospace, monospace"
+    },
+    a: {
+      color: colors.secondary.text(dark ? 3 : 7),
+      textShadow: dark ? `0 0 1px ${colors.secondary.text(3)}` : void 0,
+      textDecoration: "none",
+      transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, outline",
+      transitionDuration: transitions.duration(1),
+      transitionTimingFunction: "ease-out"
+    },
+    "a:hover": {
+      color: colors.secondary.main(dark ? 3 : 7)
+    },
+    "a:focus": {
+      outline: `1px dotted ${colors.secondary.text(4)}`
+    },
+    // LISTS
+    "ul, ol": {
+      paddingLeft: space(6)
+    },
+    ":where(ul, ol) ul, :where(ul, ol) ol": {
+      marginBottom: 0
+    },
+    ":where(ul) li::marker": {
+      content: '"\u226B "',
+      display: "inline-block",
+      marginTop: "0.05em",
+      fontSize: "0.9em"
+    },
+    // CODE
+    "code, pre": {
+      // Correct the inheritance and scaling of font size in all browsers.
+      fontFamily: fontFamilies.code
+    },
+    code: {
+      fontSize: "75%"
+    },
+    pre: {
+      display: "block",
+      borderWidth: "1px 0",
+      borderStyle: "solid",
+      borderColor: colors.primary.text(6),
+      padding: "1rem",
+      fontSize: "0.75rem",
+      background: dark ? `linear-gradient(
+          to right,
+          ${colors.primary.text(6, { alpha: 0.1 })},
+          ${colors.primary.text(9, { alpha: 0.1 })}
+        )` : colors.primary.bg(1)
+    },
+    // BLOCKQUOTE
+    blockquote: {
+      display: "block",
+      border: "none",
+      borderLeft: `${space(0.5)} solid ${colors.primary.main(5)}`,
+      padding: space([4, 4, 4, 4.5]),
+      width: "100%",
+      background: `linear-gradient(
+        to right,
+        ${colors.primary.main(4, { alpha: 0.15 })},
+        ${colors.primary.main(4, { alpha: 0.05 })}
+      )`,
+      clipPath: createFrameOctagonClip({
+        squareSize: space(3),
+        leftTop: false,
+        leftBottom: false
+      })
+    },
+    ...blockquotesThemes,
+    // TABLES
+    table: {
+      borderCollapse: "separate",
+      borderSpacing: space(1),
+      width: "100%",
+      textAlign: "left"
+    },
+    ":where(thead tr)": {
+      background: dark ? `linear-gradient(
+          to top,
+          ${colors.primary.main(7, { alpha: 0.2 })},
+          ${colors.primary.main(7, { alpha: 0.05 })}
+        )` : colors.primary.bg(1)
+    },
+    ":where(thead th, thead td)": {
+      ...typography.body(2),
+      color: colors.primary.text(dark ? 4 : 5),
+      borderBottom: `1px solid ${colors.primary.main(dark ? 7 : 9)}`
+    },
+    ":where(tbody tr)": {
+      backgroundColor: dark ? colors.primary.main(8, { alpha: 0.1 }) : void 0
+    },
+    ":where(tbody tr:hover)": {
+      backgroundColor: dark ? colors.primary.main(8, { alpha: 0.3 }) : colors.primary.deco(1)
+    },
+    "th, td": {
+      padding: space([1, 3]),
+      verticalAlign: "top"
+    },
+    tr: {
+      transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, outline",
+      transitionTimingFunction: "ease-out",
+      transitionDuration: transitions.duration(1)
+    },
+    // ASSETS
+    img: {
+      display: "block",
+      maxWidth: "100%"
+    },
+    ":where(figure img)": {
+      verticalAlign: "top",
+      clipPath: createFrameOctagonClip({
+        squareSize: space(3),
+        leftBottom: false,
+        rightTop: false,
+        rightBottom: false
+      })
+    },
+    figcaption: {
+      padding: space([2, 4]),
+      backgroundColor: dark ? colors.primary.main(8, { alpha: 0.2 }) : colors.primary.bg(1),
+      clipPath: createFrameOctagonClip({
+        squareSize: space(3),
+        leftTop: false,
+        leftBottom: false,
+        rightTop: false
+      })
+    },
+    // LINES
+    hr: {
+      position: "relative",
+      border: "none",
+      background: `linear-gradient(
+        to right,
+        ${colors.primary.deco(dark ? 2 : 8)},
+        ${colors.primary.deco(8)}
+      )`,
+      width: "100%",
+      height: "1px",
+      transformOrigin: "left center"
+    },
+    "hr::after": {
+      content: '""',
+      position: "absolute",
+      right: 0,
+      bottom: 0,
+      display: "block",
+      width: space(6),
+      height: 0,
+      borderBottom: `1px solid ${dark ? colors.primary.deco(10) : colors.primary.main(9)}`
     }
-  });
-};
-
-// ../../node_modules/.pnpm/@arwes+text@1.0.0-next.7_z6oo6hi4diq3c7b5wairo2ximq/node_modules/@arwes/text/build/esm/getTransitionTextDuration/getTransitionTextDuration.js
-var getTransitionTextDuration = (props) => {
-  const { length: length2, maxDuration = 4, cps = 400 } = props;
-  const realDuration = 1e3 / cps * length2 / 1e3;
-  return Math.min(realDuration, maxDuration);
-};
-
-// ../../node_modules/.pnpm/@arwes+frames@1.0.0-next.8/node_modules/@arwes/frames/build/esm/formatFrameSVGPath/formatFrameSVGPath.js
-var formatDimension = (size, dimension) => {
-  if (typeof dimension === "number") {
-    return String(dimension);
-  }
-  const dimensionNumber = String(dimension).trim().replace(/- /g, "-").replace(/\+ /g, "+").replace(/\s{2,}/g, " ").split(" ").reduce((total, item) => {
-    const n = Number(item.replace(/[+\-%]/g, ""));
-    if (n === 0) {
-      return total;
-    }
-    const isMinus = item.startsWith("-");
-    const isPercentage = item.endsWith("%");
-    const value = isPercentage ? size * (n / 100) : n;
-    return isMinus ? total - value : total + value;
-  }, 0);
-  return String(dimensionNumber);
-};
-var formatCommand = (width, height, command) => {
-  if (Array.isArray(command)) {
-    const [name, ...dimensions] = command;
-    if (name === "H" || name === "h") {
-      return `${name} ${formatDimension(width, dimensions[0])}`;
-    }
-    if (name === "V" || name === "v") {
-      return `${name} ${formatDimension(height, dimensions[0])}`;
-    }
-    if (name === "A" || name === "a") {
-      const [rx, ry, angle, largeArcFlag, sweepFlag, x, y] = dimensions;
-      const values2 = [
-        formatDimension(width, rx),
-        formatDimension(height, ry),
-        angle,
-        largeArcFlag,
-        sweepFlag,
-        formatDimension(width, x),
-        formatDimension(height, y)
-      ].join(",");
-      return name + " " + values2;
-    }
-    const values = dimensions.map((dimension, index) => {
-      const isEven = index % 2 === 0;
-      const size = isEven ? width : height;
-      return formatDimension(size, dimension);
-    }).join(",");
-    return name + " " + values;
-  }
-  return command;
-};
-var formatFrameSVGPath = (width, height, path) => {
-  return path.map((command) => formatCommand(width, height, command)).join(" ");
-};
-
-// ../../node_modules/.pnpm/@arwes+frames@1.0.0-next.8/node_modules/@arwes/frames/build/esm/renderFrameSVGPaths/renderFrameSVGPaths.js
-var renderFrameSVGPaths = (parentElement, width, height, pathsCustom) => {
-  if (width <= 0 || height <= 0) {
-    return;
-  }
-  const pathElementsCurrent = Array.from(parentElement.querySelectorAll("path[data-frame]"));
-  for (let index = 0; index < pathsCustom.length; index++) {
-    const pathCustom = pathsCustom[index];
-    const pathElementCurrent = pathElementsCurrent[index];
-    const pathElement = pathElementCurrent !== null && pathElementCurrent !== void 0 ? pathElementCurrent : document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const isCommands = Array.isArray(pathCustom);
-    const path = isCommands ? pathCustom : pathCustom.path;
-    pathElement.dataset.frame = "";
-    Object.assign(pathElement.style, {
-      vectorEffect: "non-scaling-stroke"
-    });
-    if (!isCommands) {
-      const { name, id, className, style: style2 } = pathCustom;
-      if (pathElement.dataset.name !== name) {
-        pathElement.dataset.name = name;
-      }
-      if (pathElement.id !== id) {
-        pathElement.id = id || "";
-      }
-      if (pathElement.classList.value !== className) {
-        pathElement.classList.value = className || "";
-      }
-      Object.assign(pathElement.style, style2);
-    }
-    pathElement.setAttribute("d", formatFrameSVGPath(width, height, path));
-    if (pathElement.parentNode !== parentElement) {
-      parentElement.appendChild(pathElement);
-    }
-  }
+  };
 };
 
 // ../../node_modules/.pnpm/@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-tools/build/esm/memo/memo.js
@@ -26619,18 +26321,1294 @@ var mergeRefs = (...refs) => {
   };
 };
 
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_xo5t6f4ryb2nvjgwj2cxjowrye/node_modules/@arwes/react-styles/build/esm/constants.js
-var STYLES_EMPTY = Object.freeze({});
-
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_xo5t6f4ryb2nvjgwj2cxjowrye/node_modules/@arwes/react-styles/build/esm/useStyles/useStyles.js
-var import_react2 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-styles@1.0.0-next.7_xo5t6f4ryb2nvjgwj2cxjowrye/node_modules/@arwes/react-styles/build/esm/useThemeStyles/useThemeStyles.js
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
 var import_react4 = __toESM(require_react(), 1);
 
+// ../../node_modules/.pnpm/@arwes+animator@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/animator/build/esm/constants.js
+var ANIMATOR_STATES2 = Object.freeze({
+  entered: "entered",
+  entering: "entering",
+  exiting: "exiting",
+  exited: "exited"
+});
+var ANIMATOR_ACTIONS2 = Object.freeze({
+  setup: "setup",
+  enter: "enter",
+  enterEnd: "enterEnd",
+  exit: "exit",
+  exitEnd: "exitEnd",
+  update: "update",
+  refresh: "refresh"
+});
+var ANIMATOR_MANAGER_NAMES2 = Object.freeze({
+  parallel: "parallel",
+  stagger: "stagger",
+  staggerReverse: "staggerReverse",
+  sequence: "sequence",
+  sequenceReverse: "sequenceReverse",
+  switch: "switch"
+});
+var ANIMATOR_DEFAULT_DURATION2 = Object.freeze({
+  enter: 0.4,
+  exit: 0.4,
+  delay: 0,
+  offset: 0,
+  stagger: 0.04
+});
+var ANIMATOR_DEFAULT_SETTINGS2 = Object.freeze({
+  active: true,
+  duration: ANIMATOR_DEFAULT_DURATION2,
+  manager: ANIMATOR_MANAGER_NAMES2.parallel,
+  merge: false,
+  combine: false,
+  initialState: "exited"
+});
+
+// ../../node_modules/.pnpm/@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/tools/build/esm/constants.js
+var IS_BROWSER2 = typeof window !== "undefined";
+var IS_BROWSER_SAFARI2 = IS_BROWSER2 && window.navigator.userAgent.includes("Safari") && !window.navigator.userAgent.includes("Chrome");
+
+// ../../node_modules/.pnpm/@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/tools/build/esm/cx/cx.js
+var cx = (...classNames) => {
+  return classNames.filter(Boolean).join(" ");
+};
+
+// ../../node_modules/.pnpm/@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/tools/build/esm/createTOScheduler/createTOScheduler.js
+var ID_DEFAULT = "";
+function createTOScheduler2() {
+  const ledger = /* @__PURE__ */ new Map();
+  const isPending = (id = ID_DEFAULT) => {
+    return ledger.has(id);
+  };
+  const stop = (id = ID_DEFAULT) => {
+    const cancelSchedule = ledger.get(id);
+    if (cancelSchedule) {
+      cancelSchedule();
+    }
+    ledger.delete(id);
+  };
+  const stopAll = () => {
+    Array.from(ledger.keys()).forEach(stop);
+  };
+  const start = (a, b, c) => {
+    const id = c ? a : ID_DEFAULT;
+    const delay = (c ? b : a) * 1e3;
+    const callback = c || b;
+    stop(id);
+    const timeoutId = setTimeout(() => {
+      ledger.delete(id);
+      callback();
+    }, delay);
+    ledger.set(id, () => {
+      clearTimeout(timeoutId);
+    });
+  };
+  return Object.freeze({ isPending, stop, stopAll, start });
+}
+
+// ../../node_modules/.pnpm/@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/tools/build/esm/randomizeList/randomizeList.js
+var randomizeList2 = (providedList) => {
+  const list = providedList.slice(0);
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+};
+
+// ../../node_modules/.pnpm/@arwes+animator@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/animator/build/esm/internal/createAnimatorManager/createAnimatorManager.js
+var createAnimatorManagerParallel = (node2) => {
+  const getChildren = (childrenProvided) => {
+    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
+    return children.filter((child) => {
+      const { condition } = child.control.getSettings();
+      return condition ? condition(child) : true;
+    });
+  };
+  const getDurationEnter = (childrenProvided) => {
+    const children = getChildren(childrenProvided);
+    return children.reduce((total, child) => Math.max(total, child.duration.enter), 0);
+  };
+  const enterChildren = (childrenProvided) => {
+    const children = getChildren(childrenProvided);
+    for (const child of children) {
+      child.send(ANIMATOR_ACTIONS2.enter);
+    }
+  };
+  return Object.freeze({
+    name: ANIMATOR_MANAGER_NAMES2.parallel,
+    getDurationEnter,
+    enterChildren
+  });
+};
+var createAnimatorManagerStagger = (node2, name) => {
+  let reservedUntilTime = 0;
+  const getChildren = (childrenProvided) => {
+    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
+    return children.filter((child) => {
+      const { condition } = child.control.getSettings();
+      return condition ? condition(child) : true;
+    });
+  };
+  const getDurationEnter = (childrenProvided) => {
+    const children = getChildren(childrenProvided);
+    if (!children.length) {
+      return 0;
+    }
+    const { duration } = node2.control.getSettings();
+    const lastChild = children[children.length - 1];
+    return duration.stagger * (children.length - 1) + lastChild.duration.enter;
+  };
+  const enterChildren = (childrenProvided) => {
+    let children = getChildren(childrenProvided);
+    const parentSettings = node2.control.getSettings();
+    const stagger = (parentSettings.duration.stagger || 0) * 1e3;
+    if (name === ANIMATOR_MANAGER_NAMES2.staggerReverse) {
+      children = children.reverse();
+    }
+    const now = Date.now();
+    reservedUntilTime = Math.max(reservedUntilTime, now);
+    for (const child of children) {
+      const childSettings = child.control.getSettings();
+      const offset = (childSettings.duration.offset || 0) * 1e3;
+      reservedUntilTime = reservedUntilTime + offset;
+      const time2 = (reservedUntilTime - now) / 1e3;
+      const delay = childSettings.duration.delay || 0;
+      reservedUntilTime = reservedUntilTime + stagger;
+      child.scheduler.start(time2 + delay, () => child.send(ANIMATOR_ACTIONS2.enter));
+    }
+  };
+  return Object.freeze({
+    name,
+    getDurationEnter,
+    enterChildren
+  });
+};
+var createAnimatorManagerSequence = (node2, name) => {
+  let reservedUntilTime = 0;
+  const getChildren = (childrenProvided) => {
+    const children = childrenProvided !== null && childrenProvided !== void 0 ? childrenProvided : Array.from(node2.children);
+    return children.filter((child) => {
+      const { condition } = child.control.getSettings();
+      return condition ? condition(child) : true;
+    });
+  };
+  const getDurationEnter = (childrenProvided) => {
+    const children = getChildren(childrenProvided);
+    return children.reduce((total, child) => total + child.duration.enter, 0);
+  };
+  const enterChildren = (childrenProvided) => {
+    let children = getChildren(childrenProvided);
+    const now = Date.now();
+    if (name === ANIMATOR_MANAGER_NAMES2.sequenceReverse) {
+      children = children.reverse();
+    }
+    reservedUntilTime = Math.max(reservedUntilTime, now);
+    for (const child of children) {
+      const childSettings = child.control.getSettings();
+      const offset = (childSettings.duration.offset || 0) * 1e3;
+      const durationEnter = child.duration.enter * 1e3;
+      reservedUntilTime = reservedUntilTime + offset;
+      const time2 = (reservedUntilTime - now) / 1e3;
+      const delay = childSettings.duration.delay || 0;
+      reservedUntilTime += durationEnter;
+      child.scheduler.start(time2 + delay, () => child.send(ANIMATOR_ACTIONS2.enter));
+    }
+  };
+  return Object.freeze({
+    name,
+    getDurationEnter,
+    enterChildren
+  });
+};
+var createAnimatorManagerSwitch = (node2) => {
+  let nodeHiding;
+  let nodeVisible;
+  let nodeSubscriberUnsubscribe;
+  const getDurationEnter = () => {
+    if (nodeVisible) {
+      return nodeVisible.duration.enter;
+    }
+    const nodeVisibleCurrent = Array.from(node2.children).find((child) => {
+      const { condition } = child.control.getSettings();
+      return condition ? condition(child) : true;
+    });
+    if (nodeVisibleCurrent) {
+      return nodeVisibleCurrent.duration.enter;
+    }
+    return 0;
+  };
+  const enterChildren = () => {
+    nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
+    nodeSubscriberUnsubscribe = void 0;
+    const children = Array.from(node2.children);
+    const nodeVisibleNew = children.find((child) => {
+      const { condition } = child.control.getSettings();
+      return condition ? condition(child) : true;
+    });
+    const onNextEnter = () => {
+      if (nodeVisibleNew) {
+        if (nodeVisibleNew === nodeVisible) {
+          nodeVisibleNew.send(ANIMATOR_ACTIONS2.enter);
+        } else {
+          if (nodeVisible) {
+            nodeHiding = nodeVisible;
+            nodeSubscriberUnsubscribe = nodeHiding.subscribe((nodeHidingSubscribed) => {
+              if (nodeHidingSubscribed.state === ANIMATOR_STATES2.exited) {
+                nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
+                nodeSubscriberUnsubscribe = void 0;
+                nodeHiding = void 0;
+                nodeVisibleNew.send(ANIMATOR_ACTIONS2.enter);
+              }
+            });
+            nodeHiding === null || nodeHiding === void 0 ? void 0 : nodeHiding.send(ANIMATOR_ACTIONS2.exit);
+          } else {
+            nodeVisibleNew.send(ANIMATOR_ACTIONS2.enter);
+            nodeHiding = void 0;
+          }
+          nodeVisible = nodeVisibleNew;
+        }
+      } else {
+        nodeHiding = nodeVisible;
+        nodeVisible = void 0;
+      }
+    };
+    if (nodeHiding) {
+      nodeSubscriberUnsubscribe = nodeHiding.subscribe((nodeHiding2) => {
+        if (nodeHiding2.state === ANIMATOR_STATES2.exited) {
+          onNextEnter();
+        }
+      });
+    } else {
+      onNextEnter();
+    }
+    children.filter((child) => child !== nodeVisibleNew).forEach((child) => child.send(ANIMATOR_ACTIONS2.exit));
+  };
+  const destroy = () => {
+    nodeHiding = void 0;
+    nodeVisible = void 0;
+    nodeSubscriberUnsubscribe === null || nodeSubscriberUnsubscribe === void 0 ? void 0 : nodeSubscriberUnsubscribe();
+    nodeSubscriberUnsubscribe = void 0;
+  };
+  return Object.freeze({
+    name: ANIMATOR_MANAGER_NAMES2.switch,
+    getDurationEnter,
+    enterChildren,
+    destroy
+  });
+};
+var createAnimatorManager2 = (node2, manager) => {
+  switch (manager) {
+    case ANIMATOR_MANAGER_NAMES2.stagger:
+      return createAnimatorManagerStagger(node2, ANIMATOR_MANAGER_NAMES2.stagger);
+    case ANIMATOR_MANAGER_NAMES2.staggerReverse:
+      return createAnimatorManagerStagger(node2, ANIMATOR_MANAGER_NAMES2.staggerReverse);
+    case ANIMATOR_MANAGER_NAMES2.sequence:
+      return createAnimatorManagerSequence(node2, ANIMATOR_MANAGER_NAMES2.sequence);
+    case ANIMATOR_MANAGER_NAMES2.sequenceReverse:
+      return createAnimatorManagerSequence(node2, ANIMATOR_MANAGER_NAMES2.sequenceReverse);
+    case ANIMATOR_MANAGER_NAMES2.switch:
+      return createAnimatorManagerSwitch(node2, ANIMATOR_MANAGER_NAMES2.switch);
+    default:
+      return createAnimatorManagerParallel(node2, ANIMATOR_MANAGER_NAMES2.parallel);
+  }
+};
+
+// ../../node_modules/.pnpm/@arwes+animator@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/animator/build/esm/internal/createAnimatorMachine/createAnimatorMachine.js
+var createAnimatorMachine2 = (node2, initialState) => {
+  let state = initialState;
+  const statesMap = {
+    [ANIMATOR_STATES2.exited]: {
+      onActions: {
+        [ANIMATOR_ACTIONS2.enter]: ANIMATOR_STATES2.entering,
+        [ANIMATOR_ACTIONS2.setup]: () => {
+          const settings = node2.control.getSettings();
+          if (node2.parent) {
+            const parentSettings = node2.parent.control.getSettings();
+            switch (node2.parent.state) {
+              case ANIMATOR_STATES2.entering: {
+                if (parentSettings.combine || settings.merge) {
+                  node2.parent.manager.enterChildren([node2]);
+                }
+                break;
+              }
+              case ANIMATOR_STATES2.entered: {
+                node2.parent.manager.enterChildren([node2]);
+                break;
+              }
+            }
+          } else {
+            const isActive = settings.active === void 0 || settings.active;
+            if (isActive) {
+              return ANIMATOR_STATES2.entering;
+            }
+          }
+        }
+      }
+    },
+    [ANIMATOR_STATES2.entering]: {
+      onEntry: {
+        execute: () => {
+          const { combine: combine2 } = node2.control.getSettings();
+          const children = combine2 ? Array.from(node2.children) : Array.from(node2.children).filter((child) => child.control.getSettings().merge);
+          node2.manager.enterChildren(children);
+        },
+        schedule: () => {
+          const { duration } = node2.control.getSettings();
+          return {
+            duration: duration.delay + duration.enter || 0,
+            action: ANIMATOR_ACTIONS2.enterEnd
+          };
+        }
+      },
+      onActions: {
+        [ANIMATOR_ACTIONS2.enterEnd]: ANIMATOR_STATES2.entered,
+        [ANIMATOR_ACTIONS2.exit]: ANIMATOR_STATES2.exiting,
+        [ANIMATOR_ACTIONS2.refresh]: () => {
+          const settings = node2.control.getSettings();
+          const childrenExited = Array.from(node2.children).filter((child) => child.state === ANIMATOR_STATES2.exited);
+          if (settings.combine) {
+            node2.manager.enterChildren(childrenExited);
+          } else {
+            const childrenMerged = childrenExited.filter((child) => child.control.getSettings().merge);
+            node2.manager.enterChildren(childrenMerged);
+          }
+        }
+      }
+    },
+    [ANIMATOR_STATES2.entered]: {
+      onEntry: {
+        execute: () => {
+          const { combine: combine2 } = node2.control.getSettings();
+          if (combine2) {
+            return;
+          }
+          const children = Array.from(node2.children).filter((child) => !child.control.getSettings().merge);
+          node2.manager.enterChildren(children);
+        }
+      },
+      onActions: {
+        [ANIMATOR_ACTIONS2.exit]: ANIMATOR_STATES2.exiting,
+        [ANIMATOR_ACTIONS2.refresh]: () => {
+          const childrenExited = Array.from(node2.children).filter((child) => child.state === ANIMATOR_STATES2.exited);
+          node2.manager.enterChildren(childrenExited);
+        }
+      }
+    },
+    [ANIMATOR_STATES2.exiting]: {
+      onEntry: {
+        execute: () => {
+          Array.from(node2.children).forEach((child) => {
+            if (child.state === ANIMATOR_STATES2.entering || child.state === ANIMATOR_STATES2.entered) {
+              child.send(ANIMATOR_ACTIONS2.exit);
+            } else if (child.state === ANIMATOR_STATES2.exited) {
+              child.scheduler.stopAll();
+            }
+          });
+        },
+        schedule: () => ({
+          duration: node2.control.getSettings().duration.exit || 0,
+          action: ANIMATOR_ACTIONS2.exitEnd
+        })
+      },
+      onActions: {
+        [ANIMATOR_ACTIONS2.exitEnd]: ANIMATOR_STATES2.exited,
+        [ANIMATOR_ACTIONS2.enter]: ANIMATOR_STATES2.entering
+      }
+    },
+    "*": {
+      onActions: {
+        [ANIMATOR_ACTIONS2.update]: () => {
+          var _a, _b;
+          const settings = node2.control.getSettings();
+          if (settings.manager !== node2.manager.name) {
+            (_b = (_a = node2.manager).destroy) === null || _b === void 0 ? void 0 : _b.call(_a);
+            node2.manager = createAnimatorManager2(node2, settings.manager);
+          }
+          if (!node2.parent) {
+            const isActive = settings.active === true || settings.active === void 0;
+            if ((state === ANIMATOR_STATES2.exited || state === ANIMATOR_STATES2.exiting) && isActive) {
+              return ANIMATOR_STATES2.entering;
+            } else if ((state === ANIMATOR_STATES2.entered || state === ANIMATOR_STATES2.entering) && !isActive) {
+              return ANIMATOR_STATES2.exiting;
+            }
+          }
+        }
+      }
+    }
+  };
+  const transition = (newState) => {
+    if (!newState || state === newState) {
+      return;
+    }
+    state = newState;
+    const { onEntry } = statesMap[state] || {};
+    const { onTransition } = node2.control.getSettings();
+    node2.scheduler.stopAll();
+    if (onEntry === null || onEntry === void 0 ? void 0 : onEntry.execute) {
+      onEntry.execute();
+    }
+    if (onEntry === null || onEntry === void 0 ? void 0 : onEntry.schedule) {
+      const task = onEntry.schedule();
+      node2.scheduler.start(task.duration, () => send(task.action));
+    }
+    onTransition === null || onTransition === void 0 ? void 0 : onTransition(node2);
+    for (const subscriber of node2.subscribers) {
+      subscriber(node2);
+    }
+  };
+  const processAction = (procedure) => {
+    if (procedure === void 0) {
+      return;
+    }
+    if (typeof procedure === "string") {
+      transition(procedure);
+    } else {
+      const newState = procedure();
+      if (newState) {
+        transition(newState);
+      }
+    }
+  };
+  const getState = () => state;
+  const send = (action) => {
+    var _a, _b, _c, _d;
+    if (!IS_BROWSER2) {
+      return;
+    }
+    processAction((_b = (_a = statesMap[state]) === null || _a === void 0 ? void 0 : _a.onActions) === null || _b === void 0 ? void 0 : _b[action]);
+    processAction((_d = (_c = statesMap["*"]) === null || _c === void 0 ? void 0 : _c.onActions) === null || _d === void 0 ? void 0 : _d[action]);
+  };
+  const machine = Object.freeze({ getState, send });
+  return machine;
+};
+
+// ../../node_modules/.pnpm/@arwes+animator@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/animator/build/esm/createAnimatorSystem/createAnimatorSystem.js
+var createAnimatorSystem = () => {
+  const systemId = `s${Math.random()}`.replace(".", "");
+  let nodeIdCounter = 0;
+  let root2;
+  const createNode = (parent, control) => {
+    const nodeId = `${systemId}-n${nodeIdCounter++}`;
+    const node2 = { id: nodeId };
+    const settings = control.getSettings();
+    const machine = createAnimatorMachine2(node2, settings.initialState);
+    const manager = createAnimatorManager2(node2, settings.manager);
+    const nodeProps = {
+      id: {
+        value: nodeId,
+        enumerable: true
+      },
+      control: {
+        value: control,
+        enumerable: true
+      },
+      parent: {
+        value: parent,
+        enumerable: true
+      },
+      children: {
+        value: /* @__PURE__ */ new Set(),
+        enumerable: true
+      },
+      subscribers: {
+        value: /* @__PURE__ */ new Set(),
+        enumerable: true
+      },
+      scheduler: {
+        value: createTOScheduler2(),
+        enumerable: true
+      },
+      duration: {
+        get: () => {
+          const { duration, combine: combine2 } = node2.control.getSettings();
+          const enter = combine2 ? node2.manager.getDurationEnter(Array.from(node2.children)) : duration.enter || 0;
+          const exit = duration.exit || 0;
+          return { enter, exit };
+        },
+        enumerable: true
+      },
+      state: {
+        get: () => machine.getState(),
+        enumerable: true
+      },
+      subscribe: {
+        value: (subscriber) => {
+          node2.subscribers.add(subscriber);
+          subscriber(node2);
+          return () => node2.subscribers.delete(subscriber);
+        },
+        enumerable: true
+      },
+      unsubscribe: {
+        value: (subscriber) => {
+          node2.subscribers.delete(subscriber);
+        },
+        enumerable: true
+      },
+      send: {
+        value: machine.send,
+        enumerable: true
+      },
+      manager: {
+        value: manager,
+        enumerable: true,
+        writable: true
+      }
+    };
+    Object.defineProperties(node2, nodeProps);
+    if (parent) {
+      parent.children.add(node2);
+    }
+    return node2;
+  };
+  const removeNode = (node2) => {
+    node2.scheduler.stopAll();
+    for (const child of node2.children) {
+      removeNode(child);
+    }
+    if (node2.parent) {
+      node2.parent.children.delete(node2);
+    }
+    node2.children.clear();
+    node2.subscribers.clear();
+  };
+  const register = (parentNode, control) => {
+    if (parentNode === void 0 || parentNode === null) {
+      if (root2) {
+        throw new Error("The root node must be unregistered before registering another root node.");
+      }
+      root2 = createNode(void 0, control);
+      return root2;
+    }
+    if (!root2) {
+      throw new Error("A root node needs to be registered first in the system before registering children nodes.");
+    }
+    return createNode(parentNode, control);
+  };
+  const unregister = (node2) => {
+    if (!root2) {
+      return;
+    }
+    removeNode(node2);
+    if (root2.id === node2.id) {
+      root2 = void 0;
+    }
+  };
+  const system = {};
+  const systemProps = {
+    id: {
+      value: systemId,
+      enumerable: true
+    },
+    root: {
+      get: () => root2,
+      enumerable: true
+    },
+    register: {
+      value: register,
+      enumerable: true
+    },
+    unregister: {
+      value: unregister,
+      enumerable: true
+    }
+  };
+  Object.defineProperties(system, systemProps);
+  return system;
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/internal/AnimatorContext/AnimatorContext.js
+var import_react2 = __toESM(require_react(), 1);
+var AnimatorContext = (0, import_react2.createContext)(void 0);
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/internal/AnimatorGeneralContext/AnimatorGeneralContext.js
+var import_react3 = __toESM(require_react(), 1);
+var AnimatorGeneralContext = (0, import_react3.createContext)(void 0);
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
+var setNodeRefValue = (nodeRef, node2) => {
+  if (typeof nodeRef === "function") {
+    nodeRef(node2);
+  } else if (nodeRef) {
+    nodeRef.current = node2;
+  }
+};
+var Animator = (props) => {
+  const { root: root2, disabled, dismissed, unmountOnExited, unmountOnEntered, unmountOnDisabled, checkToSendAction, checkToSend, nodeRef, children, ...settings } = props;
+  const parentAnimatorInterface = (0, import_react4.useContext)(AnimatorContext);
+  const animatorGeneralInterface = (0, import_react4.useContext)(AnimatorGeneralContext);
+  const settingsRef = (0, import_react4.useRef)(settings);
+  const dynamicSettingsRef = (0, import_react4.useRef)(null);
+  const foreignRef = (0, import_react4.useRef)(null);
+  const prevAnimatorRef = (0, import_react4.useRef)(void 0);
+  const isFirstRender1Ref = (0, import_react4.useRef)(true);
+  const isFirstRender2Ref = (0, import_react4.useRef)(true);
+  settingsRef.current = settings;
+  const animatorGeneralSettings = animatorGeneralInterface === null || animatorGeneralInterface === void 0 ? void 0 : animatorGeneralInterface.getSettings();
+  const isRoot = !!root2 || !parentAnimatorInterface;
+  const isDismissed = dismissed !== void 0 ? !!dismissed : !!(animatorGeneralSettings === null || animatorGeneralSettings === void 0 ? void 0 : animatorGeneralSettings.dismissed);
+  const isDisabled = disabled !== void 0 ? !!disabled : !!(animatorGeneralSettings === null || animatorGeneralSettings === void 0 ? void 0 : animatorGeneralSettings.disabled);
+  const animatorInterface = (0, import_react4.useMemo)(() => {
+    if (prevAnimatorRef.current) {
+      prevAnimatorRef.current.system.unregister(prevAnimatorRef.current.node);
+    }
+    if (isDismissed) {
+      setNodeRefValue(nodeRef, null);
+      return parentAnimatorInterface;
+    }
+    if (isDisabled) {
+      setNodeRefValue(nodeRef, null);
+      return void 0;
+    }
+    const system = isRoot ? createAnimatorSystem() : parentAnimatorInterface.system;
+    const getSettings = () => {
+      var _a, _b;
+      const animatorGeneralSettings2 = animatorGeneralInterface === null || animatorGeneralInterface === void 0 ? void 0 : animatorGeneralInterface.getSettings();
+      return {
+        ...ANIMATOR_DEFAULT_SETTINGS2,
+        ...animatorGeneralSettings2,
+        ...settingsRef.current,
+        ...dynamicSettingsRef.current,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        duration: {
+          ...ANIMATOR_DEFAULT_SETTINGS2.duration,
+          ...animatorGeneralSettings2 === null || animatorGeneralSettings2 === void 0 ? void 0 : animatorGeneralSettings2.duration,
+          ...(_a = settingsRef.current) === null || _a === void 0 ? void 0 : _a.duration,
+          ...(_b = dynamicSettingsRef.current) === null || _b === void 0 ? void 0 : _b.duration
+        },
+        onTransition: (node3) => {
+          var _a2, _b2, _c, _d;
+          (_b2 = (_a2 = settingsRef.current) === null || _a2 === void 0 ? void 0 : _a2.onTransition) === null || _b2 === void 0 ? void 0 : _b2.call(_a2, node3);
+          (_d = (_c = dynamicSettingsRef.current) === null || _c === void 0 ? void 0 : _c.onTransition) === null || _d === void 0 ? void 0 : _d.call(_c, node3);
+        }
+      };
+    };
+    const setDynamicSettings = (newSettings) => {
+      dynamicSettingsRef.current = newSettings;
+    };
+    const getDynamicSettings = () => {
+      return dynamicSettingsRef.current;
+    };
+    const getForeignRef = () => {
+      return foreignRef.current;
+    };
+    const setForeignRef = (ref) => {
+      foreignRef.current = ref;
+    };
+    const control = Object.freeze({
+      getSettings,
+      setDynamicSettings,
+      getDynamicSettings,
+      getForeignRef,
+      setForeignRef
+    });
+    const node2 = isRoot ? system.register(void 0, control) : system.register(parentAnimatorInterface.node, control);
+    setNodeRefValue(nodeRef, node2);
+    return Object.freeze({ system, node: node2 });
+  }, [parentAnimatorInterface, isRoot, isDisabled, isDismissed]);
+  prevAnimatorRef.current = animatorInterface;
+  const [isEnabledToUnmount, setIsEnabledToUnmount] = (0, import_react4.useState)(() => unmountOnExited && (animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.state) === ANIMATOR_STATES2.exited || unmountOnEntered && (animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.state) === ANIMATOR_STATES2.entered || unmountOnDisabled && isDisabled);
+  (0, import_react4.useEffect)(() => {
+    return () => {
+      if (prevAnimatorRef.current) {
+        prevAnimatorRef.current.system.unregister(prevAnimatorRef.current.node);
+      }
+    };
+  }, []);
+  (0, import_react4.useEffect)(() => {
+    animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.send(ANIMATOR_ACTIONS2.setup);
+  }, [!!animatorInterface]);
+  (0, import_react4.useEffect)(() => {
+    if (isFirstRender1Ref.current) {
+      isFirstRender1Ref.current = false;
+      return;
+    }
+    animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.send(ANIMATOR_ACTIONS2.update);
+  }, [settings.active, settings.manager, settings.merge, settings.combine]);
+  (0, import_react4.useEffect)(() => {
+    if (animatorInterface) {
+      const cancelSubscription = animatorInterface.node.subscribe((node2) => {
+        setIsEnabledToUnmount(unmountOnExited && node2.state === ANIMATOR_STATES2.exited || unmountOnEntered && node2.state === ANIMATOR_STATES2.entered);
+      });
+      return () => cancelSubscription();
+    } else {
+      setIsEnabledToUnmount(unmountOnDisabled);
+    }
+  }, [animatorInterface, unmountOnExited, unmountOnEntered, unmountOnDisabled]);
+  (0, import_react4.useEffect)(() => {
+    if (isFirstRender2Ref.current) {
+      isFirstRender2Ref.current = false;
+      return;
+    }
+    if (animatorInterface) {
+      animatorInterface.node.send(checkToSendAction !== null && checkToSendAction !== void 0 ? checkToSendAction : ANIMATOR_ACTIONS2.refresh);
+    }
+  }, checkToSend !== null && checkToSend !== void 0 ? checkToSend : []);
+  return (0, import_react4.createElement)(AnimatorContext.Provider, { value: animatorInterface }, isEnabledToUnmount ? null : children);
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/Animator/index.js
+var Animator2 = memo(Animator);
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/useAnimator/useAnimator.js
+var import_react5 = __toESM(require_react(), 1);
+var useAnimator = () => {
+  return (0, import_react5.useContext)(AnimatorContext);
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/AnimatorGeneralProvider.js
+var import_react6 = __toESM(require_react(), 1);
+var AnimatorGeneralProvider = (props) => {
+  const { children, ...animatorGeneralSettings } = props;
+  const animatorGeneralSettingsRef = (0, import_react6.useRef)(animatorGeneralSettings);
+  animatorGeneralSettingsRef.current = animatorGeneralSettings;
+  const animatorGeneralInterface = (0, import_react6.useMemo)(() => {
+    const getSettings = () => animatorGeneralSettingsRef.current;
+    return Object.freeze({ getSettings });
+  }, []);
+  return (0, import_react6.createElement)(AnimatorGeneralContext.Provider, { value: animatorGeneralInterface }, children);
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/index.js
+var AnimatorGeneralProvider2 = memo(AnimatorGeneralProvider);
+
+// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_@arwes+animator@1.0.0-alpha.21_@arwes+react-tools@1.0.0-n_7ldch66uibwdr6f4xrkkkcht4m/node_modules/@arwes/react-animator/build/esm/useAnimatorGeneral/useAnimatorGeneral.js
+var import_react7 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/constants.js
+var ANIMATED_ANIMATIONS_EMPTY = Object.freeze({});
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/Animated/index.js
+var import_react9 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
+var import_react8 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/internal/formatAnimatedCSSPropsShorthands/formatAnimatedCSSPropsShorthands.js
+var propsTransformDistances = {
+  x: "translateX",
+  y: "translateY",
+  z: "translateZ"
+};
+var propsTransformAngles = {
+  rotate: "rotate",
+  rotateX: "rotateX",
+  rotateY: "rotateY",
+  rotateZ: "rotateZ",
+  skew: "skew",
+  skewX: "skewX",
+  skewY: "skewY"
+};
+var propsTransformUnitless = {
+  scale: "scale",
+  scaleX: "scaleX",
+  scaleY: "scaleY",
+  scaleZ: "scaleZ"
+};
+var formatAnimatedCSSPropsShorthands = (cssPropertiesEnhanced) => {
+  if (!cssPropertiesEnhanced) {
+    return;
+  }
+  const cssProperties = {};
+  let transform = "";
+  Object.keys(cssPropertiesEnhanced).forEach((key) => {
+    const raw = cssPropertiesEnhanced[key];
+    if (propsTransformDistances[key]) {
+      const name = propsTransformDistances[key];
+      const value = Number.isFinite(raw) ? `${raw}px` : String(raw);
+      transform += ` ${name}(${value})`;
+    } else if (propsTransformAngles[key]) {
+      const name = propsTransformAngles[key];
+      const value = Number.isFinite(raw) ? `${raw}deg` : String(raw);
+      transform += ` ${name}(${value})`;
+    } else if (propsTransformUnitless[key]) {
+      const name = propsTransformUnitless[key];
+      transform += ` ${name}(${raw})`;
+    } else {
+      cssProperties[key] = raw;
+    }
+  });
+  transform = transform.trim();
+  if (transform) {
+    cssProperties.transform = transform;
+  }
+  return cssProperties;
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
+var Animated = (props) => {
+  const { as: asProvided, animated, className, style: style2, elementRef: externalElementRef, hideOnExited = true, hideOnEntered, ...otherProps } = props;
+  const animator = useAnimator();
+  const as = (0, import_react8.useMemo)(() => asProvided || "div", []);
+  const elementRef = (0, import_react8.useRef)(null);
+  const animatedSettingsRef = (0, import_react8.useRef)([]);
+  const animationControlsRef = (0, import_react8.useRef)([]);
+  const [isExited, setIsExited] = (0, import_react8.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES2.exited);
+  const [isEntered, setIsEntered] = (0, import_react8.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES2.entered);
+  const animatedSettingsListReceived = Array.isArray(animated) ? animated : [animated];
+  const animatedSettingsList = animatedSettingsListReceived.filter(Boolean);
+  animatedSettingsRef.current = animatedSettingsList;
+  (0, import_react8.useEffect)(() => {
+    if (!animator) {
+      return;
+    }
+    const cancelSubscription = animator.node.subscribe((node2) => {
+      setIsExited(node2.state === ANIMATOR_STATES2.exited);
+      setIsEntered(node2.state === ANIMATOR_STATES2.entered);
+      animationControlsRef.current = [];
+      const element = elementRef.current;
+      if (!element) {
+        return;
+      }
+      const settingsList = animatedSettingsRef.current;
+      const { duration } = node2;
+      const durationTransition = node2.state === ANIMATOR_STATES2.entering || node2.state === ANIMATOR_STATES2.entered ? duration.enter : duration.exit;
+      settingsList.map((settingsItem) => {
+        var _a;
+        return (_a = settingsItem.transitions) === null || _a === void 0 ? void 0 : _a[node2.state];
+      }).filter(Boolean).map((transitions) => Array.isArray(transitions) ? transitions : [transitions]).flat(1).forEach((transition) => {
+        if (typeof transition === "function") {
+          const control = transition({
+            element,
+            duration: durationTransition
+          });
+          if (control) {
+            animationControlsRef.current.push(control);
+          }
+        } else {
+          const { duration: duration2, delay, easing: easing3, options, ...definition } = transition;
+          const control = animate2(element, definition, { duration: duration2 || durationTransition, delay, easing: easing3, ...options });
+          animationControlsRef.current.push(control);
+        }
+      });
+    });
+    return () => {
+      cancelSubscription();
+      animationControlsRef.current.forEach((control) => control.stop());
+    };
+  }, [animator]);
+  let initialAttributes;
+  if (animator) {
+    initialAttributes = animatedSettingsList.map((item) => item === null || item === void 0 ? void 0 : item.initialAttributes).reduce((total, item) => ({ ...total, ...item }), {});
+  }
+  let dynamicStyles;
+  if (animator) {
+    dynamicStyles = animatedSettingsList.map((item) => formatAnimatedCSSPropsShorthands(item === null || item === void 0 ? void 0 : item.initialStyle)).reduce((total, item) => ({ ...total, ...item }), {});
+  }
+  return (0, import_react8.createElement)(as, {
+    ...otherProps,
+    ...initialAttributes,
+    className,
+    style: {
+      ...style2,
+      ...dynamicStyles,
+      visibility: animator && (hideOnExited && isExited || hideOnEntered && isEntered) ? "hidden" : "visible"
+    },
+    ref: mergeRefs(externalElementRef, elementRef)
+  });
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/Animated/index.js
+var Animated2 = (0, import_react9.memo)((0, import_react9.forwardRef)((props, forwardedRef) => (0, import_react9.createElement)(Animated, {
+  elementRef: forwardedRef,
+  ...props
+})));
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
+var import_react11 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/AnimatedX/AnimatedX.js
+var import_react10 = __toESM(require_react(), 1);
+var AnimatedX = (props) => {
+  const { as: asProvided, state: animatedState, animated, className, style: style2, elementRef: externalElementRef, ...otherProps } = props;
+  const hasState = animatedState !== void 0 && animatedState !== null;
+  const as = (0, import_react10.useMemo)(() => asProvided || "div", []);
+  const elementRef = (0, import_react10.useRef)(null);
+  const animatedSettingsRef = (0, import_react10.useRef)([]);
+  const animationControlsRef = (0, import_react10.useRef)([]);
+  const animatedSettingsListReceived = Array.isArray(animated) ? animated : [animated];
+  const animatedSettingsList = animatedSettingsListReceived.filter(Boolean);
+  animatedSettingsRef.current = animatedSettingsList;
+  (0, import_react10.useEffect)(() => {
+    if (!hasState) {
+      return;
+    }
+    animationControlsRef.current = [];
+    const element = elementRef.current;
+    const settingsList = animatedSettingsRef.current;
+    if (!element) {
+      return;
+    }
+    settingsList.map((settingsItem) => {
+      var _a;
+      return (_a = settingsItem.transitions) === null || _a === void 0 ? void 0 : _a[animatedState];
+    }).filter(Boolean).map((transitions) => Array.isArray(transitions) ? transitions : [transitions]).flat(1).forEach((transition) => {
+      if (typeof transition === "function") {
+        const control = transition({ element, duration: 0 });
+        if (control) {
+          animationControlsRef.current.push(control);
+        }
+      } else {
+        const { duration, delay, easing: easing3, options, ...definition } = transition;
+        const control = animate2(element, definition, { duration, delay, easing: easing3, ...options });
+        animationControlsRef.current.push(control);
+      }
+    });
+    return () => {
+      animationControlsRef.current.forEach((control) => control.stop());
+    };
+  }, [hasState, animatedState]);
+  let initialAttributes;
+  if (hasState) {
+    initialAttributes = animatedSettingsList.map((item) => item === null || item === void 0 ? void 0 : item.initialAttributes).reduce((total, item) => ({ ...total, ...item }), {});
+  }
+  let dynamicStyles;
+  if (hasState) {
+    dynamicStyles = animatedSettingsList.map((item) => formatAnimatedCSSPropsShorthands(item === null || item === void 0 ? void 0 : item.initialStyle)).reduce((total, item) => ({ ...total, ...item }), {});
+  }
+  return (0, import_react10.createElement)(as, {
+    ...otherProps,
+    ...initialAttributes,
+    className,
+    style: {
+      ...style2,
+      ...dynamicStyles
+    },
+    ref: mergeRefs(externalElementRef, elementRef)
+  });
+};
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
+var AnimatedX2 = (0, import_react11.memo)((0, import_react11.forwardRef)((props, forwardedRef) => (0, import_react11.createElement)(AnimatedX, {
+  elementRef: forwardedRef,
+  ...props
+})));
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/useAnimatedAnimations/useAnimatedAnimations.js
+var import_react12 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0_4wcafdiljqgvddmvwi22a56poe/node_modules/@arwes/react-animated/build/esm/animations/animations.js
+var aa = (prop, from2, to, back) => ({
+  transitions: {
+    entering: { [prop]: [from2, to] },
+    exiting: { [prop]: [to, back !== null && back !== void 0 ? back : from2] }
+  }
+});
+var aaVisibility = () => {
+  return {
+    transitions: {
+      entering: ({ element, duration }) => timeline([
+        [element, { opacity: [0, 1] }],
+        [element, { opacity: [1, 0.7] }],
+        [element, { opacity: [0.7, 1] }]
+      ], { duration }),
+      exiting: ({ element, duration }) => timeline([
+        [element, { opacity: [1, 0] }],
+        [element, { opacity: [0, 0.3] }],
+        [element, { opacity: [0.3, 0] }]
+      ], { duration })
+    }
+  };
+};
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-alpha.21_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
+var import_react14 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/bleeps/build/esm/createBleep/createBleep.js
+var createBleep2 = (props) => {
+  var _a;
+  if (!IS_BROWSER2) {
+    return null;
+  }
+  const { sources, preload = true, loop = false, volume = 1, fetchHeaders, masterGain } = props;
+  let isBufferLoading = false;
+  let isBufferError = false;
+  let isBufferPlaying = false;
+  let source = null;
+  let buffer = null;
+  let duration = 0;
+  const context = (_a = props.context) !== null && _a !== void 0 ? _a : new window.AudioContext();
+  const gain = context.createGain();
+  const callersAccount = /* @__PURE__ */ new Set();
+  const fetchAudioBuffer = () => {
+    if (buffer || isBufferLoading || isBufferError) {
+      return;
+    }
+    if (!sources.length) {
+      isBufferError = true;
+      console.error("Every bleep must have at least one source with a valid audio file URL and type.");
+      return;
+    }
+    const audioTest = new window.Audio();
+    const source2 = sources.find((source3) => {
+      if (IS_BROWSER_SAFARI2 && source3.type.includes("audio/webm")) {
+        return false;
+      }
+      const support = audioTest.canPlayType(source3.type || "");
+      return support === "probably" || support === "maybe";
+    });
+    if (!source2) {
+      isBufferError = true;
+      console.error(`The bleep sources "${JSON.stringify(sources)}" are not supported on this navigator.`);
+      return;
+    }
+    const { src, type } = source2;
+    isBufferLoading = true;
+    window.fetch(src, {
+      method: "GET",
+      headers: fetchHeaders
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Bleep source could not be fetched.");
+      }
+      return response;
+    }).then((response) => response.arrayBuffer()).then((audioArrayBuffer) => context.decodeAudioData(audioArrayBuffer)).then((audioBuffer) => {
+      buffer = audioBuffer;
+      duration = buffer.duration;
+    }).catch((err) => {
+      isBufferError = true;
+      console.error(`The bleep with source URL "${src}" and type "${type}" could not be used:`, err);
+    }).then(() => isBufferLoading = false);
+  };
+  const getDuration = () => duration;
+  const getIsPlaying = () => isBufferPlaying;
+  const getIsLoaded = () => !!buffer;
+  const play = (caller) => {
+    if (!buffer) {
+      fetchAudioBuffer();
+      return;
+    }
+    if (loop && isBufferPlaying) {
+      return;
+    }
+    if (context.state === "suspended") {
+      let isResumeError = false;
+      context.resume().catch((err) => {
+        isResumeError = true;
+        console.error(`The bleep audio context with sources "${JSON.stringify(sources)}" could not be resumed to be played:`, err);
+      });
+      if (isResumeError) {
+        return;
+      }
+    }
+    if (caller) {
+      callersAccount.add(caller);
+    }
+    isBufferPlaying = true;
+    if (source) {
+      source.stop();
+      source.disconnect(gain);
+      source = null;
+    }
+    source = context.createBufferSource();
+    source.buffer = buffer;
+    source.loop = loop;
+    if (loop) {
+      source.loopStart = 0;
+      source.loopEnd = buffer.duration;
+    }
+    source.connect(gain);
+    source.start();
+    source.onended = () => {
+      isBufferPlaying = false;
+    };
+  };
+  const stop = (caller) => {
+    if (!buffer) {
+      return;
+    }
+    if (caller) {
+      callersAccount.delete(caller);
+    }
+    const canStop = loop ? !callersAccount.size : true;
+    if (canStop) {
+      if (source) {
+        source.stop();
+        source.disconnect(gain);
+        source = null;
+      }
+      isBufferPlaying = false;
+    }
+  };
+  const load = () => {
+    fetchAudioBuffer();
+  };
+  const unload = () => {
+    if (source) {
+      source.stop();
+      source.disconnect(gain);
+      source = null;
+    }
+    buffer = null;
+    isBufferLoading = false;
+    isBufferError = false;
+  };
+  const update = (props2) => {
+    if (props2.volume !== void 0) {
+      const bleepVolume = Math.max(0, Math.min(1, props2.volume));
+      gain.gain.setValueAtTime(bleepVolume, context.currentTime);
+    }
+  };
+  const bleep = {};
+  const bleepAPI = {
+    duration: {
+      get: getDuration,
+      enumerable: true
+    },
+    isPlaying: {
+      get: getIsPlaying,
+      enumerable: true
+    },
+    isLoaded: {
+      get: getIsLoaded,
+      enumerable: true
+    },
+    play: {
+      value: play,
+      enumerable: true
+    },
+    stop: {
+      value: stop,
+      enumerable: true
+    },
+    load: {
+      value: load,
+      enumerable: true
+    },
+    unload: {
+      value: unload,
+      enumerable: true
+    },
+    update: {
+      value: update,
+      enumerable: true
+    }
+  };
+  Object.defineProperties(bleep, bleepAPI);
+  if (masterGain) {
+    gain.connect(masterGain);
+  } else {
+    gain.connect(context.destination);
+  }
+  update({ volume });
+  if (preload) {
+    fetchAudioBuffer();
+  }
+  return bleep;
+};
+
+// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/bleeps/build/esm/createBleepsManager/createBleepsManager.js
+var createBleepsManager = (props) => {
+  var _a, _b;
+  const context = IS_BROWSER2 ? new window.AudioContext() : null;
+  const masterGain = IS_BROWSER2 ? context.createGain() : null;
+  const bleeps = {};
+  const bleepNames = Object.keys(props.bleeps);
+  bleepNames.forEach((bleepName) => {
+    var _a2;
+    const bleepProps = props.bleeps[bleepName];
+    const categoryProps = bleepProps.category ? (_a2 = props.categories) === null || _a2 === void 0 ? void 0 : _a2[bleepProps.category] : null;
+    const generalProps = {
+      ...props.common,
+      ...categoryProps
+    };
+    bleeps[bleepName] = generalProps.disabled ? null : createBleep2({
+      ...generalProps,
+      ...bleepProps,
+      context,
+      masterGain
+    });
+  });
+  if (IS_BROWSER2) {
+    masterGain.connect(context.destination);
+    const globalVolume = Math.max(0, Math.min(1, (_b = (_a = props === null || props === void 0 ? void 0 : props.master) === null || _a === void 0 ? void 0 : _a.volume) !== null && _b !== void 0 ? _b : 1));
+    masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
+  }
+  const unload = () => {
+    bleepNames.forEach((bleepName) => {
+      var _a2;
+      (_a2 = bleeps[bleepName]) === null || _a2 === void 0 ? void 0 : _a2.unload();
+    });
+  };
+  const update = (newProps) => {
+    var _a2;
+    if (((_a2 = newProps.master) === null || _a2 === void 0 ? void 0 : _a2.volume) !== void 0) {
+      const globalVolume = Math.max(0, Math.min(1, newProps.master.volume));
+      masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
+    }
+    bleepNames.forEach((bleepName) => {
+      var _a3, _b2, _c, _d;
+      const baseBleepProps = props.bleeps[bleepName];
+      const category = baseBleepProps === null || baseBleepProps === void 0 ? void 0 : baseBleepProps.category;
+      const newCategoryProps = category ? (_a3 = newProps.categories) === null || _a3 === void 0 ? void 0 : _a3[category] : null;
+      const generalProps = {
+        ...newProps.common,
+        ...newCategoryProps
+      };
+      if (generalProps.disabled) {
+        (_b2 = bleeps[bleepName]) === null || _b2 === void 0 ? void 0 : _b2.unload();
+        bleeps[bleepName] = null;
+      } else {
+        if (bleeps[bleepName]) {
+          (_c = bleeps[bleepName]) === null || _c === void 0 ? void 0 : _c.update({
+            ...generalProps,
+            ...(_d = newProps.bleeps) === null || _d === void 0 ? void 0 : _d[bleepName]
+          });
+        } else {
+          bleeps[bleepName] = createBleep2({
+            ...generalProps,
+            ...baseBleepProps,
+            context,
+            masterGain
+          });
+        }
+      }
+    });
+  };
+  return Object.freeze({ bleeps, unload, update });
+};
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-alpha.21_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/internal/BleepsManagerContext.js
+var import_react13 = __toESM(require_react(), 1);
+var BleepsManagerContext = (0, import_react13.createContext)(null);
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-alpha.21_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
+var BleepsProvider = (props) => {
+  const { master, common, categories, bleeps, children } = props;
+  const bleepsManager = (0, import_react14.useMemo)(() => createBleepsManager({ master, common, categories, bleeps }), []);
+  (0, import_react14.useEffect)(() => {
+    bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.update({ master, common, categories, bleeps });
+  }, [master, common, categories, bleeps]);
+  (0, import_react14.useEffect)(() => {
+    return () => {
+      bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.unload();
+    };
+  }, []);
+  return import_react14.default.createElement(BleepsManagerContext.Provider, { value: bleepsManager }, children);
+};
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-alpha.21_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/index.js
+var BleepsProvider2 = memo(BleepsProvider);
+
+// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_@arwes+bleeps@1.0.0-alpha.21_@arwes+react-tools@1.0.0-next.10_react@18.2.0/node_modules/@arwes/react-bleeps/build/esm/useBleeps/useBleeps.js
+var import_react15 = __toESM(require_react(), 1);
+var defaultProps = {};
+var useBleeps = (props = defaultProps) => {
+  var _a;
+  if (props.disabled) {
+    return {};
+  }
+  const bleepsManager = (0, import_react15.useContext)(BleepsManagerContext);
+  return (_a = bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.bleeps) !== null && _a !== void 0 ? _a : {};
+};
+
+// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_ohoe22lbbiqeceftxzxwn2h5r4/node_modules/@arwes/react-text/build/esm/Text/Text.js
+var import_react17 = __toESM(require_react(), 1);
+
 // ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
-var React2 = __toESM(require_react());
-var import_react3 = __toESM(require_react());
+var React3 = __toESM(require_react());
+var import_react16 = __toESM(require_react());
 
 // ../../node_modules/.pnpm/@emotion+sheet@1.2.2/node_modules/@emotion/sheet/dist/emotion-sheet.browser.esm.js
 function sheetForTag(tag) {
@@ -27858,18 +28836,18 @@ var serializeStyles = function serializeStyles2(args, registered, mergedProps) {
 };
 
 // ../../node_modules/.pnpm/@emotion+use-insertion-effect-with-fallbacks@1.0.1_react@18.2.0/node_modules/@emotion/use-insertion-effect-with-fallbacks/dist/emotion-use-insertion-effect-with-fallbacks.browser.esm.js
-var React = __toESM(require_react());
+var React2 = __toESM(require_react());
 var syncFallback = function syncFallback2(create) {
   return create();
 };
-var useInsertionEffect2 = React["useInsertionEffect"] ? React["useInsertionEffect"] : false;
+var useInsertionEffect2 = React2["useInsertionEffect"] ? React2["useInsertionEffect"] : false;
 var useInsertionEffectAlwaysWithSyncFallback = useInsertionEffect2 || syncFallback;
-var useInsertionEffectWithLayoutFallback = useInsertionEffect2 || React.useLayoutEffect;
+var useInsertionEffectWithLayoutFallback = useInsertionEffect2 || React2.useLayoutEffect;
 
 // ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-element-c39617d8.browser.esm.js
 var isBrowser2 = true;
 var hasOwnProperty = {}.hasOwnProperty;
-var EmotionCacheContext = /* @__PURE__ */ React2.createContext(
+var EmotionCacheContext = /* @__PURE__ */ React3.createContext(
   // we're doing this to avoid preconstruct's dead code elimination in this one case
   // because this module is primarily intended for the browser and node
   // but it's also required in react native and similar environments sometimes
@@ -27885,20 +28863,20 @@ if (true) {
 }
 var CacheProvider = EmotionCacheContext.Provider;
 var withEmotionCache = function withEmotionCache2(func) {
-  return /* @__PURE__ */ (0, import_react3.forwardRef)(function(props, ref) {
-    var cache = (0, import_react3.useContext)(EmotionCacheContext);
+  return /* @__PURE__ */ (0, import_react16.forwardRef)(function(props, ref) {
+    var cache = (0, import_react16.useContext)(EmotionCacheContext);
     return func(props, cache, ref);
   });
 };
 if (!isBrowser2) {
   withEmotionCache = function withEmotionCache3(func) {
     return function(props) {
-      var cache = (0, import_react3.useContext)(EmotionCacheContext);
+      var cache = (0, import_react16.useContext)(EmotionCacheContext);
       if (cache === null) {
         cache = createCache({
           key: "css"
         });
-        return /* @__PURE__ */ React2.createElement(EmotionCacheContext.Provider, {
+        return /* @__PURE__ */ React3.createElement(EmotionCacheContext.Provider, {
           value: cache
         }, func(props, cache));
       } else {
@@ -27907,7 +28885,7 @@ if (!isBrowser2) {
     };
   };
 }
-var ThemeContext = /* @__PURE__ */ React2.createContext({});
+var ThemeContext = /* @__PURE__ */ React3.createContext({});
 if (true) {
   ThemeContext.displayName = "EmotionThemeContext";
 }
@@ -27985,7 +28963,7 @@ var Emotion = /* @__PURE__ */ withEmotionCache(function(props, cache, ref) {
   } else if (props.className != null) {
     className = props.className + " ";
   }
-  var serialized = serializeStyles(registeredStyles, void 0, React2.useContext(ThemeContext));
+  var serialized = serializeStyles(registeredStyles, void 0, React3.useContext(ThemeContext));
   if (serialized.name.indexOf("-") === -1) {
     var labelFromStack = props[labelPropName];
     if (labelFromStack) {
@@ -28001,11 +28979,11 @@ var Emotion = /* @__PURE__ */ withEmotionCache(function(props, cache, ref) {
   }
   newProps.ref = ref;
   newProps.className = className;
-  return /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement(Insertion, {
+  return /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement(Insertion, {
     cache,
     serialized,
     isStringTag: typeof WrappedComponent === "string"
-  }), /* @__PURE__ */ React2.createElement(WrappedComponent, newProps));
+  }), /* @__PURE__ */ React3.createElement(WrappedComponent, newProps));
 });
 if (true) {
   Emotion.displayName = "EmotionCssPropInternal";
@@ -28013,7 +28991,7 @@ if (true) {
 var Emotion$1 = Emotion;
 
 // ../../node_modules/.pnpm/@emotion+react@11.11.1_react@18.2.0/node_modules/@emotion/react/dist/emotion-react.browser.esm.js
-var React3 = __toESM(require_react());
+var React4 = __toESM(require_react());
 var import_hoist_non_react_statics = __toESM(require_hoist_non_react_statics_cjs());
 var pkg = {
   name: "@emotion/react",
@@ -28149,7 +29127,7 @@ var pkg = {
 var jsx = function jsx2(type, props) {
   var args = arguments;
   if (props == null || !hasOwnProperty.call(props, "css")) {
-    return React3.createElement.apply(void 0, args);
+    return React4.createElement.apply(void 0, args);
   }
   var argsLength = args.length;
   var createElementArgArray = new Array(argsLength);
@@ -28158,7 +29136,7 @@ var jsx = function jsx2(type, props) {
   for (var i = 2; i < argsLength; i++) {
     createElementArgArray[i] = args[i];
   }
-  return React3.createElement.apply(null, createElementArgArray);
+  return React4.createElement.apply(null, createElementArgArray);
 };
 var warnedAboutCssPropForGlobal = false;
 var Global = /* @__PURE__ */ withEmotionCache(function(props, cache) {
@@ -28171,7 +29149,7 @@ var Global = /* @__PURE__ */ withEmotionCache(function(props, cache) {
     warnedAboutCssPropForGlobal = true;
   }
   var styles = props.styles;
-  var serialized = serializeStyles([styles], void 0, React3.useContext(ThemeContext));
+  var serialized = serializeStyles([styles], void 0, React4.useContext(ThemeContext));
   if (!isBrowser2) {
     var _ref;
     var serializedNames = serialized.name;
@@ -28190,11 +29168,11 @@ var Global = /* @__PURE__ */ withEmotionCache(function(props, cache) {
     if (shouldCache) {
       return null;
     }
-    return /* @__PURE__ */ React3.createElement("style", (_ref = {}, _ref["data-emotion"] = cache.key + "-global " + serializedNames, _ref.dangerouslySetInnerHTML = {
+    return /* @__PURE__ */ React4.createElement("style", (_ref = {}, _ref["data-emotion"] = cache.key + "-global " + serializedNames, _ref.dangerouslySetInnerHTML = {
       __html: rules
     }, _ref.nonce = cache.sheet.nonce, _ref));
   }
-  var sheetRef = React3.useRef();
+  var sheetRef = React4.useRef();
   useInsertionEffectWithLayoutFallback(function() {
     var key = cache.key + "-global";
     var sheet = new cache.sheet.constructor({
@@ -28324,11 +29302,11 @@ var ClassNames = /* @__PURE__ */ withEmotionCache(function(props, cache) {
   var content = {
     css,
     cx: cx2,
-    theme: React3.useContext(ThemeContext)
+    theme: React4.useContext(ThemeContext)
   };
   var ele = props.children(content);
   hasRendered = true;
-  return /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement(Insertion3, {
+  return /* @__PURE__ */ React4.createElement(React4.Fragment, null, /* @__PURE__ */ React4.createElement(Insertion3, {
     cache,
     serializedArr
   }), ele);
@@ -28354,712 +29332,348 @@ var isTestEnv;
 var globalContext;
 var globalKey;
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
-var import_react7 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/internal/AnimatorContext/AnimatorContext.js
-var import_react5 = __toESM(require_react(), 1);
-var AnimatorContext = (0, import_react5.createContext)(void 0);
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/internal/AnimatorGeneralContext/AnimatorGeneralContext.js
-var import_react6 = __toESM(require_react(), 1);
-var AnimatorGeneralContext = (0, import_react6.createContext)(void 0);
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/Animator/Animator.js
-var setNodeRefValue = (nodeRef, node2) => {
-  if (typeof nodeRef === "function") {
-    nodeRef(node2);
-  } else if (nodeRef) {
-    nodeRef.current = node2;
+// ../../node_modules/.pnpm/@arwes+animated@1.0.0-alpha.21/node_modules/@arwes/animated/build/esm/easing/easing.js
+var pow = Math.pow;
+var sqrt = Math.sqrt;
+var sin = Math.sin;
+var cos = Math.cos;
+var PI2 = Math.PI;
+var c12 = 1.70158;
+var c22 = c12 * 1.525;
+var c32 = c12 + 1;
+var c42 = 2 * PI2 / 3;
+var c52 = 2 * PI2 / 4.5;
+var bounceOut = (x) => {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+  if (x < 1 / d1) {
+    return n1 * x * x;
+  } else if (x < 2 / d1) {
+    return n1 * (x -= 1.5 / d1) * x + 0.75;
+  } else if (x < 2.5 / d1) {
+    return n1 * (x -= 2.25 / d1) * x + 0.9375;
+  }
+  return n1 * (x -= 2.625 / d1) * x + 0.984375;
+};
+var easing2 = {
+  linear: (x) => x,
+  inQuad: (x) => {
+    return x * x;
+  },
+  outQuad: (x) => {
+    return 1 - (1 - x) * (1 - x);
+  },
+  inOutQuad: (x) => {
+    return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
+  },
+  inCubic: (x) => {
+    return x * x * x;
+  },
+  outCubic: (x) => {
+    return 1 - pow(1 - x, 3);
+  },
+  inOutCubic: (x) => {
+    return x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2;
+  },
+  inQuart: (x) => {
+    return x * x * x * x;
+  },
+  outQuart: (x) => {
+    return 1 - pow(1 - x, 4);
+  },
+  inOutQuart: (x) => {
+    return x < 0.5 ? 8 * x * x * x * x : 1 - pow(-2 * x + 2, 4) / 2;
+  },
+  inQuint: (x) => {
+    return x * x * x * x * x;
+  },
+  outQuint: (x) => {
+    return 1 - pow(1 - x, 5);
+  },
+  inOutQuint: (x) => {
+    return x < 0.5 ? 16 * x * x * x * x * x : 1 - pow(-2 * x + 2, 5) / 2;
+  },
+  inSine: (x) => {
+    return 1 - cos(x * PI2 / 2);
+  },
+  outSine: (x) => {
+    return sin(x * PI2 / 2);
+  },
+  inOutSine: (x) => {
+    return -(cos(PI2 * x) - 1) / 2;
+  },
+  inExpo: (x) => {
+    return x === 0 ? 0 : pow(2, 10 * x - 10);
+  },
+  outExpo: (x) => {
+    return x === 1 ? 1 : 1 - pow(2, -10 * x);
+  },
+  inOutExpo: (x) => {
+    return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? pow(2, 20 * x - 10) / 2 : (2 - pow(2, -20 * x + 10)) / 2;
+  },
+  inCirc: (x) => {
+    return 1 - sqrt(1 - pow(x, 2));
+  },
+  outCirc: (x) => {
+    return sqrt(1 - pow(x - 1, 2));
+  },
+  inOutCirc: (x) => {
+    return x < 0.5 ? (1 - sqrt(1 - pow(2 * x, 2))) / 2 : (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2;
+  },
+  inBack: (x) => {
+    return c32 * x * x * x - c12 * x * x;
+  },
+  outBack: (x) => {
+    return 1 + c32 * pow(x - 1, 3) + c12 * pow(x - 1, 2);
+  },
+  inOutBack: (x) => {
+    return x < 0.5 ? pow(2 * x, 2) * ((c22 + 1) * 2 * x - c22) / 2 : (pow(2 * x - 2, 2) * ((c22 + 1) * (x * 2 - 2) + c22) + 2) / 2;
+  },
+  inElastic: (x) => {
+    return x === 0 ? 0 : x === 1 ? 1 : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c42);
+  },
+  outElastic: (x) => {
+    return x === 0 ? 0 : x === 1 ? 1 : pow(2, -10 * x) * sin((x * 10 - 0.75) * c42) + 1;
+  },
+  inOutElastic: (x) => {
+    return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c52)) / 2 : pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c52) / 2 + 1;
+  },
+  inBounce: (x) => {
+    return 1 - bounceOut(1 - x);
+  },
+  outBounce: bounceOut,
+  inOutBounce: (x) => {
+    return x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2;
   }
 };
-var Animator = (props) => {
-  const { root: root2, disabled, dismissed, unmountOnExited, unmountOnEntered, unmountOnDisabled, checkToSendAction, checkToSend, nodeRef, children, ...settings } = props;
-  const parentAnimatorInterface = (0, import_react7.useContext)(AnimatorContext);
-  const animatorGeneralInterface = (0, import_react7.useContext)(AnimatorGeneralContext);
-  const settingsRef = (0, import_react7.useRef)(settings);
-  const dynamicSettingsRef = (0, import_react7.useRef)(null);
-  const foreignRef = (0, import_react7.useRef)(null);
-  const prevAnimatorRef = (0, import_react7.useRef)(void 0);
-  const isFirstRender1Ref = (0, import_react7.useRef)(true);
-  const isFirstRender2Ref = (0, import_react7.useRef)(true);
-  settingsRef.current = settings;
-  const animatorGeneralSettings = animatorGeneralInterface === null || animatorGeneralInterface === void 0 ? void 0 : animatorGeneralInterface.getSettings();
-  const isRoot = !!root2 || !parentAnimatorInterface;
-  const isDismissed = dismissed !== void 0 ? !!dismissed : !!(animatorGeneralSettings === null || animatorGeneralSettings === void 0 ? void 0 : animatorGeneralSettings.dismissed);
-  const isDisabled = disabled !== void 0 ? !!disabled : !!(animatorGeneralSettings === null || animatorGeneralSettings === void 0 ? void 0 : animatorGeneralSettings.disabled);
-  const animatorInterface = (0, import_react7.useMemo)(() => {
-    if (prevAnimatorRef.current) {
-      prevAnimatorRef.current.system.unregister(prevAnimatorRef.current.node);
+
+// ../../node_modules/.pnpm/@arwes+animated@1.0.0-alpha.21/node_modules/@arwes/animated/build/esm/createAnimation/createAnimation.js
+var createAnimation3 = (props) => {
+  const { duration: durationProvided, easing: easingName = "outSine", direction = "normal", onUpdate, onComplete, onCancel } = props;
+  const ease = typeof easingName === "function" ? easingName : easing2[easingName];
+  const duration = durationProvided * 1e3;
+  let currentAnimationFrame = null;
+  let start = window.performance.now();
+  let slapsed = 0;
+  const nextAnimation = (timestamp) => {
+    if (!start) {
+      start = timestamp;
     }
-    if (isDismissed) {
-      setNodeRefValue(nodeRef, null);
-      return parentAnimatorInterface;
+    slapsed = Math.max(timestamp - start, 0);
+    if (direction === "reverse") {
+      slapsed = duration - slapsed;
     }
-    if (isDisabled) {
-      setNodeRefValue(nodeRef, null);
-      return void 0;
-    }
-    const system = isRoot ? createAnimatorSystem() : parentAnimatorInterface.system;
-    const getSettings = () => {
-      var _a, _b;
-      const animatorGeneralSettings2 = animatorGeneralInterface === null || animatorGeneralInterface === void 0 ? void 0 : animatorGeneralInterface.getSettings();
-      return {
-        ...ANIMATOR_DEFAULT_SETTINGS,
-        ...animatorGeneralSettings2,
-        ...settingsRef.current,
-        ...dynamicSettingsRef.current,
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        duration: {
-          ...ANIMATOR_DEFAULT_SETTINGS.duration,
-          ...animatorGeneralSettings2 === null || animatorGeneralSettings2 === void 0 ? void 0 : animatorGeneralSettings2.duration,
-          ...(_a = settingsRef.current) === null || _a === void 0 ? void 0 : _a.duration,
-          ...(_b = dynamicSettingsRef.current) === null || _b === void 0 ? void 0 : _b.duration
-        },
-        onTransition: (node3) => {
-          var _a2, _b2, _c, _d;
-          (_b2 = (_a2 = settingsRef.current) === null || _a2 === void 0 ? void 0 : _a2.onTransition) === null || _b2 === void 0 ? void 0 : _b2.call(_a2, node3);
-          (_d = (_c = dynamicSettingsRef.current) === null || _c === void 0 ? void 0 : _c.onTransition) === null || _d === void 0 ? void 0 : _d.call(_c, node3);
-        }
-      };
-    };
-    const setDynamicSettings = (newSettings) => {
-      dynamicSettingsRef.current = newSettings;
-    };
-    const getDynamicSettings = () => {
-      return dynamicSettingsRef.current;
-    };
-    const getForeignRef = () => {
-      return foreignRef.current;
-    };
-    const setForeignRef = (ref) => {
-      foreignRef.current = ref;
-    };
-    const control = Object.freeze({
-      getSettings,
-      setDynamicSettings,
-      getDynamicSettings,
-      getForeignRef,
-      setForeignRef
-    });
-    const node2 = isRoot ? system.register(void 0, control) : system.register(parentAnimatorInterface.node, control);
-    setNodeRefValue(nodeRef, node2);
-    return Object.freeze({ system, node: node2 });
-  }, [parentAnimatorInterface, isRoot, isDisabled, isDismissed]);
-  prevAnimatorRef.current = animatorInterface;
-  const [isEnabledToUnmount, setIsEnabledToUnmount] = (0, import_react7.useState)(() => unmountOnExited && (animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.state) === ANIMATOR_STATES.exited || unmountOnEntered && (animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.state) === ANIMATOR_STATES.entered || unmountOnDisabled && isDisabled);
-  (0, import_react7.useEffect)(() => {
-    return () => {
-      if (prevAnimatorRef.current) {
-        prevAnimatorRef.current.system.unregister(prevAnimatorRef.current.node);
-      }
-    };
-  }, []);
-  (0, import_react7.useEffect)(() => {
-    animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.send(ANIMATOR_ACTIONS.setup);
-  }, [!!animatorInterface]);
-  (0, import_react7.useEffect)(() => {
-    if (isFirstRender1Ref.current) {
-      isFirstRender1Ref.current = false;
-      return;
-    }
-    animatorInterface === null || animatorInterface === void 0 ? void 0 : animatorInterface.node.send(ANIMATOR_ACTIONS.update);
-  }, [settings.active, settings.manager, settings.merge, settings.combine]);
-  (0, import_react7.useEffect)(() => {
-    if (animatorInterface) {
-      const cancelSubscription = animatorInterface.node.subscribe((node2) => {
-        setIsEnabledToUnmount(unmountOnExited && node2.state === ANIMATOR_STATES.exited || unmountOnEntered && node2.state === ANIMATOR_STATES.entered);
-      });
-      return () => cancelSubscription();
+    const progress2 = Math.min(1, Math.max(0, ease(slapsed / duration)));
+    const continueAnimation = direction === "normal" ? slapsed < duration : slapsed > 0;
+    onUpdate(progress2);
+    if (continueAnimation) {
+      currentAnimationFrame = window.requestAnimationFrame(nextAnimation);
     } else {
-      setIsEnabledToUnmount(unmountOnDisabled);
+      currentAnimationFrame = null;
+      onComplete === null || onComplete === void 0 ? void 0 : onComplete();
     }
-  }, [animatorInterface, unmountOnExited, unmountOnEntered, unmountOnDisabled]);
-  (0, import_react7.useEffect)(() => {
-    if (isFirstRender2Ref.current) {
-      isFirstRender2Ref.current = false;
-      return;
+  };
+  currentAnimationFrame = window.requestAnimationFrame(nextAnimation);
+  const isPending = () => {
+    return currentAnimationFrame !== null;
+  };
+  const cancel = () => {
+    if (currentAnimationFrame !== null) {
+      window.cancelAnimationFrame(currentAnimationFrame);
+      onCancel === null || onCancel === void 0 ? void 0 : onCancel();
     }
-    if (animatorInterface) {
-      animatorInterface.node.send(checkToSendAction !== null && checkToSendAction !== void 0 ? checkToSendAction : ANIMATOR_ACTIONS.refresh);
+  };
+  return { isPending, cancel };
+};
+
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-alpha.21_@arwes+animated@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21_motion@10.16.2/node_modules/@arwes/text/build/esm/internal/walkTextNodes/walkTextNodes.js
+var walkTextNodes2 = (node2, callback) => {
+  Array.from(node2.childNodes).forEach((child) => {
+    if (child.nodeType === Node.TEXT_NODE) {
+      callback(child);
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      walkTextNodes2(child, callback);
     }
-  }, checkToSend !== null && checkToSend !== void 0 ? checkToSend : []);
-  return (0, import_react7.createElement)(AnimatorContext.Provider, { value: animatorInterface }, isEnabledToUnmount ? null : children);
+  });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/Animator/index.js
-var Animator2 = memo(Animator);
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/useAnimator/useAnimator.js
-var import_react8 = __toESM(require_react(), 1);
-var useAnimator = () => {
-  return (0, import_react8.useContext)(AnimatorContext);
-};
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/AnimatorGeneralProvider.js
-var import_react9 = __toESM(require_react(), 1);
-var AnimatorGeneralProvider = (props) => {
-  const { children, ...animatorGeneralSettings } = props;
-  const animatorGeneralSettingsRef = (0, import_react9.useRef)(animatorGeneralSettings);
-  animatorGeneralSettingsRef.current = animatorGeneralSettings;
-  const animatorGeneralInterface = (0, import_react9.useMemo)(() => {
-    const getSettings = () => animatorGeneralSettingsRef.current;
-    return Object.freeze({ getSettings });
-  }, []);
-  return (0, import_react9.createElement)(AnimatorGeneralContext.Provider, { value: animatorGeneralInterface }, children);
-};
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/AnimatorGeneralProvider/index.js
-var AnimatorGeneralProvider2 = memo(AnimatorGeneralProvider);
-
-// ../../node_modules/.pnpm/@arwes+react-animator@1.0.0-next.10_nhuzr3s3f5z76tljxc5y6codbm/node_modules/@arwes/react-animator/build/esm/useAnimatorGeneral/useAnimatorGeneral.js
-var import_react10 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/constants.js
-var ANIMATED_ANIMATIONS_EMPTY = Object.freeze({});
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/Animated/index.js
-var import_react12 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
-var import_react11 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/internal/formatAnimatedCSSPropsShorthands/formatAnimatedCSSPropsShorthands.js
-var propsTransformDistances = {
-  x: "translateX",
-  y: "translateY",
-  z: "translateZ"
-};
-var propsTransformAngles = {
-  rotate: "rotate",
-  rotateX: "rotateX",
-  rotateY: "rotateY",
-  rotateZ: "rotateZ",
-  skew: "skew",
-  skewX: "skewX",
-  skewY: "skewY"
-};
-var propsTransformUnitless = {
-  scale: "scale",
-  scaleX: "scaleX",
-  scaleY: "scaleY",
-  scaleZ: "scaleZ"
-};
-var formatAnimatedCSSPropsShorthands = (cssPropertiesEnhanced) => {
-  if (!cssPropertiesEnhanced) {
-    return;
-  }
-  const cssProperties = {};
-  let transform = "";
-  Object.keys(cssPropertiesEnhanced).forEach((key) => {
-    const raw = cssPropertiesEnhanced[key];
-    if (propsTransformDistances[key]) {
-      const name = propsTransformDistances[key];
-      const value = Number.isFinite(raw) ? `${raw}px` : String(raw);
-      transform += ` ${name}(${value})`;
-    } else if (propsTransformAngles[key]) {
-      const name = propsTransformAngles[key];
-      const value = Number.isFinite(raw) ? `${raw}deg` : String(raw);
-      transform += ` ${name}(${value})`;
-    } else if (propsTransformUnitless[key]) {
-      const name = propsTransformUnitless[key];
-      transform += ` ${name}(${raw})`;
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-alpha.21_@arwes+animated@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21_motion@10.16.2/node_modules/@arwes/text/build/esm/internal/setTextNodesContent/setTextNodesContent.js
+var setTextNodesContent2 = (textNodes, texts, contentLength) => {
+  let markerLength = 0;
+  for (let index = 0; index < textNodes.length; index++) {
+    const textNode = textNodes[index];
+    const text = texts[index];
+    const newMarkerLength = markerLength + text.length;
+    if (newMarkerLength <= contentLength) {
+      if (textNode.textContent !== text) {
+        textNode.textContent = text;
+      }
+    } else if (markerLength <= contentLength) {
+      const currentTextNodeLengthPortion = contentLength - markerLength;
+      const currentTextNodeText = text.substring(0, currentTextNodeLengthPortion);
+      if (textNode.textContent !== currentTextNodeText) {
+        textNode.textContent = currentTextNodeText;
+      }
     } else {
-      cssProperties[key] = raw;
+      if (textNode.textContent !== "") {
+        textNode.textContent = "";
+      }
     }
-  });
-  transform = transform.trim();
-  if (transform) {
-    cssProperties.transform = transform;
+    markerLength = newMarkerLength;
   }
-  return cssProperties;
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/Animated/Animated.js
-var Animated = (props) => {
-  const { as: asProvided, animated, className, style: style2, elementRef: externalElementRef, hideOnExited = true, hideOnEntered, ...otherProps } = props;
-  const animator = useAnimator();
-  const as = (0, import_react11.useMemo)(() => asProvided || "div", []);
-  const elementRef = (0, import_react11.useRef)(null);
-  const animatedSettingsRef = (0, import_react11.useRef)([]);
-  const animationControlsRef = (0, import_react11.useRef)([]);
-  const [isExited, setIsExited] = (0, import_react11.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES.exited);
-  const [isEntered, setIsEntered] = (0, import_react11.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES.entered);
-  const animatedSettingsListReceived = Array.isArray(animated) ? animated : [animated];
-  const animatedSettingsList = animatedSettingsListReceived.filter(Boolean);
-  animatedSettingsRef.current = animatedSettingsList;
-  (0, import_react11.useEffect)(() => {
-    if (!animator) {
-      return;
-    }
-    const cancelSubscription = animator.node.subscribe((node2) => {
-      setIsExited(node2.state === ANIMATOR_STATES.exited);
-      setIsEntered(node2.state === ANIMATOR_STATES.entered);
-      animationControlsRef.current = [];
-      const element = elementRef.current;
-      if (!element) {
-        return;
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-alpha.21_@arwes+animated@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21_motion@10.16.2/node_modules/@arwes/text/build/esm/transitionTextSequence/transitionTextSequence.js
+var transitionTextSequence = (props) => {
+  const { rootElement, contentElement, duration, easing: easing3 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
+  if (!rootElement || !contentElement) {
+    return {
+      isPending: () => false,
+      cancel: () => {
       }
-      const settingsList = animatedSettingsRef.current;
-      const { duration } = node2;
-      const durationTransition = node2.state === ANIMATOR_STATES.entering || node2.state === ANIMATOR_STATES.entered ? duration.enter : duration.exit;
-      settingsList.map((settingsItem) => {
-        var _a;
-        return (_a = settingsItem.transitions) === null || _a === void 0 ? void 0 : _a[node2.state];
-      }).filter(Boolean).map((transitions) => Array.isArray(transitions) ? transitions : [transitions]).flat(1).forEach((transition) => {
-        if (typeof transition === "function") {
-          const control = transition({
-            element,
-            duration: durationTransition
-          });
-          if (control) {
-            animationControlsRef.current.push(control);
-          }
-        } else {
-          const { duration: duration2, delay, easing: easing2, options, ...definition } = transition;
-          const control = animate2(element, definition, { duration: duration2 || durationTransition, delay, easing: easing2, ...options });
-          animationControlsRef.current.push(control);
-        }
-      });
-    });
-    return () => {
-      cancelSubscription();
-      animationControlsRef.current.forEach((control) => control.stop());
     };
-  }, [animator]);
-  let initialAttributes;
-  if (animator) {
-    initialAttributes = animatedSettingsList.map((item) => item === null || item === void 0 ? void 0 : item.initialAttributes).reduce((total, item) => ({ ...total, ...item }), {});
   }
-  let dynamicStyles;
-  if (animator) {
-    dynamicStyles = animatedSettingsList.map((item) => formatAnimatedCSSPropsShorthands(item === null || item === void 0 ? void 0 : item.initialStyle)).reduce((total, item) => ({ ...total, ...item }), {});
-  }
-  return (0, import_react11.createElement)(as, {
-    ...otherProps,
-    ...initialAttributes,
-    className,
-    style: {
-      ...style2,
-      ...dynamicStyles,
-      visibility: animator && (hideOnExited && isExited || hideOnEntered && isEntered) ? "hidden" : "visible"
+  const cloneElement = contentElement.cloneNode(true);
+  Object.assign(cloneElement.style, {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    visibility: "visible",
+    opacity: 1
+  });
+  const blinkElement = document.createElement("span");
+  blinkElement.classList.add("arwes-text__blink");
+  blinkElement.innerHTML = "&#9614;";
+  Object.assign(blinkElement.style, {
+    position: "relative",
+    display: "inline-block",
+    width: 0,
+    height: 0,
+    lineHeight: "0",
+    color: "inherit"
+  });
+  const textNodes = [];
+  const texts = [];
+  walkTextNodes2(cloneElement, (child) => {
+    textNodes.push(child);
+    texts.push(child.textContent || "");
+    if (isEntering) {
+      child.textContent = "";
+    }
+  });
+  const length2 = texts.join("").length;
+  rootElement.appendChild(cloneElement);
+  cloneElement.appendChild(blinkElement);
+  contentElement.style.visibility = "hidden";
+  const blinkAnimation = animate2(blinkElement, { color: ["transparent", "inherit", "transparent"] }, { duration: 0.1, easing: "steps(2, end)", repeat: Infinity });
+  return createAnimation3({
+    duration,
+    easing: easing3,
+    direction: isEntering ? "normal" : "reverse",
+    onUpdate: (progress2) => {
+      const newLength = Math.round(progress2 * length2);
+      setTextNodesContent2(textNodes, texts, newLength);
     },
-    ref: mergeRefs(externalElementRef, elementRef)
+    onComplete: () => {
+      contentElement.style.visibility = isEntering && hideOnEntered || !isEntering && hideOnExited ? "hidden" : "visible";
+      cloneElement.remove();
+      blinkAnimation.cancel();
+    },
+    onCancel: () => {
+      contentElement.style.visibility = "";
+      cloneElement.remove();
+      blinkAnimation.cancel();
+    }
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/Animated/index.js
-var Animated2 = (0, import_react12.memo)((0, import_react12.forwardRef)((props, forwardedRef) => (0, import_react12.createElement)(Animated, {
-  elementRef: forwardedRef,
-  ...props
-})));
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
-var import_react14 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/AnimatedX/AnimatedX.js
-var import_react13 = __toESM(require_react(), 1);
-var AnimatedX = (props) => {
-  const { as: asProvided, state: animatedState, animated, className, style: style2, elementRef: externalElementRef, ...otherProps } = props;
-  const hasState = animatedState !== void 0 && animatedState !== null;
-  const as = (0, import_react13.useMemo)(() => asProvided || "div", []);
-  const elementRef = (0, import_react13.useRef)(null);
-  const animatedSettingsRef = (0, import_react13.useRef)([]);
-  const animationControlsRef = (0, import_react13.useRef)([]);
-  const animatedSettingsListReceived = Array.isArray(animated) ? animated : [animated];
-  const animatedSettingsList = animatedSettingsListReceived.filter(Boolean);
-  animatedSettingsRef.current = animatedSettingsList;
-  (0, import_react13.useEffect)(() => {
-    if (!hasState) {
-      return;
-    }
-    animationControlsRef.current = [];
-    const element = elementRef.current;
-    const settingsList = animatedSettingsRef.current;
-    if (!element) {
-      return;
-    }
-    settingsList.map((settingsItem) => {
-      var _a;
-      return (_a = settingsItem.transitions) === null || _a === void 0 ? void 0 : _a[animatedState];
-    }).filter(Boolean).map((transitions) => Array.isArray(transitions) ? transitions : [transitions]).flat(1).forEach((transition) => {
-      if (typeof transition === "function") {
-        const control = transition({ element, duration: 0 });
-        if (control) {
-          animationControlsRef.current.push(control);
-        }
-      } else {
-        const { duration, delay, easing: easing2, options, ...definition } = transition;
-        const control = animate2(element, definition, { duration, delay, easing: easing2, ...options });
-        animationControlsRef.current.push(control);
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-alpha.21_@arwes+animated@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21_motion@10.16.2/node_modules/@arwes/text/build/esm/transitionTextDecipher/transitionTextDecipher.js
+var LETTERS = "abcdefghijklmn\xF1opqrstuvwxyzABCDEFGHIJKLMN\xD1OPQRSTUVWXYZ>!\xB7$%&/()=?\xBF\u2264|@#";
+var transitionTextDecipher = (props) => {
+  const { rootElement, contentElement, duration, easing: easing3 = "linear", isEntering = true, hideOnExited = true, hideOnEntered } = props;
+  if (!rootElement || !contentElement) {
+    return {
+      isPending: () => false,
+      cancel: () => {
       }
-    });
-    return () => {
-      animationControlsRef.current.forEach((control) => control.stop());
     };
-  }, [hasState, animatedState]);
-  let initialAttributes;
-  if (hasState) {
-    initialAttributes = animatedSettingsList.map((item) => item === null || item === void 0 ? void 0 : item.initialAttributes).reduce((total, item) => ({ ...total, ...item }), {});
   }
-  let dynamicStyles;
-  if (hasState) {
-    dynamicStyles = animatedSettingsList.map((item) => formatAnimatedCSSPropsShorthands(item === null || item === void 0 ? void 0 : item.initialStyle)).reduce((total, item) => ({ ...total, ...item }), {});
-  }
-  return (0, import_react13.createElement)(as, {
-    ...otherProps,
-    ...initialAttributes,
-    className,
-    style: {
-      ...style2,
-      ...dynamicStyles
+  const cloneElement = contentElement.cloneNode(true);
+  Object.assign(cloneElement.style, {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    visibility: "visible",
+    opacity: 1
+  });
+  const textNodes = [];
+  const textsReal = [];
+  walkTextNodes2(cloneElement, (child) => {
+    textNodes.push(child);
+    textsReal.push(child.textContent || "");
+  });
+  const length2 = textsReal.join("").length;
+  const indexes = randomizeList2(Array(length2).fill(null).map((_, i) => i));
+  const deciphered = {};
+  rootElement.appendChild(cloneElement);
+  contentElement.style.visibility = "hidden";
+  return createAnimation3({
+    duration,
+    easing: easing3,
+    direction: isEntering ? "normal" : "reverse",
+    onUpdate: (progress2) => {
+      const newPositionsLength = Math.round(length2 * progress2);
+      for (let index = 0; index < length2; index++) {
+        deciphered[indexes[index]] = index < newPositionsLength;
+      }
+      const textsCurrent = textsReal.map((text) => text.split("").map((char2, index) => {
+        if (char2 === " ")
+          return " ";
+        if (deciphered[index])
+          return char2;
+        return LETTERS[Math.round(Math.random() * (LETTERS.length - 1))];
+      }).join(""));
+      setTextNodesContent2(textNodes, textsCurrent, length2);
     },
-    ref: mergeRefs(externalElementRef, elementRef)
+    onComplete: () => {
+      contentElement.style.visibility = isEntering && hideOnEntered || !isEntering && hideOnExited ? "hidden" : "visible";
+      cloneElement.remove();
+    },
+    onCancel: () => {
+      contentElement.style.visibility = "";
+      cloneElement.remove();
+    }
   });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/AnimatedX/index.js
-var AnimatedX2 = (0, import_react14.memo)((0, import_react14.forwardRef)((props, forwardedRef) => (0, import_react14.createElement)(AnimatedX, {
-  elementRef: forwardedRef,
-  ...props
-})));
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/useAnimatedAnimations/useAnimatedAnimations.js
-var import_react15 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+react-animated@1.0.0-next.9_q7blejfj62opcct3mjc5eotgxq/node_modules/@arwes/react-animated/build/esm/animations/animations.js
-var aa = (prop, from2, to, back) => ({
-  transitions: {
-    entering: { [prop]: [from2, to] },
-    exiting: { [prop]: [to, back !== null && back !== void 0 ? back : from2] }
-  }
-});
-var aaVisibility = () => {
-  return {
-    transitions: {
-      entering: ({ element, duration }) => timeline([
-        [element, { opacity: [0, 1] }],
-        [element, { opacity: [1, 0.7] }],
-        [element, { opacity: [0.7, 1] }]
-      ], { duration }),
-      exiting: ({ element, duration }) => timeline([
-        [element, { opacity: [1, 0] }],
-        [element, { opacity: [0, 0.3] }],
-        [element, { opacity: [0.3, 0] }]
-      ], { duration })
-    }
-  };
+// ../../node_modules/.pnpm/@arwes+text@1.0.0-alpha.21_@arwes+animated@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21_motion@10.16.2/node_modules/@arwes/text/build/esm/getTransitionTextDuration/getTransitionTextDuration.js
+var getTransitionTextDuration = (props) => {
+  const { length: length2, maxDuration = 4, cps = 400 } = props;
+  const realDuration = 1e3 / cps * length2 / 1e3;
+  return Math.min(realDuration, maxDuration);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_ynlkumrbuwygl5pazjamknxere/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
-var import_react17 = __toESM(require_react(), 1);
-
-// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleep/createBleep.js
-var createBleep2 = (props) => {
-  var _a;
-  if (!IS_BROWSER) {
-    return null;
-  }
-  const { sources, preload = true, loop = false, volume = 1, fetchHeaders, masterGain } = props;
-  let isBufferLoading = false;
-  let isBufferError = false;
-  let isBufferPlaying = false;
-  let source = null;
-  let buffer = null;
-  let duration = 0;
-  const context = (_a = props.context) !== null && _a !== void 0 ? _a : new window.AudioContext();
-  const gain = context.createGain();
-  const callersAccount = /* @__PURE__ */ new Set();
-  const fetchAudioBuffer = () => {
-    if (buffer || isBufferLoading || isBufferError) {
-      return;
-    }
-    if (!sources.length) {
-      isBufferError = true;
-      console.error("Every bleep must have at least one source with a valid audio file URL and type.");
-      return;
-    }
-    const audioTest = new window.Audio();
-    const source2 = sources.find((source3) => {
-      if (IS_BROWSER_SAFARI && source3.type.includes("audio/webm")) {
-        return false;
-      }
-      const support = audioTest.canPlayType(source3.type || "");
-      return support === "probably" || support === "maybe";
-    });
-    if (!source2) {
-      isBufferError = true;
-      console.error(`The bleep sources "${JSON.stringify(sources)}" are not supported on this navigator.`);
-      return;
-    }
-    const { src, type } = source2;
-    isBufferLoading = true;
-    window.fetch(src, {
-      method: "GET",
-      headers: fetchHeaders
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error("Bleep source could not be fetched.");
-      }
-      return response;
-    }).then((response) => response.arrayBuffer()).then((audioArrayBuffer) => context.decodeAudioData(audioArrayBuffer)).then((audioBuffer) => {
-      buffer = audioBuffer;
-      duration = buffer.duration;
-    }).catch((err) => {
-      isBufferError = true;
-      console.error(`The bleep with source URL "${src}" and type "${type}" could not be used:`, err);
-    }).then(() => isBufferLoading = false);
-  };
-  const getDuration = () => duration;
-  const getIsPlaying = () => isBufferPlaying;
-  const getIsLoaded = () => !!buffer;
-  const play = (caller) => {
-    if (!buffer) {
-      fetchAudioBuffer();
-      return;
-    }
-    if (loop && isBufferPlaying) {
-      return;
-    }
-    if (context.state === "suspended") {
-      let isResumeError = false;
-      context.resume().catch((err) => {
-        isResumeError = true;
-        console.error(`The bleep audio context with sources "${JSON.stringify(sources)}" could not be resumed to be played:`, err);
-      });
-      if (isResumeError) {
-        return;
-      }
-    }
-    if (caller) {
-      callersAccount.add(caller);
-    }
-    isBufferPlaying = true;
-    if (source) {
-      source.stop();
-      source.disconnect(gain);
-      source = null;
-    }
-    source = context.createBufferSource();
-    source.buffer = buffer;
-    source.loop = loop;
-    if (loop) {
-      source.loopStart = 0;
-      source.loopEnd = buffer.duration;
-    }
-    source.connect(gain);
-    source.start();
-    source.onended = () => {
-      isBufferPlaying = false;
-    };
-  };
-  const stop = (caller) => {
-    if (!buffer) {
-      return;
-    }
-    if (caller) {
-      callersAccount.delete(caller);
-    }
-    const canStop = loop ? !callersAccount.size : true;
-    if (canStop) {
-      if (source) {
-        source.stop();
-        source.disconnect(gain);
-        source = null;
-      }
-      isBufferPlaying = false;
-    }
-  };
-  const load = () => {
-    fetchAudioBuffer();
-  };
-  const unload = () => {
-    if (source) {
-      source.stop();
-      source.disconnect(gain);
-      source = null;
-    }
-    buffer = null;
-    isBufferLoading = false;
-    isBufferError = false;
-  };
-  const update = (props2) => {
-    if (props2.volume !== void 0) {
-      const bleepVolume = Math.max(0, Math.min(1, props2.volume));
-      gain.gain.setValueAtTime(bleepVolume, context.currentTime);
-    }
-  };
-  const bleep = {};
-  const bleepAPI = {
-    duration: {
-      get: getDuration,
-      enumerable: true
-    },
-    isPlaying: {
-      get: getIsPlaying,
-      enumerable: true
-    },
-    isLoaded: {
-      get: getIsLoaded,
-      enumerable: true
-    },
-    play: {
-      value: play,
-      enumerable: true
-    },
-    stop: {
-      value: stop,
-      enumerable: true
-    },
-    load: {
-      value: load,
-      enumerable: true
-    },
-    unload: {
-      value: unload,
-      enumerable: true
-    },
-    update: {
-      value: update,
-      enumerable: true
-    }
-  };
-  Object.defineProperties(bleep, bleepAPI);
-  if (masterGain) {
-    gain.connect(masterGain);
-  } else {
-    gain.connect(context.destination);
-  }
-  update({ volume });
-  if (preload) {
-    fetchAudioBuffer();
-  }
-  return bleep;
-};
-
-// ../../node_modules/.pnpm/@arwes+bleeps@1.0.0-next.7_@arwes+tools@1.0.0-next.7/node_modules/@arwes/bleeps/build/esm/createBleepsManager/createBleepsManager.js
-var createBleepsManager = (props) => {
-  var _a, _b;
-  const context = IS_BROWSER ? new window.AudioContext() : null;
-  const masterGain = IS_BROWSER ? context.createGain() : null;
-  const bleeps = {};
-  const bleepNames = Object.keys(props.bleeps);
-  bleepNames.forEach((bleepName) => {
-    var _a2;
-    const bleepProps = props.bleeps[bleepName];
-    const categoryProps = bleepProps.category ? (_a2 = props.categories) === null || _a2 === void 0 ? void 0 : _a2[bleepProps.category] : null;
-    const generalProps = {
-      ...props.common,
-      ...categoryProps
-    };
-    bleeps[bleepName] = generalProps.disabled ? null : createBleep2({
-      ...generalProps,
-      ...bleepProps,
-      context,
-      masterGain
-    });
-  });
-  if (IS_BROWSER) {
-    masterGain.connect(context.destination);
-    const globalVolume = Math.max(0, Math.min(1, (_b = (_a = props === null || props === void 0 ? void 0 : props.master) === null || _a === void 0 ? void 0 : _a.volume) !== null && _b !== void 0 ? _b : 1));
-    masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
-  }
-  const unload = () => {
-    bleepNames.forEach((bleepName) => {
-      var _a2;
-      (_a2 = bleeps[bleepName]) === null || _a2 === void 0 ? void 0 : _a2.unload();
-    });
-  };
-  const update = (newProps) => {
-    var _a2;
-    if (((_a2 = newProps.master) === null || _a2 === void 0 ? void 0 : _a2.volume) !== void 0) {
-      const globalVolume = Math.max(0, Math.min(1, newProps.master.volume));
-      masterGain.gain.setValueAtTime(globalVolume, context.currentTime);
-    }
-    bleepNames.forEach((bleepName) => {
-      var _a3, _b2, _c, _d;
-      const baseBleepProps = props.bleeps[bleepName];
-      const category = baseBleepProps === null || baseBleepProps === void 0 ? void 0 : baseBleepProps.category;
-      const newCategoryProps = category ? (_a3 = newProps.categories) === null || _a3 === void 0 ? void 0 : _a3[category] : null;
-      const generalProps = {
-        ...newProps.common,
-        ...newCategoryProps
-      };
-      if (generalProps.disabled) {
-        (_b2 = bleeps[bleepName]) === null || _b2 === void 0 ? void 0 : _b2.unload();
-        bleeps[bleepName] = null;
-      } else {
-        if (bleeps[bleepName]) {
-          (_c = bleeps[bleepName]) === null || _c === void 0 ? void 0 : _c.update({
-            ...generalProps,
-            ...(_d = newProps.bleeps) === null || _d === void 0 ? void 0 : _d[bleepName]
-          });
-        } else {
-          bleeps[bleepName] = createBleep2({
-            ...generalProps,
-            ...baseBleepProps,
-            context,
-            masterGain
-          });
-        }
-      }
-    });
-  };
-  return Object.freeze({ bleeps, unload, update });
-};
-
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_ynlkumrbuwygl5pazjamknxere/node_modules/@arwes/react-bleeps/build/esm/internal/BleepsManagerContext.js
-var import_react16 = __toESM(require_react(), 1);
-var BleepsManagerContext = (0, import_react16.createContext)(null);
-
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_ynlkumrbuwygl5pazjamknxere/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/BleepsProvider.js
-var BleepsProvider = (props) => {
-  const { master, common, categories, bleeps, children } = props;
-  const bleepsManager = (0, import_react17.useMemo)(() => createBleepsManager({ master, common, categories, bleeps }), []);
-  (0, import_react17.useEffect)(() => {
-    bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.update({ master, common, categories, bleeps });
-  }, [master, common, categories, bleeps]);
-  (0, import_react17.useEffect)(() => {
-    return () => {
-      bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.unload();
-    };
-  }, []);
-  return import_react17.default.createElement(BleepsManagerContext.Provider, { value: bleepsManager }, children);
-};
-
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_ynlkumrbuwygl5pazjamknxere/node_modules/@arwes/react-bleeps/build/esm/BleepsProvider/index.js
-var BleepsProvider2 = memo(BleepsProvider);
-
-// ../../node_modules/.pnpm/@arwes+react-bleeps@1.0.0-next.10_ynlkumrbuwygl5pazjamknxere/node_modules/@arwes/react-bleeps/build/esm/useBleeps/useBleeps.js
-var import_react18 = __toESM(require_react(), 1);
-var defaultProps = {};
-var useBleeps = (props = defaultProps) => {
-  var _a;
-  if (props.disabled) {
-    return {};
-  }
-  const bleepsManager = (0, import_react18.useContext)(BleepsManagerContext);
-  return (_a = bleepsManager === null || bleepsManager === void 0 ? void 0 : bleepsManager.bleeps) !== null && _a !== void 0 ? _a : {};
-};
-
-// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_vlrhzvotaicxo74txoookx2k5q/node_modules/@arwes/react-text/build/esm/Text/Text.js
-var import_react19 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_ohoe22lbbiqeceftxzxwn2h5r4/node_modules/@arwes/react-text/build/esm/Text/Text.js
 var TEXT_CLASS = "arwes-react-text-text";
 var Text = (props) => {
-  const { as: asProvided = "p", className, contentClassName, children, manager, easing: easing2, fixed, hideOnExited = true, hideOnEntered, elementRef: elementRefProvided, ...otherProps } = props;
-  const as = (0, import_react19.useMemo)(() => asProvided, []);
-  const [childrenText, setChildrenText] = (0, import_react19.useState)("");
-  const elementRef = (0, import_react19.useRef)(null);
-  const contentElementRef = (0, import_react19.useRef)(null);
-  const transitionControl = (0, import_react19.useRef)(null);
+  const { as: asProvided = "p", className, contentClassName, children, manager, easing: easing3, fixed, hideOnExited = true, hideOnEntered, elementRef: elementRefProvided, ...otherProps } = props;
+  const as = (0, import_react17.useMemo)(() => asProvided, []);
+  const [childrenText, setChildrenText] = (0, import_react17.useState)("");
+  const elementRef = (0, import_react17.useRef)(null);
+  const contentElementRef = (0, import_react17.useRef)(null);
+  const transitionControl = (0, import_react17.useRef)(null);
   const animator = useAnimator();
-  const [isExited, setIsExited] = (0, import_react19.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES.exited);
-  const [isEntered, setIsEntered] = (0, import_react19.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES.entered);
-  (0, import_react19.useEffect)(() => {
+  const [isExited, setIsExited] = (0, import_react17.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES2.exited);
+  const [isEntered, setIsEntered] = (0, import_react17.useState)(() => (animator === null || animator === void 0 ? void 0 : animator.node.state) === ANIMATOR_STATES2.entered);
+  (0, import_react17.useEffect)(() => {
     var _a, _b;
     setChildrenText((_b = (_a = contentElementRef.current) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : "");
   }, [children]);
-  (0, import_react19.useEffect)(() => {
+  (0, import_react17.useEffect)(() => {
     if (!animator) {
       if (contentElementRef.current) {
         contentElementRef.current.style.visibility = "visible";
@@ -29092,14 +29706,14 @@ var Text = (props) => {
         contentElement: contentElementRef.current,
         duration,
         isEntering,
-        easing: easing2,
+        easing: easing3,
         hideOnExited,
         hideOnEntered
       });
     };
     const cancelSubscription = animator.node.subscribe((node2) => {
-      setIsEntered(node2.state === ANIMATOR_STATES.entered);
-      setIsExited(node2.state === ANIMATOR_STATES.exited);
+      setIsEntered(node2.state === ANIMATOR_STATES2.entered);
+      setIsExited(node2.state === ANIMATOR_STATES2.exited);
       switch (node2.state) {
         case "entered": {
           if (!transitionControl.current) {
@@ -29143,13 +29757,13 @@ var Text = (props) => {
   }, children));
 };
 
-// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_vlrhzvotaicxo74txoookx2k5q/node_modules/@arwes/react-text/build/esm/Text/index.js
+// ../../node_modules/.pnpm/@arwes+react-text@1.0.0-next.8_@arwes+animator@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_ohoe22lbbiqeceftxzxwn2h5r4/node_modules/@arwes/react-text/build/esm/Text/index.js
 var Text2 = memo(Text);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/useFrameSVGRenderer/useFrameSVGRenderer.js
-var import_react21 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/useFrameSVGRenderer/useFrameSVGRenderer.js
+var import_react19 = __toESM(require_react(), 1);
 var useFrameSVGRenderer = (svgRef, onRenderExternal) => {
-  (0, import_react21.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     if (!svgRef.current) {
       return;
     }
@@ -29175,22 +29789,112 @@ var useFrameSVGRenderer = (svgRef, onRenderExternal) => {
   }, [onRenderExternal]);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/useFrameSVGAssemblingAnimation/useFrameSVGAssemblingAnimation.js
-var import_react22 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/useFrameSVGAssemblingAnimation/useFrameSVGAssemblingAnimation.js
+var import_react20 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVG/FrameSVG.js
-var import_react23 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVG/FrameSVG.js
+var import_react21 = __toESM(require_react(), 1);
+
+// ../../node_modules/.pnpm/@arwes+frames@1.0.0-alpha.21/node_modules/@arwes/frames/build/esm/formatFrameSVGPath/formatFrameSVGPath.js
+var formatDimension = (size, dimension) => {
+  if (typeof dimension === "number") {
+    return String(dimension);
+  }
+  const dimensionNumber = String(dimension).trim().replace(/- /g, "-").replace(/\+ /g, "+").replace(/\s{2,}/g, " ").split(" ").reduce((total, item) => {
+    const n = Number(item.replace(/[+\-%]/g, ""));
+    if (n === 0) {
+      return total;
+    }
+    const isMinus = item.startsWith("-");
+    const isPercentage = item.endsWith("%");
+    const value = isPercentage ? size * (n / 100) : n;
+    return isMinus ? total - value : total + value;
+  }, 0);
+  return String(dimensionNumber);
+};
+var formatCommand = (width, height, command) => {
+  if (Array.isArray(command)) {
+    const [name, ...dimensions] = command;
+    if (name === "H" || name === "h") {
+      return `${name} ${formatDimension(width, dimensions[0])}`;
+    }
+    if (name === "V" || name === "v") {
+      return `${name} ${formatDimension(height, dimensions[0])}`;
+    }
+    if (name === "A" || name === "a") {
+      const [rx, ry, angle, largeArcFlag, sweepFlag, x, y] = dimensions;
+      const values2 = [
+        formatDimension(width, rx),
+        formatDimension(height, ry),
+        angle,
+        largeArcFlag,
+        sweepFlag,
+        formatDimension(width, x),
+        formatDimension(height, y)
+      ].join(",");
+      return name + " " + values2;
+    }
+    const values = dimensions.map((dimension, index) => {
+      const isEven = index % 2 === 0;
+      const size = isEven ? width : height;
+      return formatDimension(size, dimension);
+    }).join(",");
+    return name + " " + values;
+  }
+  return command;
+};
+var formatFrameSVGPath2 = (width, height, path) => {
+  return path.map((command) => formatCommand(width, height, command)).join(" ");
+};
+
+// ../../node_modules/.pnpm/@arwes+frames@1.0.0-alpha.21/node_modules/@arwes/frames/build/esm/renderFrameSVGPaths/renderFrameSVGPaths.js
+var renderFrameSVGPaths = (parentElement, width, height, pathsCustom) => {
+  if (width <= 0 || height <= 0) {
+    return;
+  }
+  const pathElementsCurrent = Array.from(parentElement.querySelectorAll("path[data-frame]"));
+  for (let index = 0; index < pathsCustom.length; index++) {
+    const pathCustom = pathsCustom[index];
+    const pathElementCurrent = pathElementsCurrent[index];
+    const pathElement = pathElementCurrent !== null && pathElementCurrent !== void 0 ? pathElementCurrent : document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const isCommands = Array.isArray(pathCustom);
+    const path = isCommands ? pathCustom : pathCustom.path;
+    pathElement.dataset.frame = "";
+    Object.assign(pathElement.style, {
+      vectorEffect: "non-scaling-stroke"
+    });
+    if (!isCommands) {
+      const { name, id, className, style: style2 } = pathCustom;
+      if (pathElement.dataset.name !== name) {
+        pathElement.dataset.name = name;
+      }
+      if (pathElement.id !== id) {
+        pathElement.id = id || "";
+      }
+      if (pathElement.classList.value !== className) {
+        pathElement.classList.value = className || "";
+      }
+      Object.assign(pathElement.style, style2);
+    }
+    pathElement.setAttribute("d", formatFrameSVGPath2(width, height, path));
+    if (pathElement.parentNode !== parentElement) {
+      parentElement.appendChild(pathElement);
+    }
+  }
+};
+
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVG/FrameSVG.js
 var FrameSVG = (props) => {
   const { paths, onRender: onRenderExternal, className, style: style2, elementRef, children, ...otherProps } = props;
-  const svgRef = (0, import_react23.useRef)(null);
-  const onRender = (0, import_react23.useCallback)((svg, width, height) => {
+  const svgRef = (0, import_react21.useRef)(null);
+  const onRender = (0, import_react21.useCallback)((svg, width, height) => {
     if (paths) {
       renderFrameSVGPaths(svg, width, height, paths);
     }
     onRenderExternal === null || onRenderExternal === void 0 ? void 0 : onRenderExternal(svg, width, height);
   }, [paths]);
   useFrameSVGRenderer(svgRef, onRender);
-  return import_react23.default.createElement("svg", {
+  return import_react21.default.createElement("svg", {
     role: "presentation",
     ref: mergeRefs(svgRef, elementRef),
     className: cx("arwes-react-frames-framesvg", className),
@@ -29216,15 +29920,15 @@ var FrameSVG = (props) => {
   }, children);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVG/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVG/index.js
 var FrameSVG2 = memo(FrameSVG);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/FrameSVGOctagon.js
-var import_react24 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/FrameSVGOctagon.js
+var import_react22 = __toESM(require_react(), 1);
 var toPath = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGOctagon = (props) => {
   const { leftTop = true, rightTop = true, rightBottom = true, leftBottom = true, squareSize: ss = 16, strokeWidth = 1, padding: p = 0, className, ...otherProps } = props;
-  const paths = (0, import_react24.useMemo)(() => {
+  const paths = (0, import_react22.useMemo)(() => {
     const so = strokeWidth / 2;
     const polylineStyle = {
       stroke: "currentcolor",
@@ -29289,17 +29993,17 @@ var FrameSVGOctagon = (props) => {
     ];
     return paths2;
   }, [leftTop, rightTop, rightBottom, leftBottom, ss, strokeWidth, p]);
-  return import_react24.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgoctagon", className), paths });
+  return import_react22.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgoctagon", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGOctagon/index.js
 var FrameSVGOctagon2 = memo(FrameSVGOctagon);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/FrameSVGUnderline.js
-var import_react25 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/FrameSVGUnderline.js
+var import_react23 = __toESM(require_react(), 1);
 var FrameSVGUnderline = (props) => {
   const { squareSize: ss = 16, strokeWidth: sw = 1, inverted, className, ...otherProps } = props;
-  const paths = (0, import_react25.useMemo)(() => {
+  const paths = (0, import_react23.useMemo)(() => {
     const so = sw / 2;
     return [
       {
@@ -29333,17 +30037,17 @@ var FrameSVGUnderline = (props) => {
       }
     ];
   }, [ss, sw, inverted]);
-  return import_react25.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgunderline", className), paths });
+  return import_react23.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgunderline", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGUnderline/index.js
 var FrameSVGUnderline2 = memo(FrameSVGUnderline);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/FrameSVGCorners.js
-var import_react26 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/FrameSVGCorners.js
+var import_react24 = __toESM(require_react(), 1);
 var FrameSVGCorners = (props) => {
   const { strokeWidth: cw = 1, cornerLength: cl = 16, className, ...otherProps } = props;
-  const paths = (0, import_react26.useMemo)(() => {
+  const paths = (0, import_react24.useMemo)(() => {
     const co = cw / 2;
     const bg = {
       name: "bg",
@@ -29385,17 +30089,17 @@ var FrameSVGCorners = (props) => {
     }));
     return [bg, ...lines];
   }, [cw, cl]);
-  return import_react26.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgcorners", className), paths });
+  return import_react24.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgcorners", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGCorners/index.js
 var FrameSVGCorners2 = memo(FrameSVGCorners);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/FrameSVGLines.js
-var import_react27 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/FrameSVGLines.js
+var import_react25 = __toESM(require_react(), 1);
 var FrameSVGLines = (props) => {
   const { largeLineWidth: llw = 1, smallLineWidth: slw = 1, smallLineLength: sll = 16, className, ...otherProps } = props;
-  const paths = (0, import_react27.useMemo)(() => {
+  const paths = (0, import_react25.useMemo)(() => {
     const polylineStyle = {
       strokeLinecap: "square",
       stroke: "currentcolor",
@@ -29475,18 +30179,18 @@ var FrameSVGLines = (props) => {
       }))
     ];
   }, [llw, slw, sll]);
-  return import_react27.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvglines", className), paths });
+  return import_react25.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvglines", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGLines/index.js
 var FrameSVGLines2 = memo(FrameSVGLines);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/FrameSVGNefrex.js
-var import_react28 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/FrameSVGNefrex.js
+var import_react26 = __toESM(require_react(), 1);
 var toPath2 = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGNefrex = (props) => {
   const { squareSize: ss = 16, strokeWidth = 1, smallLineLength: sll = 16, largeLineLength: lll = 64, padding: p = 0, className, ...otherProps } = props;
-  const paths = (0, import_react28.useMemo)(() => {
+  const paths = (0, import_react26.useMemo)(() => {
     const so = strokeWidth / 2;
     const polylineStyle = {
       stroke: "currentcolor",
@@ -29533,18 +30237,18 @@ var FrameSVGNefrex = (props) => {
     ];
     return paths2;
   }, [sll, lll, ss, strokeWidth, p]);
-  return import_react28.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgnefrex", className), paths });
+  return import_react26.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgnefrex", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGNefrex/index.js
 var FrameSVGNefrex2 = memo(FrameSVGNefrex);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/FrameSVGKranox.js
-var import_react29 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/FrameSVGKranox.js
+var import_react27 = __toESM(require_react(), 1);
 var toPath3 = (points) => points.map((p, i) => [i === 0 ? "M" : "L", ...p]);
 var FrameSVGKranox = (props) => {
   const { squareSize: ss = 16, strokeWidth = 1, smallLineLength: sll = 16, largeLineLength: lll = 64, padding: p = 0, className, ...otherProps } = props;
-  const paths = (0, import_react29.useMemo)(() => {
+  const paths = (0, import_react27.useMemo)(() => {
     const so = strokeWidth / 2;
     const polylineStyle = {
       stroke: "currentcolor",
@@ -29605,19 +30309,19 @@ var FrameSVGKranox = (props) => {
     ];
     return paths2;
   }, [sll, lll, ss, strokeWidth, p]);
-  return import_react29.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgkranox", className), paths });
+  return import_react27.default.createElement(FrameSVG2, { ...otherProps, className: cx("arwes-react-frames-framesvgkranox", className), paths });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/FrameSVGKranox/index.js
 var FrameSVGKranox2 = memo(FrameSVGKranox);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/IlluminatorSVG.js
-var import_react30 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/IlluminatorSVG.js
+var import_react28 = __toESM(require_react(), 1);
 var IlluminatorSVG = (props) => {
   const { color = "hsl(0 0% 50% / 5%)", size = 300, className, style: style2 } = props;
-  const gradientId = (0, import_react30.useId)();
-  const circleElementRef = (0, import_react30.useRef)(null);
-  (0, import_react30.useEffect)(() => {
+  const gradientId = (0, import_react28.useId)();
+  const circleElementRef = (0, import_react28.useRef)(null);
+  (0, import_react28.useEffect)(() => {
     var _a;
     const element = circleElementRef.current;
     const svg = (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement;
@@ -29640,23 +30344,23 @@ var IlluminatorSVG = (props) => {
       document.removeEventListener("mouseleave", onHide);
     };
   }, [color, size]);
-  return import_react30.default.createElement(
+  return import_react28.default.createElement(
     "g",
     { className: cx("arwes-react-frames-illuminatorsvg", className), style: {
       pointerEvents: "none",
       ...style2
     } },
-    import_react30.default.createElement(
+    import_react28.default.createElement(
       "defs",
       null,
-      import_react30.default.createElement(
+      import_react28.default.createElement(
         "radialGradient",
         { id: gradientId },
-        import_react30.default.createElement("stop", { offset: "0%", stopColor: color }),
-        import_react30.default.createElement("stop", { offset: "100%", stopColor: "transparent" })
+        import_react28.default.createElement("stop", { offset: "0%", stopColor: color }),
+        import_react28.default.createElement("stop", { offset: "100%", stopColor: "transparent" })
       )
     ),
-    import_react30.default.createElement("circle", { ref: circleElementRef, r: size / 2, style: {
+    import_react28.default.createElement("circle", { ref: circleElementRef, r: size / 2, style: {
       position: "absolute",
       transition: "opacity 200ms ease-out",
       opacity: 0
@@ -29664,15 +30368,15 @@ var IlluminatorSVG = (props) => {
   );
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/IlluminatorSVG/index.js
 var IlluminatorSVG2 = memo(IlluminatorSVG);
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/Illuminator/Illuminator.js
-var import_react31 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/Illuminator/Illuminator.js
+var import_react29 = __toESM(require_react(), 1);
 var Illuminator = (props) => {
   const { color = "hsl(0 0% 50% / 5%)", size = 300, className, style: style2 } = props;
-  const elementRef = (0, import_react31.useRef)(null);
-  (0, import_react31.useEffect)(() => {
+  const elementRef = (0, import_react29.useRef)(null);
+  (0, import_react29.useEffect)(() => {
     const element = elementRef.current;
     const parentElement = element.parentElement;
     const onMove = (event) => {
@@ -29692,7 +30396,7 @@ var Illuminator = (props) => {
       document.removeEventListener("mouseleave", onHide);
     };
   }, []);
-  return import_react31.default.createElement("div", { role: "presentation", className: cx("arwes-react-frames-illuminator", className), style: {
+  return import_react29.default.createElement("div", { role: "presentation", className: cx("arwes-react-frames-illuminator", className), style: {
     position: "absolute",
     width: size,
     height: size,
@@ -29705,13 +30409,13 @@ var Illuminator = (props) => {
   }, ref: elementRef });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_zgaptbx3qnnitrxgphtzi4uysa/node_modules/@arwes/react-frames/build/esm/Illuminator/index.js
+// ../../node_modules/.pnpm/@arwes+react-frames@1.0.0-next.9_@arwes+frames@1.0.0-alpha.21_@arwes+react-animator@1.0.0-nex_qc6eynni5bnighntzenav7pc5i/node_modules/@arwes/react-frames/build/esm/Illuminator/index.js
 var Illuminator2 = memo(Illuminator);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
-var import_react32 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
+var import_react30 = __toESM(require_react(), 1);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Dots/getDistanceFromOriginToCornerProgress.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Dots/getDistanceFromOriginToCornerProgress.js
 var getDistanceBetweenTwoPoints = (x1, y1, x2, y2) => {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 };
@@ -29739,8 +30443,8 @@ var getDistanceFromOriginToCornerProgress = (width, height, x1, y1, origin) => {
   return distanceFromOrigin / maxDistanceToCorner;
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
-var { entering, exiting } = ANIMATOR_STATES;
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Dots/Dots.js
+var { entering, exiting } = ANIMATOR_STATES2;
 var defaultProps2 = {
   color: "#777",
   type: "box",
@@ -29752,10 +30456,10 @@ var Dots = (props) => {
   const propsFull = { ...defaultProps2, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
-  const elementRef = (0, import_react32.useRef)(null);
-  const propsFullRef = (0, import_react32.useRef)(propsFull);
+  const elementRef = (0, import_react30.useRef)(null);
+  const propsFullRef = (0, import_react30.useRef)(propsFull);
   propsFullRef.current = propsFull;
-  (0, import_react32.useEffect)(() => {
+  (0, import_react30.useEffect)(() => {
     if (!animator) {
       return;
     }
@@ -29829,7 +30533,7 @@ var Dots = (props) => {
       cancelAnimationSubscriptions();
     };
   }, [animator]);
-  return import_react32.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-dots", className), style: {
+  return import_react30.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-dots", className), style: {
     position: "absolute",
     left: 0,
     top: 0,
@@ -29843,12 +30547,12 @@ var Dots = (props) => {
   } });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Dots/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Dots/index.js
 var Dots2 = memo(Dots);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Puffs/Puffs.js
-var import_react33 = __toESM(require_react(), 1);
-var { entering: entering2, entered, exiting: exiting2, exited } = ANIMATOR_STATES;
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Puffs/Puffs.js
+var import_react31 = __toESM(require_react(), 1);
+var { entering: entering2, entered, exiting: exiting2, exited } = ANIMATOR_STATES2;
 var minmaxOverflow01 = (value) => Math.min(1, Math.max(0, value === 1 ? 1 : value % 1));
 var defaultProps3 = {
   padding: 50,
@@ -29862,10 +30566,10 @@ var Puffs = (props) => {
   const propsFull = { ...defaultProps3, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
-  const elementRef = (0, import_react33.useRef)(null);
-  const propsFullRef = (0, import_react33.useRef)(propsFull);
+  const elementRef = (0, import_react31.useRef)(null);
+  const propsFullRef = (0, import_react31.useRef)(propsFull);
   propsFullRef.current = propsFull;
-  (0, import_react33.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     if (!animator) {
       return;
     }
@@ -29930,7 +30634,7 @@ var Puffs = (props) => {
             puffsSets.forEach((puffs, index) => {
               const puffsOffset = puffsSetOffset * index;
               const puffsProgress = minmaxOverflow01(intervalProgress + puffsOffset);
-              drawPuffs(puffs, easing.outSine(puffsProgress));
+              drawPuffs(puffs, easing2.outSine(puffsProgress));
             });
           };
           canvasControl = animate2(canvas, { opacity: [0, 1] }, { duration: duration === null || duration === void 0 ? void 0 : duration.enter });
@@ -29968,7 +30672,7 @@ var Puffs = (props) => {
       cancelAnimationSubscriptions();
     };
   }, [animator]);
-  return import_react33.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-puffs", className), style: {
+  return import_react31.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-puffs", className), style: {
     position: "absolute",
     left: 0,
     top: 0,
@@ -29982,12 +30686,12 @@ var Puffs = (props) => {
   } });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/Puffs/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/Puffs/index.js
 var Puffs2 = memo(Puffs);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/GridLines/GridLines.js
-var import_react34 = __toESM(require_react(), 1);
-var { entering: entering3, exiting: exiting3 } = ANIMATOR_STATES;
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/GridLines/GridLines.js
+var import_react32 = __toESM(require_react(), 1);
+var { entering: entering3, exiting: exiting3 } = ANIMATOR_STATES2;
 var defaultProps4 = {
   lineWidth: 1,
   lineColor: "#777",
@@ -29999,10 +30703,10 @@ var GridLines = (props) => {
   const propsFull = { ...defaultProps4, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
-  const elementRef = (0, import_react34.useRef)(null);
-  const propsFullRef = (0, import_react34.useRef)(propsFull);
+  const elementRef = (0, import_react32.useRef)(null);
+  const propsFullRef = (0, import_react32.useRef)(propsFull);
   propsFullRef.current = propsFull;
-  (0, import_react34.useEffect)(() => {
+  (0, import_react32.useEffect)(() => {
     if (!animator) {
       return;
     }
@@ -30068,7 +30772,7 @@ var GridLines = (props) => {
       resizeObserver === null || resizeObserver === void 0 ? void 0 : resizeObserver.disconnect();
     };
   }, [animator]);
-  return import_react34.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-gridlines", className), style: {
+  return import_react32.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-gridlines", className), style: {
     position: "absolute",
     left: 0,
     top: 0,
@@ -30083,19 +30787,19 @@ var GridLines = (props) => {
   } });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/GridLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/GridLines/index.js
 var GridLines2 = memo(GridLines);
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/MovingLines/MovingLines.js
-var import_react35 = __toESM(require_react(), 1);
-var { entering: entering4, exiting: exiting4, exited: exited2 } = ANIMATOR_STATES;
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/MovingLines/MovingLines.js
+var import_react33 = __toESM(require_react(), 1);
+var { entering: entering4, exiting: exiting4, exited: exited2 } = ANIMATOR_STATES2;
 var random = (min, max) => (max - min) * Math.random();
 var minmaxOverflow012 = (value) => Math.min(1, Math.max(0, value === 1 ? 1 : value % 1));
 var createLinesSet = (config) => {
   const { distance, positionsLength, margin, size } = config;
   const linesLength = Math.floor(random(0.1, 0.5) * positionsLength);
   const positions = Array(positionsLength).fill(0).map((_, i) => i);
-  const positionsRandom = randomizeList(positions);
+  const positionsRandom = randomizeList2(positions);
   const positionsSelected = positionsRandom.slice(0, linesLength);
   return positionsSelected.map((position2) => {
     const axis1 = margin / 2 + position2 * distance;
@@ -30114,10 +30818,10 @@ var MovingLines = (props) => {
   const propsFull = { ...defaultProps5, ...props };
   const { elementRef: elementRefExternal, className, style: style2 } = propsFull;
   const animator = useAnimator();
-  const elementRef = (0, import_react35.useRef)(null);
-  const propsFullRef = (0, import_react35.useRef)(propsFull);
+  const elementRef = (0, import_react33.useRef)(null);
+  const propsFullRef = (0, import_react33.useRef)(propsFull);
   propsFullRef.current = propsFull;
-  (0, import_react35.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     if (!animator) {
       return;
     }
@@ -30150,7 +30854,7 @@ var MovingLines = (props) => {
       linesSets.forEach((linesSet, linesSetIndex) => {
         const linesSetProgressOffset = 1 / linesSetsLength * linesSetIndex;
         const progress2 = minmaxOverflow012(intervalProgress + linesSetProgressOffset);
-        const progressEase = easing.inOutCubic(progress2);
+        const progressEase = easing2.inOutCubic(progress2);
         linesSet.forEach((line2) => {
           const { axis1, axis2Initial, length: length2 } = line2;
           const axis2Move = axis2Size * 2 * progressEase - axis2Size;
@@ -30188,7 +30892,7 @@ var MovingLines = (props) => {
       intervalControl === null || intervalControl === void 0 ? void 0 : intervalControl.cancel();
     };
   }, [animator]);
-  return import_react35.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-movinglines", className), style: {
+  return import_react33.default.createElement("canvas", { role: "presentation", ref: mergeRefs(elementRef, elementRefExternal), className: cx("arwes-react-bgs-movinglines", className), style: {
     position: "absolute",
     left: 0,
     top: 0,
@@ -30203,21 +30907,21 @@ var MovingLines = (props) => {
   } });
 };
 
-// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_asrlhd2qgl3d3ziqn6raliniwq/node_modules/@arwes/react-bgs/build/esm/MovingLines/index.js
+// ../../node_modules/.pnpm/@arwes+react-bgs@1.0.0-next.10_@arwes+animated@1.0.0-alpha.21_@arwes+animator@1.0.0-alpha.21__rtk2bcipfndjthp4za63f7i25m/node_modules/@arwes/react-bgs/build/esm/MovingLines/index.js
 var MovingLines2 = memo(MovingLines);
 
-// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_kblgyefjpdvtk343dq4i4u4j6q/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/BleepsOnAnimator.js
-var import_react36 = __toESM(require_react(), 1);
-var import_react37 = __toESM(require_react(), 1);
+// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_@arwes+animator@1.0.0-alpha.21_@arwes+bleeps@1.0.0-alpha.21_@a_oozjepla73pus6sxlkrb2jix6a/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/BleepsOnAnimator.js
+var import_react34 = __toESM(require_react(), 1);
+var import_react35 = __toESM(require_react(), 1);
 var BleepsOnAnimator = (props) => {
   const { id: externalId, transitions, continuous } = props;
-  const internalId = (0, import_react37.useId)();
-  const transitionsRef = (0, import_react36.useRef)(transitions);
+  const internalId = (0, import_react35.useId)();
+  const transitionsRef = (0, import_react34.useRef)(transitions);
   const animator = useAnimator();
   const bleeps = useBleeps();
   transitionsRef.current = transitions;
   const id = externalId || internalId;
-  (0, import_react37.useEffect)(() => {
+  (0, import_react35.useEffect)(() => {
     if (!animator) {
       return;
     }
@@ -30239,10 +30943,10 @@ var BleepsOnAnimator = (props) => {
       currentBleep === null || currentBleep === void 0 ? void 0 : currentBleep.stop(id);
     };
   }, [id, animator, bleeps]);
-  return import_react37.default.createElement(import_react37.default.Fragment, null);
+  return import_react35.default.createElement(import_react35.default.Fragment, null);
 };
 
-// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_kblgyefjpdvtk343dq4i4u4j6q/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/index.js
+// ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_@arwes+animator@1.0.0-alpha.21_@arwes+bleeps@1.0.0-alpha.21_@a_oozjepla73pus6sxlkrb2jix6a/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/index.js
 var BleepsOnAnimator2 = memo(BleepsOnAnimator);
 
 // ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
@@ -31622,6 +32326,8 @@ var trpc = createTRPCProxyClient({
 
 // src/frontend/react-ui.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime());
+var theme = createAppTheme();
+var stylesBaseline = createAppStylesBaseline(theme);
 var animatorsSettings = {
   // Durations in seconds.
   duration: {
@@ -31672,15 +32378,17 @@ var Card = (props) => {
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { merge: true, combine: true, manager: "stagger", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     Animated2,
     {
+      className: "card",
       style: {
         position: "relative",
         display: "block",
         padding: "2rem",
         textAlign: "left",
+        fill: "black",
         color: "#fff",
         ...props.style
       },
-      animated: [aaVisibility(), aa("y", 24, 0)],
+      animated: [aaVisibility(), aa("y", "2rem", 0)],
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FrameSVGCorners2, { strokeWidth: 2 }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animated2, { style: {
@@ -31693,7 +32401,7 @@ var Card = (props) => {
   ) });
 };
 var Input = (props) => {
-  const [focused, setFocus] = (0, import_react38.useState)(false);
+  const [focused, setFocus] = (0, import_react36.useState)(false);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { onFocus: () => setFocus(true), onBlur: () => setFocus(false), style: {
     padding: "8px",
     background: focused ? "hsla(150deg, 100%, 20%, 0.3)" : "hsla(170deg, 100%, 20%, 0.2)",
@@ -31729,26 +32437,29 @@ var Button = (props) => {
   );
 };
 var App = () => {
-  const [active] = (0, import_react38.useState)(true);
+  const [active] = (0, import_react36.useState)(true);
   const currentToken = localStorage.getItem("agent-token");
-  const [selectedFaction, setSelectedFaction] = (0, import_react38.useState)("");
-  const [token2, setToken] = (0, import_react38.useState)("");
-  const [factions, setFactions] = (0, import_react38.useState)([]);
-  (0, import_react38.useEffect)(() => {
+  const [selectedFaction, setSelectedFaction] = (0, import_react36.useState)("");
+  const [token2, setToken] = (0, import_react36.useState)("");
+  const [factions, setFactions] = (0, import_react36.useState)([]);
+  (0, import_react36.useEffect)(() => {
     trpc.getFactions.query().then((result) => {
       setFactions(result);
     });
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatorGeneralProvider2, { ...animatorsSettings, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(BleepsProvider2, { ...bleepsSettings, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animator2, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Background, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Illuminator2, { style: {
-        pointerEvents: "none"
-      }, color: "hsl(0deg 0% 50% / 0.15)" })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Global, { styles: stylesBaseline }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatorGeneralProvider2, { ...animatorsSettings, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(BleepsProvider2, { ...bleepsSettings, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animator2, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Background, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Illuminator2, { style: {
+          pointerEvents: "none"
+        }, color: "hsl(0deg 0% 50% / 0.15)" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `
             body {
                 font-family: sans-serif;
+                overflow: auto;
             }
             select {
                 background: hsla(170deg, 100%, 20%, 0.2);
@@ -31756,105 +32467,105 @@ var App = () => {
                 color: white;
                 padding: 8px;
             }
-            .arwes-react-frames-framesvg path[data-name="decoration"] {
-              color: hsla(150deg, 100%, 50%);
-            }
-            .arwes-react-frames-framesvg path[data-name="shape"] {
-              color: hsla(150deg, 100%, 75%, 0.05)
-            }
-            .arwes-react-frames-framesvg.button path[data-name="shape"]:hover {
-              color: hsla(150deg, 100%, 75%, 0.1)
-            }
+          .card .arwes-react-frames-framesvg [data-name=bg] {
+            color: ${theme.colors.primary.deco(1)};
+          }
+          .card .arwes-react-frames-framesvg [data-name=line] {
+            color: ${theme.colors.primary.main(4)};
+          }
             code {
                 line-break: anywhere;
             }
           ` }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { style: {
-      margin: "1rem"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h1", children: "Spacetraders UI" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Welcome to Spacetraders UI! You can register your token here, or enter an existing token to get a view of all your ships and others. The database behind this is shared, and while you won't be able to see data for ships unaffiliated with your token. You will be able to see other ships flying in-universe if the players are using this app and have that setting enabled." }) })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
-      display: "flex",
-      margin: "1rem",
-      gap: "1rem",
-      position: "relative"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
-        flex: 1,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        gap: "1em"
-      }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em"
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: "100vh", overflow: "auto" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { style: {
+          margin: "1rem"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "checkbox" }),
-            " Share my ship positions with other players"
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "div", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "Changing this setting takes effect immediately if you already have a token set, or on game start if not." }) })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h1", children: "Spacetraders UI" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Animator2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Welcome to Spacetraders UI! You can register your token here, or enter an existing token to get a view of all your ships and others. The database behind this is shared, and while you won't be able to see data for ships unaffiliated with your token. You will be able to see other ships flying in-universe if the players are using this app and have that setting enabled." }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
           display: "flex",
-          flexDirection: "column",
-          gap: "1em"
+          margin: "1rem",
+          gap: "1rem",
+          position: "relative"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Register new agent" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
+            flex: 1,
+            position: "relative",
             display: "flex",
-            flexWrap: "wrap"
-          }, children: factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: "factions/" + faction.symbol + "/emblem.png", style: {
-            height: 96,
-            width: 96,
-            background: selectedFaction === faction.symbol ? "radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat" : "transparent",
-            opacity: selectedFaction === faction.symbol ? 1 : 0.4
-          } })) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", onChange: (e) => setSelectedFaction(e.currentTarget.value), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- faction --" }),
-            factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: faction.symbol, children: faction.name }))
+            flexDirection: "column",
+            gap: "1em"
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "checkbox" }),
+                " Share my ship positions with other players"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "div", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "Changing this setting takes effect immediately if you already have a token set, or on game start if not." }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Register new agent" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+                display: "flex",
+                flexWrap: "wrap"
+              }, children: factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: "factions/" + faction.symbol + "/emblem.png", style: {
+                height: 96,
+                width: 96,
+                background: selectedFaction === faction.symbol ? "radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat" : "transparent",
+                opacity: selectedFaction === faction.symbol ? 1 : 0.4
+              } })) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", onChange: (e) => setSelectedFaction(e.currentTarget.value), children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- faction --" }),
+                factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: faction.symbol, children: faction.name }))
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Agent name", pattern: "[a-zA-Z0-9]{3,14}}" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Email" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+            ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Agent name", pattern: "[a-zA-Z0-9]{3,14}}" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Email" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: "1em"
-      }, children: [
-        currentToken ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em"
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Current token" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "code", children: currentToken }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
-        ] }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em"
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Existing token" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Note that if you already have a token set, this token will override the existing one." }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", value: token2, onChange: (e) => setToken(e.currentTarget.value), placeholder: "Token" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
-            console.log("buttonclick");
-            localStorage.setItem("agent-token", token2);
-            window.location.href = "/play.html";
-          }, children: "Play" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Animated2, { style: {
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: "1em"
+          }, children: [
+            currentToken ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Current token" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "code", children: currentToken }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+            ] }) : null,
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em"
+            }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Existing token" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Note that if you already have a token set, this token will override the existing one." }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", value: token2, onChange: (e) => setToken(e.currentTarget.value), placeholder: "Token" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
+                console.log("buttonclick");
+                localStorage.setItem("agent-token", token2);
+                window.location.href = "/play.html";
+              }, children: "Play" })
+            ] })
+          ] })
         ] })
       ] })
-    ] })
-  ] }) });
+    ] }) })
+  ] });
 };
 var root = (0, import_client2.createRoot)(document.getElementById("app"));
 root.render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}));

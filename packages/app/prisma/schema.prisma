@@ -120,6 +120,7 @@ model AutomationPlan {
   shipGroupSymbol String?
 
   @@index([agentSymbol])
+  @@index([shipGroupSymbol])
 }
 
 model ShipGroup {
@@ -137,6 +138,7 @@ model ShipGroup {
   automationPlans AutomationPlan[]
 
   @@index([agentSymbol])
+  @@index([shipConfigurationSymbol])
 }
 
 model ShipLog {
