@@ -16,9 +16,14 @@ import {
 const theme = createAppTheme();
 const stylesBaseline = createAppStylesBaseline(theme);
 import {BleepsManagerProps} from "@arwes/bleeps";
-import {trpc} from "@front/lib/trpc";
+import {trpc} from "@front/trpc";
 import {Faction} from "spacetraders-sdk";
 import {CSSObject, Global} from "@emotion/react";
+import jwtDecode from "jwt-decode";
+import {Server} from "@backend/prisma";
+import {RootState, store} from './ui/store'
+import {Provider, useDispatch, useSelector} from 'react-redux'
+import account, {accountActions} from "@front/ui/slices/account";
 
 const animatorsSettings: AnimatorGeneralProviderSettings = {
     // Durations in seconds.
@@ -149,14 +154,30 @@ const Button = (props: PropsWithChildren<any>) => {
 
 const App = () => {
     const [active] = useState(true);
-    const currentToken = localStorage.getItem('agent-token')
+    const [signinToken, setSigninToken] = useState<string | undefined>(localStorage.getItem('agent-token'))
+    const currentTokenData: { email: string } | null = signinToken ? jwtDecode(signinToken) : null
     const [selectedFaction, setSelectedFaction] = useState('')
-    const [token, setToken] = useState('')
+    const [selectedServer, setSelectedServer] = useState('')
+    const [tokenFieldValue, setTokenFieldValue] = useState('')
     const [factions, setFactions] = useState<Faction[]>([])
+    const [servers, setServers] = useState<Server[]>([])
+    const accountState = useSelector((state: RootState) => state.account)
+    const dispatch = useDispatch()
+
 
     useEffect(() => {
         trpc.getFactions.query().then(result => {
             setFactions(result)
+        })
+        trpc.getServers.query().then(result => {
+            setServers(result)
+        });
+        trpc.validateToken.mutate({
+            token: signinToken
+        }).then(res => {
+            if (!res.valid) {
+                setSigninToken(undefined)
+            }
         })
     }, [])
 
@@ -220,39 +241,40 @@ const App = () => {
                     flexDirection: 'column',
                     gap: '1em',
                 }}>
-                    <Card childStyle={{
+                    {signinToken ? <><Card childStyle={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1em'
+                    }}>
+                        <Text as={'h2'}>Currently signed in as</Text>
+                        <Text>{currentTokenData?.email}</Text>
+                    </Card><Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
                     }}>
                         <label><Input type="checkbox" /> Share my ship positions with other players</label>
                         <Text as={'div'}><small>Changing this setting takes effect immediately if you already have a token set, or on game start if not.</small></Text>
-                    </Card>
-                    <Card childStyle={{
+                    </Card></> : <Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
                     }}>
-                        <Text as={'h2'}>Register new agent</Text>
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap'
-                        }}>
-                        {factions.map(faction => <img src={'factions/'+faction.symbol+'/emblem.png'} style={{
-                            height: 96,
-                            width: 96,
-                            background: selectedFaction === faction.symbol ?'radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat' : 'transparent',
-                            opacity: selectedFaction === faction.symbol ? 1 : 0.4
-                        }} /> )}
-                        </div>
-                        <select placeholder={'-- faction --'} onChange={(e) => setSelectedFaction(e.currentTarget.value)}>
-                            <option>-- faction --</option>
-                            {factions.map(faction => <option value={faction.symbol}>{faction.name}</option> )}
-                        </select>
-                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" />
-                        <Input type="text" placeholder="Email" />
-                        <Button>Play</Button>
-                    </Card>
+                        <Text as={'h2'}>Sign in</Text>
+                        <Text>Sign in with your account details to manage your agents.</Text>
+                        <Input type="email" placeholder="Email" value={accountState.loginEmail} onChange={e => dispatch(accountActions.setLoginEmail(e.currentTarget.value))} />
+                        <Input type="password" placeholder="Password" value={accountState.loginPassword} onChange={e => dispatch(accountActions.setLoginPassword(e.currentTarget.value))} />
+                        <Button onClick={() => {
+                            trpc.signIn.mutate({
+                                email: accountState.loginEmail,
+                                password: accountState.loginPassword
+                            }).then(result => {
+                                localStorage.setItem('agent-token', result.token)
+                                setSigninToken(result.token)
+                            })
+                        }}>Sign in</Button>
+                    </Card> }
+
                 </Animated>
                 <Animated style={{
                     flex: 1,
@@ -261,29 +283,71 @@ const App = () => {
                     gap: '1em',
 
                 }}>
-                    {currentToken ? <Card childStyle={{
+
+                    {signinToken ? <><Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
                     }}>
-                        <Text as={'h2'}>Current token</Text>
-                        <Text as={'code'}>{currentToken}</Text>
+                        <Text as={'h2'}>Register new agent</Text>
+                        <select placeholder={'-- server --'} value={selectedServer} onChange={(e) => setSelectedServer(e.currentTarget.value)}>
+                            <option>-- server --</option>
+                            {servers.map(server => <option value={server.id}>{server.name}</option> )}
+                        </select>
+                        <div style={{
+                            display: 'flex',
+                            flexWrap: 'wrap'
+                        }}>
+                            {factions.map(faction => <img src={'factions/'+faction.symbol+'/emblem.png'} style={{
+                                height: 96,
+                                width: 96,
+                                background: selectedFaction === faction.symbol ?'radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat' : 'transparent',
+                                opacity: selectedFaction === faction.symbol ? 1 : 0.4
+                            }} /> )}
+                        </div>
+                        <select placeholder={'-- faction --'} onChange={(e) => setSelectedFaction(e.currentTarget.value)}>
+                            <option>-- faction --</option>
+                            {factions.map(faction => <option value={faction.symbol}>{faction.name}</option> )}
+                        </select>
+                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" />
+                        <Input type="text" placeholder="Email" />
                         <Button>Play</Button>
-                    </Card> : null }
-                    <Card childStyle={{
+                    </Card><Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
                     }}>
-                        <Text as={'h2'}>Existing token</Text>
+                        <Text as={'h2'}>Add Existing token</Text>
                         <Text>Note that if you already have a token set, this token will override the existing one.</Text>
-                        <Input type="text" value={token} onChange={(e) => setToken(e.currentTarget.value)} placeholder="Token" />
+                        <select placeholder={'-- server --'} value={selectedServer} onChange={(e) => setSelectedServer(e.currentTarget.value)}>
+                            <option>-- server --</option>
+                            {servers.map(server => <option value={server.id}>{server.name}</option> )}
+                        </select>
+                        <Input type="text" value={tokenFieldValue} onChange={(e) => setTokenFieldValue(e.currentTarget.value)} placeholder="Token" />
                         <Button onClick={() => {
                             console.log("buttonclick")
-                            localStorage.setItem('agent-token', token)
+                            localStorage.setItem('agent-token', tokenFieldValue)
                             window.location.href = '/play.html'
                         }}>Play</Button>
-                    </Card>
+                    </Card></> : <Card childStyle={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1em'
+                    }}>
+                        <Text as={'h2'}>Register</Text>
+                        <Text>Register a new account to manage your SpaceTraders agents with.</Text>
+                        <Input type="email" placeholder="Email" value={accountState.registerEmail} onChange={e => dispatch(accountActions.setRegisterEmail(e.currentTarget.value))} />
+                        <Input type="password" placeholder="Password" value={accountState.registerPassword} onChange={e => dispatch(accountActions.setRegisterPassword(e.currentTarget.value))} />
+                        <Button onClick={() => {
+                            trpc.register.mutate({
+                                email: accountState.registerEmail,
+                                password: accountState.registerPassword
+                            }).then(result => {
+                                localStorage.setItem('agent-token', result.token)
+                                setSigninToken(result.token)
+                            })
+                        }}>Register</Button>
+                    </Card> }
 
                 </Animated>
             </Animated>
@@ -293,4 +357,4 @@ const App = () => {
 }
 
 const root = createRoot(document.getElementById('app'))
-root.render(<App />)
+root.render(<Provider store={store}><App /></Provider>)

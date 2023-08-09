@@ -12,7 +12,11 @@ datasource db {
 }
 
 model Server {
-  resetDate String @id
+  id          String @id @default(uuid())
+  name        String
+  description String @db.Text
+  endpoint    String @unique
+  resetDate   String
 }
 
 model Faction {
@@ -27,18 +31,40 @@ model Faction {
 }
 
 model Agent {
-  symbol             String    @id
+  id                 String    @id @default(uuid())
+  symbol             String
+  reset              String
+  server             String
   credits            Int
   headquartersSymbol String?
   headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
   accountId          String
   token              String?   @db.Text()
-  automationStep     Int       @default(0)
+
+  automationStep Int @default(0)
 
   automationActions AutomationPlan[]
   shipGroups        ShipGroup[]
 
+  primaryAgentAccounts Account[] @relation(name: "currentAgent")
+  Account              Account   @relation(name: "allAgents", fields: [accountId], references: [id])
+
+  @@unique([symbol, reset, server])
   @@index([headquartersSymbol])
+  @@index([accountId])
+}
+
+model Account {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+
+  currentAgent   Agent?  @relation(name: "currentAgent", fields: [currentAgentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  currentAgentId String?
+
+  agents Agent[] @relation(name: "allAgents")
+
+  @@index([currentAgentId])
 }
 
 model FactionTrait {
@@ -107,7 +133,7 @@ enum AutomationAction {
 
 model AutomationPlan {
   id          String           @id @default(uuid())
-  agent       Agent            @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  agent       Agent            @relation(fields: [agentSymbol], references: [id], onDelete: Cascade)
   agentSymbol String
   action      AutomationAction
   step        Int
@@ -127,7 +153,7 @@ model ShipGroup {
   id          String @id @default(uuid())
   name        String
   description String @db.Text
-  agent       Agent  @relation(fields: [agentSymbol], references: [symbol], onDelete: Cascade)
+  agent       Agent  @relation(fields: [agentSymbol], references: [id], onDelete: Cascade)
   agentSymbol String
 
   shipConfiguration       ShipConfiguration? @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: SetNull)

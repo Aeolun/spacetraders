@@ -4,7 +4,7 @@ import {GraphCanvas, GraphCanvasRef, recommendLayout, useSelection} from 'reagra
 import data from './graph'
 import {trpc} from "@front/lib/trpc";
 import fs from "fs";
-import {prisma} from "@app/prisma";
+import {prisma} from "@backend/prisma";
 
 const imports: Record<string, { importGood: string, weight: number}[]> = {}
 data.forEach(d => {

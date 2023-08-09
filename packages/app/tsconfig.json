@@ -9,7 +9,8 @@
     "target": "esnext",
     "lib": ["ES2021", "dom"],
     "paths": {
-      "@app/*": ["src/backend/*"],
+      "@auto/*": ["src/automation/*"],
+      "@backend/*": ["src/backend/*"],
       "@common/*": ["src/common/*"],
       "@front/*": ["src/frontend/*"]
     }
