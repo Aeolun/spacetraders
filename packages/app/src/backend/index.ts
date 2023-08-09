@@ -18,6 +18,7 @@ import {applyWSSHandler} from "@trpc/server/adapters/ws";
 import ws from 'ws'
 import {scheduleLeaderboardUpdate, updateLeaderboard} from "@app/leaderboard";
 import {backgroundQueue} from "@app/lib/queue";
+import {initGlobalBehavior} from "@app/strategy/global-behavior";
 
 
 export type { AppRouter } from '@app/server'
@@ -102,6 +103,7 @@ const init = async () => {
 
     setTimeout(resetTimeout, Math.max(timeUntilReset - 3600 * 1000, 0))
     await initializeShipBehaviors()
+    await initGlobalBehavior()
     
     scheduleLeaderboardUpdate()
 }

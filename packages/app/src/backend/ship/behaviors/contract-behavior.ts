@@ -24,7 +24,7 @@ interface TradeLocation {
 const tradeTaken = new Set([] as string[])
 export const tradeLogic = async (shipReg: string, fromSystem: string, range: number) => {
     const token = await getBackgroundAgentToken()
-    const ship = new Ship(token, 'PHANTASM', shipReg)
+    const ship = new Ship(token, shipReg)
 
     let started = false
 

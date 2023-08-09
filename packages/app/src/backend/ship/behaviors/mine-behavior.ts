@@ -1,19 +1,11 @@
 import {Ship} from "@app/ship/ship";
-import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
-import {ExtractResources201Response, Survey} from "spacetraders-sdk";
+import {findMineableWaypoint} from "@app/ship/behaviors/atoms/find-mineable-waypoint";
+import {travelTo} from "@app/ship/behaviors/atoms/travel-to";
+import {mineAt} from "@app/ship/behaviors/atoms/mine-at";
 
 export const mineBehavior = async (ship: Ship) => {
-    let extractResult: ExtractResources201Response | undefined;
-    let survey: Survey | undefined = undefined
-    do {
-        await ship.orbit()
-        // if (!survey) {
-        //     survey = (await ship.survey()).survey.data.data.surveys[0];
-        // }
-
-        extractResult = (await ship.extract(survey)).extract
-        await ship.dock()
-        await ship.sellAllCargo()
-
-    } while (extractResult && extractResult.data.cargo.units < extractResult.data.cargo.capacity)
+    const mineLocation = await findMineableWaypoint(ship)
+    await travelTo(ship, mineLocation);
+    await mineAt(ship, mineLocation);
+    const sellLocation = await findPlaceToSellGood(ship)
 }

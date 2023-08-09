@@ -373,10 +373,10 @@ model MarketPrice {
   tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
 
   kind          MarketGoodKind
-  supply        String
-  purchasePrice Int
-  sellPrice     Int
-  tradeVolume   Int
+  supply        String?
+  purchasePrice Int?
+  sellPrice     Int?
+  tradeVolume   Int?
 
   updatedOn DateTime @updatedAt
 

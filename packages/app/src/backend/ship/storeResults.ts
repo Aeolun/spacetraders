@@ -197,26 +197,42 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
 export async function storeMarketInformation(data: GetMarket200Response) {
     const importGoods = data.data.imports.map(i => i.symbol)
     const exportGoods = data.data.exports.map(i => i.symbol)
-    //const exhangeGoods = data.data.exchange.map(i => i.symbol)
+    const exhangeGoods = data.data.exchange.map(i => i.symbol)
 
     let hasFuel = false
 
     const marketData = []
-    data.data.tradeGoods?.map(good => {
-        if (good.symbol === 'FUEL') {
-            hasFuel = true
-        }
-
-        marketData.push({
-            tradeGoodSymbol: good.symbol,
-            kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
-            waypointSymbol: data.data.symbol,
-            sellPrice: good.sellPrice,
-            purchasePrice: good.purchasePrice,
-            tradeVolume: good.tradeVolume,
-            supply: good.supply
+    if (!data.data.tradeGoods) {
+        [importGoods, exportGoods, exhangeGoods].forEach(goods => {
+            goods.forEach(good => {
+                marketData.push({
+                    tradeGoodSymbol: good,
+                    kind: importGoods.includes(good as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
+                    waypointSymbol: data.data.symbol,
+                    sellPrice: null,
+                    purchasePrice: null,
+                    tradeVolume: null,
+                    supply: null
+                })
+            })
         })
-    })
+    } else {
+        data.data.tradeGoods?.map(good => {
+            if (good.symbol === 'FUEL') {
+                hasFuel = true
+            }
+
+            marketData.push({
+                tradeGoodSymbol: good.symbol,
+                kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
+                waypointSymbol: data.data.symbol,
+                sellPrice: good.sellPrice,
+                purchasePrice: good.purchasePrice,
+                tradeVolume: good.tradeVolume,
+                supply: good.supply
+            })
+        })
+    }
 
     if (hasFuel) {
         const waypoint = await prisma.waypoint.findFirstOrThrow({
@@ -265,7 +281,12 @@ export async function storeMarketInformation(data: GetMarket200Response) {
                 }
             },
             create: data,
-            update: data
+            update: {
+                sellPrice: data.sellPrice,
+                purchasePrice: data.purchasePrice,
+                tradeVolume: data.tradeVolume,
+                supply: data.supply
+            }
         })
     }))
 

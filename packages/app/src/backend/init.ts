@@ -1,11 +1,12 @@
 import {prisma} from "@app/prisma";
 import axios from "axios";
 import {backgroundQueue} from "@app/lib/queue";
-import {storeWaypointScan} from "@app/ship/storeResults";
+import {storeMarketInformation, storeWaypointScan} from "@app/ship/storeResults";
 import {getBackgroundAgentToken} from "@app/setup/background-agent-token";
 import createApi from "@app/lib/createApi";
 import throttledQueue from "throttled-queue";
 import {processShip} from "@app/ship/updateShips";
+import {WaypointTrait} from "spacetraders-sdk";
 
 export const updateMarketPrices = async () => {
     const marketprices = await axios.get('https://st.feba66.de/prices')
@@ -73,16 +74,23 @@ export const loadWaypoint = async () => {
     console.log("Loading waypoint information for all unscanned systems")
     let i = 0;
     for (const system of systems) {
-        await backgroundQueue(async () => {
-            i++
 
-            try {
-                const allWaypoints = await api.systems.getSystemWaypoints(system.symbol, 1, 20)
-                console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol}): ${allWaypoints.data.data.length}`)
-                await storeWaypointScan(system.symbol, allWaypoints.data)
-            } catch(error) {
-                console.error('failure loading waypoints', error)
+        i++
+
+        try {
+            const allWaypoints = await backgroundQueue(async () => api.systems.getSystemWaypoints(system.symbol, 1, 20))
+            console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol}): ${allWaypoints.data.data.length}`)
+            await storeWaypointScan(system.symbol, allWaypoints.data)
+
+            for(const waypoint of allWaypoints.data.data) {
+                if (waypoint.traits.find( t => t.symbol === 'MARKETPLACE')) {
+                    const marketInfo = await backgroundQueue(async () => api.systems.getMarket(system.symbol, waypoint.symbol))
+                    await storeMarketInformation(marketInfo.data)
+                }
             }
-        })
+        } catch(error) {
+            console.error('failure loading waypoints', error)
+        }
+
     }
 }
