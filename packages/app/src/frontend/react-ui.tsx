@@ -20,7 +20,7 @@ import {trpc} from "@front/trpc";
 import {Faction} from "spacetraders-sdk";
 import {CSSObject, Global} from "@emotion/react";
 import jwtDecode from "jwt-decode";
-import {Server} from "@backend/prisma";
+import {Server, Agent} from "@backend/prisma";
 import {RootState, store} from './ui/store'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import account, {accountActions} from "@front/ui/slices/account";
@@ -154,13 +154,14 @@ const Button = (props: PropsWithChildren<any>) => {
 
 const App = () => {
     const [active] = useState(true);
-    const [signinToken, setSigninToken] = useState<string | undefined>(localStorage.getItem('agent-token'))
+    const [signinToken, setSigninToken] = useState<string | undefined>(localStorage.getItem('user-token'))
     const currentTokenData: { email: string } | null = signinToken ? jwtDecode(signinToken) : null
     const [selectedFaction, setSelectedFaction] = useState('')
     const [selectedServer, setSelectedServer] = useState('')
     const [tokenFieldValue, setTokenFieldValue] = useState('')
     const [factions, setFactions] = useState<Faction[]>([])
     const [servers, setServers] = useState<Server[]>([])
+    const [agents, setAgents] = useState<Agent[]>([])
     const accountState = useSelector((state: RootState) => state.account)
     const dispatch = useDispatch()
 
@@ -180,6 +181,12 @@ const App = () => {
             }
         })
     }, [])
+
+    useEffect(() => {
+        trpc.getAgents.query().then(result => {
+            setAgents(result)
+        })
+    }, [signinToken])
 
     return <><Global styles={stylesBaseline as Record<string, CSSObject>} />
         <AnimatorGeneralProvider {...animatorsSettings}>
@@ -248,14 +255,26 @@ const App = () => {
                     }}>
                         <Text as={'h2'}>Currently signed in as</Text>
                         <Text>{currentTokenData?.email}</Text>
-                    </Card><Card childStyle={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1em'
-                    }}>
-                        <label><Input type="checkbox" /> Share my ship positions with other players</label>
-                        <Text as={'div'}><small>Changing this setting takes effect immediately if you already have a token set, or on game start if not.</small></Text>
-                    </Card></> : <Card childStyle={{
+                    </Card>{agents.map(agent => {
+                        return <Card childStyle={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1em'
+                        }}>
+                            <Text as={'h2'}>{agent.symbol}</Text>
+                            <Text>{agent.reset}</Text>
+                            <Button>Play</Button>
+                        </Card>
+                    })}
+                        <Card childStyle={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1em'
+                        }}>
+                            <label><Input type="checkbox" /> Share my ship positions with other players</label>
+                            <Text as={'div'}><small>Changing this setting takes effect immediately if you already have a token set, or on game start if not.</small></Text>
+                        </Card>
+                    </> : <Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '1em'
@@ -269,7 +288,7 @@ const App = () => {
                                 email: accountState.loginEmail,
                                 password: accountState.loginPassword
                             }).then(result => {
-                                localStorage.setItem('agent-token', result.token)
+                                localStorage.setItem('user-token', result.token)
                                 setSigninToken(result.token)
                             })
                         }}>Sign in</Button>
@@ -343,7 +362,7 @@ const App = () => {
                                 email: accountState.registerEmail,
                                 password: accountState.registerPassword
                             }).then(result => {
-                                localStorage.setItem('agent-token', result.token)
+                                localStorage.setItem('user-token', result.token)
                                 setSigninToken(result.token)
                             })
                         }}>Register</Button>

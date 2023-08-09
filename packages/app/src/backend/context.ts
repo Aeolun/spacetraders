@@ -11,6 +11,7 @@ export async function createContext({
     // This is just an example of something you might want to do in your ctx fn
     async function getUserFromHeader(): Promise<{
         account?: {
+            accountId: string
             email: string
         }
         payload?: {
@@ -28,39 +29,46 @@ export async function createContext({
         let token = req.headers.authorization.split(' ')[1]
         if (req.headers.authorization) {
             const userToken: {
+                accountId: string
                 email: string
-                server: string
+                server?: string
             } = await jwtDecode(
                 token,
             );
-            const server = await prisma.server.findFirstOrThrow({
-                where: {
-                    name: userToken.server
-                }
-            })
-            const agent = await prisma.agent.findFirst({
-                where: {
-                    Account: {
-                        email: userToken.email
-                    },
-                    server: userToken.server,
-                    reset: server.resetDate
-                }
-            })
-            const agentToken: any = jwtDecode(agent.token)
+
+            let agentTokenPayload: any | undefined, agentToken: string | undefined;
+            if (userToken.server) {
+                const server = await prisma.server.findFirstOrThrow({
+                    where: {
+                        name: userToken.server
+                    }
+                })
+                const agent = await prisma.agent.findFirst({
+                    where: {
+                        Account: {
+                            id: userToken.accountId
+                        },
+                        server: userToken.server,
+                        reset: server.resetDate
+                    }
+                })
+                agentToken = agent.token
+                agentTokenPayload = jwtDecode(agent.token)
+            }
 
             return {
                 account: {
+                    accountId: userToken.accountId,
                     email: userToken.email
                 },
-                payload: {
-                    identifier: agentToken.identifier,
-                    iat: agentToken.iat,
-                    sub: agentToken.sub,
-                    reset_date: agentToken.reset_date,
-                    version: agentToken.version
-                },
-                token: agent.token
+                payload: agentTokenPayload ? {
+                    identifier: agentTokenPayload.identifier,
+                    iat: agentTokenPayload.iat,
+                    sub: agentTokenPayload.sub,
+                    reset_date: agentTokenPayload.reset_date,
+                    version: agentTokenPayload.version
+                } : undefined,
+                token: agentToken ? agentToken : undefined
             }
         }
         return null;

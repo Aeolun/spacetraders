@@ -32745,9 +32745,10 @@ var trpc = createTRPCProxyClient({
       false: httpBatchLink({
         url: "http://" + window.location.hostname + ":4001",
         async headers() {
-          return {
-            authorization: "Bearer " + localStorage.getItem("agent-token")
-          };
+          const token2 = localStorage.getItem("agent-token") ?? localStorage.getItem("user-token");
+          return token2 ? {
+            authorization: "Bearer " + token2
+          } : {};
         }
       })
     })
@@ -35349,13 +35350,14 @@ var Button = (props) => {
 };
 var App = () => {
   const [active] = (0, import_react38.useState)(true);
-  const [signinToken, setSigninToken] = (0, import_react38.useState)(localStorage.getItem("agent-token"));
+  const [signinToken, setSigninToken] = (0, import_react38.useState)(localStorage.getItem("user-token"));
   const currentTokenData = signinToken ? jwt_decode_esm_default(signinToken) : null;
   const [selectedFaction, setSelectedFaction] = (0, import_react38.useState)("");
   const [selectedServer, setSelectedServer] = (0, import_react38.useState)("");
   const [tokenFieldValue, setTokenFieldValue] = (0, import_react38.useState)("");
   const [factions, setFactions] = (0, import_react38.useState)([]);
   const [servers, setServers] = (0, import_react38.useState)([]);
+  const [agents, setAgents] = (0, import_react38.useState)([]);
   const accountState = useSelector((state) => state.account);
   const dispatch = useDispatch();
   (0, import_react38.useEffect)(() => {
@@ -35373,6 +35375,11 @@ var App = () => {
       }
     });
   }, []);
+  (0, import_react38.useEffect)(() => {
+    trpc.getAgents.query().then((result) => {
+      setAgents(result);
+    });
+  }, [signinToken]);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Global, { styles: stylesBaseline }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatorGeneralProvider2, { ...animatorsSettings, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(BleepsProvider2, { ...bleepsSettings, children: [
@@ -35431,6 +35438,17 @@ var App = () => {
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Currently signed in as" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: currentTokenData?.email })
             ] }),
+            agents.map((agent) => {
+              return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "1em"
+              }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: agent.symbol }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: agent.reset }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+              ] });
+            }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
               display: "flex",
               flexDirection: "column",
@@ -35456,7 +35474,7 @@ var App = () => {
                 email: accountState.loginEmail,
                 password: accountState.loginPassword
               }).then((result) => {
-                localStorage.setItem("agent-token", result.token);
+                localStorage.setItem("user-token", result.token);
                 setSigninToken(result.token);
               });
             }, children: "Sign in" })
@@ -35526,7 +35544,7 @@ var App = () => {
                 email: accountState.registerEmail,
                 password: accountState.registerPassword
               }).then((result) => {
-                localStorage.setItem("agent-token", result.token);
+                localStorage.setItem("user-token", result.token);
                 setSigninToken(result.token);
               });
             }, children: "Register" })

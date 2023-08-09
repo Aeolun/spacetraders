@@ -32,9 +32,10 @@ export const trpc = createTRPCProxyClient<AppRouter>({
             false: httpBatchLink({
                 url: 'http://'+window.location.hostname+':4001',
                 async headers() {
-                    return {
-                        authorization: 'Bearer '+localStorage.getItem('agent-token'),
-                    };
+                    const token = localStorage.getItem('agent-token') ?? localStorage.getItem('user-token')
+                    return token ? {
+                        authorization: 'Bearer '+token,
+                    } : {};
                 },
             }),
         }),

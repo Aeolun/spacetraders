@@ -17,7 +17,7 @@ export const appRouter = router({
         const passwordValue = crypto.pbkdf2Sync(input.password, salt, 1000, 64, 'sha512').toString('hex');
         const password = `${salt}::${passwordValue}`
 
-        await prisma.account.create({
+        const account = await prisma.account.create({
             data: {
                 email: input.email,
                 password: password,
@@ -25,6 +25,7 @@ export const appRouter = router({
         })
         return {
             token: sign({
+                accountId: account.id,
                 email: input.email
             }, process.env.JWT_SECRET)
         }
@@ -48,6 +49,7 @@ export const appRouter = router({
         }
         return {
             token: sign({
+                accountId: account.id,
                 email: input.email
             }, process.env.JWT_SECRET, {
                 expiresIn: '30d'
@@ -131,8 +133,12 @@ export const appRouter = router({
             }))
         }
     }),
-    getAgents: publicProcedure.query(async () => {
-        return prisma.server.findMany()
+    getAgents: publicProcedure.query(async ({ctx}) => {
+        return prisma.agent.findMany({
+            where: {
+                accountId: ctx.account.accountId
+            }
+        })
     }),
     getServers: publicProcedure.query(async () => {
         return prisma.server.findMany()

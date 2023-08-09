@@ -13,5 +13,6 @@
     <orderEntry type="module" module-name="st-meta" />
     <orderEntry type="module" module-name="dijkstra-calculator" />
     <orderEntry type="module" module-name="st-universe" />
+    <orderEntry type="module" module-name="eseidel_traders" />
   </component>
 </module>
