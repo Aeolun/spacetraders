@@ -32,6 +32,10 @@ if (!process.env.API_ENDPOINT) {
     console.log("Using API endpoint", process.env.API_ENDPOINT)
 }
 
+if (!process.env.ACCOUNT_EMAIL) {
+    throw new Error("ACCOUNT_EMAIL not set")
+}
+
 const init = async () => {
     // do we have a database connection?
     const resetDate = await prisma.$queryRaw<{ resetDate: string }[]>`SELECT resetDate from Server where endpoint=${process.env.API_ENDPOINT}`
@@ -43,68 +47,13 @@ const init = async () => {
     }
 
     const serverStatus = await axios.get<StatusResponse>(process.env.API_ENDPOINT)
-
-    const initWorld = async (resetDate: string) => {
-        console.log("Resetting database")
-        await resetDatabase()
-        console.log("Reloading world from API")
-        await reloadWorldStatus()
-        console.log("Getting (new) token")
-        const newToken = await getBackgroundAgentToken(serverStatus.data.resetDate);
-        console.log("Have token!", newToken)
-
-
-        console.log("Reset completed")
-        await prisma.server.update({
-            where: {
-                endpoint: process.env.API_ENDPOINT
-            },
-            data: {
-                resetDate
-            }
-        })
-
-        await initAgent(newToken);
-        loadWaypoint().then(() => {
-            console.log('Waypoint load complete')
-        })
-
-        return newToken
+    if (serverStatus.data.resetDate !== currentInstance) {
+        throw new Error("Server reset date does not match database, please update database or reset server.")
     }
+
 
     let resetYetInterval;
-    const resetTimeout = () => {
-        resetYetInterval = setInterval(async () => {
-            const serverStatus = await backgroundQueue(() => axios.get<StatusResponse>(process.env.API_ENDPOINT))
 
-            if (serverStatus.data.resetDate !== currentInstance) {
-                // yay! reset completed
-                console.log("Reset completed! Restarting client.")
-                // need to exit with non zero code so concurrently will restart
-                process.exit(1);
-            }
-        }, 5000)
-    }
-
-    let agentToken;
-    console.log('Current data reset date: ', currentInstance)
-    console.log('API reset date', serverStatus.data.resetDate)
-    const timeUntilReset = new Date(serverStatus.data.serverResets.next).getTime() - Date.now()
-    if (serverStatus.data.resetDate === currentInstance) {
-        console.log(`Waiting ${timeUntilReset - 3600 * 1000} milliseconds, until 1 hour before reset time to begin polling`)
-        agentToken = await getBackgroundAgentToken(serverStatus.data.resetDate)
-        await initAgent(agentToken);
-
-        loadWaypoint().then(() => {
-            console.log('Waypoint load complete')
-        })
-        // start checking for reset one hour before indicated
-    } else {
-        console.log("Server already reset or never initialized.")
-        agentToken = await initWorld(serverStatus.data.resetDate)
-    }
-
-    setTimeout(resetTimeout, Math.max(timeUntilReset - 3600 * 1000, 0))
     await initializeShipBehaviors()
     await initGlobalBehavior()
     

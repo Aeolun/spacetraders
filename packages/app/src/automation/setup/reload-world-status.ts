@@ -1,11 +1,11 @@
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {seedFactions, seedSystems} from "@auto/seed/seedGameData";
-import {prisma} from "@auto/prisma";
+import {prisma, Server} from "@auto/prisma";
 import {generateName} from "@auto/lib/generate-name";
 
-export const reloadWorldStatus = async () => {
+export const reloadWorldStatus = async (server: Server) => {
     try {
-        const agentToken = await getBackgroundAgentToken()
+        const agentToken = await getBackgroundAgentToken(server)
 
         await seedSystems(agentToken)
         await seedFactions(agentToken)

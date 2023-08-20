@@ -7,7 +7,7 @@ export const initAgent = async (token: string) => {
 
     const res = await api.agents.getMyAgent()
 
-    await processAgent(res.data.data, token)
+    await processAgent(res.data.data)
     const agentSymbol = res.data.data.symbol
 
     try {

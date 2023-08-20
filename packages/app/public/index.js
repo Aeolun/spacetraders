@@ -1083,9 +1083,9 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState5(initialState2) {
+        function useState5(initialState3) {
           var dispatcher = resolveDispatcher();
-          return dispatcher.useState(initialState2);
+          return dispatcher.useState(initialState3);
         }
         function useReducer(reducer, initialArg, init) {
           var dispatcher = resolveDispatcher();
@@ -14231,20 +14231,20 @@ var require_react_dom_development = __commonJS({
         }
         function mountReducer(reducer, initialArg, init) {
           var hook = mountWorkInProgressHook();
-          var initialState2;
+          var initialState3;
           if (init !== void 0) {
-            initialState2 = init(initialArg);
+            initialState3 = init(initialArg);
           } else {
-            initialState2 = initialArg;
+            initialState3 = initialArg;
           }
-          hook.memoizedState = hook.baseState = initialState2;
+          hook.memoizedState = hook.baseState = initialState3;
           var queue = {
             pending: null,
             interleaved: null,
             lanes: NoLanes,
             dispatch: null,
             lastRenderedReducer: reducer,
-            lastRenderedState: initialState2
+            lastRenderedState: initialState3
           };
           hook.queue = queue;
           var dispatch = queue.dispatch = dispatchReducerAction.bind(null, currentlyRenderingFiber$1, queue);
@@ -14526,28 +14526,28 @@ var require_react_dom_development = __commonJS({
             scheduleUpdateOnFiber(root3, fiber, SyncLane, NoTimestamp);
           }
         }
-        function mountState(initialState2) {
+        function mountState(initialState3) {
           var hook = mountWorkInProgressHook();
-          if (typeof initialState2 === "function") {
-            initialState2 = initialState2();
+          if (typeof initialState3 === "function") {
+            initialState3 = initialState3();
           }
-          hook.memoizedState = hook.baseState = initialState2;
+          hook.memoizedState = hook.baseState = initialState3;
           var queue = {
             pending: null,
             interleaved: null,
             lanes: NoLanes,
             dispatch: null,
             lastRenderedReducer: basicStateReducer,
-            lastRenderedState: initialState2
+            lastRenderedState: initialState3
           };
           hook.queue = queue;
           var dispatch = queue.dispatch = dispatchSetState.bind(null, currentlyRenderingFiber$1, queue);
           return [hook.memoizedState, dispatch];
         }
-        function updateState(initialState2) {
+        function updateState(initialState3) {
           return updateReducer(basicStateReducer);
         }
-        function rerenderState(initialState2) {
+        function rerenderState(initialState3) {
           return rerenderReducer(basicStateReducer);
         }
         function pushEffect(tag, create, destroy, deps) {
@@ -15063,13 +15063,13 @@ var require_react_dom_development = __commonJS({
               mountHookTypesDev();
               return mountRef(initialValue);
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               mountHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnMountInDEV;
               try {
-                return mountState(initialState2);
+                return mountState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15167,13 +15167,13 @@ var require_react_dom_development = __commonJS({
               updateHookTypesDev();
               return mountRef(initialValue);
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               updateHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnMountInDEV;
               try {
-                return mountState(initialState2);
+                return mountState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15271,13 +15271,13 @@ var require_react_dom_development = __commonJS({
               updateHookTypesDev();
               return updateRef();
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               updateHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
               try {
-                return updateState(initialState2);
+                return updateState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15375,13 +15375,13 @@ var require_react_dom_development = __commonJS({
               updateHookTypesDev();
               return updateRef();
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               updateHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnRerenderInDEV;
               try {
-                return rerenderState(initialState2);
+                return rerenderState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15489,14 +15489,14 @@ var require_react_dom_development = __commonJS({
               mountHookTypesDev();
               return mountRef(initialValue);
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               warnInvalidHookAccess();
               mountHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnMountInDEV;
               try {
-                return mountState(initialState2);
+                return mountState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15610,14 +15610,14 @@ var require_react_dom_development = __commonJS({
               updateHookTypesDev();
               return updateRef();
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               warnInvalidHookAccess();
               updateHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
               try {
-                return updateState(initialState2);
+                return updateState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -15731,14 +15731,14 @@ var require_react_dom_development = __commonJS({
               updateHookTypesDev();
               return updateRef();
             },
-            useState: function(initialState2) {
+            useState: function(initialState3) {
               currentHookNameInDev = "useState";
               warnInvalidHookAccess();
               updateHookTypesDev();
               var prevDispatcher = ReactCurrentDispatcher$1.current;
               ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
               try {
-                return rerenderState(initialState2);
+                return rerenderState(initialState3);
               } finally {
                 ReactCurrentDispatcher$1.current = prevDispatcher;
               }
@@ -27045,8 +27045,8 @@ var createAnimatorManager2 = (node2, manager) => {
 };
 
 // ../../node_modules/.pnpm/@arwes+animator@1.0.0-alpha.21_@arwes+tools@1.0.0-alpha.21/node_modules/@arwes/animator/build/esm/internal/createAnimatorMachine/createAnimatorMachine.js
-var createAnimatorMachine2 = (node2, initialState2) => {
-  let state = initialState2;
+var createAnimatorMachine2 = (node2, initialState3) => {
+  let state = initialState3;
   const statesMap = {
     [ANIMATOR_STATES2.exited]: {
       onActions: {
@@ -33603,10 +33603,10 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
 function assertReducerShape(reducers) {
   Object.keys(reducers).forEach(function(key) {
     var reducer = reducers[key];
-    var initialState2 = reducer(void 0, {
+    var initialState3 = reducer(void 0, {
       type: ActionTypes.INIT
     });
-    if (typeof initialState2 === "undefined") {
+    if (typeof initialState3 === "undefined") {
       throw new Error(false ? formatProdErrorMessage(12) : 'The slice reducer for key "' + key + `" returned undefined during initialization. If the state passed to the reducer is undefined, you must explicitly return the initial state. The initial state may not be undefined. If you don't want to set a value for this reducer, you can use null instead of undefined.`);
     }
     if (typeof reducer(void 0, {
@@ -34446,7 +34446,7 @@ function isStateFunction(x2) {
   return typeof x2 === "function";
 }
 var hasWarnedAboutObjectNotation = false;
-function createReducer(initialState2, mapOrBuilderCallback, actionMatchers, defaultCaseReducer) {
+function createReducer(initialState3, mapOrBuilderCallback, actionMatchers, defaultCaseReducer) {
   if (actionMatchers === void 0) {
     actionMatchers = [];
   }
@@ -34460,12 +34460,12 @@ function createReducer(initialState2, mapOrBuilderCallback, actionMatchers, defa
   }
   var _c = typeof mapOrBuilderCallback === "function" ? executeReducerBuilderCallback(mapOrBuilderCallback) : [mapOrBuilderCallback, actionMatchers, defaultCaseReducer], actionsMap = _c[0], finalActionMatchers = _c[1], finalDefaultCaseReducer = _c[2];
   var getInitialState;
-  if (isStateFunction(initialState2)) {
+  if (isStateFunction(initialState3)) {
     getInitialState = function() {
-      return freezeDraftable(initialState2());
+      return freezeDraftable(initialState3());
     };
   } else {
-    var frozenInitialState_1 = freezeDraftable(initialState2);
+    var frozenInitialState_1 = freezeDraftable(initialState3);
     getInitialState = function() {
       return frozenInitialState_1;
     };
@@ -34532,7 +34532,7 @@ function createSlice(options) {
       console.error("You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`");
     }
   }
-  var initialState2 = typeof options.initialState == "function" ? options.initialState : freezeDraftable(options.initialState);
+  var initialState3 = typeof options.initialState == "function" ? options.initialState : freezeDraftable(options.initialState);
   var reducers = options.reducers || {};
   var reducerNames = Object.keys(reducers);
   var sliceCaseReducersByName = {};
@@ -34564,7 +34564,7 @@ function createSlice(options) {
     }
     var _c = typeof options.extraReducers === "function" ? executeReducerBuilderCallback(options.extraReducers) : [options.extraReducers], _d = _c[0], extraReducers = _d === void 0 ? {} : _d, _e = _c[1], actionMatchers = _e === void 0 ? [] : _e, _f = _c[2], defaultCaseReducer = _f === void 0 ? void 0 : _f;
     var finalCaseReducers = __spreadValues(__spreadValues({}, extraReducers), sliceCaseReducersByType);
-    return createReducer(initialState2, function(builder) {
+    return createReducer(initialState3, function(builder) {
       for (var key in finalCaseReducers) {
         builder.addCase(key, finalCaseReducers[key]);
       }
@@ -34897,10 +34897,39 @@ var accountSlice = createSlice({
 var accountActions = accountSlice.actions;
 var account_default = accountSlice.reducer;
 
+// src/frontend/ui/slices/agent.ts
+var initialState2 = {
+  registerEmail: "",
+  registerFaction: "",
+  registerSymbol: "",
+  registerServer: ""
+};
+var agentSlice = createSlice({
+  name: "account",
+  initialState: initialState2,
+  reducers: {
+    setRegisterServer: (state, action) => {
+      state.registerServer = action.payload;
+    },
+    setRegisterFaction: (state, action) => {
+      state.registerFaction = action.payload;
+    },
+    setRegisterSymbol: (state, action) => {
+      state.registerSymbol = action.payload;
+    },
+    setRegisterEmail: (state, action) => {
+      state.registerEmail = action.payload;
+    }
+  }
+});
+var agentActions = agentSlice.actions;
+var agent_default = agentSlice.reducer;
+
 // src/frontend/ui/store.ts
 var store = configureStore({
   reducer: {
-    account: account_default
+    account: account_default,
+    agent: agent_default
   }
 });
 
@@ -35359,6 +35388,7 @@ var App = () => {
   const [servers, setServers] = (0, import_react38.useState)([]);
   const [agents, setAgents] = (0, import_react38.useState)([]);
   const accountState = useSelector((state) => state.account);
+  const agentState = useSelector((state) => state.agent);
   const dispatch = useDispatch();
   (0, import_react38.useEffect)(() => {
     trpc.getFactions.query().then((result) => {
@@ -35491,7 +35521,7 @@ var App = () => {
               gap: "1em"
             }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Register new agent" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- server --", value: selectedServer, onChange: (e2) => setSelectedServer(e2.currentTarget.value), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- server --", value: agentState.registerServer, onChange: (e2) => dispatch(agentActions.setRegisterServer(e2.currentTarget.value)), children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- server --" }),
                 servers.map((server) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: server.id, children: server.name }))
               ] }),
@@ -35504,13 +35534,25 @@ var App = () => {
                 background: selectedFaction === faction.symbol ? "radial-gradient(circle, #588999 0%, rgba(0, 0, 0, 0) 75%) no-repeat" : "transparent",
                 opacity: selectedFaction === faction.symbol ? 1 : 0.4
               } })) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", onChange: (e2) => setSelectedFaction(e2.currentTarget.value), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- faction --", value: agentState.registerFaction, onChange: (e2) => dispatch(agentActions.setRegisterFaction(e2.currentTarget.value)), children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- faction --" }),
                 factions.map((faction) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: faction.symbol, children: faction.name }))
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Agent name", pattern: "[a-zA-Z0-9]{3,14}}" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Email" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Agent name", pattern: "[a-zA-Z0-9]{3,14}}", value: agentState.registerSymbol, onChange: (e2) => dispatch(agentActions.setRegisterSymbol(e2.currentTarget.value)) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", placeholder: "Email", value: agentState.registerEmail, onChange: (e2) => dispatch(agentActions.setRegisterEmail(e2.currentTarget.value)) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
+                trpc.registerAgent.mutate({
+                  serverId: agentState.registerServer,
+                  faction: agentState.registerFaction,
+                  symbol: agentState.registerSymbol,
+                  email: agentState.registerEmail
+                }).then((result) => {
+                  console.log(result);
+                  trpc.getAgents.query().then((result2) => {
+                    setAgents(result2);
+                  });
+                });
+              }, children: "Register" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {
               display: "flex",

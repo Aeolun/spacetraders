@@ -17,13 +17,14 @@ const theme = createAppTheme();
 const stylesBaseline = createAppStylesBaseline(theme);
 import {BleepsManagerProps} from "@arwes/bleeps";
 import {trpc} from "@front/trpc";
-import {Faction} from "spacetraders-sdk";
+import {Faction, FactionSymbols} from "spacetraders-sdk";
 import {CSSObject, Global} from "@emotion/react";
 import jwtDecode from "jwt-decode";
 import {Server, Agent} from "@backend/prisma";
 import {RootState, store} from './ui/store'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import account, {accountActions} from "@front/ui/slices/account";
+import {agentActions} from "@front/ui/slices/agent";
 
 const animatorsSettings: AnimatorGeneralProviderSettings = {
     // Durations in seconds.
@@ -163,6 +164,7 @@ const App = () => {
     const [servers, setServers] = useState<Server[]>([])
     const [agents, setAgents] = useState<Agent[]>([])
     const accountState = useSelector((state: RootState) => state.account)
+    const agentState = useSelector((state: RootState) => state.agent);
     const dispatch = useDispatch()
 
 
@@ -309,7 +311,7 @@ const App = () => {
                         gap: '1em'
                     }}>
                         <Text as={'h2'}>Register new agent</Text>
-                        <select placeholder={'-- server --'} value={selectedServer} onChange={(e) => setSelectedServer(e.currentTarget.value)}>
+                        <select placeholder={'-- server --'} value={agentState.registerServer} onChange={(e) => dispatch(agentActions.setRegisterServer(e.currentTarget.value))}>
                             <option>-- server --</option>
                             {servers.map(server => <option value={server.id}>{server.name}</option> )}
                         </select>
@@ -324,13 +326,25 @@ const App = () => {
                                 opacity: selectedFaction === faction.symbol ? 1 : 0.4
                             }} /> )}
                         </div>
-                        <select placeholder={'-- faction --'} onChange={(e) => setSelectedFaction(e.currentTarget.value)}>
+                        <select placeholder={'-- faction --'} value={agentState.registerFaction} onChange={(e) => dispatch(agentActions.setRegisterFaction(e.currentTarget.value))}>
                             <option>-- faction --</option>
                             {factions.map(faction => <option value={faction.symbol}>{faction.name}</option> )}
                         </select>
-                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" />
-                        <Input type="text" placeholder="Email" />
-                        <Button>Play</Button>
+                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" value={agentState.registerSymbol} onChange={(e) => dispatch(agentActions.setRegisterSymbol(e.currentTarget.value))} />
+                        <Input type="text" placeholder="Email" value={agentState.registerEmail} onChange={(e) => dispatch(agentActions.setRegisterEmail(e.currentTarget.value))} />
+                        <Button onClick={() => {
+                            trpc.registerAgent.mutate({
+                                serverId: agentState.registerServer,
+                                faction: agentState.registerFaction as FactionSymbols,
+                                symbol: agentState.registerSymbol,
+                                email: agentState.registerEmail
+                            }).then(result => {
+                                console.log(result)
+                                trpc.getAgents.query().then(result => {
+                                    setAgents(result)
+                                })
+                            })
+                        }}>Register</Button>
                     </Card><Card childStyle={{
                         display: 'flex',
                         flexDirection: 'column',

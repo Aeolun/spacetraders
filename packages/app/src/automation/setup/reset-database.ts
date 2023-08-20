@@ -1,6 +1,6 @@
-import {prisma} from "@auto/prisma";
+import {prisma, Server} from "@auto/prisma";
 
-export const resetDatabase = async () => {
+export const resetDatabase = async (server: Server) => {
     await prisma.$transaction(async () => {
         await prisma.$executeRaw`TRUNCATE TABLE \`System\``
         await prisma.$executeRaw`TRUNCATE TABLE Sector`

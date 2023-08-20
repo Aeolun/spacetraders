@@ -27,7 +27,7 @@ export async function createContext({
             return {};
         }
         let token = req.headers.authorization.split(' ')[1]
-        if (req.headers.authorization) {
+        if (token) {
             const userToken: {
                 accountId: string
                 email: string
@@ -35,6 +35,7 @@ export async function createContext({
             } = await jwtDecode(
                 token,
             );
+            console.log('token', userToken)
 
             let agentTokenPayload: any | undefined, agentToken: string | undefined;
             if (userToken.server) {

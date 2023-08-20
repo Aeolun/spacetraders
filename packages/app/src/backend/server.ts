@@ -1,4 +1,4 @@
-import {publicProcedure, router} from './trpc';
+import {authedProcedure, publicProcedure, router} from './trpc';
 import z from 'zod'
 import {prisma, ShipBehavior} from "@backend/prisma";
 import { sign, verify } from 'jsonwebtoken';
@@ -6,6 +6,13 @@ import crypto from 'crypto'
 
 import { observable } from '@trpc/server/observable';
 import {ee} from "@backend/event-emitter";
+import createApi from "@auto/lib/createApi";
+import {FactionSymbols} from "spacetraders-sdk";
+import {registerToken} from "@auto/ship/updateShips";
+
+if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET not set')
+}
 
 export const appRouter = router({
     register: publicProcedure.input(z.object({
@@ -28,6 +35,27 @@ export const appRouter = router({
                 accountId: account.id,
                 email: input.email
             }, process.env.JWT_SECRET)
+        }
+    }),
+    registerAgent: authedProcedure.input(z.object({
+        email: z.string(),
+        symbol: z.string(),
+        faction: z.nativeEnum(FactionSymbols),
+        serverId: z.string(),
+    })).mutation(async ({input, ctx}) => {
+        const server = await prisma.server.findFirstOrThrow({
+            where: {
+                id: input.serverId
+            }
+        })
+        const result = await createApi('', server.endpoint).default.register({
+            email: input.email,
+            symbol: input.symbol,
+            faction: input.faction,
+        })
+        const registerResult = await registerToken(ctx.account.email, result.data.data.agent, result.data.data.token)
+        return {
+            token: result.data.data.token
         }
     }),
     signIn: publicProcedure.input(z.object({

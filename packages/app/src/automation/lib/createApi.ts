@@ -19,9 +19,9 @@ export interface APIInstance {
     factions: FactionsApi
 }
 
-export default (agentToken: string) => {
+export default (agentToken: string, basePath?: string) => {
     const configuration = new Configuration({
-        basePath: process.env.API_ENDPOINT,
+        basePath: basePath ?? process.env.API_ENDPOINT,
         accessToken: agentToken,
     })
     return {

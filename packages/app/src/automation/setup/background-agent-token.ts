@@ -2,16 +2,16 @@ import fs from "fs";
 import createApi from "@auto/lib/createApi";
 import jwtDecode from "jwt-decode";
 import {processAgent, processShip, registerToken} from "@auto/ship/updateShips";
-import {prisma} from "@auto/prisma";
+import {prisma, Server} from "@auto/prisma";
 import {RegisterRequest} from "spacetraders-sdk";
 
-export const getBackgroundAgentToken = async (resetDate?: string) => {
+export const getBackgroundAgentToken = async (server: Server) => {
     let agentToken, agentTokenData
 
     const agent = await prisma.agent.findFirst({
         where: {
             symbol: process.env.AGENT_NAME,
-            reset: resetDate,
+            reset: server.resetDate,
             server: process.env.API_ENDPOINT,
         }
     })
@@ -19,8 +19,8 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
         agentTokenData = jwtDecode(agent.token);
     }
 
-    console.log("Agent token reset date", agentTokenData?.reset_date, resetDate)
-    if (!agent || !agent.token || (resetDate && agentTokenData.reset_date !== resetDate)) {
+    console.log("Agent token reset date", agentTokenData?.reset_date, server.resetDate)
+    if (!agent || !agent.token || (server.resetDate && agentTokenData.reset_date !== server.resetDate)) {
         console.log("No agent in database, no token for agent, or reset_date on token is not the same as server. Obtaining new token.")
 
         console.log("Registering agent on server.")
@@ -34,7 +34,6 @@ export const getBackgroundAgentToken = async (resetDate?: string) => {
 
         await registerToken(process.env.ACCOUNT_EMAIL, result.data.data.agent, result.data.data.token)
         console.log("Updated token in database")
-
 
         agentToken = result.data.data.token
     } else {
