@@ -1,12 +1,12 @@
 import type {ShipConfiguration, ShipyardModel, ShipConfigurationMount, ShipConfigurationModule} from '@backend/prisma'
-import {FlexDirection} from "@front/lib/Flex";
-import {trpc} from "@front/lib/trpc";
-import {loadSystem} from "@front/lib/loadSystem";
-import {GameState} from "@front/lib/game-state";
-import {Text} from "@front/lib/ui-elements/text";
-import {Container} from '@front/lib/ui-elements/container'
-import {Button} from "@front/lib/ui-elements/button";
-import {updateCredits} from "@front/lib/loadPlayerData";
+import {FlexDirection} from "@front/game/Flex";
+import {trpc} from "@front/trpc";
+import {loadSystem} from "@front/game/loadSystem";
+import {GameState} from "@front/game/game-state";
+import {Text} from "@front/game/ui-elements/text";
+import {Container} from '@front/game/ui-elements/container'
+import {Button} from "@front/game/ui-elements/button";
+import {updateCredits} from "@front/game/loadPlayerData";
 
 
 type ExpectedData = (ShipyardModel & { shipConfiguration: ShipConfiguration & { shipConfigurationMount: ShipConfigurationMount[], shipConfigurationModule: ShipConfigurationModule[] }})

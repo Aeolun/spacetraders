@@ -1,5 +1,5 @@
 import {BitmapText, Container, FederatedPointerEvent, NineSlicePlane} from "pixi.js";
-import {loadedAssets} from "@front/lib/assets";
+import {loadedAssets} from "@front/game/assets";
 
 export interface BaseButtonProperties { width?: number, height?: number, textSize?: number }
 

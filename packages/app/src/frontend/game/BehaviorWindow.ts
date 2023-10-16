@@ -1,12 +1,12 @@
-import {FlexDirection} from "@front/lib/Flex";
-import {Container} from "@front/lib/ui-elements/container";
-import {Text} from '@front/lib/ui-elements/text'
-import {Button} from "@front/lib/ui-elements/button";
-import {trpc} from "@front/lib/trpc";
-import {GameState} from "@front/lib/game-state";
+import {FlexDirection} from "@front/game/Flex";
+import {Container} from "@front/game/ui-elements/container";
+import {Text} from '@front/game/ui-elements/text'
+import {Button} from "@front/game/ui-elements/button";
+import {trpc} from "@front/trpc";
+import {GameState} from "@front/game/game-state";
 import type {ShipBehavior} from "@backend/prisma";
-import {Switch} from "@front/lib/switch";
-import {gameWidth} from "@front/lib/consts";
+import {Switch} from "@front/game/switch";
+import {gameWidth} from "@front/game/consts";
 
 export class BehaviorWindow {
     public container: Container

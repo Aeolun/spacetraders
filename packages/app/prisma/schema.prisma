@@ -6,17 +6,14 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
 }
 
 model Server {
-  id          String @id @default(uuid())
-  name        String
-  description String @db.Text
-  endpoint    String @unique
-  resetDate   String
+  id String @id @default(uuid())
+  apiUrl String @unique
+  resetDate String
 }
 
 model Faction {
@@ -34,10 +31,8 @@ model Agent {
   id                 String    @id @default(uuid())
   symbol             String
   reset              String
-  server             String
   credits            Int
   headquartersSymbol String?
-  headquarters       Waypoint? @relation("agentHeadquarters", fields: [headquartersSymbol], references: [symbol], onDelete: Cascade)
   accountId          String
   token              String?   @db.Text()
 
@@ -49,9 +44,7 @@ model Agent {
   primaryAgentAccounts Account[] @relation(name: "currentAgent")
   Account              Account   @relation(name: "allAgents", fields: [accountId], references: [id])
 
-  @@unique([symbol, reset, server])
-  @@index([headquartersSymbol])
-  @@index([accountId])
+  @@unique([symbol, reset])
 }
 
 model Account {
@@ -254,8 +247,6 @@ model Waypoint {
   shipsAtWaypoint Ship[] @relation("currentWaypoint")
   shipsEnroute    Ship[] @relation("destinationWaypoint")
   shipsDeparted   Ship[] @relation("departureWaypoint")
-
-  agentsWithHeadquarters Agent[] @relation("agentHeadquarters")
 
   tradeGoods MarketPrice[]
   jumpgate   Jumpgate?

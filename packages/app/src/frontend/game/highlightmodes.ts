@@ -1,7 +1,7 @@
 import {AlphaFilter, Graphics} from "pixi.js";
-import {GameState} from "@front/lib/game-state";
-import {convertToDisplayCoordinates} from "@front/lib/util";
-import {scale} from "@front/lib/consts";
+import {GameState} from "@front/game/game-state";
+import {convertToDisplayCoordinates} from "@front/game/util";
+import {scale} from "@front/game/consts";
 
 
 var stringToColour = function(str) {

@@ -1,4 +1,4 @@
-import {totalSize, universeCoordinates} from "@front/lib/consts";
+import {totalSize, universeCoordinates} from "@front/game/consts";
 
 export const convertToDisplayCoordinates = (position: { x: number, y: number}) => {
   return {

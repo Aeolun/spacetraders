@@ -3,10 +3,12 @@
 import {createTRPCProxyClient, httpBatchLink, createWSClient, wsLink, splitLink} from "@trpc/client";
 import type {AppRouter} from "@backend/server";
 
+// const backendUrl='http://'+window.location.hostname+':';
+const backendUrl='http://coder.us1.serial-experiments.com'
 
 const wsClient = createWSClient({
     // * put ws instead of http on the url
-    url: 'ws://localhost:4002/trpc',
+    url: backendUrl.replace('https', 'wss').replace('http', 'ws')+':4002/trpc',
     retryDelayMs: (attempt) => {
         if (attempt > 10) {
             return null
@@ -30,7 +32,7 @@ export const trpc = createTRPCProxyClient<AppRouter>({
 
             // * use the httpBatchLink for everything else (query, mutation)
             false: httpBatchLink({
-                url: 'http://'+window.location.hostname+':4001',
+                url: backendUrl+':4001',
                 async headers() {
                     const token = localStorage.getItem('agent-token') ?? localStorage.getItem('user-token')
                     return token ? {

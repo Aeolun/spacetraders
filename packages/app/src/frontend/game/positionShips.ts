@@ -1,6 +1,6 @@
-import {scale, systemCoordinates, systemScale} from "@front/lib/consts";
-import {GameState, ShipData, WaypointData} from "@front/lib/game-state";
-import {universeView} from "@front/lib/UIElements";
+import {scale, systemCoordinates, systemScale} from "@front/game/consts";
+import {GameState, ShipData, WaypointData} from "@front/game/game-state";
+import {universeView} from "@front/game/UIElements";
 
 let waypointShips: Record<string, number> = {}
 

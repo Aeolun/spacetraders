@@ -1,26 +1,26 @@
-import {loadAssets, loadedAssets} from "@front/lib/assets";
-import {loadUniverse} from "@front/lib/loadUniverse";
-import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/lib/worldCoordinateToOriginal";
+import {loadAssets, loadedAssets} from "@front/game/assets";
+import {loadUniverse} from "@front/game/loadUniverse";
+import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/game/worldCoordinateToOriginal";
 //     👆 **type-only** import
-import {gameHeight, scale, systemCoordinates, totalSize} from '@front/lib/consts'
+import {gameHeight, scale, systemCoordinates, totalSize} from '@front/game/consts'
 import {
     createUIElements,
     currentCoordinate, fps, marketWindow,
     systemView, universeCuller, universeGraphics, universeGraphicsText,
     universeView
-} from "@front/lib/UIElements";
-import {GameState} from "@front/lib/game-state";
-import {deselectListeners} from "@front/lib/makeInteractiveAndSelectable";
-import {positionShip, positionUniverseShip, positionWaypoint, resetShipWaypoints} from "@front/lib/positionShips";
-import {availableActions} from "@front/lib/availableActions";
-import {loadPlayerData} from "@front/lib/loadPlayerData";
-import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/lib/targetingLine";
-import {loadSystem} from "@front/lib/loadSystem";
-import {trpc} from "@front/lib/trpc";
-import { app  } from './lib/application'
-import {convertToDisplayCoordinates} from "@front/lib/util";
+} from "@front/game/UIElements";
+import {GameState} from "@front/game/game-state";
+import {deselectListeners} from "@front/game/makeInteractiveAndSelectable";
+import {positionShip, positionUniverseShip, positionWaypoint, resetShipWaypoints} from "@front/game/positionShips";
+import {availableActions} from "@front/game/availableActions";
+import {loadPlayerData} from "@front/game/loadPlayerData";
+import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/game/targetingLine";
+import {loadSystem} from "@front/game/loadSystem";
+import {trpc} from "@front/trpc";
+import { app  } from './game/application'
+import {convertToDisplayCoordinates} from "@front/game/util";
 import {Graphics} from "pixi.js";
-import {credits, cruiseModeSelect, entityInfo} from "@front/lib/createSidebar";
+import {credits, cruiseModeSelect, entityInfo} from "@front/game/createSidebar";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')

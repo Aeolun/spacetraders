@@ -1,10 +1,10 @@
 
-import {Flex, FlexDirection} from "@front/lib/Flex";
-import {loadedAssets} from "@front/lib/assets";
+import {Flex, FlexDirection} from "@front/game/Flex";
+import {loadedAssets} from "@front/game/assets";
 import {MarketPrice} from "@backend/prisma";
-import {Text} from "@front/lib/ui-elements/text";
-import {Container} from "@front/lib/ui-elements/container";
-import {gameWidth} from "@front/lib/consts";
+import {Text} from "@front/game/ui-elements/text";
+import {Container} from "@front/game/ui-elements/container";
+import {gameWidth} from "@front/game/consts";
 
 type ExpectedData = MarketPrice
 type MarketGoodKind = 'IMPORT' | 'EXPORT' | 'EXCHANGE'

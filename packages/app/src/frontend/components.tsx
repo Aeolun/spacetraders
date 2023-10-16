@@ -2,7 +2,7 @@ import { renderToString } from 'react-dom/server'
 import { useState, useEffect, useRef, PropsWithChildren, ReactNode } from 'react'
 import {GraphCanvas, GraphCanvasRef, recommendLayout, useSelection} from 'reagraph';
 import data from './graph'
-import {trpc} from "@front/lib/trpc";
+import {trpc} from "@front/game/trpc";
 import fs from "fs";
 import {prisma} from "@backend/prisma";
 

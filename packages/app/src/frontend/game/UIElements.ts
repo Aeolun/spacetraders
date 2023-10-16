@@ -1,26 +1,25 @@
 import {Viewport} from "pixi-viewport";
-import {gameWidth, totalSize} from "@front/lib/consts";
-import {Application, BitmapText, Container, Graphics, NineSlicePlane, Point, Sprite, TilingSprite} from "pixi.js";
-import { Text} from '@front/lib/ui-elements/text'
-import {loadedAssets} from "@front/lib/assets";
-import {trpc} from "@front/lib/trpc";
+import {gameWidth, totalSize} from "@front/game/consts";
+import {Application, Text, Container, Graphics, Point, TilingSprite} from "pixi.js";
+import {loadedAssets} from "@front/game/assets";
+import {trpc} from "@front/trpc";
 import { Simple, SpatialHash } from "pixi-cull"
-import {Switch} from "@front/lib/switch";
-import {MarketWindow} from "@front/lib/MarketWindow";
-import {BehaviorWindow} from "@front/lib/BehaviorWindow";
-import {createSidebar} from "@front/lib/createSidebar";
+import {Switch} from "@front/game/switch";
+import {MarketWindow} from "@front/game/MarketWindow";
+import {BehaviorWindow} from "@front/game/BehaviorWindow";
+import {createSidebar} from "@front/game/createSidebar";
 
 export let universeView: Viewport
 export let systemView: Viewport
 export let uiOverlay: Container
-export let currentCoordinate: BitmapText
-export let fps: BitmapText
+export let currentCoordinate: Text
+export let fps: Text
 export let universeCuller: Simple
 export let universeGraphics: Graphics
-export let universeGraphicsText: BitmapText
+export let universeGraphicsText: Text
 
 export let systemGraphics: Graphics
-export let systemGraphicsText: BitmapText
+export let systemGraphicsText: Text
 
 
 export let marketWindow: MarketWindow
@@ -53,7 +52,7 @@ export const createUIElements = (app: Application) => {
     systemView.addChild(systemGraphics)
 
     systemGraphicsText = new BitmapText("", {
-        fontName: 'sans-serif',
+        fontFamily: 'sans-serif',
         fontSize: 16,
         //tint: 0x0000FF,
         align: 'right',

@@ -1,10 +1,10 @@
-import {availableActions} from "@front/lib/availableActions";
-import {Button} from "@front/lib/ui-elements/button";
-import {FlexDirection, FlexWrap, PositionType} from "@front/lib/Flex";
-import {Container} from "@front/lib/ui-elements/container";
-import {app} from "@front/lib/application";
-import {highlightmodes} from "@front/lib/highlightmodes";
-import {universeView} from "@front/lib/UIElements";
+import {availableActions} from "@front/game/availableActions";
+import {Button} from "@front/game/ui-elements/button";
+import {FlexDirection, FlexWrap, PositionType} from "@front/game/Flex";
+import {Container} from "@front/game/ui-elements/container";
+import {app} from "@front/game/application";
+import {highlightmodes} from "@front/game/highlightmodes";
+import {universeView} from "@front/game/UIElements";
 import {Graphics} from "pixi.js";
 
 

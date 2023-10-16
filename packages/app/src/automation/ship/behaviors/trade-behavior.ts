@@ -1,17 +1,11 @@
 import {Ship} from "@auto/ship/ship";
-import {ExtractResources201Response, Market, MarketTradeGood, MarketTransaction, Survey} from "spacetraders-sdk";
-import {logShipAction} from "@auto/lib/log";
-import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {prisma} from "@auto/prisma";
 import {travelBehavior} from "@auto/ship/behaviors/travel-behavior";
-import {getDistance} from "@common/lib/getDistance";
 import {defaultWayfinder} from "@auto/wayfinding";
 import {findTradesBetweenSystems} from "@auto/findTradesBetweenSystems";
-import {availableActions} from "@front/lib/availableActions";
-import {symbol} from "zod";
-import {getFuelCost} from "@common/lib/getFuelCost";
-import {generateLogsFromBuyAndSell} from "@auto/lib/generateLogsFromBuyAndSell";
 import {BehaviorParameters} from "@auto/ship/shipBehavior";
+import { getFuelCost } from "@common/lib/getFuelCost";
+import { MarketTradeGood, MarketTransaction } from "spacetraders-sdk";
 
 const tradeTaken = new Set([] as string[])
 export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => {

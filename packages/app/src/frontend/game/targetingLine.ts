@@ -1,6 +1,6 @@
-import {GameState} from "@front/lib/game-state";
-import {systemGraphics, systemGraphicsText, universeGraphics, universeGraphicsText} from "@front/lib/UIElements";
-import {scale} from "@front/lib/consts";
+import {GameState} from "@front/game/game-state";
+import {systemGraphics, systemGraphicsText, universeGraphics, universeGraphicsText} from "@front/game/UIElements";
+import {scale} from "@front/game/consts";
 
 
 export const clearGraphics = () => {
@@ -35,17 +35,17 @@ export const universeTargetingLine = (sizeMultiplier: number) => {
         const distance = Math.round(Math.sqrt(Math.pow(fromData.x - toData.x, 2)+Math.pow(fromData.y - toData.y, 2)))
 
         if (jumpRange && distance < (jumpGateRange ?? jumpRange)) {
-            universeGraphics.lineStyle({
+            universeGraphics.stroke({
                 color: jumpColor,
                 width: sizeMultiplier
             })
         } else if (warpRange && distance < warpRange) {
-            universeGraphics.lineStyle({
+            universeGraphics.stroke({
                 color: warpColor,
                 width: sizeMultiplier
             })
         } else {
-            universeGraphics.lineStyle({
+            universeGraphics.stroke({
                 color: 0xFF0000,
                 width: sizeMultiplier
             })
@@ -73,18 +73,18 @@ export const universeTargetingLine = (sizeMultiplier: number) => {
         console.log("jumpgate range", jumpGateRange)
 
         if (warpRange) {
-            universeGraphics.lineStyle({
+            universeGraphics.stroke({
                 color: warpColor,
                 width: sizeMultiplier
             })
-            universeGraphics.drawCircle(fromContainer.x, fromContainer.y, warpRange*scale.universe)
+            universeGraphics.circle(fromContainer.x, fromContainer.y, warpRange*scale.universe)
         }
         if (jumpRange || jumpGateRange) {
-            universeGraphics.lineStyle({
+            universeGraphics.stroke({
                 color: jumpColor,
                 width: sizeMultiplier
             })
-            universeGraphics.drawCircle(fromContainer.x, fromContainer.y, (jumpGateRange ?? jumpRange)*scale.universe)
+            universeGraphics.circle(fromContainer.x, fromContainer.y, (jumpGateRange ?? jumpRange)*scale.universe)
         }
     }
 }
@@ -93,7 +93,7 @@ export const systemTargetingLine = () => {
     if (GameState.hoveredWaypoint && GameState.selected?.type === 'ship' && GameState.hoveredWaypoint.symbol !== GameState.shipData[GameState.selected.symbol].currentWaypoint.symbol) {
         console.log('shiptargeting')
         systemGraphics.clear()
-        systemGraphics.lineStyle({
+        systemGraphics.stroke({
             color: 0x5533FF,
             width: 10
         })

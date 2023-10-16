@@ -1,11 +1,11 @@
-import {GameState} from "@front/lib/game-state";
-import {trpc} from "@front/lib/trpc";
+import {GameState} from "@front/game/game-state";
+import {trpc} from "@front/trpc";
 import {FederatedPointerEvent} from "pixi.js";
-import {loadSystem} from "@front/lib/loadSystem";
-import {updateCredits} from "@front/lib/loadPlayerData";
-import {ShipyardWindow} from "@front/lib/ShipyardWindow";
-import {behaviorWindow, uiOverlay} from "@front/lib/UIElements";
-import {deselectListeners} from "@front/lib/makeInteractiveAndSelectable";
+import {loadSystem} from "@front/game/loadSystem";
+import {updateCredits} from "@front/game/loadPlayerData";
+import {ShipyardWindow} from "@front/game/ShipyardWindow";
+import {behaviorWindow, uiOverlay} from "@front/game/UIElements";
+import {deselectListeners} from "@front/game/makeInteractiveAndSelectable";
 
 export const availableActions: {
     name: string

@@ -1,12 +1,12 @@
-import {trpc} from "@front/lib/trpc";
-import {systemGraphics, systemGraphicsText, systemView, universeView} from "@front/lib/UIElements";
-import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/lib/game-state";
-import {systemCoordinates, systemScale} from "@front/lib/consts";
+import {trpc} from "@front/trpc";
+import {systemGraphics, systemGraphicsText, systemView, universeView} from "@front/game/UIElements";
+import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/game/game-state";
+import {systemCoordinates, systemScale} from "@front/game/consts";
 import {AnimatedSprite, BitmapText, Container, Graphics, Sprite} from "pixi.js";
-import {positionShip, resetShipWaypoints} from "@front/lib/positionShips";
-import {loadedAssets} from "@front/lib/assets";
-import {makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
-import {backButton} from "@front/lib/createSidebar";
+import {positionShip, resetShipWaypoints} from "@front/game/positionShips";
+import {loadedAssets} from "@front/game/assets";
+import {makeInteractiveAndSelectable} from "@front/game/makeInteractiveAndSelectable";
+import {backButton} from "@front/game/createSidebar";
 
 function createShipContainer(ship: ShipData) {
   const shipGroup = new Container()

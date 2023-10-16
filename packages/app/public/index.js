@@ -31379,7 +31379,7 @@ var BleepsOnAnimator = (props) => {
 // ../../node_modules/.pnpm/@arwes+react-core@1.0.0-next.7_@arwes+animator@1.0.0-alpha.21_@arwes+bleeps@1.0.0-alpha.21_@a_oozjepla73pus6sxlkrb2jix6a/node_modules/@arwes/react-core/build/esm/BleepsOnAnimator/index.js
 var BleepsOnAnimator2 = memo(BleepsOnAnimator);
 
-// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.38.5/node_modules/@trpc/server/dist/observable-ade1bad8.mjs
 function identity(x2) {
   return x2;
 }
@@ -31454,7 +31454,7 @@ function observable(subscribe) {
   return self;
 }
 
-// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/observable/index.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.38.5/node_modules/@trpc/server/dist/observable/index.mjs
 function share(_opts) {
   return (originalObserver) => {
     let refCount = 0;
@@ -31508,11 +31508,11 @@ function share(_opts) {
     };
   };
 }
-var ObservableAbortError = class extends Error {
+var ObservableAbortError = class _ObservableAbortError extends Error {
   constructor(message) {
     super(message);
     this.name = "ObservableAbortError";
-    Object.setPrototypeOf(this, ObservableAbortError.prototype);
+    Object.setPrototypeOf(this, _ObservableAbortError.prototype);
   }
 };
 function observableToPromise(observable2) {
@@ -31552,7 +31552,7 @@ function observableToPromise(observable2) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/splitLink-4c75f7be.mjs
 function createChain(opts) {
   return observable((observer) => {
     function execute(index = 0, op = opts.op) {
@@ -31594,23 +31594,68 @@ function splitLink(opts) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/TRPCClientError-fef6cf44.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/transformResult-ace864b8.mjs
+function isObject(value) {
+  return !!value && !Array.isArray(value) && typeof value === "object";
+}
+function transformResultInner(response, runtime) {
+  if ("error" in response) {
+    const error = runtime.transformer.deserialize(response.error);
+    return {
+      ok: false,
+      error: {
+        ...response,
+        error
+      }
+    };
+  }
+  const result = {
+    ...response.result,
+    ...(!response.result.type || response.result.type === "data") && {
+      type: "data",
+      data: runtime.transformer.deserialize(response.result.data)
+    }
+  };
+  return {
+    ok: true,
+    result
+  };
+}
+var TransformResultError = class extends Error {
+  constructor() {
+    super("Unable to transform response from server");
+  }
+};
+function transformResult(response, runtime) {
+  let result;
+  try {
+    result = transformResultInner(response, runtime);
+  } catch (err) {
+    throw new TransformResultError();
+  }
+  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
+    throw new TransformResultError();
+  }
+  if (result.ok && !isObject(result.result)) {
+    throw new TransformResultError();
+  }
+  return result;
+}
+
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/TRPCClientError-0de4d231.mjs
 function isTRPCClientError(cause) {
   return cause instanceof TRPCClientError || /**
   * @deprecated
   * Delete in next major
   */
-  cause.name === "TRPCClientError";
+  cause instanceof Error && cause.name === "TRPCClientError";
 }
-var TRPCClientError = class extends Error {
-  static from(cause, opts = {}) {
-    if (!(cause instanceof Error)) {
-      return new TRPCClientError(cause.error.message ?? "", {
-        ...opts,
-        cause: void 0,
-        result: cause
-      });
-    }
+function isTRPCErrorResponse(obj) {
+  return isObject(obj) && isObject(obj.error) && typeof obj.error.code === "number" && typeof obj.error.message === "string";
+}
+var TRPCClientError = class _TRPCClientError extends Error {
+  static from(_cause, opts = {}) {
+    const cause = _cause;
     if (isTRPCClientError(cause)) {
       if (opts.meta) {
         cause.meta = {
@@ -31620,10 +31665,21 @@ var TRPCClientError = class extends Error {
       }
       return cause;
     }
-    return new TRPCClientError(cause.message, {
+    if (isTRPCErrorResponse(cause)) {
+      return new _TRPCClientError(cause.error.message, {
+        ...opts,
+        result: cause
+      });
+    }
+    if (!(cause instanceof Error)) {
+      return new _TRPCClientError("Unknown error", {
+        ...opts,
+        cause
+      });
+    }
+    return new _TRPCClientError(cause.message, {
       ...opts,
-      cause,
-      result: null
+      cause
     });
   }
   constructor(message, opts) {
@@ -31636,11 +31692,11 @@ var TRPCClientError = class extends Error {
     this.shape = opts?.result?.error;
     this.data = opts?.result?.error.data;
     this.name = "TRPCClientError";
-    Object.setPrototypeOf(this, TRPCClientError.prototype);
+    Object.setPrototypeOf(this, _TRPCClientError.prototype);
   }
 };
 
-// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/codes-24aa1ce1.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.38.5/node_modules/@trpc/server/dist/codes-c924c3db.mjs
 function invert(obj) {
   const newObj = /* @__PURE__ */ Object.create(null);
   for (const key in obj) {
@@ -31659,10 +31715,9 @@ var TRPC_ERROR_CODES_BY_KEY = {
   * The JSON sent is not a valid Request object.
   */
   BAD_REQUEST: -32600,
-  /**
-  * Internal JSON-RPC error.
-  */
+  // Internal JSON-RPC error
   INTERNAL_SERVER_ERROR: -32603,
+  NOT_IMPLEMENTED: -32603,
   // Implementation specific errors
   UNAUTHORIZED: -32001,
   FORBIDDEN: -32003,
@@ -31678,7 +31733,7 @@ var TRPC_ERROR_CODES_BY_KEY = {
 };
 var TRPC_ERROR_CODES_BY_NUMBER = invert(TRPC_ERROR_CODES_BY_KEY);
 
-// ../../node_modules/.pnpm/@trpc+server@10.34.0/node_modules/@trpc/server/dist/index-044a193b.mjs
+// ../../node_modules/.pnpm/@trpc+server@10.38.5/node_modules/@trpc/server/dist/index-f91d720c.mjs
 var TRPC_ERROR_CODES_BY_NUMBER2 = invert(TRPC_ERROR_CODES_BY_KEY);
 var noop2 = () => {
 };
@@ -31715,7 +31770,7 @@ var createFlatProxy = (callback) => {
   });
 };
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/httpUtils-1efcb902.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/httpUtils-0cb58db4.mjs
 var isFunction2 = (fn2) => typeof fn2 === "function";
 function getFetch(customFetchImpl) {
   if (customFetchImpl) {
@@ -31822,9 +31877,11 @@ async function fetchHTTPResponse(opts, ac) {
 function httpRequest(opts) {
   const ac = opts.AbortController ? new opts.AbortController() : null;
   const meta = {};
+  let done = false;
   const promise2 = new Promise((resolve, reject) => {
     fetchHTTPResponse(opts, ac).then((_res) => {
       meta.response = _res;
+      done = true;
       return _res.json();
     }).then((json) => {
       meta.responseJSON = json;
@@ -31833,13 +31890,16 @@ function httpRequest(opts) {
         meta
       });
     }).catch((err) => {
+      done = true;
       reject(TRPCClientError.from(err, {
         meta
       }));
     });
   });
   const cancel = () => {
-    ac?.abort();
+    if (!done) {
+      ac?.abort();
+    }
   };
   return {
     promise: promise2,
@@ -31847,55 +31907,7 @@ function httpRequest(opts) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/transformResult-7ab522e6.mjs
-function isObject(value) {
-  return !!value && !Array.isArray(value) && typeof value === "object";
-}
-function transformResultInner(response, runtime) {
-  if ("error" in response) {
-    const error = runtime.transformer.deserialize(response.error);
-    return {
-      ok: false,
-      error: {
-        ...response,
-        error
-      }
-    };
-  }
-  const result = {
-    ...response.result,
-    ...(!response.result.type || response.result.type === "data") && {
-      type: "data",
-      data: runtime.transformer.deserialize(response.result.data)
-    }
-  };
-  return {
-    ok: true,
-    result
-  };
-}
-var TransformResultError = class extends Error {
-  constructor() {
-    super("Unable to transform response from server");
-  }
-};
-function transformResult(response, runtime) {
-  let result;
-  try {
-    result = transformResultInner(response, runtime);
-  } catch (err) {
-    throw new TransformResultError();
-  }
-  if (!result.ok && (!isObject(result.error.error) || typeof result.error.error.code !== "number")) {
-    throw new TransformResultError();
-  }
-  if (result.ok && !isObject(result.result)) {
-    throw new TransformResultError();
-  }
-  return result;
-}
-
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/httpBatchLink-fbd7b43c.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/httpBatchLink-cee1f56c.mjs
 var throwFatalError = () => {
   throw new Error("Something went wrong. Please submit an issue at https://github.com/trpc/trpc/issues/new");
 };
@@ -32120,7 +32132,7 @@ var batchRequester = (requesterOpts) => {
 };
 var httpBatchLink = createHTTPBatchLink(batchRequester);
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/links/httpLink.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/links/httpLink.mjs
 function httpLinkFactory(factoryOpts) {
   return (opts) => {
     const resolvedOpts = resolveHTTPLinkOptions(opts);
@@ -32174,7 +32186,7 @@ var httpLink = httpLinkFactory({
   requester: jsonHttpRequester
 });
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/links/wsLink.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/links/wsLink.mjs
 var retryDelay = (attemptIndex) => attemptIndex === 0 ? 0 : Math.min(1e3 * 2 ** attemptIndex, 3e4);
 function createWSClient(opts) {
   const { url, WebSocket: WebSocketImpl = WebSocket, retryDelayMs: retryDelayFn = retryDelay, onOpen, onClose } = opts;
@@ -32374,11 +32386,11 @@ function createWSClient(opts) {
     }
   };
 }
-var TRPCWebSocketClosedError = class extends Error {
+var TRPCWebSocketClosedError = class _TRPCWebSocketClosedError extends Error {
   constructor(message) {
     super(message);
     this.name = "TRPCWebSocketClosedError";
-    Object.setPrototypeOf(this, TRPCWebSocketClosedError.prototype);
+    Object.setPrototypeOf(this, _TRPCWebSocketClosedError.prototype);
   }
 };
 function wsLink(opts) {
@@ -32425,7 +32437,7 @@ function wsLink(opts) {
   };
 }
 
-// ../../node_modules/.pnpm/@trpc+client@10.34.0_@trpc+server@10.34.0/node_modules/@trpc/client/dist/index.mjs
+// ../../node_modules/.pnpm/@trpc+client@10.38.5_@trpc+server@10.38.5/node_modules/@trpc/client/dist/index.mjs
 var TRPCUntypedClient = class {
   $request({ type, input, path, context = {} }) {
     const chain$ = createChain({
@@ -32719,9 +32731,10 @@ var experimental_formDataLink = httpLinkFactory({
 });
 
 // src/frontend/trpc.ts
+var backendUrl = "http://coder.us1.serial-experiments.com";
 var wsClient = createWSClient({
   // * put ws instead of http on the url
-  url: "ws://localhost:4002/trpc",
+  url: backendUrl.replace("https", "wss").replace("http", "ws") + ":4002/trpc",
   retryDelayMs: (attempt) => {
     if (attempt > 10) {
       return null;
@@ -32743,7 +32756,7 @@ var trpc = createTRPCProxyClient({
       }),
       // * use the httpBatchLink for everything else (query, mutation)
       false: httpBatchLink({
-        url: "http://" + window.location.hostname + ":4001",
+        url: backendUrl + ":4001",
         async headers() {
           const token2 = localStorage.getItem("agent-token") ?? localStorage.getItem("user-token");
           return token2 ? {
@@ -33736,7 +33749,7 @@ var thunk = createThunkMiddleware();
 thunk.withExtraArgument = createThunkMiddleware;
 var es_default = thunk;
 
-// ../../node_modules/.pnpm/@reduxjs+toolkit@1.9.5_react-redux@8.1.2_react@18.2.0/node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
+// ../../node_modules/.pnpm/@reduxjs+toolkit@1.9.6_react-redux@8.1.3_react@18.2.0/node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js
 var __extends = function() {
   var extendStatics = function(d2, b2) {
     extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
@@ -33909,6 +33922,69 @@ function isPlainObject2(value) {
   }
   return proto === baseProto;
 }
+var hasMatchFunction = function(v2) {
+  return v2 && typeof v2.match === "function";
+};
+function createAction(type, prepareAction) {
+  function actionCreator() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+      args[_i] = arguments[_i];
+    }
+    if (prepareAction) {
+      var prepared = prepareAction.apply(void 0, args);
+      if (!prepared) {
+        throw new Error("prepareAction did not return an object");
+      }
+      return __spreadValues(__spreadValues({
+        type,
+        payload: prepared.payload
+      }, "meta" in prepared && { meta: prepared.meta }), "error" in prepared && { error: prepared.error });
+    }
+    return { type, payload: args[0] };
+  }
+  actionCreator.toString = function() {
+    return "" + type;
+  };
+  actionCreator.type = type;
+  actionCreator.match = function(action) {
+    return action.type === type;
+  };
+  return actionCreator;
+}
+function isActionCreator(action) {
+  return typeof action === "function" && "type" in action && hasMatchFunction(action);
+}
+function getMessage(type) {
+  var splitType = type ? ("" + type).split("/") : [];
+  var actionName = splitType[splitType.length - 1] || "actionCreator";
+  return 'Detected an action creator with type "' + (type || "unknown") + "\" being dispatched. \nMake sure you're calling the action creator before dispatching, i.e. `dispatch(" + actionName + "())` instead of `dispatch(" + actionName + ")`. This is necessary even if the action has no payload.";
+}
+function createActionCreatorInvariantMiddleware(options) {
+  if (options === void 0) {
+    options = {};
+  }
+  if (false) {
+    return function() {
+      return function(next2) {
+        return function(action) {
+          return next2(action);
+        };
+      };
+    };
+  }
+  var _c = options.isActionCreator, isActionCreator2 = _c === void 0 ? isActionCreator : _c;
+  return function() {
+    return function(next2) {
+      return function(action) {
+        if (isActionCreator2(action)) {
+          console.warn(getMessage(action.type));
+        }
+        return next2(action);
+      };
+    };
+  };
+}
 function getTimeMeasureUtils(maxDelay, fnName) {
   var elapsed = 0;
   return {
@@ -34057,15 +34133,19 @@ function trackForMutations(isImmutable, ignorePaths, obj) {
     }
   };
 }
-function trackProperties(isImmutable, ignorePaths, obj, path) {
+function trackProperties(isImmutable, ignorePaths, obj, path, checkedObjects) {
   if (ignorePaths === void 0) {
     ignorePaths = [];
   }
   if (path === void 0) {
     path = "";
   }
+  if (checkedObjects === void 0) {
+    checkedObjects = /* @__PURE__ */ new Set();
+  }
   var tracked = { value: obj };
-  if (!isImmutable(obj)) {
+  if (!isImmutable(obj) && !checkedObjects.has(obj)) {
+    checkedObjects.add(obj);
     tracked.children = {};
     for (var key in obj) {
       var childPath = path ? path + "." + key : key;
@@ -34304,7 +34384,7 @@ function getDefaultMiddleware(options) {
   if (options === void 0) {
     options = {};
   }
-  var _c = options.thunk, thunk2 = _c === void 0 ? true : _c, _d = options.immutableCheck, immutableCheck = _d === void 0 ? true : _d, _e = options.serializableCheck, serializableCheck = _e === void 0 ? true : _e;
+  var _c = options.thunk, thunk2 = _c === void 0 ? true : _c, _d = options.immutableCheck, immutableCheck = _d === void 0 ? true : _d, _e = options.serializableCheck, serializableCheck = _e === void 0 ? true : _e, _f = options.actionCreatorCheck, actionCreatorCheck = _f === void 0 ? true : _f;
   var middlewareArray = new MiddlewareArray();
   if (thunk2) {
     if (isBoolean(thunk2)) {
@@ -34327,6 +34407,13 @@ function getDefaultMiddleware(options) {
         serializableOptions = serializableCheck;
       }
       middlewareArray.push(createSerializableStateInvariantMiddleware(serializableOptions));
+    }
+    if (actionCreatorCheck) {
+      var actionCreatorOptions = {};
+      if (!isBoolean(actionCreatorCheck)) {
+        actionCreatorOptions = actionCreatorCheck;
+      }
+      middlewareArray.unshift(createActionCreatorInvariantMiddleware(actionCreatorOptions));
     }
   }
   return middlewareArray;
@@ -34372,33 +34459,6 @@ function configureStore(options) {
   var composedEnhancer = finalCompose.apply(void 0, storeEnhancers);
   return createStore(rootReducer, preloadedState, composedEnhancer);
 }
-function createAction(type, prepareAction) {
-  function actionCreator() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      args[_i] = arguments[_i];
-    }
-    if (prepareAction) {
-      var prepared = prepareAction.apply(void 0, args);
-      if (!prepared) {
-        throw new Error("prepareAction did not return an object");
-      }
-      return __spreadValues(__spreadValues({
-        type,
-        payload: prepared.payload
-      }, "meta" in prepared && { meta: prepared.meta }), "error" in prepared && { error: prepared.error });
-    }
-    return { type, payload: args[0] };
-  }
-  actionCreator.toString = function() {
-    return "" + type;
-  };
-  actionCreator.type = type;
-  actionCreator.match = function(action) {
-    return action.type === type;
-  };
-  return actionCreator;
-}
 function executeReducerBuilderCallback(builderCallback) {
   var actionsMap = {};
   var actionMatchers = [];
@@ -34414,8 +34474,11 @@ function executeReducerBuilderCallback(builderCallback) {
         }
       }
       var type = typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
+      if (!type) {
+        throw new Error("`builder.addCase` cannot be called with an empty action type");
+      }
       if (type in actionsMap) {
-        throw new Error("addCase cannot be called with two reducers for the same action type");
+        throw new Error("`builder.addCase` cannot be called with two reducers for the same action type");
       }
       actionsMap[type] = reducer;
       return builder;
@@ -34933,14 +34996,14 @@ var store = configureStore({
   }
 });
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/index.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/index.js
 var import_shim = __toESM(require_shim());
 var import_with_selector = __toESM(require_with_selector());
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/reactBatchedUpdates.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/reactBatchedUpdates.js
 var import_react_dom = __toESM(require_react_dom());
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/batch.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/batch.js
 function defaultNoopBatch(callback) {
   callback();
 }
@@ -34948,13 +35011,13 @@ var batch = defaultNoopBatch;
 var setBatch = (newBatch) => batch = newBatch;
 var getBatch = () => batch;
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useSelector.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useSelector.js
 var import_react37 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useReduxContext.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useReduxContext.js
 var import_react36 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/Context.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/Context.js
 var React19 = __toESM(require_react());
 var ContextKey = Symbol.for(`react-redux-context`);
 var gT = typeof globalThis !== "undefined" ? globalThis : (
@@ -34978,7 +35041,7 @@ function getContext() {
 }
 var ReactReduxContext = /* @__PURE__ */ getContext();
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useReduxContext.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useReduxContext.js
 function createReduxContextHook(context = ReactReduxContext) {
   return function useReduxContext2() {
     const contextValue = (0, import_react36.useContext)(context);
@@ -34990,12 +35053,12 @@ function createReduxContextHook(context = ReactReduxContext) {
 }
 var useReduxContext = /* @__PURE__ */ createReduxContextHook();
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/useSyncExternalStore.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/useSyncExternalStore.js
 var notInitialized = () => {
   throw new Error("uSES not initialized!");
 };
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useSelector.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useSelector.js
 var useSyncExternalStoreWithSelector = notInitialized;
 var initializeUseSelector = (fn2) => {
   useSyncExternalStoreWithSelector = fn2;
@@ -35038,17 +35101,38 @@ function createSelectorHook(context = ReactReduxContext) {
           if (finalStabilityCheck === "always" || finalStabilityCheck === "once" && firstRun.current) {
             const toCompare = selector(state);
             if (!equalityFn(selected, toCompare)) {
+              let stack = void 0;
+              try {
+                throw new Error();
+              } catch (e2) {
+                ;
+                ({
+                  stack
+                } = e2);
+              }
               console.warn("Selector " + (selector.name || "unknown") + " returned a different result when called with the same parameters. This can lead to unnecessary rerenders.\nSelectors that return a new reference (such as an object or an array) should be memoized: https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization", {
                 state,
                 selected,
-                selected2: toCompare
+                selected2: toCompare,
+                stack
               });
             }
           }
           const finalNoopCheck = typeof noopCheck === "undefined" ? globalNoopCheck : noopCheck;
           if (finalNoopCheck === "always" || finalNoopCheck === "once" && firstRun.current) {
             if (selected === state) {
-              console.warn("Selector " + (selector.name || "unknown") + " returned the root state when called. This can lead to unnecessary rerenders.\nSelectors that return the entire state are almost certainly a mistake, as they will cause a rerender whenever *anything* in state changes.");
+              let stack = void 0;
+              try {
+                throw new Error();
+              } catch (e2) {
+                ;
+                ({
+                  stack
+                } = e2);
+              }
+              console.warn("Selector " + (selector.name || "unknown") + " returned the root state when called. This can lead to unnecessary rerenders.\nSelectors that return the entire state are almost certainly a mistake, as they will cause a rerender whenever *anything* in state changes.", {
+                stack
+              });
             }
           }
           if (firstRun.current)
@@ -35064,12 +35148,12 @@ function createSelectorHook(context = ReactReduxContext) {
 }
 var useSelector = /* @__PURE__ */ createSelectorHook();
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/connect.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/connect.js
 var import_hoist_non_react_statics2 = __toESM(require_hoist_non_react_statics_cjs());
 var React21 = __toESM(require_react());
 var import_react_is = __toESM(require_react_is2());
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/Subscription.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/Subscription.js
 function createListenerCollection() {
   const batch2 = getBatch();
   let first = null;
@@ -35135,9 +35219,19 @@ var nullListeners = {
 function createSubscription(store2, parentSub) {
   let unsubscribe;
   let listeners = nullListeners;
+  let subscriptionsAmount = 0;
+  let selfSubscribed = false;
   function addNestedSub(listener2) {
     trySubscribe();
-    return listeners.subscribe(listener2);
+    const cleanupListener = listeners.subscribe(listener2);
+    let removed = false;
+    return () => {
+      if (!removed) {
+        removed = true;
+        cleanupListener();
+        tryUnsubscribe();
+      }
+    };
   }
   function notifyNestedSubs() {
     listeners.notify();
@@ -35148,20 +35242,34 @@ function createSubscription(store2, parentSub) {
     }
   }
   function isSubscribed() {
-    return Boolean(unsubscribe);
+    return selfSubscribed;
   }
   function trySubscribe() {
+    subscriptionsAmount++;
     if (!unsubscribe) {
       unsubscribe = parentSub ? parentSub.addNestedSub(handleChangeWrapper) : store2.subscribe(handleChangeWrapper);
       listeners = createListenerCollection();
     }
   }
   function tryUnsubscribe() {
-    if (unsubscribe) {
+    subscriptionsAmount--;
+    if (unsubscribe && subscriptionsAmount === 0) {
       unsubscribe();
       unsubscribe = void 0;
       listeners.clear();
       listeners = nullListeners;
+    }
+  }
+  function trySubscribeSelf() {
+    if (!selfSubscribed) {
+      selfSubscribed = true;
+      trySubscribe();
+    }
+  }
+  function tryUnsubscribeSelf() {
+    if (selfSubscribed) {
+      selfSubscribed = false;
+      tryUnsubscribe();
     }
   }
   const subscription = {
@@ -35169,25 +35277,25 @@ function createSubscription(store2, parentSub) {
     notifyNestedSubs,
     handleChangeWrapper,
     isSubscribed,
-    trySubscribe,
-    tryUnsubscribe,
+    trySubscribe: trySubscribeSelf,
+    tryUnsubscribe: tryUnsubscribeSelf,
     getListeners: () => listeners
   };
   return subscription;
 }
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/useIsomorphicLayoutEffect.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/utils/useIsomorphicLayoutEffect.js
 var React20 = __toESM(require_react());
 var canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
 var useIsomorphicLayoutEffect = canUseDOM ? React20.useLayoutEffect : React20.useEffect;
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/connect.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/connect.js
 var useSyncExternalStore = notInitialized;
 var initializeConnect = (fn2) => {
   useSyncExternalStore = fn2;
 };
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/Provider.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/components/Provider.js
 var React22 = __toESM(require_react());
 function Provider({
   store: store2,
@@ -35229,7 +35337,7 @@ function Provider({
 }
 var Provider_default = Provider;
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useStore.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useStore.js
 function createStoreHook(context = ReactReduxContext) {
   const useReduxContext2 = (
     // @ts-ignore
@@ -35247,7 +35355,7 @@ function createStoreHook(context = ReactReduxContext) {
 }
 var useStore = /* @__PURE__ */ createStoreHook();
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useDispatch.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/hooks/useDispatch.js
 function createDispatchHook(context = ReactReduxContext) {
   const useStore2 = (
     // @ts-ignore
@@ -35260,7 +35368,7 @@ function createDispatchHook(context = ReactReduxContext) {
 }
 var useDispatch = /* @__PURE__ */ createDispatchHook();
 
-// ../../node_modules/.pnpm/react-redux@8.1.2_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/index.js
+// ../../node_modules/.pnpm/react-redux@8.1.3_react-dom@18.2.0_react@18.2.0_redux@4.2.1/node_modules/react-redux/es/index.js
 initializeUseSelector(import_with_selector.useSyncExternalStoreWithSelector);
 initializeConnect(import_shim.useSyncExternalStore);
 setBatch(import_react_dom.unstable_batchedUpdates);
@@ -35382,10 +35490,8 @@ var App = () => {
   const [signinToken, setSigninToken] = (0, import_react38.useState)(localStorage.getItem("user-token"));
   const currentTokenData = signinToken ? jwt_decode_esm_default(signinToken) : null;
   const [selectedFaction, setSelectedFaction] = (0, import_react38.useState)("");
-  const [selectedServer, setSelectedServer] = (0, import_react38.useState)("");
   const [tokenFieldValue, setTokenFieldValue] = (0, import_react38.useState)("");
   const [factions, setFactions] = (0, import_react38.useState)([]);
-  const [servers, setServers] = (0, import_react38.useState)([]);
   const [agents, setAgents] = (0, import_react38.useState)([]);
   const accountState = useSelector((state) => state.account);
   const agentState = useSelector((state) => state.agent);
@@ -35393,9 +35499,6 @@ var App = () => {
   (0, import_react38.useEffect)(() => {
     trpc.getFactions.query().then((result) => {
       setFactions(result);
-    });
-    trpc.getServers.query().then((result) => {
-      setServers(result);
     });
     trpc.validateToken.mutate({
       token: signinToken
@@ -35521,10 +35624,6 @@ var App = () => {
               gap: "1em"
             }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Register new agent" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- server --", value: agentState.registerServer, onChange: (e2) => dispatch(agentActions.setRegisterServer(e2.currentTarget.value)), children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- server --" }),
-                servers.map((server) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: server.id, children: server.name }))
-              ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
                 display: "flex",
                 flexWrap: "wrap"
@@ -35561,10 +35660,6 @@ var App = () => {
             }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: "Add Existing token" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: "Note that if you already have a token set, this token will override the existing one." }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { placeholder: "-- server --", value: selectedServer, onChange: (e2) => setSelectedServer(e2.currentTarget.value), children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { children: "-- server --" }),
-                servers.map((server) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: server.id, children: server.name }))
-              ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, { type: "text", value: tokenFieldValue, onChange: (e2) => setTokenFieldValue(e2.currentTarget.value), placeholder: "Token" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
                 console.log("buttonclick");
@@ -35700,7 +35795,7 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 
-@trpc/client/dist/httpUtils-1efcb902.mjs:
+@trpc/client/dist/httpUtils-0cb58db4.mjs:
   (* istanbul ignore if -- @preserve *)
 
 @trpc/client/dist/links/wsLink.mjs:

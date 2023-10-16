@@ -1,8 +1,8 @@
 import {BitmapText, FederatedPointerEvent} from "pixi.js";
-import {loadedAssets} from "@front/lib/assets";
-import {Container} from "@front/lib/ui-elements/container";
-import {FlexDirection} from "@front/lib/Flex";
-import {Text} from "@front/lib/ui-elements/text";
+import {loadedAssets} from "@front/game/assets";
+import {Container} from "@front/game/ui-elements/container";
+import {FlexDirection} from "@front/game/Flex";
+import {Text} from "@front/game/ui-elements/text";
 
 export class Switch extends Container {
     optionSprites: Record<string, Container> = {}

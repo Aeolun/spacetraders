@@ -1,17 +1,17 @@
-import {Container, Container as UIContainer} from "@front/lib/ui-elements/container";
-import {BaseButton} from "@front/lib/base-elements/base-button";
-import {GameState} from "@front/lib/game-state";
+import {Container, Container as UIContainer} from "@front/game/ui-elements/container";
+import {BaseButton} from "@front/game/base-elements/base-button";
+import {GameState} from "@front/game/game-state";
 import {BitmapText, NineSlicePlane} from "pixi.js";
-import {loadedAssets} from "@front/lib/assets";
-import {Switch} from "@front/lib/switch";
-import {trpc} from "@front/lib/trpc";
+import {loadedAssets} from "@front/game/assets";
+import {Switch} from "@front/game/switch";
+import {trpc} from "@front/trpc";
 
-import {createActionButtons, createHighlightButtons} from "@front/lib/ui/action-buttons";
-import {Button} from "@front/lib/ui-elements/button";
-import {Text} from "@front/lib/ui-elements/text";
-import {systemView, universeView} from "@front/lib/UIElements";
-import {gameHeight} from "@front/lib/consts";
-import {app} from "@front/lib/application";
+import {createActionButtons, createHighlightButtons} from "@front/game/ui/action-buttons";
+import {Button} from "@front/game/ui-elements/button";
+import {Text} from "@front/game/ui-elements/text";
+import {systemView, universeView} from "@front/game/UIElements";
+import {gameHeight} from "@front/game/consts";
+import {app} from "@front/game/application";
 
 
 export let credits: Text

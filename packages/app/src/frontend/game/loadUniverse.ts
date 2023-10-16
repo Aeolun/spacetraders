@@ -1,15 +1,15 @@
-import {AlphaFilter, BitmapText, BLEND_MODES, Container, DisplayObject, Graphics, Sprite} from "pixi.js";
-import {trpc} from '@front/lib/trpc'
-import {deselectListeners, makeInteractiveAndSelectable} from "@front/lib/makeInteractiveAndSelectable";
-import {loadedAssets} from "@front/lib/assets";
-import {scale, totalSize, universeCoordinates,} from "@front/lib/consts";
-import {behaviorWindow, universeCuller, universeView} from "@front/lib/UIElements";
-import {GameState, System, WaypointData} from "@front/lib/game-state";
-import {positionUniverseShip, resetShipWaypoints} from "@front/lib/positionShips";
-import {loadSystem} from "@front/lib/loadSystem";
+import {AlphaFilter, BitmapText, BLEND_MODES, Container, Graphics, Sprite} from "pixi.js";
+import {trpc} from '@front/trpc'
+import {deselectListeners, makeInteractiveAndSelectable} from "@front/game/makeInteractiveAndSelectable";
+import {loadedAssets} from "@front/game/assets";
+import {scale, totalSize, universeCoordinates,} from "@front/game/consts";
+import {behaviorWindow, universeCuller, universeView} from "@front/game/UIElements";
+import {GameState, System, WaypointData} from "@front/game/game-state";
+import {positionUniverseShip, resetShipWaypoints} from "@front/game/positionShips";
+import {loadSystem} from "@front/game/loadSystem";
 import {getDistance} from "@common/lib/getDistance";
-import {convertToDisplayCoordinates} from "@front/lib/util";
-import {highlightmodes} from "@front/lib/highlightmodes";
+import {convertToDisplayCoordinates} from "@front/game/util";
+import {highlightmodes} from "@front/game/highlightmodes";
 
 
 const addTraitIcons = (item: System, container: Container) => {
@@ -99,7 +99,7 @@ function createStar(starData: System) {
         y: 32
     }
     const text = new BitmapText(starData.name+'\n('+starData.symbol+')', {
-        fontName: 'sans-serif',
+        fontFamily: 'sans-serif',
         fontSize: 18,
         align: 'left',
     })
@@ -232,7 +232,7 @@ function createStar(starData: System) {
 }
 
 export const loadUniverse = async () => {
-    const references: Record<string, Container<DisplayObject>> = {}
+    const references: Record<string, Container> = {}
 
     const systems = await trpc.getSystems.query()
 
@@ -264,7 +264,7 @@ export const loadUniverse = async () => {
                 const displayCoords = convertToDisplayCoordinates(starData)
                 const targetCoords = convertToDisplayCoordinates(jumpTarget)
 
-                jumpGraphics.lineStyle({
+                jumpGraphics.stroke({
                     width: starData.jumpgateRange / 250,
                     color: 0x999933,
                     alpha: 0.1,

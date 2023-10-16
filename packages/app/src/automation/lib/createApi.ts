@@ -23,6 +23,7 @@ export default (agentToken: string, basePath?: string) => {
     const configuration = new Configuration({
         basePath: basePath ?? process.env.API_ENDPOINT,
         accessToken: agentToken,
+        
     })
     return {
         systems: new SystemsApi(configuration),

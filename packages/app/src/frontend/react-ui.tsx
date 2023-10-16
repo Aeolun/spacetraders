@@ -158,10 +158,8 @@ const App = () => {
     const [signinToken, setSigninToken] = useState<string | undefined>(localStorage.getItem('user-token'))
     const currentTokenData: { email: string } | null = signinToken ? jwtDecode(signinToken) : null
     const [selectedFaction, setSelectedFaction] = useState('')
-    const [selectedServer, setSelectedServer] = useState('')
     const [tokenFieldValue, setTokenFieldValue] = useState('')
     const [factions, setFactions] = useState<Faction[]>([])
-    const [servers, setServers] = useState<Server[]>([])
     const [agents, setAgents] = useState<Agent[]>([])
     const accountState = useSelector((state: RootState) => state.account)
     const agentState = useSelector((state: RootState) => state.agent);
@@ -172,9 +170,6 @@ const App = () => {
         trpc.getFactions.query().then(result => {
             setFactions(result)
         })
-        trpc.getServers.query().then(result => {
-            setServers(result)
-        });
         trpc.validateToken.mutate({
             token: signinToken
         }).then(res => {
@@ -311,10 +306,6 @@ const App = () => {
                         gap: '1em'
                     }}>
                         <Text as={'h2'}>Register new agent</Text>
-                        <select placeholder={'-- server --'} value={agentState.registerServer} onChange={(e) => dispatch(agentActions.setRegisterServer(e.currentTarget.value))}>
-                            <option>-- server --</option>
-                            {servers.map(server => <option value={server.id}>{server.name}</option> )}
-                        </select>
                         <div style={{
                             display: 'flex',
                             flexWrap: 'wrap'
@@ -352,10 +343,6 @@ const App = () => {
                     }}>
                         <Text as={'h2'}>Add Existing token</Text>
                         <Text>Note that if you already have a token set, this token will override the existing one.</Text>
-                        <select placeholder={'-- server --'} value={selectedServer} onChange={(e) => setSelectedServer(e.currentTarget.value)}>
-                            <option>-- server --</option>
-                            {servers.map(server => <option value={server.id}>{server.name}</option> )}
-                        </select>
                         <Input type="text" value={tokenFieldValue} onChange={(e) => setTokenFieldValue(e.currentTarget.value)} placeholder="Token" />
                         <Button onClick={() => {
                             console.log("buttonclick")

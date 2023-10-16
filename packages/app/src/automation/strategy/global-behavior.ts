@@ -1,20 +1,30 @@
-import {startBehaviorForShip} from "@auto/ship/shipBehavior";
-import {prisma, ShipBehavior} from "@auto/prisma";
-import {getBackgroundAgent} from "@auto/lib/get-background-agent";
+import { startBehaviorForShip } from "@auto/ship/shipBehavior";
+import { prisma, ShipBehavior } from "@auto/prisma";
+import { getBackgroundAgent } from "@auto/lib/get-background-agent";
 
 let stage = 0;
 export async function initGlobalBehavior() {
-  let agent = await getBackgroundAgent()
-  let homeSystem = agent.headquarters.system;
-  let hasUnexploredHomeWaypoints = await prisma.waypoint.findFirst({
+  let agent = await getBackgroundAgent();
+  let homeWaypoint = await prisma.waypoint.findFirstOrThrow({
     where: {
-      tradeGoods: {
-        some: {
-          purchasePrice: null
-        }
-      }
-    }
-  })
+      symbol: agent.headquartersSymbol,
+    },
+    include: {
+      system: true,
+    },
+  });
+  let homeSystem = homeWaypoint.system;
+  let hasUnexploredHomeWaypoints =
+    (
+      await prisma.waypoint.findMany({
+        where: {
+          systemSymbol: homeSystem.symbol,
+        },
+        include: {
+          tradeGoods: true,
+        },
+      })
+    ).filter((w) => w.tradeGoods.length === 0).length > 0;
 
   if (hasUnexploredHomeWaypoints) {
     stage = 1;
@@ -22,18 +32,26 @@ export async function initGlobalBehavior() {
     stage = 2;
   }
 
-  while(true) {
-    console.log(`Running global logic at stage ${stage}`)
+  while (true) {
+    //console.log(`Running global logic at stage ${stage}`);
     if (stage === 1) {
-      await startBehaviorForShip('PHANTASM-1', {
-        systemSymbol: homeSystem.symbol
-      }, ShipBehavior.EXPLORE_MARKETS)
+      await startBehaviorForShip(
+        "PHANTASM-1",
+        {
+          systemSymbol: homeSystem.symbol,
+        },
+        ShipBehavior.EXPLORE
+      );
     } else if (stage === 2) {
-      await startBehaviorForShip('PHANTASM-1', {
-        systemSymbol: homeSystem.symbol
-      }, ShipBehavior.MINE)
+      await startBehaviorForShip(
+        "PHANTASM-1",
+        {
+          systemSymbol: homeSystem.symbol,
+        },
+        ShipBehavior.MINE
+      );
     }
 
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 }

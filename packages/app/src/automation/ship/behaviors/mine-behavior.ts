@@ -7,5 +7,5 @@ export const mineBehavior = async (ship: Ship) => {
     const mineLocation = await findMineableWaypoint(ship)
     await travelTo(ship, mineLocation);
     await mineAt(ship, mineLocation);
-    const sellLocation = await findPlaceToSellGood(ship)
+    //const sellLocation = await findPlaceToSellGood(ship)
 }

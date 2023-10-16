@@ -1,5 +1,5 @@
 import {IPointData} from "@pixi/core";
-import {systemCoordinates, totalSize, universeCoordinates, systemScale} from "@front/lib/consts";
+import {systemCoordinates, totalSize, universeCoordinates, systemScale} from "@front/game/consts";
 
 export const worldCoordinateToOriginal = (point: IPointData) => {
     const multiFactor = (universeCoordinates.maxX - universeCoordinates.minX) / totalSize

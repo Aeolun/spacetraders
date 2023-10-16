@@ -1,9 +1,8 @@
-import {Container, DisplayObject, NineSlicePlane} from "pixi.js";
+import {Container, DisplayObject, NineSlicePlane, EventEmitter} from "pixi.js";
 import {GlowFilter} from "@pixi/filter-glow";
-import {EventEmitter} from "@pixi/utils";
-import {GameState, SelectedType} from "@front/lib/game-state";
-import {loadedAssets} from "@front/lib/assets";
-import {BaseButton} from "@front/lib/base-elements/base-button";
+import {GameState, SelectedType} from "@front/game/game-state";
+import {loadedAssets} from "@front/game/assets";
+import {BaseButton} from "@front/game/base-elements/base-button";
 
 export const deselectListeners = new EventEmitter()
 
