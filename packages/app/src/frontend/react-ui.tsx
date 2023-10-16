@@ -260,7 +260,10 @@ const App = () => {
                         }}>
                             <Text as={'h2'}>{agent.symbol}</Text>
                             <Text>{agent.reset}</Text>
-                            <Button>Play</Button>
+                            <Button onClick={() => {
+                                localStorage.setItem('agent-token', agent.token)
+                                window.location.href = '/play'
+                            }}>Play</Button>
                         </Card>
                     })}
                         <Card childStyle={{

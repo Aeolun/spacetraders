@@ -1,8 +1,8 @@
-import {Container, DisplayObject, NineSlicePlane, EventEmitter} from "pixi.js";
+import {Container, NineSlicePlane } from "pixi.js";
 import {GlowFilter} from "@pixi/filter-glow";
 import {GameState, SelectedType} from "@front/game/game-state";
 import {loadedAssets} from "@front/game/assets";
-import {BaseButton} from "@front/game/base-elements/base-button";
+import {EventEmitter} from "events";
 
 export const deselectListeners = new EventEmitter()
 
@@ -25,7 +25,7 @@ export function makeInteractiveAndSelectable(item: Container, options?: {
     item.cursor = 'pointer';
     item.on('mouseover', () => {
         //star.alpha = 0.5
-        item.filters = [new GlowFilter()]
+        item.filters = []
         options?.onMouseOver?.()
     })
     const removeGlow = () => {
@@ -63,21 +63,21 @@ export function makeInteractiveAndSelectable(item: Container, options?: {
                 const background = new NineSlicePlane(loadedAssets.statsBlock)
                 background.height = filteredCommands.length * 40
                 background.width = 180
-                filteredCommands.forEach((comm, index) => {
-                    const button = new BaseButton(comm.name, {
-                        width: 160,
-                        height: 30,
-                        textSize: 16
-                    }, (event) => {
-                        event.stopPropagation();
-                        comm.action(GameState.selected.symbol)
-                        item.removeChild(background)
-                    })
-                    button.x = 10
-                    button.y = 10 + (index * 35)
-                    button.disabled = !isCommandAvailable[index]
-                    background.addChild(button)
-                })
+                // filteredCommands.forEach((comm, index) => {
+                //     const button = new BaseButton(comm.name, {
+                //         width: 160,
+                //         height: 30,
+                //         textSize: 16
+                //     }, (event) => {
+                //         event.stopPropagation();
+                //         comm.action(GameState.selected.symbol)
+                //         item.removeChild(background)
+                //     })
+                //     button.x = 10
+                //     button.y = 10 + (index * 35)
+                //     button.disabled = !isCommandAvailable[index]
+                //     background.addChild(button)
+                // })
                 item.addChild(background)
                 deselectListeners.once('deselect', () => {
                     item.removeChild(background)
@@ -92,7 +92,7 @@ export function makeInteractiveAndSelectable(item: Container, options?: {
             event.stopPropagation()
             deselectListeners.once('deselect', () => {
                 removeGlow()
-                GameState.selected = false
+                GameState.selected = undefined
                 item.on('mouseout', removeGlow)
             })
             item.off('mouseout', removeGlow)

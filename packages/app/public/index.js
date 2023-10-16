@@ -32731,7 +32731,7 @@ var experimental_formDataLink = httpLinkFactory({
 });
 
 // src/frontend/trpc.ts
-var backendUrl = "http://coder.us1.serial-experiments.com";
+var backendUrl = "http://" + window.location.hostname;
 var wsClient = createWSClient({
   // * put ws instead of http on the url
   url: backendUrl.replace("https", "wss").replace("http", "ws") + ":4002/trpc",
@@ -35579,7 +35579,10 @@ var App = () => {
               }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: agent.symbol }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: agent.reset }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { children: "Play" })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
+                  localStorage.setItem("agent-token", agent.token);
+                  window.location.href = "/play";
+                }, children: "Play" })
               ] });
             }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { childStyle: {

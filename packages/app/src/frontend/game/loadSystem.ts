@@ -1,12 +1,12 @@
 import {trpc} from "@front/trpc";
 import {systemGraphics, systemGraphicsText, systemView, universeView} from "@front/game/UIElements";
-import {GameState, ShipData, System, Waypoint, WaypointData} from "@front/game/game-state";
+import {GameState, ShipData, System, WaypointData} from "@front/game/game-state";
 import {systemCoordinates, systemScale} from "@front/game/consts";
-import {AnimatedSprite, BitmapText, Container, Graphics, Sprite} from "pixi.js";
+import { Text, Container, Graphics, Sprite} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/game/positionShips";
 import {loadedAssets} from "@front/game/assets";
 import {makeInteractiveAndSelectable} from "@front/game/makeInteractiveAndSelectable";
-import {backButton} from "@front/game/createSidebar";
+import {Waypoint} from "@backend/prisma";
 
 function createShipContainer(ship: ShipData) {
   const shipGroup = new Container()
@@ -37,10 +37,14 @@ function createShipContainer(ship: ShipData) {
 
   shipGroup.addChild(itemSprite)
 
-  const text = new BitmapText(ship.symbol + ' - ' + ship.role, {
-    fontName: 'sans-serif',
-    fontSize: 16,
-    align: 'right',
+  const text = new Text({
+    text: ship.symbol + ' - ' + ship.role,
+    renderMode: 'bitmap',
+    style: {
+      fontFamily: 'sans-serif',
+      fontSize: 16,
+      align: 'right',
+    }
   })
   text.visible = false
   text.x = 0
@@ -110,16 +114,10 @@ function createSystemItem(data: {
   }, scale = 1, index = 0) {
   const orbitingGroup = new Container()
 
-  let orbitingSprite: Sprite | AnimatedSprite;
-  if (data.waypoint.type === 'PLANET') {
-    orbitingSprite = new AnimatedSprite(loadedAssets.planet.animations['planet/tile/planet.png_spin'], true)
-    if (orbitingSprite instanceof AnimatedSprite) {
-      orbitingSprite.animationSpeed = 1/20
-      orbitingSprite.play()
-    }
-  } else {
-    orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
-  }
+  let orbitingSprite: Sprite;
+
+  orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
+
   orbitingSprite.pivot = {
     x: 32,
     y: 32
@@ -136,10 +134,14 @@ function createSystemItem(data: {
 
   orbitingGroup.addChild(orbitingSprite)
 
-  const orbitingText = new BitmapText(data.waypoint.symbol + ' - ' + data.waypoint.type, {
-    fontName: 'sans-serif',
-    fontSize: 16,
-    align: 'right',
+  const orbitingText = new Text({
+    text: data.waypoint.symbol + ' - ' + data.waypoint.type,
+    renderMode: 'bitmap',
+    style: {
+      fontFamily: 'sans-serif',
+      fontSize: 16,
+      align: 'right',
+    }
   })
   orbitingText.x = 24
   orbitingText.y = -8
@@ -217,8 +219,6 @@ export async function loadSystem(systemSymbol: string, resetCamera = true) {
     clearSystem()
     showSystemView()
     GameState.currentSystem = systemSymbol
-
-    backButton.disabled = false
 
     systemCoordinates.minX = 0
     systemCoordinates.minY = 0

@@ -1,6 +1,7 @@
-import {processAgent, updateShips} from "@auto/ship/updateShips";
+import {updateShips} from "@auto/ship/updateShips";
 import createApi from "@auto/lib/createApi";
 import jwtDecode from "jwt-decode";
+import {processAgent} from "@auto/ship/data-update/store-agent";
 
 export const initAgent = async (token: string) => {
     const api = createApi(token)

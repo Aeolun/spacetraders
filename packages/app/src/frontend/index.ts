@@ -5,22 +5,19 @@ import {systemCoordinateToOriginal, worldCoordinateToOriginal} from "@front/game
 import {gameHeight, scale, systemCoordinates, totalSize} from '@front/game/consts'
 import {
     createUIElements,
-    currentCoordinate, fps, marketWindow,
-    systemView, universeCuller, universeGraphics, universeGraphicsText,
+    currentCoordinate, fps,
+    systemView, universeCuller,
     universeView
 } from "@front/game/UIElements";
 import {GameState} from "@front/game/game-state";
 import {deselectListeners} from "@front/game/makeInteractiveAndSelectable";
 import {positionShip, positionUniverseShip, positionWaypoint, resetShipWaypoints} from "@front/game/positionShips";
-import {availableActions} from "@front/game/availableActions";
 import {loadPlayerData} from "@front/game/loadPlayerData";
 import {clearGraphics, systemTargetingLine, universeTargetingLine} from "@front/game/targetingLine";
-import {loadSystem} from "@front/game/loadSystem";
 import {trpc} from "@front/trpc";
 import { app  } from './game/application'
 import {convertToDisplayCoordinates} from "@front/game/util";
 import {Graphics} from "pixi.js";
-import {credits, cruiseModeSelect, entityInfo} from "@front/game/createSidebar";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -34,7 +31,7 @@ if (!localStorage.getItem('agent-token')) {
 
 // The application will create a canvas element for you that you
 // can then insert into the DOM
-document.body.appendChild(app.view);
+document.body.appendChild(app.canvas);
 app.view.addEventListener('contextmenu', (e) => {
     e.preventDefault()
 })

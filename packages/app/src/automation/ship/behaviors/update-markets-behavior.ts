@@ -3,9 +3,9 @@ import {ExtractResources201Response, Survey} from "spacetraders-sdk";
 import {logShipAction} from "@auto/lib/log";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {prisma, Prisma} from "@auto/prisma";
-import {storeWaypoint} from "@auto/ship/storeResults";
 import {travelBehavior} from "@auto/ship/behaviors/travel-behavior";
 import {BehaviorParameters} from "@auto/ship/shipBehavior";
+import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
 
 const updateTaken = new Set([] as string[])
 const shitList: { system: string, expire: number }[] = [{

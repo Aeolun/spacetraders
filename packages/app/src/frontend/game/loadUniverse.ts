@@ -1,9 +1,9 @@
-import {AlphaFilter, BitmapText, BLEND_MODES, Container, Graphics, Sprite} from "pixi.js";
+import {AlphaFilter, Text, BLEND_MODES, Container, Graphics, Sprite} from "pixi.js";
 import {trpc} from '@front/trpc'
 import {deselectListeners, makeInteractiveAndSelectable} from "@front/game/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/game/assets";
 import {scale, totalSize, universeCoordinates,} from "@front/game/consts";
-import {behaviorWindow, universeCuller, universeView} from "@front/game/UIElements";
+import { universeCuller, universeView} from "@front/game/UIElements";
 import {GameState, System, WaypointData} from "@front/game/game-state";
 import {positionUniverseShip, resetShipWaypoints} from "@front/game/positionShips";
 import {loadSystem} from "@front/game/loadSystem";
@@ -98,10 +98,14 @@ function createStar(starData: System) {
         x: 32,
         y: 32
     }
-    const text = new BitmapText(starData.name+'\n('+starData.symbol+')', {
-        fontFamily: 'sans-serif',
-        fontSize: 18,
-        align: 'left',
+    const text = new Text({
+        text: starData.name+'\n('+starData.symbol+')',
+        renderMode: 'bitmap',
+        style: {
+            fontFamily: 'sans-serif',
+            fontSize: 18,
+            align: 'left',
+        }
     })
     text.name = 'label'
     text.x = 0

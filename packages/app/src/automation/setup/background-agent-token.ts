@@ -1,15 +1,9 @@
 import fs from "fs";
 import createApi from "@auto/lib/createApi";
 import jwtDecode from "jwt-decode";
-import {
-  processAgent,
-  processShip,
-  registerToken,
-  updateShips,
-} from "@auto/ship/updateShips";
 import { prisma, Server } from "@auto/prisma";
 import { RegisterRequest } from "spacetraders-sdk";
-import { ensureTextStyle } from "pixi.js";
+import {storeAgentToken} from "@auto/ship/data-update/store-agent-token";
 
 export const getBackgroundAgentToken = async (server: Server) => {
   let agentToken, agentTokenData;
@@ -51,7 +45,7 @@ export const getBackgroundAgentToken = async (server: Server) => {
         process.exit(1);
       });
 
-    await registerToken(
+    await storeAgentToken(
       process.env.ACCOUNT_EMAIL,
       result.data.data.agent,
       result.data.data.token

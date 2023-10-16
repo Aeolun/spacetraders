@@ -2,7 +2,7 @@ import {Ship} from "@auto/ship/ship";
 import {ShipBehavior} from "@auto/prisma";
 import {tradeLogic} from "@auto/ship/behaviors/trade-behavior";
 import {mineBehavior} from "@auto/ship/behaviors/mine-behavior";
-import {exploreBehavior} from "@auto/ship/behaviors/explore-behavior";
+import {executeExploreTask} from "@auto/ship/behaviors/execute-explore-task";
 import {updateMarketsBehavior} from "@auto/ship/behaviors/update-markets-behavior";
 import {exploreNewMarkets} from "@auto/ship/behaviors/explore-markets-shipyards";
 import {mapJumpgatesBehavior} from "@auto/ship/behaviors/map-jumpgates-behavior";
@@ -34,7 +34,7 @@ export const availableLogic: ShipLogic[] = [
     symbol: ShipBehavior.EXPLORE,
     name: "Explore",
     description: "Explore the universe",
-    logic: exploreBehavior
+    logic: executeExploreTask
   },
   {
     symbol: ShipBehavior.UPDATE_MARKETS,

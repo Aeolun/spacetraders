@@ -3,8 +3,8 @@
 import {createTRPCProxyClient, httpBatchLink, createWSClient, wsLink, splitLink} from "@trpc/client";
 import type {AppRouter} from "@backend/server";
 
-// const backendUrl='http://'+window.location.hostname+':';
-const backendUrl='http://coder.us1.serial-experiments.com'
+const backendUrl='http://'+window.location.hostname;
+//const backendUrl='http://coder.us1.serial-experiments.com'
 
 const wsClient = createWSClient({
     // * put ws instead of http on the url

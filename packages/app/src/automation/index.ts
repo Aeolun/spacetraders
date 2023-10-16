@@ -4,18 +4,13 @@ import axios from "axios";
 import { resetDatabase } from "@auto/setup/reset-database";
 import { getBackgroundAgentToken } from "@auto/setup/background-agent-token";
 import { reloadWorldStatus } from "@auto/setup/reload-world-status";
-import { loadWaypoint, updateMarketPrices } from "@auto/init";
 
-import { prisma, ShipBehavior } from "@auto/prisma";
-import { initializeShipBehaviors } from "@auto/ship/initializeShipBehaviors";
-import { initAgent } from "@auto/agent/init-agent";
-import {
-  scheduleLeaderboardUpdate,
-  updateLeaderboard,
-} from "@auto/leaderboard";
-import { backgroundQueue } from "@auto/lib/queue";
+import { prisma } from "@auto/prisma";
 import { initGlobalBehavior } from "@auto/strategy/global-behavior";
 import { retrieveInitialUserInfo } from "./setup/retrieveInitialUserInfo";
+import {Orchestrator} from "@auto/strategy/orchestrator";
+import {TaskPopulator} from "@auto/strategy/task-populator";
+import createApi from "@auto/lib/createApi";
 
 config();
 
@@ -57,6 +52,16 @@ const init = async () => {
     });
   }
 
+  let account = await prisma.account.findFirst({
+    where: {
+      email: process.env.ACCOUNT_EMAIL,
+    },
+  });
+
+  if (!account) {
+    throw new Error("You need to register the account specified in .env for the agent first.")
+  }
+
   if (serverData && serverData.resetDate !== undefined) {
     currentInstance = serverData.resetDate;
   } else {
@@ -88,10 +93,12 @@ const init = async () => {
     console.log("Database and background agent initialized. Proceeding.");
   }
 
-  await initializeShipBehaviors();
-  await initGlobalBehavior();
+  const token = await getBackgroundAgentToken(serverData);
+  const api = createApi(token)
+  const orchestrator = new Orchestrator();
+  const taskPopulator = new TaskPopulator(orchestrator);
 
-  scheduleLeaderboardUpdate();
+  await initGlobalBehavior(orchestrator, taskPopulator, api);
 };
 
 init().catch((error) => {

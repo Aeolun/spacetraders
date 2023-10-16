@@ -1,14 +1,6 @@
-import { createOrGetAgentQueue, Queue } from "@auto/lib/queue";
+import {foregroundQueue, Queue} from "@auto/lib/queue";
 import { logShipAction } from "@auto/lib/log";
 import api, { APIInstance } from "@auto/lib/createApi";
-import {
-  processShipyard,
-  storeJumpGateInformation,
-  storeMarketInformation,
-  storeShipScan,
-  storeWaypoint,
-  storeWaypointScan,
-} from "@auto/ship/storeResults";
 import fs from "fs";
 import {
   ExtractResources201Response,
@@ -22,23 +14,23 @@ import {
   TradeSymbol,
 } from "spacetraders-sdk";
 import {
-  processAgent,
-  processCargo,
-  processCooldown,
-  processFuel,
-  processNav,
-  processShip,
   returnShipData,
 } from "@auto/ship/updateShips";
-import * as process from "process";
-import axios from "axios";
-import { Context } from "@auto/context";
-import createApi from "@auto/lib/createApi";
-import throttledQueue from "throttled-queue";
 import { prisma, System, Waypoint } from "@auto/prisma";
 import { getDistance } from "@common/lib/getDistance";
-import { tradeLogic } from "@auto/ship/behaviors/trade-behavior";
 import { ee } from "@auto/event-emitter";
+import {storeWaypointScan} from "@auto/ship/data-update/store-waypoint-scan";
+import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
+import {storeJumpGateInformation} from "@auto/ship/data-update/store-jump-gate";
+import {storeMarketInformation} from "@auto/ship/data-update/store-market-information";
+import {processShipyard} from "@auto/ship/data-update/store-shipyard";
+import {storeShipScan} from "@auto/ship/data-update/store-ship-scan";
+import {processShip} from "@auto/ship/data-update/store-ship";
+import {processNav} from "@auto/ship/data-update/store-ship-nav";
+import {processFuel} from "@auto/ship/data-update/store-ship-fuel";
+import {processAgent} from "@auto/ship/data-update/store-agent";
+import {processCooldown} from "@auto/ship/data-update/store-cooldown";
+import {processCargo} from "@auto/ship/data-update/store-ship-cargo";
 
 type CooldownKind = "reactor";
 
@@ -50,8 +42,7 @@ const cooldowns: Record<
 };
 
 export class Ship {
-  public api: APIInstance;
-  public queue: Queue;
+  private queue: Queue;
 
   public currentSystemSymbol: string;
   private _currentSystemObject?: System;
@@ -68,9 +59,8 @@ export class Ship {
   public navigationUntil: string | undefined = undefined;
   public isDocked = false;
 
-  constructor(public token: string, public symbol: string) {
-    this.api = createApi(token);
-    this.queue = createOrGetAgentQueue(symbol.split("-")[0]);
+  constructor(public symbol: string, private api: APIInstance) {
+    this.queue = foregroundQueue;
   }
 
   public setCurrentLocation(system: string, waypoint: string) {
@@ -194,13 +184,22 @@ export class Ship {
     });
   }
 
-  async waitFor(time: number) {
-    this.log(`Waiting ${time} ms`);
+  async waitFor(time: number, reason?: string) {
+    this.log(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`);
+    this.setOverallGoal(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);
       }, time);
     });
+  }
+
+  async getSystemWaypoints(symbol: string) {
+    const result = await this.queue(() => this.api.systems.getSystemWaypoints(symbol, 1, 20))
+    result.data.data.forEach((wp) => {
+      storeWaypoint(wp);
+    });
+    return result.data.data
   }
 
   async navigate(waypoint: string, waitForTimeout = true) {

@@ -1,9 +1,13 @@
-import { startBehaviorForShip } from "@auto/ship/shipBehavior";
-import { prisma, ShipBehavior } from "@auto/prisma";
-import { getBackgroundAgent } from "@auto/lib/get-background-agent";
+import {prisma} from "@auto/prisma";
+import {getBackgroundAgent} from "@auto/lib/get-background-agent";
+import {Orchestrator} from "@auto/strategy/orchestrator";
+import {TaskPopulator} from "@auto/strategy/task-populator";
+import {TaskType} from "@auto/task/abstractTask";
+import {APIInstance} from "@auto/lib/createApi";
+import {startShipBehavior} from "@auto/strategy/ship-behavior";
 
 let stage = 0;
-export async function initGlobalBehavior() {
+export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulator: TaskPopulator, api: APIInstance) {
   let agent = await getBackgroundAgent();
   let homeWaypoint = await prisma.waypoint.findFirstOrThrow({
     where: {
@@ -32,24 +36,19 @@ export async function initGlobalBehavior() {
     stage = 2;
   }
 
+  setInterval(() => {
+    taskPopulator.populateTasks()
+  }, 5000);
+
+  startShipBehavior(orchestrator, api)
+
+
   while (true) {
     //console.log(`Running global logic at stage ${stage}`);
     if (stage === 1) {
-      await startBehaviorForShip(
-        "PHANTASM-1",
-        {
-          systemSymbol: homeSystem.symbol,
-        },
-        ShipBehavior.EXPLORE
-      );
+      taskPopulator.addPossibleTask(TaskType.EXPLORE)
     } else if (stage === 2) {
-      await startBehaviorForShip(
-        "PHANTASM-1",
-        {
-          systemSymbol: homeSystem.symbol,
-        },
-        ShipBehavior.MINE
-      );
+      taskPopulator.addPossibleTask(TaskType.MINE)
     }
 
     await new Promise((resolve) => setTimeout(resolve, 2000));

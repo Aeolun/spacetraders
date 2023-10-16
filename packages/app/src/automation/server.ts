@@ -5,8 +5,7 @@ import {defaultShipStore} from "@auto/ship/shipStore";
 import {ShipNavFlightMode, ShipType} from "spacetraders-sdk";
 import {initAgent} from "@auto/agent/init-agent";
 import createApi from "@auto/lib/createApi";
-import {processShip, returnShipData} from "@auto/ship/updateShips";
-import {storeJumpGateInformation} from "@auto/ship/storeResults";
+import {returnShipData} from "@auto/ship/updateShips";
 import {createOrGetAgentQueue} from "@auto/lib/queue";
 import {defaultWayfinder} from "@auto/wayfinding";
 import {availableLogic} from "@auto/ship/behaviors";
@@ -16,6 +15,8 @@ import crypto from 'crypto'
 
 import { observable } from '@trpc/server/observable';
 import {ee} from "@auto/event-emitter";
+import {storeJumpGateInformation} from "@auto/ship/data-update/store-jump-gate";
+import {processShip} from "@auto/ship/data-update/store-ship";
 
 export const appRouter = router({
     event: publicProcedure.subscription(() => {

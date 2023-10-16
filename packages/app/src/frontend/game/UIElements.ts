@@ -4,10 +4,6 @@ import {Application, Text, Container, Graphics, Point, TilingSprite} from "pixi.
 import {loadedAssets} from "@front/game/assets";
 import {trpc} from "@front/trpc";
 import { Simple, SpatialHash } from "pixi-cull"
-import {Switch} from "@front/game/switch";
-import {MarketWindow} from "@front/game/MarketWindow";
-import {BehaviorWindow} from "@front/game/BehaviorWindow";
-import {createSidebar} from "@front/game/createSidebar";
 
 export let universeView: Viewport
 export let systemView: Viewport
@@ -21,9 +17,6 @@ export let universeGraphicsText: Text
 export let systemGraphics: Graphics
 export let systemGraphicsText: Text
 
-
-export let marketWindow: MarketWindow
-export let behaviorWindow: BehaviorWindow
 
 export const createUIElements = (app: Application) => {
     let pointerDownPlace: Point | undefined;
@@ -51,11 +44,14 @@ export const createUIElements = (app: Application) => {
     systemGraphics = new Graphics()
     systemView.addChild(systemGraphics)
 
-    systemGraphicsText = new BitmapText("", {
-        fontFamily: 'sans-serif',
-        fontSize: 16,
-        //tint: 0x0000FF,
-        align: 'right',
+    systemGraphicsText = new Text({
+        text: "",
+        style: {
+            fontFamily: 'sans-serif',
+            fontSize: 16,
+            //tint: 0x0000FF,
+            align: 'right',
+        }
     })
     systemView.addChild(systemGraphicsText)
 
@@ -103,11 +99,14 @@ export const createUIElements = (app: Application) => {
     universeGraphics = new Graphics()
     universeView.addChild(universeGraphics)
 
-    universeGraphicsText = new BitmapText("", {
-        fontName: 'sans-serif',
-        fontSize: 16,
-        //tint: 0x0000FF,
-        align: 'right',
+    universeGraphicsText = new Text({
+        text: "",
+        style: {
+            fontFamily: 'sans-serif',
+            fontSize: 16,
+            //tint: 0x0000FF,
+            align: 'right',
+        }
     })
     universeView.addChild(universeGraphicsText)
 
@@ -115,38 +114,28 @@ export const createUIElements = (app: Application) => {
     uiOverlay = new Container()
     const popupOverlay = new Container()
 
-    const sidebar = createSidebar()
-
-    uiOverlay.addChild(sidebar.displayObject)
 
 
-
-    behaviorWindow = new BehaviorWindow()
-    trpc.availableBehaviors.query().then((behaviors) => {
-        behaviorWindow.setBehaviors(behaviors)
-    })
-    behaviorWindow.hide()
-
-    marketWindow = new MarketWindow()
-    marketWindow.container.displayObject.visible = false
-
-    uiOverlay.addChild(marketWindow.container.displayObject)
-    popupOverlay.addChild(behaviorWindow.container.displayObject)
-
-    currentCoordinate = new BitmapText('0, 0', {
-        fontName: 'sans-serif',
-        fontSize: 18,
-        align: 'right',
+    currentCoordinate = new Text({
+        text: '0, 0',
+        style: {
+            fontFamily: 'sans-serif',
+            fontSize: 18,
+            align: 'right',
+        }
     })
     currentCoordinate.x = gameWidth - 166
     currentCoordinate.y = 16
     currentCoordinate.maxWidth = 150
     uiOverlay.addChild(currentCoordinate)
 
-    fps = new BitmapText('FPS: 60', {
-        fontName: 'sans-serif',
-        fontSize: 18,
-        align: 'right',
+    fps = new Text({
+        text: 'FPS: 60',
+        style: {
+            fontFamily: 'sans-serif',
+            fontSize: 18,
+            align: 'right',
+        }
     })
     fps.x = gameWidth - 166
     fps.y = 40

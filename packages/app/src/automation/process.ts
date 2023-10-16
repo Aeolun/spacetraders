@@ -1,8 +1,8 @@
 import fs from "fs";
 import { join } from 'path';
-import {processShipyard} from "@auto/ship/storeResults";
 import {Ship} from "@auto/ship/ship";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
+import {processShipyard} from "@auto/ship/data-update/store-shipyard";
 
 const targetPrice = 7668
 const good = 'MODULE_CARGO_HOLD_I'

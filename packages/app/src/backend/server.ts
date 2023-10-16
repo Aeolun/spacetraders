@@ -8,7 +8,8 @@ import { observable } from '@trpc/server/observable';
 import {ee} from "@backend/event-emitter";
 import createApi from "@auto/lib/createApi";
 import {FactionSymbols} from "spacetraders-sdk";
-import {registerToken} from "@auto/ship/updateShips";
+
+import {storeAgentToken} from "@auto/ship/data-update/store-token";
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
@@ -53,7 +54,7 @@ export const appRouter = router({
             symbol: input.symbol,
             faction: input.faction,
         })
-        const registerResult = await registerToken(ctx.account.email, result.data.data.agent, result.data.data.token)
+        const registerResult = await storeAgentToken(ctx.account.email, result.data.data.agent, result.data.data.token)
         return {
             token: result.data.data.token
         }

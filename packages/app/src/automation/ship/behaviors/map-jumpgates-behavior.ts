@@ -3,11 +3,11 @@ import {ExtractResources201Response, Survey} from "spacetraders-sdk";
 import {logShipAction} from "@auto/lib/log";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {prisma, Prisma} from "@auto/prisma";
-import {storeWaypoint} from "@auto/ship/storeResults";
 import {travelBehavior} from "@auto/ship/behaviors/travel-behavior";
 import {getDistance} from "@common/lib/getDistance";
 import {defaultWayfinder} from "@auto/wayfinding";
 import {BehaviorParameters} from "@auto/ship/shipBehavior";
+import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
 
 const jumpMapTaken = new Set([] as string[])
 
