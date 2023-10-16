@@ -54,13 +54,13 @@ export interface Waypoint {
      */
     'systemSymbol': string;
     /**
-     * Position in the universe in the x axis.
+     * Relative position of the waypoint on the system\'s x axis. This is not an absolute position in the universe.
      * @type {number}
      * @memberof Waypoint
      */
     'x': number;
     /**
-     * Position in the universe in the Y axis.
+     * Relative position of the waypoint on the system\'s y axis. This is not an absolute position in the universe.
      * @type {number}
      * @memberof Waypoint
      */
@@ -71,6 +71,12 @@ export interface Waypoint {
      * @memberof Waypoint
      */
     'orbitals': Array<WaypointOrbital>;
+    /**
+     * The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined.
+     * @type {string}
+     * @memberof Waypoint
+     */
+    'orbits'?: string;
     /**
      * 
      * @type {WaypointFaction}

@@ -36,7 +36,7 @@ export interface Survey {
      */
     'symbol': string;
     /**
-     * A list of deposits that can be found at this location.
+     * A list of deposits that can be found at this location. A ship will extract one of these deposits when using this survey in an extraction request. If multiple deposits of the same type are present, the chance of extracting that deposit is increased.
      * @type {Array<SurveyDeposit>}
      * @memberof Survey
      */

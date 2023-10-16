@@ -31,6 +31,9 @@ import { ShipReactor } from './ship-reactor';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ShipType } from './ship-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipyardShipCrew } from './shipyard-ship-crew';
 
 /**
  * 
@@ -92,6 +95,12 @@ export interface ShipyardShip {
      * @memberof ShipyardShip
      */
     'mounts': Array<ShipMount>;
+    /**
+     * 
+     * @type {ShipyardShipCrew}
+     * @memberof ShipyardShip
+     */
+    'crew': ShipyardShipCrew;
 }
 
 

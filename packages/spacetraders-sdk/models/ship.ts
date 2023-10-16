@@ -15,6 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { Cooldown } from './cooldown';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ShipCargo } from './ship-cargo';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -92,6 +95,12 @@ export interface Ship {
      * @memberof Ship
      */
     'engine': ShipEngine;
+    /**
+     * 
+     * @type {Cooldown}
+     * @memberof Ship
+     */
+    'cooldown': Cooldown;
     /**
      * Modules installed in this ship.
      * @type {Array<ShipModule>}

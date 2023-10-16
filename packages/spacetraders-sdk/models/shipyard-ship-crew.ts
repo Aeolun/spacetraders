@@ -13,45 +13,24 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import { ShipNavRouteWaypoint } from './ship-nav-route-waypoint';
 
 /**
- * The routing information for the ship\'s most recent transit or current location.
+ * 
  * @export
- * @interface ShipNavRoute
+ * @interface ShipyardShipCrew
  */
-export interface ShipNavRoute {
+export interface ShipyardShipCrew {
     /**
      * 
-     * @type {ShipNavRouteWaypoint}
-     * @memberof ShipNavRoute
+     * @type {number}
+     * @memberof ShipyardShipCrew
      */
-    'destination': ShipNavRouteWaypoint;
+    'required': number;
     /**
      * 
-     * @type {ShipNavRouteWaypoint}
-     * @memberof ShipNavRoute
+     * @type {number}
+     * @memberof ShipyardShipCrew
      */
-    'departure': ShipNavRouteWaypoint;
-    /**
-     * 
-     * @type {ShipNavRouteWaypoint}
-     * @memberof ShipNavRoute
-     */
-    'origin': ShipNavRouteWaypoint;
-    /**
-     * The date time of the ship\'s departure.
-     * @type {string}
-     * @memberof ShipNavRoute
-     */
-    'departureTime': string;
-    /**
-     * The date time of the ship\'s arrival. If the ship is in-transit, this is the expected time of arrival.
-     * @type {string}
-     * @memberof ShipNavRoute
-     */
-    'arrival': string;
+    'capacity': number;
 }
 

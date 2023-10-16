@@ -131,6 +131,7 @@ export * from './ship-role';
 export * from './ship-type';
 export * from './shipyard';
 export * from './shipyard-ship';
+export * from './shipyard-ship-crew';
 export * from './shipyard-ship-types-inner';
 export * from './shipyard-transaction';
 export * from './survey';

@@ -145,6 +145,7 @@ models/ship-requirements.ts
 models/ship-role.ts
 models/ship-type.ts
 models/ship.ts
+models/shipyard-ship-crew.ts
 models/shipyard-ship-types-inner.ts
 models/shipyard-ship.ts
 models/shipyard-transaction.ts

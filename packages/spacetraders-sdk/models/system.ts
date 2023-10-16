@@ -48,13 +48,13 @@ export interface System {
      */
     'type': SystemType;
     /**
-     * Position in the universe in the x axis.
+     * Relative position of the system in the sector in the x axis.
      * @type {number}
      * @memberof System
      */
     'x': number;
     /**
-     * Position in the universe in the y axis.
+     * Relative position of the system in the sector in the y axis.
      * @type {number}
      * @memberof System
      */

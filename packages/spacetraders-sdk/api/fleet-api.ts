@@ -96,6 +96,8 @@ import { ShipRefine201Response } from '../models';
 // @ts-ignore
 import { ShipRefineRequest } from '../models';
 // @ts-ignore
+import { Survey } from '../models';
+// @ts-ignore
 import { TransferCargo200Response } from '../models';
 // @ts-ignore
 import { TransferCargoRequest } from '../models';
@@ -334,7 +336,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.  The survey property is now deprecated. See the `extract/survey` endpoint for more details.
          * @summary Extract Resources
          * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
@@ -369,6 +371,48 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(extractResourcesRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use a survey when extracting resources from a waypoint. This endpoint requires a survey as the payload, which allows your ship to extract specific yields.  Send the full survey object as the payload which will be validated according to the signature. If the signature is invalid, or any properties of the survey are changed, the request will fail.
+         * @summary Extract Resources with Survey
+         * @param {string} shipSymbol The ship symbol.
+         * @param {Survey} [survey] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        extractResourcesWithSurvey: async (shipSymbol: string, survey?: Survey, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('extractResourcesWithSurvey', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/extract/survey`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(survey, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1304,7 +1348,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.  The survey property is now deprecated. See the `extract/survey` endpoint for more details.
          * @summary Extract Resources
          * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
@@ -1313,6 +1357,18 @@ export const FleetApiFp = function(configuration?: Configuration) {
          */
         async extractResources(shipSymbol: string, extractResourcesRequest?: ExtractResourcesRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExtractResources201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.extractResources(shipSymbol, extractResourcesRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use a survey when extracting resources from a waypoint. This endpoint requires a survey as the payload, which allows your ship to extract specific yields.  Send the full survey object as the payload which will be validated according to the signature. If the signature is invalid, or any properties of the survey are changed, the request will fail.
+         * @summary Extract Resources with Survey
+         * @param {string} shipSymbol The ship symbol.
+         * @param {Survey} [survey] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async extractResourcesWithSurvey(shipSymbol: string, survey?: Survey, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExtractResources201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.extractResourcesWithSurvey(shipSymbol, survey, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1630,7 +1686,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.dockShip(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
-         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
+         * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.  The survey property is now deprecated. See the `extract/survey` endpoint for more details.
          * @summary Extract Resources
          * @param {string} shipSymbol The ship symbol.
          * @param {ExtractResourcesRequest} [extractResourcesRequest] 
@@ -1639,6 +1695,17 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         extractResources(shipSymbol: string, extractResourcesRequest?: ExtractResourcesRequest, options?: any): AxiosPromise<ExtractResources201Response> {
             return localVarFp.extractResources(shipSymbol, extractResourcesRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use a survey when extracting resources from a waypoint. This endpoint requires a survey as the payload, which allows your ship to extract specific yields.  Send the full survey object as the payload which will be validated according to the signature. If the signature is invalid, or any properties of the survey are changed, the request will fail.
+         * @summary Extract Resources with Survey
+         * @param {string} shipSymbol The ship symbol.
+         * @param {Survey} [survey] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        extractResourcesWithSurvey(shipSymbol: string, survey?: Survey, options?: any): AxiosPromise<ExtractResources201Response> {
+            return localVarFp.extractResourcesWithSurvey(shipSymbol, survey, options).then((request) => request(axios, basePath));
         },
         /**
          * Get the mounts installed on a ship.
@@ -1946,7 +2013,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.
+     * Extract resources from a waypoint that can be extracted, such as asteroid fields, into your ship. Send an optional survey as the payload to target specific yields.  The ship must be in orbit to be able to extract and must have mining equipments installed that can extract goods, such as the `Gas Siphon` mount for gas-based goods or `Mining Laser` mount for ore-based goods.  The survey property is now deprecated. See the `extract/survey` endpoint for more details.
      * @summary Extract Resources
      * @param {string} shipSymbol The ship symbol.
      * @param {ExtractResourcesRequest} [extractResourcesRequest] 
@@ -1956,6 +2023,19 @@ export class FleetApi extends BaseAPI {
      */
     public extractResources(shipSymbol: string, extractResourcesRequest?: ExtractResourcesRequest, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).extractResources(shipSymbol, extractResourcesRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use a survey when extracting resources from a waypoint. This endpoint requires a survey as the payload, which allows your ship to extract specific yields.  Send the full survey object as the payload which will be validated according to the signature. If the signature is invalid, or any properties of the survey are changed, the request will fail.
+     * @summary Extract Resources with Survey
+     * @param {string} shipSymbol The ship symbol.
+     * @param {Survey} [survey] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public extractResourcesWithSurvey(shipSymbol: string, survey?: Survey, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).extractResourcesWithSurvey(shipSymbol, survey, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -15,6 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { WaypointOrbital } from './waypoint-orbital';
+// May contain unused imports in some cases
+// @ts-ignore
 import { WaypointType } from './waypoint-type';
 
 /**
@@ -36,17 +39,29 @@ export interface SystemWaypoint {
      */
     'type': WaypointType;
     /**
-     * Position in the universe in the x axis.
+     * Relative position of the waypoint on the system\'s x axis. This is not an absolute position in the universe.
      * @type {number}
      * @memberof SystemWaypoint
      */
     'x': number;
     /**
-     * Position in the universe in the y axis.
+     * Relative position of the waypoint on the system\'s y axis. This is not an absolute position in the universe.
      * @type {number}
      * @memberof SystemWaypoint
      */
     'y': number;
+    /**
+     * Waypoints that orbit this waypoint.
+     * @type {Array<WaypointOrbital>}
+     * @memberof SystemWaypoint
+     */
+    'orbitals': Array<WaypointOrbital>;
+    /**
+     * The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined.
+     * @type {string}
+     * @memberof SystemWaypoint
+     */
+    'orbits'?: string;
 }
 
 
