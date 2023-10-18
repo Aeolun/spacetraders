@@ -1,4 +1,4 @@
-import {Prisma, prisma} from "@auto/prisma";
+import {Prisma, prisma} from "@common/prisma";
 import {Ship} from "@auto/ship/ship";
 
 export const findSystemToExplore = async (ship: Ship) => {

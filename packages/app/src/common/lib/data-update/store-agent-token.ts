@@ -1,5 +1,5 @@
 import {Agent} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import jwtDecode from "jwt-decode";
 
 export async function storeAgentToken(

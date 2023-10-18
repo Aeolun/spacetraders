@@ -1,8 +1,8 @@
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {getBackgroundAgent} from "@auto/lib/get-background-agent";
 import {Orchestrator} from "@auto/strategy/orchestrator";
 import {TaskPopulator} from "@auto/strategy/task-populator";
-import {TaskType} from "@auto/task/abstractTask";
+import {TaskType} from "@auto/task/abstract-task";
 import {APIInstance} from "@auto/lib/createApi";
 import {startShipBehavior} from "@auto/strategy/ship-behavior";
 

@@ -15,8 +15,8 @@ import crypto from 'crypto'
 
 import { observable } from '@trpc/server/observable';
 import {ee} from "@auto/event-emitter";
-import {storeJumpGateInformation} from "@auto/ship/data-update/store-jump-gate";
-import {processShip} from "@auto/ship/data-update/store-ship";
+import {storeJumpGateInformation} from "@common/lib/data-update/store-jump-gate";
+import {processShip} from "@common/lib/data-update/store-ship";
 
 export const appRouter = router({
     event: publicProcedure.subscription(() => {

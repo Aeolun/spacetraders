@@ -1,5 +1,5 @@
 import {ScannedShipEngine, ShipEngine} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeShipEngine(
   engine: ShipEngine | ScannedShipEngine

@@ -1,4 +1,4 @@
-import {TaskType} from "@auto/task/abstractTask";
+import {TaskType} from "@auto/task/abstract-task";
 import {Orchestrator} from "@auto/strategy/orchestrator";
 
 export class TaskPopulator {

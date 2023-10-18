@@ -1,4 +1,4 @@
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 interface TradeInfo {
     purchaseWaypoint: string

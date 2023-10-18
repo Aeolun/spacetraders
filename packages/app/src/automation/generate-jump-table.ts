@@ -1,5 +1,5 @@
 import {defaultWayfinder} from "@auto/wayfinding";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 let slice = 0
 let sliceSize = 100

@@ -1,5 +1,5 @@
 import {Agent} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function processAgent(agent: Agent) {
   const serverState = await prisma.server.findFirstOrThrow({

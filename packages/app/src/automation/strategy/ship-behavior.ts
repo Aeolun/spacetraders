@@ -1,4 +1,4 @@
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {Ship} from "@auto/ship/ship";
 import {APIInstance} from "@auto/lib/createApi";
 import {Orchestrator} from "@auto/strategy/orchestrator";

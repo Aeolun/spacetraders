@@ -1,5 +1,5 @@
 import {ScannedWaypoint, Waypoint} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
   if (waypoint.faction) {

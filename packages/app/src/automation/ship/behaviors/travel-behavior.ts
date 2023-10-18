@@ -1,6 +1,6 @@
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {Ship} from "@auto/ship/ship";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {defaultWayfinder, printRoute} from "@auto/wayfinding";
 import {LinkedListItem} from "@aeolun/dijkstra-calculator";
 import {ShipNavFlightMode} from "spacetraders-sdk";

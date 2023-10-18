@@ -3,6 +3,7 @@ export enum TaskType {
   EXPLORE = 'explore',
   TRADE = 'trade',
   MINE = 'mine',
+  TRAVEL = 'travel',
   UPDATE_MARKET = 'update-market',
 }
 export abstract class AbstractTask {

@@ -1,5 +1,5 @@
 import {ShipNav} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function processNav(shipSymbol: string, nav: ShipNav) {
   const shipData = {

@@ -1,4 +1,4 @@
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export const getBackgroundAgent = async () => {
   const server = await prisma.server.findFirstOrThrow({

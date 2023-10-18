@@ -1,5 +1,5 @@
 import {Ship} from "@auto/ship/ship";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {travelBehavior} from "@auto/ship/behaviors/travel-behavior";
 import {defaultWayfinder} from "@auto/wayfinding";
 import {findTradesBetweenSystems} from "@auto/findTradesBetweenSystems";

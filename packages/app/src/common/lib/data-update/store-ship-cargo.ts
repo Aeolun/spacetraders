@@ -1,5 +1,5 @@
 import {ShipCargo} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {returnShipData} from "@auto/ship/updateShips";
 
 export async function processCargo(shipSymbol: string, cargo: ShipCargo) {

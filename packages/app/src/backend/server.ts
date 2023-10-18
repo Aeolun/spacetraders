@@ -1,15 +1,11 @@
 import {authedProcedure, publicProcedure, router} from './trpc';
 import z from 'zod'
-import {prisma, ShipBehavior} from "@backend/prisma";
+import {prisma, ShipBehavior} from "@common/prisma";
 import { sign, verify } from 'jsonwebtoken';
 import crypto from 'crypto'
-
-import { observable } from '@trpc/server/observable';
-import {ee} from "@backend/event-emitter";
 import createApi from "@auto/lib/createApi";
 import {FactionSymbols} from "spacetraders-sdk";
-
-import {storeAgentToken} from "@auto/ship/data-update/store-token";
+import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
@@ -49,7 +45,7 @@ export const appRouter = router({
                 id: input.serverId
             }
         })
-        const result = await createApi('', server.endpoint).default.register({
+        const result = await createApi('').default.register({
             email: input.email,
             symbol: input.symbol,
             faction: input.faction,

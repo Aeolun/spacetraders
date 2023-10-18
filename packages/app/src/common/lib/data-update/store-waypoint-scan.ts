@@ -4,9 +4,9 @@ import {
   ScannedWaypoint,
   Waypoint
 } from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
-import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
+import {storeWaypoint} from "@common/lib/data-update/store-waypoint";
 
 export async function storeWaypointScan(systemSymbol: string, data: CreateShipWaypointScan201ResponseData | GetSystemWaypoints200Response) {
   const waypoints: (Waypoint | ScannedWaypoint)[] = 'waypoints' in data ? data.waypoints : data.data

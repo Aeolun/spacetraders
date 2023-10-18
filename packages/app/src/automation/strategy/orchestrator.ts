@@ -15,14 +15,21 @@ export class Orchestrator {
     this.tasks.push(task);
   }
 
-  getNextTask(ship: Ship) {
+  async getNextTask(ship: Ship) {
     return this.tasks.pop();
   }
 
   async addShip(ship: Ship) {
     this.ships.push(ship);
     while(true) {
-      const nextTask = this.getNextTask(ship)
+      let nextTask: Task
+      if (ship.taskQueue.length > 0) {
+        ship.log("Taking up next task in my queue")
+        nextTask = ship.taskQueue.shift()
+      } else {
+        ship.log("Looking for next task")
+        nextTask = await this.getNextTask(ship)
+      }
 
       if (!nextTask) {
         await ship.waitFor(20000, "No task available for ship");
@@ -36,6 +43,7 @@ export class Orchestrator {
           } else if (nextTask.type === TaskType.UPDATE_MARKET) {
             await ship.waitFor(20000, "Update market task not implemented yet");
           }
+          ship.log(`Task ${nextTask.objective} complete`)
         } catch (e) {
           console.error(e);
           await ship.waitFor(10000, `Error while executing task ${nextTask.type}`);

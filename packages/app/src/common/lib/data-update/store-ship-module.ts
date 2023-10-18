@@ -1,5 +1,5 @@
 import {ShipModule} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeShipModule(module: ShipModule) {
   const smsplit = module.symbol.split("_");

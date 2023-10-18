@@ -1,13 +1,12 @@
 import { Ship } from "@auto/ship/ship";
-import { prisma, Prisma } from "@auto/prisma";
-import { travelBehavior } from "@auto/ship/behaviors/travel-behavior";
+import { prisma, Prisma } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
-import { defaultWayfinder } from "@auto/wayfinding";
 import { checkIfNeedDriftForFuel } from "./atoms/check-if-need-drift-for-fuel";
-import {findSystemToExplore} from "@auto/ship/behaviors/atoms/find-system-to-explore";
 import {ExploreTask} from "@auto/task/explore-task";
-import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
 import {exploreWaypoint} from "@auto/ship/behaviors/atoms/explore-waypoint";
+import {findRouteTo} from "@auto/ship/behaviors/atoms/find-route-to";
+import {travelRoute} from "@auto/ship/behaviors/atoms/travel-route";
+import {getExplorableWaypoints} from "@auto/ship/behaviors/atoms/get-explorable-waypoints";
 
 export const executeExploreTask = async (
   ship: Ship,
@@ -15,43 +14,13 @@ export const executeExploreTask = async (
 ) => {
   await checkIfNeedDriftForFuel(ship);
 
-  const route = await findRouteTo(ship, explorableSystem);
+  const explorableWaypoints = await getExplorableWaypoints(ship, task.system)
 
-  const systemInfo = await ship.getSystemWaypoints(task.system.symbol);
-  const hasUnchartedTraits = systemInfo.some((wp) => {
-    return wp.traits.some((trait) => trait.symbol === "UNCHARTED");
-  });
-
-  if (!hasUnchartedTraits) {
-    ship.log(
-      `${task.system.symbol} has no more uncharted waypoints, task complete.`
-    );
-    await prisma.system.update({
-      where: {
-        symbol: task.system.symbol,
-      },
-      data: {
-        hasUncharted: false,
-      },
-    });
-    return;
-  }
+  const route = await findRouteTo(ship, task.system);
+  await travelRoute(ship, route);
 
   do {
-    const shipData = await prisma.ship.findFirstOrThrow({
-      where: {
-        symbol: ship.symbol,
-      },
-      include: {
-        currentWaypoint: true,
-      },
-    });
-    explorableWaypoints.forEach((wp) => {
-      wp.distance = getDistance(wp, shipData.currentWaypoint);
-    });
-    explorableWaypoints.sort((a, b) => {
-      return a.distance > b.distance ? 1 : -1;
-    });
+
 
     // closest waypoint
     const wp = explorableWaypoints[0];

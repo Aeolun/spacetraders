@@ -16,21 +16,22 @@ import {
 import {
   returnShipData,
 } from "@auto/ship/updateShips";
-import { prisma, System, Waypoint } from "@auto/prisma";
+import { prisma, System, Waypoint } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
 import { ee } from "@auto/event-emitter";
-import {storeWaypointScan} from "@auto/ship/data-update/store-waypoint-scan";
-import {storeWaypoint} from "@auto/ship/data-update/store-waypoint";
-import {storeJumpGateInformation} from "@auto/ship/data-update/store-jump-gate";
-import {storeMarketInformation} from "@auto/ship/data-update/store-market-information";
-import {processShipyard} from "@auto/ship/data-update/store-shipyard";
-import {storeShipScan} from "@auto/ship/data-update/store-ship-scan";
-import {processShip} from "@auto/ship/data-update/store-ship";
-import {processNav} from "@auto/ship/data-update/store-ship-nav";
-import {processFuel} from "@auto/ship/data-update/store-ship-fuel";
-import {processAgent} from "@auto/ship/data-update/store-agent";
-import {processCooldown} from "@auto/ship/data-update/store-cooldown";
-import {processCargo} from "@auto/ship/data-update/store-ship-cargo";
+import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
+import {storeWaypoint} from "@common/lib/data-update/store-waypoint";
+import {storeJumpGateInformation} from "@common/lib/data-update/store-jump-gate";
+import {storeMarketInformation} from "@common/lib/data-update/store-market-information";
+import {processShipyard} from "@common/lib/data-update/store-shipyard";
+import {storeShipScan} from "@common/lib/data-update/store-ship-scan";
+import {processShip} from "@common/lib/data-update/store-ship";
+import {processNav} from "@common/lib/data-update/store-ship-nav";
+import {processFuel} from "@common/lib/data-update/store-ship-fuel";
+import {processAgent} from "@common/lib/data-update/store-agent";
+import {processCooldown} from "@common/lib/data-update/store-cooldown";
+import {processCargo} from "@common/lib/data-update/store-ship-cargo";
+import {Task} from "@auto/task/task";
 
 type CooldownKind = "reactor";
 
@@ -43,6 +44,7 @@ const cooldowns: Record<
 
 export class Ship {
   private queue: Queue;
+  public taskQueue: Task[] = [];
 
   public currentSystemSymbol: string;
   private _currentSystemObject?: System;

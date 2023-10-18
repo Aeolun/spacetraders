@@ -1,13 +1,13 @@
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import axios from "axios";
 import {backgroundQueue} from "@auto/lib/queue";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import createApi from "@auto/lib/createApi";
 import throttledQueue from "throttled-queue";
 import {WaypointTrait} from "spacetraders-sdk";
-import {storeWaypointScan} from "@auto/ship/data-update/store-waypoint-scan";
-import {storeMarketInformation} from "@auto/ship/data-update/store-market-information";
-import {processShip} from "@auto/ship/data-update/store-ship";
+import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
+import {storeMarketInformation} from "@common/lib/data-update/store-market-information";
+import {processShip} from "@common/lib/data-update/store-ship";
 
 export const updateMarketPrices = async () => {
     const marketprices = await axios.get('https://st.feba66.de/prices')

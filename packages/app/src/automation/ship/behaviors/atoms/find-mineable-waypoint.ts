@@ -1,5 +1,5 @@
 import {Ship} from "@auto/ship/ship";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export const findMineableWaypoint = async (ship: Ship) => {
   const waypoint = await prisma.waypoint.findFirstOrThrow({

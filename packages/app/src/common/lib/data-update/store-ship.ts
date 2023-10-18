@@ -1,12 +1,12 @@
 import {ScannedShip, Ship} from "spacetraders-sdk";
-import {storeShipModule} from "@auto/ship/data-update/store-ship-module";
-import {storeShipMount} from "@auto/ship/data-update/store-ship-mount";
-import {processShipFrame} from "@auto/ship/data-update/store-ship-frame";
-import {storeShipEngine} from "@auto/ship/data-update/store-ship-engine";
-import {prisma} from "@auto/prisma";
+import {storeShipModule} from "@common/lib/data-update/store-ship-module";
+import {storeShipMount} from "@common/lib/data-update/store-ship-mount";
+import {processShipFrame} from "@common/lib/data-update/store-ship-frame";
+import {storeShipEngine} from "@common/lib/data-update/store-ship-engine";
+import {prisma} from "@common/prisma";
 
-import {processCargo} from "@auto/ship/data-update/store-ship-cargo";
-import {storeShipReactor} from "@auto/ship/data-update/store-ship-reactor";
+import {processCargo} from "@common/lib/data-update/store-ship-cargo";
+import {storeShipReactor} from "@common/lib/data-update/store-ship-reactor";
 
 export async function processShip(ship: Ship | ScannedShip) {
   if ("modules" in ship) {

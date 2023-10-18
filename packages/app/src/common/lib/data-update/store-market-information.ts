@@ -1,5 +1,5 @@
 import {GetMarket200Response, TradeSymbol} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeMarketInformation(data: GetMarket200Response) {
   const importGoods = data.data.imports.map(i => i.symbol)

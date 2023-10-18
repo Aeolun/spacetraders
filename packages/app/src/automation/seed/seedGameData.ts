@@ -1,6 +1,5 @@
 import axios from "axios";
-import {prisma} from "../prisma";
-import createApi from "@auto/lib/createApi";
+import {prisma} from "@common/prisma";
 
 export const seedSystems = async (agentToken: string) => {
     const data = await axios.get(process.env.API_ENDPOINT+'/systems.json', {

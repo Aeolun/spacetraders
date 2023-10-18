@@ -1,6 +1,6 @@
 import {APIInstance} from "@auto/lib/createApi";
-import {prisma} from "@auto/prisma";
-import {processShip} from "@auto/ship/data-update/store-ship";
+import {prisma} from "@common/prisma";
+import {processShip} from "@common/lib/data-update/store-ship";
 
 export async function updateShips(api: APIInstance) {
   const ships = await api.fleet.getMyShips(1, 20);

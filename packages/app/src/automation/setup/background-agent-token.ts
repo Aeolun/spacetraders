@@ -1,9 +1,9 @@
 import fs from "fs";
 import createApi from "@auto/lib/createApi";
 import jwtDecode from "jwt-decode";
-import { prisma, Server } from "@auto/prisma";
+import { prisma, Server } from "@common/prisma";
 import { RegisterRequest } from "spacetraders-sdk";
-import {storeAgentToken} from "@auto/ship/data-update/store-agent-token";
+import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
 
 export const getBackgroundAgentToken = async (server: Server) => {
   let agentToken, agentTokenData;

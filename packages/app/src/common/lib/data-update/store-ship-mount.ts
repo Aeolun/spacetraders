@@ -1,5 +1,5 @@
 import {ScannedShipMountsInner, ShipMount} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeShipMount(module: ShipMount | ScannedShipMountsInner) {
   const smsplit = module.symbol.split("_");

@@ -1,5 +1,5 @@
 import {Cooldown} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function processCooldown(shipSymbol: string, cooldown: Cooldown) {
   return await prisma.ship.update({

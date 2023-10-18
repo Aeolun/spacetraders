@@ -1,5 +1,5 @@
 import {ScannedShipReactor, ShipReactor} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function storeShipReactor(
   reactor: ShipReactor | ScannedShipReactor

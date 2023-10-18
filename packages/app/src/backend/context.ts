@@ -1,7 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
 import jwtDecode from "jwt-decode";
-import {prisma} from "@backend/prisma";
+import {prisma} from "@common/prisma";
 export async function createContext({
                                         req,
                                         res,
@@ -41,7 +41,7 @@ export async function createContext({
             if (userToken.server) {
                 const server = await prisma.server.findFirstOrThrow({
                     where: {
-                        name: userToken.server
+                        apiUrl: process.env.API_ENDPOINT
                     }
                 })
                 const agent = await prisma.agent.findFirst({
@@ -49,7 +49,7 @@ export async function createContext({
                         Account: {
                             id: userToken.accountId
                         },
-                        server: userToken.server,
+
                         reset: server.resetDate
                     }
                 })

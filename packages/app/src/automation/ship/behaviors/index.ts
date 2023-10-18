@@ -1,5 +1,5 @@
 import {Ship} from "@auto/ship/ship";
-import {ShipBehavior} from "@auto/prisma";
+import {ShipBehavior} from "@common/prisma";
 import {tradeLogic} from "@auto/ship/behaviors/trade-behavior";
 import {mineBehavior} from "@auto/ship/behaviors/mine-behavior";
 import {executeExploreTask} from "@auto/ship/behaviors/execute-explore-task";

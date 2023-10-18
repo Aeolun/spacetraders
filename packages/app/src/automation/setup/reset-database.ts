@@ -1,4 +1,4 @@
-import {prisma, Server} from "@auto/prisma";
+import {prisma, Server} from "@common/prisma";
 
 export const resetDatabase = async (server: Server) => {
     await prisma.$transaction(async () => {

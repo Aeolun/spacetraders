@@ -1,5 +1,5 @@
 import {ShipFuel} from "spacetraders-sdk";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 
 export async function processFuel(shipSymbol: string, fuel: ShipFuel) {
   return await prisma.ship.update({

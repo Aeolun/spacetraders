@@ -5,7 +5,7 @@ import { resetDatabase } from "@auto/setup/reset-database";
 import { getBackgroundAgentToken } from "@auto/setup/background-agent-token";
 import { reloadWorldStatus } from "@auto/setup/reload-world-status";
 
-import { prisma } from "@auto/prisma";
+import { prisma } from "@common/prisma";
 import { initGlobalBehavior } from "@auto/strategy/global-behavior";
 import { retrieveInitialUserInfo } from "./setup/retrieveInitialUserInfo";
 import {Orchestrator} from "@auto/strategy/orchestrator";

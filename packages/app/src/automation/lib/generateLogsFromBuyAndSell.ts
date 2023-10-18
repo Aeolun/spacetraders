@@ -1,5 +1,5 @@
 import {MarketTransaction} from "spacetraders-sdk";
-import {prisma, Prisma} from "@auto/prisma";
+import {prisma, Prisma} from "@common/prisma";
 
 export function generateLogsFromBuyAndSell(shipSymbol: string, buyTransactions: MarketTransaction[], sellTransactions: MarketTransaction[]) {
     const logs: Prisma.TradeLogCreateInput[]

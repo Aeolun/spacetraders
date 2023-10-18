@@ -2,7 +2,7 @@ import {Ship} from "@auto/ship/ship";
 import {ExtractResources201Response, Market, MarketTradeGood, MarketTransaction, Survey} from "spacetraders-sdk";
 import {logShipAction} from "@auto/lib/log";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
-import {prisma} from "@auto/prisma";
+import {prisma} from "@common/prisma";
 import {travelBehavior} from "@auto/ship/behaviors/travel-behavior";
 import {getDistance} from "@common/lib/getDistance";
 import {defaultWayfinder} from "@auto/wayfinding";
