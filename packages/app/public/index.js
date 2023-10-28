@@ -35578,7 +35578,7 @@ var App = () => {
                 gap: "1em"
               }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { as: "h2", children: agent.symbol }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: agent.reset }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text2, { children: new Date(agent.reset).toLocaleString() }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, { onClick: () => {
                   localStorage.setItem("agent-token", agent.token);
                   window.location.href = "/play";

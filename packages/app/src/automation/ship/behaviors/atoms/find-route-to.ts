@@ -1,7 +1,7 @@
 import {ShipNavFlightMode} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {LinkedListItem} from "@aeolun/dijkstra-calculator";
-import {defaultWayfinder} from "@auto/wayfinding";
+import {defaultWayfinder} from "@common/default-wayfinder";
 import { Waypoint, System } from "@common/prisma";
 import {StrategySettings} from "@auto/strategy/stategy-settings";
 

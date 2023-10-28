@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../eseidel_traders" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/packages/pixi-viewport" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../st-meta" vcs="Git" />
   </component>
 </project>

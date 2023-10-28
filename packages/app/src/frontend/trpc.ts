@@ -19,6 +19,7 @@ const wsClient = createWSClient({
 })
 
 export const trpc = createTRPCProxyClient<AppRouter>({
+    transformer: null,
     links: [
         splitLink({
             // * only use the web socket link if the operation is a subscription

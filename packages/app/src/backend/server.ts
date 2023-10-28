@@ -162,6 +162,9 @@ export const appRouter = router({
         return prisma.agent.findMany({
             where: {
                 accountId: ctx.account.accountId
+            },
+            orderBy: {
+                reset: 'desc'
             }
         })
     }),
@@ -199,6 +202,7 @@ export const appRouter = router({
         })
     }),
     getMyShips: publicProcedure.query(async ({ctx}) => {
+        console.log(ctx);
        return prisma.ship.findMany({
            where: {
                agent: ctx.payload.identifier

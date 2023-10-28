@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "noEmit": true,
+    "noEmit": false,
+    "outDir": "compiled",
     "rootDir": "./",
     "baseUrl": "./",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "target": "esnext",
+    "skipLibCheck": true,
+    "types": ["bun-types"],
     "lib": ["ES2021", "dom"],
     "paths": {
       "@auto/*": ["src/automation/*"],
@@ -15,5 +19,9 @@
       "@front/*": ["src/frontend/*"]
     }
   },
-  "include": ["**/*"]
+  "include": ["src/**/*"],
+  "ts-node": {
+    // It is faster to skip typechecking.
+    "transpileOnly": true,
+  }
 }

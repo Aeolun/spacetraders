@@ -259,7 +259,7 @@ const App = () => {
                             gap: '1em'
                         }}>
                             <Text as={'h2'}>{agent.symbol}</Text>
-                            <Text>{agent.reset}</Text>
+                            <Text>{new Date(agent.reset).toLocaleString()}</Text>
                             <Button onClick={() => {
                                 localStorage.setItem('agent-token', agent.token)
                                 window.location.href = '/play'

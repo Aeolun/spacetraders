@@ -28,40 +28,40 @@ export async function createContext({
         }
         let token = req.headers.authorization.split(' ')[1]
         if (token) {
-            const userToken: {
-                accountId: string
-                email: string
-                server?: string
-            } = await jwtDecode(
-                token,
-            );
-            console.log('token', userToken)
+            // const userToken: {
+            //     accountId: string
+            //     email: string
+            //     server?: string
+            // } = await jwtDecode(
+            //     token,
+            // );
+            // console.log('token', userToken)
 
-            let agentTokenPayload: any | undefined, agentToken: string | undefined;
-            if (userToken.server) {
-                const server = await prisma.server.findFirstOrThrow({
-                    where: {
-                        apiUrl: process.env.API_ENDPOINT
-                    }
-                })
-                const agent = await prisma.agent.findFirst({
-                    where: {
-                        Account: {
-                            id: userToken.accountId
-                        },
-
-                        reset: server.resetDate
-                    }
-                })
-                agentToken = agent.token
-                agentTokenPayload = jwtDecode(agent.token)
-            }
+            // let agentTokenPayload: any | undefined, agentToken: string | undefined;
+            // if (userToken.server) {
+            //     const server = await prisma.server.findFirstOrThrow({
+            //         where: {
+            //             apiUrl: process.env.API_ENDPOINT
+            //         }
+            //     })
+            //     const agent = await prisma.agent.findFirst({
+            //         where: {
+            //             Account: {
+            //                 id: userToken.accountId
+            //             },
+            //
+            //             reset: server.resetDate
+            //         }
+            //     })
+            //     agentToken = agent.token
+                const agentTokenPayload: any = jwtDecode(token)
+            // }
 
             return {
-                account: {
-                    accountId: userToken.accountId,
-                    email: userToken.email
-                },
+                // account: {
+                //     accountId: userToken.accountId,
+                //     email: userToken.email
+                // },
                 payload: agentTokenPayload ? {
                     identifier: agentTokenPayload.identifier,
                     iat: agentTokenPayload.iat,
@@ -69,7 +69,7 @@ export async function createContext({
                     reset_date: agentTokenPayload.reset_date,
                     version: agentTokenPayload.version
                 } : undefined,
-                token: agentToken ? agentToken : undefined
+                token: token
             }
         }
         return null;

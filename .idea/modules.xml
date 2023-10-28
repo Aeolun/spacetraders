@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../api-docs/.idea/api-docs.iml" filepath="$PROJECT_DIR$/../api-docs/.idea/api-docs.iml" />
       <module fileurl="file://$PROJECT_DIR$/../dijkstra-calculator/.idea/dijkstra-calculator.iml" filepath="$PROJECT_DIR$/../dijkstra-calculator/.idea/dijkstra-calculator.iml" />
       <module fileurl="file://$PROJECT_DIR$/../eseidel_traders/.idea/eseidel_traders.iml" filepath="$PROJECT_DIR$/../eseidel_traders/.idea/eseidel_traders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pixi-viewport/.idea/pixi-viewport.iml" filepath="$PROJECT_DIR$/../pixi-viewport/.idea/pixi-viewport.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/spacetraders.iml" filepath="$PROJECT_DIR$/.idea/spacetraders.iml" />
       <module fileurl="file://$PROJECT_DIR$/../st-meta/.idea/st-meta.iml" filepath="$PROJECT_DIR$/../st-meta/.idea/st-meta.iml" />
       <module fileurl="file://$PROJECT_DIR$/../st-universe/.idea/st-universe.iml" filepath="$PROJECT_DIR$/../st-universe/.idea/st-universe.iml" />

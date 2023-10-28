@@ -1,5 +1,5 @@
 import {AbstractTask, TaskType} from "@auto/task/abstract-task";
-import { System } from '@auto/prisma'
+import { System } from '@common/prisma'
 
 export class ExploreTask extends AbstractTask {
   public system: System

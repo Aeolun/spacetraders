@@ -6,13 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Server {
-  id String @id @default(uuid())
-  apiUrl String @unique
+  id        String @id @default(uuid())
+  apiUrl    String @unique
   resetDate String
 }
 
@@ -28,13 +28,13 @@ model Faction {
 }
 
 model Agent {
-  id                 String    @id @default(uuid())
+  id                 String  @id @default(uuid())
   symbol             String
   reset              String
   credits            Int
   headquartersSymbol String?
   accountId          String
-  token              String?   @db.Text()
+  token              String? @db.Text()
 
   automationStep Int @default(0)
 
@@ -321,8 +321,10 @@ model Jumpgate {
 }
 
 model JumpConnectedSystem {
+  fromSystemSymbol   String
   fromWaypointSymbol String
   fromWaypoint       Jumpgate @relation("fromSystem", fields: [fromWaypointSymbol], references: [waypointSymbol])
+  toSystemSymbol     String
   toWaypointSymbol   String
   toWaypoint         Jumpgate @relation("toSystem", fields: [toWaypointSymbol], references: [waypointSymbol])
 

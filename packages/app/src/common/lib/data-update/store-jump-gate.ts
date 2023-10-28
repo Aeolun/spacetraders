@@ -11,7 +11,6 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
       jumpgateRange: data.data.jumpRange
     }
   })
-  console.log('save jump infomration', systemSymbol, data.data.jumpRange)
 
   await prisma.jumpgate.upsert({
     where: {
@@ -26,26 +25,37 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
     }
   })
 
-  await Promise.all(data.data.connectedSystems.map(system => {
-    return prisma.jumpConnectedSystem.upsert({
+
+  const jumpgateWaypoints = await prisma.waypoint.findMany({
+    select: {
+      symbol: true,
+      systemSymbol: true,
+    },
+    where: {
+      systemSymbol: {
+        in: data.data.connectedSystems.map(system => system.symbol)
+      },
+      type: 'JUMP_GATE'
+    }
+  })
+  await prisma.$transaction(async prisma => {
+    await prisma.jumpConnectedSystem.deleteMany({
       where: {
-        fromWaypointSymbol_toWaypointSymbol: {
-          fromWaypointSymbol: waypointSymbol,
-          toWaypointSymbol: system.symbol
-        }
-      },
-      create: {
         fromWaypointSymbol: waypointSymbol,
-        toWaypointSymbol: system.symbol,
-        distance: system.distance,
-        x: system.x,
-        y: system.y,
-      },
-      update: {
-        distance: system.distance,
-        x: system.x,
-        y: system.y,
       }
+    });
+    await prisma.jumpConnectedSystem.createMany({
+      data: data.data.connectedSystems.map(system => {
+        return {
+          fromWaypointSymbol: waypointSymbol,
+          fromSystemSymbol: systemSymbol,
+          toWaypointSymbol: jumpgateWaypoints.find(wp => wp.systemSymbol === system.symbol)?.symbol,
+          toSystemSymbol: system.symbol,
+          distance: system.distance,
+          x: system.x,
+          y: system.y,
+        }
+      })
     })
-  }))
+  })
 }

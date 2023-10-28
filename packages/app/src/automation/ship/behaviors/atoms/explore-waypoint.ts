@@ -1,5 +1,5 @@
-import {defaultWayfinder} from "@auto/wayfinding";
 import {Ship} from "@auto/ship/ship";
+import {defaultWayfinder} from "@common/default-wayfinder";
 
 export async function exploreWaypoint(ship: Ship) {
   const chartResult = await ship.chart();
@@ -24,6 +24,6 @@ export async function exploreWaypoint(ship: Ship) {
 
   if (chartResult.waypoint.type === "JUMP_GATE") {
     await ship.jumpgate();
-    await defaultWayfinder.loadWaypoints();
+    await defaultWayfinder.addSystemFromDatabase(ship.currentSystem.symbol);
   }
 }
