@@ -6,7 +6,7 @@ export let loadedAssets: {
     uisheet: Spritesheet
     buttonsheet: Spritesheet,
     planet: Spritesheet,
-    font: BitmapFont,
+    sansSerif: BitmapFont,
     buttonTextWhite: BitmapFont,
     buttonText: BitmapFont,
     bgTexture: Texture,
@@ -36,7 +36,7 @@ export async function loadAssets() {
     const uisheet: Spritesheet = await Assets.load('uisheet.json');
     const planet: Spritesheet = await Assets.load('planet.json');
     const buttonSheet: Spritesheet = await Assets.load('ui/button.json');
-    const font = await Assets.load('font.fnt');
+    const sansSerif = await Assets.load('sans-serif.fnt');
     const buttonText = await Assets.load('buttontext.fnt')
     const segment = await Assets.load('segment.fnt')
     const buttonTextWhite = await Assets.load('buttontext_white.fnt')
@@ -57,12 +57,13 @@ export async function loadAssets() {
     const spaceshipTexture: Texture = await Assets.load('spaceship.png');
     const probeTexture: Texture = await Assets.load('ships/PROBE.png');
     const lightFreighterTexture: Texture = await Assets.load('ships/LIGHT_FREIGHTER.png');
+    const explorer: Texture = await Assets.load('ships/FRAME_EXPLORER.png')
 
     loadedAssets = {
         sheet,
         planetsheet,
         uisheet,
-        font,
+        sansSerif,
         buttonsheet: buttonSheet,
         buttonText,
         planet,
@@ -78,9 +79,10 @@ export async function loadAssets() {
         treasure,
         spaceshipTexture,
         spaceshipTextures: {
+            FRAME_FRIGATE: explorer,
             FRAME_PROBE: probeTexture,
             FRAME_LIGHT_FREIGHTER: lightFreighterTexture,
-            FRAME_EXPLORER: await Assets.load('ships/FRAME_EXPLORER.png')
+            FRAME_EXPLORER: explorer
         },
         asteroidBelt,
         shipyard,

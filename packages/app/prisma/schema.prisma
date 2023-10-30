@@ -221,20 +221,26 @@ enum WaypointType {
   ORBITAL_STATION
   JUMP_GATE
   ASTEROID_FIELD
+  ASTEROID
+  ENGINEERED_ASTEROID
+  ASTEROID_BASE
   NEBULA
   DEBRIS_FIELD
   GRAVITY_WELL
+  ARTIFICIAL_GRAVITY_WELL
+  FUEL_STATION
 }
 
 model Waypoint {
-  symbol        String          @id
+  symbol        String             @id
   type          WaypointType
   systemSymbol  String
-  system        System          @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
+  system        System             @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
   x             Float
   y             Float
   factionSymbol String?
   traits        WaypointTrait[]
+  modifiers     WaypointModifier[]
 
   orbitsSymbol String?
   orbits       Waypoint?  @relation("orbits", fields: [orbitsSymbol], references: [symbol], onDelete: NoAction, onUpdate: NoAction)
@@ -248,12 +254,33 @@ model Waypoint {
   shipsEnroute    Ship[] @relation("destinationWaypoint")
   shipsDeparted   Ship[] @relation("departureWaypoint")
 
-  tradeGoods MarketPrice[]
-  jumpgate   Jumpgate?
+  tradeGoods        MarketPrice[]
+  jumpConnectedTo   Waypoint[]    @relation("jumpConnectedTo")
+  jumpConnectedFrom Waypoint[]    @relation("jumpConnectedTo")
 
   @@index([orbitsSymbol])
   @@index([systemSymbol])
   @@index([factionSymbol])
+}
+
+model Construction {
+  symbol      String  @id
+  isCompleted Boolean @default(false)
+
+  materials Material[]
+}
+
+model Material {
+  id              Int          @id @default(autoincrement())
+  constructionId  String
+  construction    Construction @relation(fields: [constructionId], references: [symbol], onDelete: Cascade)
+  tradeGoodSymbol String
+  tradeGood       TradeGood    @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
+  required        Int
+  fulfilled       Int
+
+  @@index([constructionId])
+  @@index([tradeGoodSymbol])
 }
 
 model ShipConfiguration {
@@ -308,34 +335,11 @@ model WaypointTrait {
   waypoints   Waypoint[]
 }
 
-model Jumpgate {
-  waypointSymbol String   @id
-  waypoint       Waypoint @relation(fields: [waypointSymbol], references: [symbol])
-
-  range Int
-
-  validJumpTargets  JumpConnectedSystem[] @relation("fromSystem")
-  incomingJumpsFrom JumpConnectedSystem[] @relation("toSystem")
-
-  @@index([waypointSymbol])
-}
-
-model JumpConnectedSystem {
-  fromSystemSymbol   String
-  fromWaypointSymbol String
-  fromWaypoint       Jumpgate @relation("fromSystem", fields: [fromWaypointSymbol], references: [waypointSymbol])
-  toSystemSymbol     String
-  toWaypointSymbol   String
-  toWaypoint         Jumpgate @relation("toSystem", fields: [toWaypointSymbol], references: [waypointSymbol])
-
-  // x and y here are duplicate information, but don't want to join more
-  x        Int
-  y        Int
-  distance Int
-
-  @@id([fromWaypointSymbol, toWaypointSymbol])
-  @@index([fromWaypointSymbol])
-  @@index([toWaypointSymbol])
+model WaypointModifier {
+  symbol      String     @id
+  name        String
+  description String     @db.Text
+  waypoints   Waypoint[]
 }
 
 model JumpDistance {
@@ -385,6 +389,20 @@ enum MarketGoodKind {
   EXCHANGE
 }
 
+enum MarketGoodSupply {
+  ABUNDANT
+  HIGH
+  MODERATE
+  LIMITED
+  SCARCE
+}
+
+enum MarketGoodActivityLevel {
+  STRONG
+  GROWING
+  WEAK
+}
+
 model MarketPrice {
   waypointSymbol  String
   waypoint        Waypoint  @relation(fields: [waypointSymbol], references: [symbol], onDelete: Cascade)
@@ -392,7 +410,8 @@ model MarketPrice {
   tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
 
   kind          MarketGoodKind
-  supply        String?
+  supply        MarketGoodSupply?
+  activityLevel MarketGoodActivityLevel?
   purchasePrice Int?
   sellPrice     Int?
   tradeVolume   Int?
@@ -404,6 +423,23 @@ model MarketPrice {
   @@index([tradeGoodSymbol])
 }
 
+enum MarketTransationType {
+  PURCHASE
+  SELL
+}
+
+model MarketTransation {
+  id             String               @id @default(uuid())
+  waypointSymbol String
+  shipSymbol     String
+  tradeSymbol    String
+  type           MarketTransationType
+  units          Int
+  pricePerUnit   Int
+  totalPrice     Int
+  timestamp      DateTime             @default(now())
+}
+
 model TradeGood {
   symbol      String @id
   name        String
@@ -411,6 +447,7 @@ model TradeGood {
 
   cargo      ShipCargo[]
   onMarketAt MarketPrice[]
+  Material   Material[]
 }
 
 model ShipCargo {

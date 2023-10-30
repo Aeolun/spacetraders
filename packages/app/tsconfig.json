@@ -11,7 +11,7 @@
     "target": "esnext",
     "skipLibCheck": true,
     "types": ["bun-types"],
-    "lib": ["ES2021", "dom"],
+    "lib": ["ES2021", "DOM"],
     "paths": {
       "@auto/*": ["src/automation/*"],
       "@backend/*": ["src/backend/*"],
@@ -19,7 +19,7 @@
       "@front/*": ["src/frontend/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "packages/app/node_modules/@pencil.js/spritesheet/src"],
   "ts-node": {
     // It is faster to skip typechecking.
     "transpileOnly": true,

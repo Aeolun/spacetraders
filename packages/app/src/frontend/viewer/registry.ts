@@ -2,9 +2,10 @@ import {Container} from "pixi.js";
 import type {Waypoint, WaypointTrait, Jumpgate, JumpConnectedSystem, Faction } from "@common/prisma";
 import {inferRouterOutputs} from "@trpc/server";
 import {AppRouter} from "@backend/server";
+import {UniverseEntity} from "@front/viewer/universe-entity";
 
 
-export type SelectedType = 'ship' | 'waypoint'
+export type SelectedType = 'ship' | 'waypoint' | 'star'
 export interface Registry {
     agent: Agent;
     selected?: {
@@ -28,11 +29,13 @@ export interface Registry {
     // references to all the visible nodes
     transformedSystems: Record<string, boolean>
     systemObjects: Record<string, Container[]>
-    systems: Record<string, Container>
-    universeShips: Record<string, Container>
-    waypoints: Record<string, Container>
+    systems: Record<string, UniverseEntity>
+    universeShips: Record<string, UniverseEntity>
+    waypoints: Record<string, UniverseEntity>
 
     factions: Record<string, Faction>
+
+    deselect: () => void
 }
 
 export interface TradeGood {
@@ -86,5 +89,18 @@ export const Registry: Registry = {
     universeShips: {},
     displayedMarket: undefined,
     systemData: {},
-    waypointData: {}
+    waypointData: {},
+
+    deselect: () => {
+        if (Registry.selected) {
+            if (Registry.selected.type === 'waypoint') {
+                Registry.waypoints[Registry.selected.symbol].deselect()
+            } else if (Registry.selected.type === 'ship') {
+                Registry.universeShips[Registry.selected.symbol].deselect()
+            } else if (Registry.selected.type === 'star') {
+                Registry.systems[Registry.selected.symbol].deselect()
+            }
+            Registry.selected = undefined
+        }
+    }
 }

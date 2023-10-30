@@ -1,5 +1,5 @@
 import { DijkstraCalculator, LinkedListItem, PathReturnProperties } from '@aeolun/dijkstra-calculator'
-import {prisma, System, Waypoint, Jumpgate} from '@common/prisma'
+import {prisma, System, Waypoint} from '@common/prisma'
 import {getDistance} from "@common/lib/getDistance";
 import { System as STSystem } from 'spacetraders-sdk'
 
@@ -20,7 +20,7 @@ export interface SimpleSystem {
     hasJumpGate?: boolean
 }
 
-type WayfindDbSystem = System & { waypoints: (Waypoint & { jumpgate: Jumpgate & {validJumpTargets: {toSystemSymbol: string}[]}})[] }
+type WayfindDbSystem = System & { waypoints: (Waypoint & { jumpConnectedTo: { symbol: string }[] })[] }
 
 export class Wayfinding {
     dijkstra?: DijkstraCalculator
@@ -248,13 +248,9 @@ export class Wayfinding {
                         type: 'JUMP_GATE'
                     },
                     include: {
-                        jumpgate: {
-                            include: {
-                                validJumpTargets: {
-                                    select: {
-                                        toSystemSymbol: true
-                                    }
-                                }
+                        jumpConnectedTo: {
+                            select: {
+                                symbol: true
                             }
                         }
                     }
@@ -270,8 +266,8 @@ export class Wayfinding {
 
     private systemToWayfindingSystem(system: WayfindDbSystem) {
         const jumpTargets: string[] = []
-        system.waypoints.find(wp => wp.type === 'JUMP_GATE')?.jumpgate?.validJumpTargets.forEach(jt => {
-            jumpTargets.push(jt.toSystemSymbol)
+        system.waypoints.find(wp => wp.type === 'JUMP_GATE').jumpConnectedTo.forEach(jt => {
+            jumpTargets.push(jt.symbol)
         })
         return {
             symbol: system.symbol,
@@ -291,13 +287,9 @@ export class Wayfinding {
                         type: 'JUMP_GATE'
                     },
                     include: {
-                        jumpgate: {
-                            include: {
-                                validJumpTargets: {
-                                    select: {
-                                        toSystemSymbol: true
-                                    }
-                                }
+                        jumpConnectedTo: {
+                            select: {
+                                symbol: true
                             }
                         }
                     }

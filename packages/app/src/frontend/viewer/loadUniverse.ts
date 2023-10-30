@@ -8,83 +8,32 @@ import {Registry, System, WaypointData} from "@front/viewer/registry";
 import {positionUniverseShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {getDistance} from "@common/lib/getDistance";
 import {convertToDisplayCoordinates} from "@front/viewer/util";
+import {UniverseEntity} from "@front/viewer/universe-entity";
+import {UniverseShip} from "@front/viewer/universe-ship";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
 
 
-const addTraitIcons = (item: System, container: Container) => {
-    let xOffset = 0
+const getTraits = (item: System) => {
+    const traits: string[] = []
     if (item.hasMarket) {
-        const sprite = new Sprite(loadedAssets.market)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.25}
-        sprite.x = xOffset - 16
-        sprite.y =  24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('market')
     }
     if (item.hasShipyard) {
-        const sprite = new Sprite(loadedAssets.shipyard)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.24}
-        sprite.x = xOffset - 16
-        sprite.y = 24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('shipyard')
     }
     if (item.hasBelt) {
-        const sprite = new Sprite(loadedAssets.asteroidBelt)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.24}
-        sprite.x = xOffset - 16
-        sprite.y = 24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('belt')
     }
     if (item.hasJumpGate) {
-        const sprite = new Sprite(loadedAssets.jumpgate)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.24}
-        sprite.x = xOffset - 16
-        sprite.y = 24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('jumpgate')
     }
     if (item.hasStation && !item.hasShipyard) {
-        const sprite = new Sprite(loadedAssets.station)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.24}
-        sprite.x = xOffset - 16
-        sprite.y = 24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('station')
     }
     if (item.hasUncharted) {
-        const sprite = new Sprite(loadedAssets.treasure)
-        sprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        sprite.scale = {x: 0.25, y: 0.24}
-        sprite.x = xOffset - 16
-        sprite.y = 24
-        container.addChild(sprite)
-        xOffset += 16
+        traits.push('uncharted')
     }
+    return traits
 }
 
 
@@ -92,28 +41,19 @@ const addTraitIcons = (item: System, container: Container) => {
 function createStar(starData: System) {
     let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
 
-    const star = new Sprite(texture)
-    star.pivot = {
-        x: 32,
-        y: 32
-    }
-    // const text = new Text({
-    //     text: starData.name+'\n('+starData.symbol+')',
-    //     style: {
-    //         fontFamily: 'sans-serif',
-    //         fontSize: 18,
-    //         align: 'left',
-    //     }
-    // })
-    // text.name = 'label'
-    // text.x = 0
-    // text.y = 40
-
-    const starContainer = new Container();
-    starContainer.addChild(star)
-    // starContainer.addChild(text)
-
-    addTraitIcons(starData, starContainer)
+    const star = new UniverseEntity({
+        texture,
+        traits: getTraits(starData),
+        label: starData.name+'\n('+starData.symbol+')',
+        position: convertToDisplayCoordinates(starData),
+        onSelect: () => {
+            Registry.deselect()
+            Registry.selected = {
+                type: 'star',
+                symbol: starData.symbol,
+            }
+        }
+    })
 
     // makeInteractiveAndSelectable(starContainer, {
     //     onMouseOut: () => {
@@ -222,15 +162,53 @@ function createStar(starData: System) {
     //     ]
     // })
 
-    // starContainer.on('click', () => {
-    //     loadSystem(starData.symbol)
+    return star
+}
+
+const createShip = (ship: any) => {
+
+    const shipPosition = positionUniverseShip(ship)
+
+    const shipGroup = new UniverseShip({
+        label: ship.symbol + ' - ' + ship.role,
+        texture: loadedAssets.spaceshipTextures[ship.frameSymbol] ? loadedAssets.spaceshipTextures[ship.frameSymbol] : loadedAssets.spaceshipTexture,
+        traits: [],
+        position: shipPosition,
+        onSelect: () => {
+            Registry.deselect()
+            Registry.selected = {
+                type: 'ship',
+                symbol: ship.symbol,
+            }
+        }
+    })
+
+    // const text = new Text({
+    //     text: ship.symbol + ' - ' + ship.role,
+    //     style: {
+    //         fontFamily: 'sans-serif',
+    //         fontSize: 16,
+    //         align: 'right',
+    //     }
     // })
+    // text.visible = false
+    // text.x = 0
+    // text.y = 32
+    // shipGroup.addChild(text);
 
-    const displayCoords = convertToDisplayCoordinates(starData)
-    starContainer.x = displayCoords.x
-    starContainer.y = displayCoords.y
-
-    return starContainer
+    // makeInteractiveAndSelectable(shipGroup, {
+    //     onMouseOver: () => {
+    //         text.visible = true
+    //     },
+    //     onMouseOut: () => {
+    //         text.visible = false
+    //     },
+    //     onSelect: {
+    //         type: 'ship',
+    //         symbol: ship.symbol
+    //     }
+    // })
+    return shipGroup
 }
 
 export const loadUniverse = async () => {
@@ -298,64 +276,16 @@ export const loadUniverse = async () => {
         references[starData.symbol] = starContainer
     }
     universeView.addChild(starsContainer)
+
+    Registry.universeShips = {}
+    Object.values(Registry.shipData).forEach(ship => {
+        const shipContainer = createShip(ship)
+        Registry.universeShips[ship.symbol] = shipContainer
+        starsContainer.addChild(shipContainer)
+    })
     // universeCuller.addList(starsCont.children)
 
     resetShipWaypoints()
-    Registry.universeShips = {}
-    Object.values(Registry.shipData).forEach(ship => {
-        const shipGroup = new Container()
-
-        const itemSprite = new Sprite(loadedAssets.spaceshipTextures[ship.frameSymbol] ? loadedAssets.spaceshipTextures[ship.frameSymbol] : loadedAssets.spaceshipTexture)
-        itemSprite.name = 'ship'
-        itemSprite.pivot = {
-            x: 32,
-            y: 32
-        }
-        const navSprite = new Sprite(loadedAssets.navArrow);
-        navSprite.pivot = {
-            x: navSprite.width / 2,
-            y: navSprite.height / 2,
-        }
-        navSprite.name = 'nav'
-        navSprite.visible = false;
-        shipGroup.addChild(navSprite)
-
-        itemSprite.scale = { x: 0.5, y: 0.5 }
-        const shipPosition = positionUniverseShip(ship)
-        shipGroup.x = shipPosition.x
-        shipGroup.y = shipPosition.y
-
-        shipGroup.addChild(itemSprite)
-
-        // const text = new Text({
-        //     text: ship.symbol + ' - ' + ship.role,
-        //     style: {
-        //         fontFamily: 'sans-serif',
-        //         fontSize: 16,
-        //         align: 'right',
-        //     }
-        // })
-        // text.visible = false
-        // text.x = 0
-        // text.y = 32
-        // shipGroup.addChild(text);
-
-        // makeInteractiveAndSelectable(shipGroup, {
-        //     onMouseOver: () => {
-        //         text.visible = true
-        //     },
-        //     onMouseOut: () => {
-        //         text.visible = false
-        //     },
-        //     onSelect: {
-        //         type: 'ship',
-        //         symbol: ship.symbol
-        //     }
-        // })
-
-        universeView.addChild(shipGroup)
-        Registry.universeShips[ship.symbol] = shipGroup
-    })
 
     const graphics = new Graphics()
     graphics.stroke({

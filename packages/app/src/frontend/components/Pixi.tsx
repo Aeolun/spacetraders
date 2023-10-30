@@ -10,7 +10,7 @@ export const Pixi = () => {
 
   useEffect(() => {
     if (!ref.current) return;
-    app.init().then(() => {
+    app.init({}).then(() => {
       initialize(app)
 
       app.resizeTo = ref.current

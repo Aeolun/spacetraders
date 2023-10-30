@@ -105,11 +105,11 @@ export const appRouter = router({
             },
             include: {
                 traits: true,
-                jumpgate: {
-                    include: {
-                        validJumpTargets: true
+                jumpConnectedTo: {
+                    select: {
+                        symbol: true
                     }
-                }
+                },
             }
         })
 
@@ -130,7 +130,11 @@ export const appRouter = router({
             include: {
                 traits: true,
                 tradeGoods: true,
-                jumpgate: true,
+                jumpConnectedTo: {
+                    select: {
+                        symbol: true
+                    }
+                }
             }
         })
 

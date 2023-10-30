@@ -17,7 +17,7 @@ export const createUIElements = (app: Application) => {
     universeView = new Viewport({
         screenWidth: window.innerWidth,
         screenHeight: window.innerHeight,
-
+        disableOnContextMenu: true,
 
         events: app.renderer.events // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
     })
@@ -42,7 +42,7 @@ export const createUIElements = (app: Application) => {
         .decelerate()
     universeView.moveCenter(0, 0)
     const starContainer = new Container()
-    starContainer.name = 'stars'
+    starContainer.label = 'stars'
     universeView.addChild(starContainer)
     // universeCuller = new Simple() // new SpatialHash()
     // universeCuller.cull(universeView.getVisibleBounds())

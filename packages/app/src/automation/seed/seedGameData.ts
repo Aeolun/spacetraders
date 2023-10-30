@@ -8,13 +8,29 @@ export const seedSystems = async (agentToken: string) => {
         }
     })
 
-    const sectors = await prisma.sector.findMany({})
+    const sectors = await prisma.sector.findMany({
+        select: {
+            symbol: true
+        }
+    })
     const existingSectorIds = {}
     sectors.forEach(s => existingSectorIds[s.symbol] = true)
 
-    const systems = await prisma.system.findMany({})
+    const systems = await prisma.system.findMany({
+        select: {
+            symbol: true
+        }
+    })
     const existingSystems = {}
     systems.forEach(s => existingSystems[s.symbol] = true)
+
+    const waypoints = await prisma.waypoint.findMany({
+        select: {
+            symbol: true
+        }
+    });
+    const existingWaypoints = {}
+    waypoints.forEach(s => existingWaypoints[s.symbol] = true)
 
     const createableSystems = []
     const creatableWaypoints = {}
@@ -36,12 +52,14 @@ export const seedSystems = async (agentToken: string) => {
             if (waypoint.type === 'ORBITAL_STATION') {
                 hasStation = true
             }
-            creatableWaypoints[waypoint.symbol] = {
-                symbol: waypoint.symbol,
-                type: waypoint.type,
-                systemSymbol: system.symbol,
-                x: waypoint.x,
-                y: waypoint.y
+            if (!existingWaypoints[waypoint.symbol]) {
+                creatableWaypoints[waypoint.symbol] = {
+                    symbol: waypoint.symbol,
+                    type: waypoint.type,
+                    systemSymbol: system.symbol,
+                    x: waypoint.x,
+                    y: waypoint.y,
+                }
             }
         })
 

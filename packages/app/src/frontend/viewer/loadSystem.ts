@@ -7,6 +7,7 @@ import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {loadedAssets} from "@front/viewer/assets";
 // import {makeInteractiveAndSelectable} from "@front/viewer/makeInteractiveAndSelectable";
 import {Waypoint} from "@common/prisma";
+import {UniverseEntity} from "@front/viewer/universe-entity";
 
 function createShipContainer(ship: ShipData) {
   const shipGroup = new Container()
@@ -67,48 +68,27 @@ function createShipContainer(ship: ShipData) {
   return shipGroup
 }
 
-function createOrbitGraphics(item: Waypoint) {
-  const orbit = new Graphics()
-
+function createOrbitGraphics(orbit: Graphics, item: Waypoint) {
   const diameter = Math.sqrt(Math.pow(item.x, 2) + Math.pow(item.y, 2)) * mapScale
-  console.log('diameter', diameter)
   orbit.circle(0, 0, diameter).stroke({
     width: 2,
     color: 0x444444
   })
 
-
   return orbit
 }
 
-function addTraitIcons(item: WaypointData, container: Container) {
-  let xOffset = 0
+function getTraitIcons(item: WaypointData) {
+  const traits: string[] = []
   item.traits.forEach(trait => {
     if (trait.symbol === 'MARKETPLACE') {
-      const sprite = new Sprite(loadedAssets.market)
-      sprite.pivot = {
-        x: 32,
-        y: 32
-      }
-      sprite.scale = {x: 0.25, y: 0.25}
-      sprite.x = xOffset - 16
-      sprite.y =  24
-      container.addChild(sprite)
-      xOffset += 16
+      traits.push('market')
     }
     if (trait.symbol === 'SHIPYARD') {
-      const sprite = new Sprite(loadedAssets.shipyard)
-      sprite.pivot = {
-        x: 32,
-        y: 32
-      }
-      sprite.scale = {x: 0.25, y: 0.24}
-      sprite.x = xOffset - 16
-      sprite.y = 24
-      container.addChild(sprite)
-      xOffset += 16
+      traits.push('shipyard')
     }
   })
+  return traits;
 }
 
 function createSystemItem(data: {
@@ -116,41 +96,29 @@ function createSystemItem(data: {
     waypoint: WaypointData
     parent?: PointData
   }, scale = 1, index = 0) {
-  const orbitingGroup = new Container()
 
-  let orbitingSprite: Sprite;
-
-  orbitingSprite = new Sprite(loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`])
-
-  orbitingSprite.pivot = {
-    x: 32,
-    y: 32
-  }
-  orbitingSprite.scale = {x: scale, y: scale}
-
+  let position = { x: 0, y: 0}
   if (data.parent) {
-    orbitingGroup.x = data.star.x * mapScale + data.parent.x + 32
-    orbitingGroup.y = data.star.y * mapScale + data.parent.y + 48 + 64*index
+    position.x = data.star.x * mapScale + data.parent.x + 32
+    position.y = data.star.y * mapScale + data.parent.y + 48 + 64*index
   } else {
-    orbitingGroup.x = (data.waypoint.x + data.star.x) * mapScale
-    orbitingGroup.y = (data.waypoint.y + data.star.y) * mapScale
+    position.x = (data.waypoint.x + data.star.x) * mapScale
+    position.y = (data.waypoint.y + data.star.y) * mapScale
   }
 
-  orbitingGroup.addChild(orbitingSprite)
-
-  const orbitingText = new Text({
-    text: data.waypoint.symbol + ' - ' + data.waypoint.type,
-    renderMode: 'bitmap',
-    style: {
-      fontFamily: 'sans-serif',
-      fontSize: 16,
-      align: 'right',
+  const universeEntity = new UniverseEntity({
+    texture: loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`],
+    label: data.waypoint.symbol + ' - ' + data.waypoint.type,
+    traits: getTraitIcons(data.waypoint),
+    position: position,
+    onSelect: () => {
+      Registry.deselect()
+      Registry.selected = {
+        type: 'waypoint',
+        symbol: data.waypoint.symbol,
+      }
     }
   })
-  orbitingText.x = 24
-  orbitingText.y = -8
-  orbitingText.visible = false
-  orbitingGroup.addChild(orbitingText)
 
   // makeInteractiveAndSelectable(orbitingGroup, {
   //   onMouseOver: () => {
@@ -182,9 +150,7 @@ function createSystemItem(data: {
   //   ]
   // })
 
-  addTraitIcons(data.waypoint, orbitingGroup)
-
-  return orbitingGroup
+  return universeEntity
 }
 
 export async function loadSystem(systemSymbol: string) {
@@ -214,17 +180,18 @@ export async function loadSystem(systemSymbol: string) {
 
   resetShipWaypoints()
 
+  const orbitGraphics = new Graphics();
+  orbitGraphics.eventMode = 'none'
+  orbitGraphics.x = starData.x * mapScale
+  orbitGraphics.y = starData.y * mapScale
   waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
-    const orbitGraphics = createOrbitGraphics(item)
-    const container = new Container(orbitGraphics);
-    container.x = starData.x * mapScale
-    container.y = starData.y * mapScale
-    console.log('adding container at ', container.x, container.y)
-    console.log('before', starsContainer.children.length)
-    starsContainer.addChild(container)
-    console.log('after', starsContainer.children.length)
-    Registry.systemObjects[systemSymbol].push(container)
+    createOrbitGraphics(orbitGraphics, item)
+  });
 
+  starsContainer.addChild(orbitGraphics)
+  Registry.systemObjects[systemSymbol].push(orbitGraphics)
+
+  waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
     const itemGroup = createSystemItem({
       waypoint: item,
       star: starData,

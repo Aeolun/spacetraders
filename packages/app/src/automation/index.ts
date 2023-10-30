@@ -73,6 +73,8 @@ const init = async () => {
   const serverStatus = await axios.get<StatusResponse>(
     process.env.API_ENDPOINT
   );
+  const waypoints = await prisma.waypoint.count();
+  const systems = await prisma.system.count();
   if (serverStatus.data.resetDate !== currentInstance) {
     console.log(
       `Server reset date ${serverStatus.data.resetDate} does not match database ${currentInstance}, updating database state.`
@@ -91,6 +93,11 @@ const init = async () => {
     await retrieveInitialUserInfo(serverData);
 
     console.log("Database and background agent initialized. Proceeding.");
+  } else if (waypoints === 0 || systems === 0) {
+    console.log("Zero waypoints and/or systems in database, reloading world.");
+
+    await reloadWorldStatus(serverData);
+    await retrieveInitialUserInfo(serverData);
   }
 
   const token = await getBackgroundAgentToken(serverData);

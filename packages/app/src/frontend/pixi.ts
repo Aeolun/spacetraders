@@ -36,19 +36,7 @@ import {convertToDisplayCoordinates} from "packages/app/src/frontend/game/util";
 import {gameHeight, scale} from "packages/app/src/frontend/game/consts";
 
 document.body.appendChild(app.canvas);
-app.view.addEventListener('contextmenu', (e) => {
-  e.preventDefault()
-})
 
-app.stage.interactive = true;
-app.stage.hitArea = app.screen;
-
-app.stage.on("click", (event) => {
-  console.log(event)
-
-  deselectListeners.emit('deselect')
-  GameState.selected = undefined
-})
 
 
 const loadedUniverse = await loadUniverse()

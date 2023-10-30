@@ -67,9 +67,9 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
       },
       include: {
         traits: true,
-        jumpgate: {
-          include: {
-            validJumpTargets: true
+        jumpConnectedTo: {
+          select: {
+            symbol: true
           }
         }
       },

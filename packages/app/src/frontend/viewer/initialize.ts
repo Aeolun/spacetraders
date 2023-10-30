@@ -42,8 +42,22 @@ export async function initialize(app: Application) {
 
     txt.text = `fps: ${ticker.FPS.toFixed(0)}, zoom: ${zoom.toFixed(2)}`
   })
+  app.ticker.minFPS = 40
+  app.ticker.maxFPS = 120
 
   app.stage.addChild(txt);
+
+  app.canvas.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+  })
+
+  app.stage.interactive = true;
+  app.stage.hitArea = app.screen;
+
+  app.stage.on("click", (event) => {
+    console.log("deselecting")
+    Registry.deselect();
+  })
 
   // ticker to size universe objects
   app.ticker.add(() => {
