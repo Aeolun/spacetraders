@@ -83,9 +83,6 @@ importers:
       motion:
         specifier: ^10.16.2
         version: 10.16.2
-      node_or_tools:
-        specifier: ^1.1.1
-        version: 1.1.1
       pixi-cull:
         specifier: ^2.1.1
         version: 2.2.0(pixi.js@8.0.0-beta.6)
@@ -110,6 +107,9 @@ importers:
       reagraph:
         specifier: ^4.14.1
         version: 4.14.1(@types/three@0.156.0)(graphology-types@0.24.7)(react-dom@18.2.0)(react@18.2.0)
+      salesman.js:
+        specifier: ^2.0.4
+        version: 2.0.4
       spacetraders-sdk:
         specifier: workspace:^
         version: link:../spacetraders-sdk
@@ -7190,17 +7190,6 @@ packages:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
 
-  /node_or_tools@1.1.1:
-    resolution: {integrity: sha512-x4Jjq9QGV/R3JscjWDi3xXwxBb4uZCuQoirAXLSm+qF2e9wvAOBNajSDhYAXqH7LsfH5pbalULmCnH79x59pHQ==}
-    requiresBuild: true
-    dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
-      nan: 2.18.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
   /nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
     engines: {node: '>=6'}
@@ -8443,6 +8432,10 @@ packages:
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
+
+  /salesman.js@2.0.4:
+    resolution: {integrity: sha512-1QIyvlqdxobZlCCDmySLpEMQXQO731ORdT/DymRPrWBzTnuQK5uUHrI/F3N+/izPtzO/Y5kvAQi94DZ6O3ZqtA==}
+    dev: false
 
   /scheduler@0.21.0:
     resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}

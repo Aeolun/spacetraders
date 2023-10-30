@@ -1,4 +1,4 @@
-import node_or_tools from 'node_or_tools'
+import salesman from 'salesman.js'
 
 class MatrixBuilder {
 
@@ -80,7 +80,6 @@ export const findFastestPath = async (vertices: Vertex[], startNode: string): Pr
   const matrixBuildTime = Date.now() - startMatrixBuild
 
   const startSolver = Date.now()
-  var TSP = new node_or_tools.TSP(tspSolverOpts);
 
   const depotNode = 0
   var tspSearchOpts = {
@@ -92,22 +91,21 @@ export const findFastestPath = async (vertices: Vertex[], startNode: string): Pr
   const start = Date.now()
 
   return new Promise((resolve, reject) => {
-    TSP.Solve(tspSearchOpts, function (err, solution) {
-      if (err) {
-        return reject(err)
-      };
-      solution.unshift(depotNode)
+    const solution: number[] = salesman.solve(vertices, 0.999995);
+    const solveTime = Date.now() - start
+    //solution.unshift()
+    console.log(solution)
 
-      const solveTime = Date.now() - start
 
-      return resolve({
-        path: matrix.pathToNames(solution),
-        timings: {
-          matrixBuildTime,
-          createSolverTime,
-          solveTime
-        }
-      })
-    });
+
+
+    return resolve({
+      path: solution.map(i => vertices[i].name),
+      timings: {
+        matrixBuildTime,
+        createSolverTime,
+        solveTime
+      }
+    })
   });
 }

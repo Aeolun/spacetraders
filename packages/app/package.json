@@ -14,7 +14,7 @@
     "dev:backend": "tsnd -r tsconfig-paths/register src/backend/index.ts",
     "dev:frontend": "vite --port 3000",
     "dev": "run-p dev:*",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -64,7 +64,7 @@
     "jsonwebtoken": "^9.0.1",
     "jwt-decode": "^3.1.2",
     "motion": "^10.16.2",
-    "node_or_tools": "^1.1.1",
+    "salesman.js": "^2.0.4",
     "pixi-cull": "^2.1.1",
     "pixi-viewport": "workspace:^",
     "pixi.js": "prerelease-v8",
