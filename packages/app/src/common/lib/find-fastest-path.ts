@@ -1,4 +1,4 @@
-import salesman from 'salesman.js'
+import axios from "axios";
 
 class MatrixBuilder {
 
@@ -90,17 +90,17 @@ export const findFastestPath = async (vertices: Vertex[], startNode: string): Pr
 
   const start = Date.now()
 
-  return new Promise((resolve, reject) => {
-    const solution: number[] = salesman.solve(vertices, 0.999995);
+  return new Promise(async (resolve, reject) => {
+    const response = await axios.post('http://127.0.0.1:5000/routing', {
+      distance_matrix: tspSolverOpts.costs
+    })
+    //response.data.route.shift()
+    response.data.route.pop()
     const solveTime = Date.now() - start
     //solution.unshift()
-    console.log(solution)
-
-
-
 
     return resolve({
-      path: solution.map(i => vertices[i].name),
+      path: response.data.route.map(i => vertices[i].name),
       timings: {
         matrixBuildTime,
         createSolverTime,

@@ -13,6 +13,7 @@
     "dev:agent": "tsnd -r tsconfig-paths/register src/automation/index.ts",
     "dev:backend": "tsnd -r tsconfig-paths/register src/backend/index.ts",
     "dev:frontend": "vite --port 3000",
+    "dev:routing": "poetry run python -m flask run",
     "dev": "run-p dev:*",
     "test": "vitest"
   },

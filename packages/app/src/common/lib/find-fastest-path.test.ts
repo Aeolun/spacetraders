@@ -1,5 +1,15 @@
 import {findFastestPath} from "@common/lib/find-fastest-path";
-import { test, expect } from "vitest";
+import { test, afterAll, beforeAll, expect } from "vitest";
+import * as child_process from "child_process";
+
+let cp: child_process.ChildProcess
+beforeAll(() => {
+  cp = child_process.exec('poetry run python -m flask run')
+})
+
+afterAll(() => {
+  cp.kill()
+})
 
 test('fastest path simple', async () => {
   const res = await findFastestPath([
@@ -8,8 +18,8 @@ test('fastest path simple', async () => {
     {name: 'c', x: 0, y: 2},
   ], 'a')
 
-  expect(res.path).toEqual(['a', 'c', 'b'])
-  expect(res.timings.solveTime).toBeLessThan(500)
+  expect(res.path).toEqual(['a', 'b', 'c'])
+  expect(res.timings.solveTime).toBeLessThan(50)
 })
 
 test('fastest path complex', async () => {
@@ -22,6 +32,6 @@ test('fastest path complex', async () => {
     {name: 'f', x: 933, y: 471},
   ], 'a')
 
-  expect(res.path).toEqual(['a', 'c', 'e', 'f', 'd', 'b'])
+  expect(res.path).toEqual(['a', 'f', 'e', 'd', 'c', 'b'])
   expect(res.timings.solveTime).toBeLessThan(500)
 })

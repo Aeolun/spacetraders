@@ -99,7 +99,6 @@ export class Wayfinding {
 
                 const systemSymbol = system.symbol
                 const toSystemSymbol = connection
-                console.log(systemSymbol, toSystemSymbol)
 
                 this.dijkstra.addEdge(systemSymbol, toSystemSymbol, {
                     id: 'jump',
