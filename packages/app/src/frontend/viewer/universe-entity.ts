@@ -8,6 +8,7 @@ export interface UniverseEntityProperties {
   texture: Texture
   traits: string[]
   label?: string,
+  scale?: number,
   position: PointData,
   onSelect?: () => void,
 }
@@ -25,8 +26,10 @@ export class UniverseEntity extends Container {
     this.y = properties.position.y
     this.selected = false;
     this.cursor = 'pointer'
+    this.scaleFactor = properties.scale ?? 1
 
     this.sprite = new Sprite(properties.texture)
+    this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
     this.interactive = true;
     this.sprite.pivot = getCenterPivot(properties.texture)
 
@@ -35,7 +38,7 @@ export class UniverseEntity extends Container {
 
 
     this.hoverCircle = new Graphics();
-    this.hoverCircle.circle(0, 0, 48).stroke({
+    this.hoverCircle.circle(0, 0, 48 * this.scaleFactor).stroke({
       color: 0xffffff,
       width: 2,
     })
@@ -102,12 +105,12 @@ export class UniverseEntity extends Container {
   private addTraits(traits: string[]) {
     if (!traitTextures) {
       traitTextures = {
-        market: loadedAssets.market,
-        shipyard: loadedAssets.shipyard,
-        belt: loadedAssets.asteroidBelt,
-        jumpgate: loadedAssets.jumpgate,
-        station: loadedAssets.station,
-        uncharted: loadedAssets.treasure,
+        market: loadedAssets.spritesheet.textures['public/textures/market.png'],
+        shipyard: loadedAssets.spritesheet.textures['public/textures/shipyard.png'],
+        belt: loadedAssets.spritesheet.textures['public/textures/asteroid.png'],
+        jumpgate: loadedAssets.spritesheet.textures['public/textures/jumpgate.png'],
+        station: loadedAssets.spritesheet.textures['public/textures/station.png'],
+        uncharted: loadedAssets.spritesheet.textures['public/textures/treasure.png'],
       }
     }
 

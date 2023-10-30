@@ -42,6 +42,7 @@ export interface WaypointTrait {
 
 export const WaypointTraitSymbolEnum = {
     Uncharted: 'UNCHARTED',
+    UnderConstruction: 'UNDER_CONSTRUCTION',
     Marketplace: 'MARKETPLACE',
     Shipyard: 'SHIPYARD',
     Outpost: 'OUTPOST',
@@ -90,6 +91,7 @@ export const WaypointTraitSymbolEnum = {
     ToxicAtmosphere: 'TOXIC_ATMOSPHERE',
     CorrosiveAtmosphere: 'CORROSIVE_ATMOSPHERE',
     BreathableAtmosphere: 'BREATHABLE_ATMOSPHERE',
+    ThinAtmosphere: 'THIN_ATMOSPHERE',
     Jovian: 'JOVIAN',
     Rocky: 'ROCKY',
     Volcanic: 'VOLCANIC',
@@ -99,6 +101,13 @@ export const WaypointTraitSymbolEnum = {
     Temperate: 'TEMPERATE',
     Jungle: 'JUNGLE',
     Ocean: 'OCEAN',
+    Radioactive: 'RADIOACTIVE',
+    MicroGravityAnomalies: 'MICRO_GRAVITY_ANOMALIES',
+    DebrisCluster: 'DEBRIS_CLUSTER',
+    DeepCraters: 'DEEP_CRATERS',
+    ShallowCraters: 'SHALLOW_CRATERS',
+    UnstableComposition: 'UNSTABLE_COMPOSITION',
+    HollowedInterior: 'HOLLOWED_INTERIOR',
     Stripped: 'STRIPPED'
 } as const;
 

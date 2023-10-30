@@ -5,15 +5,16 @@ import {loadUniverse} from "@front/viewer/loadUniverse";
 import {loadPlayerData} from "@front/viewer/loadPlayerData";
 import {Registry} from "@front/viewer/registry";
 import {loadSystem, unloadSystem} from "@front/viewer/loadSystem";
-import {mapScale} from "@front/viewer/consts";
+import {mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
+import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 
 export const handleMapMove = () => {
   const zoom = universeView.worldScreenWidth / universeView.screenWidth
 
-  if (zoom < 30) {
+  if (zoom < 40) {
     console.log(`checking systems between x ${universeView.worldTransform.tx} and ${universeView.worldTransform.tx + universeView.worldScreenWidth}, y ${universeView.worldTransform.ty} and ${universeView.worldTransform.ty + universeView.worldScreenHeight}`)
     Object.values(Registry.systemData).forEach(system => {
-      if (system.x < universeView.right / mapScale && system.x > universeView.left / mapScale && system.y < universeView.bottom / mapScale && system.y > universeView.top / mapScale) {
+      if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
         loadSystem(system.symbol)
       }
     });
@@ -61,16 +62,20 @@ export async function initialize(app: Application) {
 
   // ticker to size universe objects
   app.ticker.add(() => {
-    const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 30)
+    const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 1)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
     Object.values(loadedUniverse.systems).forEach(ref => {
       ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
     })
 
-    Object.keys(Registry.universeShips).forEach(shipKey => {
-      const ship = Registry.universeShips[shipKey]
-      ship.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
+    resetShipWaypoints()
+    Object.keys(Registry.shipData).forEach(shipKey => {
+      const shipEntity = Registry.universeShips[shipKey]
+      const shipData = Registry.shipData[shipKey]
+      //shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
+
+      shipEntity.position = positionShip(shipData).position
     });
   })
 

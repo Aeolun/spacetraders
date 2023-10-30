@@ -15,8 +15,10 @@ export class UniverseShip extends UniverseEntity {
     super(properties);
 
     this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
-    this.navSprite = new Sprite(loadedAssets.navArrow);
-    this.navSprite.pivot = getCenterPivot(loadedAssets.navArrow)
+    this.zIndex = 100000
+    const texture = loadedAssets.spritesheet.textures['public/textures/navarrow.png']
+    this.navSprite = new Sprite(texture)
+    this.navSprite.pivot = getCenterPivot(texture)
     this.navSprite.name = 'nav'
     this.navSprite.visible = false;
     this.addChild(this.navSprite)

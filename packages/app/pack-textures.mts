@@ -7,7 +7,9 @@ const options = {
 };
 // Call the async function and extract the json and image values
 (async () => {
-  const files = await glob("public/textures/**/*");
+  const files = await glob("public/textures/**/*", {
+    nodir: true,
+  });
 
   console.log(files);
   const { json, image } = await spritesheet(files, options);

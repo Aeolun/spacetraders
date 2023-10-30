@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import { ConnectedSystem } from './connected-system';
 
 /**
  * 
@@ -24,22 +21,10 @@ import { ConnectedSystem } from './connected-system';
  */
 export interface JumpGate {
     /**
-     * The maximum jump range of the gate.
-     * @type {number}
+     * All the gates that are connected to this waypoint.
+     * @type {Array<string>}
      * @memberof JumpGate
      */
-    'jumpRange': number;
-    /**
-     * The symbol of the faction that owns the gate.
-     * @type {string}
-     * @memberof JumpGate
-     */
-    'factionSymbol'?: string;
-    /**
-     * The systems within range of the gate that have a corresponding gate.
-     * @type {Array<ConnectedSystem>}
-     * @memberof JumpGate
-     */
-    'connectedSystems': Array<ConnectedSystem>;
+    'connections': Array<string>;
 }
 

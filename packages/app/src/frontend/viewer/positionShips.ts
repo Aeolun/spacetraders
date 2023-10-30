@@ -1,6 +1,7 @@
 import {scale, systemCoordinates} from "@front/viewer/consts";
 import {Registry, ShipData, WaypointData} from "@front/viewer/registry";
 import {universeView} from "@front/viewer/UIElements";
+import {getStarPosition, getSystemPosition} from "@front/viewer/util";
 
 let waypointShips: Record<string, number> = {}
 
@@ -45,11 +46,11 @@ const planetOrbitSpeed = 20000
 // }
 
 export function positionShip(ship: ShipData) {
-    let serverX, serverY, navRot, xOffset = 0, yOffset = 0
+    let serverX = 0, serverY = 0, navRot, xOffset = 0, yOffset = 0
     const arrivalOn = new Date(ship.arrivalOn)
     const departureOn = new Date(ship.departureOn)
 
-    if (ship.destinationWaypoint.symbol !== ship.departureWaypoint.symbol && Date.now() < arrivalOn.getTime()) {
+    if (ship.destinationWaypoint && ship.departureWaypoint && ship.destinationWaypoint.symbol !== ship.departureWaypoint.symbol && Date.now() < arrivalOn.getTime()) {
         const positionAlongPath = (Date.now() - departureOn.getTime())/(arrivalOn.getTime() - departureOn.getTime())
 
         try {
@@ -64,7 +65,7 @@ export function positionShip(ship: ShipData) {
             serverY = 0
             navRot = 0
         }
-    } else {
+    } else if (ship.currentWaypoint) {
         const orbitSymbol = ship.currentWaypoint.orbitsSymbol ? ship.currentWaypoint.orbitsSymbol : ship.currentWaypoint.symbol
         if (waypointShips[orbitSymbol] === undefined) {
             waypointShips[orbitSymbol] = 0
@@ -72,12 +73,16 @@ export function positionShip(ship: ShipData) {
             waypointShips[orbitSymbol]++
         }
 
+        const system = Registry.systemData[ship.currentWaypoint.systemSymbol]
+        const curr = Registry.waypointData[ship.currentWaypoint.symbol]
 
-            const curr = Registry.waypoints[ship.currentWaypoint.symbol]
 
         if (curr) {
-            serverX = curr.x
-            serverY = curr.y
+
+            const newPos = getSystemPosition(curr, system)
+
+            serverX = newPos.x
+            serverY = newPos.y
 
             xOffset = (32 * waypointShips[orbitSymbol])
             yOffset = 80
@@ -90,8 +95,16 @@ export function positionShip(ship: ShipData) {
     const x = serverX + xOffset
     const y = serverY + yOffset
 
+    console.log('newpos', {
+        x, y
+    })
+
     return {
-        x, y, navRot
+        position: {
+            x,
+            y,
+        },
+        navRot
     }
 }
 

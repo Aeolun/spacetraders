@@ -15,9 +15,11 @@ git_push.sh
 index.ts
 models/accept-contract200-response-data.ts
 models/accept-contract200-response.ts
+models/activity-level.ts
 models/agent.ts
 models/chart.ts
-models/connected-system.ts
+models/construction-material.ts
+models/construction.ts
 models/contract-deliver-good.ts
 models/contract-payment.ts
 models/contract-terms.ts
@@ -47,6 +49,7 @@ models/faction-trait.ts
 models/faction.ts
 models/fulfill-contract200-response.ts
 models/get-agents200-response.ts
+models/get-construction200-response.ts
 models/get-contract200-response.ts
 models/get-contracts200-response.ts
 models/get-faction200-response.ts
@@ -69,6 +72,7 @@ models/get-status200-response-links-inner.ts
 models/get-status200-response-server-resets.ts
 models/get-status200-response-stats.ts
 models/get-status200-response.ts
+models/get-system-waypoints-traits-parameter.ts
 models/get-system-waypoints200-response.ts
 models/get-system200-response.ts
 models/get-systems200-response.ts
@@ -150,6 +154,14 @@ models/shipyard-ship-types-inner.ts
 models/shipyard-ship.ts
 models/shipyard-transaction.ts
 models/shipyard.ts
+models/siphon-resources201-response-data.ts
+models/siphon-resources201-response.ts
+models/siphon-yield.ts
+models/siphon.ts
+models/supply-construction-request.ts
+models/supply-construction200-response-data.ts
+models/supply-construction200-response.ts
+models/supply-level.ts
 models/survey-deposit.ts
 models/survey.ts
 models/system-faction.ts
@@ -161,6 +173,7 @@ models/trade-symbol.ts
 models/transfer-cargo-request.ts
 models/transfer-cargo200-response.ts
 models/waypoint-faction.ts
+models/waypoint-modifier.ts
 models/waypoint-orbital.ts
 models/waypoint-trait.ts
 models/waypoint-type.ts

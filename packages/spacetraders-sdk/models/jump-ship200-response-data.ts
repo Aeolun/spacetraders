@@ -18,6 +18,9 @@
 import { Cooldown } from './cooldown';
 // May contain unused imports in some cases
 // @ts-ignore
+import { MarketTransaction } from './market-transaction';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ShipNav } from './ship-nav';
 
 /**
@@ -28,15 +31,21 @@ import { ShipNav } from './ship-nav';
 export interface JumpShip200ResponseData {
     /**
      * 
+     * @type {ShipNav}
+     * @memberof JumpShip200ResponseData
+     */
+    'nav': ShipNav;
+    /**
+     * 
      * @type {Cooldown}
      * @memberof JumpShip200ResponseData
      */
     'cooldown': Cooldown;
     /**
      * 
-     * @type {ShipNav}
+     * @type {MarketTransaction}
      * @memberof JumpShip200ResponseData
      */
-    'nav': ShipNav;
+    'transaction': MarketTransaction;
 }
 

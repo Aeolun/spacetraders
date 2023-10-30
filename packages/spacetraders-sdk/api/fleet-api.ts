@@ -96,6 +96,8 @@ import { ShipRefine201Response } from '../models';
 // @ts-ignore
 import { ShipRefineRequest } from '../models';
 // @ts-ignore
+import { SiphonResources201Response } from '../models';
+// @ts-ignore
 import { Survey } from '../models';
 // @ts-ignore
 import { TransferCargo200Response } from '../models';
@@ -738,7 +740,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
+         * Jump your ship instantly to a target connected waypoint. The ship must be in orbit to execute a jump.  A unit of antimatter is purchased and consumed from the market when jumping. The price of antimatter is determined by the market and is subject to change. A ship can only jump to connected waypoints
          * @summary Jump Ship
          * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -822,7 +824,7 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at any waypoint with a faction present to negotiate a contract with that faction.
          * @summary Negotiate Contract
          * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
@@ -1188,6 +1190,44 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Siphon gases, such as hydrocarbon, from gas giants.  The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed.
+         * @summary Siphon Resources
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        siphonResources: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('siphonResources', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/siphon`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
          * @summary Transfer Cargo
          * @param {string} shipSymbol The transferring ship\&#39;s symbol.
@@ -1463,7 +1503,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
+         * Jump your ship instantly to a target connected waypoint. The ship must be in orbit to execute a jump.  A unit of antimatter is purchased and consumed from the market when jumping. The price of antimatter is determined by the market and is subject to change. A ship can only jump to connected waypoints
          * @summary Jump Ship
          * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -1487,7 +1527,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at any waypoint with a faction present to negotiate a contract with that faction.
          * @summary Negotiate Contract
          * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
@@ -1589,6 +1629,17 @@ export const FleetApiFp = function(configuration?: Configuration) {
          */
         async shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShipRefine201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shipRefine(shipSymbol, shipRefineRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Siphon gases, such as hydrocarbon, from gas giants.  The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed.
+         * @summary Siphon Resources
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async siphonResources(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SiphonResources201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.siphonResources(shipSymbol, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1791,7 +1842,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.jettison(shipSymbol, jettisonRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
+         * Jump your ship instantly to a target connected waypoint. The ship must be in orbit to execute a jump.  A unit of antimatter is purchased and consumed from the market when jumping. The price of antimatter is determined by the market and is subject to change. A ship can only jump to connected waypoints
          * @summary Jump Ship
          * @param {string} shipSymbol The ship symbol.
          * @param {JumpShipRequest} [jumpShipRequest] 
@@ -1813,7 +1864,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.navigateShip(shipSymbol, navigateShipRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
+         * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at any waypoint with a faction present to negotiate a contract with that faction.
          * @summary Negotiate Contract
          * @param {string} shipSymbol The ship\&#39;s symbol.
          * @param {*} [options] Override http request option.
@@ -1907,6 +1958,16 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: any): AxiosPromise<ShipRefine201Response> {
             return localVarFp.shipRefine(shipSymbol, shipRefineRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Siphon gases, such as hydrocarbon, from gas giants.  The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed.
+         * @summary Siphon Resources
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        siphonResources(shipSymbol: string, options?: any): AxiosPromise<SiphonResources201Response> {
+            return localVarFp.siphonResources(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
          * Transfer cargo between ships.  The receiving ship must be in the same waypoint as the transferring ship, and it must able to hold the additional cargo after the transfer is complete. Both ships also must be in the same state, either both are docked or both are orbiting.  The response body\'s cargo shows the cargo of the transferring ship after the transfer is complete.
@@ -2138,7 +2199,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system\'s Jump Gate waypoint.  When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship\'s cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
+     * Jump your ship instantly to a target connected waypoint. The ship must be in orbit to execute a jump.  A unit of antimatter is purchased and consumed from the market when jumping. The price of antimatter is determined by the market and is subject to change. A ship can only jump to connected waypoints
      * @summary Jump Ship
      * @param {string} shipSymbol The ship symbol.
      * @param {JumpShipRequest} [jumpShipRequest] 
@@ -2164,7 +2225,7 @@ export class FleetApi extends BaseAPI {
     }
 
     /**
-     * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at a faction\'s HQ waypoint to negotiate a contract with that faction.
+     * Negotiate a new contract with the HQ.  In order to negotiate a new contract, an agent must not have ongoing or offered contracts over the allowed maximum amount. Currently the maximum contracts an agent can have at a time is 1.  Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.   The ship must be present at any waypoint with a faction present to negotiate a contract with that faction.
      * @summary Negotiate Contract
      * @param {string} shipSymbol The ship\&#39;s symbol.
      * @param {*} [options] Override http request option.
@@ -2275,6 +2336,18 @@ export class FleetApi extends BaseAPI {
      */
     public shipRefine(shipSymbol: string, shipRefineRequest?: ShipRefineRequest, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).shipRefine(shipSymbol, shipRefineRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Siphon gases, such as hydrocarbon, from gas giants.  The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed.
+     * @summary Siphon Resources
+     * @param {string} shipSymbol The ship symbol.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public siphonResources(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).siphonResources(shipSymbol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

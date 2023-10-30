@@ -1,78 +1,20 @@
 import {trpc} from "@front/trpc";
 import {starsContainer, universeView} from "@front/viewer/UIElements";
 import {Registry, ShipData, System, WaypointData} from "@front/viewer/registry";
-import {mapScale, systemCoordinates} from "@front/viewer/consts";
+import {mapScale, systemCoordinates, systemDistanceMultiplier} from "@front/viewer/consts";
 import {Text, Container, Graphics, Sprite, PointData} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {loadedAssets} from "@front/viewer/assets";
 // import {makeInteractiveAndSelectable} from "@front/viewer/makeInteractiveAndSelectable";
 import {Waypoint} from "@common/prisma";
 import {UniverseEntity} from "@front/viewer/universe-entity";
+import {getStarPosition, getSystemPosition} from "@front/viewer/util";
+import {getDistance} from "@common/lib/getDistance";
 
-function createShipContainer(ship: ShipData) {
-  const shipGroup = new Container()
-
-  const itemSprite = new Sprite(loadedAssets.spaceshipTextures[ship.frameSymbol] ? loadedAssets.spaceshipTextures[ship.frameSymbol] : loadedAssets.spaceshipTexture)
-  itemSprite.name = 'ship'
-  itemSprite.pivot = {
-    x: 32,
-    y: 32
-  }
-  const navSprite = new Sprite(loadedAssets.navArrow);
-  navSprite.pivot = {
-    x: navSprite.width / 2,
-    y: navSprite.height / 2,
-  }
-  navSprite.name = 'nav'
-  navSprite.visible = false;
-  shipGroup.addChild(navSprite)
-
-  itemSprite.scale = { x: 0.5, y: 0.5 }
-  const shipPosition = positionShip(ship)
-  shipGroup.x = shipPosition.x
-  shipGroup.y = shipPosition.y
-
-  if (ship.agent !== Registry.agent.symbol) {
-    itemSprite.tint = 0xDD9999
-  }
-
-  shipGroup.addChild(itemSprite)
-
-  const text = new Text({
-    text: ship.symbol + ' - ' + ship.role,
-    renderMode: 'bitmap',
-    style: {
-      fontFamily: 'sans-serif',
-      fontSize: 16,
-      align: 'right',
-    }
-  })
-  text.visible = false
-  text.x = 0
-  text.y = 32
-  shipGroup.addChild(text);
-
-  // makeInteractiveAndSelectable(shipGroup, {
-  //   onMouseOver: () => {
-  //     text.visible = true
-  //   },
-  //   onMouseOut: () => {
-  //     text.visible = false
-  //   },
-  //   onSelect: {
-  //     type: 'ship',
-  //     symbol: ship.symbol
-  //   }
-  // })
-
-  return shipGroup
-}
-
-function createOrbitGraphics(orbit: Graphics, item: Waypoint) {
-  const diameter = Math.sqrt(Math.pow(item.x, 2) + Math.pow(item.y, 2)) * mapScale
+function createOrbitGraphics(orbit: Graphics, diameter: number, color: number = 0x111111, width = 2) {
   orbit.circle(0, 0, diameter).stroke({
-    width: 2,
-    color: 0x444444
+    width: width,
+    color: color,
   })
 
   return orbit
@@ -95,22 +37,24 @@ function createSystemItem(data: {
     star: PointData
     waypoint: WaypointData
     parent?: PointData
+    rotation?: number
   }, scale = 1, index = 0) {
 
-  let position = { x: 0, y: 0}
-  if (data.parent) {
-    position.x = data.star.x * mapScale + data.parent.x + 32
-    position.y = data.star.y * mapScale + data.parent.y + 48 + 64*index
-  } else {
-    position.x = (data.waypoint.x + data.star.x) * mapScale
-    position.y = (data.waypoint.y + data.star.y) * mapScale
+  let position = getSystemPosition(data.waypoint, data.star)
+  if (data.parent && data.rotation !== undefined) {
+    const offsetX = Math.sin(data.rotation ?? 0) * 48
+    const offsetY = Math.cos(data.rotation ?? 0) * 48
+    position.x += offsetX
+    position.y += offsetY
   }
 
+  console.log('creating system item', data.waypoint.symbol, data.waypoint.type)
   const universeEntity = new UniverseEntity({
-    texture: loadedAssets.planetsheet.textures[`planets/tile/${data.waypoint.type}.png`],
+    texture: loadedAssets.spritesheet.textures[`public/textures/planets/${data.waypoint.type}.png`],
     label: data.waypoint.symbol + ' - ' + data.waypoint.type,
     traits: getTraitIcons(data.waypoint),
     position: position,
+    scale: scale,
     onSelect: () => {
       Registry.deselect()
       Registry.selected = {
@@ -163,6 +107,11 @@ export async function loadSystem(systemSymbol: string) {
   const waypoints = Registry.waypointsForSystem[systemSymbol] ?? await trpc.waypointsForSystem.query({
     system: systemSymbol,
   })
+
+  waypoints.forEach(waypoint => {
+    Registry.waypointData[waypoint.symbol] = waypoint
+  })
+
   const starData = Registry.systemData[systemSymbol]
   if (!Registry.systemObjects[systemSymbol]) {
     Registry.systemObjects[systemSymbol] = []
@@ -180,12 +129,45 @@ export async function loadSystem(systemSymbol: string) {
 
   resetShipWaypoints()
 
+  const centerPoint = {x: 0, y: 0}
+  const asteroidBands: {start: number, end: number}[] = []
+  waypoints.sort((a, b) => {
+    return getDistance(a, {x: 0, y: 0}) - getDistance(b, centerPoint)
+  })
+
+  let startBand, lastBand
+  waypoints.filter(item => item.type === 'ASTEROID').forEach(item => {
+    if (!startBand) {
+      startBand = getDistance(item, centerPoint)
+    }
+    if (getDistance(item, centerPoint) - startBand > 100) {
+      asteroidBands.push({
+        start: startBand,
+        end: lastBand
+      })
+      startBand = getDistance(item, centerPoint)
+    }
+    lastBand = getDistance(item, centerPoint)
+  })
+  asteroidBands.push({
+    start: startBand,
+    end: lastBand
+  })
+
+  console.log("bands", asteroidBands)
+
   const orbitGraphics = new Graphics();
+  orbitGraphics.alpha = 0.5
   orbitGraphics.eventMode = 'none'
-  orbitGraphics.x = starData.x * mapScale
-  orbitGraphics.y = starData.y * mapScale
-  waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
-    createOrbitGraphics(orbitGraphics, item)
+  const starPos = getStarPosition(starData);
+  orbitGraphics.x = starPos.x
+  orbitGraphics.y = starPos.y
+  waypoints.filter(item => !item.orbitsSymbol && item.type !== 'ASTEROID' && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
+    const diameter = Math.sqrt(Math.pow(item.x, 2) + Math.pow(item.y, 2)) * mapScale
+    createOrbitGraphics(orbitGraphics, diameter)
+  });
+  asteroidBands.forEach(band => {
+    createOrbitGraphics(orbitGraphics, (band.start+band.end)/2 * mapScale, 0x111010, (band.end - band.start) * 1.1 * mapScale)
   });
 
   starsContainer.addChild(orbitGraphics)
@@ -197,16 +179,20 @@ export async function loadSystem(systemSymbol: string) {
       star: starData,
     })
     //
-    // waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y)).forEach((orbitingThing, index) => {
-    //   const orbitingGroup = createSystemItem({
-    //     waypoint: orbitingThing,
-    //     parent: item
-    //   }, 0.5, index)
-    //
-    //   Registry.waypoints[orbitingThing.symbol] = orbitingGroup
-    //
-    //   universeView.addChild(orbitingGroup)
-    // })
+    const orbitingThings = waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y))
+    orbitingThings.forEach((orbitingThing, index) => {
+      const orbitingGroup = createSystemItem({
+        star: starData,
+        waypoint: orbitingThing,
+        parent: item,
+        rotation: (index+1) / orbitingThings.length * Math.PI * 2,
+      }, 0.5, index)
+
+      Registry.waypoints[orbitingThing.symbol] = orbitingGroup
+
+      starsContainer.addChild(orbitingGroup)
+      Registry.systemObjects[systemSymbol].push(orbitingGroup)
+    })
     //
     Registry.waypoints[item.symbol] = itemGroup
 

@@ -5,9 +5,9 @@ import {loadedAssets} from "@front/viewer/assets";
 import {scale, universeCoordinates,} from "@front/viewer/consts";
 import { universeView, starsContainer} from "@front/viewer/UIElements";
 import {Registry, System, WaypointData} from "@front/viewer/registry";
-import {positionUniverseShip, resetShipWaypoints} from "@front/viewer/positionShips";
+import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {getDistance} from "@common/lib/getDistance";
-import {convertToDisplayCoordinates} from "@front/viewer/util";
+import {getStarPosition} from "@front/viewer/util";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {UniverseShip} from "@front/viewer/universe-ship";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
@@ -39,13 +39,13 @@ const getTraits = (item: System) => {
 
 
 function createStar(starData: System) {
-    let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
+    let texture = loadedAssets.spritesheet.textures[`public/textures/stars/${starData.type}.png`]
 
     const star = new UniverseEntity({
         texture,
         traits: getTraits(starData),
         label: starData.name+'\n('+starData.symbol+')',
-        position: convertToDisplayCoordinates(starData),
+        position: getStarPosition(starData),
         onSelect: () => {
             Registry.deselect()
             Registry.selected = {
@@ -167,11 +167,11 @@ function createStar(starData: System) {
 
 const createShip = (ship: any) => {
 
-    const shipPosition = positionUniverseShip(ship)
+    const shipPosition = positionShip(ship)
 
     const shipGroup = new UniverseShip({
         label: ship.symbol + ' - ' + ship.role,
-        texture: loadedAssets.spaceshipTextures[ship.frameSymbol] ? loadedAssets.spaceshipTextures[ship.frameSymbol] : loadedAssets.spaceshipTexture,
+        texture: loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] ? loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] : loadedAssets.spritesheet.textures['public/textures/ships/FRAME_EXPLORER.png'],
         traits: [],
         position: shipPosition,
         onSelect: () => {

@@ -22,6 +22,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { GetConstruction200Response } from '../models';
+// @ts-ignore
 import { GetJumpGate200Response } from '../models';
 // @ts-ignore
 import { GetMarket200Response } from '../models';
@@ -32,9 +34,17 @@ import { GetSystem200Response } from '../models';
 // @ts-ignore
 import { GetSystemWaypoints200Response } from '../models';
 // @ts-ignore
+import { GetSystemWaypointsTraitsParameter } from '../models';
+// @ts-ignore
 import { GetSystems200Response } from '../models';
 // @ts-ignore
 import { GetWaypoint200Response } from '../models';
+// @ts-ignore
+import { SupplyConstruction200Response } from '../models';
+// @ts-ignore
+import { SupplyConstructionRequest } from '../models';
+// @ts-ignore
+import { WaypointType } from '../models';
 /**
  * SystemsApi - axios parameter creator
  * @export
@@ -42,7 +52,49 @@ import { GetWaypoint200Response } from '../models';
 export const SystemsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  The response will return all systems that are have a Jump Gate in range of this Jump Gate. Those systems can be jumped to from this Jump Gate.
+         * Get construction details for a waypoint. Requires a waypoint with a property of `isUnderConstruction` to be true.
+         * @summary Get Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getConstruction: async (systemSymbol: string, waypointSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemSymbol' is not null or undefined
+            assertParamExists('getConstruction', 'systemSymbol', systemSymbol)
+            // verify required parameter 'waypointSymbol' is not null or undefined
+            assertParamExists('getConstruction', 'waypointSymbol', waypointSymbol)
+            const localVarPath = `/systems/{systemSymbol}/waypoints/{waypointSymbol}/construction`
+                .replace(`{${"systemSymbol"}}`, encodeURIComponent(String(systemSymbol)))
+                .replace(`{${"waypointSymbol"}}`, encodeURIComponent(String(waypointSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  Waypoints connected to this jump gate can be 
          * @summary Get Jump Gate
          * @param {string} systemSymbol The system symbol
          * @param {string} waypointSymbol The waypoint symbol
@@ -211,10 +263,12 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} systemSymbol The system symbol
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
+         * @param {WaypointType} [type] Filter waypoints by type.
+         * @param {GetSystemWaypointsTraitsParameter} [traits] Filter waypoints by one or more traits.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSystemWaypoints: async (systemSymbol: string, page?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getSystemWaypoints: async (systemSymbol: string, page?: number, limit?: number, type?: WaypointType, traits?: GetSystemWaypointsTraitsParameter, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'systemSymbol' is not null or undefined
             assertParamExists('getSystemWaypoints', 'systemSymbol', systemSymbol)
             const localVarPath = `/systems/{systemSymbol}/waypoints`
@@ -240,6 +294,14 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
 
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (traits !== undefined) {
+                localVarQueryParameter['traits'] = traits;
             }
 
 
@@ -339,6 +401,52 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.  The good must be in your ship\'s cargo. The good will be removed from your ship\'s cargo and added to the construction site\'s materials.
+         * @summary Supply Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {SupplyConstructionRequest} [supplyConstructionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supplyConstruction: async (systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'systemSymbol' is not null or undefined
+            assertParamExists('supplyConstruction', 'systemSymbol', systemSymbol)
+            // verify required parameter 'waypointSymbol' is not null or undefined
+            assertParamExists('supplyConstruction', 'waypointSymbol', waypointSymbol)
+            const localVarPath = `/systems/{systemSymbol}/waypoints/{waypointSymbol}/construction/supply`
+                .replace(`{${"systemSymbol"}}`, encodeURIComponent(String(systemSymbol)))
+                .replace(`{${"waypointSymbol"}}`, encodeURIComponent(String(waypointSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(supplyConstructionRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -350,7 +458,19 @@ export const SystemsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SystemsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  The response will return all systems that are have a Jump Gate in range of this Jump Gate. Those systems can be jumped to from this Jump Gate.
+         * Get construction details for a waypoint. Requires a waypoint with a property of `isUnderConstruction` to be true.
+         * @summary Get Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getConstruction(systemSymbol: string, waypointSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetConstruction200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getConstruction(systemSymbol, waypointSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  Waypoints connected to this jump gate can be 
          * @summary Get Jump Gate
          * @param {string} systemSymbol The system symbol
          * @param {string} waypointSymbol The waypoint symbol
@@ -402,11 +522,13 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          * @param {string} systemSymbol The system symbol
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
+         * @param {WaypointType} [type] Filter waypoints by type.
+         * @param {GetSystemWaypointsTraitsParameter} [traits] Filter waypoints by one or more traits.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSystemWaypoints200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSystemWaypoints(systemSymbol, page, limit, options);
+        async getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, type?: WaypointType, traits?: GetSystemWaypointsTraitsParameter, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSystemWaypoints200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSystemWaypoints(systemSymbol, page, limit, type, traits, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -433,6 +555,19 @@ export const SystemsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWaypoint(systemSymbol, waypointSymbol, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.  The good must be in your ship\'s cargo. The good will be removed from your ship\'s cargo and added to the construction site\'s materials.
+         * @summary Supply Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {SupplyConstructionRequest} [supplyConstructionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupplyConstruction200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supplyConstruction(systemSymbol, waypointSymbol, supplyConstructionRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -444,7 +579,18 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = SystemsApiFp(configuration)
     return {
         /**
-         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  The response will return all systems that are have a Jump Gate in range of this Jump Gate. Those systems can be jumped to from this Jump Gate.
+         * Get construction details for a waypoint. Requires a waypoint with a property of `isUnderConstruction` to be true.
+         * @summary Get Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getConstruction(systemSymbol: string, waypointSymbol: string, options?: any): AxiosPromise<GetConstruction200Response> {
+            return localVarFp.getConstruction(systemSymbol, waypointSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  Waypoints connected to this jump gate can be 
          * @summary Get Jump Gate
          * @param {string} systemSymbol The system symbol
          * @param {string} waypointSymbol The waypoint symbol
@@ -492,11 +638,13 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
          * @param {string} systemSymbol The system symbol
          * @param {number} [page] What entry offset to request
          * @param {number} [limit] How many entries to return per page
+         * @param {WaypointType} [type] Filter waypoints by type.
+         * @param {GetSystemWaypointsTraitsParameter} [traits] Filter waypoints by one or more traits.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, options?: any): AxiosPromise<GetSystemWaypoints200Response> {
-            return localVarFp.getSystemWaypoints(systemSymbol, page, limit, options).then((request) => request(axios, basePath));
+        getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, type?: WaypointType, traits?: GetSystemWaypointsTraitsParameter, options?: any): AxiosPromise<GetSystemWaypoints200Response> {
+            return localVarFp.getSystemWaypoints(systemSymbol, page, limit, type, traits, options).then((request) => request(axios, basePath));
         },
         /**
          * Return a paginated list of all systems.
@@ -520,6 +668,18 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         getWaypoint(systemSymbol: string, waypointSymbol: string, options?: any): AxiosPromise<GetWaypoint200Response> {
             return localVarFp.getWaypoint(systemSymbol, waypointSymbol, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.  The good must be in your ship\'s cargo. The good will be removed from your ship\'s cargo and added to the construction site\'s materials.
+         * @summary Supply Construction Site
+         * @param {string} systemSymbol The system symbol
+         * @param {string} waypointSymbol The waypoint symbol
+         * @param {SupplyConstructionRequest} [supplyConstructionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: any): AxiosPromise<SupplyConstruction200Response> {
+            return localVarFp.supplyConstruction(systemSymbol, waypointSymbol, supplyConstructionRequest, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -531,7 +691,20 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
  */
 export class SystemsApi extends BaseAPI {
     /**
-     * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  The response will return all systems that are have a Jump Gate in range of this Jump Gate. Those systems can be jumped to from this Jump Gate.
+     * Get construction details for a waypoint. Requires a waypoint with a property of `isUnderConstruction` to be true.
+     * @summary Get Construction Site
+     * @param {string} systemSymbol The system symbol
+     * @param {string} waypointSymbol The waypoint symbol
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApi
+     */
+    public getConstruction(systemSymbol: string, waypointSymbol: string, options?: AxiosRequestConfig) {
+        return SystemsApiFp(this.configuration).getConstruction(systemSymbol, waypointSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get jump gate details for a waypoint. Requires a waypoint of type `JUMP_GATE` to use.  Waypoints connected to this jump gate can be 
      * @summary Get Jump Gate
      * @param {string} systemSymbol The system symbol
      * @param {string} waypointSymbol The waypoint symbol
@@ -587,12 +760,14 @@ export class SystemsApi extends BaseAPI {
      * @param {string} systemSymbol The system symbol
      * @param {number} [page] What entry offset to request
      * @param {number} [limit] How many entries to return per page
+     * @param {WaypointType} [type] Filter waypoints by type.
+     * @param {GetSystemWaypointsTraitsParameter} [traits] Filter waypoints by one or more traits.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SystemsApi
      */
-    public getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, options?: AxiosRequestConfig) {
-        return SystemsApiFp(this.configuration).getSystemWaypoints(systemSymbol, page, limit, options).then((request) => request(this.axios, this.basePath));
+    public getSystemWaypoints(systemSymbol: string, page?: number, limit?: number, type?: WaypointType, traits?: GetSystemWaypointsTraitsParameter, options?: AxiosRequestConfig) {
+        return SystemsApiFp(this.configuration).getSystemWaypoints(systemSymbol, page, limit, type, traits, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -619,5 +794,19 @@ export class SystemsApi extends BaseAPI {
      */
     public getWaypoint(systemSymbol: string, waypointSymbol: string, options?: AxiosRequestConfig) {
         return SystemsApiFp(this.configuration).getWaypoint(systemSymbol, waypointSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.  The good must be in your ship\'s cargo. The good will be removed from your ship\'s cargo and added to the construction site\'s materials.
+     * @summary Supply Construction Site
+     * @param {string} systemSymbol The system symbol
+     * @param {string} waypointSymbol The waypoint symbol
+     * @param {SupplyConstructionRequest} [supplyConstructionRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SystemsApi
+     */
+    public supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: AxiosRequestConfig) {
+        return SystemsApiFp(this.configuration).supplyConstruction(systemSymbol, waypointSymbol, supplyConstructionRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }

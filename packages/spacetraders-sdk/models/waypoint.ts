@@ -21,6 +21,9 @@ import { Chart } from './chart';
 import { WaypointFaction } from './waypoint-faction';
 // May contain unused imports in some cases
 // @ts-ignore
+import { WaypointModifier } from './waypoint-modifier';
+// May contain unused imports in some cases
+// @ts-ignore
 import { WaypointOrbital } from './waypoint-orbital';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -90,11 +93,23 @@ export interface Waypoint {
      */
     'traits': Array<WaypointTrait>;
     /**
+     * The modifiers of the waypoint.
+     * @type {Array<WaypointModifier>}
+     * @memberof Waypoint
+     */
+    'modifiers'?: Array<WaypointModifier>;
+    /**
      * 
      * @type {Chart}
      * @memberof Waypoint
      */
     'chart'?: Chart;
+    /**
+     * True if the waypoint is under construction.
+     * @type {boolean}
+     * @memberof Waypoint
+     */
+    'isUnderConstruction': boolean;
 }
 
 

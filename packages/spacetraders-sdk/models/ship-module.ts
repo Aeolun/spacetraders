@@ -63,7 +63,10 @@ export interface ShipModule {
 
 export const ShipModuleSymbolEnum = {
     MineralProcessorI: 'MODULE_MINERAL_PROCESSOR_I',
+    GasProcessorI: 'MODULE_GAS_PROCESSOR_I',
     CargoHoldI: 'MODULE_CARGO_HOLD_I',
+    CargoHoldIi: 'MODULE_CARGO_HOLD_II',
+    CargoHoldIii: 'MODULE_CARGO_HOLD_III',
     CrewQuartersI: 'MODULE_CREW_QUARTERS_I',
     EnvoyQuartersI: 'MODULE_ENVOY_QUARTERS_I',
     PassengerCabinI: 'MODULE_PASSENGER_CABIN_I',

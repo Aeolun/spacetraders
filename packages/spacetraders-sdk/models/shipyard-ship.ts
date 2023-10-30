@@ -15,6 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { ActivityLevel } from './activity-level';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ShipEngine } from './ship-engine';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -34,6 +37,9 @@ import { ShipType } from './ship-type';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ShipyardShipCrew } from './shipyard-ship-crew';
+// May contain unused imports in some cases
+// @ts-ignore
+import { SupplyLevel } from './supply-level';
 
 /**
  * 
@@ -59,6 +65,18 @@ export interface ShipyardShip {
      * @memberof ShipyardShip
      */
     'description': string;
+    /**
+     * 
+     * @type {SupplyLevel}
+     * @memberof ShipyardShip
+     */
+    'supply': SupplyLevel;
+    /**
+     * 
+     * @type {ActivityLevel}
+     * @memberof ShipyardShip
+     */
+    'activity'?: ActivityLevel;
     /**
      * 
      * @type {number}
