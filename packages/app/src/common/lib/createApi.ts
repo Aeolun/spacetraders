@@ -1,14 +1,8 @@
 import {FleetApi, SystemsApi, DefaultApi, AgentsApi, ContractsApi, FactionsApi, Configuration} from "spacetraders-sdk";
 import globalAxios from 'axios';
-import retryAfter from 'axios-retry-after'
+import axiosRetry from 'axios-retry'
 
-globalAxios.interceptors.response.use(null, retryAfter(globalAxios, {
-    wait (error) {
-        return new Promise(
-          resolve => setTimeout(resolve, Math.random() * 1000 * 2)
-        )
-    }
-}))
+axiosRetry(globalAxios, { retries: 3 });
 
 export interface APIInstance {
     systems: SystemsApi,

@@ -2,7 +2,7 @@ import {prisma} from "@common/prisma";
 import axios from "axios";
 import {backgroundQueue} from "@auto/lib/queue";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
-import createApi from "@auto/lib/createApi";
+import createApi from "@common/lib/createApi";
 import throttledQueue from "throttled-queue";
 import {WaypointTrait} from "spacetraders-sdk";
 import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";

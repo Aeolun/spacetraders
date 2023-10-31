@@ -41,6 +41,9 @@ export class Wayfinding {
     async findRoute(fromSystem: string, toSystem: string, fuel: { max: number, current: number }) {
         await this.init
 
+        if (!this.dijkstra) {
+            throw new Error("No dijkstra")
+        }
         return this.dijkstra.calculateShortestPathAsLinkedListResult(fromSystem, toSystem, {
             supplies: {
                 fuel: fuel.current
@@ -54,6 +57,9 @@ export class Wayfinding {
     async findJumpRoute(fromSystem: string, toSystem: string, fuel: { max: number, current: number }) {
         await this.init
 
+        if (!this.jumpDijkstra) {
+            throw new Error("No jump dijkstra")
+        }
         return this.jumpDijkstra.calculateShortestPathAsLinkedListResult(fromSystem, toSystem, {
             supplies: {
                 fuel: fuel.current
@@ -80,7 +86,7 @@ export class Wayfinding {
             })
         } else if(this.connectedSystems[fromSystem].find(connection => connection.system === toSystem)) {
             // if already connected, add methods
-            this.connectedSystems[fromSystem].find(connection => connection.system === toSystem).methods.push(...methods)
+            this.connectedSystems[fromSystem].find(connection => connection.system === toSystem)?.methods.push(...methods)
         }
     }
 
@@ -266,7 +272,9 @@ export class Wayfinding {
 
     private systemToWayfindingSystem(system: WayfindDbSystem) {
         const jumpTargets: string[] = []
-        system.waypoints.find(wp => wp.type === 'JUMP_GATE').jumpConnectedTo.forEach(jt => {
+
+        const jumpGate = system.waypoints.find(wp => wp.type === 'JUMP_GATE')
+        jumpGate?.jumpConnectedTo.forEach(jt => {
             jumpTargets.push(jt.symbol)
         })
         return {

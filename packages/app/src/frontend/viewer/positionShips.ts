@@ -95,10 +95,6 @@ export function positionShip(ship: ShipData) {
     const x = serverX + xOffset
     const y = serverY + yOffset
 
-    console.log('newpos', {
-        x, y
-    })
-
     return {
         position: {
             x,

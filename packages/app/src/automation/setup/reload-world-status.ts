@@ -2,6 +2,7 @@ import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {seedFactions, seedSystems} from "@auto/seed/seedGameData";
 import {prisma, Server} from "@common/prisma";
 import {generateName} from "@auto/lib/generate-name";
+import {AxiosError} from "axios";
 
 export const reloadWorldStatus = async (server: Server) => {
     try {
@@ -34,6 +35,10 @@ export const reloadWorldStatus = async (server: Server) => {
 
         console.log("Generated readable names for all systems")
     } catch (error) {
-        console.error(error.response?.data ? error.response.data : error)
+        if (error instanceof AxiosError) {
+            console.error(error.response?.data ? error.response.data : error)
+        } else {
+            console.error(error)
+        }
     }
 }

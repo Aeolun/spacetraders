@@ -1,5 +1,5 @@
 import {updateShips} from "@auto/ship/updateShips";
-import createApi from "@auto/lib/createApi";
+import createApi from "@common/lib/createApi";
 import jwtDecode from "jwt-decode";
 import {processAgent} from "@common/lib/data-update/store-agent";
 

@@ -1,21 +1,21 @@
-import {TaskType} from "@auto/task/abstract-task";
+import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {Orchestrator} from "@auto/strategy/orchestrator";
 import {prisma} from "@common/prisma";
-import {ExploreTask} from "@auto/task/explore-task";
+import {ExploreObjective} from "@auto/strategy/objective/explore-objective";
 
 export class TaskPopulator {
-  private allowedTasks: TaskType[] = [];
+  private allowedTasks: ObjectiveType[] = [];
 
   constructor(private orchestrator: Orchestrator) {}
 
-  public addPossibleTask(taskType: TaskType) {
+  public addPossibleTask(taskType: ObjectiveType) {
     this.allowedTasks.push(taskType);
   }
 
   public async populateTasks() {
     // read through current universe state and updates available tasks
 
-    if (this.allowedTasks.includes(TaskType.EXPLORE)) {
+    if (this.allowedTasks.includes(ObjectiveType.EXPLORE)) {
       // find unexplored systems
       // create explore tasks for them
       const systemsWithUnchartedWaypointsOrMarketplace = await prisma.system.findMany({
@@ -51,7 +51,7 @@ export class TaskPopulator {
       });
       if (systemsWithUnchartedWaypointsOrMarketplace.length > 0) {
         for (const system of systemsWithUnchartedWaypointsOrMarketplace) {
-          this.orchestrator.addTask(new ExploreTask(system));
+          this.orchestrator.addTask(new ExploreObjective(system));
         }
       }
     }

@@ -80,6 +80,6 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
       update: updateValues
     })
   } catch (error) {
-    console.error("Issue updating waypoint", error.toString())
+    console.error("Issue updating waypoint", error?.toString())
   }
 }

@@ -1,8 +1,10 @@
 import axios from "axios";
-import {prisma} from "@common/prisma";
+import {prisma, Prisma} from "@common/prisma";
+import {Faction, GetFactions200Response, System} from "spacetraders-sdk";
+
 
 export const seedSystems = async (agentToken: string) => {
-    const data = await axios.get(process.env.API_ENDPOINT+'/systems.json', {
+    const data = await axios.get<System[]>(process.env.API_ENDPOINT+'/systems.json', {
         headers: {
             Authorization: 'Bearer '+ agentToken
         }
@@ -13,7 +15,7 @@ export const seedSystems = async (agentToken: string) => {
             symbol: true
         }
     })
-    const existingSectorIds = {}
+    const existingSectorIds: Record<string, boolean> = {}
     sectors.forEach(s => existingSectorIds[s.symbol] = true)
 
     const systems = await prisma.system.findMany({
@@ -21,7 +23,7 @@ export const seedSystems = async (agentToken: string) => {
             symbol: true
         }
     })
-    const existingSystems = {}
+    const existingSystems: Record<string, boolean> = {}
     systems.forEach(s => existingSystems[s.symbol] = true)
 
     const waypoints = await prisma.waypoint.findMany({
@@ -29,11 +31,11 @@ export const seedSystems = async (agentToken: string) => {
             symbol: true
         }
     });
-    const existingWaypoints = {}
+    const existingWaypoints: Record<string, boolean> = {}
     waypoints.forEach(s => existingWaypoints[s.symbol] = true)
 
-    const createableSystems = []
-    const creatableWaypoints = {}
+    const createableSystems: Prisma.SystemCreateManyInput[] = []
+    const creatableWaypoints: Prisma.WaypointCreateManyInput[] = []
     for(const system of data.data) {
         if (!existingSectorIds[system.sectorSymbol]) {
             await prisma.sector.create({
@@ -53,13 +55,13 @@ export const seedSystems = async (agentToken: string) => {
                 hasStation = true
             }
             if (!existingWaypoints[waypoint.symbol]) {
-                creatableWaypoints[waypoint.symbol] = {
+                creatableWaypoints.push({
                     symbol: waypoint.symbol,
                     type: waypoint.type,
                     systemSymbol: system.symbol,
                     x: waypoint.x,
                     y: waypoint.y,
-                }
+                })
             }
         })
 
@@ -97,15 +99,15 @@ export const seedSystems = async (agentToken: string) => {
     }
 }
 
-export const seedFactions = async (agentToken) => {
-    const factionData = await axios.get(process.env.API_ENDPOINT+'/factions?page=1&limit=20', {
+export const seedFactions = async (agentToken: string) => {
+    const factionData = await axios.get<GetFactions200Response>(process.env.API_ENDPOINT+'/factions?page=1&limit=20', {
         headers: {
             Authorization: 'Bearer '+agentToken
         }
     })
 
     const factions = await prisma.faction.findMany({})
-    const existingFactions = {}
+    const existingFactions: Record<string, boolean> = {}
     factions.forEach(f => existingFactions[f.symbol] = true)
 
     for(const faction of factionData.data.data) {

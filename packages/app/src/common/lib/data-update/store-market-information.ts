@@ -1,45 +1,25 @@
 import {GetMarket200Response, TradeSymbol} from "spacetraders-sdk";
-import {prisma} from "@common/prisma";
+import {prisma, Prisma} from "@common/prisma";
 
 export async function storeMarketInformation(data: GetMarket200Response) {
-  const importGoods = data.data.imports.map(i => i.symbol)
-  const exportGoods = data.data.exports.map(i => i.symbol)
-  const exhangeGoods = data.data.exchange.map(i => i.symbol)
-
   let hasFuel = false
 
-  const marketData = []
-  if (!data.data.tradeGoods) {
-    [importGoods, exportGoods, exhangeGoods].forEach(goods => {
-      goods.forEach(good => {
-        marketData.push({
-          tradeGoodSymbol: good,
-          kind: importGoods.includes(good as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
-          waypointSymbol: data.data.symbol,
-          sellPrice: null,
-          purchasePrice: null,
-          tradeVolume: null,
-          supply: null
-        })
-      })
-    })
-  } else {
-    data.data.tradeGoods?.map(good => {
-      if (good.symbol === 'FUEL') {
-        hasFuel = true
-      }
+  const marketData: Prisma.MarketPriceUncheckedCreateInput[] = []
+  data.data.tradeGoods?.forEach(good => {
+    if (good.symbol === 'FUEL') {
+      hasFuel = true
+    }
 
-      marketData.push({
-        tradeGoodSymbol: good.symbol,
-        kind: importGoods.includes(good.symbol as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good.symbol as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
-        waypointSymbol: data.data.symbol,
-        sellPrice: good.sellPrice,
-        purchasePrice: good.purchasePrice,
-        tradeVolume: good.tradeVolume,
-        supply: good.supply
-      })
+    marketData.push({
+      tradeGoodSymbol: good.symbol,
+      kind: good.type,
+      waypointSymbol: data.data.symbol,
+      sellPrice: good.sellPrice,
+      purchasePrice: good.purchasePrice,
+      tradeVolume: good.tradeVolume,
+      supply: good.supply
     })
-  }
+  })
 
   if (hasFuel) {
     const waypoint = await prisma.waypoint.findFirstOrThrow({

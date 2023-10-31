@@ -1,52 +1,58 @@
-import {TaskType} from "@auto/task/abstract-task";
+import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {Ship} from "@auto/ship/ship";
 import {executeExploreTask} from "@auto/ship/behaviors/execute-explore-task";
-import {Task} from "@auto/task/task";
+import {Objective} from "@auto/strategy/objective/objective";
+import {Task} from "@auto/ship/task/task";
 
 export class Orchestrator {
-  private tasks: Task[] = [];
+  private tasks: Objective[] = [];
   private ships: Ship[] = [];
 
   constructor() {
 
   }
 
-  addTask(task: Task) {
+  addTask(task: Objective) {
     this.tasks.push(task);
   }
 
-  async getNextTask(ship: Ship) {
+  async getNextObjective(ship: Ship) {
     return this.tasks.pop();
   }
 
   async addShip(ship: Ship) {
     this.ships.push(ship);
     while(true) {
-      let nextTask: Task
+      let nextTask: Task | undefined
       if (ship.taskQueue.length > 0) {
         ship.log("Taking up next task in my queue")
         nextTask = ship.taskQueue.shift()
+        if (nextTask) {
+          await nextTask.execute(ship)
+        }
       } else {
-        ship.log("Looking for next task")
-        nextTask = await this.getNextTask(ship)
-      }
+        let nextObjective: Objective | undefined
 
-      if (!nextTask) {
-        await ship.waitFor(20000, "No task available for ship");
-      } else {
-        try {
-          ship.setOverallGoal(nextTask.objective)
-          if (nextTask.type === TaskType.EXPLORE) {
-            await executeExploreTask(ship, nextTask);
-          } else if (nextTask.type === TaskType.TRADE) {
-            await ship.waitFor(20000, "Trade task not implemented yet");
-          } else if (nextTask.type === TaskType.UPDATE_MARKET) {
-            await ship.waitFor(20000, "Update market task not implemented yet");
+        ship.log("Looking for next objective")
+        nextObjective = await this.getNextObjective(ship)
+
+        if (!nextObjective) {
+          await ship.waitFor(20000, "No task available for ship");
+        } else {
+          try {
+            ship.setOverallGoal(nextObjective.objective)
+            if (nextObjective.type === ObjectiveType.EXPLORE) {
+              await nextObjective.constructTasks(ship);
+            } else if (nextObjective.type === ObjectiveType.TRADE) {
+              await ship.waitFor(20000, "Trade objective not implemented yet");
+            } else if (nextObjective.type === ObjectiveType.UPDATE_MARKET) {
+              await ship.waitFor(20000, "Update market objective not implemented yet");
+            }
+            ship.log(`Tasks for execution of ${nextObjective.objective} added to ship queue`)
+          } catch (e) {
+            console.error(e);
+            await ship.waitFor(10000, `Error while adding tasks for objective ${nextObjective.type}`);
           }
-          ship.log(`Task ${nextTask.objective} complete`)
-        } catch (e) {
-          console.error(e);
-          await ship.waitFor(10000, `Error while executing task ${nextTask.type}`);
         }
       }
     }

@@ -501,9 +501,9 @@ model ShipEngine {
 }
 
 model ShipModule {
-  symbol      String @id
-  name        String
-  description String @db.Text
+  symbol      String  @id
+  name        String?
+  description String? @db.Text
 
   effectName String?
   value      Int?
@@ -516,9 +516,9 @@ model ShipModule {
 }
 
 model ShipMount {
-  symbol      String @id
-  name        String
-  description String @db.Text
+  symbol      String  @id
+  name        String?
+  description String? @db.Text
 
   effectName String?
   value      Int?

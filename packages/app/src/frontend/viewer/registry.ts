@@ -18,7 +18,7 @@ export interface Registry {
     hoveredSystem?: System;
     hoveredWaypoint?: Waypoint;
     currentSystem?: string;
-    displayedMarket: string
+    displayedMarket: string | undefined;
 
     // source data for objects
     systemData: Record<string, System>
@@ -56,7 +56,7 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>
 
 export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}}
 
-export type ShipData = RouterOutputs['instructRefuel']
+export type ShipData = RouterOutputs['shipData']
 
 export interface ShipModule {
     effectName: string
@@ -69,7 +69,78 @@ export interface ShipMount {
 
 export type System = RouterOutputs['getSystems'][number]
 
+export const getSelectedEntity = () => {
+    if (Registry.selected) {
+        if (Registry.selected.type === 'waypoint') {
+            return Registry.waypoints[Registry.selected.symbol]
+        } else if (Registry.selected.type === 'ship') {
+            return Registry.universeShips[Registry.selected.symbol]
+        } else if (Registry.selected.type === 'star') {
+            return Registry.systems[Registry.selected.symbol]
+        }
+    }
+    return undefined;
+}
 
+export const getSelectedEntityData = () => {
+    if (Registry.selected) {
+        if (Registry.selected.type === 'waypoint') {
+            return Registry.waypointData[Registry.selected.symbol]
+        } else if (Registry.selected.type === 'ship') {
+            return Registry.shipData[Registry.selected.symbol]
+        } else if (Registry.selected.type === 'star') {
+            return Registry.systemData[Registry.selected.symbol]
+        }
+    }
+    return undefined;
+}
+
+export type GetEntityDataResult = {
+    kind: 'ship',
+    data: ShipData
+} | {
+    kind: 'waypoint',
+    data: WaypointData
+} | {
+    kind: 'star',
+    data: System
+}
+
+export const getEntityData = (symbol: string) : GetEntityDataResult => {
+    if (Registry.shipData[symbol]) {
+        return {
+            kind: 'ship',
+            data: Registry.shipData[symbol]
+        }
+    } else if (Registry.waypointData[symbol]) {
+        return {
+            kind: 'waypoint',
+            data: Registry.waypointData[symbol]
+        }
+    } else if (Registry.systemData[symbol]) {
+        return {
+            kind: 'star',
+            data: Registry.systemData[symbol]
+        }
+    }
+    throw new Error(`entity ${symbol} does not exist`)
+}
+
+export const getEntityPosition = (symbol: string) => {
+    const entity = getEntityData(symbol)
+    if (entity?.kind === 'ship') {
+        return {
+            x: entity.data.currentWaypoint.x,
+            y: entity.data.currentWaypoint.y
+        }
+    } else {
+        return {
+            x: entity.data.x,
+            y: entity.data.y,
+        }
+    }
+    throw new Error(`entity ${symbol} does not exist`)
+}
 
 export const Registry: Registry = {
     agent: {
@@ -93,14 +164,8 @@ export const Registry: Registry = {
 
     deselect: () => {
         if (Registry.selected) {
-            if (Registry.selected.type === 'waypoint') {
-                Registry.waypoints[Registry.selected.symbol].deselect()
-            } else if (Registry.selected.type === 'ship') {
-                Registry.universeShips[Registry.selected.symbol].deselect()
-            } else if (Registry.selected.type === 'star') {
-                Registry.systems[Registry.selected.symbol].deselect()
-            }
+            getSelectedEntity()?.deselect()
             Registry.selected = undefined
         }
-    }
+    },
 }

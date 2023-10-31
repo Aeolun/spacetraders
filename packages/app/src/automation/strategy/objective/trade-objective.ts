@@ -1,14 +1,14 @@
-import {AbstractTask, TaskType} from "@auto/task/abstract-task";
-import { Waypoint } from '@auto/prisma'
+import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstract-objective";
+import { Waypoint } from '@common/prisma'
 import {TradeSymbol} from "spacetraders-sdk";
 
-export class TradeTask extends AbstractTask {
+export class TradeObjective extends AbstractObjective {
   public fromWaypoint: Waypoint
   public toWaypoint: Waypoint
   public tradeSymbol: TradeSymbol
   public amount: number
 
-  type: TaskType.TRADE = TaskType.TRADE;
+  type: ObjectiveType.TRADE = ObjectiveType.TRADE;
 
   constructor(fromWaypoint: Waypoint, toWaypoint: Waypoint, tradeSymbol: TradeSymbol, amount: number) {
     super(`Trade ${amount} ${tradeSymbol} from ${fromWaypoint.symbol} to ${toWaypoint.symbol}`);

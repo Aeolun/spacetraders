@@ -1,6 +1,6 @@
 import { Server } from "@prisma/client";
 import { getBackgroundAgentToken } from "./background-agent-token";
-import createApi from "@auto/lib/createApi";
+import createApi from "@common/lib/createApi";
 import { updateShips } from "@auto/ship/updateShips";
 
 export async function retrieveInitialUserInfo(server: Server) {

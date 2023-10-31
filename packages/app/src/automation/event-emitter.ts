@@ -1,3 +1,7 @@
-import {EventEmitter} from "events";
+import {redisClient} from "@common/redis";
 
-export const ee = new EventEmitter()
+export const ee = {
+  emit: (type: string, data: any) => {
+    redisClient.publish(type, JSON.stringify(data));
+  }
+}

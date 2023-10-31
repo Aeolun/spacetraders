@@ -1,6 +1,6 @@
 import {prisma} from "@common/prisma";
 import {Ship} from "@auto/ship/ship";
-import {APIInstance} from "@auto/lib/createApi";
+import {APIInstance} from "@common/lib/createApi";
 import {Orchestrator} from "@auto/strategy/orchestrator";
 
 export const startShipBehavior = async (orchestrator: Orchestrator, api: APIInstance) => {

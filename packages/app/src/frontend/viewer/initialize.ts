@@ -7,6 +7,7 @@ import {Registry} from "@front/viewer/registry";
 import {loadSystem, unloadSystem} from "@front/viewer/loadSystem";
 import {mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
+import { trpc } from "@front/trpc";
 
 export const handleMapMove = () => {
   const zoom = universeView.worldScreenWidth / universeView.screenWidth
@@ -33,6 +34,7 @@ export async function initialize(app: Application) {
   await createUIElements(app)
   await loadPlayerData()
   const loadedUniverse = await loadUniverse()
+  startListeningToEvents();
 
   const txt = new Text({ text: "hello", style: {
       fill: 0xffffff
@@ -84,4 +86,15 @@ export async function initialize(app: Application) {
     handleMapMove()
   })
   handleMapMove()
+}
+
+function startListeningToEvents() {
+  trpc.event.subscribe(undefined, {
+    onData: (data) => {
+      console.log('event', data);
+      // if (data.type == 'NAVIGATE') {
+      //   GameState.shipData[data.data.symbol] = data.data
+      // }
+    }
+  })
 }

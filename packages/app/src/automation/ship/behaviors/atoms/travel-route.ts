@@ -23,7 +23,7 @@ export const travelRoute = async (ship: Ship, route: Route, options?: {
         await ship.navigate(systemJumpgateWaypoint.symbol)
       }
 
-      await ship.jump(nextSystem.toSystemSymbol)
+      await ship.jump(nextSystem.toWaypointSymbol)
       await options?.executeEveryStop?.()
     } else {
       const availableWaypoints = await prisma.waypoint.findMany({

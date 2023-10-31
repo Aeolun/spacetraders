@@ -10,12 +10,16 @@ export async function processShipyard(data: Shipyard) {
   if (data.ships) {
     return Promise.all(data.ships.map(async ship => {
       await prisma.$transaction(async () => {
+        const configurationSymbol = ship.type
+        if (!configurationSymbol) {
+          throw new Error("No ship type")
+        }
         await prisma.shipConfiguration.upsert({
           where: {
-            symbol: ship.type,
+            symbol: configurationSymbol,
           },
           create: {
-            symbol: ship.type,
+            symbol: configurationSymbol,
 
             name: ship.name,
             description: ship.description,
@@ -50,20 +54,20 @@ export async function processShipyard(data: Shipyard) {
         await prisma.shipConfigurationModule.createMany({
           data: ship.modules.map(module => {
             return {
-              shipConfigurationSymbol: ship.type,
+              shipConfigurationSymbol: configurationSymbol,
               moduleSymbol: module.symbol
             }
           })
         })
         await prisma.shipConfigurationMount.deleteMany({
           where: {
-            shipConfigurationSymbol: ship.type
+            shipConfigurationSymbol: configurationSymbol
           }
         })
         await prisma.shipConfigurationMount.createMany({
           data: ship.mounts.map(module => {
             return {
-              shipConfigurationSymbol: ship.type,
+              shipConfigurationSymbol: configurationSymbol,
               mountSymbol: module.symbol
             }
           })
@@ -71,12 +75,12 @@ export async function processShipyard(data: Shipyard) {
         await prisma.shipyardModel.upsert({
           where: {
             shipConfigurationSymbol_waypointSymbol: {
-              shipConfigurationSymbol: ship.type,
+              shipConfigurationSymbol: configurationSymbol,
               waypointSymbol: data.symbol,
             }
           },
           create: {
-            shipConfigurationSymbol: ship.type,
+            shipConfigurationSymbol: configurationSymbol,
             waypointSymbol: data.symbol,
             price: ship.purchasePrice
           },
@@ -88,19 +92,21 @@ export async function processShipyard(data: Shipyard) {
     }))
   } else if (data.shipTypes) {
     return Promise.all(data.shipTypes.map(async ship => {
-      await prisma.shipyardModel.upsert({
-        where: {
-          shipConfigurationSymbol_waypointSymbol: {
+      if (ship.type) {
+        await prisma.shipyardModel.upsert({
+          where: {
+            shipConfigurationSymbol_waypointSymbol: {
+              shipConfigurationSymbol: ship.type,
+              waypointSymbol: data.symbol,
+            }
+          },
+          create: {
             shipConfigurationSymbol: ship.type,
             waypointSymbol: data.symbol,
-          }
-        },
-        create: {
-          shipConfigurationSymbol: ship.type,
-          waypointSymbol: data.symbol,
-        },
-        update: {}
-      })
+          },
+          update: {}
+        })
+      }
     }))
   } else {
     return Promise.resolve([])

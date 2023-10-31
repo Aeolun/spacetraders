@@ -1,6 +1,6 @@
 import {foregroundQueue, Queue} from "@auto/lib/queue";
 import { logShipAction } from "@auto/lib/log";
-import api, { APIInstance } from "@auto/lib/createApi";
+import api, { APIInstance } from "@common/lib/createApi";
 import fs from "fs";
 import {
   ExtractResources201Response,
@@ -31,7 +31,10 @@ import {processFuel} from "@common/lib/data-update/store-ship-fuel";
 import {processAgent} from "@common/lib/data-update/store-agent";
 import {processCooldown} from "@common/lib/data-update/store-cooldown";
 import {processCargo} from "@common/lib/data-update/store-ship-cargo";
-import {Task} from "@auto/task/task";
+import {Objective} from "@auto/strategy/objective/objective";
+import {isAxiosApiErrorResponse} from "@common/lib/is-api-error";
+import {AxiosError} from "axios";
+import {Task} from "@auto/ship/task/task";
 
 type CooldownKind = "reactor";
 
@@ -46,9 +49,9 @@ export class Ship {
   private queue: Queue;
   public taskQueue: Task[] = [];
 
-  public currentSystemSymbol: string;
+  public _currentSystemSymbol?: string;
   private _currentSystemObject?: System;
-  public currentWaypointSymbol: string;
+  public _currentWaypointSymbol?: string;
   private _currentWaypointObject?: Waypoint;
 
   public hasWarpDrive = false;
@@ -65,9 +68,23 @@ export class Ship {
     this.queue = foregroundQueue;
   }
 
+  get currentSystemSymbol(): string {
+    if (!this._currentSystemSymbol) {
+      throw new Error("No current system symbol");
+    }
+    return this._currentSystemSymbol;
+  }
+
+  get currentWaypointSymbol(): string {
+    if (!this._currentWaypointSymbol) {
+      throw new Error("No current waypoint symbol");
+    }
+    return this._currentWaypointSymbol;
+  }
+
   public setCurrentLocation(system: string, waypoint: string) {
-    this.currentSystemSymbol = system;
-    this.currentWaypointSymbol = waypoint;
+    this._currentSystemSymbol = system;
+    this._currentWaypointSymbol = waypoint;
   }
 
   public async updateShipStatus() {
@@ -76,8 +93,8 @@ export class Ship {
     );
     await processShip(shipInfo.data.data);
 
-    this.currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol;
-    this.currentSystemSymbol = shipInfo.data.data.nav.systemSymbol;
+    this._currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol;
+    this._currentSystemSymbol = shipInfo.data.data.nav.systemSymbol;
     await this.updateLocationObjects()
 
     this.navigationUntil =
@@ -100,6 +117,9 @@ export class Ship {
   }
 
   get currentSystem(): System {
+    if (!this._currentSystemObject) {
+      throw new Error("No current system object");
+    }
     return this._currentSystemObject;
   }
 
@@ -167,7 +187,7 @@ export class Ship {
 
     if (res.status === 204) {
       return true;
-    } else {
+    } else if(res.data.data.expiration) {
       const expire = new Date(res.data.data.expiration);
       const timeRemaining = expire.getTime() - Date.now() + 200;
       this.setCooldown("reactor", timeRemaining);
@@ -223,16 +243,16 @@ export class Ship {
       });
       const nowAfterNav = Date.now();
 
-      this.currentSystemSymbol =
+      this._currentSystemSymbol =
         res.data.data.nav.route.destination.systemSymbol;
-      this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
+      this._currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
       await this.updateLocationObjects();
 
       this.fuel = res.data.data.fuel.current;
       this.maxFuel = res.data.data.fuel.capacity;
 
       this.log(
-        `Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
+        `Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
       );
 
       try {
@@ -245,7 +265,7 @@ export class Ship {
             toWaypoint: res.data.data.nav.route.destination.symbol,
             method: "navigate",
             engineSpeed: this.engineSpeed,
-            fuelConsumed: res.data.data.fuel.consumed.amount,
+            fuelConsumed: res.data.data.fuel.consumed?.amount ?? 0,
             flightMode: res.data.data.nav.flightMode,
             distance: Math.round(
               getDistance(
@@ -277,19 +297,22 @@ export class Ship {
         return navResult;
       }
     } catch (error) {
-      if (error.response?.data?.error?.code === 4203) {
-        await this.navigateMode("DRIFT");
-        await this.warp(waypoint, waitForTimeout);
-      } else if (error.response?.data?.error?.code === 4204) {
-        this.log(`Already at ${waypoint}`);
-        return;
-      } else {
+      if (isAxiosApiErrorResponse(error)) {
+        if (error.response?.data?.error?.code === 4203) {
+          await this.navigateMode("DRIFT");
+          await this.warp(waypoint, waitForTimeout);
+        } else if (error.response?.data?.error?.code === 4204) {
+          this.log(`Already at ${waypoint}`);
+          return;
+        }
+      } else if (error instanceof AxiosError) {
         console.error(
           `issue in navigate for ${this.symbol}`,
-          error.response.data
+          error.response?.data
         );
         throw error;
       }
+      throw error;
     }
   }
 
@@ -314,16 +337,16 @@ export class Ship {
       });
       const nowAfterNav = Date.now();
 
-      this.currentSystemSymbol =
+      this._currentSystemSymbol =
         res.data.data.nav.route.destination.systemSymbol;
-      this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
+      this._currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
       await this.updateLocationObjects();
 
       this.fuel = res.data.data.fuel.current;
       this.maxFuel = res.data.data.fuel.capacity;
 
       this.log(
-        `Navigating from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed.amount} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
+        `Navigating from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
       );
 
       await processFuel(this.symbol, res.data.data.fuel);
@@ -335,12 +358,12 @@ export class Ship {
       });
 
       try {
-        const departureSystem = await prisma.system.findFirst({
+        const departureSystem = await prisma.system.findFirstOrThrow({
           where: {
             symbol: res.data.data.nav.route.departure.systemSymbol,
           },
         });
-        const destinationSystem = await prisma.system.findFirst({
+        const destinationSystem = await prisma.system.findFirstOrThrow({
           where: {
             symbol: res.data.data.nav.route.destination.systemSymbol,
           },
@@ -355,7 +378,7 @@ export class Ship {
             toWaypoint: res.data.data.nav.route.destination.symbol,
             method: "warp",
             engineSpeed: this.engineSpeed,
-            fuelConsumed: res.data.data.fuel.consumed.amount,
+            fuelConsumed: res.data.data.fuel.consumed?.amount ?? 0,
             flightMode: res.data.data.nav.flightMode,
             distance: Math.round(
               getDistance(departureSystem, destinationSystem)
@@ -382,20 +405,23 @@ export class Ship {
         return navResult;
       }
     } catch (error) {
-      if (error.response?.data?.error?.code === 4203) {
-        await this.navigateMode("DRIFT");
-        await this.warp(waypoint, waitForTimeout);
-      } else if (error.response?.data?.error?.code === 4204) {
-        this.log(`Already at ${waypoint}`);
-        return;
-      } else {
-        console.error(`issue in warp for ${this.symbol}`, error.response.data);
-        throw error;
+      if (isAxiosApiErrorResponse(error)) {
+        if (error.response?.data?.error?.code === 4203) {
+          await this.navigateMode("DRIFT");
+          await this.warp(waypoint, waitForTimeout);
+        } else if (error.response?.data?.error?.code === 4204) {
+          this.log(`Already at ${waypoint}`);
+          return;
+        } else {
+          console.error(`issue in warp for ${this.symbol}`, error.response?.data);
+          throw error;
+        }
       }
+      throw error;
     }
   }
 
-  async jump(system: string, waitForTimeout = true) {
+  async jump(waypointSymbol: string, waitForTimeout = true) {
     try {
       if (this.navigationUntil) {
         this.log("Ship still navigating, waiting until completion");
@@ -408,30 +434,25 @@ export class Ship {
         await this.orbit();
       }
 
-      const res = await this.queue(() => {
-        this.log(`Jumping ship from ${this.currentSystemSymbol} to ${system}`);
-        return this.api.fleet.jumpShip(this.symbol, {
-          systemSymbol: system,
+      const res = await this.queue(async () => {
+        const res = await this.api.fleet.jumpShip(this.symbol, {
+          waypointSymbol: waypointSymbol,
         });
+        `Jumping from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`
+        return res
       });
       const nowAfterNav = Date.now();
 
-      this.currentSystemSymbol =
+      this._currentSystemSymbol =
         res.data.data.nav.route.destination.systemSymbol;
-      this.currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
+      this._currentWaypointSymbol = res.data.data.nav.route.destination.symbol;
       await this.updateLocationObjects();
-
-      this.log(
-        `Jumping from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`
-      );
 
       const navResult = await processNav(this.symbol, res.data.data.nav);
 
       await processCooldown(this.symbol, res.data.data.cooldown);
 
-      const expiry = new Date(res.data.data.cooldown.expiration);
-      const waitTime = expiry.getTime() - Date.now() + 200;
-      this.setCooldown("reactor", waitTime);
+      let expiry: Date | undefined = this.handleExpiration(res.data.data.cooldown.expiration);
 
       ee.emit("event", {
         type: "NAVIGATE",
@@ -439,12 +460,12 @@ export class Ship {
       });
 
       try {
-        const departureSystem = await prisma.system.findFirst({
+        const departureSystem = await prisma.system.findFirstOrThrow({
           where: {
             symbol: res.data.data.nav.route.departure.systemSymbol,
           },
         });
-        const destinationSystem = await prisma.system.findFirst({
+        const destinationSystem = await prisma.system.findFirstOrThrow({
           where: {
             symbol: res.data.data.nav.route.destination.systemSymbol,
           },
@@ -464,7 +485,7 @@ export class Ship {
             distance: Math.round(
               getDistance(departureSystem, destinationSystem)
             ),
-            cooldown: expiry.getTime() - Date.now(),
+            cooldown: expiry ? expiry.getTime() - Date.now() : 0,
             flightDuration:
               new Date(res.data.data.nav.route.arrival).getTime() - nowAfterNav,
           },
@@ -486,18 +507,20 @@ export class Ship {
         return navResult;
       }
     } catch (error) {
-      if (error.response?.data?.error?.code === 4204) {
-        this.log(`Already at ${system}`);
+      if (isAxiosApiErrorResponse(error) && error.response?.data?.error?.code === 4204) {
+        this.log(`Already at ${waypointSymbol}`);
         return;
+      } else if (error instanceof AxiosError) {
+        console.error(`issue in jump for ${this.symbol}`, error.response?.data);
+        throw error;
       } else {
-        console.error(`issue in jump for ${this.symbol}`, error.response.data);
         throw error;
       }
     }
   }
 
   async extract(survey?: Survey) {
-    try {
+    return this.catchAxiosCodes('extract', async () => {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
@@ -515,9 +538,7 @@ export class Ship {
       await processCooldown(this.symbol, res.data.data.cooldown);
       const newShipInfo = await processCargo(this.symbol, res.data.data.cargo);
 
-      const expiry = new Date(res.data.data.cooldown.expiration);
-      const waitTime = expiry.getTime() - Date.now() + 200;
-      this.setCooldown("reactor", waitTime);
+      let expiry: Date | undefined = this.handleExpiration(res.data.data.cooldown.expiration);
 
       ee.emit("event", {
         type: "NAVIGATE",
@@ -528,8 +549,8 @@ export class Ship {
         ship: newShipInfo,
         extract: res.data,
       };
-    } catch (error) {
-      if (error.response.data.error.code === 4228) {
+    }, {
+      4228: async () => {
         this.log(`Cargo at max capacity`);
 
         const response: ExtractResources201Response = {
@@ -558,17 +579,12 @@ export class Ship {
           ship: null,
           extract: response,
         });
-      } else {
-        console.log(
-          `error during extract for ${this.symbol}`,
-          error.response?.data ? error.response.data : error
-        );
       }
-    }
+    })
   }
 
   async refuel() {
-    try {
+    return this.catchAxiosCodes('refuel', async () => {
       const beforeDetails = await this.queue(() => {
         return this.api.agents.getMyAgent();
       });
@@ -598,42 +614,58 @@ export class Ship {
       });
 
       return result;
-    } catch (error) {
-      this.log(`error refueling at ${this.currentWaypointSymbol}`);
-      console.log(error.response?.data ? error.response.data : error);
-    }
+    });
   }
 
   async dock() {
-    return this.queue(async () => {
-      this.log(`Docking ship`);
-      try {
+    return this.catchAxiosCodes('dock', async () => {
+      return this.queue(async () => {
+        this.log(`Docking ship`);
+
         const res = await this.api.fleet.dockShip(this.symbol);
 
         this.isDocked = true;
         return processNav(this.symbol, res.data.data.nav);
-      } catch (error) {
-        console.log(
-          `error docking for ${this.symbol}`,
-          error.response?.data ? error.response.data : error.toString()
-        );
-      }
+      });
     });
   }
 
   async orbit() {
-    return this.queue(async () => {
-      this.log(`Orbiting ship`);
-      const res = await this.api.fleet.orbitShip(this.symbol);
+    return this.catchAxiosCodes('orbit', async () => {
+      return this.queue(async () => {
+        this.log(`Orbiting ship`);
+        const res = await this.api.fleet.orbitShip(this.symbol);
 
-      this.isDocked = false;
+        this.isDocked = false;
 
-      return processNav(this.symbol, res.data.data.nav);
-    });
+        return processNav(this.symbol, res.data.data.nav);
+      });
+    })
+  }
+
+  private async catchAxiosCodes<T>(action: string, fn: () => Promise<T>, handledCodes?: Record<string, () => Promise<T>>) {
+    try {
+      return await fn()
+    } catch(error) {
+      if (isAxiosApiErrorResponse(error)) {
+        console.log(
+          `error ${action} for ${this.symbol}`,
+          error.response?.data ? error.response.data : error.toString()
+        );
+        const code = error.response?.data.error.code
+        if (code && handledCodes && handledCodes[code]) {
+          return handledCodes[code]()
+        } else {
+          throw error
+        }
+      } else {
+        throw error;
+      }
+    }
   }
 
   async contract() {
-    try {
+    return this.catchAxiosCodes('contract', async () => {
       const result = await this.queue(async () => {
         this.log(`Negotiating contract`);
         const res = await this.api.fleet.negotiateContract(this.symbol);
@@ -646,16 +678,11 @@ export class Ship {
         return res;
       });
       return result;
-    } catch (error) {
-      console.log(
-        `error docking for ${this.symbol}`,
-        error.response?.data ? error.response.data : error.toString()
-      );
-    }
+    });
   }
 
   async chart() {
-    try {
+    return this.catchAxiosCodes('chart', async () => {
       this.log(`Charting current position`);
 
       let waypointData;
@@ -667,18 +694,25 @@ export class Ship {
           res.data.data.waypoint.chart ?? res.data.data.chart;
         waypointData = res.data.data.waypoint;
       } catch (error) {
-        console.log(
-          "error during chart, updating waypoint information",
-          error.response?.data ? error.response.data : error.toString()
-        );
-        await this.updateShipStatus();
-        const waypointInfo = await this.queue(async () =>
-          this.api.systems.getWaypoint(
-            this.currentSystemSymbol,
-            this.currentWaypointSymbol
-          )
-        );
-        waypointData = waypointInfo.data.data;
+        if (isAxiosApiErrorResponse(error)) {
+          console.log(
+            "error during chart, updating waypoint information",
+            error.response?.data ? error.response.data : error.toString()
+          );
+          await this.updateShipStatus();
+          const waypointInfo = await this.queue(async () => {
+            if (!this.currentSystemSymbol || !this.currentWaypointSymbol) {
+              throw new Error("No current system or waypoint");
+            }
+            return this.api.systems.getWaypoint(
+              this.currentSystemSymbol,
+              this.currentWaypointSymbol
+            )
+          });
+          waypointData = waypointInfo.data.data;
+        } else {
+          throw error;
+        }
       }
       const waypoint = await storeWaypoint(waypointData);
       const shipData = await returnShipData(this.symbol);
@@ -687,17 +721,11 @@ export class Ship {
         ship: shipData,
         waypoint: waypoint,
       };
-    } catch (error) {
-      console.log(
-        `error in chart for ${this.symbol}`,
-        error.response?.data ? error.response.data : error
-      );
-      throw error;
-    }
+    })
   }
 
   async navigateMode(mode: ShipNavFlightMode) {
-    try {
+    return this.catchAxiosCodes('navigateMode', async () => {
       this.log(`Setting navigate mode to ${mode}`);
       const res = await this.queue(async () =>
         this.api.fleet.patchShipNav(this.symbol, {
@@ -708,60 +736,68 @@ export class Ship {
       await processNav(this.symbol, res.data.data);
 
       return returnShipData(this.symbol);
-    } catch (error) {
-      console.log(
-        `error in navigatemode for ${this.symbol}`,
-        error.response?.data ? error.response.data : error
-      );
-    }
+    })
   }
 
   async currentCargo() {
-    const cargo = await this.queue(() => {
-      return this.api.fleet.getMyShipCargo(this.symbol);
-    });
+    return this.catchAxiosCodes('currentCargo', async () => {
+      const cargo = await this.queue(() => {
+        return this.api.fleet.getMyShipCargo(this.symbol);
+      });
 
-    cargo.data.data.inventory.forEach((item) => {
-      this.log(`Cargo: ${item.symbol} x${item.units}`);
-    });
+      cargo.data.data.inventory.forEach((item) => {
+        this.log(`Cargo: ${item.symbol} x${item.units}`);
+      });
 
-    return processCargo(this.symbol, cargo.data.data);
+      return processCargo(this.symbol, cargo.data.data);
+    });
   }
 
   async survey() {
-    await this.waitForCooldown("reactor");
+    return this.catchAxiosCodes('survey', async () => {
+      await this.waitForCooldown("reactor");
 
-    const survey = await this.queue(() => {
-      return this.api.fleet.createSurvey(this.symbol);
-    });
+      const survey = await this.queue(() => {
+        return this.api.fleet.createSurvey(this.symbol);
+      });
 
-    survey.data.data.surveys.forEach((item) => {
-      this.log(
-        `Survey: ${item.signature} [${item.size}] ${item.deposits
-          .map((d) => d.symbol)
-          .join(", ")}, expires ${item.expiration}`
+      survey.data.data.surveys.forEach((item) => {
+        this.log(
+          `Survey: ${item.signature} [${item.size}] ${item.deposits
+            .map((d) => d.symbol)
+            .join(", ")}, expires ${item.expiration}`
+        );
+      });
+
+      fs.writeFileSync(
+        `dumps/survey${survey.data.data.surveys[0].signature}`,
+        JSON.stringify(survey.data.data, null, 2)
       );
+
+
+      this.handleExpiration(survey.data.data.cooldown.expiration)
+
+      const ship = processCooldown(this.symbol, survey.data.data.cooldown);
+
+      return {
+        ship: ship,
+        survey: survey,
+      };
     });
+  }
 
-    fs.writeFileSync(
-      `dumps/survey${survey.data.data.surveys[0].signature}`,
-      JSON.stringify(survey.data.data, null, 2)
-    );
-
-    const expiry = new Date(survey.data.data.cooldown.expiration);
-    const waitTime = expiry.getTime() - Date.now() + 200;
-    this.setCooldown("reactor", waitTime);
-
-    const ship = processCooldown(this.symbol, survey.data.data.cooldown);
-
-    return {
-      ship: ship,
-      survey: survey,
-    };
+  handleExpiration(expiration: string | undefined) {
+    if (expiration) {
+      const expiry = new Date(expiration);
+      const waitTime = expiry.getTime() - Date.now() + 200;
+      this.setCooldown("reactor", waitTime);
+      return expiry;
+    }
+    return undefined;
   }
 
   async yeet(good: string, quantity: number) {
-    try {
+    return this.catchAxiosCodes('yeet', async () => {
       const result = await this.queue(() =>
         this.api.fleet.jettison(this.symbol, {
           units: quantity,
@@ -770,21 +806,19 @@ export class Ship {
       );
       this.log(`Jettisoned ${quantity} ${good}`);
       return result;
-    } catch (error) {
-      console.log("Issue during yeeting");
-    }
+    });
   }
 
   async purchaseCargo(good: string, quantity: number) {
     let shipData: any = undefined;
-    try {
+    return this.catchAxiosCodes('purchaseCargo', async () => {
       const marketBefore = await this.queue(() =>
         this.api.systems.getMarket(
           this.currentSystemSymbol,
           this.currentWaypointSymbol
         )
       );
-      const boughtGoodBefore = marketBefore.data.data.tradeGoods.find(
+      const boughtGoodBefore = marketBefore.data.data.tradeGoods?.find(
         (g) => g.symbol === good
       );
       const result = await this.queue(() =>
@@ -799,26 +833,30 @@ export class Ship {
           this.currentWaypointSymbol
         )
       );
-      const boughtGood = marketAfter.data.data.tradeGoods.find(
+      const boughtGood = marketAfter.data.data.tradeGoods?.find(
         (g) => g.symbol === good
       );
       this.log(
         `Purchased ${quantity} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`
       );
-      await prisma.tradeLog.create({
-        data: {
-          shipSymbol: this.symbol,
-          waypointSymbol: result.data.data.transaction.waypointSymbol,
-          tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
-          purchasePrice: result.data.data.transaction.pricePerUnit,
-          purchaseAmount: result.data.data.transaction.units,
-          purchaseVolume: boughtGood.tradeVolume,
-          purchasePriceAfter: boughtGood.purchasePrice,
-          tradeVolume: boughtGoodBefore.tradeVolume,
-          supply: boughtGoodBefore.supply,
-          supplyAfter: boughtGood.supply,
-        },
-      });
+      if (boughtGood && boughtGoodBefore) {
+        await prisma.tradeLog.create({
+          data: {
+            shipSymbol: this.symbol,
+            waypointSymbol: result.data.data.transaction.waypointSymbol,
+            tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
+            purchasePrice: result.data.data.transaction.pricePerUnit,
+            purchaseAmount: result.data.data.transaction.units,
+            purchaseVolume: boughtGood.tradeVolume,
+            purchasePriceAfter: boughtGood.purchasePrice,
+            tradeVolume: boughtGoodBefore.tradeVolume,
+            supply: boughtGoodBefore.supply,
+            supplyAfter: boughtGood.supply,
+          },
+        });
+      } else {
+        this.log("Could not log trade, missing market information")
+      }
 
       await storeMarketInformation(marketAfter.data);
       await processCargo(this.symbol, result.data.data.cargo);
@@ -829,12 +867,7 @@ export class Ship {
       });
 
       return result.data.data.transaction;
-    } catch (error) {
-      console.log(
-        `error during purchase cargo for ${this.symbol}`,
-        error.response?.data ? error.response.data : error
-      );
-    }
+    })
   }
 
   async sellCargo(
@@ -842,17 +875,18 @@ export class Ship {
     units: number,
     market?: GetMarket200Response
   ) {
-    if (!market) {
-      const axiosData = await this.queue(() =>
-        this.api.systems.getMarket(
-          this.currentSystemSymbol,
-          this.currentWaypointSymbol
-        )
-      );
-      market = axiosData.data;
-    }
-    try {
-      const good = market.data.tradeGoods.find(
+    return this.catchAxiosCodes('sellCargo', async () => {
+      if (!market) {
+        const axiosData = await this.queue(() =>
+          this.api.systems.getMarket(
+            this.currentSystemSymbol,
+            this.currentWaypointSymbol
+          )
+        );
+        market = axiosData.data;
+      }
+
+      const good = market.data.tradeGoods?.find(
         (g) => g.symbol === tradeGoodSymbol
       );
       if (!good) {
@@ -861,7 +895,7 @@ export class Ship {
 
       const tradeVolume = good?.tradeVolume;
 
-      const soldGoodBefore = market.data.tradeGoods.find(
+      const soldGoodBefore = market.data.tradeGoods?.find(
         (g) => g.symbol === tradeGoodSymbol
       );
       let leftToSell = units;
@@ -880,23 +914,27 @@ export class Ship {
             this.currentWaypointSymbol
           )
         );
-        const soldGood = marketAfter.data.data.tradeGoods.find(
+        const soldGood = marketAfter.data.data.tradeGoods?.find(
           (g) => g.symbol === tradeGoodSymbol
         );
-        await prisma.tradeLog.create({
-          data: {
-            shipSymbol: this.symbol,
-            waypointSymbol: result.data.data.transaction.waypointSymbol,
-            tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
-            sellPrice: result.data.data.transaction.pricePerUnit,
-            sellAmount: result.data.data.transaction.units,
-            sellVolume: good.tradeVolume,
-            sellPriceAfter: soldGood.sellPrice,
-            tradeVolume: soldGoodBefore.tradeVolume,
-            supply: soldGoodBefore.supply,
-            supplyAfter: soldGood.supply,
-          },
-        });
+        if (soldGood && soldGoodBefore) {
+          await prisma.tradeLog.create({
+            data: {
+              shipSymbol: this.symbol,
+              waypointSymbol: result.data.data.transaction.waypointSymbol,
+              tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
+              sellPrice: result.data.data.transaction.pricePerUnit,
+              sellAmount: result.data.data.transaction.units,
+              sellVolume: good.tradeVolume,
+              sellPriceAfter: soldGood.sellPrice,
+              tradeVolume: soldGoodBefore.tradeVolume,
+              supply: soldGoodBefore.supply,
+              supplyAfter: soldGood.supply,
+            },
+          });
+        } else {
+          this.log("Could not log trade, missing market information")
+        }
         this.log(
           `Sold ${Math.min(
             units,
@@ -918,13 +956,7 @@ export class Ship {
 
         return result.data.data.transaction;
       } while (leftToSell > 0);
-    } catch (error) {
-      console.error(
-        `failed to sell ${tradeGoodSymbol}`,
-        error.response?.data ? error.response.data : error
-      );
-      throw error;
-    }
+    })
   }
 
   async refine() {
@@ -957,9 +989,7 @@ export class Ship {
 
     const afterCargo = await processCargo(this.symbol, res.data.data.cargo);
 
-    const expiry = new Date(res.data.data.cooldown.expiration);
-    const waitTime = expiry.getTime() - Date.now() + 200;
-    this.setCooldown("reactor", waitTime);
+    const expiry = this.handleExpiration(res.data.data.cooldown.expiration);
 
     return afterCargo;
   }
@@ -972,7 +1002,7 @@ export class Ship {
       },
     });
     if (fuelHere) {
-      const ship = await prisma.ship.findFirst({
+      const ship = await prisma.ship.findFirstOrThrow({
         where: {
           symbol: this.symbol,
         },
@@ -984,19 +1014,20 @@ export class Ship {
   }
 
   async sellAllCargo() {
-    this.log("Selling all cargo");
-    const cargo = await this.queue(() => {
-      return this.api.fleet.getMyShipCargo(this.symbol);
-    });
-    const market = await this.queue(() =>
-      this.api.systems.getMarket(
-        this.currentSystemSymbol,
-        this.currentWaypointSymbol
-      )
-    );
+    return this.catchAxiosCodes('sellAllCargo', async () => {
+      this.log("Selling all cargo");
+      const cargo = await this.queue(() => {
+        return this.api.fleet.getMyShipCargo(this.symbol);
+      });
+      const market = await this.queue(() =>
+        this.api.systems.getMarket(
+          this.currentSystemSymbol,
+          this.currentWaypointSymbol
+        )
+      );
 
-    let transactions: MarketTransaction[] = [];
-    try {
+      let transactions: MarketTransaction[] = [];
+
       for (const item of cargo.data.data.inventory) {
         if (item.symbol === "ANTIMATTER") {
           continue;
@@ -1005,18 +1036,12 @@ export class Ship {
           await this.sellCargo(item.symbol, item.units, market.data)
         );
       }
-    } catch (error) {
-      console.log(
-        `error while selling goods for ${this.symbol}`,
-        error.response?.data ? error.response.data : error
-      );
-    }
-
-    return transactions;
+      return transactions;
+    })
   }
 
   async scanWaypoints() {
-    try {
+    return this.catchAxiosCodes('scanWaypoints', async () => {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
@@ -1027,9 +1052,8 @@ export class Ship {
         `dumps/scanresult${res.data.data.waypoints[0].systemSymbol}.json`,
         JSON.stringify(res.data.data.waypoints, null, 2)
       );
-      const expiry = new Date(res.data.data.cooldown.expiration);
-      const waitTime = expiry.getTime() - Date.now() + 200;
-      this.setCooldown("reactor", waitTime);
+
+      const expiry = this.handleExpiration(res.data.data.cooldown.expiration);
 
       await storeWaypointScan(
         res.data.data.waypoints[0].systemSymbol,
@@ -1041,15 +1065,11 @@ export class Ship {
       );
 
       return cooldown;
-    } catch (error) {
-      console.error(
-        error?.response?.data ? error?.response?.data : error.toString()
-      );
-    }
+    })
   }
 
   async scanShips() {
-    try {
+    return this.catchAxiosCodes('scanShips', async () => {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
@@ -1061,9 +1081,7 @@ export class Ship {
         `Scanned for ships, found ${res.data.data.ships.length} ships in scan range.`
       );
 
-      const expiry = new Date(res.data.data.cooldown.expiration);
-      const waitTime = expiry.getTime() - Date.now() + 200;
-      this.setCooldown("reactor", waitTime);
+      const expiry = this.handleExpiration(res.data.data.cooldown.expiration);
 
       await storeShipScan(res.data.data);
       const cooldown = await processCooldown(
@@ -1072,12 +1090,7 @@ export class Ship {
       );
 
       return cooldown;
-    } catch (error) {
-      console.error(
-        `error scanning ships for ${this.symbol}`,
-        error?.response?.data ? error?.response?.data : error
-      );
-    }
+    })
   }
 
   async market() {

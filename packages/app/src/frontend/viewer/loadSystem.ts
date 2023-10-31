@@ -1,6 +1,14 @@
 import {trpc} from "@front/trpc";
 import {starsContainer, universeView} from "@front/viewer/UIElements";
-import {Registry, ShipData, System, WaypointData} from "@front/viewer/registry";
+import {
+  getEntityData, getEntityPosition,
+  getSelectedEntity,
+  getSelectedEntityData,
+  Registry,
+  ShipData,
+  System,
+  WaypointData
+} from "@front/viewer/registry";
 import {mapScale, systemCoordinates, systemDistanceMultiplier} from "@front/viewer/consts";
 import {Text, Container, Graphics, Sprite, PointData} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
@@ -53,6 +61,7 @@ function createSystemItem(data: {
     texture: loadedAssets.spritesheet.textures[`public/textures/planets/${data.waypoint.type}.png`],
     label: data.waypoint.symbol + ' - ' + data.waypoint.type,
     traits: getTraitIcons(data.waypoint),
+    rotation: data.waypoint.type === 'ASTEROID' ? Math.random() * Math.PI * 2 : 0,
     position: position,
     scale: scale,
     onSelect: () => {
@@ -60,6 +69,14 @@ function createSystemItem(data: {
       Registry.selected = {
         type: 'waypoint',
         symbol: data.waypoint.symbol,
+      }
+    },
+    onHover: (entity) => {
+      const selectedEntity = getSelectedEntityData();
+      if (selectedEntity && entity.text) {
+        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type+`\n${Math.round(getDistance(getEntityPosition(data.waypoint.symbol), getEntityPosition(selectedEntity.symbol)))} LY`
+      } else if (entity.text) {
+        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type
       }
     }
   })

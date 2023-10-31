@@ -14,13 +14,13 @@ export class UniverseShip extends UniverseEntity {
   constructor(properties: UniverseEntityProperties & UniverseShipProperties) {
     super(properties);
 
-    this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
-    this.zIndex = 100000
-    const texture = loadedAssets.spritesheet.textures['public/textures/navarrow.png']
-    this.navSprite = new Sprite(texture)
-    this.navSprite.pivot = getCenterPivot(texture)
-    this.navSprite.name = 'nav'
-    this.navSprite.visible = false;
-    this.addChild(this.navSprite)
+    //this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
+    // this.zIndex = 100000
+    // const texture = loadedAssets.spritesheet.textures['public/textures/navarrow.png']
+    // this.navSprite = new Sprite(texture)
+    // this.navSprite.pivot = getCenterPivot(texture)
+    // this.navSprite.name = 'nav'
+    // this.navSprite.visible = false;
+    // this.addChild(this.navSprite)
   }
 }

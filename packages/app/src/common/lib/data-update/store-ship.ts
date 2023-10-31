@@ -20,9 +20,13 @@ export async function processShip(ship: Ship | ScannedShip) {
     }
   }
 
-  await processShipFrame(ship.frame);
+  if (ship.frame) {
+    await processShipFrame(ship.frame);
+  }
   await storeShipEngine(ship.engine);
-  await storeShipReactor(ship.reactor);
+  if (ship.reactor) {
+    await storeShipReactor(ship.reactor);
+  }
 
   const shipData = {
     symbol: ship.symbol,
@@ -66,12 +70,12 @@ export async function processShip(ship: Ship | ScannedShip) {
 
     frame: {
       connect: {
-        symbol: ship.frame.symbol,
+        symbol: ship.frame?.symbol,
       },
     },
     reactor: {
       connect: {
-        symbol: ship.reactor.symbol,
+        symbol: ship.reactor?.symbol,
       },
     },
     engine: {
@@ -86,7 +90,7 @@ export async function processShip(ship: Ship | ScannedShip) {
           : [],
     },
     mounts: {
-      connect: ship.mounts.map((m) => ({symbol: m.symbol})),
+      connect: ship.mounts?.map((m) => ({symbol: m.symbol})),
     },
   };
   await prisma.ship.upsert({

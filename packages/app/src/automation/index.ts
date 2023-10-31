@@ -10,7 +10,7 @@ import { initGlobalBehavior } from "@auto/strategy/global-behavior";
 import { retrieveInitialUserInfo } from "./setup/retrieveInitialUserInfo";
 import {Orchestrator} from "@auto/strategy/orchestrator";
 import {TaskPopulator} from "@auto/strategy/task-populator";
-import createApi from "@auto/lib/createApi";
+import createApi from "@common/lib/createApi";
 
 config();
 
@@ -24,11 +24,13 @@ interface StatusResponse {
 }
 
 let currentInstance: string;
+let apiEndpoint: string;
 
 if (!process.env.API_ENDPOINT) {
   throw new Error("API_ENDPOINT not set");
 } else {
-  console.log("Using API endpoint", process.env.API_ENDPOINT);
+  apiEndpoint = process.env.API_ENDPOINT;
+  console.log("Using API endpoint", );
 }
 
 if (!process.env.ACCOUNT_EMAIL) {
@@ -39,14 +41,14 @@ const init = async () => {
   // do we have a database connection?
   let serverData = await prisma.server.findFirst({
     where: {
-      apiUrl: process.env.API_ENDPOINT,
+      apiUrl: apiEndpoint,
     },
   });
 
   if (!serverData) {
     serverData = await prisma.server.create({
       data: {
-        apiUrl: process.env.API_ENDPOINT,
+        apiUrl: apiEndpoint,
         resetDate: "",
       },
     });
@@ -71,7 +73,7 @@ const init = async () => {
   }
 
   const serverStatus = await axios.get<StatusResponse>(
-    process.env.API_ENDPOINT
+    apiEndpoint
   );
   const waypoints = await prisma.waypoint.count();
   const systems = await prisma.system.count();
@@ -81,7 +83,7 @@ const init = async () => {
     );
     serverData = await prisma.server.update({
       where: {
-        apiUrl: process.env.API_ENDPOINT,
+        apiUrl: apiEndpoint,
       },
       data: {
         resetDate: serverStatus.data.resetDate,

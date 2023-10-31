@@ -1,4 +1,4 @@
-import {APIInstance} from "@auto/lib/createApi";
+import {APIInstance} from "@common/lib/createApi";
 import {prisma} from "@common/prisma";
 import {processShip} from "@common/lib/data-update/store-ship";
 

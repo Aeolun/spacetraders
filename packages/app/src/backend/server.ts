@@ -3,15 +3,36 @@ import z from 'zod'
 import {prisma, ShipBehavior} from "@common/prisma";
 import { sign, verify } from 'jsonwebtoken';
 import crypto from 'crypto'
-import createApi from "@auto/lib/createApi";
+import createApi from "@common/lib/createApi";
 import {FactionSymbols} from "spacetraders-sdk";
 import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
+import {observable} from "@trpc/server/observable";
+import {redisClient} from "@common/redis";
+
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
 }
 
 export const appRouter = router({
+    event: publicProcedure.subscription(() => {
+        // return an `observable` with a callback which is triggered immediately
+        return observable<any>((emit) => {
+            const onEvent = (data: any, channel: unknown) => {
+                // emit data to client
+                emit.next(JSON.parse(data));
+            };
+            emit.next({
+                type: 'ready',
+            })
+            // trigger `onAdd()` when `add` is triggered in our event emitter
+            redisClient.subscribe('event', onEvent);
+            // unsubscribe function when client disconnects or stops subscribing
+            return () => {
+                redisClient.unsubscribe('event', onEvent);
+            };
+        });
+    }),
     register: publicProcedure.input(z.object({
         email: z.string(),
         password: z.string()
@@ -197,6 +218,26 @@ export const appRouter = router({
                 cargo: true
             }
         })
+    }),
+    shipData: publicProcedure.input(z.object({
+        symbol: z.string()
+    })).query(async ({input}) => {
+        return prisma.ship.findFirstOrThrow({
+            where: {
+                symbol: input.symbol
+            },
+            include: {
+                currentWaypoint: true,
+                destinationWaypoint: true,
+                departureWaypoint: true,
+                frame: true,
+                reactor: true,
+                engine: true,
+                mounts: true,
+                modules: true,
+                cargo: true
+            }
+        });
     }),
     getAgentInfo: publicProcedure.query(async ({ctx}) => {
         return prisma.agent.findFirst({

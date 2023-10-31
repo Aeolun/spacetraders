@@ -48,15 +48,6 @@ let hidingLabels = false;
 
 let currentRoute
 
-trpc.event.subscribe(undefined, {
-  onData: (data) => {
-    console.log('event', data);
-    if (data.type == 'NAVIGATE') {
-      GameState.shipData[data.data.symbol] = data.data
-    }
-  }
-})
-
 app.ticker.add((dt) => {
   const sizeMultiplier = Math.min(universeView.worldScreenWidth / universeView.screenWidth, 20)
   const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth

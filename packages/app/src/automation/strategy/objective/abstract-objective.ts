@@ -1,16 +1,19 @@
+import {Ship} from "@auto/ship/ship";
 
-export enum TaskType {
+export enum ObjectiveType {
   EXPLORE = 'explore',
   TRADE = 'trade',
   MINE = 'mine',
   TRAVEL = 'travel',
   UPDATE_MARKET = 'update-market',
 }
-export abstract class AbstractTask {
+export abstract class AbstractObjective {
   public objective: string;
   public priority: number = 0;
   constructor(objective: string, priority: number = 0) {
     this.objective = objective;
     this.priority = priority;
   }
+
+  abstract constructTasks(ship: Ship): Promise<void>
 }

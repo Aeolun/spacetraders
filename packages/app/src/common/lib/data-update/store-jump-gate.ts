@@ -8,7 +8,6 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
     },
     data: {
       hasJumpGate: true,
-      jumpgateRange: data.data.jumpRange
     }
   })
   
@@ -18,9 +17,9 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
     },
     data: {
       jumpConnectedTo: {
-        connect: data.data.connectedSystems.map(system => {
+        connect: data.data.connections.map(waypointSymbol => {
           return {
-            symbol: system.symbol
+            symbol: waypointSymbol
           }
         })
       }

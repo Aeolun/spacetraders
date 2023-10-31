@@ -1,6 +1,8 @@
 import {Container, Graphics, PointData, Sprite, Text, Texture} from "pixi.js";
 import {loadedAssets} from "@front/viewer/assets";
 import {getCenterPivot} from "@front/viewer/lib/get-center-pivot";
+import {getSelectedEntity, Registry} from "@front/viewer/registry";
+import {getDistance} from "@common/lib/getDistance";
 
 let traitTextures;
 
@@ -9,13 +11,16 @@ export interface UniverseEntityProperties {
   traits: string[]
   label?: string,
   scale?: number,
+  rotation?: number,
   position: PointData,
-  onSelect?: () => void,
+  onSelect?: (entity: UniverseEntity) => void,
+  onHover?: (entity: UniverseEntity) => void
 }
 
 export class UniverseEntity extends Container {
   sprite: Sprite
   hoverCircle: Graphics
+  text?: Text
   selected: boolean
   scaleFactor = 1
 
@@ -29,9 +34,10 @@ export class UniverseEntity extends Container {
     this.scaleFactor = properties.scale ?? 1
 
     this.sprite = new Sprite(properties.texture)
+    this.sprite.rotation = properties.rotation ?? 0
     this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
-    this.interactive = true;
     this.sprite.pivot = getCenterPivot(properties.texture)
+    this.sprite.interactive = true;
 
     this.addChild(this.sprite)
     this.addTraits(properties.traits)
@@ -45,26 +51,27 @@ export class UniverseEntity extends Container {
     this.hoverCircle.visible = false;
     this.addChild(this.hoverCircle)
 
-    this.on('mouseover', () => {
+    this.sprite.on('mouseover', () => {
       this.hoverCircle.visible = true;
       this.sprite.scale = {x: 1.2*this.scaleFactor, y: 1.2*this.scaleFactor}
+      properties.onHover?.(this)
     });
-    this.on('mouseout', () => {
+    this.sprite.on('mouseout', () => {
       if (!this.selected) {
         this.hoverCircle.visible = false;
       }
       this.sprite.scale = {x: 1*this.scaleFactor, y: 1*this.scaleFactor}
     });
-    this.on('click', (event) => {
+    this.sprite.on('click', (event) => {
       console.log(`click on ${properties.label}`)
       event.stopPropagation()
       this.hoverCircle.visible = true;
       this.hoverCircle.tint = 0x00ff00;
       this.selected = true;
-      properties.onSelect?.()
+      properties.onSelect?.(this)
     })
     if (properties.label) {
-      const text = new Text({
+      this.text = new Text({
         text: properties.label,
         renderMode: 'canvas',
         style: {
@@ -74,17 +81,21 @@ export class UniverseEntity extends Container {
           align: 'left',
         }
       })
-      text.name = 'label'
-      text.x = 0
-      text.y = 40
-      text.visible = false;
-      this.on('mouseover', () => {
-          text.visible = true;
+      this.text.name = 'label'
+      this.text.x = 0
+      this.text.y = 40
+      this.text.visible = false;
+      this.sprite.on('mouseover', () => {
+        if (this.text) {
+          this.text.visible = true;
+        }
       });
-      this.on('mouseout', () => {
-          text.visible = false;
+      this.sprite.on('mouseout', () => {
+        if (this.text) {
+          this.text.visible = false;
+        }
       });
-      this.addChild(text)
+      this.addChild(this.text)
     }
   }
 
