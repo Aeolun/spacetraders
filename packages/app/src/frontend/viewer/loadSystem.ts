@@ -18,6 +18,8 @@ import {Waypoint} from "@common/prisma";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {getStarPosition, getSystemPosition} from "@front/viewer/util";
 import {getDistance} from "@common/lib/getDistance";
+import {store} from "@front/ui/store";
+import {selectionActions} from "@front/ui/slices/selection";
 
 function createOrbitGraphics(orbit: Graphics, diameter: number, color: number = 0x111111, width = 2) {
   orbit.circle(0, 0, diameter).stroke({
@@ -70,11 +72,15 @@ function createSystemItem(data: {
         type: 'waypoint',
         symbol: data.waypoint.symbol,
       }
+      store.dispatch(selectionActions.setSelection({
+        type: 'waypoint',
+        symbol: data.waypoint.symbol,
+      }))
     },
     onHover: (entity) => {
       const selectedEntity = getSelectedEntityData();
       if (selectedEntity && entity.text) {
-        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type+`\n${Math.round(getDistance(getEntityPosition(data.waypoint.symbol), getEntityPosition(selectedEntity.symbol)))} LY`
+        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type+`\n${Math.round(getDistance(getEntityPosition(data.waypoint.symbol), getEntityPosition(selectedEntity.symbol)))} LY Away`
       } else if (entity.text) {
         entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type
       }

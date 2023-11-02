@@ -104,42 +104,42 @@ export function positionShip(ship: ShipData) {
     }
 }
 
-export function positionUniverseShip(ship: ShipData) {
-    let serverX, serverY, navRot, xOffset = 0, yOffset = 0
-    const arrivalOn = new Date(ship.arrivalOn)
-    const departureOn = new Date(ship.departureOn)
-
-    const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
-
-
-    if (ship.destinationWaypoint.systemSymbol !== ship.departureWaypoint.systemSymbol && Date.now() < arrivalOn.getTime()) {
-        const positionAlongPath = (Date.now() - departureOn.getTime())/(arrivalOn.getTime() - departureOn.getTime())
-
-        const departureSystem = Registry.systems[ship.departureWaypoint.systemSymbol]
-        const destinationSystem = Registry.systems[ship.destinationWaypoint.systemSymbol]
-
-        serverX = departureSystem.x + (destinationSystem.x - departureSystem.x) * positionAlongPath
-        serverY = departureSystem.y + (destinationSystem.y - departureSystem.y) * positionAlongPath
-        navRot = Math.atan2(destinationSystem.y - departureSystem.y, destinationSystem.x - departureSystem.x) + Math.PI/2;
-    } else {
-        if (waypointShips[ship.currentWaypoint.systemSymbol] === undefined) {
-            waypointShips[ship.currentWaypoint.systemSymbol] = 0
-        } else {
-            waypointShips[ship.currentWaypoint.systemSymbol]++
-        }
-
-        const currentSystem = Registry.systems[ship.currentWaypoint.systemSymbol]
-
-        serverX = currentSystem.x
-        serverY = currentSystem.y
-
-        xOffset = (32 * waypointShips[ship.currentWaypoint.systemSymbol]) * sizeMultiplier
-        yOffset = 80 * Math.min(sizeMultiplier, 8)
-    }
-    const x = serverX + xOffset
-    const y = serverY + yOffset
-
-    return {
-        x, y, navRot
-    }
-}
+// export function positionUniverseShip(ship: ShipData) {
+//     let serverX, serverY, navRot, xOffset = 0, yOffset = 0
+//     const arrivalOn = new Date(ship.arrivalOn)
+//     const departureOn = new Date(ship.departureOn)
+//
+//     const sizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
+//
+//
+//     if (ship.destinationWaypoint.systemSymbol !== ship.departureWaypoint.systemSymbol && Date.now() < arrivalOn.getTime()) {
+//         const positionAlongPath = (Date.now() - departureOn.getTime())/(arrivalOn.getTime() - departureOn.getTime())
+//
+//         const departureSystem = Registry.systems[ship.departureWaypoint.systemSymbol]
+//         const destinationSystem = Registry.systems[ship.destinationWaypoint.systemSymbol]
+//
+//         serverX = departureSystem.x + (destinationSystem.x - departureSystem.x) * positionAlongPath
+//         serverY = departureSystem.y + (destinationSystem.y - departureSystem.y) * positionAlongPath
+//         navRot = Math.atan2(destinationSystem.y - departureSystem.y, destinationSystem.x - departureSystem.x) + Math.PI/2;
+//     } else {
+//         if (waypointShips[ship.currentWaypoint.systemSymbol] === undefined) {
+//             waypointShips[ship.currentWaypoint.systemSymbol] = 0
+//         } else {
+//             waypointShips[ship.currentWaypoint.systemSymbol]++
+//         }
+//
+//         const currentSystem = Registry.systems[ship.currentWaypoint.systemSymbol]
+//
+//         serverX = currentSystem.x
+//         serverY = currentSystem.y
+//
+//         xOffset = (32 * waypointShips[ship.currentWaypoint.systemSymbol]) * sizeMultiplier
+//         yOffset = 80 * Math.min(sizeMultiplier, 8)
+//     }
+//     const x = serverX + xOffset
+//     const y = serverY + yOffset
+//
+//     return {
+//         x, y, navRot
+//     }
+// }

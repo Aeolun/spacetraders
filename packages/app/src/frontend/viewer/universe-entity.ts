@@ -48,6 +48,7 @@ export class UniverseEntity extends Container {
       color: 0xffffff,
       width: 2,
     })
+    this.hoverCircle.zIndex = -1;
     this.hoverCircle.visible = false;
     this.addChild(this.hoverCircle)
 

@@ -8,7 +8,7 @@ export async function loadAssetsData() {
     const buttonText = await Assets.load('buttontext.fnt')
     const segment = await Assets.load('segment.fnt')
     const buttonTextWhite = await Assets.load('buttontext_white.fnt')
-    const bgTexture = await Assets.load('starfield.png');
+    const bgTexture = await Assets.load('background4.jpg');
     const starTexture: Texture = await Assets.load('stars.png');
     const select: Texture = await Assets.load('ui/select.png')
     const statsBlock: Texture = await Assets.load('ui/stats.png')

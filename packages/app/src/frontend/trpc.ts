@@ -1,9 +1,10 @@
 // Pass AppRouter as generic here. 👇 This lets the `trpc` object know
 // what procedures are available on the server and their input/output types.
 import {createTRPCProxyClient, httpBatchLink, createWSClient, wsLink, splitLink} from "@trpc/client";
+import { createTRPCReact } from '@trpc/react-query';
 import type {AppRouter} from "@backend/server";
 
-const backendUrl='http://'+window.location.hostname;
+export const backendUrl='http://'+window.location.hostname;
 //const backendUrl='http://coder.us1.serial-experiments.com'
 
 const wsClient = createWSClient({
@@ -44,3 +45,5 @@ export const trpc = createTRPCProxyClient<AppRouter>({
         }),
     ],
 });
+
+export const trpcReact = createTRPCReact<AppRouter>();

@@ -15,5 +15,8 @@ export abstract class AbstractObjective {
     this.priority = priority;
   }
 
+  abstract appropriateForShip(ship: Ship): boolean
+  abstract distanceToStart(ship: Ship): number
+
   abstract constructTasks(ship: Ship): Promise<void>
 }

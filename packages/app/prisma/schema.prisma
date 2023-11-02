@@ -95,6 +95,12 @@ model Leaderboard {
   @@id([agentSymbol, reset, dateTime])
 }
 
+enum ExploreStatus {
+  UNEXPLORED
+  EXPLORING
+  EXPLORED
+}
+
 model System {
   symbol          String     @id
   sectorSymbol    String
@@ -113,9 +119,11 @@ model System {
   hasStation      Boolean    @default(false)
   majorityFaction String?
 
+  exploreStatus      ExploreStatus? @default(UNEXPLORED)
+  exploredAt         DateTime?
   waypoints          Waypoint[]
-  waypointsRetrieved Boolean    @default(false)
-  shipsInSystem      Ship[]     @relation("currentSystem")
+  waypointsRetrieved Boolean        @default(false)
+  shipsInSystem      Ship[]         @relation("currentSystem")
 
   @@index([sectorSymbol])
 }
@@ -239,6 +247,7 @@ model Waypoint {
   x             Float
   y             Float
   factionSymbol String?
+  exploreStatus ExploreStatus?     @default(UNEXPLORED)
   traits        WaypointTrait[]
   modifiers     WaypointModifier[]
 

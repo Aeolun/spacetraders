@@ -9,8 +9,10 @@ import { prisma } from "@common/prisma";
 import { initGlobalBehavior } from "@auto/strategy/global-behavior";
 import { retrieveInitialUserInfo } from "./setup/retrieveInitialUserInfo";
 import {Orchestrator} from "@auto/strategy/orchestrator";
-import {TaskPopulator} from "@auto/strategy/task-populator";
+import {ObjectivePopulator} from "@auto/strategy/objective-populator";
 import createApi from "@common/lib/createApi";
+
+import {loadWaypoint} from "@auto/load-waypoints";
 
 config();
 
@@ -105,8 +107,11 @@ const init = async () => {
   const token = await getBackgroundAgentToken(serverData);
   const api = createApi(token)
   const orchestrator = new Orchestrator();
-  const taskPopulator = new TaskPopulator(orchestrator);
+  const taskPopulator = new ObjectivePopulator(orchestrator);
 
+  loadWaypoint(serverData).catch((error) => {
+    console.error("Issue during waypoint loading", error);
+  })
   await initGlobalBehavior(orchestrator, taskPopulator, api);
 };
 

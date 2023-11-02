@@ -1,13 +1,13 @@
 import {prisma} from "@common/prisma";
 import {getBackgroundAgent} from "@auto/lib/get-background-agent";
 import {Orchestrator} from "@auto/strategy/orchestrator";
-import {TaskPopulator} from "@auto/strategy/task-populator";
+import {ObjectivePopulator} from "@auto/strategy/objective-populator";
 import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {APIInstance} from "@common/lib/createApi";
 import {startShipBehavior} from "@auto/strategy/ship-behavior";
 
 let stage = 0;
-export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulator: TaskPopulator, api: APIInstance) {
+export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulator: ObjectivePopulator, api: APIInstance) {
   let agent = await getBackgroundAgent();
 
   if (!agent.headquartersSymbol) {
@@ -42,7 +42,8 @@ export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulat
   }
 
   setInterval(() => {
-    taskPopulator.populateTasks()
+    taskPopulator.populateObjectives()
+    console.log("Current objectives", orchestrator.getObjectiveCount())
   }, 5000);
 
   startShipBehavior(orchestrator, api)
@@ -51,9 +52,9 @@ export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulat
   while (true) {
     //console.log(`Running global logic at stage ${stage}`);
     if (stage === 1) {
-      taskPopulator.addPossibleTask(ObjectiveType.EXPLORE)
+      taskPopulator.addPossibleObjective(ObjectiveType.EXPLORE)
     } else if (stage === 2) {
-      taskPopulator.addPossibleTask(ObjectiveType.MINE)
+      taskPopulator.addPossibleObjective(ObjectiveType.MINE)
     }
 
     await new Promise((resolve) => setTimeout(resolve, 2000));

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import accountReducer from './slices/account';
 import agentReducer from './slices/agent';
+import selectionReducer from './slices/selection';
 
 export const store = configureStore({
   reducer: {
     account: accountReducer,
     agent: agentReducer,
+    selection: selectionReducer,
   },
 })
 

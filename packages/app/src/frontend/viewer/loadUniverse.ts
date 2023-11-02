@@ -10,6 +10,8 @@ import {getDistance} from "@common/lib/getDistance";
 import {getStarPosition} from "@front/viewer/util";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {UniverseShip} from "@front/viewer/universe-ship";
+import {store} from "@front/ui/store";
+import {selectionActions} from "@front/ui/slices/selection";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
 
 
@@ -52,6 +54,10 @@ function createStar(starData: System) {
                 type: 'star',
                 symbol: starData.symbol,
             }
+            store.dispatch(selectionActions.setSelection({
+                type: 'star',
+                symbol: starData.symbol,
+            }))
         }
     })
 
@@ -180,6 +186,10 @@ const createShip = (ship: any) => {
                 type: 'ship',
                 symbol: ship.symbol,
             }
+            store.dispatch(selectionActions.setSelection({
+                type: 'ship',
+                symbol: ship.symbol,
+            }))
         }
     })
 

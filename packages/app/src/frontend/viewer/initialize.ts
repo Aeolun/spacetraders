@@ -92,9 +92,9 @@ function startListeningToEvents() {
   trpc.event.subscribe(undefined, {
     onData: (data) => {
       console.log('event', data);
-      // if (data.type == 'NAVIGATE') {
-      //   GameState.shipData[data.data.symbol] = data.data
-      // }
+      if (data.type == 'NAVIGATE') {
+        GameState.shipData[data.data.symbol] = data.data
+      }
     }
   })
 }

@@ -4,7 +4,8 @@ globalStyle("html, body", {
   margin: 0,
   padding: 0,
   fontFamily: "sans-serif",
-  height: '100vh'
+  height: '100vh',
+  background: 'black',
 })
 export const app = style({
   display: 'flex',
@@ -22,7 +23,10 @@ export const column = style({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
-  maxWidth: '200px'
+  maxWidth: '300px',
+  borderLeft: '1px solid #292929',
+  borderRight: '1px solid #292929',
+  color: 'white'
 });
 
 export const mainColumn = style({
@@ -33,12 +37,13 @@ export const mainColumn = style({
 
 export const menu = style({
   display: 'flex',
+  borderBottom: '1px solid #292929',
 });
 
 export const menuItem = style({
-  border: '1px solid gray',
-  backgroundColor: 'darkgray',
+  backgroundColor: 'black',
   color: 'white',
+  borderRight: '1px solid #292929',
   fontSize: '1.5em',
   padding: '0.5em',
   cursor: 'pointer',
@@ -46,3 +51,10 @@ export const menuItem = style({
     backgroundColor: 'gray',
   }
 })
+
+export const marketRow = style({
+  display: 'flex',
+  flexDirection: 'row',
+  borderBottom: '1px solid #292929',
+  justifyContent: 'space-between',
+});

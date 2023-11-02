@@ -73,7 +73,8 @@ export const seedSystems = async (agentToken: string) => {
                 x: system.x,
                 y: system.y,
                 hasJumpGate: hasJumpGate,
-                hasStation: hasStation
+                hasStation: hasStation,
+                hasUncharted: true,
             })
         }
     }

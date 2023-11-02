@@ -21,7 +21,7 @@ export class TravelTask implements TaskInterface {
       //already there
     } else if (ship.currentSystemSymbol === this.destination.systemSymbol) {
       //warp to waypoint
-      await ship.warp(this.destination.waypointSymbol)
+      await ship.navigate(this.destination.waypointSymbol)
     } else {
       //warp to system
       await ship.warp(this.destination.systemSymbol)

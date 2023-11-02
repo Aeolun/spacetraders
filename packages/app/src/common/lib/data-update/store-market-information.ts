@@ -5,6 +5,8 @@ export async function storeMarketInformation(data: GetMarket200Response) {
   let hasFuel = false
 
   const marketData: Prisma.MarketPriceUncheckedCreateInput[] = []
+
+
   data.data.tradeGoods?.forEach(good => {
     if (good.symbol === 'FUEL') {
       hasFuel = true
@@ -19,6 +21,30 @@ export async function storeMarketInformation(data: GetMarket200Response) {
       tradeVolume: good.tradeVolume,
       supply: good.supply
     })
+  })
+
+  const importGoods: TradeSymbol[] = data.data.imports.map(i => i.symbol)
+  const exportGoods: TradeSymbol[] = data.data.exports.map(i => i.symbol)
+  const exhangeGoods: TradeSymbol[] = data.data.exchange.map(i => i.symbol)
+
+  const combinedGood = [...importGoods, ...exportGoods, ...exhangeGoods]
+
+  combinedGood.forEach(good => {
+    if (!marketData.find(mdGood => mdGood.tradeGoodSymbol === good)) {
+      if (good === 'FUEL') {
+        hasFuel = true
+      }
+
+      marketData.push({
+        tradeGoodSymbol: good,
+        kind: importGoods.includes(good as TradeSymbol) ? 'IMPORT' : exportGoods.includes(good as TradeSymbol) ? 'EXPORT' : 'EXCHANGE',
+        waypointSymbol: data.data.symbol,
+        sellPrice: null,
+        purchasePrice: null,
+        tradeVolume: null,
+        supply: null
+      })
+    }
   })
 
   if (hasFuel) {

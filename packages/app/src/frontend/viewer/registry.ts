@@ -3,6 +3,8 @@ import type {Waypoint, WaypointTrait, Jumpgate, JumpConnectedSystem, Faction } f
 import {inferRouterOutputs} from "@trpc/server";
 import {AppRouter} from "@backend/server";
 import {UniverseEntity} from "@front/viewer/universe-entity";
+import {store} from "@front/ui/store";
+import {selectionActions} from "@front/ui/slices/selection";
 
 
 export type SelectedType = 'ship' | 'waypoint' | 'star'
@@ -166,6 +168,7 @@ export const Registry: Registry = {
         if (Registry.selected) {
             getSelectedEntity()?.deselect()
             Registry.selected = undefined
+            store.dispatch(selectionActions.setSelection(undefined))
         }
     },
 }

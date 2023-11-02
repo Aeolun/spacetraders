@@ -12,6 +12,7 @@ export const startShipBehavior = async (orchestrator: Orchestrator, api: APIInst
 
   for (const shipData of ships) {
     const ship = new Ship(shipData.symbol, api)
+    await ship.updateShipStatus()
 
     orchestrator.addShip(ship)
   }

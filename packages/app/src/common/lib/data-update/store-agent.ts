@@ -1,10 +1,11 @@
 import {Agent} from "spacetraders-sdk";
 import {prisma} from "@common/prisma";
+import {environmentVariables} from "@common/environment-variables";
 
 export async function processAgent(agent: Agent) {
   const serverState = await prisma.server.findFirstOrThrow({
     where: {
-      apiUrl: process.env.API_ENDPOINT,
+      apiUrl: environmentVariables.apiEndpoint,
     },
   });
 
@@ -18,7 +19,6 @@ export async function processAgent(agent: Agent) {
     data: {
       credits: agent.credits,
       headquartersSymbol: agent.headquarters,
-      accountId: agent.accountId,
     },
   });
 }

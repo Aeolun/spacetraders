@@ -5,19 +5,44 @@ import {Objective} from "@auto/strategy/objective/objective";
 import {Task} from "@auto/ship/task/task";
 
 export class Orchestrator {
-  private tasks: Objective[] = [];
+  private objectives: Objective[] = [];
+  private objectiveIds: Record<string, boolean> = [];
   private ships: Ship[] = [];
 
   constructor() {
 
   }
 
-  addTask(task: Objective) {
-    this.tasks.push(task);
+  getObjectiveCount() {
+    return this.objectives.length;
   }
 
-  async getNextObjective(ship: Ship) {
-    return this.tasks.pop();
+  addObjective(task: Objective) {
+    if (this.objectiveIds[task.objective]) {
+      return;
+    }
+    this.objectiveIds[task.objective] = true;
+    this.objectives.push(task);
+  }
+
+  async getNextObjective(ship: Ship): Promise<Objective | undefined> {
+    const shipObjectives = this.objectives.filter(o => o.appropriateForShip(ship))
+    shipObjectives.sort((a, b) => {
+      return a.distanceToStart(ship) - b.distanceToStart(ship);
+    });
+    console.log(shipObjectives.slice(0, 10).map(o => o.objective + " (" + o.distanceToStart(ship)+' LY)'))
+
+    let newObjective: Objective | undefined;
+    // only do if in same system
+
+    if (shipObjectives.length > 0 && shipObjectives[0].distanceToStart(ship) <= 0) {
+      newObjective = shipObjectives[0];
+    }
+    if (newObjective) {
+      this.objectives = this.objectives.filter(o => o.objective !== newObjective?.objective);
+      return newObjective
+    }
+    return undefined;
   }
 
   async addShip(ship: Ship) {
@@ -29,6 +54,9 @@ export class Orchestrator {
         nextTask = ship.taskQueue.shift()
         if (nextTask) {
           await nextTask.execute(ship)
+        } else {
+          ship.log("Objective complete")
+          ship.setOverallGoal('');
         }
       } else {
         let nextObjective: Objective | undefined

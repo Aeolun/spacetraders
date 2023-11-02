@@ -20,7 +20,7 @@ export interface SimpleSystem {
     hasJumpGate?: boolean
 }
 
-type WayfindDbSystem = System & { waypoints: (Waypoint & { jumpConnectedTo: { symbol: string }[] })[] }
+type WayfindDbSystem = System & { waypoints: ({ symbol: string, type: string, jumpConnectedTo: { symbol: string }[] })[] }
 
 export class Wayfinding {
     dijkstra?: DijkstraCalculator
@@ -29,6 +29,7 @@ export class Wayfinding {
     edges = 0
     furthestDistance = 2000
     systemMap: Record<string, {x: number, y: number}> = {}
+    waypointMap: Record<string, {x: number, y: number}> = {}
     systemArray: SimpleSystem[] = []
     init: Promise<void>
     connectedSystems: Record<string, {
@@ -173,6 +174,7 @@ export class Wayfinding {
 
     resetData(systems: SimpleSystem[]) {
         this.systemMap = {}
+        this.waypointMap = {}
         this.systemArray = []
 
         systems.forEach(system => {
@@ -231,6 +233,9 @@ export class Wayfinding {
         this.furthestDistance = furthestDistance
         console.log("furthest distance between two systems", furthestDistance, ' between ', furthest)
 
+        systems.forEach(system => {
+            system.waypoints.forEach(wp => this.waypointMap[wp.symbol] = {x: system.x, y: system.y })
+        });
         systems.forEach(system => {
             this.addRoutes({
                 symbol: system.symbol,
@@ -294,7 +299,8 @@ export class Wayfinding {
                     where: {
                         type: 'JUMP_GATE'
                     },
-                    include: {
+                    select: {
+                        symbol: true,
                         jumpConnectedTo: {
                             select: {
                                 symbol: true
@@ -320,6 +326,12 @@ export class Wayfinding {
         });
 
         this.resetData(wayfindingSystems);
+
+        systems.forEach(system => {
+            system.waypoints.forEach(wp => {
+                this.waypointMap[wp.symbol] = {x: system.x, y: system.y }
+            })
+        });
 
         const {furthest, furthestDistance} = findClosestSystems(wayfindingSystems)
         this.furthestDistance = furthestDistance
