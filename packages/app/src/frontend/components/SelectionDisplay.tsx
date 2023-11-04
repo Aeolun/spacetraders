@@ -15,6 +15,9 @@ export const SelectionDisplay = () => {
   const query = trpcReact.getMarketInfo.useQuery({
     waypoint: selection?.symbol || ''
   })
+  const shipyard = trpcReact.getShipyard.useQuery({
+    waypointSymbol: selection?.symbol || ''
+  })
 
   return selection ? <div>
     <div>{selection.type} {selection.symbol}</div>
@@ -30,6 +33,13 @@ export const SelectionDisplay = () => {
             <div>{market.sellPrice}</div>
         </div>)}
       </div>: null }
+      {shipyard.isFetched ? <div>
+        <h2>Shipyard</h2>
+        {shipyard.data?.map(ship => <div className={marketRow}>
+          <div>{ship.shipConfigurationSymbol}</div>
+          <div>{ship.price}</div>
+        </div>)}
+      </div> : null}
     </div> : null}
     {selection.type === 'ship' ? <div>
       <div>{shipData.role}</div>

@@ -20,6 +20,7 @@ import {getStarPosition, getSystemPosition} from "@front/viewer/util";
 import {getDistance} from "@common/lib/getDistance";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
+import {contextMenuActions} from "@front/ui/slices/context-menu";
 
 function createOrbitGraphics(orbit: Graphics, diameter: number, color: number = 0x111111, width = 2) {
   orbit.circle(0, 0, diameter).stroke({
@@ -40,6 +41,9 @@ function getTraitIcons(item: WaypointData) {
       traits.push('shipyard')
     }
   })
+  if (item.exploreStatus === 'UNEXPLORED') {
+    traits.push('uncharted')
+  }
   return traits;
 }
 
@@ -59,9 +63,27 @@ function createSystemItem(data: {
   }
 
   console.log('creating system item', data.waypoint.symbol, data.waypoint.type)
+
+  let texture = loadedAssets.spritesheet.textures[`public/textures/planets/${data.waypoint.type}.png`]
+  if (data.waypoint.type == 'ASTEROID') {
+    if (data.waypoint.traits.find(i => i.symbol === "HOLLOWED_INTERIOR")) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_HOLLOW.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === "MINERAL_DEPOSITS")) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_MINERAL.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === "RARE_METAL_DEPOSITS")) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_RARE.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === "PRECIOUS_METAL_DEPOSITS")) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_UNCOMMON.png`]
+    }
+  }
+
+  const waypointOnlyName = data.waypoint.symbol.replace(data.waypoint.systemSymbol+'-', '')
   const universeEntity = new UniverseEntity({
-    texture: loadedAssets.spritesheet.textures[`public/textures/planets/${data.waypoint.type}.png`],
-    label: data.waypoint.symbol + ' - ' + data.waypoint.type,
+    texture,
+    label: waypointOnlyName + ' - ' + data.waypoint.type,
     traits: getTraitIcons(data.waypoint),
     rotation: data.waypoint.type === 'ASTEROID' ? Math.random() * Math.PI * 2 : 0,
     position: position,
@@ -80,10 +102,13 @@ function createSystemItem(data: {
     onHover: (entity) => {
       const selectedEntity = getSelectedEntityData();
       if (selectedEntity && entity.text) {
-        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type+`\n${Math.round(getDistance(getEntityPosition(data.waypoint.symbol), getEntityPosition(selectedEntity.symbol)))} LY Away`
+        entity.text.text = waypointOnlyName + ' - ' + data.waypoint.type+`\n${Math.round(getDistance(getEntityPosition(data.waypoint.symbol), getEntityPosition(selectedEntity.symbol)))} LY Away`
       } else if (entity.text) {
-        entity.text.text = data.waypoint.symbol + ' - ' + data.waypoint.type
+        entity.text.text = waypointOnlyName + ' - ' + data.waypoint.type
       }
+    },
+    onRightClick: (event, entity) => {
+      store.dispatch(contextMenuActions.open({x: event.globalX, y: event.globalY}))
     }
   })
 

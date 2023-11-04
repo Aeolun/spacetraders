@@ -51,6 +51,9 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
         })
       }
     }
+    if ('isUnderConstruction' in waypoint) {
+      updateValues.isUnderConstruction = waypoint.isUnderConstruction
+    }
     await prisma.waypoint.update({
       where: {
         symbol: waypoint.symbol

@@ -8,6 +8,9 @@ import {loadSystem, unloadSystem} from "@front/viewer/loadSystem";
 import {mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import { trpc } from "@front/trpc";
+import {UniverseEntity} from "@front/viewer/universe-entity";
+import {contextMenuActions} from "@front/ui/slices/context-menu";
+import {store} from "@front/ui/store";
 
 export const handleMapMove = () => {
   const zoom = universeView.worldScreenWidth / universeView.screenWidth
@@ -60,15 +63,23 @@ export async function initialize(app: Application) {
   app.stage.on("click", (event) => {
     console.log("deselecting")
     Registry.deselect();
+    store.dispatch(contextMenuActions.close())
   })
 
   // ticker to size universe objects
   app.ticker.add(() => {
     const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 1)
+    const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 1)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
     Object.values(loadedUniverse.systems).forEach(ref => {
       ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
+    })
+
+    Object.values(Registry.systemObjects).forEach(objects => {
+      objects.filter(ref => ref instanceof UniverseEntity).forEach(ref => {
+        ref.scale = {x: systemSizeMultiplier, y: systemSizeMultiplier}
+      });
     })
 
     resetShipWaypoints()
@@ -81,6 +92,9 @@ export async function initialize(app: Application) {
     });
   })
 
+  universeView.on('drag-start', () => {
+    store.dispatch(contextMenuActions.close())
+  })
   // ticker to load system data when zoomed in far enough
   universeView.on('moved', () => {
     handleMapMove()

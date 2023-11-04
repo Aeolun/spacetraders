@@ -49,11 +49,12 @@ export class Orchestrator {
     this.ships.push(ship);
     while(true) {
       let nextTask: Task | undefined
-      if (ship.taskQueue.length > 0) {
+      if (ship.taskQueueLength > 0) {
         ship.log("Taking up next task in my queue")
-        nextTask = ship.taskQueue.shift()
+        nextTask = await ship.getNextTask();
         if (nextTask) {
           await nextTask.execute(ship)
+          await ship.finishedTask()
         } else {
           ship.log("Objective complete")
           ship.setOverallGoal('');

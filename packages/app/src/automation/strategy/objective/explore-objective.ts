@@ -56,11 +56,11 @@ export class ExploreObjective extends AbstractObjective {
     }
 
     for (const waypoint of orderedWaypoints) {
-      ship.taskQueue.push(new TravelTask({
+      await ship.addTask(new TravelTask({
         systemSymbol: waypoint.systemSymbol,
         waypointSymbol: waypoint.symbol,
       }))
-      ship.taskQueue.push(new ExploreTask(waypoint.symbol))
+      await ship.addTask(new ExploreTask(waypoint.symbol))
     }
   }
 

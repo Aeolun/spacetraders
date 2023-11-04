@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import accountReducer from './slices/account';
 import agentReducer from './slices/agent';
 import selectionReducer from './slices/selection';
+import contextMenuReducer from './slices/context-menu';
 
 export const store = configureStore({
   reducer: {
     account: accountReducer,
     agent: agentReducer,
     selection: selectionReducer,
+    contextMenu: contextMenuReducer
   },
 })
 

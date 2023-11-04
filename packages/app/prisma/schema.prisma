@@ -240,16 +240,17 @@ enum WaypointType {
 }
 
 model Waypoint {
-  symbol        String             @id
-  type          WaypointType
-  systemSymbol  String
-  system        System             @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
-  x             Float
-  y             Float
-  factionSymbol String?
-  exploreStatus ExploreStatus?     @default(UNEXPLORED)
-  traits        WaypointTrait[]
-  modifiers     WaypointModifier[]
+  symbol              String             @id
+  type                WaypointType
+  systemSymbol        String
+  system              System             @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
+  x                   Float
+  y                   Float
+  isUnderConstruction Boolean            @default(false)
+  factionSymbol       String?
+  exploreStatus       ExploreStatus?     @default(UNEXPLORED)
+  traits              WaypointTrait[]
+  modifiers           WaypointModifier[]
 
   orbitsSymbol String?
   orbits       Waypoint?  @relation("orbits", fields: [orbitsSymbol], references: [symbol], onDelete: NoAction, onUpdate: NoAction)
@@ -266,6 +267,7 @@ model Waypoint {
   tradeGoods        MarketPrice[]
   jumpConnectedTo   Waypoint[]    @relation("jumpConnectedTo")
   jumpConnectedFrom Waypoint[]    @relation("jumpConnectedTo")
+  construction      Construction?
 
   @@index([orbitsSymbol])
   @@index([systemSymbol])
@@ -273,8 +275,9 @@ model Waypoint {
 }
 
 model Construction {
-  symbol      String  @id
-  isCompleted Boolean @default(false)
+  symbol      String   @id
+  waypoint    Waypoint @relation(fields: [symbol], references: [symbol], onDelete: Cascade)
+  isCompleted Boolean  @default(false)
 
   materials Material[]
 }
@@ -288,6 +291,7 @@ model Material {
   required        Int
   fulfilled       Int
 
+  @@unique([constructionId, tradeGoodSymbol])
   @@index([constructionId])
   @@index([tradeGoodSymbol])
 }
@@ -597,8 +601,9 @@ model Ship {
 
   updatedAt DateTime @default(now()) @updatedAt
 
-  modules ShipModule[]
-  mounts  ShipMount[]
+  modules  ShipModule[]
+  mounts   ShipMount[]
+  ShipTask ShipTask[]
 
   //    crew ShipCrew
   @@index([currentSystemSymbol])
@@ -608,6 +613,20 @@ model Ship {
   @@index([frameSymbol])
   @@index([reactorSymbol])
   @@index([engineSymbol])
+}
+
+enum TaskType {
+  TRAVEL
+  EXPLORE
+}
+
+model ShipTask {
+  id         String   @id @default(uuid())
+  shipSymbol String
+  ship       Ship     @relation(fields: [shipSymbol], references: [symbol], onDelete: Cascade)
+  type       TaskType
+  data       String   @db.Text()
+  createdAt  DateTime @default(now())
 }
 
 enum ContractType {

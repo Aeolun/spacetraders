@@ -32,6 +32,7 @@ export const column = style({
 export const mainColumn = style({
   display: 'flex',
   flexDirection: 'column',
+  position: 'relative',
   flex: 1
 });
 

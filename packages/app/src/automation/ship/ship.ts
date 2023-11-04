@@ -16,7 +16,7 @@ import {
 import {
   returnShipData,
 } from "@auto/ship/updateShips";
-import { prisma, System, Waypoint } from "@common/prisma";
+import { prisma, System, TaskType, Waypoint } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
 import { ee } from "@auto/event-emitter";
 import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
@@ -35,6 +35,9 @@ import {Objective} from "@auto/strategy/objective/objective";
 import {isAxiosApiErrorResponse} from "@common/lib/is-api-error";
 import {AxiosError} from "axios";
 import {Task} from "@auto/ship/task/task";
+import {TravelTask} from "@auto/ship/task/travel";
+import {deserializeTask} from "@auto/ship/task/deserialize-task";
+import {processConstruction} from "@common/lib/data-update/store-construction";
 
 type CooldownKind = "reactor";
 
@@ -47,7 +50,7 @@ const cooldowns: Record<
 
 export class Ship {
   private queue: Queue;
-  public taskQueue: Task[] = [];
+  private taskQueue: {id: string; task: Task}[] = [];
 
   public _currentSystemSymbol?: string;
   private _currentSystemObject?: System;
@@ -66,6 +69,60 @@ export class Ship {
 
   constructor(public symbol: string, private api: APIInstance) {
     this.queue = foregroundQueue;
+  }
+
+  async addTask(task: Task) {
+    const taskEntity = await prisma.shipTask.create({
+      data: {
+        shipSymbol: this.symbol,
+        data: task.serialize(),
+        type: task.type
+      }
+    })
+    this.taskQueue.push({
+      id: taskEntity.id,
+      task: task
+    });
+  }
+
+  get taskQueueLength() {
+    return this.taskQueue.length
+  }
+
+  async getNextTask() {
+    const nextTask = this.taskQueue[0]
+    if (nextTask === undefined) {
+      return undefined
+    }
+    return nextTask?.task
+  }
+  async finishedTask() {
+    const nextTask = this.taskQueue.shift()
+    if (nextTask === undefined) {
+      throw new Error("Should never remove a nonexistent task.")
+    }
+    await prisma.shipTask.delete({
+      where: {
+        id: nextTask.id
+      }
+    })
+  }
+
+  async loadTaskQueue() {
+    const tasks = await prisma.shipTask.findMany({
+      where: {
+        shipSymbol: this.symbol
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    })
+    this.taskQueue = tasks.map((t) => {
+      return {
+        id: t.id,
+        task: deserializeTask(t)
+      }
+    })
   }
 
   get currentSystemSymbol(): string {
@@ -112,6 +169,8 @@ export class Ship {
     );
 
     this.isDocked = shipInfo.data.data.nav.status === "DOCKED";
+
+    await this.loadTaskQueue();
 
     await this.waitUntil(shipInfo.data.data.nav.route.arrival);
   }
@@ -298,9 +357,10 @@ export class Ship {
       }
     } catch (error) {
       if (isAxiosApiErrorResponse(error)) {
-        if (error.response?.data?.error?.code === 4203) {
+        if (error.response?.data?.error?.code === 4203 && this.fuel > 1) {
+          this.log(`Insufficient fuel for ${this.navMode} navigation to ${waypoint}. Switching to drift mode.`)
           await this.navigateMode("DRIFT");
-          await this.warp(waypoint, waitForTimeout);
+          return this.navigate(waypoint, waitForTimeout);
         } else if (error.response?.data?.error?.code === 4204) {
           this.log(`Already at ${waypoint}`);
           return;
@@ -311,8 +371,9 @@ export class Ship {
           error.response?.data
         );
         throw error;
+      } else {
+        throw error;
       }
-      throw error;
     }
   }
 
@@ -643,6 +704,17 @@ export class Ship {
     })
   }
 
+  async construction() {
+    return this.catchAxiosCodes('construction', async () => {
+      return this.queue(async () => {
+        this.log(`Retrieving waypoint construction information`);
+        const res = await this.api.systems.getConstruction(this.currentSystemSymbol, this.currentWaypointSymbol);
+
+        return processConstruction(res.data);
+      });
+    })
+  }
+
   private async catchAxiosCodes<T>(action: string, fn: () => Promise<T>, handledCodes?: Record<string, () => Promise<T>>) {
     try {
       return await fn()
@@ -726,12 +798,16 @@ export class Ship {
 
   async navigateMode(mode: ShipNavFlightMode) {
     return this.catchAxiosCodes('navigateMode', async () => {
+      if (this.navMode === mode) {
+        return;
+      }
       this.log(`Setting navigate mode to ${mode}`);
       const res = await this.queue(async () =>
         this.api.fleet.patchShipNav(this.symbol, {
           flightMode: mode,
         })
       );
+      this.navMode = mode;
 
       await processNav(this.symbol, res.data.data);
 
@@ -1007,7 +1083,7 @@ export class Ship {
           symbol: this.symbol,
         },
       });
-      if (ship.fuelAvailable < ship.fuelCapacity / 2) {
+      if (ship.fuelAvailable < ship.fuelCapacity) {
         await this.refuel();
       }
     }

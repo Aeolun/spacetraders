@@ -1,12 +1,10 @@
-import {ShipNavFlightMode} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
-import {prisma, Waypoint} from "@common/prisma";
-import {Route} from "@auto/ship/behaviors/atoms/find-route-to";
 import {TaskInterface} from "@auto/ship/task/taskInterface";
 import {defaultWayfinder} from "@common/default-wayfinder";
+import {prisma, TaskType} from "@common/prisma";
 
 export class ExploreTask implements TaskInterface {
-  name = 'Explore';
+  type = TaskType.EXPLORE;
   waypointSymbol: string;
 
   constructor(waypointSymbol: string) {
@@ -40,8 +38,27 @@ export class ExploreTask implements TaskInterface {
         await ship.jumpgate();
         await defaultWayfinder.addSystemFromDatabase(ship.currentSystem.symbol);
       }
+
+      if (chartResult.waypoint?.isUnderConstruction) {
+        
+      }
+
+      await prisma.waypoint.update({
+        where: {
+          symbol: ship.currentWaypointSymbol
+        },
+        data: {
+          exploreStatus: 'EXPLORED'
+        }
+      })
     } else {
       throw new Error(`Not at the location to explore. Need to be at ${this.waypointSymbol} but at ${ship.currentWaypointSymbol}.`)
     }
+  }
+
+  serialize(): string {
+    return JSON.stringify({
+      waypointSymbol: this.waypointSymbol,
+    });
   }
 }

@@ -1,4 +1,4 @@
-import {Container, Graphics, PointData, Sprite, Text, Texture} from "pixi.js";
+import {Container, FederatedPointerEvent, Graphics, PointData, Sprite, Text, Texture} from "pixi.js";
 import {loadedAssets} from "@front/viewer/assets";
 import {getCenterPivot} from "@front/viewer/lib/get-center-pivot";
 import {getSelectedEntity, Registry} from "@front/viewer/registry";
@@ -15,9 +15,11 @@ export interface UniverseEntityProperties {
   position: PointData,
   onSelect?: (entity: UniverseEntity) => void,
   onHover?: (entity: UniverseEntity) => void
+  onRightClick?: (event: FederatedPointerEvent, entity: UniverseEntity) => void
 }
 
 export class UniverseEntity extends Container {
+  __entity = 'universe-object'
   sprite: Sprite
   hoverCircle: Graphics
   text?: Text
@@ -52,6 +54,11 @@ export class UniverseEntity extends Container {
     this.hoverCircle.visible = false;
     this.addChild(this.hoverCircle)
 
+    this.sprite.on('rightclick', (event) => {
+      event.stopPropagation()
+      console.log(`right click on ${properties.label}`)
+      properties.onRightClick?.(event, this)
+    });
     this.sprite.on('mouseover', () => {
       this.hoverCircle.visible = true;
       this.sprite.scale = {x: 1.2*this.scaleFactor, y: 1.2*this.scaleFactor}
