@@ -618,6 +618,9 @@ model Ship {
 enum TaskType {
   TRAVEL
   EXPLORE
+  PURCHASE
+  SELL
+  UPDATE_MARKET
 }
 
 model ShipTask {

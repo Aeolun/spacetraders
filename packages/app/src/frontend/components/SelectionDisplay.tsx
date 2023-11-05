@@ -29,6 +29,9 @@ export const SelectionDisplay = () => {
         <h2>Marketplace</h2>
         {query.data.map(market => <div className={marketRow}>
           <div>{market.tradeGoodSymbol}</div>
+          <div>{market.activityLevel}</div>
+          <div>{market.kind}</div>
+          <div>{market.supply}</div>
             <div>{market.purchasePrice}</div>
             <div>{market.sellPrice}</div>
         </div>)}

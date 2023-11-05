@@ -113,6 +113,10 @@ export class UniverseEntity extends Container {
     this.hoverCircle.tint = 0xffffff;
   }
 
+  public setAngle(rotation: number) {
+    this.sprite.rotation = rotation;
+  }
+
   private addTrait(texture: Texture, offset: number) {
     const sprite = new Sprite(texture)
     sprite.pivot = getCenterPivot(texture)

@@ -41,9 +41,6 @@ const App = () => {
             <div className={appStyles.menuItem}>Systems</div>
         </div>
         <section className={appStyles.columns}>
-            <div className={appStyles.column}>
-                <h3>Options</h3>
-            </div>
             <Pixi />
             <div className={appStyles.column}>
                 <h3>Details</h3>

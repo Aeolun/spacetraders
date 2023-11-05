@@ -23,7 +23,7 @@ export const column = style({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
-  maxWidth: '300px',
+  maxWidth: '600px',
   borderLeft: '1px solid #292929',
   borderRight: '1px solid #292929',
   color: 'white'
@@ -54,7 +54,8 @@ export const menuItem = style({
 })
 
 export const marketRow = style({
-  display: 'flex',
+  display: 'grid',
+  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr',
   flexDirection: 'row',
   borderBottom: '1px solid #292929',
   justifyContent: 'space-between',

@@ -5,6 +5,7 @@ import {AppRouter} from "@backend/server";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
+import {UniverseShip} from "@front/viewer/universe-ship";
 
 
 export type SelectedType = 'ship' | 'waypoint' | 'star'
@@ -32,7 +33,7 @@ export interface Registry {
     transformedSystems: Record<string, boolean>
     systemObjects: Record<string, Container[]>
     systems: Record<string, UniverseEntity>
-    universeShips: Record<string, UniverseEntity>
+    universeShips: Record<string, UniverseShip>
     waypoints: Record<string, UniverseEntity>
 
     factions: Record<string, Faction>

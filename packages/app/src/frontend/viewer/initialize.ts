@@ -88,7 +88,14 @@ export async function initialize(app: Application) {
       const shipData = Registry.shipData[shipKey]
       //shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
 
-      shipEntity.position = positionShip(shipData).position
+      const newPos = positionShip(shipData)
+      shipEntity.position = newPos.position
+      shipEntity.setAngle(newPos.navRot ?? 0)
+      if (shipData.navStatus === "IN_TRANSIT") {
+        shipEntity.setNavigating(true)
+      } else {
+        shipEntity.setNavigating(false)
+      }
     });
   })
 
@@ -107,7 +114,7 @@ function startListeningToEvents() {
     onData: (data) => {
       console.log('event', data);
       if (data.type == 'NAVIGATE') {
-        GameState.shipData[data.data.symbol] = data.data
+        Registry.shipData[data.data.symbol] = data.data
       }
     }
   })

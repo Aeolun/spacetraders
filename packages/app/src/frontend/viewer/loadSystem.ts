@@ -79,6 +79,20 @@ function createSystemItem(data: {
       texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_UNCOMMON.png`]
     }
   }
+  if (data.waypoint.type === 'PLANET') {
+    if (data.waypoint.traits.find(i => i.symbol === 'DRY_SEABEDS')) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/PLANET_DRY_SEABEDS.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === 'VOLCANIC')) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/PLANET_LAVA.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === 'OCEANIC')) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/PLANET_WATER.png`]
+    }
+    if (data.waypoint.traits.find(i => i.symbol === 'JUNGLE')) {
+      texture = loadedAssets.spritesheet.textures[`public/textures/planets/PLANET_JUNGLE.png`]
+    }
+  }
 
   const waypointOnlyName = data.waypoint.symbol.replace(data.waypoint.systemSymbol+'-', '')
   const universeEntity = new UniverseEntity({
