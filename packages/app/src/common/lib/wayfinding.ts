@@ -29,7 +29,7 @@ export class Wayfinding {
     edges = 0
     furthestDistance = 2000
     systemMap: Record<string, {x: number, y: number}> = {}
-    waypointMap: Record<string, {x: number, y: number}> = {}
+    waypointMap: Record<string, {x: number, y: number, systemSymbol: string}> = {}
     systemArray: SimpleSystem[] = []
     init: Promise<void>
     connectedSystems: Record<string, {
@@ -97,25 +97,25 @@ export class Wayfinding {
 
     addRoutes(system: WayfindingSystem) {
         if (system.hasJumpGate) {
-            system.jumpConnectedSystems.forEach(connection => {
-                const connectionId = [system.symbol, connection].sort().join('-')+'jump'
+            system.jumpConnectedSystems.forEach(waypointSymbol => {
+                const connectionId = [system.symbol, waypointSymbol].sort().join('-')+'jump'
                 if (this.alreadyConnected.has(connectionId)) {
                     return;
                 }
                 this.alreadyConnected.add(connectionId)
 
                 const systemSymbol = system.symbol
-                const toSystemSymbol = connection
+                const toSystemSymbol = this.waypointMap[waypointSymbol].systemSymbol
 
                 this.dijkstra.addEdge(systemSymbol, toSystemSymbol, {
                     id: 'jump',
-                    weight: getDistance(system, this.systemMap[connection]),
+                    weight: getDistance(system, this.waypointMap[waypointSymbol]),
                 })
                 this.jumpDijkstra.addEdge(systemSymbol, toSystemSymbol, {
                     id: 'jump',
-                    weight: getDistance(system, this.systemMap[connection])
+                    weight: getDistance(system, this.waypointMap[waypointSymbol])
                 })
-                this.addConnection(systemSymbol, toSystemSymbol, getDistance(system, this.systemMap[connection]), ['jump'])
+                this.addConnection(systemSymbol, toSystemSymbol, getDistance(system, this.waypointMap[waypointSymbol]), ['jump'])
                 this.edges++
             })
         }
@@ -234,7 +234,7 @@ export class Wayfinding {
         console.log("furthest distance between two systems", furthestDistance, ' between ', furthest)
 
         systems.forEach(system => {
-            system.waypoints.forEach(wp => this.waypointMap[wp.symbol] = {x: system.x, y: system.y })
+            system.waypoints.forEach(wp => this.waypointMap[wp.symbol] = {x: system.x, y: system.y, systemSymbol: system.symbol })
         });
         systems.forEach(system => {
             this.addRoutes({
@@ -329,7 +329,7 @@ export class Wayfinding {
 
         systems.forEach(system => {
             system.waypoints.forEach(wp => {
-                this.waypointMap[wp.symbol] = {x: system.x, y: system.y }
+                this.waypointMap[wp.symbol] = {x: system.x, y: system.y, systemSymbol: system.symbol }
             })
         });
 
@@ -365,29 +365,11 @@ export function findClosestSystems(systems: SimpleSystem[]) {
 
         if (closestSystem > furthestDistance) {
             furthestDistance = closestSystem
-            furthest = system.symbol+'-'+closest
+            furthest = system.symbol + '-' + closest
         }
     })
     return {
         furthest,
         furthestDistance
     }
-}
-
-export function printRoute(route: LinkedListItem[], pathProperties: PathReturnProperties) {
-    console.log("=== Route ===")
-
-    const rows = route.map((trip, index) => {
-        return {
-            method: trip.edge,
-            from: trip.source,
-            to: trip.target,
-            cost: Math.round(trip.weight),
-            fuel: Math.round(trip.consumes?.fuel ?? 0),
-            refuel: trip.recover && trip.recover.fuel > 0 ? Math.round(trip.recover.fuel) : 0
-        }
-    })
-    console.table(rows, ['method', 'from', 'to', 'cost', 'fuel', 'refuel'])
-    console.log(`Total cost: ${pathProperties.priority}cr, took ${pathProperties.timeTaken}ms`)
-    console.log("=============")
 }

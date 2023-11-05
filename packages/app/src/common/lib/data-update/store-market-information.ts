@@ -18,6 +18,7 @@ export async function storeMarketInformation(data: GetMarket200Response) {
       waypointSymbol: data.data.symbol,
       sellPrice: good.sellPrice,
       purchasePrice: good.purchasePrice,
+      activityLevel: good.activity,
       tradeVolume: good.tradeVolume,
       supply: good.supply
     })

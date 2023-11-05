@@ -54,6 +54,17 @@ export const SelectionDisplay = () => {
       <div>Speed: {shipData.engine.speed}</div>
       <div>Fuel: {shipData.fuelAvailable}/{shipData.fuelCapacity}</div>
       <div>Cargo: {shipData.cargoUsed}/{shipData.cargoCapacity}</div>
+      <h2>Modules</h2>
+      <div>Frame: {shipData.frame.name}</div>
+      <div>Engine: {shipData.engine.name}</div>
+      <div>Reactor: {shipData.reactor.name}</div>
+
+      <ul>{shipData.modules.map(module => {
+        return <li>{module.name}</li>
+      })}</ul>
+      <ul>{shipData.mounts.map(mount => {
+        return <li>{mount.name}</li>
+      })}</ul>
     </div> : null}
   </div> : <div>nothing selected</div>
 }

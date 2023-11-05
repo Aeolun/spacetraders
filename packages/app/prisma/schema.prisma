@@ -621,6 +621,9 @@ enum TaskType {
   PURCHASE
   SELL
   UPDATE_MARKET
+  SIPHON
+  MINE
+  SURVEY
 }
 
 model ShipTask {
