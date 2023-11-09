@@ -146,7 +146,7 @@ export const getEntityPosition = (symbol: string) => {
 }
 
 export const Registry: Registry = {
-    agent: {
+    registerAgent: {
         symbol: '',
         credits: 0
     },

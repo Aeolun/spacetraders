@@ -24,7 +24,7 @@ import {Server, Agent} from "@backend/prisma";
 import {RootState, store} from './ui/store'
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import account, {accountActions} from "@front/ui/slices/account";
-import {agentActions} from "@front/ui/slices/agent";
+import {registerAgentActions} from "@front/ui/slices/register-agent";
 
 const animatorsSettings: AnimatorGeneralProviderSettings = {
     // Durations in seconds.
@@ -320,12 +320,12 @@ const App = () => {
                                 opacity: selectedFaction === faction.symbol ? 1 : 0.4
                             }} /> )}
                         </div>
-                        <select placeholder={'-- faction --'} value={agentState.registerFaction} onChange={(e) => dispatch(agentActions.setRegisterFaction(e.currentTarget.value))}>
+                        <select placeholder={'-- faction --'} value={agentState.registerFaction} onChange={(e) => dispatch(registerAgentActions.setRegisterFaction(e.currentTarget.value))}>
                             <option>-- faction --</option>
                             {factions.map(faction => <option value={faction.symbol}>{faction.name}</option> )}
                         </select>
-                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" value={agentState.registerSymbol} onChange={(e) => dispatch(agentActions.setRegisterSymbol(e.currentTarget.value))} />
-                        <Input type="text" placeholder="Email" value={agentState.registerEmail} onChange={(e) => dispatch(agentActions.setRegisterEmail(e.currentTarget.value))} />
+                        <Input type="text" placeholder="Agent name" pattern="[a-zA-Z0-9]{3,14}}" value={agentState.registerSymbol} onChange={(e) => dispatch(registerAgentActions.setRegisterSymbol(e.currentTarget.value))} />
+                        <Input type="text" placeholder="Email" value={agentState.registerEmail} onChange={(e) => dispatch(registerAgentActions.setRegisterEmail(e.currentTarget.value))} />
                         <Button onClick={() => {
                             trpc.registerAgent.mutate({
                                 serverId: agentState.registerServer,

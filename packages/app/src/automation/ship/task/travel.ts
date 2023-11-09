@@ -10,14 +10,9 @@ export class TravelTask implements TaskInterface {
     systemSymbol: string;
     waypointSymbol: string;
   }
-  flightMode: ShipNavFlightMode = 'CRUISE'
 
-
-  constructor(destination: { systemSymbol: string; waypointSymbol: string }, options?: { flightMode?: ShipNavFlightMode }) {
+  constructor(destination: { systemSymbol: string; waypointSymbol: string }) {
     this.destination = destination;
-    if (options?.flightMode) {
-      this.flightMode = options.flightMode
-    }
   }
 
   async execute(ship: Ship) {
@@ -25,10 +20,15 @@ export class TravelTask implements TaskInterface {
       //already there
     } else if (ship.currentSystemSymbol === this.destination.systemSymbol) {
       await defaultSystemWayfinder.loadSystemFromDb(this.destination.systemSymbol)
-      const route = await defaultSystemWayfinder.findRoute(ship.currentWaypointSymbol, this.destination.waypointSymbol, {
-        max: ship.maxFuel,
-        current: ship.fuel
-      })
+      let route;
+      if (ship.maxFuel === 0) {
+        route = await defaultSystemWayfinder.findRouteNoFuel(ship.currentWaypointSymbol, this.destination.waypointSymbol)
+      } else {
+        route = await defaultSystemWayfinder.findRoute(ship.currentWaypointSymbol, this.destination.waypointSymbol, {
+          max: ship.maxFuel,
+          current: ship.fuel
+        })
+      }
       //warp to waypoint
       for(const step of route.finalPath) {
         await ship.navigateMode(step.edge === 'drift' ? ShipNavFlightMode.Drift : step.edge === 'burn' ? ShipNavFlightMode.Burn : ShipNavFlightMode.Cruise)
@@ -44,7 +44,6 @@ export class TravelTask implements TaskInterface {
   serialize(): string {
     return JSON.stringify({
       destination: this.destination,
-      flightMode: this.flightMode
     })
   }
 }

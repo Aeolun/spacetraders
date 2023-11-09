@@ -40,7 +40,7 @@ export class ExploreTask implements TaskInterface {
       }
 
       if (chartResult.waypoint?.isUnderConstruction) {
-        
+        await ship.construction();
       }
 
       await prisma.waypoint.update({

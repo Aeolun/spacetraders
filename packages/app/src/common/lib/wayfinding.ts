@@ -23,8 +23,8 @@ export interface SimpleSystem {
 type WayfindDbSystem = System & { waypoints: ({ symbol: string, type: string, jumpConnectedTo: { symbol: string }[] })[] }
 
 export class Wayfinding {
-    dijkstra?: DijkstraCalculator
-    jumpDijkstra?: DijkstraCalculator
+    dijkstra?: DijkstraCalculator<'fuel'>
+    jumpDijkstra?: DijkstraCalculator<'fuel'>
     alreadyConnected = new Set<string>()
     edges = 0
     furthestDistance = 2000
@@ -49,7 +49,7 @@ export class Wayfinding {
             supplies: {
                 fuel: fuel.current
             },
-            maxSupplies: {
+            supplyCapacity: {
                 fuel: fuel.max
             }
         })
@@ -65,7 +65,7 @@ export class Wayfinding {
             supplies: {
                 fuel: fuel.current
             },
-            maxSupplies: {
+            supplyCapacity: {
                 fuel: fuel.max
             }
         })
@@ -105,6 +105,9 @@ export class Wayfinding {
                 this.alreadyConnected.add(connectionId)
 
                 const systemSymbol = system.symbol
+                if (!this.waypointMap[waypointSymbol]) {
+                    throw new Error(`Cannot find waypoint ${waypointSymbol} in waypointMap`)
+                }
                 const toSystemSymbol = this.waypointMap[waypointSymbol].systemSymbol
 
                 this.dijkstra.addEdge(systemSymbol, toSystemSymbol, {
@@ -223,7 +226,8 @@ export class Wayfinding {
                 x: system.x,
                 y: system.y,
                 hasFuel: system.waypoints.some(wp => wp.type === 'PLANET' || wp.type === 'MOON'),
-                hasJumpGate: system.waypoints.some(wp => wp.type === 'JUMP_GATE')
+                hasJumpGate: system.waypoints.some(wp => wp.type === 'JUMP_GATE'),
+                jumpGateWaypoint: system.waypoints.find(wp => wp.type === 'JUMP_GATE')?.symbol
             }
         })
 
@@ -244,7 +248,7 @@ export class Wayfinding {
                 hasJumpGate: system.waypoints.some(wp => wp.type === 'JUMP_GATE'),
                 // this is obviously incorrect, but it's a decent approximation
                 hasFuel: system.waypoints.some(wp => wp.type === 'PLANET' || wp.type === 'MOON'),
-                jumpConnectedSystems: system.waypoints.some(wp => wp.type === 'JUMP_GATE') ? simpleSystems.filter(s => s.symbol !== system.symbol && getDistance(system, s) <= 2500).map(s => s.symbol) : []
+                jumpConnectedSystems: system.waypoints.some(wp => wp.type === 'JUMP_GATE') ? simpleSystems.filter(s => s.symbol !== system.symbol && s.hasJumpGate && getDistance(system, s) <= 2500).map(s => s.jumpGateWaypoint) : []
             })
         })
 

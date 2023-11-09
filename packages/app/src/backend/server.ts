@@ -215,7 +215,8 @@ export const appRouter = router({
                 engine: true,
                 mounts: true,
                 modules: true,
-                cargo: true
+                cargo: true,
+                ShipTask: true
             }
         })
     }),
@@ -235,14 +236,18 @@ export const appRouter = router({
                 engine: true,
                 mounts: true,
                 modules: true,
-                cargo: true
+                cargo: true,
+                ShipTask: true
             }
         });
     }),
     getAgentInfo: publicProcedure.query(async ({ctx}) => {
         return prisma.agent.findFirst({
             where: {
-                symbol: ctx.payload.identifier
+                symbol: ctx.payload?.identifier,
+            },
+            orderBy: {
+                reset: 'desc'
             }
         })
     }),
@@ -261,7 +266,8 @@ export const appRouter = router({
                engine: true,
                mounts: true,
                modules: true,
-               cargo: true
+               cargo: true,
+               ShipTask: true,
            }
        })
     }),

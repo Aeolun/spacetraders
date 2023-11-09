@@ -1,36 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface AccountState {
-  registerServer: string,
-  registerFaction: string,
-  registerSymbol: string,
-  registerEmail: string,
+export interface AgentState {
+  credits: number
 }
 
-const initialState: AccountState = {
-  registerEmail: '',
-  registerFaction: '',
-  registerSymbol: '',
-  registerServer: '',
+const initialState: AgentState = {
+  credits: 0
 }
 
 export const agentSlice = createSlice({
-  name: 'account',
+  name: 'agent',
   initialState,
   reducers: {
-    setRegisterServer: (state, action: PayloadAction<string>) => {
-      state.registerServer = action.payload
+    setCredits: (state, action: PayloadAction<number>) => {
+      state.credits = action.payload
     },
-    setRegisterFaction: (state, action: PayloadAction<string>) => {
-      state.registerFaction = action.payload
-    },
-    setRegisterSymbol: (state, action: PayloadAction<string>) => {
-      state.registerSymbol = action.payload
-    },
-    setRegisterEmail: (state, action: PayloadAction<string>) => {
-      state.registerEmail = action.payload
-    }
   },
 })
 

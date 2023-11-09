@@ -251,6 +251,7 @@ model Waypoint {
   exploreStatus       ExploreStatus?     @default(UNEXPLORED)
   traits              WaypointTrait[]
   modifiers           WaypointModifier[]
+  marketLastUpdated   DateTime           @default(now())
 
   orbitsSymbol String?
   orbits       Waypoint?  @relation("orbits", fields: [orbitsSymbol], references: [symbol], onDelete: NoAction, onUpdate: NoAction)
@@ -264,10 +265,12 @@ model Waypoint {
   shipsEnroute    Ship[] @relation("destinationWaypoint")
   shipsDeparted   Ship[] @relation("departureWaypoint")
 
-  tradeGoods        MarketPrice[]
-  jumpConnectedTo   Waypoint[]    @relation("jumpConnectedTo")
-  jumpConnectedFrom Waypoint[]    @relation("jumpConnectedTo")
-  construction      Construction?
+  tradeGoods         MarketPrice[]
+  jumpConnectedTo    Waypoint[]           @relation("jumpConnectedTo")
+  jumpConnectedFrom  Waypoint[]           @relation("jumpConnectedTo")
+  construction       Construction?
+  purchasableShips   ShipyardModel[]
+  MarketPriceHistory MarketPriceHistory[]
 
   @@index([orbitsSymbol])
   @@index([systemSymbol])
@@ -334,6 +337,7 @@ model ShipyardModel {
   shipConfigurationSymbol String
   shipConfiguration       ShipConfiguration? @relation(fields: [shipConfigurationSymbol], references: [symbol])
   waypointSymbol          String
+  waypoint                Waypoint           @relation(fields: [waypointSymbol], references: [symbol])
 
   price Int?
 
@@ -436,12 +440,33 @@ model MarketPrice {
   @@index([tradeGoodSymbol])
 }
 
+model MarketPriceHistory {
+  waypointSymbol  String
+  waypoint        Waypoint  @relation(fields: [waypointSymbol], references: [symbol], onDelete: Cascade)
+  tradeGoodSymbol String
+  tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+
+  kind          MarketGoodKind
+  supply        MarketGoodSupply?
+  activityLevel MarketGoodActivityLevel?
+  purchasePrice Int?
+  sellPrice     Int?
+  tradeVolume   Int?
+
+  updatedOn DateTime @updatedAt
+
+  @@id([waypointSymbol, tradeGoodSymbol, createdAt])
+  @@index([waypointSymbol])
+  @@index([tradeGoodSymbol])
+}
+
 enum MarketTransationType {
   PURCHASE
   SELL
 }
 
-model MarketTransation {
+model MarketTransaction {
   id             String               @id @default(uuid())
   waypointSymbol String
   shipSymbol     String
@@ -451,6 +476,8 @@ model MarketTransation {
   pricePerUnit   Int
   totalPrice     Int
   timestamp      DateTime             @default(now())
+
+  @@unique([waypointSymbol, shipSymbol, tradeSymbol, timestamp])
 }
 
 model TradeGood {
@@ -458,9 +485,10 @@ model TradeGood {
   name        String
   description String @db.Text
 
-  cargo      ShipCargo[]
-  onMarketAt MarketPrice[]
-  Material   Material[]
+  cargo              ShipCargo[]
+  onMarketAt         MarketPrice[]
+  Material           Material[]
+  MarketPriceHistory MarketPriceHistory[]
 }
 
 model ShipCargo {
@@ -624,6 +652,7 @@ enum TaskType {
   SIPHON
   MINE
   SURVEY
+  PURCHASE_SHIP
 }
 
 model ShipTask {

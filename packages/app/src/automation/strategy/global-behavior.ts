@@ -5,6 +5,7 @@ import {ObjectivePopulator} from "@auto/strategy/objective-populator";
 import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {APIInstance} from "@common/lib/createApi";
 import {startShipBehavior} from "@auto/strategy/ship-behavior";
+import {environmentVariables} from "@common/environment-variables";
 
 let stage = 0;
 export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulator: ObjectivePopulator, api: APIInstance) {
@@ -28,12 +29,10 @@ export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulat
       await prisma.waypoint.findMany({
         where: {
           systemSymbol: homeSystem.symbol,
-        },
-        include: {
-          tradeGoods: true,
+          exploreStatus: "UNEXPLORED",
         },
       })
-    ).filter((w) => w.tradeGoods.length === 0).length > 0;
+    ).length > 0;
 
   if (hasUnexploredHomeWaypoints) {
     stage = 1;
@@ -43,10 +42,18 @@ export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulat
 
   setInterval(() => {
     taskPopulator.populateObjectives()
-    console.log("Current objectives", orchestrator.getObjectiveCount())
+    const commandShip = orchestrator.getShip(`${environmentVariables.agentName}-1`)
+    if (commandShip) {
+      const shipObjectives = orchestrator.getSortedObjectives(commandShip).slice(0, 10)
+      console.log(shipObjectives.slice(0, 10).map(o => o.objective + ` P${o.priority} (` + o.distanceToStart(commandShip) + ' LY)'))
+    }
   }, 5000);
 
   startShipBehavior(orchestrator, api)
+  setInterval(() => {
+    console.log("Checking for new ships")
+    startShipBehavior(orchestrator, api)
+  }, 60000)
 
 
   while (true) {
@@ -55,6 +62,9 @@ export async function initGlobalBehavior(orchestrator: Orchestrator, taskPopulat
       taskPopulator.addPossibleObjective(ObjectiveType.EXPLORE)
     } else if (stage === 2) {
       taskPopulator.addPossibleObjective(ObjectiveType.MINE)
+      taskPopulator.addPossibleObjective(ObjectiveType.TRADE)
+      taskPopulator.addPossibleObjective(ObjectiveType.UPDATE_MARKET)
+      taskPopulator.addPossibleObjective(ObjectiveType.PURCHASE_SHIP)
     }
 
     await new Promise((resolve) => setTimeout(resolve, 2000));

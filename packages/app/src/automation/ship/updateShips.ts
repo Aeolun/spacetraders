@@ -37,6 +37,7 @@ export async function returnShipData(shipSymbol: string) {
       mounts: true,
       modules: true,
       cargo: true,
+      ShipTask: true,
     },
   });
 }

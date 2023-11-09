@@ -53,10 +53,45 @@ export const menuItem = style({
   }
 })
 
+export const agentInfo = style({
+  display: 'flex',
+  alignSelf: 'center',
+  justifySelf: 'flex-end',
+  fontSize: '1.5em',
+  marginLeft: 'auto',
+  padding: '0.5em',
+  color: 'white'
+});
+
 export const marketRow = style({
   display: 'grid',
-  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr',
+  gridTemplateColumns: '24px 2fr 24px 24px 24px 1fr 1fr 1fr',
   flexDirection: 'row',
   borderBottom: '1px solid #292929',
   justifyContent: 'space-between',
+  '*': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'left',
+    overflow: 'hidden'
+  }
+});
+
+export const marketRowNumber = style({
+  display: 'flex',
+  justifyContent: 'right'
+})
+
+export const shipyardRow = style({
+  display: 'grid',
+  gridTemplateColumns: '2fr 1fr',
+  flexDirection: 'row',
+  borderBottom: '1px solid #292929',
+  justifyContent: 'space-between',
+  '*': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'left',
+    overflow: 'hidden'
+  }
 });

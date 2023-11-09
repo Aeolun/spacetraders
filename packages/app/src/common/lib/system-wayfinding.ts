@@ -5,6 +5,7 @@ import { System as STSystem } from 'spacetraders-sdk'
 
 export class SystemWayfinding {
     dijkstra?: DijkstraCalculator<'fuel'>
+    noFuelDijkstra?: DijkstraCalculator<'fuel'>
 
     constructor() {}
 
@@ -22,8 +23,16 @@ export class SystemWayfinding {
         })
     }
 
+    async findRouteNoFuel(fromWaypoint: string, toWaypoint: string) {
+        if (!this.noFuelDijkstra) {
+            throw new Error("No dijkstra, load a system first.")
+        }
+        return this.noFuelDijkstra.calculateShortestPathAsLinkedListResult(fromWaypoint, toWaypoint)
+    }
+
     async loadSystemFromDb(systemSymbol: string) {
         const dijkstra = this.dijkstra = new DijkstraCalculator();
+        const noFuelDijkstra = this.noFuelDijkstra = new DijkstraCalculator();
 
         const waypoints = await prisma.waypoint.findMany({
             where: {
@@ -52,6 +61,7 @@ export class SystemWayfinding {
                     }
                 }
             })
+            noFuelDijkstra?.addVertex(waypoint.symbol)
         }
 
         waypoints.forEach((waypoint) => {
@@ -106,6 +116,18 @@ export class SystemWayfinding {
                     consumes: {
                         fuel: 1,
                     },
+                });
+                noFuelDijkstra.addEdge(waypoint.symbol, otherWaypoint.symbol, {
+                    weight: edgeCost(30, 7.5, distance),
+                    id: 'burn',
+                });
+                noFuelDijkstra.addEdge(waypoint.symbol, otherWaypoint.symbol, {
+                    weight: edgeCost(30, 15, distance),
+                    id: 'cruise',
+                });
+                noFuelDijkstra.addEdge(waypoint.symbol, otherWaypoint.symbol, {
+                    weight: edgeCost(30, 150, distance),
+                    id: 'drift',
                 });
             });
         });

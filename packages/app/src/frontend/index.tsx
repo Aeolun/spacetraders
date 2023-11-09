@@ -1,5 +1,5 @@
-import {Provider} from "react-redux";
-import {store} from "@front/ui/store";
+import {Provider, useSelector} from "react-redux";
+import {RootState, store} from "@front/ui/store";
 import {createRoot} from "react-dom/client";
 import {Pixi} from "@front/components/Pixi";
 import * as appStyles from "@front/styles/app.css";
@@ -8,6 +8,7 @@ import {SelectionDisplay} from "@front/components/SelectionDisplay";
 import {backendUrl, trpcReact} from "./trpc";
 import {httpBatchLink} from "@trpc/client";
 import {useState} from "react";
+import {format} from "@common/lib/format";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -32,6 +33,8 @@ const App = () => {
         ],
     }),);
 
+    const credits = useSelector((select: RootState) => select.agent.credits)
+
     return <trpcReact.Provider client={trpcClient} queryClient={queryClient}><QueryClientProvider client={queryClient}><div className={appStyles.app}>
 
         <div className={appStyles.menu}>
@@ -39,6 +42,9 @@ const App = () => {
             <div className={appStyles.menuItem}>Ships</div>
             <div className={appStyles.menuItem}>Waypoints</div>
             <div className={appStyles.menuItem}>Systems</div>
+            <div className={appStyles.agentInfo}>
+                {format.format(credits)}
+            </div>
         </div>
         <section className={appStyles.columns}>
             <Pixi />

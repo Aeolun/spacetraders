@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Waypoint" ADD COLUMN     "marketLastUpdated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

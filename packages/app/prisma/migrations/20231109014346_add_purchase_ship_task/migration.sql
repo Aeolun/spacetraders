@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "TaskType" ADD VALUE 'PURCHASE_SHIP';

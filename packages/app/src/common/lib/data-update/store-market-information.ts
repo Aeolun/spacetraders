@@ -1,10 +1,17 @@
 import {GetMarket200Response, TradeSymbol} from "spacetraders-sdk";
 import {prisma, Prisma} from "@common/prisma";
+import {storeMarketTransaction} from "@common/lib/data-update/store-market-transaction";
 
 export async function storeMarketInformation(data: GetMarket200Response) {
   let hasFuel = false
 
   const marketData: Prisma.MarketPriceUncheckedCreateInput[] = []
+
+  if (data.data.transactions) {
+    await Promise.all(data.data.transactions.map(transaction => {
+      return storeMarketTransaction(transaction)
+    }))
+  }
 
 
   data.data.tradeGoods?.forEach(good => {
@@ -99,6 +106,7 @@ export async function storeMarketInformation(data: GetMarket200Response) {
         sellPrice: data.sellPrice,
         purchasePrice: data.purchasePrice,
         tradeVolume: data.tradeVolume,
+        activityLevel: data.activityLevel,
         supply: data.supply
       }
     })

@@ -3,7 +3,7 @@ import {prisma} from "@common/prisma";
 import {returnShipData} from "@auto/ship/updateShips";
 
 export async function processConstruction(data: GetConstruction200Response) {
-  prisma.construction.upsert({
+  return prisma.construction.upsert({
     where: {
       symbol: data.data.symbol,
     },
@@ -26,8 +26,10 @@ export async function processConstruction(data: GetConstruction200Response) {
         upsert: data.data.materials.map((material) => {
           return {
             where: {
-              constructionId: data.data.symbol,
-              tradeGoodSymbol: material.tradeSymbol,
+              constructionId_tradeGoodSymbol: {
+                constructionId: data.data.symbol,
+                tradeGoodSymbol: material.tradeSymbol,
+              }
             },
             create: {
               tradeGoodSymbol: material.tradeSymbol,
@@ -42,5 +44,4 @@ export async function processConstruction(data: GetConstruction200Response) {
       }
     }
   })
-  data.data.symbol
 }

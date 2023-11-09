@@ -1,5 +1,7 @@
 import {trpc} from "@front/trpc";
 import {Registry, ShipData} from "@front/viewer/registry";
+import {agentActions} from "@front/ui/slices/agent";
+import {store} from "@front/ui/store";
 
 export async function loadPlayerData() {
   const ships = await trpc.getMyShips.query()
@@ -20,5 +22,8 @@ export async function loadPlayerData() {
 
 export async function updateCredits() {
   const agent = await trpc.getAgentInfo.query()
-  Registry.agent = agent
+  if (agent?.credits) {
+    Registry.agent = agent
+    store.dispatch(agentActions.setCredits(agent.credits));
+  }
 }

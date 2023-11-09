@@ -6,6 +6,7 @@ export enum ObjectiveType {
   MINE = 'mine',
   TRAVEL = 'travel',
   UPDATE_MARKET = 'update-market',
+  PURCHASE_SHIP = 'purchase-ship',
 }
 export abstract class AbstractObjective {
   public objective: string;
@@ -18,5 +19,7 @@ export abstract class AbstractObjective {
   abstract appropriateForShip(ship: Ship): boolean
   abstract distanceToStart(ship: Ship): number
 
+  abstract onStarted(ship: Ship): Promise<void>
   abstract constructTasks(ship: Ship): Promise<void>
+  abstract onCompleted(ship: Ship): Promise<void>
 }

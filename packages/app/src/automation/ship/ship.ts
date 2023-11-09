@@ -7,9 +7,9 @@ import {
   ExtractResources201ResponseData,
   GetMarket200Response,
   Market,
-  MarketTransaction,
+  MarketTransaction, ShipCargoItem,
   ShipNavFlightMode,
-  ShipRefineRequestProduceEnum,
+  ShipRefineRequestProduceEnum, ShipType,
   Survey,
   TradeSymbol,
 } from "spacetraders-sdk";
@@ -64,11 +64,23 @@ export class Ship {
   public fuel = 0;
   public maxFuel = 0;
 
+  public cargo = 0;
+  public maxCargo = 0;
+  public currentCargo: Record<string, number> = {}
+
   public navigationUntil: string | undefined = undefined;
   public isDocked = false;
 
+  public expectedCargo: Record<string, number> = {};
+
   constructor(public symbol: string, private api: APIInstance) {
     this.queue = foregroundQueue;
+  }
+
+  public hasMoreThanExpectedCargo() {
+    return Object.keys(this.currentCargo).some((key) => {
+      return this.currentCargo[key] > (this.expectedCargo[key] ?? 0);
+    });
   }
 
   async addTask(task: Task) {
@@ -83,6 +95,15 @@ export class Ship {
       id: taskEntity.id,
       task: task
     });
+  }
+
+  async clearTaskQueue() {
+    await prisma.shipTask.deleteMany({
+      where: {
+        shipSymbol: this.symbol
+      }
+    })
+    this.taskQueue = []
   }
 
   get taskQueueLength() {
@@ -101,7 +122,7 @@ export class Ship {
     if (nextTask === undefined) {
       throw new Error("Should never remove a nonexistent task.")
     }
-    await prisma.shipTask.delete({
+    await prisma.shipTask.deleteMany({
       where: {
         id: nextTask.id
       }
@@ -160,6 +181,10 @@ export class Ship {
         : undefined;
     this.navMode = shipInfo.data.data.nav.flightMode;
 
+    this.cargo = shipInfo.data.data.cargo.units;
+    this.maxCargo = shipInfo.data.data.cargo.capacity;
+    this.updateInventory(shipInfo.data.data.cargo.inventory);
+
     this.fuel = shipInfo.data.data.fuel.current;
     this.maxFuel = shipInfo.data.data.fuel.capacity;
 
@@ -171,8 +196,13 @@ export class Ship {
     this.isDocked = shipInfo.data.data.nav.status === "DOCKED";
 
     await this.loadTaskQueue();
+  }
 
-    await this.waitUntil(shipInfo.data.data.nav.route.arrival);
+  private updateInventory(inventory: ShipCargoItem[]) {
+    this.currentCargo = inventory.reduce((acc, cur) => {
+      acc[cur.symbol] = cur.units
+      return acc
+    }, {} as Record<string, number>)
   }
 
   get currentSystem(): System {
@@ -180,6 +210,13 @@ export class Ship {
       throw new Error("No current system object");
     }
     return this._currentSystemObject;
+  }
+
+  get currentWaypoint(): Waypoint {
+    if (!this._currentWaypointObject) {
+      throw new Error("No current waypoint object");
+    }
+    return this._currentWaypointObject;
   }
 
   private async updateLocationObjects() {
@@ -597,6 +634,7 @@ export class Ship {
       );
 
       await processCooldown(this.symbol, res.data.data.cooldown);
+      this.cargo = res.data.data.cargo.units;
       const newShipInfo = await processCargo(this.symbol, res.data.data.cargo);
 
       let expiry: Date | undefined = this.handleExpiration(res.data.data.cooldown.expiration);
@@ -646,6 +684,10 @@ export class Ship {
 
   async refuel() {
     return this.catchAxiosCodes('refuel', async () => {
+      if (!this.isDocked) {
+        await this.dock()
+      }
+
       const beforeDetails = await this.queue(() => {
         return this.api.agents.getMyAgent();
       });
@@ -669,6 +711,10 @@ export class Ship {
 
       const result = await processFuel(this.symbol, res.data.data.fuel);
 
+      ee.emit('event', {
+        type: 'AGENT',
+        data: res.data.data.agent
+      })
       ee.emit("event", {
         type: "NAVIGATE",
         data: await returnShipData(this.symbol),
@@ -702,6 +748,23 @@ export class Ship {
         return processNav(this.symbol, res.data.data.nav);
       });
     })
+  }
+
+  async purchaseShip(shipType: ShipType) {
+    return this.catchAxiosCodes('purchase ship', async () => {
+      return this.queue(async () => {
+        this.log(`Purchasing ship ${shipType}`);
+
+        const res = await this.api.fleet.purchaseShip({
+          shipType: shipType,
+          waypointSymbol: this.currentWaypointSymbol,
+        });
+
+        await processShip(res.data.data.ship);
+        //await processTransaction(res.data.data.transaction);
+        await processAgent(res.data.data.agent);
+      });
+    });
   }
 
   async construction() {
@@ -815,16 +878,19 @@ export class Ship {
     })
   }
 
-  async currentCargo() {
+  async updateCurrentCargo() {
     return this.catchAxiosCodes('currentCargo', async () => {
       const cargo = await this.queue(() => {
         return this.api.fleet.getMyShipCargo(this.symbol);
       });
 
+      this.currentCargo = {}
       cargo.data.data.inventory.forEach((item) => {
+        this.currentCargo[item.symbol] = item.units;
         this.log(`Cargo: ${item.symbol} x${item.units}`);
       });
 
+      this.cargo = cargo.data.data.units;
       return processCargo(this.symbol, cargo.data.data);
     });
   }
@@ -888,61 +954,78 @@ export class Ship {
   async purchaseCargo(good: string, quantity: number) {
     let shipData: any = undefined;
     return this.catchAxiosCodes('purchaseCargo', async () => {
-      const marketBefore = await this.queue(() =>
-        this.api.systems.getMarket(
-          this.currentSystemSymbol,
-          this.currentWaypointSymbol
-        )
-      );
-      const boughtGoodBefore = marketBefore.data.data.tradeGoods?.find(
-        (g) => g.symbol === good
-      );
-      const result = await this.queue(() =>
-        this.api.fleet.purchaseCargo(this.symbol, {
-          symbol: good as TradeSymbol,
-          units: quantity,
-        })
-      );
-      const marketAfter = await this.queue(() =>
-        this.api.systems.getMarket(
-          this.currentSystemSymbol,
-          this.currentWaypointSymbol
-        )
-      );
-      const boughtGood = marketAfter.data.data.tradeGoods?.find(
-        (g) => g.symbol === good
-      );
-      this.log(
-        `Purchased ${quantity} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`
-      );
-      if (boughtGood && boughtGoodBefore) {
-        await prisma.tradeLog.create({
-          data: {
-            shipSymbol: this.symbol,
-            waypointSymbol: result.data.data.transaction.waypointSymbol,
-            tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
-            purchasePrice: result.data.data.transaction.pricePerUnit,
-            purchaseAmount: result.data.data.transaction.units,
-            purchaseVolume: boughtGood.tradeVolume,
-            purchasePriceAfter: boughtGood.purchasePrice,
-            tradeVolume: boughtGoodBefore.tradeVolume,
-            supply: boughtGoodBefore.supply,
-            supplyAfter: boughtGood.supply,
-          },
-        });
-      } else {
-        this.log("Could not log trade, missing market information")
+      if (!this.isDocked) {
+        await this.dock()
       }
 
-      await storeMarketInformation(marketAfter.data);
-      await processCargo(this.symbol, result.data.data.cargo);
+      let marketBefore = await this.queue(() =>
+        this.api.systems.getMarket(
+          this.currentSystemSymbol,
+          this.currentWaypointSymbol
+        )
+      );
+      let boughtGoodBefore = marketBefore.data.data.tradeGoods?.find(
+        (g) => g.symbol === good
+      );
+      if (!boughtGoodBefore) {
+        throw new Error(`Cannot buy ${good} at waypoint ${this.currentWaypointSymbol}`);
+      }
+      let totalBought = 0;
+      const purchasePerCall = Math.min(boughtGoodBefore?.tradeVolume, quantity)
+      for(let i = 0; i < quantity; i += purchasePerCall) {
+        const result = await this.queue(() =>
+          this.api.fleet.purchaseCargo(this.symbol, {
+            symbol: good as TradeSymbol,
+            units: Math.min(quantity - totalBought, purchasePerCall),
+          })
+        );
+        let marketAfter = await this.queue(() =>
+          this.api.systems.getMarket(
+            this.currentSystemSymbol,
+            this.currentWaypointSymbol
+          )
+        );
+        await storeMarketInformation(marketAfter.data);
+        await processAgent(result.data.data.agent)
+        this.cargo = result.data.data.cargo.units;
+        await processCargo(this.symbol, result.data.data.cargo);
+        this.updateInventory(result.data.data.cargo.inventory);
+        ee.emit('event', {
+          type: 'AGENT',
+          data: result.data.data.agent
+        })
+        const boughtGood = marketAfter.data.data.tradeGoods?.find(
+          (g) => g.symbol === good
+        );
+        this.log(
+          `Purchased ${quantity} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`
+        );
+        if (boughtGood && boughtGoodBefore) {
+          await prisma.tradeLog.create({
+            data: {
+              shipSymbol: this.symbol,
+              waypointSymbol: result.data.data.transaction.waypointSymbol,
+              tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
+              purchasePrice: result.data.data.transaction.pricePerUnit,
+              purchaseAmount: result.data.data.transaction.units,
+              purchaseVolume: boughtGood.tradeVolume,
+              purchasePriceAfter: boughtGood.purchasePrice,
+              tradeVolume: boughtGoodBefore.tradeVolume,
+              supply: boughtGoodBefore.supply,
+              supplyAfter: boughtGood.supply,
+            },
+          });
+        } else {
+          this.log("Could not log trade, missing market information")
+        }
+        marketBefore = marketAfter;
+        boughtGoodBefore = boughtGood;
+      }
 
       ee.emit("event", {
         type: "NAVIGATE",
         data: await returnShipData(this.symbol),
       });
-
-      return result.data.data.transaction;
     })
   }
 
@@ -952,6 +1035,10 @@ export class Ship {
     market?: GetMarket200Response
   ) {
     return this.catchAxiosCodes('sellCargo', async () => {
+      if (!this.isDocked) {
+        await this.dock()
+      }
+
       if (!market) {
         const axiosData = await this.queue(() =>
           this.api.systems.getMarket(
@@ -1023,8 +1110,14 @@ export class Ship {
         );
         await storeMarketInformation(marketAfter.data);
         await processAgent(result.data.data.agent);
+        this.cargo = result.data.data.cargo.units;
         await processCargo(this.symbol, result.data.data.cargo);
+        this.updateInventory(result.data.data.cargo.inventory);
 
+        ee.emit('event', {
+          type: 'AGENT',
+          data: result.data.data.agent
+        })
         ee.emit("event", {
           type: "NAVIGATE",
           data: await returnShipData(this.symbol),
@@ -1063,7 +1156,9 @@ export class Ship {
       })
     );
 
+    this.cargo = res.data.data.cargo.units;
     const afterCargo = await processCargo(this.symbol, res.data.data.cargo);
+    this.updateInventory(res.data.data.cargo.inventory);
 
     const expiry = this.handleExpiration(res.data.data.cooldown.expiration);
 

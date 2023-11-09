@@ -11,6 +11,7 @@ import { trpc } from "@front/trpc";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {contextMenuActions} from "@front/ui/slices/context-menu";
 import {store} from "@front/ui/store";
+import {agentActions} from "@front/ui/slices/agent";
 
 export const handleMapMove = () => {
   const zoom = universeView.worldScreenWidth / universeView.screenWidth
@@ -67,7 +68,7 @@ export async function initialize(app: Application) {
   })
 
   // ticker to size universe objects
-  app.ticker.add(() => {
+  app.ticker.add((dat) => {
     const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 1)
     const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 1)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
@@ -91,7 +92,7 @@ export async function initialize(app: Application) {
       const newPos = positionShip(shipData)
       shipEntity.position = newPos.position
       shipEntity.setAngle(newPos.navRot ?? 0)
-      if (shipData.navStatus === "IN_TRANSIT") {
+      if (shipData.navStatus === "IN_TRANSIT" && shipData.arrivalOn && new Date(shipData.arrivalOn).getTime() > Date.now()) {
         shipEntity.setNavigating(true)
       } else {
         shipEntity.setNavigating(false)
@@ -115,6 +116,9 @@ function startListeningToEvents() {
       console.log('event', data);
       if (data.type == 'NAVIGATE') {
         Registry.shipData[data.data.symbol] = data.data
+      } else if (data.type == 'AGENT') {
+        Registry.agent = data.data
+        store.dispatch(agentActions.setCredits(data.data.credits));
       }
     }
   })
