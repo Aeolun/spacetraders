@@ -4,10 +4,11 @@ import {glob} from 'glob'
 
 const options = {
   outputFormat: "png",
+  crop: false,
 };
 // Call the async function and extract the json and image values
 (async () => {
-  const files = await glob("public/textures/**/*", {
+  const files = await glob("public/textures/**/*.png", {
     nodir: true,
   });
 

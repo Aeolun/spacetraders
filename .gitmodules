@@ -1,0 +1,3 @@
+[submodule "packages/pixi-layers"]
+	path = packages/pixi-layers
+	url = git@github.com:Aeolun/layers.git

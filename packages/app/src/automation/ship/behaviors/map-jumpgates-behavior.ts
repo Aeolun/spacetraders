@@ -55,7 +55,7 @@ export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParam
     }
     ship.log(`Reserving ${exploreSystem.symbol} to find jump connections for`)
     jumpMapTaken.add(exploreSystem.symbol)
-    await ship.setOverallGoal(`Map jump-gate in ${exploreSystem.symbol}`)
+    await ship.setObjective(`Map jump-gate in ${exploreSystem.symbol}`)
 
     let explorableWaypoints = await prisma.waypoint.findMany({
         where: {
@@ -100,5 +100,5 @@ export const mapJumpgatesBehavior = async (ship: Ship, parameters: BehaviorParam
 
     ship.log(`Finished mapping jumps in ${exploreSystem.symbol}`)
     jumpMapTaken.delete(exploreSystem.symbol)
-    await ship.setOverallGoal(null)
+    await ship.setObjective(null)
 }

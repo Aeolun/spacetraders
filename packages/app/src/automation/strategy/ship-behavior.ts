@@ -11,12 +11,12 @@ export const startShipBehavior = async (orchestrator: Orchestrator, api: APIInst
   });
 
   for (const shipData of ships) {
-    if (!orchestrator.hasShip(shipData.symbol)) {
+    if (!orchestrator.hasExecutor(shipData.symbol)) {
       console.log("Starting behavior for ship", shipData.symbol)
       const ship = new Ship(shipData.symbol, api)
       await ship.updateShipStatus()
 
-      orchestrator.addShip(ship)
+      orchestrator.addExecutor(ship)
     } else {
       console.log("Ship already orchestrated", shipData.symbol)
     }

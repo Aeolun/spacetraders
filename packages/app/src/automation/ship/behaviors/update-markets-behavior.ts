@@ -91,14 +91,14 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
 
     if (updatable.length <= 0) {
         ship.log(`No systems to updated market prices for within ${parameters.range} of ${parameters.systemSymbol}, pausing for a bit.`)
-        await ship.setOverallGoal(null)
+        await ship.setObjective(null)
         await ship.waitFor(60000)
         return;
     }
 
     const updateSystem = updatable[0]
     updateTaken.add(updateSystem.symbol)
-    await ship.setOverallGoal(`Updating market waypoints in ${updateSystem.symbol}`)
+    await ship.setObjective(`Updating market waypoints in ${updateSystem.symbol}`)
 
     const success = await travelBehavior(updateSystem.symbol, ship)
     if (!success) {
@@ -153,5 +153,5 @@ export const updateMarketsBehavior = async (ship: Ship, parameters: BehaviorPara
 
     ship.log(`Finished updating markets in ${updateSystem.symbol}`)
     updateTaken.delete(updateSystem.symbol)
-    await ship.setOverallGoal(null)
+    await ship.setObjective(null)
 }

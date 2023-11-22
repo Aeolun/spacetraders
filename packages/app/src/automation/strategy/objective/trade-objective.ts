@@ -13,15 +13,23 @@ export class TradeObjective extends AbstractObjective {
   public toWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}
   public tradeSymbol: TradeSymbol
   public amount: number
+  public minSell: number;
+  public maxBuy: number;
+
 
   type: ObjectiveType.TRADE = ObjectiveType.TRADE;
 
-  constructor(fromWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, toWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, tradeSymbol: TradeSymbol, amount: number) {
-    super(`Trade ${tradeSymbol} from ${fromWaypoint.symbol} to ${toWaypoint.symbol}`);
+  constructor(fromWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, toWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, tradeSymbol: TradeSymbol, amount: number, options: {
+    minimumSell: number
+    maximumBuy: number
+  }) {
+    super(`Trade ${tradeSymbol} from ${fromWaypoint.symbol}`);
     this.fromWaypoint = fromWaypoint;
     this.toWaypoint = toWaypoint;
     this.tradeSymbol = tradeSymbol;
     this.amount = amount;
+    this.minSell = options.minimumSell;
+    this.maxBuy = options.maximumBuy;
   }
 
   async onStarted(ship: Ship): Promise<void> {
@@ -53,7 +61,7 @@ export class TradeObjective extends AbstractObjective {
     await ship.addTask(new PurchaseTask({
       systemSymbol: this.fromWaypoint.systemSymbol,
       waypointSymbol: this.fromWaypoint.symbol,
-    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount)))
+    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount), this.maxBuy))
     await ship.addTask(new TravelTask({
       systemSymbol: this.toWaypoint.systemSymbol,
       waypointSymbol: this.toWaypoint.symbol,
@@ -61,7 +69,7 @@ export class TradeObjective extends AbstractObjective {
     await ship.addTask(new SellTask({
       systemSymbol: this.toWaypoint.systemSymbol,
       waypointSymbol: this.toWaypoint.symbol,
-    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount)))
+    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount), this.minSell))
 
   }
 }

@@ -1,4 +1,4 @@
-import {globalStyle, style} from "@vanilla-extract/css";
+import {globalStyle, style, styleVariants} from "@vanilla-extract/css";
 
 globalStyle("html, body", {
   margin: 0,
@@ -13,12 +13,38 @@ export const app = style({
   height: '100vh'
 })
 
+export const error = style({
+  color: 'red',
+  fontSize: '1.5em',
+  padding: '0.5em'
+})
+
 export const columns = style({
   display: 'flex',
   flexDirection: 'row',
   flex: 1,
+  overflow: 'hidden'
 })
 
+export const link = style({
+  color: 'white',
+  textDecoration: 'underline',
+  cursor: 'pointer',
+})
+
+export const tagList = style({
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: '0.25em',
+  padding: '0.25em'
+})
+export const tag = style({
+  backgroundColor: 'black',
+  color: 'white',
+  border: '1px solid #888888',
+  padding: '0.25em'
+})
 export const column = style({
   display: 'flex',
   flexDirection: 'column',
@@ -26,6 +52,7 @@ export const column = style({
   maxWidth: '600px',
   borderLeft: '1px solid #292929',
   borderRight: '1px solid #292929',
+  overflow: 'auto',
   color: 'white'
 });
 
@@ -63,7 +90,7 @@ export const agentInfo = style({
   color: 'white'
 });
 
-export const marketRow = style({
+const defaultMarketRow = style({
   display: 'grid',
   gridTemplateColumns: '24px 2fr 24px 24px 24px 1fr 1fr 1fr',
   flexDirection: 'row',
@@ -75,23 +102,51 @@ export const marketRow = style({
     justifyContent: 'left',
     overflow: 'hidden'
   }
+})
+export const marketRow = styleVariants({
+  default: [defaultMarketRow],
+  header: [defaultMarketRow, {
+    backgroundColor: 'white',
+    color: 'black',
+  }]
 });
+
+const defaultSystemMarketRow = style({
+  display: 'grid',
+  gridTemplateColumns: '24px 3fr 2fr 2fr 2fr 1fr 1fr',
+  borderBottom: '1px solid #292929',
+  '*': {
+    overflow: 'hidden'
+  }
+})
+export const systemMarketRow = styleVariants({
+  default: [defaultSystemMarketRow],
+  header: [defaultSystemMarketRow, {
+    backgroundColor: 'white',
+    color: 'black',
+  }],
+  win: [defaultSystemMarketRow, {
+    backgroundColor: 'green',
+  }]
+});
+
 
 export const marketRowNumber = style({
   display: 'flex',
   justifyContent: 'right'
 })
 
-export const shipyardRow = style({
+const defaultShipyardRow = style({
   display: 'grid',
-  gridTemplateColumns: '2fr 1fr',
+  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
   flexDirection: 'row',
   borderBottom: '1px solid #292929',
   justifyContent: 'space-between',
-  '*': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'left',
-    overflow: 'hidden'
-  }
+})
+export const shipyardRow = styleVariants({
+  default: [defaultShipyardRow],
+  header: [defaultShipyardRow, {
+    backgroundColor: 'white',
+    color: 'black',
+  }]
 });

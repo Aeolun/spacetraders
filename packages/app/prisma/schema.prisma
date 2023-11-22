@@ -119,11 +119,12 @@ model System {
   hasStation      Boolean    @default(false)
   majorityFaction String?
 
-  exploreStatus      ExploreStatus? @default(UNEXPLORED)
+  exploreStatus      ExploreStatus?      @default(UNEXPLORED)
   exploredAt         DateTime?
   waypoints          Waypoint[]
-  waypointsRetrieved Boolean        @default(false)
-  shipsInSystem      Ship[]         @relation("currentSystem")
+  waypointsRetrieved Boolean             @default(false)
+  shipsInSystem      Ship[]              @relation("currentSystem")
+  ConsolidatedPrice  ConsolidatedPrice[]
 
   @@index([sectorSymbol])
 }
@@ -306,8 +307,11 @@ model ShipConfiguration {
   description String @db.Text
 
   frameSymbol   String
+  frame         ShipFrame   @relation(fields: [frameSymbol], references: [symbol], onDelete: Cascade)
   reactorSymbol String
+  reactor       ShipReactor @relation(fields: [reactorSymbol], references: [symbol], onDelete: Cascade)
   engineSymbol  String
+  engine        ShipEngine  @relation(fields: [engineSymbol], references: [symbol], onDelete: Cascade)
 
   shipConfigurationModule ShipConfigurationModule[]
   shipConfigurationMount  ShipConfigurationMount[]
@@ -320,6 +324,7 @@ model ShipConfigurationModule {
   shipConfigurationSymbol String
   shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
   moduleSymbol            String
+  module                  ShipModule        @relation(fields: [moduleSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([shipConfigurationSymbol])
 }
@@ -329,6 +334,7 @@ model ShipConfigurationMount {
   shipConfigurationSymbol String
   shipConfiguration       ShipConfiguration @relation(fields: [shipConfigurationSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
   mountSymbol             String
+  mount                   ShipMount         @relation(fields: [mountSymbol], references: [symbol], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([shipConfigurationSymbol])
 }
@@ -418,6 +424,7 @@ enum MarketGoodActivityLevel {
   STRONG
   GROWING
   WEAK
+  RESTRICTED
 }
 
 model MarketPrice {
@@ -438,6 +445,34 @@ model MarketPrice {
   @@id([waypointSymbol, tradeGoodSymbol])
   @@index([waypointSymbol])
   @@index([tradeGoodSymbol])
+}
+
+model ConsolidatedPrice {
+  tradeGoodSymbol String    @id
+  tradeGood       TradeGood @relation(fields: [tradeGoodSymbol], references: [symbol], onDelete: Cascade)
+
+  systemSymbol String?
+  system       System? @relation(fields: [systemSymbol], references: [symbol], onDelete: Cascade)
+
+  purchaseMaxPrice    Int?
+  purchaseMinPrice    Int?
+  purchaseAvgPrice    Int?
+  purchaseMedianPrice Int?
+  purchaseStdDev      Int?
+  purchaseP95         Int?
+  purchaseP5          Int?
+  sellMaxPrice        Int?
+  sellMinPrice        Int?
+  sellAvgPrice        Int?
+  sellMedianPrice     Int?
+  sellStdDev          Int?
+  sellP95             Int?
+  sellP5              Int?
+  maxVolume           Int?
+  minVolume           Int?
+  importMarketCount   Int?
+  exportMarketCount   Int?
+  exchangeMarketCount Int?
 }
 
 model MarketPriceHistory {
@@ -489,6 +524,7 @@ model TradeGood {
   onMarketAt         MarketPrice[]
   Material           Material[]
   MarketPriceHistory MarketPriceHistory[]
+  ConsolidatedPrice  ConsolidatedPrice[]
 }
 
 model ShipCargo {
@@ -514,7 +550,8 @@ model ShipFrame {
   crewRequirement  Int?
   powerRequirement Int?
 
-  ship Ship[]
+  ship              Ship[]
+  ShipConfiguration ShipConfiguration[]
 }
 
 model ShipReactor {
@@ -526,7 +563,8 @@ model ShipReactor {
 
   crewRequirement Int?
 
-  ships Ship[]
+  ships             Ship[]
+  ShipConfiguration ShipConfiguration[]
 }
 
 model ShipEngine {
@@ -538,7 +576,8 @@ model ShipEngine {
   crewRequirement  Int?
   powerRequirement Int?
 
-  ships Ship[]
+  ships             Ship[]
+  ShipConfiguration ShipConfiguration[]
 }
 
 model ShipModule {
@@ -553,7 +592,8 @@ model ShipModule {
   powerRequirement Int?
   slotRequirement  Int?
 
-  ships Ship[]
+  ships                   Ship[]
+  ShipConfigurationModule ShipConfigurationModule[]
 }
 
 model ShipMount {
@@ -569,7 +609,8 @@ model ShipMount {
   powerRequirement Int?
   slotRequirement  Int?
 
-  ships Ship[]
+  ships                  Ship[]
+  ShipConfigurationMount ShipConfigurationMount[]
 }
 
 enum ShipBehavior {
@@ -584,6 +625,7 @@ enum ShipBehavior {
 
 model Ship {
   symbol        String   @id
+  callsign      String   @default("")
   agent         String   @default("PHANTASM")
   name          String
   factionSymbol String

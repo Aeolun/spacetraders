@@ -23,7 +23,7 @@ export async function updateShips(api: APIInstance) {
 }
 
 export async function returnShipData(shipSymbol: string) {
-  return prisma.ship.findFirst({
+  return prisma.ship.findFirstOrThrow({
     where: {
       symbol: shipSymbol,
     },

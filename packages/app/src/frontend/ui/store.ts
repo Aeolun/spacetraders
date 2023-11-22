@@ -4,6 +4,8 @@ import registerAgentReducer from 'src/frontend/ui/slices/register-agent';
 import agentReducer from './slices/agent';
 import selectionReducer from './slices/selection';
 import contextMenuReducer from './slices/context-menu';
+import shipReducer from './slices/ship';
+import goodsReducer from './slices/goods';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +13,9 @@ export const store = configureStore({
     registerAgent: registerAgentReducer,
     agent: agentReducer,
     selection: selectionReducer,
-    contextMenu: contextMenuReducer
+    contextMenu: contextMenuReducer,
+    ship: shipReducer,
+    goods: goodsReducer
   },
 })
 

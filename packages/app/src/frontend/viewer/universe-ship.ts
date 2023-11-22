@@ -15,14 +15,14 @@ export class UniverseShip extends UniverseEntity {
     super(properties);
 
     //this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
-    this.zIndex = 100000
     const texture = loadedAssets.spritesheet.textures['public/textures/navarrow.png']
     this.navSprite = new Sprite(texture)
     this.navSprite.pivot = getCenterPivot(texture)
     this.navSprite.name = 'nav'
     this.navSprite.zIndex = -1
     this.navSprite.visible = false;
-    this.addChild(this.navSprite)
+    this.starLayerObject.addChild(this.navSprite)
+    console.log(this.sprite);
   }
 
   public setAngle(rotation: number) {

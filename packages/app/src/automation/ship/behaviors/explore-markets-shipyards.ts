@@ -92,7 +92,7 @@ export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamete
 
             if (updatable.length <= 0) {
                 ship.log(`No systems to updated market prices for within ${parameters.range} of ${parameters.systemSymbol}, pausing for a bit.`)
-                await ship.setOverallGoal(null)
+                await ship.setObjective(null)
                 await ship.waitFor(60000)
                 return;
             }
@@ -100,7 +100,7 @@ export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamete
             const updateSystem = updatable[0]
             updateTaken.add(updateSystem.symbol)
             ship.log(`Updating ${updateSystem.waypointCount} new markets in ${updateSystem.symbol}`)
-            await ship.setOverallGoal(`Updating ${updateSystem.waypointCount} new markets in ${updateSystem.symbol}`)
+            await ship.setObjective(`Updating ${updateSystem.waypointCount} new markets in ${updateSystem.symbol}`)
 
             const success = await travelBehavior(updateSystem.symbol, ship, undefined, {
               jumpOnly: true,
@@ -157,5 +157,5 @@ export const exploreNewMarkets = async (ship: Ship, parameters: BehaviorParamete
 
             ship.log(`Finished updating markets in ${updateSystem.symbol}`)
             updateTaken.delete(updateSystem.symbol)
-            await ship.setOverallGoal(null)
+            await ship.setObjective(null)
 }

@@ -1,5 +1,5 @@
 import {trpc} from "@front/trpc";
-import {starsContainer, universeView} from "@front/viewer/UIElements";
+import {starLayer, starsContainer, universeView} from "@front/viewer/UIElements";
 import {
   getEntityData, getEntityPosition,
   getSelectedEntity,
@@ -9,7 +9,7 @@ import {
   System,
   WaypointData
 } from "@front/viewer/registry";
-import {mapScale, systemCoordinates, systemDistanceMultiplier} from "@front/viewer/consts";
+import {mapScale, scale, systemCoordinates, systemDistanceMultiplier} from "@front/viewer/consts";
 import {Text, Container, Graphics, Sprite, PointData} from "pixi.js";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {loadedAssets} from "@front/viewer/assets";
@@ -21,6 +21,7 @@ import {getDistance} from "@common/lib/getDistance";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
 import {contextMenuActions} from "@front/ui/slices/context-menu";
+import {clearMarketRoutes, displayExportMarkets, displayImportMarkets} from "@front/viewer/display-export-market";
 
 function createOrbitGraphics(orbit: Graphics, diameter: number, color: number = 0x111111, width = 2) {
   orbit.circle(0, 0, diameter).stroke({
@@ -112,6 +113,9 @@ function createSystemItem(data: {
         type: 'waypoint',
         symbol: data.waypoint.symbol,
       }))
+      clearMarketRoutes()
+      displayImportMarkets(data.waypoint.systemSymbol, data.waypoint.symbol, data.waypoint.tradeGoods.filter(tg => tg.kind === 'EXPORT').map(tg => tg.tradeGoodSymbol))
+      displayExportMarkets(data.waypoint.systemSymbol, data.waypoint.symbol, data.waypoint.tradeGoods.filter(tg => tg.kind === 'IMPORT').map(tg => tg.tradeGoodSymbol))
     },
     onHover: (entity) => {
       const selectedEntity = getSelectedEntityData();
@@ -169,6 +173,7 @@ export async function loadSystem(systemSymbol: string) {
   const waypoints = Registry.waypointsForSystem[systemSymbol] ?? await trpc.waypointsForSystem.query({
     system: systemSymbol,
   })
+  Registry.waypointsForSystem[systemSymbol] = waypoints
 
   waypoints.forEach(waypoint => {
     Registry.waypointData[waypoint.symbol] = waypoint
@@ -197,12 +202,12 @@ export async function loadSystem(systemSymbol: string) {
     return getDistance(a, {x: 0, y: 0}) - getDistance(b, centerPoint)
   })
 
-  let startBand, lastBand
+  let startBand: number | undefined = undefined, lastBand: number | undefined = undefined
   waypoints.filter(item => item.type === 'ASTEROID').forEach(item => {
     if (!startBand) {
       startBand = getDistance(item, centerPoint)
     }
-    if (getDistance(item, centerPoint) - startBand > 100) {
+    if (getDistance(item, centerPoint) - startBand > 100 && lastBand) {
       asteroidBands.push({
         start: startBand,
         end: lastBand
@@ -211,12 +216,12 @@ export async function loadSystem(systemSymbol: string) {
     }
     lastBand = getDistance(item, centerPoint)
   })
-  asteroidBands.push({
-    start: startBand,
-    end: lastBand
-  })
-
-  console.log("bands", asteroidBands)
+  if (startBand && lastBand) {
+    asteroidBands.push({
+      start: startBand,
+      end: lastBand
+    })
+  }
 
   const orbitGraphics = new Graphics();
   orbitGraphics.alpha = 0.5
@@ -224,6 +229,7 @@ export async function loadSystem(systemSymbol: string) {
   const starPos = getStarPosition(starData);
   orbitGraphics.x = starPos.x
   orbitGraphics.y = starPos.y
+  orbitGraphics.zIndex = -1
   waypoints.filter(item => !item.orbitsSymbol && item.type !== 'ASTEROID' && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
     const diameter = Math.sqrt(Math.pow(item.x, 2) + Math.pow(item.y, 2)) * mapScale
     createOrbitGraphics(orbitGraphics, diameter)
@@ -232,7 +238,7 @@ export async function loadSystem(systemSymbol: string) {
     createOrbitGraphics(orbitGraphics, (band.start+band.end)/2 * mapScale, 0x111010, (band.end - band.start) * 1.1 * mapScale)
   });
 
-  starsContainer.addChild(orbitGraphics)
+  starLayer.addChild(orbitGraphics)
   Registry.systemObjects[systemSymbol].push(orbitGraphics)
 
   waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
@@ -242,6 +248,12 @@ export async function loadSystem(systemSymbol: string) {
     })
     //
     const orbitingThings = waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y))
+    if (orbitingThings.length > 0) {
+      orbitGraphics.circle(item.x*mapScale, item.y*mapScale, 48).stroke({
+        width: 2,
+        color: 0x111111,
+      })
+    }
     orbitingThings.forEach((orbitingThing, index) => {
       const orbitingGroup = createSystemItem({
         star: starData,
@@ -252,13 +264,11 @@ export async function loadSystem(systemSymbol: string) {
 
       Registry.waypoints[orbitingThing.symbol] = orbitingGroup
 
-      starsContainer.addChild(orbitingGroup)
       Registry.systemObjects[systemSymbol].push(orbitingGroup)
     })
     //
     Registry.waypoints[item.symbol] = itemGroup
 
-    starsContainer.addChild(itemGroup)
     Registry.systemObjects[systemSymbol].push(itemGroup)
   })
 }
@@ -269,7 +279,11 @@ export async function unloadSystem(systemSymbol: string) {
   }
   Registry.transformedSystems[systemSymbol] = false
 
-  Registry.systemObjects[systemSymbol].forEach(item => {
-    starsContainer.removeChild(item)
+  Registry.systemObjects?.[systemSymbol]?.forEach(item => {
+    if (item instanceof UniverseEntity) {
+      item.unload()
+    } else {
+      starsContainer.removeChild(item)
+    }
   });
 }

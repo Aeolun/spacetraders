@@ -3,6 +3,7 @@ import {loadedAssets} from "@front/viewer/assets";
 import {getCenterPivot} from "@front/viewer/lib/get-center-pivot";
 import {getSelectedEntity, Registry} from "@front/viewer/registry";
 import {getDistance} from "@common/lib/getDistance";
+import {iconLayer, labelLayer, starLayer, starsContainer} from "@front/viewer/UIElements";
 
 let traitTextures;
 
@@ -18,7 +19,11 @@ export interface UniverseEntityProperties {
   onRightClick?: (event: FederatedPointerEvent, entity: UniverseEntity) => void
 }
 
-export class UniverseEntity extends Container {
+export class UniverseEntity {
+  protected starLayerObject = new Container()
+  protected iconLayerObject = new Container()
+  protected labelLayerObject = new Container()
+
   __entity = 'universe-object'
   sprite: Sprite
   hoverCircle: Graphics
@@ -27,23 +32,26 @@ export class UniverseEntity extends Container {
   scaleFactor = 1
 
   constructor(properties: UniverseEntityProperties) {
-    super();
+    starLayer.addChild(this.starLayerObject)
+    iconLayer.addChild(this.iconLayerObject)
+    labelLayer.addChild(this.labelLayerObject)
 
     this.x = properties.position.x
     this.y = properties.position.y
     this.selected = false;
-    this.cursor = 'pointer'
-    this.scaleFactor = properties.scale ?? 1
+    this.starLayerObject.cursor = 'pointer'
+    this.scaleFactor = properties.scale ?? this.scaleFactor
 
     this.sprite = new Sprite(properties.texture)
+    const pivot = getCenterPivot(properties.texture)
+    this.sprite.pivot = pivot
+
     this.sprite.rotation = properties.rotation ?? 0
+    this.sprite.eventMode = 'static'
     this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
-    this.sprite.pivot = getCenterPivot(properties.texture)
-    this.sprite.interactive = true;
 
-    this.addChild(this.sprite)
+    this.starLayerObject.addChild(this.sprite)
     this.addTraits(properties.traits)
-
 
     this.hoverCircle = new Graphics();
     this.hoverCircle.circle(0, 0, 48 * this.scaleFactor).stroke({
@@ -52,7 +60,8 @@ export class UniverseEntity extends Container {
     })
     this.hoverCircle.zIndex = -1;
     this.hoverCircle.visible = false;
-    this.addChild(this.hoverCircle)
+    this.hoverCircle.eventMode = 'none'
+    this.labelLayerObject.addChild(this.hoverCircle)
 
     this.sprite.on('rightclick', (event) => {
       event.stopPropagation()
@@ -61,14 +70,14 @@ export class UniverseEntity extends Container {
     });
     this.sprite.on('mouseover', () => {
       this.hoverCircle.visible = true;
-      this.sprite.scale = {x: 1.2*this.scaleFactor, y: 1.2*this.scaleFactor}
+      //this.sprite.scale = {x: 1.2*this.scaleFactor, y: 1.2*this.scaleFactor}
       properties.onHover?.(this)
     });
-    this.sprite.on('mouseout', () => {
+    this.sprite.on('mouseleave', () => {
       if (!this.selected) {
         this.hoverCircle.visible = false;
       }
-      this.sprite.scale = {x: 1*this.scaleFactor, y: 1*this.scaleFactor}
+      this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
     });
     this.sprite.on('click', (event) => {
       console.log(`click on ${properties.label}`)
@@ -81,9 +90,9 @@ export class UniverseEntity extends Container {
     if (properties.label) {
       this.text = new Text({
         text: properties.label,
-        renderMode: 'canvas',
+        renderMode: 'bitmap',
         style: {
-          fontFamily: 'sans-serif',
+          fontFamily: 'use_font',
           fill: 0xffffff,
           fontSize: 18,
           align: 'left',
@@ -103,8 +112,52 @@ export class UniverseEntity extends Container {
           this.text.visible = false;
         }
       });
-      this.addChild(this.text)
+      this.labelLayerObject.addChild(this.text)
     }
+  }
+
+  set x(x: number) {
+    this.starLayerObject.x = x
+    this.iconLayerObject.x = x
+    this.labelLayerObject.x = x
+  }
+
+  set y(y: number) {
+    this.starLayerObject.y = y
+    this.iconLayerObject.y = y
+    this.labelLayerObject.y = y
+  }
+
+  set position(position: PointData) {
+    this.x = position.x
+    this.y = position.y
+  }
+
+  get position() {
+    return {
+      x: this.x,
+      y: this.y,
+    }
+  }
+
+  get x() {
+    return this.starLayerObject.x
+  }
+
+  get y() {
+    return this.starLayerObject.y
+  }
+
+  set scale(scale: { x: number; y: number; }) {
+    this.starLayerObject.scale = scale
+    this.iconLayerObject.scale = scale
+    this.labelLayerObject.scale = scale
+  }
+
+  public unload() {
+    starsContainer.removeChild(this.starLayerObject)
+    iconLayer.removeChild(this.iconLayerObject)
+    labelLayer.removeChild(this.labelLayerObject)
   }
 
   public deselect() {
@@ -123,7 +176,7 @@ export class UniverseEntity extends Container {
     sprite.scale = {x: 0.25, y: 0.25}
     sprite.x = offset - 16
     sprite.y =  24
-    this.addChild(sprite)
+    this.iconLayerObject.addChild(sprite)
   }
   private addTraits(traits: string[]) {
     if (!traitTextures) {

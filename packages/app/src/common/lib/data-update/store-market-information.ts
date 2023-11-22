@@ -94,6 +94,18 @@ export async function storeMarketInformation(data: GetMarket200Response) {
         }
       })
     }
+    await prisma.marketPriceHistory.create({
+      data: {
+        kind: data.kind,
+        waypointSymbol: data.waypointSymbol,
+        tradeGoodSymbol: data.tradeGoodSymbol,
+        sellPrice: data.sellPrice,
+        purchasePrice: data.purchasePrice,
+        tradeVolume: data.tradeVolume,
+        activityLevel: data.activityLevel,
+        supply: data.supply
+      }
+    });
     return prisma.marketPrice.upsert({
       where: {
         waypointSymbol_tradeGoodSymbol: {

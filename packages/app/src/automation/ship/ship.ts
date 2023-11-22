@@ -38,6 +38,10 @@ import {Task} from "@auto/ship/task/task";
 import {TravelTask} from "@auto/ship/task/travel";
 import {deserializeTask} from "@auto/ship/task/deserialize-task";
 import {processConstruction} from "@common/lib/data-update/store-construction";
+import {storeMarketTransaction} from "@common/lib/data-update/store-market-transaction";
+import {TaskExecutor} from "@auto/strategy/task-executor";
+import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objective";
+import {O} from "vitest/dist/reporters-5f784f42";
 
 type CooldownKind = "reactor";
 
@@ -48,7 +52,7 @@ const cooldowns: Record<
   reactor: {},
 };
 
-export class Ship {
+export class Ship implements TaskExecutor<Task, Objective> {
   private queue: Queue;
   private taskQueue: {id: string; task: Task}[] = [];
 
@@ -60,6 +64,7 @@ export class Ship {
   public hasWarpDrive = false;
   public engineSpeed = 0;
   public navMode: ShipNavFlightMode = ShipNavFlightMode.Cruise;
+  public hasExtractor = false;
 
   public fuel = 0;
   public maxFuel = 0;
@@ -68,13 +73,52 @@ export class Ship {
   public maxCargo = 0;
   public currentCargo: Record<string, number> = {}
 
-  public navigationUntil: string | undefined = undefined;
+  public navigationUntil: Date | undefined = undefined;
   public isDocked = false;
 
   public expectedCargo: Record<string, number> = {};
+  public currentObjective: string | undefined = undefined;
 
   constructor(public symbol: string, private api: APIInstance) {
     this.queue = foregroundQueue;
+  }
+
+  async onTaskStarted(task: Task) {
+    this.log(`Executing ${task.type}`)
+  }
+
+  async onObjectiveCompleted() {
+    this.log("Objective complete");
+  }
+
+  async onTaskFailed(task: Task, e: unknown) {
+    await this.waitFor(10000, `Error while executing task ${task.type}: ${e instanceof Error ? e.message : e?.toString()}`)
+  }
+
+  async onObjectiveStarted(objective: Objective) {
+    this.log(`Tasks for execution of ${objective.objective} added to ship queue`)
+  }
+
+  async onObjectiveFailed(objective: Objective, e: unknown) {
+    await this.waitFor(10000, `Error while adding tasks for objective ${objective.type}`);
+  }
+
+  getPersonalObjective() {
+    // we do not expect to have cargo left after finishing the task queue
+    if (this.hasMoreThanExpectedCargo()) {
+      this.log("Ship has more cargo than expected, next objective is getting rid of it.")
+      return new EmptyCargoObjective(this.symbol);
+    }
+  }
+
+  async onNothingToDo() {
+    await this.waitFor(20000, "No task available for ship");
+  }
+
+  async prepare() {
+    if (this.navigationUntil && new Date(this.navigationUntil).getTime() > Date.now()) {
+      await this.waitUntil(this.navigationUntil, 'Waiting for ship to finish existing navigation before starting behavior loop')
+    }
   }
 
   public hasMoreThanExpectedCargo() {
@@ -170,6 +214,11 @@ export class Ship {
       this.api.fleet.getMyShip(this.symbol)
     );
     await processShip(shipInfo.data.data);
+    const databaseShip = await prisma.ship.findFirstOrThrow({
+      where: {
+        symbol: this.symbol,
+      }
+    })
 
     this._currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol;
     this._currentSystemSymbol = shipInfo.data.data.nav.systemSymbol;
@@ -177,7 +226,7 @@ export class Ship {
 
     this.navigationUntil =
       shipInfo.data.data.nav.status === "IN_TRANSIT"
-        ? shipInfo.data.data.nav.route.arrival
+        ? new Date(shipInfo.data.data.nav.route.arrival)
         : undefined;
     this.navMode = shipInfo.data.data.nav.flightMode;
 
@@ -192,8 +241,12 @@ export class Ship {
     this.hasWarpDrive = shipInfo.data.data.modules.some((m) =>
       m.symbol.includes("WARP_DRIVE")
     );
+    this.hasExtractor = shipInfo.data.data.mounts.some((m) =>
+      m.symbol.includes("MINING_LASER")
+    ) && shipInfo.data.data.modules.some((m) => m.symbol.includes("MINERAL_PROCESSOR"));
 
     this.isDocked = shipInfo.data.data.nav.status === "DOCKED";
+    this.currentObjective = databaseShip.overalGoal ?? undefined
 
     await this.loadTaskQueue();
   }
@@ -232,7 +285,7 @@ export class Ship {
     });
   }
 
-  setTravelGoal(system: string) {
+  async setTravelGoal(system: string) {
     return prisma.ship.update({
       where: {
         symbol: this.symbol,
@@ -243,8 +296,9 @@ export class Ship {
     });
   }
 
-  setOverallGoal(goal: string) {
-    return prisma.ship.update({
+  async setObjective(goal: string) {
+    this.currentObjective = goal;
+    await prisma.ship.update({
       where: {
         symbol: this.symbol,
       },
@@ -291,10 +345,10 @@ export class Ship {
     }
   }
 
-  async waitUntil(time: string) {
-    const arrivalTime = new Date(time);
+  async waitUntil(time: string | Date, reason?: string) {
+    const arrivalTime = typeof time === 'string' ? new Date(time) : time;
     const waitTime = arrivalTime.getTime() - Date.now() + 200;
-    this.log(`Waiting ${waitTime} ms`);
+    this.log(`Waiting ${waitTime} ms${reason ? `. ${reason}` : ""}`);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);
@@ -304,7 +358,7 @@ export class Ship {
 
   async waitFor(time: number, reason?: string) {
     this.log(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`);
-    this.setOverallGoal(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`)
+    await this.setObjective('')
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);
@@ -320,12 +374,16 @@ export class Ship {
     return result.data.data
   }
 
-  async navigate(waypoint: string, waitForTimeout = true) {
+  async waitForNavigationCompletion() {
+    if (this.navigationUntil && this.navigationUntil.getTime() > Date.now()) {
+      this.log("Ship already navigating, waiting until current navigation completion");
+      await this.waitUntil(this.navigationUntil);
+    }
+  }
+
+  async navigate(waypoint: string, waitForTimeout = true): ReturnType<typeof processNav> {
     try {
-      if (this.navigationUntil) {
-        this.log("Ship still navigating, waiting until completion");
-        await this.waitUntil(this.navigationUntil);
-      }
+      await this.waitForNavigationCompletion()
 
       if (this.isDocked) {
         await this.orbit();
@@ -400,7 +458,9 @@ export class Ship {
           return this.navigate(waypoint, waitForTimeout);
         } else if (error.response?.data?.error?.code === 4204) {
           this.log(`Already at ${waypoint}`);
-          return;
+          return returnShipData(this.symbol);
+        } else {
+          throw error
         }
       } else if (error instanceof AxiosError) {
         console.error(
@@ -416,10 +476,7 @@ export class Ship {
 
   async warp(waypoint: string, waitForTimeout = true) {
     try {
-      if (this.navigationUntil) {
-        this.log("Ship still navigating, waiting until completion");
-        await this.waitUntil(this.navigationUntil);
-      }
+      await this.waitForNavigationCompletion()
 
       if (this.isDocked) {
         await this.orbit();
@@ -521,10 +578,7 @@ export class Ship {
 
   async jump(waypointSymbol: string, waitForTimeout = true) {
     try {
-      if (this.navigationUntil) {
-        this.log("Ship still navigating, waiting until completion");
-        await this.waitUntil(this.navigationUntil);
-      }
+      await this.waitForNavigationCompletion()
 
       await this.waitForCooldown("reactor");
 
@@ -675,7 +729,7 @@ export class Ship {
           },
         };
         return Promise.resolve({
-          ship: null,
+          ship: await returnShipData(this.symbol),
           extract: response,
         });
       }
@@ -752,18 +806,20 @@ export class Ship {
 
   async purchaseShip(shipType: ShipType) {
     return this.catchAxiosCodes('purchase ship', async () => {
-      return this.queue(async () => {
-        this.log(`Purchasing ship ${shipType}`);
+      this.log(`Purchasing ship ${shipType}`);
 
-        const res = await this.api.fleet.purchaseShip({
-          shipType: shipType,
-          waypointSymbol: this.currentWaypointSymbol,
-        });
+      const res = await this.queue(async () =>this.api.fleet.purchaseShip({
+        shipType: shipType,
+        waypointSymbol: this.currentWaypointSymbol,
+      }));
 
-        await processShip(res.data.data.ship);
-        //await processTransaction(res.data.data.transaction);
-        await processAgent(res.data.data.agent);
-      });
+      await processShip(res.data.data.ship);
+      await storeMarketTransaction(res.data.data.transaction);
+      await processAgent(res.data.data.agent);
+
+      await this.shipyard();
+
+      return res
     });
   }
 
@@ -951,7 +1007,7 @@ export class Ship {
     });
   }
 
-  async purchaseCargo(good: string, quantity: number) {
+  async purchaseCargo(good: string, quantity: number, maxPrice: number) {
     let shipData: any = undefined;
     return this.catchAxiosCodes('purchaseCargo', async () => {
       if (!this.isDocked) {
@@ -973,27 +1029,24 @@ export class Ship {
       let totalBought = 0;
       const purchasePerCall = Math.min(boughtGoodBefore?.tradeVolume, quantity)
       for(let i = 0; i < quantity; i += purchasePerCall) {
+        if (boughtGoodBefore?.purchasePrice && maxPrice && boughtGoodBefore.purchasePrice > maxPrice) {
+          throw new Error(`Cannot buy ${good} for more than ${maxPrice} but current price is ${boughtGoodBefore.purchasePrice}`)
+        }
         const result = await this.queue(() =>
           this.api.fleet.purchaseCargo(this.symbol, {
             symbol: good as TradeSymbol,
             units: Math.min(quantity - totalBought, purchasePerCall),
           })
         );
+        totalBought += purchasePerCall
         let marketAfter = await this.queue(() =>
           this.api.systems.getMarket(
             this.currentSystemSymbol,
             this.currentWaypointSymbol
           )
         );
-        await storeMarketInformation(marketAfter.data);
-        await processAgent(result.data.data.agent)
-        this.cargo = result.data.data.cargo.units;
-        await processCargo(this.symbol, result.data.data.cargo);
-        this.updateInventory(result.data.data.cargo.inventory);
-        ee.emit('event', {
-          type: 'AGENT',
-          data: result.data.data.agent
-        })
+
+
         const boughtGood = marketAfter.data.data.tradeGoods?.find(
           (g) => g.symbol === good
         );
@@ -1008,7 +1061,7 @@ export class Ship {
               tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
               purchasePrice: result.data.data.transaction.pricePerUnit,
               purchaseAmount: result.data.data.transaction.units,
-              purchaseVolume: boughtGood.tradeVolume,
+              purchaseVolume: boughtGoodBefore.tradeVolume,
               purchasePriceAfter: boughtGood.purchasePrice,
               tradeVolume: boughtGoodBefore.tradeVolume,
               supply: boughtGoodBefore.supply,
@@ -1018,6 +1071,16 @@ export class Ship {
         } else {
           this.log("Could not log trade, missing market information")
         }
+        await processAgent(result.data.data.agent)
+        this.cargo = result.data.data.cargo.units;
+        await processCargo(this.symbol, result.data.data.cargo);
+        this.updateInventory(result.data.data.cargo.inventory);
+        ee.emit('event', {
+          type: 'AGENT',
+          data: result.data.data.agent
+        })
+        await storeMarketInformation(marketAfter.data);
+
         marketBefore = marketAfter;
         boughtGoodBefore = boughtGood;
       }
@@ -1032,7 +1095,8 @@ export class Ship {
   async sellCargo(
     tradeGoodSymbol: string,
     units: number,
-    market?: GetMarket200Response
+    market?: GetMarket200Response,
+    minPrice?: number
   ) {
     return this.catchAxiosCodes('sellCargo', async () => {
       if (!this.isDocked) {
@@ -1063,6 +1127,9 @@ export class Ship {
       );
       let leftToSell = units;
       do {
+        if (soldGoodBefore?.sellPrice && minPrice && soldGoodBefore.sellPrice < minPrice) {
+          throw new Error(`Cannot sell ${tradeGoodSymbol} for less than ${minPrice} but current price is ${soldGoodBefore.sellPrice}`)
+        }
         const result = await this.queue(() => {
           this.log(`Selling ${units} of ${tradeGoodSymbol}`);
           return this.api.fleet.sellCargo(this.symbol, {
@@ -1312,11 +1379,6 @@ export class Ship {
     });
 
     await processShipyard(res.data.data);
-
-    fs.writeFileSync(
-      `dumps/shipyardInformation-${this.currentWaypointSymbol}.json`,
-      JSON.stringify(res.data.data, null, 2)
-    );
 
     // axios.put('https://st.feba66.de/markets', res.data.data).catch(error => {
     //     console.log("Error loading market data to feba66", error)

@@ -3,6 +3,9 @@ import {Application, Text, Container, Graphics, Point, TilingSprite} from "pixi.
 import {loadedAssets} from "@front/viewer/assets";
 
 export let universeView: Viewport
+export let starLayer: Container
+export let iconLayer: Container
+export let labelLayer: Container
 export let uiOverlay: Container
 
 export let starsContainer  = new Container()
@@ -41,9 +44,37 @@ export const createUIElements = (app: Application) => {
         .wheel()
         .decelerate()
     universeView.moveCenter(0, 0)
-    const starContainer = new Container()
-    starContainer.label = 'stars'
-    universeView.addChild(starContainer)
+    starLayer = new Container()
+    starLayer.label = 'stars'
+    universeView.addChild(starLayer)
+
+    iconLayer = new Container()
+    iconLayer.label = 'icons'
+    universeView.addChild(iconLayer)
+
+    labelLayer = new Container()
+    labelLayer.label = 'labels'
+    universeView.addChild(labelLayer)
+
+    const influenceGraphics = new Graphics()
+    // highlightmodes.Factions(influenceGraphics)
+    influenceGraphics.name = 'highlight'
+    universeView.addChild(influenceGraphics);
+
+    // draw jump connections
+    const jumpGraphics = new Graphics()
+    universeView.addChild(jumpGraphics)
+
+    const routeGraphics = new Graphics()
+    routeGraphics.name = 'route'
+    universeView.addChild(routeGraphics)
+
+    const homeSystemGraphics = new Graphics()
+    homeSystemGraphics.name = 'homeSystem'
+    universeView.addChild(homeSystemGraphics)
+
+    universeView.addChild(starsContainer)
+
     // universeCuller = new Simple() // new SpatialHash()
     // universeCuller.cull(universeView.getVisibleBounds())
     universeGraphics = new Graphics()

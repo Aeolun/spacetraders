@@ -48,9 +48,10 @@ export class SystemWayfinding {
         });
 
         for (const waypoint of waypoints) {
-            const fuelPrice = waypoint.tradeGoods.find(tg => tg.tradeGoodSymbol === 'FUEL')?.purchasePrice ?? 85;
+            const hasFuel = waypoint.tradeGoods.find(tg => tg.tradeGoodSymbol === 'FUEL');
+            const fuelPrice = hasFuel?.purchasePrice ?? 85;
             dijkstra?.addVertex(waypoint.symbol, {
-                recover: {
+                recover: hasFuel ? {
                     fuel: (current, max) => {
                         const recover = max - current;
                         const costCount = Math.ceil(recover / 100);
@@ -59,7 +60,7 @@ export class SystemWayfinding {
                             cost: costCount * fuelPrice,
                         };
                     }
-                }
+                } : undefined,
             })
             noFuelDijkstra?.addVertex(waypoint.symbol)
         }

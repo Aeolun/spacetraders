@@ -7,7 +7,9 @@ import {prisma} from "@common/prisma";
 
 import {processCargo} from "@common/lib/data-update/store-ship-cargo";
 import {storeShipReactor} from "@common/lib/data-update/store-ship-reactor";
+import {ShipNameGenerator} from "@auto/setup/ship-name-generator";
 
+// TODO: make this less wasteful
 export async function processShip(ship: Ship | ScannedShip) {
   if ("modules" in ship) {
     for (const module of ship.modules) {
@@ -93,11 +95,15 @@ export async function processShip(ship: Ship | ScannedShip) {
       connect: ship.mounts?.map((m) => ({symbol: m.symbol})),
     },
   };
+  const generator = new ShipNameGenerator();
   await prisma.ship.upsert({
     where: {
       symbol: ship.symbol,
     },
-    create: shipData,
+    create: {
+      ...shipData,
+      callsign: generator.common
+    },
     update: shipData,
   });
 

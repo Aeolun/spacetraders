@@ -84,8 +84,8 @@ export function positionShip(ship: ShipData) {
             serverX = newPos.x
             serverY = newPos.y
 
-            xOffset = (32 * waypointShips[orbitSymbol])
-            yOffset = 80
+            xOffset = 80
+            yOffset = 32*  waypointShips[orbitSymbol]
         } else {
             serverX = 0
             serverY = 0

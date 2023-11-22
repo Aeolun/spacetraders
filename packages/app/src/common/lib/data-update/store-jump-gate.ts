@@ -10,19 +10,24 @@ export async function storeJumpGateInformation(systemSymbol: string, waypointSym
       hasJumpGate: true,
     }
   })
-  
-  await prisma.waypoint.update({
-    where: {
-      symbol: waypointSymbol
-    },
-    data: {
-      jumpConnectedTo: {
-        connect: data.data.connections.map(waypointSymbol => {
-          return {
-            symbol: waypointSymbol
-          }
-        })
+
+  try {
+    await prisma.waypoint.update({
+      where: {
+        symbol: waypointSymbol
+      },
+      data: {
+        jumpConnectedTo: {
+          connect: data.data.connections.map(waypointSymbol => {
+            return {
+              symbol: waypointSymbol
+            }
+          })
+        }
       }
-    }
-  });
+    });
+  } catch(error) {
+    console.log(`error connecting jumps for waypoint ${waypointSymbol}: ${data.data.connections.join(', ')}`)
+    console.log(error)
+  }
 }

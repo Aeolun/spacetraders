@@ -11,12 +11,13 @@ export class SellTask implements TaskInterface {
   }
   tradeSymbol: TradeSymbol
   units: number
+  minSell: number
 
-
-  constructor(destination: { systemSymbol: string; waypointSymbol: string }, tradeSymbol: TradeSymbol, units: number) {
+  constructor(destination: { systemSymbol: string; waypointSymbol: string }, tradeSymbol: TradeSymbol, units: number, expectedSell: number) {
     this.destination = destination;
     this.tradeSymbol = tradeSymbol;
     this.units = units;
+    this.minSell = expectedSell;
   }
 
   async execute(ship: Ship) {
@@ -24,14 +25,15 @@ export class SellTask implements TaskInterface {
       throw new Error("Cannot sell in a place we are not")
     }
 
-    await ship.sellCargo(this.tradeSymbol, this.units)
+    await ship.sellCargo(this.tradeSymbol, this.units, undefined, this.minSell)
   }
 
   serialize(): string {
     return JSON.stringify({
       destination: this.destination,
       tradeSymbol: this.tradeSymbol,
-      units: this.units
+      units: this.units,
+      minSell: this.minSell
     })
   }
 }

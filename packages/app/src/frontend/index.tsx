@@ -9,6 +9,13 @@ import {backendUrl, trpcReact} from "./trpc";
 import {httpBatchLink} from "@trpc/client";
 import {useState} from "react";
 import {format} from "@common/lib/format";
+import {
+    createBrowserRouter, Link,
+    RouterProvider,
+} from "react-router-dom";
+import {World} from "@front/components/World";
+import {Layout} from "@front/components/Layout";
+import { NotFound } from "./components/NotFound";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -16,6 +23,24 @@ if (!localStorage.getItem('agent-token')) {
 }
 
 const queryClient = new QueryClient()
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout />,
+        errorElement: <Layout><NotFound /></Layout>,
+        children: [
+            {
+                children: [
+                    {
+                        index: true,
+                        element: <World />
+                    },
+                ]
+            }
+        ]
+    },
+]);
 
 const App = () => {
     const [trpcClient] = useState(() => trpcReact.createClient({
@@ -33,27 +58,10 @@ const App = () => {
         ],
     }),);
 
-    const credits = useSelector((select: RootState) => select.agent.credits)
-
-    return <trpcReact.Provider client={trpcClient} queryClient={queryClient}><QueryClientProvider client={queryClient}><div className={appStyles.app}>
-
-        <div className={appStyles.menu}>
-            <div className={appStyles.menuItem}>Main</div>
-            <div className={appStyles.menuItem}>Ships</div>
-            <div className={appStyles.menuItem}>Waypoints</div>
-            <div className={appStyles.menuItem}>Systems</div>
-            <div className={appStyles.agentInfo}>
-                {format.format(credits)}
-            </div>
-        </div>
-        <section className={appStyles.columns}>
-            <Pixi />
-            <div className={appStyles.column}>
-                <h3>Details</h3>
-                <SelectionDisplay />
-            </div>
-        </section>
-        </div></QueryClientProvider></trpcReact.Provider>
+    return <trpcReact.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+        </QueryClientProvider></trpcReact.Provider>
 }
 
 const root = createRoot(document.getElementById('app'))

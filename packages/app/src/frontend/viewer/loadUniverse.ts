@@ -5,13 +5,14 @@ import {loadedAssets} from "@front/viewer/assets";
 import {scale, universeCoordinates,} from "@front/viewer/consts";
 import { universeView, starsContainer} from "@front/viewer/UIElements";
 import {Registry, System, WaypointData} from "@front/viewer/registry";
-import {positionShip, positionUniverseShip, resetShipWaypoints} from "@front/viewer/positionShips";
+import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {getDistance} from "@common/lib/getDistance";
 import {getStarPosition} from "@front/viewer/util";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {UniverseShip} from "@front/viewer/universe-ship";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
+import {shipActions} from "@front/ui/slices/ship";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
 
 
@@ -176,10 +177,11 @@ const createShip = (ship: any) => {
     const shipPosition = positionShip(ship)
 
     const shipGroup = new UniverseShip({
-        label: ship.symbol + ' - ' + ship.role,
+        label: ship.callsign,
         texture: loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] ? loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] : loadedAssets.spritesheet.textures['public/textures/ships/FRAME_EXPLORER.png'],
         traits: [],
         position: shipPosition,
+        scale: 0.75,
         onSelect: () => {
             Registry.deselect()
             Registry.selected = {
@@ -226,6 +228,9 @@ export const loadUniverse = async () => {
 
     const systems = await trpc.getSystems.query()
 
+    const commandShip = Object.values(Registry.shipData).find(ship => ship.role === 'COMMAND')
+    const commandShipLocation = commandShip?.currentWaypoint.systemSymbol
+
     for(const starData of systems) {
         Registry.systemData[starData.symbol] = starData
 
@@ -237,76 +242,27 @@ export const loadUniverse = async () => {
 
     Registry.systems = {}
 
-    const influenceGraphics = new Graphics()
-    // highlightmodes.Factions(influenceGraphics)
-    influenceGraphics.name = 'highlight'
-    universeView.addChild(influenceGraphics);
 
-    // draw jump connections
-    const jumpGraphics = new Graphics()
+
     for(const starData of systems) {
-        const jumpGate = starData.hasJumpGate
-        if (jumpGate && starData.jumpgateRange) {
-            const validJumpTargets = systems.filter(s => getDistance(s, starData) <= starData.jumpgateRange && s.hasJumpGate && s.symbol !== starData.symbol)
+        if (!commandShip || getDistance(Registry.systemData[commandShip.currentSystemSymbol], starData) < 1000) {
+            const starContainer = createStar(starData)
 
-            validJumpTargets.forEach(jumpTarget => {
-                const displayCoords = convertToDisplayCoordinates(starData)
-                const targetCoords = convertToDisplayCoordinates(jumpTarget)
+            Registry.systems[starData.symbol] = starContainer
 
-                jumpGraphics.stroke({
-                    width: starData.jumpgateRange / 250,
-                    color: 0x999933,
-                    alpha: 0.1,
-                })
-                jumpGraphics.moveTo(displayCoords.x, displayCoords.y)
-                jumpGraphics.lineTo(targetCoords.x, targetCoords.y)
-                jumpGraphics.closePath()
-
-            })
-
+            references[starData.symbol] = starContainer
         }
     }
-    universeView.addChild(jumpGraphics)
-
-    const routeGraphics = new Graphics()
-    routeGraphics.name = 'route'
-    universeView.addChild(routeGraphics)
-
-    const homeSystemGraphics = new Graphics()
-    homeSystemGraphics.name = 'homeSystem'
-    universeView.addChild(homeSystemGraphics)
-
-    for(const starData of systems) {
-        const starContainer = createStar(starData)
-
-        Registry.systems[starData.symbol] = starContainer
-
-
-        starsContainer.addChild(starContainer)
-        references[starData.symbol] = starContainer
-    }
-    universeView.addChild(starsContainer)
 
     Registry.universeShips = {}
     Object.values(Registry.shipData).forEach(ship => {
         const shipContainer = createShip(ship)
         Registry.universeShips[ship.symbol] = shipContainer
-        starsContainer.addChild(shipContainer)
+        //starsContainer.addChild(shipContainer)
     })
     // universeCuller.addList(starsCont.children)
 
     resetShipWaypoints()
-
-    const graphics = new Graphics()
-    graphics.stroke({
-        width: 15,
-        color: 0x0077FF
-    })
-
-    const commandShip = Object.values(Registry.shipData).find(ship => ship.role === 'COMMAND')
-    const commandShipLocation = commandShip?.currentWaypoint.systemSymbol
-
-    universeView.addChild(graphics)
 
     if (commandShipLocation) {
         universeView.moveCenter(references[commandShipLocation].x, references[commandShipLocation].y)

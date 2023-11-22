@@ -11,12 +11,13 @@ export class PurchaseTask implements TaskInterface {
   }
   tradeSymbol: TradeSymbol
   units: number
+  maxPrice: number
 
-
-  constructor(destination: { systemSymbol: string; waypointSymbol: string }, tradeSymbol: TradeSymbol, units: number) {
+  constructor(destination: { systemSymbol: string; waypointSymbol: string }, tradeSymbol: TradeSymbol, units: number, maxPrice: number) {
     this.destination = destination;
     this.tradeSymbol = tradeSymbol;
     this.units = units;
+    this.maxPrice = maxPrice;
   }
 
   async execute(ship: Ship) {
@@ -24,14 +25,15 @@ export class PurchaseTask implements TaskInterface {
       throw new Error("Cannot purchase in a place we are not")
     }
 
-    await ship.purchaseCargo(this.tradeSymbol, this.units)
+    await ship.purchaseCargo(this.tradeSymbol, this.units, this.maxPrice)
   }
 
   serialize(): string {
     return JSON.stringify({
       destination: this.destination,
       tradeSymbol: this.tradeSymbol,
-      units: this.units
+      units: this.units,
+      maxPrice: this.maxPrice,
     })
   }
 }

@@ -1,6 +1,5 @@
 import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstract-objective";
-import { System, Waypoint } from '@common/prisma'
-import {undefined} from "zod";
+import {prisma, System, Waypoint} from '@common/prisma'
 import {Ship} from "@auto/ship/ship";
 import {TravelTask} from "@auto/ship/task/travel";
 import {UpdateMarketTask} from "@auto/ship/task/update-market";
@@ -12,14 +11,15 @@ export class UpdateMarketDataObjective extends AbstractObjective {
 
   type: ObjectiveType.UPDATE_MARKET = ObjectiveType.UPDATE_MARKET;
 
-  constructor(system: System, waypoint: Waypoint) {
+  constructor(system: System, waypoint: Waypoint, requiredShipSymbol?: string) {
     super(`Update market data for ${waypoint.symbol}`);
     this.system = system;
     this.waypoint = waypoint;
+    this.requiredShipSymbols = requiredShipSymbol ? [requiredShipSymbol] : [];
   }
 
   appropriateForShip(ship: Ship): boolean {
-    return ship.maxCargo === 0;
+    return ship.maxCargo === 0 && (this.requiredShipSymbols.length === 0 || this.requiredShipSymbols.includes(ship.symbol));
   }
 
   distanceToStart(ship: Ship): number {

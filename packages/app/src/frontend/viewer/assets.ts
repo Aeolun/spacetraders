@@ -1,12 +1,12 @@
-import {Assets, Spritesheet, Texture} from "pixi.js";
+import {Assets, Spritesheet, SpritesheetData, Texture} from "pixi.js";
 
 export async function loadAssetsData() {
-    const uisheet: Spritesheet = await Assets.load('uisheet.json');
     const buttonSheet: Spritesheet = await Assets.load('ui/button.json');
     const spritesheet: Spritesheet = await Assets.load('spritesheet.json');
     const sansSerif = await Assets.load('sans-serif.fnt');
     const buttonText = await Assets.load('buttontext.fnt')
     const segment = await Assets.load('segment.fnt')
+    const use_font = await Assets.load('use_font.fnt')
     const buttonTextWhite = await Assets.load('buttontext_white.fnt')
     const bgTexture = await Assets.load('background4.jpg');
     const starTexture: Texture = await Assets.load('stars.png');
@@ -15,11 +15,12 @@ export async function loadAssetsData() {
     const panel2: Texture = await Assets.load('ui/panel2.png')
     const panelInvisible: Texture = await Assets.load('ui/panel_invisible.png')
     const selectInactive: Texture = await Assets.load('ui/select_inactive.png')
-
+    const tradeArrow: Spritesheet<SpritesheetData & {
+        animations: 'animate'
+    }> = await Assets.load('textures/effects/TRADE_ARROWS.json')
 
 
     return {
-        uisheet,
         sansSerif,
         buttonsheet: buttonSheet,
         buttonText,
@@ -30,6 +31,7 @@ export async function loadAssetsData() {
         starTexture,
         spritesheet,
         statsBlock,
+        tradeArrow: tradeArrow.animations['animate'],
         panel2,
         station: spritesheet.textures['station.png'],
         jumpgate: spritesheet.textures['jumpgate.png'],

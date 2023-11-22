@@ -55,11 +55,11 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
 
         if (!whereToSell || whereToSell.length <= 0) {
             ship.log(`Cannot find place to sell current cargo, waiting for a bit.`)
-            await ship.setOverallGoal(`Waiting for decent place to sell cargo.`)
+            await ship.setObjective(`Waiting for decent place to sell cargo.`)
             await ship.waitFor(60000)
         } else {
             ship.log(`Going to sell ${sellableCargo[0].units} of ${sellableCargo[0].tradeGoodSymbol} in ${whereToSell[0].waypointSymbol}, ${whereToSell[0].totalDistance} away for ${whereToSell[0].sellPrice}`)
-            await ship.setOverallGoal(`Selling ${sellableCargo[0].units} ${sellableCargo[0].tradeGoodSymbol} in ${whereToSell[0].waypointSymbol}`)
+            await ship.setObjective(`Selling ${sellableCargo[0].units} ${sellableCargo[0].tradeGoodSymbol} in ${whereToSell[0].waypointSymbol}`)
 
             const shipData = await prisma.ship.findFirstOrThrow({
                 where: {
@@ -77,7 +77,7 @@ export const tradeLogic = async (ship: Ship, parameters: BehaviorParameters) => 
             await ship.sellCargo(sellableCargo[0].tradeGoodSymbol, sellableCargo[0].units)
             await ship.orbit()
 
-            await ship.setOverallGoal(null)
+            await ship.setObjective(null)
         }
     } else {
 
@@ -153,7 +153,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
 
         if (Array.isArray(bestTrades) && bestTrades.length <= 0) {
             ship.log(`No more profitable trades found.`)
-            await ship.setOverallGoal('Wait for trades')
+            await ship.setObjective('Wait for trades')
             await ship.waitFor(1000 * 60)
             return;
         } else if(Array.isArray(bestTrades)) {
@@ -164,7 +164,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
 
         if (allowedTrades.length <= 0) {
             ship.log(`All profitable trades already taken.`)
-            await ship.setOverallGoal('Wait for trades')
+            await ship.setObjective('Wait for trades')
             await ship.waitFor(1000 * 60)
             return;
         }
@@ -199,7 +199,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
             }
         } catch (e) {
             console.error(e)
-            await ship.setOverallGoal(null)
+            await ship.setObjective(null)
             await ship.waitFor(60000)
             return;
         }
@@ -209,7 +209,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
             ship.log(`Going to trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol}, sold at ${bestTrade.purchasePrice}, purchased at ${bestTrade.sellPrice}, total profit ${bestTrade.totalProfit}, tprd ${bestTrade.totalPerRunDistance}, dissta ${bestTrade.disStart}`)
 
             tradeTaken.add(bestTrade.buyAt + bestTrade.sellAt + bestTrade.tradeGoodSymbol)
-            await ship.setOverallGoal(`Trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol} from ${bestTrade.buyAt} to ${bestTrade.sellAt}`)
+            await ship.setObjective(`Trade ${bestTrade.tradeVolume} ${bestTrade.tradeGoodSymbol} from ${bestTrade.buyAt} to ${bestTrade.sellAt}`)
 
             const good = bestTrade.tradeGoodSymbol
 
@@ -376,7 +376,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
                         })
                     } else {
                         ship.log(`No alternative sale location found for a decent enough price.`)
-                        await ship.setOverallGoal("Waiting for price increase.")
+                        await ship.setObjective("Waiting for price increase.")
                         await ship.waitFor(120000)
                     }
                 }
@@ -398,7 +398,7 @@ creditsPerSecond desc, totalPerRunDistance desc LIMIT 50;`
             const thingSold = soldMarket.tradeGoods.find(i => i.symbol == good)
             console.log(`Sell price of item is now ${thingSold.sellPrice}`)
             tradeTaken.delete(bestTrade.buyAt + bestTrade.sellAt + bestTrade.tradeGoodSymbol)
-            await ship.setOverallGoal(null)
+            await ship.setObjective(null)
         } catch(e) {
             tradeTaken.delete(bestTrade.buyAt+bestTrade.sellAt+bestTrade.tradeGoodSymbol)
             throw e

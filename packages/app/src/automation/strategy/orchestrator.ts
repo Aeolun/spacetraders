@@ -1,45 +1,77 @@
-import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {Ship} from "@auto/ship/ship";
 import {Objective} from "@auto/strategy/objective/objective";
-import {Task} from "@auto/ship/task/task";
+import {Task, TaskInterface} from "@auto/ship/task/task";
 import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objective";
+import {prisma} from "@common/prisma";
+import {environmentVariables} from "@common/environment-variables";
+import {TaskExecutor} from "@auto/strategy/task-executor";
 
-export class Orchestrator {
-  private objectives: Record<string, Objective> = {};
+
+
+export class Orchestrator<E extends TaskExecutor<TT, Objective>, TT extends TaskInterface<E>> {
+  private objectives: Objective[] = [];
   private objectiveIds: Record<string, boolean> = {};
-  private ships: Ship[] = [];
+  private executingObjectives: string[] = [];
+  private executorsAssignedToObjective: Record<string, string[]> = {};
+  private executors: E[] = [];
 
   constructor() {
 
+  }
+
+  async loadObjectives() {
+    const ships = await prisma.ship.findMany({
+      where: {
+        agent: environmentVariables.agentName
+      }
+    })
+    this.executingObjectives = ships.map(s => s.overalGoal).filter(g => !!g) as string[]
+    // set executors assigned to objectives
+    for (const ship of ships) {
+      if (ship.overalGoal) {
+        if (!this.executorsAssignedToObjective[ship.overalGoal]) {
+          this.executorsAssignedToObjective[ship.overalGoal] = []
+        }
+        this.executorsAssignedToObjective[ship.overalGoal].push(ship.symbol)
+      }
+    }
   }
 
   getObjectiveCount() {
     return Object.keys(this.objectives).length;
   }
 
+  getExecutingObjectiveCount() {
+    return this.executingObjectives.length;
+  }
+
   public getObjectives() {
     return Object.values(this.objectives)
   }
 
-  addObjective(task: Objective) {
-    if (this.objectiveIds[task.objective]) {
+  addObjectiveIfNotExists(task: Objective) {
+    if (this.objectiveIds[task.objective] || this.executingObjectives.includes(task.objective)) {
       return;
     }
     this.objectiveIds[task.objective] = true;
-    this.objectives[task.objective] = task;
+    this.objectives.push(task);
   }
 
   addOrUpdateObjective(task: Objective) {
+    if (this.executingObjectives.includes(task.objective)) {
+      return;
+    }
     this.objectiveIds[task.objective] = true;
-    this.objectives[task.objective] = task;
+    // replace existing objective
+    this.objectives.splice(this.objectives.findIndex(t => t.objective === task.objective), 1, task);
   }
 
-  getShip(symbol: string) {
-    return this.ships.find(s => s.symbol === symbol)
+  getExecutor(symbol: string) {
+    return this.executors.find(s => s.symbol === symbol)
   }
 
-  public getSortedObjectives(ship: Ship) {
-    const shipObjectives = Object.values(this.objectives).filter(o => o.appropriateForShip(ship))
+  public getSortedObjectives(ship: E) {
+    const shipObjectives = Object.values(this.objectives).filter(o => o.shipsAssigned.length < o.maxShips).filter(o => o.appropriateForShip(ship))
     shipObjectives.sort((a, b) => {
       if (a.priority !== b.priority) {
         //higher priority first
@@ -50,15 +82,15 @@ export class Orchestrator {
     return shipObjectives;
   }
 
-  async getNextObjective(ship: Ship): Promise<Objective | undefined> {
-    // we do not expect to have cargo left after finishing the task queue
-    if (ship.hasMoreThanExpectedCargo()) {
-      ship.log("Ship has more cargo than expected, next objective is getting rid of it.")
-      return new EmptyCargoObjective(ship.symbol);
+  async getNextObjective(executor: E): Promise<Objective | undefined> {
+    const personalObjective = executor.getPersonalObjective();
+    if (personalObjective) {
+      console.log("Running personal objective", personalObjective)
+      return personalObjective;
     }
 
-    const shipObjectives = this.getSortedObjectives(ship);
-    console.log(shipObjectives.slice(0, 10).map(o => o.objective + ` P${o.priority} (` + o.distanceToStart(ship)+' LY)'))
+    const shipObjectives = this.getSortedObjectives(executor);
+    console.log('possible objectives', shipObjectives.slice(0, 10).map(o => o.objective + ` P${o.priority} (` + o.distanceToStart(executor)+' LY)'))
 
     let newObjective: Objective | undefined;
     // only do if in same system
@@ -67,66 +99,86 @@ export class Orchestrator {
       newObjective = shipObjectives[0];
     }
     if (newObjective) {
-      delete this.objectives[newObjective.objective]
+      if (!newObjective.isPersistent) {
+        // remove from available objectives
+        this.objectiveIds[newObjective.objective] = false;
+        this.objectives.splice(this.objectives.findIndex(o => o.objective === newObjective?.objective), 1)
+      } else {
+        // add ship to shipsAssignedToObjectives
+        if (!this.executorsAssignedToObjective[newObjective.objective]) {
+          this.executorsAssignedToObjective[newObjective.objective] = []
+        }
+        this.executorsAssignedToObjective[newObjective.objective].push(executor.symbol)
+      }
       return newObjective
     }
     return undefined;
   }
 
-  public hasShip(symbol: string) {
-    return !!this.ships.find(es => es.symbol === symbol)
+  public hasExecutor(symbol: string) {
+    return !!this.executors.find(es => es.symbol === symbol)
   }
 
-  async addShip(ship: Ship) {
-    if (this.hasShip(ship.symbol)) {
+  async addExecutor(executor: E) {
+    if (this.hasExecutor(executor.symbol)) {
       console.log("Ship already added")
       return;
     }
-    this.ships.push(ship);
+    this.executors.push(executor);
 
     // prepare to run the loop for this ship
-    if (ship.navigationUntil && new Date(ship.navigationUntil).getTime() > Date.now()) {
-      console.log(`Waiting for ship ${ship.symbol} to finish navigation before starting behavior loop`)
-      await ship.waitUntil(ship.navigationUntil)
-    }
+    await executor.prepare();
 
     while (true) {
-      let nextTask: Task | undefined
-      if (ship.taskQueueLength > 0) {
-        ship.log("Taking up next task in my queue")
-        nextTask = await ship.getNextTask();
+      let nextTask: TT | undefined
+      if (executor.taskQueueLength > 0) {
+        nextTask = await executor.getNextTask();
         if (nextTask) {
           try {
-            ship.log(`Executing ${nextTask.type}`)
-            await nextTask.execute(ship)
-            await ship.finishedTask()
+            await executor.onTaskStarted(nextTask)
+
+            await nextTask.execute(executor)
+            await executor.finishedTask()
           } catch (e) {
-            await ship.clearTaskQueue();
-            await ship.waitFor(10000, `Error while executing task ${nextTask.type}: ${e instanceof Error ? e.message : e?.toString()}`)
+            await executor.clearTaskQueue();
+            console.log(`Removing objective ${executor.currentObjective} from executing objectives`)
+            this.executingObjectives = this.executingObjectives.filter(o => o !== executor.currentObjective)
+            await executor.setObjective('');
+            await executor.onTaskFailed(nextTask, e)
           }
-        } else {
-          ship.log("Objective complete")
-          ship.setOverallGoal('');
+        }
+
+        if (executor.taskQueueLength === 0) {
+          await executor.onObjectiveCompleted()
+
+          console.log(`Removing objective ${executor.currentObjective} from executing objectives`)
+          this.executingObjectives = this.executingObjectives.filter(o => o !== executor.currentObjective)
+          // remove ship from ships assigned to it
+          if (executor.currentObjective && this.executorsAssignedToObjective[executor.currentObjective]) {
+            this.executorsAssignedToObjective[executor.currentObjective] = this.executorsAssignedToObjective[executor.currentObjective].filter(s => s !== executor.symbol)
+          }
+          await executor.setObjective('');
         }
       } else {
         let nextObjective: Objective | undefined
 
-        ship.log("Looking for next objective")
-        nextObjective = await this.getNextObjective(ship)
+        nextObjective = await this.getNextObjective(executor)
 
         if (!nextObjective) {
-          await ship.waitFor(20000, "No task available for ship");
+          await executor.onNothingToDo();
+
         } else {
           try {
-            await nextObjective.onStarted(ship);
-            ship.setOverallGoal(nextObjective.objective)
+            await nextObjective.onStarted(executor);
+            this.executingObjectives.push(nextObjective.objective)
+            await executor.setObjective(nextObjective.objective)
 
-            await nextObjective.constructTasks(ship);
+            await nextObjective.constructTasks(executor);
 
-            ship.log(`Tasks for execution of ${nextObjective.objective} added to ship queue`)
+            await executor.onObjectiveStarted(nextObjective);
           } catch (e) {
             console.error(e);
-            await ship.waitFor(10000, `Error while adding tasks for objective ${nextObjective.type}`);
+            await executor.onObjectiveFailed(nextObjective, e)
           }
         }
 

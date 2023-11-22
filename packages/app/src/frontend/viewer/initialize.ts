@@ -1,5 +1,5 @@
 import {loadAssets} from "@front/viewer/assets";
-import {Application, Text} from "pixi.js";
+import {Application, Text, Ticker} from "pixi.js";
 import {createUIElements, universeView} from "@front/viewer/UIElements";
 import {loadUniverse} from "@front/viewer/loadUniverse";
 import {loadPlayerData} from "@front/viewer/loadPlayerData";
@@ -12,6 +12,7 @@ import {UniverseEntity} from "@front/viewer/universe-entity";
 import {contextMenuActions} from "@front/ui/slices/context-menu";
 import {store} from "@front/ui/store";
 import {agentActions} from "@front/ui/slices/agent";
+import {shipActions} from "@front/ui/slices/ship";
 
 export const handleMapMove = () => {
   const zoom = universeView.worldScreenWidth / universeView.screenWidth
@@ -34,11 +35,9 @@ export const handleMapMove = () => {
 }
 
 export async function initialize(app: Application) {
-  await loadAssets()
   await createUIElements(app)
   await loadPlayerData()
   const loadedUniverse = await loadUniverse()
-  startListeningToEvents();
 
   const txt = new Text({ text: "hello", style: {
       fill: 0xffffff
@@ -49,6 +48,7 @@ export async function initialize(app: Application) {
 
     txt.text = `fps: ${ticker.FPS.toFixed(0)}, zoom: ${zoom.toFixed(2)}`
   })
+  Ticker.shared.speed = 2
   app.ticker.minFPS = 40
   app.ticker.maxFPS = 120
 
@@ -69,8 +69,8 @@ export async function initialize(app: Application) {
 
   // ticker to size universe objects
   app.ticker.add((dat) => {
-    const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 1)
-    const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 1)
+    const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 0.3)
+    const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 0.3)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
     Object.values(loadedUniverse.systems).forEach(ref => {
@@ -87,15 +87,17 @@ export async function initialize(app: Application) {
     Object.keys(Registry.shipData).forEach(shipKey => {
       const shipEntity = Registry.universeShips[shipKey]
       const shipData = Registry.shipData[shipKey]
-      //shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
+      shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
 
-      const newPos = positionShip(shipData)
-      shipEntity.position = newPos.position
-      shipEntity.setAngle(newPos.navRot ?? 0)
-      if (shipData.navStatus === "IN_TRANSIT" && shipData.arrivalOn && new Date(shipData.arrivalOn).getTime() > Date.now()) {
-        shipEntity.setNavigating(true)
-      } else {
-        shipEntity.setNavigating(false)
+      if (shipEntity) {
+        const newPos = positionShip(shipData)
+        shipEntity.position = newPos.position
+        shipEntity.setAngle(newPos.navRot ?? 0)
+        if (shipData.navStatus === "IN_TRANSIT" && shipData.arrivalOn && new Date(shipData.arrivalOn).getTime() > Date.now()) {
+          shipEntity.setNavigating(true)
+        } else {
+          shipEntity.setNavigating(false)
+        }
       }
     });
   })
@@ -108,18 +110,4 @@ export async function initialize(app: Application) {
     handleMapMove()
   })
   handleMapMove()
-}
-
-function startListeningToEvents() {
-  trpc.event.subscribe(undefined, {
-    onData: (data) => {
-      console.log('event', data);
-      if (data.type == 'NAVIGATE') {
-        Registry.shipData[data.data.symbol] = data.data
-      } else if (data.type == 'AGENT') {
-        Registry.agent = data.data
-        store.dispatch(agentActions.setCredits(data.data.credits));
-      }
-    }
-  })
 }

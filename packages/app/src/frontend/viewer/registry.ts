@@ -1,11 +1,12 @@
 import {Container} from "pixi.js";
-import type {Waypoint, WaypointTrait, Jumpgate, JumpConnectedSystem, Faction } from "@common/prisma";
+import type {Waypoint, WaypointTrait, TradeGoodKind, Faction } from "@common/prisma";
 import {inferRouterOutputs} from "@trpc/server";
 import {AppRouter} from "@backend/server";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
 import {UniverseShip} from "@front/viewer/universe-ship";
+import {clearMarketRoutes} from "@front/viewer/display-export-market";
 
 
 export type SelectedType = 'ship' | 'waypoint' | 'star'
@@ -26,7 +27,7 @@ export interface Registry {
     // source data for objects
     systemData: Record<string, System>
     waypointData: Record<string, WaypointData>
-    waypointsForSystem: Record<string, Waypoint[]>
+    waypointsForSystem: Record<string, WaypointData[]>
     shipData: Record<string, ShipData>
 
     // references to all the visible nodes
@@ -57,9 +58,11 @@ export interface Agent {
 
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], jumpgate: Jumpgate & {validJumpTargets: JumpConnectedSystem[]}}
+export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], tradeGoods: { tradeGoodSymbol: string, kind: TradeGoodKind }[]}
 
 export type ShipData = RouterOutputs['shipData']
+
+export type ShipConfigurationData = RouterOutputs['getShipyard'][number]
 
 export interface ShipModule {
     effectName: string
@@ -170,6 +173,7 @@ export const Registry: Registry = {
             getSelectedEntity()?.deselect()
             Registry.selected = undefined
             store.dispatch(selectionActions.setSelection(undefined))
+            clearMarketRoutes()
         }
     },
 }

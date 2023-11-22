@@ -6,6 +6,7 @@ import {PurchaseTask} from "@auto/ship/task/purchase";
 import {SellTask} from "@auto/ship/task/sell";
 import {UpdateMarketTask} from "@auto/ship/task/update-market";
 import {PurchaseShipTask} from "@auto/ship/task/purchase-ship";
+import {MineTask} from "@auto/ship/task/mine";
 
 export const deserializeTask = (serializedTask: ShipTask): Task => {
   if (serializedTask.type === 'TRAVEL') {
@@ -16,10 +17,10 @@ export const deserializeTask = (serializedTask: ShipTask): Task => {
     return new ExploreTask(data.waypointSymbol);
   } else if (serializedTask.type === 'PURCHASE') {
     const data = JSON.parse(serializedTask.data)
-    return new PurchaseTask(data.destination, data.tradeSymbol, data.units);
+    return new PurchaseTask(data.destination, data.tradeSymbol, data.units, data.maxPrice);
   } else if (serializedTask.type === 'SELL') {
     const data = JSON.parse(serializedTask.data)
-    return new SellTask(data.destination, data.tradeSymbol, data.units);
+    return new SellTask(data.destination, data.tradeSymbol, data.units, data.minSell);
   } else if (serializedTask.type === 'UPDATE_MARKET') {
     const data = JSON.parse(serializedTask.data)
     return new UpdateMarketTask(data.waypointSymbol);
@@ -27,6 +28,9 @@ export const deserializeTask = (serializedTask: ShipTask): Task => {
     const data = JSON.parse(serializedTask.data)
     return new PurchaseShipTask({
       waypointSymbol: data.waypointSymbol, shipSymbol: data.shipSymbol, amount: data.amount});
+  } else if (serializedTask.type === 'MINE') {
+    const data = JSON.parse(serializedTask.data)
+    return new MineTask(data.destination, data.units);
   }
   throw new Error(`Trying to deserialize unknown task type ${serializedTask.type}`)
 }

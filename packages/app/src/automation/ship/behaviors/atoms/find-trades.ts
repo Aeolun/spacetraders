@@ -1,5 +1,5 @@
 import {Ship} from "@auto/ship/ship";
-import {prisma} from "@common/prisma";
+import {prisma, Prisma} from "@common/prisma";
 import {environmentVariables} from "@common/environment-variables";
 import {TradeSymbol} from "spacetraders-sdk";
 
@@ -7,10 +7,24 @@ interface Trade {
   fromWaypointSymbol: string;
   toWaypointSymbol: string;
   tradeSymbol: TradeSymbol;
+  purchasePrice: number;
+  sellPrice: number;
   amount: number;
 }
 
-export const findTrades = async (): Promise<Trade[]> => {
+const priorityLevels: Record<string, number> = {
+  'ABUNDANT': 4,
+  'HIGH': 3,
+  'MODERATE': 2,
+  'LIMITED': 1,
+  'SCARCE': 0,
+}
+
+export const findTrades = async (data: {
+  dbLimit: number,
+  resultLimit: number,
+  systemSymbols: string[]
+}): Promise<Trade[]> => {
   const cargoValue = 70;
   const currentAgent = await prisma.agent.findFirstOrThrow({
     where: {
@@ -21,7 +35,7 @@ export const findTrades = async (): Promise<Trade[]> => {
     }
   });
   const currentMoney = currentAgent.credits
-  const minProfit = 1000;
+  const minProfit = 15;
 
   const bestTrades = await prisma.$queryRaw<{
     buysystem: string
@@ -33,6 +47,7 @@ export const findTrades = async (): Promise<Trade[]> => {
     buyvolume: number
     sellvolume: number
     tradevolume: number
+    dis: number
     dissys: number
     perunitprofit: number
     tradeGoodSymbol: string
@@ -81,9 +96,10 @@ join "Waypoint" gatewp2 on gatewp2.type = 'JUMP_GATE' and gatewp2."systemSymbol"
 left join "JumpDistance" jd on jd."fromSystemSymbol" = s1.symbol and jd."toSystemSymbol" =s2.symbol
 where
 m1."purchasePrice" < m2."sellPrice"
-and ROUND(LEAST(${cargoValue}, ${currentMoney} / m1."purchasePrice", m1."tradeVolume", m2."tradeVolume") * (m2."sellPrice" - m1."purchasePrice")) > ${minProfit}
+and (m2."sellPrice" - m1."purchasePrice") * 40 > ${minProfit}
+and wp1."systemSymbol" IN (${Prisma.join(data.systemSymbols)}) and wp2."systemSymbol" IN (${Prisma.join(data.systemSymbols)})
 order by
-perunitprofit desc LIMIT 10;`;
+perunitprofit desc LIMIT ${data.dbLimit};`;
 
 
 
@@ -91,19 +107,29 @@ perunitprofit desc LIMIT 10;`;
     const safeBuyVolume = [
       'ABUNDANT',
       'HIGH'
-    ].includes(trade.buysupply) ? trade.buyvolume * 10 : trade.buyvolume;
+    ].includes(trade.buysupply) ? trade.buyvolume * 10 : ['MODERATE'].includes(trade.buysupply) ? trade.buyvolume * 3 : trade.buyvolume;
     const safeSellVolume = [
       'LIMITED',
       'SCARCE'
-    ].includes(trade.sellsupply) ? trade.sellvolume * 10 : trade.sellvolume;
-    const totalProfit = Math.min(safeBuyVolume, safeSellVolume) * trade.perunitprofit;
+    ].includes(trade.sellsupply) ? trade.sellvolume * 10 : ['MODERATE'].includes(trade.sellsupply) ? trade.sellvolume * 3 : trade.sellvolume;
+    const bonusPriority = priorityLevels[trade.buysupply] + (4 - priorityLevels[trade.sellsupply]);
+    const tradeVolume = Math.min(safeBuyVolume, safeSellVolume)
+    const totalProfit = tradeVolume * trade.perunitprofit;
     return {
       fromWaypointSymbol: trade.buyat,
       toWaypointSymbol: trade.sellat,
       tradeSymbol: trade.tradeGoodSymbol as TradeSymbol,
+      purchasePrice: trade.purchasePrice,
+      sellPrice: trade.sellPrice,
       unitProfit: trade.perunitprofit,
-      amount: Math.min(safeBuyVolume, safeSellVolume),
+      maxProfit: Math.min(70, tradeVolume) * trade.perunitprofit,
+      profitPerDistance: Math.min(70, tradeVolume) * trade.perunitprofit / trade.dis,
+      priority: bonusPriority,
+      amount: tradeVolume,
       totalProfit: totalProfit
     }
-  }).sort((a, b) => b.unitProfit - a.unitProfit);
+  }).sort((a, b) => {
+    //if (a.priority !== b.priority) return b.priority - a.priority
+    return b.profitPerDistance - a.profitPerDistance
+  }).slice(0, data.resultLimit);
 }

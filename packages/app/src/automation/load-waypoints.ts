@@ -46,10 +46,6 @@ export const loadWaypoint = async (server: Server) => {
           const marketInfo = await backgroundQueue(async () => api.systems.getMarket(system.symbol, waypoint.symbol))
           await storeMarketInformation(marketInfo.data)
         }
-        if (waypoint.type === 'JUMP_GATE' && isCharted) {
-          const gateInfo = await backgroundQueue(async () => api.systems.getJumpGate(system.symbol, waypoint.symbol))
-          await storeJumpGateInformation(system.symbol, waypoint.symbol, gateInfo.data)
-        }
         if (isCharted && !isMarketplace) {
           await prisma.waypoint.update({
             where: {
@@ -59,6 +55,10 @@ export const loadWaypoint = async (server: Server) => {
               exploreStatus: ExploreStatus.EXPLORED
             }
           })
+        }
+        if (waypoint.type === 'JUMP_GATE' && isCharted) {
+          const gateInfo = await backgroundQueue(async () => api.systems.getJumpGate(system.symbol, waypoint.symbol))
+          await storeJumpGateInformation(system.symbol, waypoint.symbol, gateInfo.data)
         }
       }
 

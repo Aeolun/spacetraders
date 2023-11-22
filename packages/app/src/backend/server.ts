@@ -1,6 +1,6 @@
 import {authedProcedure, publicProcedure, router} from './trpc';
 import z from 'zod'
-import {prisma, ShipBehavior} from "@common/prisma";
+import {MarketPriceHistory, prisma, ShipBehavior, TradeLog} from "@common/prisma";
 import { sign, verify } from 'jsonwebtoken';
 import crypto from 'crypto'
 import createApi from "@common/lib/createApi";
@@ -8,7 +8,9 @@ import {FactionSymbols} from "spacetraders-sdk";
 import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
 import {observable} from "@trpc/server/observable";
 import {redisClient} from "@common/redis";
-
+import {combinedMarketStats} from "@common/lib/stats/market-stats";
+import {TradeHistory} from "@common/types";
+import {findTrades} from "@auto/ship/behaviors/atoms/find-trades";
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
@@ -131,10 +133,49 @@ export const appRouter = router({
                         symbol: true
                     }
                 },
+                tradeGoods: {
+                    select: {
+                        tradeGoodSymbol: true,
+                        kind: true
+                    }
+                }
             }
         })
 
         return waypoints
+    }),
+    consolidatedPrices: publicProcedure.query(async () => {
+        return prisma.consolidatedPrice.findMany({
+            include: {
+                tradeGood: true
+            }
+        })
+    }),
+    bestTrades: publicProcedure.input(z.object({})).query(async ({input}) => {
+        return findTrades({
+            systemSymbols: [],
+            dbLimit: 250,
+            resultLimit: 100
+        });
+    }),
+    getWaypoint: publicProcedure.input(z.object({
+        symbol: z.string()
+    })).query(async ({input}) => {
+        const waypoint = await prisma.waypoint.findFirstOrThrow({
+            where: {
+                symbol: input.symbol
+            },
+            include: {
+                traits: true,
+                jumpConnectedTo: {
+                    select: {
+                        symbol: true
+                    }
+                },
+            }
+        })
+
+        return waypoint
     }),
     getWaypoints: publicProcedure.input(z.object({
         systemSymbol: z.string()
@@ -158,8 +199,6 @@ export const appRouter = router({
                 }
             }
         })
-
-
         return {
             system,
             waypoints: await Promise.all(waypoints.map(async wp => {
@@ -284,8 +323,19 @@ export const appRouter = router({
             include: {
                 shipConfiguration: {
                     include: {
-                        shipConfigurationMount: true,
-                        shipConfigurationModule: true
+                        frame: true,
+                        reactor: true,
+                        engine: true,
+                        shipConfigurationMount: {
+                            include: {
+                                mount: true
+                            }
+                        },
+                        shipConfigurationModule: {
+                            include: {
+                                module: true
+                            }
+                        }
                     }
                 }
             }
@@ -302,6 +352,76 @@ export const appRouter = router({
                 tradeGood: true
             }
         })
+    }),
+    getShipLog: publicProcedure.input(z.object({
+        shipSymbol: z.string()
+    })).query(async ({input}) => {
+        return prisma.shipLog.findMany({
+            where: {
+                symbol: input.shipSymbol
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 100
+        })
+    }),
+    getMarketInfoHistory: publicProcedure.input(z.object({
+        waypoint: z.string(),
+        tradeGood: z.string()
+    })).query(async ({input}) => {
+        const priceHistory = await prisma.marketPriceHistory.findMany({
+            where: {
+                tradeGoodSymbol: input.tradeGood,
+                waypointSymbol: input.waypoint
+            },
+            include: {
+                tradeGood: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 192 // 2 days = 192 * 15 minutes
+        })
+        const trades = await prisma.tradeLog.findMany({
+            where: {
+                tradeGoodSymbol: input.tradeGood,
+                waypointSymbol: input.waypoint
+            }
+        })
+        let newData: TradeHistory = []
+        priceHistory.forEach(ph => {
+            newData.push({
+                ...ph,
+                entryType: 'history'
+            })
+        })
+        trades.forEach(t => {
+            newData.push({
+                ...t,
+                entryType: 'trade'
+            })
+        })
+        newData.sort((a, b) => {
+            // trade goes before history
+            if (b.createdAt.toLocaleString() === a.createdAt.toLocaleString() && a.entryType === 'trade' && b.entryType === 'history') {
+                return 1
+            }
+            return b.createdAt.getTime() - a.createdAt.getTime()
+        });
+        return newData
+    }),
+    getSystemMarket: publicProcedure.input(z.object({
+        system: z.string()
+    })).query(async ({input}) => {
+        const marketPrices = await prisma.marketPrice.findMany({
+            where: {
+                waypoint: {
+                    systemSymbol: input.system
+                }
+            },
+        })
+        return combinedMarketStats(marketPrices)
     }),
 });
 

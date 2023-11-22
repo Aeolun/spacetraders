@@ -5,4 +5,4 @@ import {TravelObjective} from "@auto/strategy/objective/travel-objective";
 import {PurchaseShipObjective} from "@auto/strategy/objective/purchase-ship";
 import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objective";
 
-export type Objective = ExploreObjective | TradeObjective | UpdateMarketDataObjective | TravelObjective | PurchaseShipObjective | EmptyCargoObjective
+export type Objective = ExploreObjective | TradeObjective | UpdateMarketDataObjective | TravelObjective | PurchaseShipObjective | EmptyCargoObjective | MineObjective
