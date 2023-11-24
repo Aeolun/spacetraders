@@ -3,6 +3,7 @@ import {Registry} from "@front/viewer/registry";
 import {RootState} from "@front/ui/store";
 import { useSelector } from "react-redux";
 import {trpcReact} from "@front/trpc";
+import {timeAgo} from "@common/lib/time-ago";
 
 export const ShipInfo = (props: { symbol: string }) => {
   const shipData = useSelector((select: RootState) => select.ship.ship[props.symbol]);
@@ -17,6 +18,7 @@ export const ShipInfo = (props: { symbol: string }) => {
     <div>Navstatus: {shipData.navStatus}</div>
     <div>Overall goal: {shipData.overalGoal}</div>
     <div>Flight Mode: {shipData.flightMode}</div>
+    <div>Cargo State: {shipData.cargoState}</div>
     <div>Target: {shipData.destinationWaypoint?.symbol}</div>
     <div>Arrival: { shipData.arrivalOn ? <Timeago date={shipData.arrivalOn} /> : null }</div>
     <div>Timeout: { shipData.reactorCooldownOn ? <Timeago date={shipData.reactorCooldownOn} /> : null }</div>
@@ -46,7 +48,9 @@ export const ShipInfo = (props: { symbol: string }) => {
     {shipLog.isFetched ? <div>
       <h2>Log</h2>
       <ul>{shipLog.data?.map(log => {
-        return <li>{log.createdAt.toString()} {log.message}</li>
+        return <li style={{
+          color: log.level === 'ERROR' ? 'red' : 'inherit'
+        }}>{timeAgo(log.createdAt)} {log.level}: {log.message}</li>
       })}</ul>
     </div> : null}
   </div>

@@ -1,5 +1,6 @@
 import {ScannedWaypoint, Waypoint} from "spacetraders-sdk";
-import {prisma} from "@common/prisma";
+import {prisma, Prisma} from "@common/prisma";
+import {WaypointUpdateInput} from ".prisma/client";
 
 export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
   if (waypoint.faction) {
@@ -21,7 +22,7 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
 
 
   try {
-    const updateValues = {
+    const updateValues: Prisma.WaypointUncheckedUpdateInput = {
       factionSymbol: waypoint.faction?.symbol,
       chartSubmittedBy: waypoint.chart?.submittedBy,
       chartSubmittedOn: waypoint.chart?.submittedOn,
@@ -53,6 +54,23 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
     }
     if ('isUnderConstruction' in waypoint) {
       updateValues.isUnderConstruction = waypoint.isUnderConstruction
+
+      if (waypoint.modifiers) {
+        updateValues.modifiers = {
+          connectOrCreate: waypoint.modifiers.map(mod => {
+            return {
+              where: {
+                symbol: mod.symbol,
+              },
+              create: {
+                symbol: mod.symbol,
+                name: mod.name,
+                description: mod.description
+              }
+            }
+          }),
+        }
+      }
     }
     await prisma.waypoint.update({
       where: {

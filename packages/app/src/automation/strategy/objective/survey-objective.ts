@@ -5,19 +5,18 @@ import {TravelTask} from "@auto/ship/task/travel";
 import {prisma, Waypoint} from "@common/prisma";
 import {MineTask} from "@auto/ship/task/mine";
 import {getDistance} from "@common/lib/getDistance";
+import {SurveyTask} from "@auto/ship/task/survey";
 
-export class MineObjective extends AbstractObjective {
-  type: ObjectiveType.MINE = ObjectiveType.MINE;
+export class SurveyObjective extends AbstractObjective {
+  type: ObjectiveType.SURVEY = ObjectiveType.SURVEY;
   priority = 0
   isPersistent = true;
-  maxShips = 8;
+  maxShips = 2;
   waypoint: Waypoint;
-  tradeSymbol?: TradeSymbol;
 
-  constructor(waypoint: Waypoint, tradeSymbol?: TradeSymbol, priority?: number) {
-    super(`Mine ${waypoint.symbol}${tradeSymbol ? ` for ${tradeSymbol}` : ''}`);
+  constructor(waypoint: Waypoint, priority?: number) {
+    super(`Survey ${waypoint.symbol}`);
     this.waypoint = waypoint;
-    this.tradeSymbol = tradeSymbol;
     if (priority) {
       this.priority = priority;
     }
@@ -33,7 +32,7 @@ export class MineObjective extends AbstractObjective {
   }
 
   appropriateForShip(ship: Ship): boolean {
-    return ship.hasExtractor;
+    return ship.hasSurveyor;
   }
 
   distanceToStart(ship: Ship): number {
@@ -45,10 +44,10 @@ export class MineObjective extends AbstractObjective {
       systemSymbol: this.waypoint.systemSymbol,
       waypointSymbol: this.waypoint.symbol,
     }))
-    await ship.addTask(new MineTask({
+    await ship.addTask(new SurveyTask({
       systemSymbol: this.waypoint.systemSymbol,
       waypointSymbol: this.waypoint.symbol,
-    }, 50))
+    }, 10))
 
   }
 }

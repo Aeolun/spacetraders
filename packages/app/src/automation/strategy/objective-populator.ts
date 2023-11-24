@@ -13,6 +13,12 @@ import {PurchaseShipObjective} from "@auto/strategy/objective/purchase-ship";
 import {MineObjective} from "@auto/strategy/objective/mine-objective";
 import {Ship} from "@auto/ship/ship";
 import {Task} from "@auto/ship/task/task";
+import {getDistance} from "@common/lib/getDistance";
+import {scoreAsteroid} from "@auto/strategy/objective-populator/score-asteroid";
+import {PickupCargoObjective} from "@auto/strategy/objective/pickup-cargo-objective";
+import fs from "fs";
+import {SurveyObjective} from "@auto/strategy/objective/survey-objective";
+import {SiphonObjective} from "@auto/strategy/objective/siphon-objective";
 
 export class ObjectivePopulator {
   private allowedObjectives: ObjectiveType[] = [];
@@ -106,7 +112,7 @@ export class ObjectivePopulator {
               role: "SATELLITE"
             }
           }),
-          cost: 60_000
+          cost: 30_000
         },
         [ShipType.LightHauler]: {
           max: StrategySettings.MAX_HAULERS,
@@ -121,10 +127,35 @@ export class ObjectivePopulator {
           max: StrategySettings.MAX_MINING_DRONES,
           current: await prisma.ship.count({
             where: {
-              frameSymbol: "FRAME_DRONE"
+              frameSymbol: "FRAME_DRONE",
+              role: "EXCAVATOR"
             }
           }),
-          cost: 200_000
+          cost: 30_000
+        },
+        [ShipType.Surveyor]: {
+          max: StrategySettings.MAX_SURVEYORS,
+          current: await prisma.ship.count({
+            where: {
+              frameSymbol: "FRAME_DRONE",
+              role: "SURVEYOR"
+            }
+          }),
+          cost: 35_000
+        },
+        [ShipType.SiphonDrone]: {
+          max: StrategySettings.MAX_SIPHONERS,
+          current: await prisma.ship.count({
+            where: {
+              frameSymbol: "FRAME_DRONE",
+              mounts: {
+                some: {
+                  symbol: "MOUNT_GAS_SIPHON_I"
+                }
+              }
+            }
+          }),
+          cost: 50_000
         }
       }
 
@@ -187,21 +218,143 @@ export class ObjectivePopulator {
       }
     }
 
+    const asteroids = await prisma.waypoint.findMany({
+      where: {
+        exploreStatus: ExploreStatus.EXPLORED,
+        type: {
+          in: ['ASTEROID', 'ENGINEERED_ASTEROID']
+        },
+        modifiers: {
+          none: {
+            symbol: "CRITICAL_LIMIT"
+          }
+        },
+        systemSymbol: {
+          in: this.allowedSystems
+        }
+      },
+      include: {
+        traits: true
+      }
+    })
+    const asteroidBases = await prisma.waypoint.findMany({
+      where: {
+        exploreStatus: ExploreStatus.EXPLORED,
+        type: {
+          in: ['ASTEROID_BASE', "PLANET"]
+        },
+        systemSymbol: {
+          in: this.allowedSystems
+        }
+      },
+      include: {
+        traits: true
+      }
+    })
+
+    asteroids.sort((a, b) => {
+      return scoreAsteroid(b, asteroidBases) - scoreAsteroid(a, asteroidBases)
+    })
+
     // mine objectives
     if (this.allowedObjectives.includes(ObjectiveType.MINE)) {
-      const asteroids = await prisma.waypoint.findMany({
+      for (const asteroid of asteroids) {
+        this.orchestrator.addObjectiveIfNotExists(new MineObjective(asteroid, undefined, scoreAsteroid(asteroid, asteroidBases)))
+      }
+    }
+
+    // survey objectives
+    if (this.allowedObjectives.includes(ObjectiveType.SURVEY)) {
+      for (const asteroid of asteroids) {
+        this.orchestrator.addObjectiveIfNotExists(new SurveyObjective(asteroid, scoreAsteroid(asteroid, asteroidBases)+0.1))
+      }
+    }
+
+    const gasGiants = await prisma.waypoint.findMany({
+      where: {
+        exploreStatus: ExploreStatus.EXPLORED,
+        type: {
+          in: ['GAS_GIANT']
+        },
+        modifiers: {
+          none: {
+            symbol: "CRITICAL_LIMIT"
+          }
+        },
+        systemSymbol: {
+          in: this.allowedSystems
+        }
+      },
+      include: {
+        traits: true
+      }
+    })
+    const fuelProcessors = await prisma.waypoint.findMany({
+      where: {
+        exploreStatus: ExploreStatus.EXPLORED,
+        tradeGoods: {
+          some: {
+            tradeGoodSymbol: "HYDROCARBONS",
+            kind: "IMPORT"
+          }
+        },
+        systemSymbol: {
+          in: this.allowedSystems
+        }
+      },
+      include: {
+        traits: true
+      }
+    })
+
+    if (this.allowedObjectives.includes(ObjectiveType.SIPHON)) {
+      for (const gasGiant of gasGiants) {
+        this.orchestrator.addObjectiveIfNotExists(new SiphonObjective(gasGiant, scoreAsteroid(gasGiant, fuelProcessors)+0.1))
+      }
+    }
+
+    // pickup cargo objectives
+    if (this.allowedObjectives.includes(ObjectiveType.PICKUP_CARGO)) {
+      const waypoints = await prisma.ship.groupBy({
+        _sum: {
+          cargoUsed: true,
+          cargoCapacity: true
+        },
+        by: 'currentWaypointSymbol',
         where: {
-          exploreStatus: ExploreStatus.EXPLORED,
-          type: 'ASTEROID',
-          systemSymbol: {
-            in: this.allowedSystems
+          cargoState: "OPEN_PICKUP",
+          currentWaypoint: {
+            exploreStatus: ExploreStatus.EXPLORED,
+            systemSymbol: {
+              in: this.allowedSystems
+            },
+          }
+        },
+        orderBy: {
+          _sum: {
+            cargoUsed: 'desc'
           }
         }
       })
-
-      for (const asteroid of asteroids) {
-        this.orchestrator.addObjectiveIfNotExists(new MineObjective(asteroid))
+      // make sure we do not fly to waypoints that do not have ships on them anymore
+      this.orchestrator.removeObjectivesOfType(ObjectiveType.PICKUP_CARGO)
+      for (const pickupOption of waypoints) {
+        const waypoint = await prisma.waypoint.findFirstOrThrow({
+          where: {
+            symbol: pickupOption.currentWaypointSymbol
+          }
+        })
+        this.orchestrator.addObjectiveIfNotExists(new PickupCargoObjective(waypoint, {
+          waitForFullCargo: true
+        }))
       }
     }
+    fs.writeFileSync('objectives.json', JSON.stringify({
+      objectives: this.orchestrator.getObjectives().map(o => ({
+        objective: o.objective,
+        priority: o.priority,
+      })),
+      objectiveData: this.orchestrator.getObjectiveData()
+    }))
   }
 }

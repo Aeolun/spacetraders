@@ -35,7 +35,6 @@ export const handleMapMove = () => {
 }
 
 export async function initialize(app: Application) {
-  await createUIElements(app)
   await loadPlayerData()
   const loadedUniverse = await loadUniverse()
 
@@ -87,9 +86,9 @@ export async function initialize(app: Application) {
     Object.keys(Registry.shipData).forEach(shipKey => {
       const shipEntity = Registry.universeShips[shipKey]
       const shipData = Registry.shipData[shipKey]
-      shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
 
       if (shipEntity) {
+        shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
         const newPos = positionShip(shipData)
         shipEntity.position = newPos.position
         shipEntity.setAngle(newPos.navRot ?? 0)

@@ -11,6 +11,10 @@ import {redisClient} from "@common/redis";
 import {combinedMarketStats} from "@common/lib/stats/market-stats";
 import {TradeHistory} from "@common/types";
 import {findTrades} from "@auto/ship/behaviors/atoms/find-trades";
+import fs from "fs";
+import {backgroundQueue} from "@auto/lib/queue";
+import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
+import {storeWaypoint} from "@common/lib/data-update/store-waypoint";
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
@@ -128,6 +132,7 @@ export const appRouter = router({
             },
             include: {
                 traits: true,
+                modifiers: true,
                 jumpConnectedTo: {
                     select: {
                         symbol: true
@@ -167,6 +172,7 @@ export const appRouter = router({
             },
             include: {
                 traits: true,
+                modifiers: true,
                 jumpConnectedTo: {
                     select: {
                         symbol: true
@@ -176,6 +182,26 @@ export const appRouter = router({
         })
 
         return waypoint
+    }),
+    updateWaypoint: publicProcedure.input(z.object({
+        systemSymbol: z.string(),
+        symbol: z.string(),
+    })).mutation(async ({input}) => {
+        const server = await prisma.server.findFirstOrThrow({
+            where: {
+                apiUrl: process.env.API_URL
+            },
+            orderBy: {
+                resetDate: 'desc'
+            }
+        })
+        const token = await getBackgroundAgentToken(server);
+        const api = createApi(token);
+        const data = await backgroundQueue(() => api.systems.getWaypoint(input.systemSymbol, input.symbol))
+
+
+        console.log(data.data.data)
+        await storeWaypoint(data.data.data)
     }),
     getWaypoints: publicProcedure.input(z.object({
         systemSymbol: z.string()
@@ -352,6 +378,18 @@ export const appRouter = router({
                 tradeGood: true
             }
         })
+    }),
+    getObjectives: publicProcedure.query(async () => {
+        try {
+            const data = fs.readFileSync('objectives.json').toString('utf8')
+            const objectives = JSON.parse(data)
+            objectives.objectives.sort((a: any, b: any) => {
+                return b.priority - a.priority
+            });
+            return objectives
+        } catch (error) {
+            return []
+        }
     }),
     getShipLog: publicProcedure.input(z.object({
         shipSymbol: z.string()

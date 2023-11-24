@@ -9,36 +9,8 @@ import {trpc} from "@front/trpc";
 import {Registry} from "@front/viewer/registry";
 import {shipActions} from "@front/ui/slices/ship";
 import {agentActions} from "@front/ui/slices/agent";
+import {app, appInitPromise} from "@front/viewer/pixi-app";
 
-export const app = new Application();
-const initPromise = app.init({
-  // eventFeatures: {
-  //   move: true,
-  //   globalMove: false,
-  //   click: true,
-  //   wheel: false
-  // }
-  antialias: true,
-  roundPixels: false,
-}).then(async () => {
-  await loadAssets()
-  startListeningToEvents();
-})
-
-function startListeningToEvents() {
-  trpc.event.subscribe(undefined, {
-    onData: (data) => {
-      console.log('event', data);
-      if (data.type == 'NAVIGATE') {
-        Registry.shipData[data.data.symbol] = data.data
-        store.dispatch(shipActions.setShipInfo(data.data))
-      } else if (data.type == 'AGENT') {
-        Registry.agent = data.data
-        store.dispatch(agentActions.setCredits(data.data.credits));
-      }
-    }
-  })
-}
 
 export const Pixi = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,12 +18,12 @@ export const Pixi = () => {
 
   useEffect(() => {
     if (!ref.current) return;
-    initPromise.then(() => {
-      initialize(app)
+    appInitPromise.then(() => {
+      if (ref.current) {
+        app.resizeTo = ref.current
 
-      app.resizeTo = ref.current
-
-      ref.current.appendChild(app.canvas)
+        ref.current.appendChild(app.canvas)
+      }
     });
   }, []);
 

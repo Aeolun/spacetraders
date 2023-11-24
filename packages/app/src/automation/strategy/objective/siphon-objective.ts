@@ -5,19 +5,18 @@ import {TravelTask} from "@auto/ship/task/travel";
 import {prisma, Waypoint} from "@common/prisma";
 import {MineTask} from "@auto/ship/task/mine";
 import {getDistance} from "@common/lib/getDistance";
+import {SiphonTask} from "@auto/ship/task/siphon";
 
-export class MineObjective extends AbstractObjective {
-  type: ObjectiveType.MINE = ObjectiveType.MINE;
+export class SiphonObjective extends AbstractObjective {
+  type: ObjectiveType.SIPHON = ObjectiveType.SIPHON;
   priority = 0
   isPersistent = true;
   maxShips = 8;
   waypoint: Waypoint;
-  tradeSymbol?: TradeSymbol;
 
-  constructor(waypoint: Waypoint, tradeSymbol?: TradeSymbol, priority?: number) {
-    super(`Mine ${waypoint.symbol}${tradeSymbol ? ` for ${tradeSymbol}` : ''}`);
+  constructor(waypoint: Waypoint, priority?: number) {
+    super(`Siphon ${waypoint.symbol}`);
     this.waypoint = waypoint;
-    this.tradeSymbol = tradeSymbol;
     if (priority) {
       this.priority = priority;
     }
@@ -33,7 +32,7 @@ export class MineObjective extends AbstractObjective {
   }
 
   appropriateForShip(ship: Ship): boolean {
-    return ship.hasExtractor;
+    return ship.hasSiphon;
   }
 
   distanceToStart(ship: Ship): number {
@@ -45,7 +44,7 @@ export class MineObjective extends AbstractObjective {
       systemSymbol: this.waypoint.systemSymbol,
       waypointSymbol: this.waypoint.symbol,
     }))
-    await ship.addTask(new MineTask({
+    await ship.addTask(new SiphonTask({
       systemSymbol: this.waypoint.systemSymbol,
       waypointSymbol: this.waypoint.symbol,
     }, 50))

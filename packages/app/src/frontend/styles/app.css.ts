@@ -6,6 +6,7 @@ globalStyle("html, body", {
   fontFamily: "sans-serif",
   height: '100vh',
   background: 'black',
+  color: 'white',
 })
 export const app = style({
   display: 'flex',
@@ -32,6 +33,10 @@ export const link = style({
   cursor: 'pointer',
 })
 
+export const dataTable = style({
+  width: '100%',
+})
+
 export const tagList = style({
   display: 'flex',
   flexDirection: 'row',
@@ -54,6 +59,13 @@ export const column = style({
   borderRight: '1px solid #292929',
   overflow: 'auto',
   color: 'white'
+});
+
+export const pageColumn = style({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1,
+  overflow: 'auto',
 });
 
 export const mainColumn = style({

@@ -5,6 +5,7 @@ import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objectiv
 import {prisma} from "@common/prisma";
 import {environmentVariables} from "@common/environment-variables";
 import {TaskExecutor} from "@auto/strategy/task-executor";
+import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 
 
 
@@ -46,19 +47,36 @@ export class Orchestrator<E extends TaskExecutor<TT, Objective>, TT extends Task
   }
 
   public getObjectives() {
-    return Object.values(this.objectives)
+    return this.objectives
+  }
+
+  public getObjectiveData() {
+    return {
+      objectiveIds: this.objectiveIds,
+      executingObjectives: this.executingObjectives,
+      executorsAssignedToObjective: this.executorsAssignedToObjective,
+    }
+  }
+
+  private canAddObjective(objective: Objective) {
+    return !this.executingObjectives.includes(objective.objective) || objective.isPersistent;
   }
 
   addObjectiveIfNotExists(task: Objective) {
-    if (this.objectiveIds[task.objective] || this.executingObjectives.includes(task.objective)) {
+    if (this.objectiveIds[task.objective] || !this.canAddObjective(task)) {
       return;
     }
     this.objectiveIds[task.objective] = true;
     this.objectives.push(task);
   }
 
+  removeObjectivesOfType(type: ObjectiveType) {
+    this.objectives.filter(o => o.type === type).forEach(o => this.objectiveIds[o.objective] = false)
+    this.objectives = this.objectives.filter(o => o.type !== type)
+  }
+
   addOrUpdateObjective(task: Objective) {
-    if (this.executingObjectives.includes(task.objective)) {
+    if (!this.canAddObjective(task)) {
       return;
     }
     this.objectiveIds[task.objective] = true;
@@ -71,7 +89,7 @@ export class Orchestrator<E extends TaskExecutor<TT, Objective>, TT extends Task
   }
 
   public getSortedObjectives(ship: E) {
-    const shipObjectives = Object.values(this.objectives).filter(o => o.shipsAssigned.length < o.maxShips).filter(o => o.appropriateForShip(ship))
+    const shipObjectives = Object.values(this.objectives).filter((o: Objective) => !this.executorsAssignedToObjective[o.objective] || this.executorsAssignedToObjective[o.objective].length < o.maxShips).filter(o => o.appropriateForShip(ship))
     shipObjectives.sort((a, b) => {
       if (a.priority !== b.priority) {
         //higher priority first
@@ -137,7 +155,7 @@ export class Orchestrator<E extends TaskExecutor<TT, Objective>, TT extends Task
           try {
             await executor.onTaskStarted(nextTask)
 
-            await nextTask.execute(executor)
+            await nextTask.execute(executor, this)
             await executor.finishedTask()
           } catch (e) {
             await executor.clearTaskQueue();

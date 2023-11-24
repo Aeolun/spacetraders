@@ -1,10 +1,10 @@
 import {ShipNavFlightMode} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/taskInterface";
 import {defaultSystemWayfinder} from "@common/default-wayfinder";
+import {TaskInterface} from "@auto/ship/task/task";
 
-export class TravelTask implements TaskInterface {
+export class TravelTask implements TaskInterface<Ship> {
   type = TaskType.TRAVEL;
   destination: {
     systemSymbol: string;
@@ -34,6 +34,7 @@ export class TravelTask implements TaskInterface {
         await ship.navigateMode(step.edge === 'drift' ? ShipNavFlightMode.Drift : step.edge === 'burn' ? ShipNavFlightMode.Burn : ShipNavFlightMode.Cruise)
         await ship.attemptRefuel();
         await ship.navigate(step.target)
+        await ship.waitForNavigationCompletion()
       }
     } else {
       //warp to system

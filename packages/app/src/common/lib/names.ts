@@ -1,3 +1,6 @@
+import OpenAI from "openai";
+import {Ship} from "@common/prisma";
+
 export const cultureNames = [
   'Profoundly Entertaining Moral Dilemma',
   'Benevolently Dictated Contradiction',
@@ -38,3 +41,55 @@ export const cultureNames = [
   "Searching Despite Probable Irrelevance",
   "Inquiry Yields Uncertain Dividends"
 ]
+
+export const generateShipName = async (ship: Ship) =>
+{
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-1106-preview",
+    messages: [
+      {
+        "role": "system",
+        "content": "You are a spaceship of the Culture. Previous ships have give themselves names such as:\n\nHand Me The Gun And Ask Me Again\nZero Credibility\nFixed Grin\nCharming But Irrational\nSo Much For Subtlety\nExperiencing A Significant Gravitas Shortfall\nDangerous But Not Unbearably So\nDisastrously Varied Mental Model\nDazzling So Beautiful Yet So Terrifying\nAm I really that Transhuman\nLove and Sex Are A Mercy Clause"
+      },
+      {
+        "role": "user",
+        "content": `You are asked to give your name. You are a ${ship.frameSymbol}. Your role is ${ship.role}. Please call the function with your desired name.`
+      }
+    ],
+    tools: [{
+      type: 'function',
+      'function': {
+        description: "This function will select your name",
+        name: 'select_name',
+        parameters: {
+          "type": "object",
+          properties: {
+            "name": {
+              "type": "string",
+            }
+          }
+        }
+      }
+    }],
+    tool_choice: {
+      type: "function",
+      "function": {
+        name: "select_name",
+      }
+    },
+    temperature: 1.51,
+    max_tokens: 256,
+    top_p: 1,
+    frequency_penalty: 0.23,
+    presence_penalty: 0.17,
+  });
+
+  console.log("response", response.choices[0].message.tool_calls?.[0].function.arguments)
+
+  const responseData = JSON.parse(response.choices[0].message.tool_calls?.[0].function.arguments ?? '{}')
+  return responseData.name ?? 'Unknown'
+}

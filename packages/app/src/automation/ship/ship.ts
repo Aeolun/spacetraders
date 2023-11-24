@@ -9,14 +9,14 @@ import {
   Market,
   MarketTransaction, ShipCargoItem,
   ShipNavFlightMode,
-  ShipRefineRequestProduceEnum, ShipType,
+  ShipRefineRequestProduceEnum, ShipType, SiphonResources201Response,
   Survey,
   TradeSymbol,
 } from "spacetraders-sdk";
 import {
   returnShipData,
 } from "@auto/ship/updateShips";
-import { prisma, System, TaskType, Waypoint } from "@common/prisma";
+import { prisma, System, TaskType, Waypoint, LogLevel } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
 import { ee } from "@auto/event-emitter";
 import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
@@ -33,7 +33,7 @@ import {processCooldown} from "@common/lib/data-update/store-cooldown";
 import {processCargo} from "@common/lib/data-update/store-ship-cargo";
 import {Objective} from "@auto/strategy/objective/objective";
 import {isAxiosApiErrorResponse} from "@common/lib/is-api-error";
-import {AxiosError} from "axios";
+import {AxiosError, isAxiosError} from "axios";
 import {Task} from "@auto/ship/task/task";
 import {TravelTask} from "@auto/ship/task/travel";
 import {deserializeTask} from "@auto/ship/task/deserialize-task";
@@ -65,6 +65,8 @@ export class Ship implements TaskExecutor<Task, Objective> {
   public engineSpeed = 0;
   public navMode: ShipNavFlightMode = ShipNavFlightMode.Cruise;
   public hasExtractor = false;
+  public hasSurveyor = false;
+  public hasSiphon = false;
 
   public fuel = 0;
   public maxFuel = 0;
@@ -92,7 +94,15 @@ export class Ship implements TaskExecutor<Task, Objective> {
   }
 
   async onTaskFailed(task: Task, e: unknown) {
-    await this.waitFor(10000, `Error while executing task ${task.type}: ${e instanceof Error ? e.message : e?.toString()}`)
+    let logMessage = e?.toString()
+    if (isAxiosError(e)) {
+      logMessage = JSON.stringify({
+        message: e.toString(),
+        responseData: e.response?.data
+      })
+    }
+
+    await this.waitFor(10000, `Error while executing task ${task.type}: ${logMessage}`, LogLevel.ERROR)
   }
 
   async onObjectiveStarted(objective: Objective) {
@@ -100,7 +110,15 @@ export class Ship implements TaskExecutor<Task, Objective> {
   }
 
   async onObjectiveFailed(objective: Objective, e: unknown) {
-    await this.waitFor(10000, `Error while adding tasks for objective ${objective.type}`);
+    let logMessage = e?.toString()
+    if (isAxiosError(e)) {
+      logMessage = JSON.stringify({
+        message: e.toString(),
+        responseData: e.response?.data
+      })
+    }
+
+    await this.waitFor(10000, `Error while adding tasks for objective ${objective.type}: ${logMessage}`, LogLevel.ERROR)
   }
 
   getPersonalObjective() {
@@ -244,6 +262,12 @@ export class Ship implements TaskExecutor<Task, Objective> {
     this.hasExtractor = shipInfo.data.data.mounts.some((m) =>
       m.symbol.includes("MINING_LASER")
     ) && shipInfo.data.data.modules.some((m) => m.symbol.includes("MINERAL_PROCESSOR"));
+    this.hasSurveyor = shipInfo.data.data.mounts.some((m) =>
+      m.symbol.includes("MOUNT_SURVEYOR")
+    );
+    this.hasSiphon = shipInfo.data.data.mounts.some((m) =>
+      m.symbol.includes("MOUNT_GAS_SIPHON")
+    ) && shipInfo.data.data.modules.some((m) => m.symbol.includes("GAS_PROCESSOR"));
 
     this.isDocked = shipInfo.data.data.nav.status === "DOCKED";
     this.currentObjective = databaseShip.overalGoal ?? undefined
@@ -252,10 +276,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
   }
 
   private updateInventory(inventory: ShipCargoItem[]) {
+    let total = 0;
     this.currentCargo = inventory.reduce((acc, cur) => {
       acc[cur.symbol] = cur.units
+      total += cur.units
       return acc
     }, {} as Record<string, number>)
+    this.cargo = total
   }
 
   get currentSystem(): System {
@@ -308,8 +335,8 @@ export class Ship implements TaskExecutor<Task, Objective> {
     });
   }
 
-  log(message: string) {
-    logShipAction(this.symbol, message);
+  log(message: string, level: LogLevel = LogLevel.INFO) {
+    logShipAction(this.symbol, message, level);
   }
 
   private setCooldown(kind: CooldownKind, waitTime: number) {
@@ -356,8 +383,8 @@ export class Ship implements TaskExecutor<Task, Objective> {
     });
   }
 
-  async waitFor(time: number, reason?: string) {
-    this.log(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`);
+  async waitFor(time: number, reason?: string, level: LogLevel = LogLevel.INFO) {
+    this.log(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`, level);
     await this.setObjective('')
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -371,6 +398,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
     result.data.data.forEach((wp) => {
       storeWaypoint(wp);
     });
+    return result.data.data
+  }
+
+  async agent() {
+    const result = await this.queue(() => this.api.agents.getMyAgent())
+    await processAgent(result.data.data);
+
     return result.data.data
   }
 
@@ -690,6 +724,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
       await processCooldown(this.symbol, res.data.data.cooldown);
       this.cargo = res.data.data.cargo.units;
       const newShipInfo = await processCargo(this.symbol, res.data.data.cargo);
+      this.updateInventory(res.data.data.cargo.inventory);
 
       let expiry: Date | undefined = this.handleExpiration(res.data.data.cooldown.expiration);
 
@@ -732,6 +767,115 @@ export class Ship implements TaskExecutor<Task, Objective> {
           ship: await returnShipData(this.symbol),
           extract: response,
         });
+      },
+      4253: async (e) => {
+        this.log("Overextracted!", LogLevel.ERROR);
+
+        const waypointInfo = await this.queue(() => this.api.systems.getWaypoint(
+          this.currentSystemSymbol,
+          this.currentWaypointSymbol
+        ))
+
+        await storeWaypoint(waypointInfo.data.data)
+
+        throw e;
+      },
+      4224: async (e) => {
+        this.log("Survey exhausted", LogLevel.WARN)
+
+        await prisma.survey.deleteMany({
+          where: {
+            signature: survey?.signature
+          }
+        })
+
+        throw e;
+      },
+      4221: async (e) => {
+        this.log("Survey expired", LogLevel.WARN)
+
+        await prisma.survey.deleteMany({
+          where: {
+            signature: survey?.signature
+          }
+        })
+
+        throw e;
+      }
+    })
+  }
+
+  async siphon() {
+    return this.catchAxiosCodes('siphon', async () => {
+      await this.waitForCooldown("reactor");
+
+      const res = await this.queue(() => {
+        this.log(`Siphoning resources`);
+        return this.api.fleet.siphonResources(this.symbol);
+      });
+
+      this.log(
+        `Extracted ${res.data.data.siphon.yield.units} units of ${res.data.data.siphon.yield.symbol}, ${res.data.data.cargo.units}/${res.data.data.cargo.capacity} filled`
+      );
+
+      await processCooldown(this.symbol, res.data.data.cooldown);
+      this.cargo = res.data.data.cargo.units;
+      const newShipInfo = await processCargo(this.symbol, res.data.data.cargo);
+      this.updateInventory(res.data.data.cargo.inventory);
+
+      let expiry: Date | undefined = this.handleExpiration(res.data.data.cooldown.expiration);
+
+      ee.emit("event", {
+        type: "NAVIGATE",
+        data: await returnShipData(this.symbol),
+      });
+
+      return {
+        ship: newShipInfo,
+        siphon: res.data,
+      };
+    }, {
+      4228: async () => {
+        this.log(`Cargo at max capacity`);
+
+        const response: SiphonResources201Response = {
+          data: {
+            siphon: {
+              ["yield"]: {
+                symbol: "FUEL",
+                units: 0,
+              },
+              shipSymbol: this.symbol,
+            },
+            cargo: {
+              capacity: 100,
+              units: 100,
+              inventory: [],
+            },
+            cooldown: {
+              remainingSeconds: 0,
+              shipSymbol: this.symbol,
+              totalSeconds: 0,
+              expiration: new Date().toISOString(),
+            },
+          },
+        };
+        return Promise.resolve({
+          ship: await returnShipData(this.symbol),
+          siphon: response,
+        });
+      },
+      4253: async (e) => {
+        this.log("Overextracted!", LogLevel.ERROR);
+
+        const waypointInfo = await this.queue(() => this.api.systems.getWaypoint(
+          this.currentSystemSymbol,
+          this.currentWaypointSymbol
+        ))
+
+        await storeWaypoint(waypointInfo.data.data)
+
+        throw e;
       }
     })
   }
@@ -824,7 +968,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
   }
 
   async construction() {
-    return this.catchAxiosCodes('construction', async () => {
+    return this.catchAxiosCodes('retrieve construction data', async () => {
       return this.queue(async () => {
         this.log(`Retrieving waypoint construction information`);
         const res = await this.api.systems.getConstruction(this.currentSystemSymbol, this.currentWaypointSymbol);
@@ -834,7 +978,23 @@ export class Ship implements TaskExecutor<Task, Objective> {
     })
   }
 
-  private async catchAxiosCodes<T>(action: string, fn: () => Promise<T>, handledCodes?: Record<string, () => Promise<T>>) {
+  async transferCargo(targetShipSymbol: string, tradeSymbol: TradeSymbol, units: number) {
+    return this.catchAxiosCodes('transferCargo', async () => {
+      return this.queue(async () => {
+        const res = await this.api.fleet.transferCargo(this.symbol, {
+          shipSymbol: targetShipSymbol,
+          tradeSymbol,
+          units
+        })
+        this.log(`Transferred ${tradeSymbol} x${units} from ${this.symbol} to ${targetShipSymbol}`);
+
+        this.updateInventory(res.data.data.cargo.inventory);
+        return processCargo(this.symbol, res.data.data.cargo);
+      });
+    })
+  }
+
+  private async catchAxiosCodes<T>(action: string, fn: () => Promise<T>, handledCodes?: Record<string, (error: AxiosError) => Promise<T>>) {
     try {
       return await fn()
     } catch(error) {
@@ -845,7 +1005,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
         );
         const code = error.response?.data.error.code
         if (code && handledCodes && handledCodes[code]) {
-          return handledCodes[code]()
+          return handledCodes[code](error)
         } else {
           throw error
         }
@@ -967,11 +1127,32 @@ export class Ship implements TaskExecutor<Task, Objective> {
         );
       });
 
-      fs.writeFileSync(
-        `dumps/survey${survey.data.data.surveys[0].signature}`,
-        JSON.stringify(survey.data.data, null, 2)
-      );
+      await Promise.all(survey.data.data.surveys.map(async (item) => {
+        const prices = await prisma.consolidatedPrice.findMany({
+          where: {
+            tradeGoodSymbol: {
+              in: item.deposits.map((d) => d.symbol)
+            },
+            systemSymbol: this.currentSystemSymbol,
+          }
+        })
+        let totalValue = 0;
+        prices.forEach((p) => {
+          const deposit = item.deposits.filter((d) => d.symbol === p.tradeGoodSymbol)
+          if (deposit && p.sellP95) {
+            totalValue += p.sellP95 * deposit.length
+          }
+        })
 
+        await prisma.survey.create({
+          data: {
+            waypointSymbol: this.currentWaypointSymbol,
+            payload: JSON.stringify(item),
+            signature: item.signature,
+            value: totalValue,
+          }
+        })
+      }))
 
       this.handleExpiration(survey.data.data.cooldown.expiration)
 
@@ -1003,6 +1184,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
         })
       );
       this.log(`Jettisoned ${quantity} ${good}`);
+      this.updateInventory(result.data.data.cargo.inventory);
       return result;
     });
   }

@@ -19,12 +19,26 @@ export const WaypointInfo = ({ symbol }: {symbol: string}) => {
     waypointSymbol: symbol || ''
   })
 
+  const updateWaypoint = trpcReact.updateWaypoint.useMutation()
+
   return <>
   {currentWaypoint.data?.chartSubmittedBy ? <div>Chart submitted by {currentWaypoint.data?.chartSubmittedBy} at {currentWaypoint.data?.chartSubmittedOn?.toLocaleString()}</div> : null}
   <div className={tagList}>
-    {currentWaypoint.data?.traits.map(trait => <div className={tag}>{trait.name}</div>)}
+    {currentWaypoint.data?.traits.map(trait => <div className={tag} title={trait.description}>{trait.name}</div>)}
   </div>
+    <div className={tagList}>
+      {currentWaypoint.data?.modifiers.map(modifier => <div className={tag} title={modifier.description}>{modifier.name}</div>)}
+    </div>
   <div>ExploreStatus: {currentWaypoint.data?.exploreStatus}</div>
+  {currentWaypoint.data ? <button onClick={() => {
+
+      updateWaypoint.mutateAsync({
+        systemSymbol: currentWaypoint.data.systemSymbol,
+        symbol: currentWaypoint.data.symbol,
+      }).then(() => {
+        currentWaypoint.refetch()
+      })
+    }}>Update</button> : null }
   {query.data ? <div>
     <h2>Marketplace (last update <Timeago date={currentWaypoint.data?.marketLastUpdated} />)</h2>
     <div className={marketRow.header}>

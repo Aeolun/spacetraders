@@ -1,9 +1,10 @@
 import {Ship} from "@auto/ship/ship";
-import {TaskInterface} from "@auto/ship/task/taskInterface";
+
 import {prisma, TaskType} from "@common/prisma";
 import {ShipType} from "spacetraders-sdk";
+import {TaskInterface} from "@auto/ship/task/task";
 
-export class PurchaseShipTask implements TaskInterface {
+export class PurchaseShipTask implements TaskInterface<Ship> {
   type = TaskType.PURCHASE_SHIP;
   waypointSymbol: string;
   shipSymbol: ShipType;

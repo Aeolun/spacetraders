@@ -5,12 +5,13 @@ import {ObjectivePopulator} from "@auto/strategy/objective-populator";
 import {ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import {APIInstance} from "@common/lib/createApi";
 import {startShipBehavior} from "@auto/strategy/ship-behavior";
-import {environmentVariables} from "@common/environment-variables";
 import {updateMarketStats} from "@auto/background/update-market-stats";
 import {Ship} from "@auto/ship/ship";
+import {backgroundQueueStats, foregroundQueueStats} from "@auto/lib/queue";
+import {Task} from "@auto/ship/task/task";
 
 let stage = 0;
-export async function initGlobalBehavior(orchestrator: Orchestrator<Ship>, taskPopulator: ObjectivePopulator, api: APIInstance) {
+export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task>, taskPopulator: ObjectivePopulator, api: APIInstance) {
   let agent = await getBackgroundAgent();
 
   if (!agent.headquartersSymbol) {
@@ -54,11 +55,21 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship>, taskP
 
   setInterval(() => {
     taskPopulator.populateObjectives()
-    const commandShip = orchestrator.getExecutor(`${environmentVariables.agentName}-1`)
-    if (commandShip) {
-      const shipObjectives = orchestrator.getSortedObjectives(commandShip).slice(0, 10)
-      console.log('in progress', orchestrator.getExecutingObjectiveCount(), 'current objective', shipObjectives.slice(0, 10).map(o => o.objective + ` P${o.priority} (` + o.distanceToStart(commandShip) + ` LY, ${o.requiredShipSymbols?.join(', ')})`))
-    }
+    // const commandShip = orchestrator.getExecutor(`${environmentVariables.agentName}-1`)
+    // if (commandShip) {
+      //const shipObjectives = orchestrator.getSortedObjectives(commandShip).slice(0, 10)
+      //console.log('in progress', orchestrator.getExecutingObjectiveCount(), 'current objective', shipObjectives.slice(0, 10).map(o => o.objective + ` P${o.priority} (` + o.distanceToStart(commandShip) + ` LY, ${o.requiredShipSymbols?.join(', ')})`))
+    // }
+    console.log({
+      foregroundQueueStats: {
+        totalRequests: foregroundQueueStats.totalRequests,
+        requestsPerSecond: foregroundQueueStats.requestsPerSecond(),
+      },
+      backgroundQueueStats: {
+        totalRequests: backgroundQueueStats.totalRequests,
+        requestsPerSecond: backgroundQueueStats.requestsPerSecond(),
+      }
+    })
   }, 5000);
 
   startShipBehavior(orchestrator, api)
@@ -83,10 +94,13 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship>, taskP
       taskPopulator.addPossibleObjective(ObjectiveType.PURCHASE_SHIP)
       taskPopulator.addPossibleObjective(ObjectiveType.TRADE);
     } else if (stage === 3) {
+      taskPopulator.addPossibleObjective(ObjectiveType.PICKUP_CARGO)
       taskPopulator.addPossibleObjective(ObjectiveType.UPDATE_MARKET)
       taskPopulator.addPossibleObjective(ObjectiveType.PURCHASE_SHIP)
       taskPopulator.addPossibleObjective(ObjectiveType.TRADE);
       taskPopulator.addPossibleObjective(ObjectiveType.MINE)
+      taskPopulator.addPossibleObjective(ObjectiveType.SIPHON)
+      taskPopulator.addPossibleObjective(ObjectiveType.SURVEY)
     }
 
     await new Promise((resolve) => setTimeout(resolve, 15000));

@@ -169,10 +169,17 @@ model ShipGroup {
   @@index([shipConfigurationSymbol])
 }
 
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
 model ShipLog {
   id        String   @id @default(uuid())
   symbol    String
   message   String
+  level     LogLevel @default(INFO)
   createdAt DateTime @default(now())
 
   @@index([symbol, createdAt])
@@ -272,6 +279,7 @@ model Waypoint {
   construction       Construction?
   purchasableShips   ShipyardModel[]
   MarketPriceHistory MarketPriceHistory[]
+  Survey             Survey[]
 
   @@index([orbitsSymbol])
   @@index([systemSymbol])
@@ -356,6 +364,19 @@ model WaypointTrait {
   name        String
   description String     @db.Text
   waypoints   Waypoint[]
+}
+
+model Survey {
+  id             String   @id @default(uuid())
+  waypoint       Waypoint @relation(fields: [waypointSymbol], references: [symbol], onDelete: Cascade)
+  waypointSymbol String
+  signature      String
+  payload        String   @db.Text
+  value          Float
+  createdAt      DateTime @default(now())
+
+  @@unique([signature])
+  @@index([waypointSymbol])
 }
 
 model WaypointModifier {
@@ -623,13 +644,19 @@ enum ShipBehavior {
   TRAVEL
 }
 
+enum CargoState {
+  OPEN_PICKUP
+  MANAGED
+}
+
 model Ship {
-  symbol        String   @id
-  callsign      String   @default("")
-  agent         String   @default("PHANTASM")
+  symbol        String     @id
+  callsign      String     @default("")
+  agent         String     @default("PHANTASM")
   name          String
   factionSymbol String
   role          ShipRole
+  cargoState    CargoState @default(MANAGED)
 
   currentSystemSymbol   String
   currentSystem         System   @relation("currentSystem", fields: [currentSystemSymbol], references: [symbol], onDelete: Cascade)
@@ -695,6 +722,8 @@ enum TaskType {
   MINE
   SURVEY
   PURCHASE_SHIP
+  PICKUP_CARGO
+  OFFLOAD_INVENTORY
 }
 
 model ShipTask {

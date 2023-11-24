@@ -4,6 +4,7 @@ import {format} from "@common/lib/format";
 import {useSelector} from "react-redux";
 import {RootState} from "@front/ui/store";
 import {PropsWithChildren} from "react";
+import {World} from "@front/components/World";
 
 export const Layout = ({ children }: PropsWithChildren) => {
   const credits = useSelector((select: RootState) => select.agent.credits)
@@ -16,6 +17,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
       <Link className={appStyles.menuItem} to={'/waypoints'}>Waypoints</Link>
       <Link className={appStyles.menuItem} to={'/systems'}>Systems</Link>
       <Link className={appStyles.menuItem} to={'/trades'}>Trades</Link>
+      <Link className={appStyles.menuItem} to={'/objectives'}>Objectives</Link>
       <div className={appStyles.agentInfo}>
         {format.format(credits)}
       </div>

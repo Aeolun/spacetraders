@@ -1,9 +1,9 @@
 import {TradeSymbol} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/taskInterface";
+import {TaskInterface} from "@auto/ship/task/task";
 
-export class SellTask implements TaskInterface {
+export class SellTask implements TaskInterface<Ship> {
   type = TaskType.SELL;
   destination: {
     systemSymbol: string;

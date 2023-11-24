@@ -3,7 +3,10 @@ import {Ship} from "@auto/ship/ship";
 export enum ObjectiveType {
   EXPLORE = 'explore',
   TRADE = 'trade',
+  PICKUP_CARGO = 'pickup-cargo',
   MINE = 'mine',
+  SURVEY = 'survey',
+  SIPHON = 'siphon',
   TRAVEL = 'travel',
   UPDATE_MARKET = 'update-market',
   PURCHASE_SHIP = 'purchase-ship',

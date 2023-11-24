@@ -3,8 +3,8 @@ import {Ship} from "@auto/ship/ship";
 import {prisma, TaskType} from "@common/prisma";
 import {TaskInterface} from "@auto/ship/task/task";
 
-export class MineTask implements TaskInterface<Ship> {
-  type = TaskType.MINE;
+export class SiphonTask implements TaskInterface<Ship> {
+  type = TaskType.SIPHON;
   destination: {
     systemSymbol: string;
     waypointSymbol: string;
@@ -18,7 +18,7 @@ export class MineTask implements TaskInterface<Ship> {
 
   async execute(ship: Ship) {
     if (ship.currentWaypointSymbol !== this.destination.waypointSymbol) {
-      throw new Error("Cannot mine in a place we are not")
+      throw new Error("Cannot siphon in a place we are not")
     }
 
     let extracted = 0;
@@ -34,26 +34,17 @@ export class MineTask implements TaskInterface<Ship> {
       let emptyTime = Date.now()
       while (extracted < this.units) {
         if (Date.now() - emptyTime > 1000 * 60 * 240) {
-          await ship.waitFor(10000, "Mining task timed out after 4 hours without pickup.")
+          await ship.waitFor(10000, "Siphoning task timed out after 4 hours without pickup.")
           break;
         } else if (ship.cargo >= ship.maxCargo) {
           await ship.waitFor(10000, "Cargo full, wait until our cargo is picked up.")
         } else if (extracted > this.units) {
-          await ship.log(`Finished extracting ${this.units} units.`)
+          await ship.log(`Finished siphoning ${this.units} units.`)
           break;
         } else {
           emptyTime = Date.now()
-
-          const survey = await prisma.survey.findFirst({
-            where: {
-              waypointSymbol: ship.currentWaypointSymbol,
-            },
-            orderBy: {
-              value: 'desc'
-            }
-          })
-          const result = await ship.extract(survey ? JSON.parse(survey.payload) : undefined)
-          extracted += result.extract.data.extraction.yield.units
+          const result = await ship.siphon()
+          extracted += result.siphon.data.siphon.yield.units
         }
       }
     } finally {

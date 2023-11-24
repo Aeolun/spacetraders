@@ -1,9 +1,9 @@
 import {Ship} from "@auto/ship/ship";
-import {TaskInterface} from "@auto/ship/task/taskInterface";
 import {defaultWayfinder} from "@common/default-wayfinder";
 import {prisma, TaskType} from "@common/prisma";
+import {TaskInterface} from "@auto/ship/task/task";
 
-export class ExploreTask implements TaskInterface {
+export class ExploreTask implements TaskInterface<Ship> {
   type = TaskType.EXPLORE;
   waypointSymbol: string;
 

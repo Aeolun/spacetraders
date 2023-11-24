@@ -1,5 +1,5 @@
 import {Container} from "pixi.js";
-import type {Waypoint, WaypointTrait, TradeGoodKind, Faction } from "@common/prisma";
+import type {Waypoint, WaypointTrait, TradeGoodKind, Faction, WaypointModifier } from "@common/prisma";
 import {inferRouterOutputs} from "@trpc/server";
 import {AppRouter} from "@backend/server";
 import {UniverseEntity} from "@front/viewer/universe-entity";
@@ -58,7 +58,7 @@ export interface Agent {
 
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], tradeGoods: { tradeGoodSymbol: string, kind: TradeGoodKind }[]}
+export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], modifiers: WaypointModifier[], tradeGoods: { tradeGoodSymbol: string, kind: TradeGoodKind }[]}
 
 export type ShipData = RouterOutputs['shipData']
 
