@@ -1,5 +1,5 @@
 import {test, describe, it, expect} from "vitest";
-import {scoreAsteroid, ScoreProperties} from "@auto/strategy/objective-populator/score-asteroid";
+import {BaseScoreProperties, scoreAsteroid, ScoreProperties} from "@auto/strategy/objective-populator/score-asteroid";
 
 // Helper function to sort asteroids by score
 const sortAsteroids = (asteroids: ScoreProperties[], asteroidBases: ScoreProperties[]) => {
@@ -24,6 +24,8 @@ const testSortAsteroids = ({ asteroids, asteroidBases, expected }: any) => {
   }));
 };
 
+const defaultTradeGoods = [{ tradeGoodSymbol: 'IRON_ORE' }, { tradeGoodSymbol: 'IRON_ORE' }, { tradeGoodSymbol: 'IRON_ORE' }, { tradeGoodSymbol: 'IRON_ORE' }]
+
 const testCases = [
   {
     name: 'Test Case - No Traits',
@@ -33,7 +35,7 @@ const testCases = [
       { x: 5, y: 6, traits: [] },
     ],
     asteroidBases: [
-      { x: 7, y: 8, traits: [] },
+      { x: 7, y: 8, traits: [], tradeGoods: defaultTradeGoods },
     ],
     expected: [
       { x: 5, y: 6, traits: [] },
@@ -49,7 +51,7 @@ const testCases = [
       { x: 5, y: 6, traits: [{ symbol: 'RARE_METAL_DEPOSITS' }] },
     ],
     asteroidBases: [
-      { x: 7, y: 8, traits: [] },
+      { x: 7, y: 8, traits: [], tradeGoods: defaultTradeGoods },
     ],
     expected: [
       { x: 3, y: 4, traits: [{ symbol: 'PRECIOUS_METAL_DEPOSITS' }, { symbol: 'RARE_METAL_DEPOSITS' }] },
@@ -64,7 +66,7 @@ const testCases = [
       { x: 3, y: 4, traits: [{ symbol: 'RARE_METAL_DEPOSITS' }] },
     ],
     asteroidBases: [
-      { x: 2, y: 3, traits: [] },
+      { x: 2, y: 3, traits: [], tradeGoods: defaultTradeGoods },
     ],
     expected: [
       { x: 1, y: 2, traits: [{ symbol: 'RARE_METAL_DEPOSITS' }] },
@@ -91,7 +93,7 @@ const testCases = [
       { x: 5, y: 6, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }] },
     ],
     asteroidBases: [
-      { x: 7, y: 8, traits: [] },
+      { x: 7, y: 8, traits: [], tradeGoods: defaultTradeGoods },
     ],
     expected: [
       { x: 5, y: 6, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }] },
@@ -107,12 +109,12 @@ const testCases = [
       { x: 5, y: 6, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }] },
     ],
     asteroidBases: [
-      { x: 7, y: 8, traits: [] },
+      { x: 7, y: 8, traits: [], tradeGoods: defaultTradeGoods },
     ],
     expected: [
-      { x: 5, y: 6, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }], score: 0.97 },
-      { x: 3, y: 4, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }], score: 0.94 },
-      { x: 300, y: 300, traits: [{ symbol: 'RARE_METAL_DEPOSITS' }], score: -1.136 },
+      { x: 5, y: 6, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }], score: 1.97 },
+      { x: 3, y: 4, traits: [{ symbol: 'COMMON_METAL_DEPOSITS' }], score: 1.94 },
+      { x: 300, y: 300, traits: [{ symbol: 'RARE_METAL_DEPOSITS' }], score: -1.1365 },
     ],
   }
 ];
@@ -123,7 +125,7 @@ describe('scoreAsteroid', () => {
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [];
+    const asteroidBases: BaseScoreProperties[] = [];
     expect(scoreAsteroid(asteroid, asteroidBases)).toBe(0);
   });
 
@@ -133,8 +135,8 @@ describe('scoreAsteroid', () => {
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [];
-    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(2);
+    const asteroidBases: BaseScoreProperties[] = [];
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(3);
   });
 
   it('should score correctly for an asteroid with RARE_METAL_DEPOSITS trait', () => {
@@ -143,7 +145,7 @@ describe('scoreAsteroid', () => {
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [];
+    const asteroidBases: BaseScoreProperties[] = [];
     expect(scoreAsteroid(asteroid, asteroidBases)).toBe(3);
   });
 
@@ -153,8 +155,8 @@ describe('scoreAsteroid', () => {
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [];
-    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(1);
+    const asteroidBases: BaseScoreProperties[] = [];
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(2);
   });
 
   it('should accumulate scores for an asteroid with multiple traits', () => {
@@ -167,33 +169,45 @@ describe('scoreAsteroid', () => {
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [];
-    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(6);
+    const asteroidBases: BaseScoreProperties[] = [];
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBe(8);
   });
 
-  it('should include distance from asteroid bases in the score', () => {
+  it('asteroid is penalized based on closest asteroid base', () => {
     const asteroid: ScoreProperties = {
       traits: [],
       x: 0,
       y: 0,
     };
-    const asteroidBases: ScoreProperties[] = [
-      { traits: [], x: 10, y: 10 },
-      { traits: [], x: 20, y: 20 },
+    const asteroidBases: BaseScoreProperties[] = [
+      { traits: [], x: 10, y: 10, tradeGoods: defaultTradeGoods },
+      { traits: [], x: 200, y: 200, tradeGoods: defaultTradeGoods },
     ];
-    expect(scoreAsteroid(asteroid, asteroidBases)).toBeCloseTo(0.282, 1);
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBeCloseTo(-0.141, 1);
   });
 
-  it('very far asteroid has high score the score', () => {
+  it('very far asteroid gets high penalty to score', () => {
     const asteroid: ScoreProperties = {
       traits: [],
       x: 200,
       y: 200,
     };
-    const asteroidBases: ScoreProperties[] = [
-      { traits: [], x: 0, y: 0 },
+    const asteroidBases: BaseScoreProperties[] = [
+      { traits: [], x: 0, y: 0, tradeGoods: defaultTradeGoods },
     ];
-    expect(scoreAsteroid(asteroid, asteroidBases)).toBeCloseTo(5.65, 1);
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBeCloseTo(-2.828, 1);
+  });
+
+  it('asteroid is penalized double if asteroid base has half the sellable goods', () => {
+    const asteroid: ScoreProperties = {
+      traits: [],
+      x: 200,
+      y: 200,
+    };
+    const asteroidBases: BaseScoreProperties[] = [
+      { traits: [], x: 0, y: 0, tradeGoods: [{ tradeGoodSymbol: 'IRON_ORE' }, { tradeGoodSymbol: 'IRON_ORE' }] },
+    ];
+    expect(scoreAsteroid(asteroid, asteroidBases)).toBeCloseTo(-5.656, 1);
   });
 });
 

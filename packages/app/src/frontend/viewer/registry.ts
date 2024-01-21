@@ -28,6 +28,7 @@ export interface Registry {
     systemData: Record<string, System>
     waypointData: Record<string, WaypointData>
     waypointsForSystem: Record<string, WaypointData[]>
+    universeJumpData: Record<string, string[]>
     shipData: Record<string, ShipData>
 
     // references to all the visible nodes
@@ -58,7 +59,7 @@ export interface Agent {
 
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], modifiers: WaypointModifier[], tradeGoods: { tradeGoodSymbol: string, kind: TradeGoodKind }[]}
+export type WaypointData = Waypoint & {offset: number, traits: WaypointTrait[], modifiers: WaypointModifier[], jumpConnectedTo: {symbol: string,x: number, y: number}[], tradeGoods: { tradeGoodSymbol: string, kind: TradeGoodKind }[]}
 
 export type ShipData = RouterOutputs['shipData']
 
@@ -153,6 +154,7 @@ export const Registry: Registry = {
         symbol: '',
         credits: 0
     },
+    universeJumpData: {},
     transformedSystems: {},
     currentView: 'universe',
     currentSystem: undefined,

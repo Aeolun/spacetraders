@@ -11,6 +11,7 @@
     "jsx": "react-jsx",
     "target": "esnext",
     "skipLibCheck": true,
+    "strictNullChecks": true,
     "types": ["bun-types"],
     "lib": ["ES2021", "dom"],
     "paths": {

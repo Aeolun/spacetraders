@@ -1,18 +1,24 @@
 import {Ship} from "@auto/ship/ship";
 import {defaultWayfinder} from "@common/default-wayfinder";
 import {prisma, TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/task";
 
-export class ExploreTask implements TaskInterface<Ship> {
-  type = TaskType.EXPLORE;
-  waypointSymbol: string;
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 
-  constructor(waypointSymbol: string) {
-    this.waypointSymbol = waypointSymbol;
+export class ExploreTask extends AbstractTask {
+  expectedPosition: LocationWithWaypointSpecifier;
+
+  constructor(data: {
+    expectedPosition: LocationWithWaypointSpecifier
+    expectedDuration: number
+  }) {
+    super(TaskType.EXPLORE, data.expectedDuration, data.expectedPosition)
+    this.expectedPosition = data.expectedPosition
   }
 
   async execute(ship: Ship) {
-    if (ship.currentWaypointSymbol === this.waypointSymbol) {
+    if (ship.currentWaypointSymbol === this.expectedPosition.waypoint.symbol) {
       // go and explore
       const chartResult = await ship.chart();
 
@@ -52,13 +58,14 @@ export class ExploreTask implements TaskInterface<Ship> {
         }
       })
     } else {
-      throw new Error(`Not at the location to explore. Need to be at ${this.waypointSymbol} but at ${ship.currentWaypointSymbol}.`)
+      throw new Error(`Not at the location to explore. Need to be at ${this.expectedPosition.waypoint.symbol} but at ${ship.currentWaypointSymbol}.`)
     }
   }
 
   serialize(): string {
     return JSON.stringify({
-      waypointSymbol: this.waypointSymbol,
+      expectedPosition: this.expectedPosition,
+      expectedDuration: this.expectedDuration
     });
   }
 }

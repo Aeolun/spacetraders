@@ -12,11 +12,12 @@ import {
   ShipRefineRequestProduceEnum, ShipType, SiphonResources201Response,
   Survey,
   TradeSymbol,
+  Ship as SdkShip
 } from "spacetraders-sdk";
 import {
   returnShipData,
-} from "@auto/ship/updateShips";
-import { prisma, System, TaskType, Waypoint, LogLevel } from "@common/prisma";
+} from "@auto/ship/getAllShips";
+import { prisma, System, TaskType, Waypoint, ObjectiveExecutionState, LogLevel } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
 import { ee } from "@auto/event-emitter";
 import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
@@ -32,16 +33,16 @@ import {processAgent} from "@common/lib/data-update/store-agent";
 import {processCooldown} from "@common/lib/data-update/store-cooldown";
 import {processCargo} from "@common/lib/data-update/store-ship-cargo";
 import {Objective} from "@auto/strategy/objective/objective";
-import {isAxiosApiErrorResponse} from "@common/lib/is-api-error";
+import {isSTApiErrorResponse} from "@common/lib/is-api-error";
 import {AxiosError, isAxiosError} from "axios";
 import {Task} from "@auto/ship/task/task";
 import {TravelTask} from "@auto/ship/task/travel";
 import {deserializeTask} from "@auto/ship/task/deserialize-task";
 import {processConstruction} from "@common/lib/data-update/store-construction";
 import {storeMarketTransaction} from "@common/lib/data-update/store-market-transaction";
-import {TaskExecutor} from "@auto/strategy/task-executor";
 import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objective";
-import {O} from "vitest/dist/reporters-5f784f42";
+import {TaskExecutor} from "@auto/strategy/orchestrator/types";
+import {LocationSpecifier} from "@auto/strategy/types";
 
 type CooldownKind = "reactor";
 
@@ -52,7 +53,7 @@ const cooldowns: Record<
   reactor: {},
 };
 
-export class Ship implements TaskExecutor<Task, Objective> {
+export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   private queue: Queue;
   private taskQueue: {id: string; task: Task}[] = [];
 
@@ -79,18 +80,103 @@ export class Ship implements TaskExecutor<Task, Objective> {
   public isDocked = false;
 
   public expectedCargo: Record<string, number> = {};
+  public currentExecutionId: string | undefined = undefined;
   public currentObjective: string | undefined = undefined;
+  public nextExecutionId: string | undefined = undefined;
+  public nextObjective: string | undefined = undefined;
+
+  public taskStartedOn: Date | undefined = undefined;
+  public expectedTaskDuration: number | undefined = undefined;
 
   constructor(public symbol: string, private api: APIInstance) {
     this.queue = foregroundQueue;
   }
 
-  async onTaskStarted(task: Task) {
-    this.log(`Executing ${task.type}`)
+  async setNextObjective(objective: string): Promise<void> {
+    this.nextObjective = objective;
+    this.log(`Setting next objective to ${objective}`)
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol,
+      },
+      data: {
+        nextObjective: objective,
+      },
+    });
   }
 
-  async onObjectiveCompleted() {
-    this.log("Objective complete");
+  getExpectedFreeTime(): number {
+    const taskQueueDurationInSeconds = this.taskQueue.reduce((acc, cur) => {
+      return acc + cur.task.expectedDuration
+    }, 0)
+    const taskStartedTime = this.taskStartedOn?.getTime()
+    const currentTaskDuration = this.expectedTaskDuration ?? 0
+    const expectedTimeForCurrentTask = taskStartedTime ? currentTaskDuration - ((Date.now() - taskStartedTime) / 1000) : 0
+
+    const result = expectedTimeForCurrentTask + taskQueueDurationInSeconds
+    if (isNaN(result)) {
+      console.log('SOmehow nan', {
+        taskQueueDurationInSeconds,
+        taskStartedTime,
+        currentTaskDuration,
+        expectedTimeForCurrentTask
+      })
+      return 1000000
+    }
+
+    return result
+  }
+
+  getExpectedPosition(): LocationSpecifier {
+    const lastTask = this.taskQueue[this.taskQueue.length-1]
+    return lastTask && lastTask.task.expectedPosition ? lastTask.task.expectedPosition : {
+      system: {
+        symbol: this.currentSystemSymbol,
+        x: this.currentSystem.x,
+        y: this.currentSystem.y,
+      },
+      waypoint: {
+        symbol: this.currentWaypointSymbol,
+        x: this.currentWaypoint.x,
+        y: this.currentWaypoint.y,
+      }
+    }
+  }
+
+  async finishedTask() {
+    const nextTask = this.taskQueue.shift()
+    if (nextTask === undefined) {
+      throw new Error("Should never remove a nonexistent task.")
+    }
+    await prisma.shipTask.deleteMany({
+      where: {
+        id: nextTask.id
+      }
+    })
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        taskStartedOn: null,
+        expectedTaskDuration: null
+      }
+    })
+  }
+
+  async onTaskStarted(task: Task) {
+    this.log(`Executing ${task.type}`)
+    this.taskStartedOn = new Date()
+    this.expectedTaskDuration = task.expectedDuration
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        taskStartedOn: this.taskStartedOn,
+        expectedTaskDuration: this.expectedTaskDuration
+      }
+    })
   }
 
   async onTaskFailed(task: Task, e: unknown) {
@@ -101,15 +187,130 @@ export class Ship implements TaskExecutor<Task, Objective> {
         responseData: e.response?.data
       })
     }
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        taskStartedOn: null,
+        expectedTaskDuration: null
+      }
+    })
 
-    await this.waitFor(10000, `Error while executing task ${task.type}: ${logMessage}`, LogLevel.ERROR)
+    await this.log(`Error while executing task ${task.type}: ${logMessage}`, LogLevel.ERROR)
   }
 
-  async onObjectiveStarted(objective: Objective) {
+  async clearObjectives() {
+    this.log(`Clearing objectives`)
+    this.currentObjective = undefined;
+    this.nextObjective = undefined;
+    this.currentExecutionId = undefined;
+    this.nextExecutionId = undefined;
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol,
+      },
+      data: {
+        objective: '',
+        nextObjective: '',
+        objectiveExecutionId: null,
+        nextObjectiveExecutionId: null
+      },
+    });
+  }
+
+  async onStartNextObjective() {
+    this.log(`Starting next objective ${this.nextObjective}`)
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol,
+      },
+      data: {
+        objective: this.nextObjective,
+        objectiveExecutionId: this.nextExecutionId,
+        nextObjective: '',
+        nextObjectiveExecutionId: null
+      },
+    });
+    this.currentObjective = this.nextObjective
+    this.currentExecutionId = this.nextExecutionId
+    this.nextObjective = undefined
+    this.nextExecutionId = undefined
+  }
+
+  async onObjectiveAssigned(objective: Objective, executionId: string, which: 'current' | 'next' = 'current') {
+    this.log(`Scheduled execution of ${objective.objective}`)
+    const execution = await prisma.objectiveExecution.create({
+      data: {
+        id: executionId,
+        shipSymbol: this.symbol,
+        name: objective.objective,
+        creditsReserved: objective.creditReservation,
+        state: ObjectiveExecutionState.SCHEDULED,
+        type: objective.type
+      }
+    })
+    if (which === 'current') {
+      this.currentObjective = objective.objective
+      this.currentExecutionId = execution.id
+    } else {
+      this.nextObjective = objective.objective
+      this.nextExecutionId = execution.id
+    }
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: which === 'current' ? {
+        objective: objective.objective,
+        objectiveExecutionId: execution.id
+      } : {
+        nextObjective: objective.objective,
+        nextObjectiveExecutionId: execution.id
+      }
+    })
+  }
+  async onObjectiveStarted(objective: Objective, executionId: string) {
     this.log(`Tasks for execution of ${objective.objective} added to ship queue`)
+    await prisma.objectiveExecution.update({
+      where: {
+        id: executionId,
+      },
+      data: {
+        state: ObjectiveExecutionState.RUNNING,
+      }
+    })
   }
 
-  async onObjectiveFailed(objective: Objective, e: unknown) {
+  async onObjectiveCompleted(executionId: string) {
+    this.log("Objective complete");
+    const execution = await prisma.objectiveExecution.update({
+      where: {
+        id: this.currentExecutionId
+      },
+      data: {
+        state: ObjectiveExecutionState.COMPLETED,
+        completedAt: new Date(),
+      }
+    })
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        objective: '',
+        objectiveExecutionId: null
+      }
+    })
+    this.currentObjective = undefined;
+    this.currentExecutionId = undefined
+    ee.emit("event", {
+      type: "NAVIGATE",
+      data: await returnShipData(this.symbol),
+    });
+  }
+
+  async onObjectiveFailed(e: unknown, executionId: string) {
     let logMessage = e?.toString()
     if (isAxiosError(e)) {
       logMessage = JSON.stringify({
@@ -117,8 +318,71 @@ export class Ship implements TaskExecutor<Task, Objective> {
         responseData: e.response?.data
       })
     }
+    const execution = await prisma.objectiveExecution.update({
+      where: {
+        id: this.currentExecutionId
+      },
+      data: {
+        state: ObjectiveExecutionState.FAILED,
+        completedAt: new Date(),
+      }
+    })
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        objective: '',
+        objectiveExecutionId: null
+      }
+    })
+    this.currentObjective = undefined;
+    this.currentExecutionId = undefined
 
-    await this.waitFor(10000, `Error while adding tasks for objective ${objective.type}: ${logMessage}`, LogLevel.ERROR)
+    ee.emit("event", {
+      type: "NAVIGATE",
+      data: await returnShipData(this.symbol),
+    });
+    await this.waitFor(10000, `Error while executing objective ${this.currentObjective}: ${logMessage}`, LogLevel.ERROR)
+  }
+
+  async onObjectiveCancelled(which: 'current' | 'next' = 'current') {
+    await this.waitFor(10000, `Cancelled objective ${which ==='current' ? this.currentObjective : this.nextObjective}`, LogLevel.WARN)
+
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: which === 'current' ? {
+        objective: '',
+        objectiveExecutionId: null
+      } : {
+        nextObjective: '',
+        nextObjectiveExecutionId: null
+      }
+    })
+    const execution = await prisma.objectiveExecution.update({
+      where: {
+        id: which === 'current' ? this.currentExecutionId : this.nextExecutionId
+      },
+      data: {
+        state: ObjectiveExecutionState.CANCELLED,
+        completedAt: new Date(),
+      }
+    })
+    if (which === 'current') {
+      this.currentObjective = undefined
+      this.currentExecutionId = undefined
+    } else {
+      this.nextObjective = undefined
+      this.nextExecutionId = undefined
+    }
+
+    ee.emit("event", {
+      type: "NAVIGATE",
+      data: await returnShipData(this.symbol),
+    });
+
   }
 
   getPersonalObjective() {
@@ -129,12 +393,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
     }
   }
 
-  async onNothingToDo() {
-    await this.waitFor(20000, "No task available for ship");
+  async onNothingToDo(reason?: string) {
+    await this.waitFor(20000, `No task available for ship${reason ? `: ${reason}` : ''}`, LogLevel.INFO);
   }
 
   async prepare() {
     if (this.navigationUntil && new Date(this.navigationUntil).getTime() > Date.now()) {
+      console.log("Ship already navigating, waiting for completion")
       await this.waitUntil(this.navigationUntil, 'Waiting for ship to finish existing navigation before starting behavior loop')
     }
   }
@@ -179,17 +444,6 @@ export class Ship implements TaskExecutor<Task, Objective> {
     }
     return nextTask?.task
   }
-  async finishedTask() {
-    const nextTask = this.taskQueue.shift()
-    if (nextTask === undefined) {
-      throw new Error("Should never remove a nonexistent task.")
-    }
-    await prisma.shipTask.deleteMany({
-      where: {
-        id: nextTask.id
-      }
-    })
-  }
 
   async loadTaskQueue() {
     const tasks = await prisma.shipTask.findMany({
@@ -227,52 +481,66 @@ export class Ship implements TaskExecutor<Task, Objective> {
     this._currentWaypointSymbol = waypoint;
   }
 
-  public async updateShipStatus() {
-    const shipInfo = await this.queue(() =>
-      this.api.fleet.getMyShip(this.symbol)
-    );
-    await processShip(shipInfo.data.data);
+  public async updateShipStatus(shipData?: SdkShip) {
+    if (!shipData) {
+
+      const shipInfo = await this.queue(() =>
+        this.api.fleet.getMyShip(this.symbol)
+      );
+      shipData = shipInfo.data.data;
+    }
+
+    await processShip(shipData);
     const databaseShip = await prisma.ship.findFirstOrThrow({
       where: {
         symbol: this.symbol,
       }
     })
+    this.currentObjective = databaseShip.objective ?? undefined
+    this.currentExecutionId = databaseShip.objectiveExecutionId ?? undefined
+    this.nextObjective = databaseShip.nextObjective ?? undefined
+    this.nextExecutionId = databaseShip.nextObjectiveExecutionId ?? undefined
 
-    this._currentWaypointSymbol = shipInfo.data.data.nav.waypointSymbol;
-    this._currentSystemSymbol = shipInfo.data.data.nav.systemSymbol;
+    this.taskStartedOn = databaseShip.taskStartedOn ?? undefined
+    this.expectedTaskDuration = databaseShip.expectedTaskDuration ?? undefined
+
+    this._currentWaypointSymbol = shipData.nav.waypointSymbol;
+    this._currentSystemSymbol = shipData.nav.systemSymbol;
     await this.updateLocationObjects()
 
+    this.handleExpiration(shipData.cooldown.expiration);
     this.navigationUntil =
-      shipInfo.data.data.nav.status === "IN_TRANSIT"
-        ? new Date(shipInfo.data.data.nav.route.arrival)
+      shipData.nav.status === "IN_TRANSIT"
+        ? new Date(shipData.nav.route.arrival)
         : undefined;
-    this.navMode = shipInfo.data.data.nav.flightMode;
+    this.navMode = shipData.nav.flightMode;
+    await processNav(this.symbol, shipData.nav);
 
-    this.cargo = shipInfo.data.data.cargo.units;
-    this.maxCargo = shipInfo.data.data.cargo.capacity;
-    this.updateInventory(shipInfo.data.data.cargo.inventory);
+    this.cargo = shipData.cargo.units;
+    this.maxCargo = shipData.cargo.capacity;
+    this.updateInventory(shipData.cargo.inventory);
+    await processCargo(this.symbol, shipData.cargo);
 
-    this.fuel = shipInfo.data.data.fuel.current;
-    this.maxFuel = shipInfo.data.data.fuel.capacity;
+    this.fuel = shipData.fuel.current;
+    this.maxFuel = shipData.fuel.capacity;
 
-    this.engineSpeed = shipInfo.data.data.engine.speed;
-    this.hasWarpDrive = shipInfo.data.data.modules.some((m) =>
+    this.engineSpeed = shipData.engine.speed;
+    this.hasWarpDrive = shipData.modules.some((m) =>
       m.symbol.includes("WARP_DRIVE")
     );
-    this.hasExtractor = shipInfo.data.data.mounts.some((m) =>
+    this.hasExtractor = shipData.mounts.some((m) =>
       m.symbol.includes("MINING_LASER")
-    ) && shipInfo.data.data.modules.some((m) => m.symbol.includes("MINERAL_PROCESSOR"));
-    this.hasSurveyor = shipInfo.data.data.mounts.some((m) =>
+    ) && shipData.modules.some((m) => m.symbol.includes("MINERAL_PROCESSOR"));
+    this.hasSurveyor = shipData.mounts.some((m) =>
       m.symbol.includes("MOUNT_SURVEYOR")
     );
-    this.hasSiphon = shipInfo.data.data.mounts.some((m) =>
+    this.hasSiphon = shipData.mounts.some((m) =>
       m.symbol.includes("MOUNT_GAS_SIPHON")
-    ) && shipInfo.data.data.modules.some((m) => m.symbol.includes("GAS_PROCESSOR"));
+    ) && shipData.modules.some((m) => m.symbol.includes("GAS_PROCESSOR"));
 
-    this.isDocked = shipInfo.data.data.nav.status === "DOCKED";
-    this.currentObjective = databaseShip.overalGoal ?? undefined
-
+    this.isDocked = shipData.nav.status === "DOCKED";
     await this.loadTaskQueue();
+    this.log('Reloaded')
   }
 
   private updateInventory(inventory: ShipCargoItem[]) {
@@ -283,6 +551,39 @@ export class Ship implements TaskExecutor<Task, Objective> {
       return acc
     }, {} as Record<string, number>)
     this.cargo = total
+  }
+
+  public async addToCargo(tradeGood: TradeSymbol, quantity: number) {
+    this.currentCargo[tradeGood] = (this.currentCargo[tradeGood] ?? 0) + quantity
+    this.cargo += quantity
+    await prisma.shipCargo.upsert({
+      where: {
+        shipSymbol_tradeGoodSymbol: {
+          shipSymbol: this.symbol,
+          tradeGoodSymbol: tradeGood
+        }
+      },
+      create: {
+        shipSymbol: this.symbol,
+        tradeGoodSymbol: tradeGood,
+        units: this.currentCargo[tradeGood]
+      },
+      update: {
+        units: this.currentCargo[tradeGood]
+      }
+    })
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        cargoUsed: this.cargo,
+      }
+    })
+    ee.emit("event", {
+      type: "NAVIGATE",
+      data: await returnShipData(this.symbol),
+    });
   }
 
   get currentSystem(): System {
@@ -308,29 +609,6 @@ export class Ship implements TaskExecutor<Task, Objective> {
     this._currentWaypointObject = await prisma.waypoint.findFirstOrThrow({
       where: {
         symbol: this.currentWaypointSymbol,
-      },
-    });
-  }
-
-  async setTravelGoal(system: string) {
-    return prisma.ship.update({
-      where: {
-        symbol: this.symbol,
-      },
-      data: {
-        travelGoalSystemSymbol: system,
-      },
-    });
-  }
-
-  async setObjective(goal: string) {
-    this.currentObjective = goal;
-    await prisma.ship.update({
-      where: {
-        symbol: this.symbol,
-      },
-      data: {
-        overalGoal: goal,
       },
     });
   }
@@ -364,7 +642,8 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
     if (res.status === 204) {
       return true;
-    } else if(res.data.data.expiration) {
+    }
+    if(res.data.data.expiration) {
       const expire = new Date(res.data.data.expiration);
       const timeRemaining = expire.getTime() - Date.now() + 200;
       this.setCooldown("reactor", timeRemaining);
@@ -385,7 +664,6 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async waitFor(time: number, reason?: string, level: LogLevel = LogLevel.INFO) {
     this.log(`Waiting ${time} ms${reason ? `, ${reason}` : ""}`, level);
-    await this.setObjective('')
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);
@@ -395,9 +673,9 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async getSystemWaypoints(symbol: string) {
     const result = await this.queue(() => this.api.systems.getSystemWaypoints(symbol, 1, 20))
-    result.data.data.forEach((wp) => {
+    for (const wp of result.data.data) {
       storeWaypoint(wp);
-    });
+    };
     return result.data.data
   }
 
@@ -481,30 +759,29 @@ export class Ship implements TaskExecutor<Task, Objective> {
       if (waitForTimeout) {
         await this.waitUntil(res.data.data.nav.route.arrival);
         return navResult;
-      } else {
-        return navResult;
       }
+      return navResult;
     } catch (error) {
-      if (isAxiosApiErrorResponse(error)) {
+      if (isSTApiErrorResponse(error)) {
         if (error.response?.data?.error?.code === 4203 && this.fuel > 1) {
-          this.log(`Insufficient fuel for ${this.navMode} navigation to ${waypoint}. Switching to drift mode.`)
+          this.log(`Insufficient fuel for ${this.navMode} navigation to ${waypoint}. Switching to drift mode.`, LogLevel.ERROR)
           await this.navigateMode("DRIFT");
           return this.navigate(waypoint, waitForTimeout);
-        } else if (error.response?.data?.error?.code === 4204) {
+        }
+        if (error.response?.data?.error?.code === 4204) {
           this.log(`Already at ${waypoint}`);
           return returnShipData(this.symbol);
-        } else {
-          throw error
         }
-      } else if (error instanceof AxiosError) {
+        throw error
+      }
+      if (error instanceof AxiosError) {
         console.error(
           `issue in navigate for ${this.symbol}`,
           error.response?.data
         );
         throw error;
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -590,11 +867,11 @@ export class Ship implements TaskExecutor<Task, Objective> {
             resolve(navResult);
           }, waitTime);
         });
-      } else {
-        return navResult;
       }
+      return navResult;
+
     } catch (error) {
-      if (isAxiosApiErrorResponse(error)) {
+      if (isSTApiErrorResponse(error)) {
         if (error.response?.data?.error?.code === 4203) {
           await this.navigateMode("DRIFT");
           await this.warp(waypoint, waitForTimeout);
@@ -627,6 +904,22 @@ export class Ship implements TaskExecutor<Task, Objective> {
         `Jumping from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`
         return res
       });
+
+      await prisma.ledger.create({
+        data: {
+          shipSymbol: this.symbol,
+          waypointSymbol: res.data.data.transaction.waypointSymbol,
+          tradeGoodSymbol: res.data.data.transaction.tradeSymbol,
+          transactionType: "PURCHASE",
+          pricePerUnit: res.data.data.transaction.pricePerUnit,
+          totalPrice: res.data.data.transaction.totalPrice,
+          units: res.data.data.transaction.units,
+
+          credits: res.data.data.agent.credits,
+          objectiveExecutionId: this.currentExecutionId
+        },
+      });
+
       const nowAfterNav = Date.now();
 
       this._currentSystemSymbol =
@@ -689,19 +982,18 @@ export class Ship implements TaskExecutor<Task, Objective> {
             resolve(navResult);
           }, waitTime);
         });
-      } else {
-        return navResult;
       }
+      return navResult;
+
     } catch (error) {
-      if (isAxiosApiErrorResponse(error) && error.response?.data?.error?.code === 4204) {
+      if (isSTApiErrorResponse(error) && error.response?.data?.error?.code === 4204) {
         this.log(`Already at ${waypointSymbol}`);
         return;
-      } else if (error instanceof AxiosError) {
-        console.error(`issue in jump for ${this.symbol}`, error.response?.data);
-        throw error;
-      } else {
-        throw error;
       }
+      if (error instanceof AxiosError) {
+        console.error(`issue in jump for ${this.symbol}`, error.response?.data);
+      }
+      throw error;
     }
   }
 
@@ -710,8 +1002,8 @@ export class Ship implements TaskExecutor<Task, Objective> {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
-        const fromDeposit = survey ? ` from deposit ${survey.signature}` : "";
-        this.log(`Extracting resources${fromDeposit}`);
+        const fromDeposit = survey ? ` from deposit ${survey.signature} expiring at ${survey.expiration}` : "";
+        this.log(`Extracting resources at ${this.currentWaypointSymbol}${fromDeposit}`);
         return this.api.fleet.extractResources(this.symbol, {
           survey: survey,
         });
@@ -739,7 +1031,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
       };
     }, {
       4228: async () => {
-        this.log(`Cargo at max capacity`);
+        this.log("Cargo at max capacity");
 
         const response: ExtractResources201Response = {
           data: {
@@ -777,6 +1069,25 @@ export class Ship implements TaskExecutor<Task, Objective> {
         ))
 
         await storeWaypoint(waypointInfo.data.data)
+        await prisma.waypoint.update({
+          where: {
+            symbol: waypointInfo.data.data.symbol
+          },
+          data: {
+            modifiers: {
+              connectOrCreate: {
+                where: {
+                  symbol: "UNSTABLE"
+                },
+                create: {
+                  symbol: "UNSTABLE",
+                  name: 'UNSTABLE',
+                  description: "UNSTABLE"
+                }
+              }
+            }
+          }
+        })
 
         throw e;
       },
@@ -810,12 +1121,12 @@ export class Ship implements TaskExecutor<Task, Objective> {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
-        this.log(`Siphoning resources`);
+        this.log("Siphoning resources");
         return this.api.fleet.siphonResources(this.symbol);
       });
 
       this.log(
-        `Extracted ${res.data.data.siphon.yield.units} units of ${res.data.data.siphon.yield.symbol}, ${res.data.data.cargo.units}/${res.data.data.cargo.capacity} filled`
+        `Siphoned ${res.data.data.siphon.yield.units} units of ${res.data.data.siphon.yield.symbol}, ${res.data.data.cargo.units}/${res.data.data.cargo.capacity} filled`
       );
 
       await processCooldown(this.symbol, res.data.data.cooldown);
@@ -836,7 +1147,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
       };
     }, {
       4228: async () => {
-        this.log(`Cargo at max capacity`);
+        this.log("Cargo at max capacity");
 
         const response: SiphonResources201Response = {
           data: {
@@ -886,26 +1197,33 @@ export class Ship implements TaskExecutor<Task, Objective> {
         await this.dock()
       }
 
-      const beforeDetails = await this.queue(() => {
-        return this.api.agents.getMyAgent();
-      });
       const res = await this.queue(() => {
-        this.log(`Refueling ship`);
+        this.log("Refueling ship");
         return this.api.fleet.refuelShip(this.symbol);
       });
-
-      const cost =
-        beforeDetails.data.data.credits - res.data.data.agent.credits;
 
       await processAgent(res.data.data.agent);
 
       this.fuel = res.data.data.fuel.current;
       this.maxFuel = res.data.data.fuel.capacity;
 
+      await prisma.ledger.create({
+        data: {
+          shipSymbol: this.symbol,
+          waypointSymbol: res.data.data.transaction.waypointSymbol,
+          tradeGoodSymbol: res.data.data.transaction.tradeSymbol,
+          transactionType: "PURCHASE",
+          pricePerUnit: res.data.data.transaction.pricePerUnit,
+          totalPrice: res.data.data.transaction.totalPrice,
+          units: res.data.data.transaction.units,
+          credits: res.data.data.agent.credits,
+          objectiveExecutionId: this.currentExecutionId
+        },
+      });
+
       this.log(
-        `New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${cost}`
+        `New fuel ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} at cost of ${res.data.data.transaction.totalPrice}`
       );
-      await this.navigateMode("CRUISE");
 
       const result = await processFuel(this.symbol, res.data.data.fuel);
 
@@ -924,21 +1242,23 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async dock() {
     return this.catchAxiosCodes('dock', async () => {
-      return this.queue(async () => {
-        this.log(`Docking ship`);
+      if (!this.isDocked) {
+        return this.queue(async () => {
+          this.log("Docking ship");
 
-        const res = await this.api.fleet.dockShip(this.symbol);
+          const res = await this.api.fleet.dockShip(this.symbol);
 
-        this.isDocked = true;
-        return processNav(this.symbol, res.data.data.nav);
-      });
+          this.isDocked = true;
+          return processNav(this.symbol, res.data.data.nav);
+        });
+      }
     });
   }
 
   async orbit() {
     return this.catchAxiosCodes('orbit', async () => {
       return this.queue(async () => {
-        this.log(`Orbiting ship`);
+        this.log("Orbiting ship");
         const res = await this.api.fleet.orbitShip(this.symbol);
 
         this.isDocked = false;
@@ -957,6 +1277,21 @@ export class Ship implements TaskExecutor<Task, Objective> {
         waypointSymbol: this.currentWaypointSymbol,
       }));
 
+      await prisma.ledger.create({
+        data: {
+          shipSymbol: this.symbol,
+          waypointSymbol: res.data.data.transaction.waypointSymbol,
+          tradeGoodSymbol: res.data.data.transaction.shipType,
+          transactionType: "PURCHASE",
+          pricePerUnit: res.data.data.transaction.price,
+          totalPrice: res.data.data.transaction.price,
+          units: 1,
+
+          credits: res.data.data.agent.credits,
+          objectiveExecutionId: this.currentExecutionId
+        },
+      });
+
       await processShip(res.data.data.ship);
       await storeMarketTransaction(res.data.data.transaction);
       await processAgent(res.data.data.agent);
@@ -970,10 +1305,28 @@ export class Ship implements TaskExecutor<Task, Objective> {
   async construction() {
     return this.catchAxiosCodes('retrieve construction data', async () => {
       return this.queue(async () => {
-        this.log(`Retrieving waypoint construction information`);
+        this.log("Retrieving waypoint construction information");
         const res = await this.api.systems.getConstruction(this.currentSystemSymbol, this.currentWaypointSymbol);
 
-        return processConstruction(res.data);
+        return processConstruction(res.data.data);
+      });
+    })
+  }
+
+  async construct(tradeSymbol: string, units: number) {
+    return this.catchAxiosCodes('construct', async () => {
+      await this.dock()
+      return this.queue(async () => {
+        this.log(`Constructing waypoint ${this.currentWaypointSymbol} with ${units}x ${tradeSymbol}`);
+        const res = await this.api.systems.supplyConstruction(this.currentSystemSymbol, this.currentWaypointSymbol, {
+          shipSymbol: this.symbol,
+          tradeSymbol: tradeSymbol,
+          units: units
+        });
+
+        await processCargo(this.symbol, res.data.data.cargo);
+        this.updateInventory(res.data.data.cargo.inventory);
+        return processConstruction(res.data.data.construction);
       });
     })
   }
@@ -989,7 +1342,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
         this.log(`Transferred ${tradeSymbol} x${units} from ${this.symbol} to ${targetShipSymbol}`);
 
         this.updateInventory(res.data.data.cargo.inventory);
-        return processCargo(this.symbol, res.data.data.cargo);
+
+        const rest = await processCargo(this.symbol, res.data.data.cargo);
+        ee.emit("event", {
+          type: "NAVIGATE",
+          data: await returnShipData(this.symbol),
+        });
+        return rest
       });
     })
   }
@@ -998,7 +1357,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
     try {
       return await fn()
     } catch(error) {
-      if (isAxiosApiErrorResponse(error)) {
+      if (isSTApiErrorResponse(error)) {
         console.log(
           `error ${action} for ${this.symbol}`,
           error.response?.data ? error.response.data : error.toString()
@@ -1006,19 +1365,16 @@ export class Ship implements TaskExecutor<Task, Objective> {
         const code = error.response?.data.error.code
         if (code && handledCodes && handledCodes[code]) {
           return handledCodes[code](error)
-        } else {
-          throw error
         }
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
   async contract() {
     return this.catchAxiosCodes('contract', async () => {
       const result = await this.queue(async () => {
-        this.log(`Negotiating contract`);
+        this.log("Negotiating contract");
         const res = await this.api.fleet.negotiateContract(this.symbol);
 
         fs.writeFileSync(
@@ -1034,7 +1390,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async chart() {
     return this.catchAxiosCodes('chart', async () => {
-      this.log(`Charting current position`);
+      this.log("Charting current position");
 
       let waypointData;
       try {
@@ -1045,7 +1401,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
           res.data.data.waypoint.chart ?? res.data.data.chart;
         waypointData = res.data.data.waypoint;
       } catch (error) {
-        if (isAxiosApiErrorResponse(error)) {
+        if (isSTApiErrorResponse(error)) {
           console.log(
             "error during chart, updating waypoint information",
             error.response?.data ? error.response.data : error.toString()
@@ -1101,10 +1457,10 @@ export class Ship implements TaskExecutor<Task, Objective> {
       });
 
       this.currentCargo = {}
-      cargo.data.data.inventory.forEach((item) => {
+      for (const item of cargo.data.data.inventory) {
         this.currentCargo[item.symbol] = item.units;
         this.log(`Cargo: ${item.symbol} x${item.units}`);
-      });
+      };
 
       this.cargo = cargo.data.data.units;
       return processCargo(this.symbol, cargo.data.data);
@@ -1119,13 +1475,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
         return this.api.fleet.createSurvey(this.symbol);
       });
 
-      survey.data.data.surveys.forEach((item) => {
+      for (const item of survey.data.data.surveys) {
         this.log(
           `Survey: ${item.signature} [${item.size}] ${item.deposits
             .map((d) => d.symbol)
             .join(", ")}, expires ${item.expiration}`
         );
-      });
+      };
 
       await Promise.all(survey.data.data.surveys.map(async (item) => {
         const prices = await prisma.consolidatedPrice.findMany({
@@ -1133,22 +1489,24 @@ export class Ship implements TaskExecutor<Task, Objective> {
             tradeGoodSymbol: {
               in: item.deposits.map((d) => d.symbol)
             },
-            systemSymbol: this.currentSystemSymbol,
           }
         })
         let totalValue = 0;
-        prices.forEach((p) => {
+        for (const p of prices) {
           const deposit = item.deposits.filter((d) => d.symbol === p.tradeGoodSymbol)
-          if (deposit && p.sellP95) {
+
+          if (deposit.length && p.sellP95) {
             totalValue += p.sellP95 * deposit.length
           }
-        })
+          console.log(`${deposit.length} deposits for ${p.tradeGoodSymbol} at ${p.sellP95} each, totalvalue ${totalValue}`)
+        }
 
         await prisma.survey.create({
           data: {
             waypointSymbol: this.currentWaypointSymbol,
             payload: JSON.stringify(item),
             signature: item.signature,
+            expiration: item.expiration,
             value: totalValue,
           }
         })
@@ -1185,6 +1543,11 @@ export class Ship implements TaskExecutor<Task, Objective> {
       );
       this.log(`Jettisoned ${quantity} ${good}`);
       this.updateInventory(result.data.data.cargo.inventory);
+      await processCargo(this.symbol, result.data.data.cargo);
+      ee.emit("event", {
+        type: "NAVIGATE",
+        data: await returnShipData(this.symbol),
+      });
       return result;
     });
   }
@@ -1202,6 +1565,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
           this.currentWaypointSymbol
         )
       );
+      await storeMarketInformation(marketBefore.data)
       let boughtGoodBefore = marketBefore.data.data.tradeGoods?.find(
         (g) => g.symbol === good
       );
@@ -1214,10 +1578,11 @@ export class Ship implements TaskExecutor<Task, Objective> {
         if (boughtGoodBefore?.purchasePrice && maxPrice && boughtGoodBefore.purchasePrice > maxPrice) {
           throw new Error(`Cannot buy ${good} for more than ${maxPrice} but current price is ${boughtGoodBefore.purchasePrice}`)
         }
+        const purchaseCount = Math.min(quantity - totalBought, purchasePerCall)
         const result = await this.queue(() =>
           this.api.fleet.purchaseCargo(this.symbol, {
             symbol: good as TradeSymbol,
-            units: Math.min(quantity - totalBought, purchasePerCall),
+            units: purchaseCount,
           })
         );
         totalBought += purchasePerCall
@@ -1233,21 +1598,23 @@ export class Ship implements TaskExecutor<Task, Objective> {
           (g) => g.symbol === good
         );
         this.log(
-          `Purchased ${quantity} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`
+          `Purchased ${purchaseCount} of ${good} for ${result.data.data.transaction.pricePerUnit} each. Total price ${result.data.data.transaction.totalPrice}.`
         );
-        if (boughtGood && boughtGoodBefore) {
-          await prisma.tradeLog.create({
+        if (boughtGoodBefore) {
+          await prisma.ledger.create({
             data: {
               shipSymbol: this.symbol,
               waypointSymbol: result.data.data.transaction.waypointSymbol,
               tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
-              purchasePrice: result.data.data.transaction.pricePerUnit,
-              purchaseAmount: result.data.data.transaction.units,
-              purchaseVolume: boughtGoodBefore.tradeVolume,
-              purchasePriceAfter: boughtGood.purchasePrice,
+              transactionType: "PURCHASE",
+              pricePerUnit: result.data.data.transaction.pricePerUnit,
+              totalPrice: result.data.data.transaction.totalPrice,
+              units: result.data.data.transaction.units,
               tradeVolume: boughtGoodBefore.tradeVolume,
+              activityLevel: boughtGoodBefore.activity,
               supply: boughtGoodBefore.supply,
-              supplyAfter: boughtGood.supply,
+              credits: result.data.data.agent.credits,
+              objectiveExecutionId: this.currentExecutionId
             },
           });
         } else {
@@ -1280,6 +1647,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
     market?: GetMarket200Response,
     minPrice?: number
   ) {
+    let leftToSell = units;
     return this.catchAxiosCodes('sellCargo', async () => {
       if (!this.isDocked) {
         await this.dock()
@@ -1307,61 +1675,61 @@ export class Ship implements TaskExecutor<Task, Objective> {
       const soldGoodBefore = market.data.tradeGoods?.find(
         (g) => g.symbol === tradeGoodSymbol
       );
-      let leftToSell = units;
       do {
         if (soldGoodBefore?.sellPrice && minPrice && soldGoodBefore.sellPrice < minPrice) {
           throw new Error(`Cannot sell ${tradeGoodSymbol} for less than ${minPrice} but current price is ${soldGoodBefore.sellPrice}`)
         }
+        const sellUnitCount = Math.min(units, tradeVolume)
         const result = await this.queue(() => {
-          this.log(`Selling ${units} of ${tradeGoodSymbol}`);
+          this.log(`Selling ${sellUnitCount} of ${tradeGoodSymbol}`);
           return this.api.fleet.sellCargo(this.symbol, {
             symbol: tradeGoodSymbol as TradeSymbol,
-            units: Math.min(units, tradeVolume),
+            units: sellUnitCount,
           });
         });
-        leftToSell -= Math.min(units, tradeVolume);
+        await processCargo(this.symbol, result.data.data.cargo);
+        this.updateInventory(result.data.data.cargo.inventory);
+
+        leftToSell -= sellUnitCount;
+
+        if (soldGoodBefore) {
+          await prisma.ledger.create({
+            data: {
+              shipSymbol: this.symbol,
+              waypointSymbol: result.data.data.transaction.waypointSymbol,
+              tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
+              transactionType: "SELL",
+              pricePerUnit: result.data.data.transaction.pricePerUnit,
+              totalPrice: result.data.data.transaction.totalPrice,
+              units: result.data.data.transaction.units,
+              tradeVolume: soldGoodBefore.tradeVolume,
+              activityLevel: soldGoodBefore.activity,
+              supply: soldGoodBefore.supply,
+              credits: result.data.data.agent.credits,
+              objectiveExecutionId: this.currentExecutionId
+            },
+          });
+        } else {
+          this.log("Could not log trade, missing market information")
+        }
+
         const marketAfter = await this.queue(() =>
           this.api.systems.getMarket(
             this.currentSystemSymbol,
             this.currentWaypointSymbol
           )
         );
-        const soldGood = marketAfter.data.data.tradeGoods?.find(
-          (g) => g.symbol === tradeGoodSymbol
-        );
-        if (soldGood && soldGoodBefore) {
-          await prisma.tradeLog.create({
-            data: {
-              shipSymbol: this.symbol,
-              waypointSymbol: result.data.data.transaction.waypointSymbol,
-              tradeGoodSymbol: result.data.data.transaction.tradeSymbol,
-              sellPrice: result.data.data.transaction.pricePerUnit,
-              sellAmount: result.data.data.transaction.units,
-              sellVolume: good.tradeVolume,
-              sellPriceAfter: soldGood.sellPrice,
-              tradeVolume: soldGoodBefore.tradeVolume,
-              supply: soldGoodBefore.supply,
-              supplyAfter: soldGood.supply,
-            },
-          });
-        } else {
-          this.log("Could not log trade, missing market information")
-        }
+
         this.log(
-          `Sold ${Math.min(
-            units,
-            tradeVolume
-          )} units of ${tradeGoodSymbol} for ${
+          `Sold ${sellUnitCount} units of ${tradeGoodSymbol} for ${
             result.data.data.transaction.pricePerUnit
-          } each, total ${result.data.data.transaction.totalPrice}. Credits ${
+          } each, total ${result.data.data.transaction.totalPrice}. ${leftToSell} left to sell. Credits ${
             result.data.data.agent.credits
           }.`
         );
         await storeMarketInformation(marketAfter.data);
         await processAgent(result.data.data.agent);
         this.cargo = result.data.data.cargo.units;
-        await processCargo(this.symbol, result.data.data.cargo);
-        this.updateInventory(result.data.data.cargo.inventory);
 
         ee.emit('event', {
           type: 'AGENT',
@@ -1371,8 +1739,6 @@ export class Ship implements TaskExecutor<Task, Objective> {
           type: "NAVIGATE",
           data: await returnShipData(this.symbol),
         });
-
-        return result.data.data.transaction;
       } while (leftToSell > 0);
     })
   }
@@ -1380,7 +1746,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
   async refine() {
     await this.waitForCooldown("reactor");
 
-    this.log(`Refining`);
+    this.log("Refining");
 
     const cargo = await prisma.shipCargo.findMany({
       where: {
@@ -1446,17 +1812,13 @@ export class Ship implements TaskExecutor<Task, Objective> {
         )
       );
 
-      let transactions: MarketTransaction[] = [];
-
       for (const item of cargo.data.data.inventory) {
         if (item.symbol === "ANTIMATTER") {
           continue;
         }
-        transactions.push(
-          await this.sellCargo(item.symbol, item.units, market.data)
-        );
+
+        await this.sellCargo(item.symbol, item.units, market.data)
       }
-      return transactions;
     })
   }
 
@@ -1465,7 +1827,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
-        this.log(`Scanning waypoints`);
+        this.log("Scanning waypoints");
         return this.api.fleet.createShipWaypointScan(this.symbol);
       });
       fs.writeFileSync(
@@ -1493,7 +1855,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
       await this.waitForCooldown("reactor");
 
       const res = await this.queue(() => {
-        this.log(`Scanning ships`);
+        this.log("Scanning ships");
         return this.api.fleet.createShipShipScan(this.symbol);
       });
 
@@ -1515,7 +1877,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async market() {
     const res = await this.queue(() => {
-      this.log(`Retrieving market information`);
+      this.log("Retrieving market information");
       return this.api.systems.getMarket(
         this.currentSystemSymbol,
         this.currentWaypointSymbol
@@ -1535,7 +1897,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async jumpgate() {
     const res = await this.queue(() => {
-      this.log(`Retrieving jumpgate information`);
+      this.log("Retrieving jumpgate information");
       return this.api.systems.getJumpGate(
         this.currentSystemSymbol,
         this.currentWaypointSymbol
@@ -1553,7 +1915,7 @@ export class Ship implements TaskExecutor<Task, Objective> {
 
   async shipyard() {
     const res = await this.queue(() => {
-      this.log(`Retrieving shipyard information`);
+      this.log("Retrieving shipyard information");
       return this.api.systems.getShipyard(
         this.currentSystemSymbol,
         this.currentWaypointSymbol

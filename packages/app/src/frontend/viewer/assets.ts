@@ -18,6 +18,12 @@ export async function loadAssetsData() {
     const tradeArrow: Spritesheet<SpritesheetData & {
         animations: 'animate'
     }> = await Assets.load('textures/effects/TRADE_ARROWS.json')
+  const engineflame: Spritesheet<SpritesheetData & {
+    animations: 'animate'
+  }> = await Assets.load('textures/effects/engineflame.json')
+  const laser: Spritesheet<SpritesheetData & {
+    animations: 'animate'
+  }> = await Assets.load('textures/effects/laser.json')
 
 
     return {
@@ -31,7 +37,9 @@ export async function loadAssetsData() {
         starTexture,
         spritesheet,
         statsBlock,
-        tradeArrow: tradeArrow.animations['animate'],
+        tradeArrow: tradeArrow.animations.animate,
+        engineflame: engineflame.animations.animate,
+      laser: laser.animations.animate,
         panel2,
         station: spritesheet.textures['station.png'],
         jumpgate: spritesheet.textures['jumpgate.png'],

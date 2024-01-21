@@ -27,7 +27,7 @@ export async function processNav(shipSymbol: string, nav: ShipNav) {
       engine: true,
       mounts: true,
       modules: true,
-      ShipTask: true,
+      shipTasks: true,
     },
     data: shipData,
   });

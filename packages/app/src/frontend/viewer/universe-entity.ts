@@ -1,4 +1,4 @@
-import {Container, FederatedPointerEvent, Graphics, PointData, Sprite, Text, Texture} from "pixi.js";
+import {Container, FederatedPointerEvent, Graphics, PointData, Rectangle, Sprite, Text, Texture} from "pixi.js";
 import {loadedAssets} from "@front/viewer/assets";
 import {getCenterPivot} from "@front/viewer/lib/get-center-pivot";
 import {getSelectedEntity, Registry} from "@front/viewer/registry";
@@ -13,10 +13,13 @@ export interface UniverseEntityProperties {
   label?: string,
   scale?: number,
   rotation?: number,
+  color?: number,
+  tint?: number,
   position: PointData,
   onSelect?: (entity: UniverseEntity) => void,
   onHover?: (entity: UniverseEntity) => void
   onRightClick?: (event: FederatedPointerEvent, entity: UniverseEntity) => void
+  spriteLayer: Container
 }
 
 export class UniverseEntity {
@@ -25,14 +28,17 @@ export class UniverseEntity {
   protected labelLayerObject = new Container()
 
   __entity = 'universe-object'
+  shape = 'circle'
   sprite: Sprite
   hoverCircle: Graphics
+  simpleItem: Graphics
   text?: Text
   selected: boolean
   scaleFactor = 1
 
-  constructor(properties: UniverseEntityProperties) {
-    starLayer.addChild(this.starLayerObject)
+  constructor(private properties: UniverseEntityProperties) {
+
+    (properties.spriteLayer ?? starLayer).addChild(this.starLayerObject)
     iconLayer.addChild(this.iconLayerObject)
     labelLayer.addChild(this.labelLayerObject)
 
@@ -45,12 +51,26 @@ export class UniverseEntity {
     this.sprite = new Sprite(properties.texture)
     const pivot = getCenterPivot(properties.texture)
     this.sprite.pivot = pivot
+    this.sprite.hitArea = new Rectangle(pivot.x-32, pivot.y-32, 64, 64);
 
     this.sprite.rotation = properties.rotation ?? 0
     this.sprite.eventMode = 'static'
+    this.sprite.visible = true;
+    this.sprite.tint = properties.tint ?? undefined
     this.sprite.scale = {x: this.scaleFactor, y: this.scaleFactor}
 
     this.starLayerObject.addChild(this.sprite)
+
+    this.simpleItem = new Graphics()
+    this.simpleItem.circle(0, 0, 32)
+    this.simpleItem.fill({
+      color: properties.color ?? 0xFF0000
+    })
+    this.simpleItem.closePath()
+    this.simpleItem.scale = {x: this.scaleFactor, y: this.scaleFactor}
+    this.simpleItem.visible = false;
+    this.starLayerObject.addChild(this.simpleItem)
+
     this.addTraits(properties.traits)
 
     this.hoverCircle = new Graphics();
@@ -82,10 +102,7 @@ export class UniverseEntity {
     this.sprite.on('click', (event) => {
       console.log(`click on ${properties.label}`)
       event.stopPropagation()
-      this.hoverCircle.visible = true;
-      this.hoverCircle.tint = 0x00ff00;
-      this.selected = true;
-      properties.onSelect?.(this)
+      this.select();
     })
     if (properties.label) {
       this.text = new Text({
@@ -113,6 +130,25 @@ export class UniverseEntity {
         }
       });
       this.labelLayerObject.addChild(this.text)
+    }
+  }
+
+  select() {
+    this.hoverCircle.visible = true;
+    this.hoverCircle.tint = 0x00ff00;
+    this.selected = true;
+    this.properties.onSelect?.(this)
+  }
+
+  set displaySimple(simple: boolean) {
+    if (simple) {
+      this.sprite.visible = false;
+      this.iconLayerObject.visible = false;
+      this.simpleItem.visible = true;
+    } else {
+      this.sprite.visible = true;
+      this.iconLayerObject.visible = true;
+      this.simpleItem.visible = false;
     }
   }
 

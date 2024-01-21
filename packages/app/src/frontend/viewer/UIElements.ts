@@ -4,9 +4,12 @@ import {loadedAssets} from "@front/viewer/assets";
 
 export let universeView: Viewport
 export let starLayer: Container
+export let shipLayer: Container
 export let iconLayer: Container
 export let labelLayer: Container
 export let uiOverlay: Container
+
+export let overlayLayer: Container
 
 export let starsContainer  = new Container()
 // export let universeCuller: Simple
@@ -44,9 +47,18 @@ export const createUIElements = (app: Application) => {
         .wheel()
         .decelerate()
     universeView.moveCenter(0, 0)
+
+    overlayLayer = new Container()
+    overlayLayer.label = 'overlay'
+    universeView.addChild(overlayLayer)
+
     starLayer = new Container()
     starLayer.label = 'stars'
     universeView.addChild(starLayer)
+
+    shipLayer = new Container()
+    shipLayer.label = 'ships'
+    universeView.addChild(shipLayer)
 
     iconLayer = new Container()
     iconLayer.label = 'icons'
@@ -60,10 +72,6 @@ export const createUIElements = (app: Application) => {
     // highlightmodes.Factions(influenceGraphics)
     influenceGraphics.name = 'highlight'
     universeView.addChild(influenceGraphics);
-
-    // draw jump connections
-    const jumpGraphics = new Graphics()
-    universeView.addChild(jumpGraphics)
 
     const routeGraphics = new Graphics()
     routeGraphics.name = 'route'

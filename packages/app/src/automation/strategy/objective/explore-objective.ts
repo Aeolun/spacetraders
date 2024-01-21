@@ -4,23 +4,28 @@ import {Ship} from "@auto/ship/ship";
 import {getExplorableWaypointsInOrder} from "@auto/ship/behaviors/atoms/get-explorable-waypoints-in-order";
 import {TravelTask} from "@auto/ship/task/travel";
 import {ExploreTask} from "@auto/ship/task/explore";
-import {getDistance} from "@common/lib/getDistance";
+import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
+import {appendTravelTasks} from "@auto/ship/behaviors/atoms/append-travel-tasks";
+import canvas from 'canvas'
+import fs from "fs";
 
 export class ExploreObjective extends AbstractObjective {
   public system: System
   type: ObjectiveType.EXPLORE = ObjectiveType.EXPLORE;
 
   constructor(system: System) {
-    super(`Explore ${system.symbol}`);
+    super(`Explore ${system.symbol}`, {
+      system: {
+        symbol: system.symbol,
+        x: system.x,
+        y: system.y,
+      }
+    });
     this.system = system;
   }
 
-  appropriateForShip(ship: Ship): boolean {
+  appropriateFor(ship: Ship): boolean {
     return ship.engineSpeed > 10
-  }
-
-  distanceToStart(ship: Ship): number {
-    return getDistance(ship.currentSystem, this.system);
   }
 
   async onStarted(ship: Ship) {
@@ -34,14 +39,42 @@ export class ExploreObjective extends AbstractObjective {
       }
     })
   }
+  async onFailed(ship: Ship, error: unknown, executionId: string): Promise<void> {
+    // mark system as being explored
+    prisma.system.update({
+      where: {
+        symbol: this.system.symbol
+      },
+      data: {
+        exploreStatus: ExploreStatus.UNEXPLORED
+      }
+    })
+  }
 
   async constructTasks(ship: Ship) {
-    if (ship.currentSystemSymbol != this.system.symbol) {
+    if (ship.currentSystemSymbol !== this.system.symbol) {
       // add tasks to travel to target system
     }
 
     // add tasks to explore all waypoints
     const orderedWaypoints = await getExplorableWaypointsInOrder(ship, this.system)
+    // output a map of the exploration route
+    const draw = new canvas.Canvas(1000, 1000)
+    const ctx = draw.getContext('2d')
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(0, 0, 1000, 1000)
+    ctx.fillStyle = '#ffffff'
+    ctx.strokeStyle = '#ffffff'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(ship.currentWaypoint.x, ship.currentWaypoint.y)
+    for (const waypoint of orderedWaypoints) {
+      const location = await waypointLocationFromSymbol(waypoint.symbol)
+      ctx.lineTo(location.waypoint.x / 1000, location.waypoint.y / 1000)
+      ctx.stroke()
+    }
+    ctx.closePath()
+    fs.writeFileSync(`./exploration-route-${this.system.symbol}.png`, draw.toBuffer())
 
     if (orderedWaypoints.length === 0) {
       await prisma.system.update({
@@ -56,11 +89,12 @@ export class ExploreObjective extends AbstractObjective {
     }
 
     for (const waypoint of orderedWaypoints) {
-      await ship.addTask(new TravelTask({
-        systemSymbol: waypoint.systemSymbol,
-        waypointSymbol: waypoint.symbol,
+      const exploreLocation = await waypointLocationFromSymbol(waypoint.symbol)
+      await appendTravelTasks(ship, exploreLocation)
+      await ship.addTask(new ExploreTask({
+        expectedPosition: exploreLocation,
+        expectedDuration: 3
       }))
-      await ship.addTask(new ExploreTask(waypoint.symbol))
     }
   }
 

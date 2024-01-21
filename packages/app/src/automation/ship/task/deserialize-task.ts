@@ -11,41 +11,60 @@ import {OffloadInventoryTask} from "@auto/ship/task/offload-inventory-task";
 import {PickupCargoTask} from "@auto/ship/task/pickup-cargo";
 import {SiphonTask} from "@auto/ship/task/siphon";
 import {SurveyTask} from "@auto/ship/task/survey";
+import {ConstructTask} from "@auto/ship/task/construct";
 
 export const deserializeTask = (serializedTask: ShipTask): Task => {
   if (serializedTask.type === 'TRAVEL') {
     const data = JSON.parse(serializedTask.data)
-    return new TravelTask(data.destination);
-  } else if (serializedTask.type === 'EXPLORE') {
+    return new TravelTask(data.destination, data.travelMethod, data.expectedDuration);
+  }
+  if (serializedTask.type === 'EXPLORE') {
     const data = JSON.parse(serializedTask.data)
-    return new ExploreTask(data.waypointSymbol);
-  } else if (serializedTask.type === 'PURCHASE') {
+    return new ExploreTask({
+      expectedPosition: data.expectedPosition,
+      expectedDuration: data.expectedDuration
+    });
+  }
+  if (serializedTask.type === 'PURCHASE') {
     const data = JSON.parse(serializedTask.data)
-    return new PurchaseTask(data.destination, data.tradeSymbol, data.units, data.maxPrice);
-  } else if (serializedTask.type === 'SELL') {
+    return new PurchaseTask(data.expectedPosition, data.tradeSymbol, data.units, data.maxPrice);
+  }
+  if (serializedTask.type === 'SELL') {
     const data = JSON.parse(serializedTask.data)
-    return new SellTask(data.destination, data.tradeSymbol, data.units, data.minSell);
-  } else if (serializedTask.type === 'UPDATE_MARKET') {
+    return new SellTask(data.expectedPosition, data.tradeSymbol, data.units, data.minSell);
+  }
+  if (serializedTask.type === 'UPDATE_MARKET') {
     const data = JSON.parse(serializedTask.data)
-    return new UpdateMarketTask(data.waypointSymbol);
-  } else if (serializedTask.type === 'PURCHASE_SHIP') {
+    return new UpdateMarketTask(data.expectedPosition);
+  }
+  if (serializedTask.type === 'PURCHASE_SHIP') {
     const data = JSON.parse(serializedTask.data)
     return new PurchaseShipTask({
-      waypointSymbol: data.waypointSymbol, shipSymbol: data.shipSymbol, amount: data.amount});
-  } else if (serializedTask.type === 'MINE') {
+      expectedPosition: data.expectedPosition, shipSymbol: data.shipSymbol, amount: data.amount});
+  }
+  if (serializedTask.type === 'MINE') {
     const data = JSON.parse(serializedTask.data)
-    return new MineTask(data.destination, data.units);
-  } else if (serializedTask.type === 'OFFLOAD_INVENTORY') {
-    return new OffloadInventoryTask();
-  } else if (serializedTask.type === "PICKUP_CARGO") {
+    return new MineTask(data.expectedPosition, data.units);
+  }
+  if (serializedTask.type === 'OFFLOAD_INVENTORY') {
     const data = JSON.parse(serializedTask.data)
-    return new PickupCargoTask(data.waypointSymbol, data.tradeGoods, data.waitForFullCargo);
-  } else if (serializedTask.type === "SIPHON") {
+    return new OffloadInventoryTask(data.expectedPosition);
+  }
+  if (serializedTask.type === "PICKUP_CARGO") {
     const data = JSON.parse(serializedTask.data)
-    return new SiphonTask(data.destination, data.units);
-  } else if (serializedTask.type === "SURVEY") {
+    return new PickupCargoTask(data.expectedPosition, data.tradeGoods, data.waitForFullCargo);
+  }
+  if (serializedTask.type === "SIPHON") {
     const data = JSON.parse(serializedTask.data)
-    return new SurveyTask(data.destination, data.count);
+    return new SiphonTask(data.expectedPosition, data.units);
+  }
+  if (serializedTask.type === "SURVEY") {
+    const data = JSON.parse(serializedTask.data)
+    return new SurveyTask(data.expectedPosition, data.count);
+  }
+  if (serializedTask.type === "CONSTRUCT") {
+    const data = JSON.parse(serializedTask.data)
+    return new ConstructTask(data.destination, data.tradeSymbol, data.units);
   }
   throw new Error(`Trying to deserialize unknown task type ${serializedTask.type}`)
 }

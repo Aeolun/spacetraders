@@ -1,14 +1,20 @@
+import {config} from 'dotenv'
+
+console.log("Port before load", process.env.PORT);
+console.log("Loading backend", process.env.SERVER ? `.env.${process.env.SERVER}` : '.env')
+config({
+  path: process.env.SERVER ? `.env.${process.env.SERVER}` : undefined,
+});
+console.log("Redis DB after load", process.env.REDIS_DB);
+
 import {appRouter} from '@backend/server'
 import {createHTTPServer} from '@trpc/server/adapters/standalone';
 import cors from 'cors'
-import {config} from 'dotenv'
 import {createContext} from "@backend/context";
 import {applyWSSHandler} from "@trpc/server/adapters/ws";
 import websocket from 'ws'
 
 export type { AppRouter } from '@backend/server'
-
-config();
 
 const httpServer = createHTTPServer({
     router: appRouter,
@@ -16,9 +22,12 @@ const httpServer = createHTTPServer({
     createContext: createContext
 })
 
+console.log("Port to listen on is", process.env.PORT ? process.env.PORT : 4001);
+
+const port = process.env.PORT ? parseInt(process.env.PORT) : 4001
 
 const wss = new websocket.Server({
-    port: 4002,
+    port: port+1,
 });
 applyWSSHandler({ wss, router: appRouter, createContext })
 wss.on('connection', (ws) => {
@@ -28,6 +37,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-httpServer.listen(4001)
-console.log("✅ Listening at port 4001")
-console.log('✅ WebSocket Server listening on ws://localhost:4002');
+httpServer.listen(port)
+console.log(`✅ Listening at port ${port}`)
+console.log(`✅ WebSocket Server listening on ws://localhost:${port+1}`);

@@ -6,8 +6,19 @@ import { RegisterRequest } from "spacetraders-sdk";
 import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
 import {environmentVariables} from "@common/environment-variables";
 
-export const getBackgroundAgentToken = async (server: Server) => {
+export const getBackgroundAgentToken = async (server?: Server) => {
   let agentToken, agentTokenData: { reset_date: string } | undefined;
+
+  if (!server) {
+    server = await prisma.server.findFirstOrThrow({
+      where: {
+        apiUrl: environmentVariables.apiEndpoint,
+      },
+      orderBy: {
+        resetDate: "desc",
+      }
+    });
+  }
 
   const agent = await prisma.agent.findFirst({
     where: {

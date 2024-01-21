@@ -39,7 +39,6 @@ export async function storeWaypointScan(systemSymbol: string, data: CreateShipWa
       symbol: systemSymbol
     },
     data: {
-      waypointsRetrieved: true,
       hasUncharted: hasUncharted,
       hasMarket: hasMarket,
       hasShipyard: hasShipyard,

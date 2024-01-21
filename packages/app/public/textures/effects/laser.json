@@ -1,0 +1,118 @@
+{ "frames": {
+   "laser 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 1.aseprite": {
+    "frame": { "x": 47, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 2.aseprite": {
+    "frame": { "x": 94, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 3.aseprite": {
+    "frame": { "x": 141, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 4.aseprite": {
+    "frame": { "x": 188, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 5.aseprite": {
+    "frame": { "x": 235, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 6.aseprite": {
+    "frame": { "x": 282, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 7.aseprite": {
+    "frame": { "x": 329, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 8.aseprite": {
+    "frame": { "x": 376, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   },
+   "laser 9.aseprite": {
+    "frame": { "x": 423, "y": 0, "w": 47, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 47, "h": 48 },
+    "sourceSize": { "w": 47, "h": 48 },
+    "duration": 100
+   }
+ },
+  "animations": {
+    "animate": [
+      "laser 2.aseprite",
+      "laser 2.aseprite",
+      "laser 2.aseprite",
+      "laser 0.aseprite",
+      "laser 1.aseprite",
+      "laser 2.aseprite",
+      "laser 2.aseprite",
+      "laser 2.aseprite",
+      "laser 3.aseprite",
+      "laser 4.aseprite",
+      "laser 5.aseprite",
+      "laser 6.aseprite",
+      "laser 7.aseprite",
+      "laser 8.aseprite",
+      "laser 9.aseprite"
+    ]
+  },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "laser.png",
+  "format": "RGBA8888",
+  "size": { "w": 470, "h": 48 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "animate", "from": 0, "to": 9, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

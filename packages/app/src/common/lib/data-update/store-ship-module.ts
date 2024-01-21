@@ -14,14 +14,21 @@ export async function storeShipModule(module: ShipModule) {
     powerRequirement: module.requirements.power,
     slotRequirement: module.requirements.slots,
   };
-  await prisma.shipModule.upsert({
+  console.log("selecting")
+  const existingModule = await prisma.shipModule.findUnique({
     where: {
       symbol: module.symbol,
     },
-    create: {
-      symbol: module.symbol,
-      ...moduleData,
-    },
-    update: moduleData,
   });
+  console.log("select over")
+
+  if (!existingModule) {
+    console.log('inserting')
+    await prisma.shipModule.create({
+      data: {
+        symbol: module.symbol,
+        ...moduleData,
+      }
+    });
+  }
 }

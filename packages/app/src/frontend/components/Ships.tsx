@@ -1,5 +1,5 @@
 import {trpcReact} from "@front/trpc";
-import {dataTable, pageColumn} from "@front/styles/app.css";
+import {columnStyle, dataTable, pageColumn, rowStyle} from "@front/styles/app.css";
 import {useSelector} from "react-redux";
 import {RootState} from "@front/ui/store";
 import Timeago from "react-timeago";
@@ -11,16 +11,16 @@ export const Ships = (props: {}) => {
     <table className={dataTable}>
       <thead>
       <tr>
-        <th>Callsign</th>
-        <th>Symbol</th>
-        <th>Role</th>
-        <th>Waypoint</th>
-        <th>Navstatus</th>
-        <th>Overall goal</th>
-        <th>Flight Mode</th>
-        <th>Fuel</th>
-        <th>Cargo</th>
-        <th>Arrival</th>
+        <th className={columnStyle.default}>Callsign</th>
+        <th className={columnStyle.default}>Symbol</th>
+        <th className={columnStyle.default}>Role</th>
+        <th className={columnStyle.default}>Waypoint</th>
+        <th className={columnStyle.default}>Navstatus</th>
+        <th className={columnStyle.default}>Objective</th>
+        <th className={columnStyle.default}>Flight Mode</th>
+        <th className={columnStyle.default}>Fuel</th>
+        <th className={columnStyle.default}>Cargo</th>
+        <th className={columnStyle.default}>Arrival</th>
       </tr>
       </thead>
       <tbody>
@@ -28,17 +28,17 @@ export const Ships = (props: {}) => {
         return a.role.localeCompare(b.role)
       }).map(ship => {
         const arrivalTime = ship.arrivalOn ? new Date(ship.arrivalOn).getTime() : null
-        return <tr>
-          <td>{ship.callsign.substring(0, 40)}</td>
-          <td>{ship.symbol}</td>
-          <td>{ship.role}</td>
-          <td>{ship.currentWaypointSymbol}</td>
-          <td>{ship.navStatus}</td>
-          <td>{ship.overalGoal}</td>
-          <td>{ship.flightMode}</td>
-          <td>{ship.fuelAvailable}/{ship.fuelCapacity}</td>
-          <td>{ship.cargoUsed}/{ship.cargoCapacity}</td>
-          <td>{arrivalTime && arrivalTime > Date.now() ? Math.round((arrivalTime - Date.now()) / 1000) : 'Arrived' }</td>
+        return <tr className={rowStyle.default}>
+          <td className={columnStyle.default}>{ship.callsign.substring(0, 40)}</td>
+          <td className={columnStyle.default}>{ship.symbol}</td>
+          <td className={columnStyle.default}>{ship.role}</td>
+          <td className={columnStyle.default}>{ship.currentWaypointSymbol}</td>
+          <td className={columnStyle.default}>{ship.navStatus}</td>
+          <td className={columnStyle.default}>{ship.objective}{ship.nextObjective ? ` / ${ship.nextObjective}` : ''}</td>
+          <td className={columnStyle.default}>{ship.flightMode}</td>
+          <td className={columnStyle.default}>{ship.fuelAvailable}/{ship.fuelCapacity}</td>
+          <td className={columnStyle.default}>{ship.cargoUsed}/{ship.cargoCapacity}</td>
+          <td className={columnStyle.default}>{arrivalTime && arrivalTime > Date.now() ? Math.round((arrivalTime - Date.now()) / 1000) : 'Arrived' }</td>
         </tr>
       })}
       </tbody>

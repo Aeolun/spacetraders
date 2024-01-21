@@ -15,7 +15,7 @@ export const isApiError = (response: any): response is ApiError => {
   return false;
 }
 
-export const isAxiosApiErrorResponse = (error: any): error is AxiosError<ApiError> => {
+export const isSTApiErrorResponse = (error: any): error is AxiosError<ApiError> => {
     if (error.isAxiosError && error.response) {
         return isApiError(error.response.data)
     }

@@ -1,75 +1,97 @@
 import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstract-objective";
 import { Waypoint } from '@common/prisma'
 import {TradeSymbol} from "spacetraders-sdk";
-import {undefined} from "zod";
 import {getDistance} from "@common/lib/getDistance";
 import {Ship} from "@auto/ship/ship";
 import {TravelTask} from "@auto/ship/task/travel";
 import {PurchaseTask} from "@auto/ship/task/purchase";
 import {SellTask} from "@auto/ship/task/sell";
+import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
+import {craftTravelTasks} from "@auto/ship/behaviors/atoms/craft-travel-tasks";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 
 export class TradeObjective extends AbstractObjective {
-  public fromWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}
-  public toWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}
+  public toWaypoint: LocationWithWaypointSpecifier
   public tradeSymbol: TradeSymbol
   public amount: number
   public minSell: number;
   public maxBuy: number;
-
-
+  startingLocation: LocationWithWaypointSpecifier
   type: ObjectiveType.TRADE = ObjectiveType.TRADE;
 
   constructor(fromWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, toWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, tradeSymbol: TradeSymbol, amount: number, options: {
     minimumSell: number
     maximumBuy: number
+    maxShips?: number
+    priority?: number
+    creditReservation?: number
   }) {
-    super(`Trade ${tradeSymbol} from ${fromWaypoint.symbol}`);
-    this.fromWaypoint = fromWaypoint;
-    this.toWaypoint = toWaypoint;
+    const location = {
+      system: {
+        symbol: fromWaypoint.system.symbol,
+        x: fromWaypoint.system.x,
+        y: fromWaypoint.system.y,
+      },
+      waypoint: {
+        symbol: fromWaypoint.symbol,
+        x: fromWaypoint.x,
+        y: fromWaypoint.y,
+      }
+    }
+    super(`Trade ${tradeSymbol} from ${fromWaypoint.symbol}`, location);
+    this.startingLocation = location;
+    this.toWaypoint = {
+      system: {
+        symbol: toWaypoint.system.symbol,
+        x: toWaypoint.system.x,
+        y: toWaypoint.system.y,
+      },
+      waypoint: {
+        symbol: toWaypoint.symbol,
+        x: toWaypoint.x,
+        y: toWaypoint.y,
+      }
+    };
     this.tradeSymbol = tradeSymbol;
     this.amount = amount;
     this.minSell = options.minimumSell;
     this.maxBuy = options.maximumBuy;
+    this.maxShips = options.maxShips ?? 1;
+    this.priority = options.priority ?? 0;
+    this.creditReservation = options.creditReservation ?? 0;
   }
 
-  async onStarted(ship: Ship): Promise<void> {
+  async onStarted(ship: Ship, executionId: string): Promise<void> {}
+  async onCompleted(ship: Ship, executionId: string): Promise<void> {}
+  async onFailed(ship: Ship, error: unknown, executionId: string): Promise<void> {}
 
-  }
-
-
-  async onCompleted(ship: Ship): Promise<void> {
-
-  }
-
-  appropriateForShip(ship: Ship): boolean {
-    return ship.maxCargo >= 35;
-  }
-
-  distanceToStart(ship: Ship): number {
-    if (ship.currentSystemSymbol === this.fromWaypoint.systemSymbol) {
-      return getDistance(ship.currentWaypoint, this.fromWaypoint)
-    } else {
-      return getDistance(ship.currentSystem, this.fromWaypoint.system)
-    }
+  appropriateFor(ship: Ship): boolean {
+    return ship.maxCargo >= 35 && ship.cargo === 0;
   }
 
   async constructTasks(ship: Ship): Promise<void> {
-    await ship.addTask(new TravelTask({
-      systemSymbol: this.fromWaypoint.systemSymbol,
-      waypointSymbol: this.fromWaypoint.symbol,
-    }))
-    await ship.addTask(new PurchaseTask({
-      systemSymbol: this.fromWaypoint.systemSymbol,
-      waypointSymbol: this.fromWaypoint.symbol,
-    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount), this.maxBuy))
-    await ship.addTask(new TravelTask({
-      systemSymbol: this.toWaypoint.systemSymbol,
-      waypointSymbol: this.toWaypoint.symbol,
-    }))
-    await ship.addTask(new SellTask({
-      systemSymbol: this.toWaypoint.systemSymbol,
-      waypointSymbol: this.toWaypoint.symbol,
-    }, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount), this.minSell))
+    const currentCargo = ship.currentCargo[this.tradeSymbol] ?? 0;
+    if (currentCargo < this.amount) {
+      const currentLocation = await waypointLocationFromSymbol(ship.currentWaypointSymbol)
+      const travelTasks = await craftTravelTasks(currentLocation, this.startingLocation, {
+        speed: ship.engineSpeed,
+        maxFuel: ship.maxFuel,
+        currentFuel: ship.fuel,
+      })
+      for (const task of travelTasks) {
+        await ship.addTask(task)
+      }
+      await ship.addTask(new PurchaseTask(this.startingLocation, this.tradeSymbol, Math.min(ship.maxCargo - ship.cargo, this.amount - currentCargo), this.maxBuy))
+    }
+    const tradeTravelTasks = await craftTravelTasks(this.startingLocation, this.toWaypoint, {
+      speed: ship.engineSpeed,
+      maxFuel: ship.maxFuel,
+      currentFuel: ship.fuel,
+    })
+    for(const task of tradeTravelTasks) {
+      await ship.addTask(task)
+    }
+    await ship.addTask(new SellTask(this.toWaypoint, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount), this.minSell))
 
   }
 }

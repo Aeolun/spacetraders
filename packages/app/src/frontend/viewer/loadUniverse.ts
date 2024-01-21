@@ -3,7 +3,7 @@ import {trpc} from '@front/trpc'
 // import {deselectListeners, makeInteractiveAndSelectable} from "@front/viewer/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/viewer/assets";
 import {scale, universeCoordinates,} from "@front/viewer/consts";
-import { universeView, starsContainer} from "@front/viewer/UIElements";
+import {universeView, starsContainer, overlayLayer} from "@front/viewer/UIElements";
 import {Registry, System, WaypointData} from "@front/viewer/registry";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {getDistance} from "@common/lib/getDistance";
@@ -13,6 +13,7 @@ import {UniverseShip} from "@front/viewer/universe-ship";
 import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
 import {shipActions} from "@front/ui/slices/ship";
+import {systemToDisplayCoordinates} from "@front/viewer/worldCoordinateToOriginal";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
 
 
@@ -42,12 +43,14 @@ const getTraits = (item: System) => {
 
 
 function createStar(starData: System) {
+
     let texture = loadedAssets.spritesheet.textures[`public/textures/stars/${starData.type}.png`]
 
     const star = new UniverseEntity({
-        texture,
+        texture: texture ?? loadedAssets.spritesheet.textures['public/textures/stars/large_white.png'],
         traits: getTraits(starData),
         label: starData.name+'\n('+starData.symbol+')',
+        color: starData.hasJumpGate ? 0x00FF00 : 0xFFFFFF,
         position: getStarPosition(starData),
         onSelect: () => {
             Registry.deselect()
@@ -173,14 +176,11 @@ function createStar(starData: System) {
 }
 
 const createShip = (ship: any) => {
-
-    const shipPosition = positionShip(ship)
-
     const shipGroup = new UniverseShip({
         label: ship.callsign,
         texture: loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] ? loadedAssets.spritesheet.textures['public/textures/ships/'+ship.frameSymbol+'.png'] : loadedAssets.spritesheet.textures['public/textures/ships/FRAME_EXPLORER.png'],
         traits: [],
-        position: shipPosition,
+        position: {x: 0, y:0},
         scale: 0.75,
         onSelect: () => {
             Registry.deselect()
@@ -223,9 +223,62 @@ const createShip = (ship: any) => {
     return shipGroup
 }
 
-export const loadUniverse = async () => {
-    const references: Record<string, Container> = {}
+let universeJumpGraphics: Graphics
 
+export function hideUnverseJumpGraphics() {
+    if (!universeJumpGraphics) {
+        return;
+    }
+    universeJumpGraphics.visible = false
+}
+
+export function showUnverseJumpGraphics() {
+    if (!universeJumpGraphics) {
+        return;
+    }
+    universeJumpGraphics.visible = true
+}
+
+export function renderUniverseJumpGraphics() {
+    if (!universeJumpGraphics) {
+        return;
+    }
+    console.log("rendering universe jump graphics", Object.keys(Registry.universeJumpData))
+    universeJumpGraphics.clear()
+    for(const systemSymbol of Object.keys(Registry.universeJumpData)) {
+        const system = Registry.systemData[systemSymbol]
+        if (system) {
+            const jumpData = Registry.universeJumpData[systemSymbol]
+            console.log("target systems", jumpData)
+            const fromPos = getStarPosition({
+                x: system.x,
+                y: system.y
+            })
+
+            for(const targetSymbol of jumpData) {
+                universeJumpGraphics.moveTo(fromPos.x, fromPos.y)
+                const target = Registry.systemData[targetSymbol]
+
+                if (target) {
+
+                    const toPos = getStarPosition({
+                        x: target.x,
+                        y: target.y
+                    })
+                    console.log("Draw graphics from ", fromPos, " to ", toPos)
+                    universeJumpGraphics.stroke({
+                        width: 1000,
+                        color: 0x0000FF,
+                    }).lineTo(toPos.x, toPos.y)
+
+                }
+            }
+        }
+    }
+
+}
+
+export const loadUniverse = async () => {
     const systems = await trpc.getSystems.query()
 
     const commandShip = Object.values(Registry.shipData).find(ship => ship.role === 'COMMAND')
@@ -242,15 +295,11 @@ export const loadUniverse = async () => {
 
     Registry.systems = {}
 
-
-
     for(const starData of systems) {
         if (!commandShip || getDistance(Registry.systemData[commandShip.currentSystemSymbol], starData) < 1000) {
             const starContainer = createStar(starData)
 
             Registry.systems[starData.symbol] = starContainer
-
-            references[starData.symbol] = starContainer
         }
     }
 
@@ -262,14 +311,36 @@ export const loadUniverse = async () => {
     })
     // universeCuller.addList(starsCont.children)
 
+    universeJumpGraphics = new Graphics();
+    universeJumpGraphics.alpha = 0.5
+    universeJumpGraphics.visible = true
+    universeJumpGraphics.eventMode = 'none'
+    overlayLayer.addChild(universeJumpGraphics)
+
     resetShipWaypoints()
 
     if (commandShipLocation) {
-        universeView.moveCenter(references[commandShipLocation].x, references[commandShipLocation].y)
+        universeView.moveCenter(Registry.systems[commandShipLocation].x, Registry.systems[commandShipLocation].y)
     }
+}
 
-
-    return {
-        systems: references
+export const showStar = (symbol: string) => {
+    if (Registry.systems[symbol]) {
+      return;
     }
+    console.log("Showing star", symbol)
+    const starData = Registry.systemData[symbol]
+    if (starData) {
+      const starContainer = createStar(starData)
+
+      Registry.systems[starData.symbol] = starContainer
+    }
+}
+
+export const hideStar = (symbol: string) => {
+    const star = Registry.systems[symbol]
+    if (star) {
+        star.unload()
+    }
+    delete Registry.systems[symbol]
 }

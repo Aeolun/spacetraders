@@ -103,6 +103,7 @@ export function displayImportMarkets(systemSymbol: string, waypointSymbol: strin
 export function clearMarketRoutes() {
   marketRoutes.forEach(route => {
     starLayer.removeChild(route)
+    //route.visible = false;
   })
   marketRoutes.length = 0
 }

@@ -8,14 +8,7 @@ import {MineTask} from "@auto/ship/task/mine";
 import {SurveyTask} from "@auto/ship/task/survey";
 import {OffloadInventoryTask} from "@auto/ship/task/offload-inventory-task";
 import {PickupCargoTask} from "@auto/ship/task/pickup-cargo";
-import {Orchestrator} from "@auto/strategy/orchestrator";
-import {Ship} from "@auto/ship/ship";
-import {TaskExecutor} from "@auto/strategy/task-executor";
 import {SiphonTask} from "@auto/ship/task/siphon";
+import {ConstructTask} from "@auto/ship/task/construct";
 
-export type Task = ExploreTask | TravelTask | PurchaseTask | SellTask | UpdateMarketTask | PurchaseShipTask | MineTask | SurveyTask | OffloadInventoryTask | PickupCargoTask | SiphonTask
-export interface TaskInterface<EX extends TaskExecutor<any, any>> {
-  type: string;
-  execute(executor: EX, orchestrator?: Orchestrator<EX, TaskInterface<any>>): Promise<void>;
-  serialize(): string;
-}
+export type Task = ExploreTask | TravelTask | PurchaseTask | SellTask | UpdateMarketTask | PurchaseShipTask | MineTask | SurveyTask | OffloadInventoryTask | PickupCargoTask | SiphonTask | ConstructTask

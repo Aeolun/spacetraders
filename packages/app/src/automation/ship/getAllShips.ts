@@ -1,12 +1,14 @@
 import {APIInstance} from "@common/lib/createApi";
 import {prisma} from "@common/prisma";
 import {processShip} from "@common/lib/data-update/store-ship";
+import {Ship} from "spacetraders-sdk";
 
-export async function updateShips(api: APIInstance) {
+export async function getAllShips(api: APIInstance) {
   const ships = await api.fleet.getMyShips(1, 20);
+  const allShips: Ship[] = [];
   await Promise.all(
     ships.data.data.map(async (ship) => {
-      return processShip(ship);
+      allShips.push(ship);
     })
   );
   const totalPages = Math.ceil(ships.data.meta.total / 20);
@@ -15,11 +17,12 @@ export async function updateShips(api: APIInstance) {
       const moreShips = await api.fleet.getMyShips(i, 20);
       await Promise.all(
         moreShips.data.data.map(async (ship) => {
-          return processShip(ship);
+          allShips.push(ship);
         })
       );
     }
   }
+  return allShips;
 }
 
 export async function returnShipData(shipSymbol: string) {
@@ -37,7 +40,7 @@ export async function returnShipData(shipSymbol: string) {
       mounts: true,
       modules: true,
       cargo: true,
-      ShipTask: true,
+      shipTasks: true,
     },
   });
 }

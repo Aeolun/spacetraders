@@ -24,22 +24,28 @@ export const loadWaypoint = async (server: Server) => {
     i++
 
     try {
+      console.log(`${i}/${systems.length}: loading waypoints for ${system.name} (${system.symbol})`)
       const allWaypoints: Waypoint[] = []
       let page = 1
 
       let waypoints = await backgroundQueue(async () => api.systems.getSystemWaypoints(system.symbol, page, 20))
-      await storeWaypointScan(system.symbol, waypoints.data)
+
       allWaypoints.push(...waypoints.data.data)
       while (waypoints.data.meta.total >= page * 20) {
+        console.log(`${i}/${systems.length}: loading waypoints for ${system.name} (${system.symbol}) page ${page}`)
         page++
         waypoints = await backgroundQueue(async () => api.systems.getSystemWaypoints(system.symbol, page, 20))
-        await storeWaypointScan(system.symbol, waypoints.data)
         allWaypoints.push(...waypoints.data.data)
       }
+      // @ts-ignore
+      await storeWaypointScan(system.symbol, {
+        data: allWaypoints
+      })
 
       console.log(`${i}/${systems.length}: got all waypoints for ${system.name} (${system.symbol}): ${allWaypoints.length}`)
 
       for (const waypoint of allWaypoints) {
+        console.log(`${i}/${systems.length}: loading information for ${waypoint.symbol} in ${system.name} (${system.symbol})`)
         const isMarketplace = waypoint.traits.find(t => t.symbol === 'MARKETPLACE')
         const isCharted = waypoint.chart?.submittedBy !== undefined
         if (isMarketplace) {
@@ -61,7 +67,15 @@ export const loadWaypoint = async (server: Server) => {
           await storeJumpGateInformation(system.symbol, waypoint.symbol, gateInfo.data)
         }
       }
-
+      await prisma.system.update({
+        where: {
+          symbol: system.symbol
+        },
+        data: {
+          waypointsRetrieved: true,
+        }
+      })
+      console.log(`${i}/${systems.length}: finished loading information for ${system.name} (${system.symbol})`)
     } catch (error) {
       console.error('failure loading waypoints', error)
     }

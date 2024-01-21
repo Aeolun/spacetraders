@@ -1,0 +1,94 @@
+{ "frames": {
+   "th 0.png": {
+    "frame": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 1.png": {
+    "frame": { "x": 13, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 2.png": {
+    "frame": { "x": 26, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 3.png": {
+    "frame": { "x": 39, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 4.png": {
+    "frame": { "x": 52, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 5.png": {
+    "frame": { "x": 65, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 6.png": {
+    "frame": { "x": 78, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   },
+   "th 7.png": {
+    "frame": { "x": 91, "y": 0, "w": 13, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 13, "h": 26 },
+    "sourceSize": { "w": 13, "h": 26 },
+    "duration": 100
+   }
+ },
+  "animations": {
+    "animate": [
+      "th 0.png",
+      "th 1.png",
+      "th 2.png",
+      "th 3.png",
+      "th 4.png",
+      "th 5.png",
+      "th 6.png",
+      "th 7.png"
+    ]
+  },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "engineflame-sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 104, "h": 26 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -2,52 +2,60 @@ import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstrac
 import {TradeSymbol} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {TravelTask} from "@auto/ship/task/travel";
-import {prisma, Waypoint} from "@common/prisma";
+import {prisma, System, Waypoint} from "@common/prisma";
 import {MineTask} from "@auto/ship/task/mine";
 import {getDistance} from "@common/lib/getDistance";
 import {SurveyTask} from "@auto/ship/task/survey";
+import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
+import {craftTravelTasks} from "@auto/ship/behaviors/atoms/craft-travel-tasks";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 
 export class SurveyObjective extends AbstractObjective {
   type: ObjectiveType.SURVEY = ObjectiveType.SURVEY;
   priority = 0
   isPersistent = true;
   maxShips = 2;
-  waypoint: Waypoint;
+  startingLocation: LocationWithWaypointSpecifier
 
-  constructor(waypoint: Waypoint, priority?: number) {
-    super(`Survey ${waypoint.symbol}`);
-    this.waypoint = waypoint;
+  constructor(system: System, waypoint: Waypoint, priority?: number) {
+    const location = {
+      system: {
+        symbol: system.symbol,
+        x: system.x,
+        y: system.y,
+      },
+      waypoint: {
+        symbol: waypoint.symbol,
+        x: waypoint.x,
+        y: waypoint.y,
+      }
+    }
+    super(`Survey ${waypoint.symbol}`, location);
+    this.startingLocation = location;
     if (priority) {
       this.priority = priority;
     }
   }
 
-  async onStarted(ship: Ship): Promise<void> {
+  async onStarted(ship: Ship, executionId: string): Promise<void> {}
+  async onCompleted(ship: Ship, executionId: string): Promise<void> {}
+  async onFailed(ship: Ship, error: unknown, executionId: string): Promise<void> {}
 
-  }
-
-
-  async onCompleted(ship: Ship): Promise<void> {
-
-  }
-
-  appropriateForShip(ship: Ship): boolean {
-    return ship.hasSurveyor;
-  }
-
-  distanceToStart(ship: Ship): number {
-    return getDistance(ship.currentWaypoint, this.waypoint)
+  appropriateFor(ship: Ship): boolean {
+    return ship.hasSurveyor && ship.maxCargo < 40;
   }
 
   async constructTasks(ship: Ship): Promise<void> {
-    await ship.addTask(new TravelTask({
-      systemSymbol: this.waypoint.systemSymbol,
-      waypointSymbol: this.waypoint.symbol,
-    }))
-    await ship.addTask(new SurveyTask({
-      systemSymbol: this.waypoint.systemSymbol,
-      waypointSymbol: this.waypoint.symbol,
-    }, 10))
+    const currentLocation = await waypointLocationFromSymbol(ship.currentWaypointSymbol)
+    const travelTasks = await craftTravelTasks(currentLocation, this.startingLocation, {
+      speed: ship.engineSpeed,
+      maxFuel: ship.maxFuel,
+      currentFuel: ship.fuel,
+    })
+    for(const task of travelTasks) {
+      await ship.addTask(task)
+    }
+    await ship.addTask(new SurveyTask(this.startingLocation, 10))
 
   }
 }

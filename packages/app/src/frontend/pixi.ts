@@ -167,7 +167,7 @@ app.ticker.add((dt) => {
       const arrivalValue = navTime > Date.now() ? (Math.round((navTime - Date.now())/1000)+'s') : 'Ready'
       if (GameState.agent.symbol === shipInfo.agent) {
         // your own ships
-        entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}\nAction: ${shipInfo.overalGoal}`
+        entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nFuel: ${shipInfo.fuelAvailable}/${shipInfo.fuelCapacity}\nCargo: ${shipInfo.cargoUsed}/${shipInfo.cargoCapacity}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nReactor Cooldown: ${cooldownValue}\nAction: ${shipInfo.objective}`
       } else {
         // someone elses ships
         entityInfo.displayObject.bitmapText.text = `Entity Information\nSymbol: ${shipInfo.symbol}\nLocation: ${shipInfo.currentWaypoint.symbol}\nOwner: ${shipInfo.agent}\nNav Status: ${shipInfo.navStatus} ${arrivalValue}\nLast update: ${Math.round((Date.now() - new Date(shipInfo.updatedAt).getTime())/1000)}s ago`

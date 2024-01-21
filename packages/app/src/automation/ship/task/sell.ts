@@ -1,27 +1,28 @@
 import {TradeSymbol} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/task";
 
-export class SellTask implements TaskInterface<Ship> {
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+
+export class SellTask extends AbstractTask {
   type = TaskType.SELL;
-  destination: {
-    systemSymbol: string;
-    waypointSymbol: string;
-  }
   tradeSymbol: TradeSymbol
   units: number
   minSell: number
+  expectedPosition: LocationWithWaypointSpecifier
 
-  constructor(destination: { systemSymbol: string; waypointSymbol: string }, tradeSymbol: TradeSymbol, units: number, expectedSell: number) {
-    this.destination = destination;
-    this.tradeSymbol = tradeSymbol;
-    this.units = units;
-    this.minSell = expectedSell;
+  constructor(destination: LocationWithWaypointSpecifier, tradeSymbol: TradeSymbol, units: number, expectedSell: number) {
+    super(TaskType.SELL, 1, destination)
+    this.expectedPosition = destination
+    this.tradeSymbol = tradeSymbol
+    this.units = units
+    this.minSell = expectedSell
   }
 
   async execute(ship: Ship) {
-    if (ship.currentWaypointSymbol !== this.destination.waypointSymbol) {
+    if (ship.currentWaypointSymbol !== this.expectedPosition.waypoint.symbol) {
       throw new Error("Cannot sell in a place we are not")
     }
 
@@ -30,7 +31,7 @@ export class SellTask implements TaskInterface<Ship> {
 
   serialize(): string {
     return JSON.stringify({
-      destination: this.destination,
+      expectedPosition: this.expectedPosition,
       tradeSymbol: this.tradeSymbol,
       units: this.units,
       minSell: this.minSell

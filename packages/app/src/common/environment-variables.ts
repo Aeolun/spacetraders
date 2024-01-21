@@ -1,5 +1,3 @@
-
-
 function assert(variable: string | undefined) {
   if (!variable) {
     throw new Error("Environment variable not set")

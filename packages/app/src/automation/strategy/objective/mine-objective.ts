@@ -2,9 +2,12 @@ import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstrac
 import {TradeSymbol} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {TravelTask} from "@auto/ship/task/travel";
-import {prisma, Waypoint} from "@common/prisma";
+import {prisma, Waypoint, System} from "@common/prisma";
 import {MineTask} from "@auto/ship/task/mine";
 import {getDistance} from "@common/lib/getDistance";
+import {craftTravelTasks} from "@auto/ship/behaviors/atoms/craft-travel-tasks";
+import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 
 export class MineObjective extends AbstractObjective {
   type: ObjectiveType.MINE = ObjectiveType.MINE;
@@ -13,9 +16,23 @@ export class MineObjective extends AbstractObjective {
   maxShips = 8;
   waypoint: Waypoint;
   tradeSymbol?: TradeSymbol;
+  startingLocation: LocationWithWaypointSpecifier
 
-  constructor(waypoint: Waypoint, tradeSymbol?: TradeSymbol, priority?: number) {
-    super(`Mine ${waypoint.symbol}${tradeSymbol ? ` for ${tradeSymbol}` : ''}`);
+  constructor(system: System, waypoint: Waypoint, tradeSymbol?: TradeSymbol, priority?: number) {
+    const location = {
+      system: {
+        symbol: system.symbol,
+        x: system.x,
+        y: system.y,
+      },
+      waypoint: {
+        symbol: waypoint.symbol,
+        x: waypoint.x,
+        y: waypoint.y,
+      }
+    }
+    super(`Mine ${waypoint.symbol}${tradeSymbol ? ` for ${tradeSymbol}` : ''}`, location);
+    this.startingLocation = location;
     this.waypoint = waypoint;
     this.tradeSymbol = tradeSymbol;
     if (priority) {
@@ -23,32 +40,25 @@ export class MineObjective extends AbstractObjective {
     }
   }
 
-  async onStarted(ship: Ship): Promise<void> {
+  async onStarted(ship: Ship, executionId: string): Promise<void> {}
+  async onCompleted(ship: Ship, executionId: string): Promise<void> {}
+  async onFailed(ship: Ship, error: unknown, executionId: string): Promise<void> {}
 
-  }
-
-
-  async onCompleted(ship: Ship): Promise<void> {
-
-  }
-
-  appropriateForShip(ship: Ship): boolean {
-    return ship.hasExtractor;
-  }
-
-  distanceToStart(ship: Ship): number {
-    return getDistance(ship.currentWaypoint, this.waypoint)
+  appropriateFor(ship: Ship): boolean {
+    return ship.hasExtractor && ship.maxCargo < 40;
   }
 
   async constructTasks(ship: Ship): Promise<void> {
-    await ship.addTask(new TravelTask({
-      systemSymbol: this.waypoint.systemSymbol,
-      waypointSymbol: this.waypoint.symbol,
-    }))
-    await ship.addTask(new MineTask({
-      systemSymbol: this.waypoint.systemSymbol,
-      waypointSymbol: this.waypoint.symbol,
-    }, 50))
+    const currentLocation = await waypointLocationFromSymbol(ship.currentWaypointSymbol)
+    const travelTasks = await craftTravelTasks(currentLocation, this.startingLocation, {
+      speed: ship.engineSpeed,
+      maxFuel: ship.maxFuel,
+      currentFuel: ship.fuel,
+    })
+    for(const task of travelTasks) {
+      await ship.addTask(task)
+    }
+    await ship.addTask(new MineTask(this.startingLocation, 50))
 
   }
 }

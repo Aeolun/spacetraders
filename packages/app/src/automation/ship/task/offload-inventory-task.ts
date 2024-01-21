@@ -2,37 +2,50 @@ import {TradeSymbol} from "spacetraders-sdk";
 import {findPlaceToSellGood} from "@auto/ship/behaviors/atoms/find-place-to-sell-good";
 import {TravelTask} from "@auto/ship/task/travel";
 import {SellTask} from "@auto/ship/task/sell";
-import {TaskType} from "@common/prisma";
+import {prisma, TaskType} from "@common/prisma";
 import {Ship} from "@auto/ship/ship";
-import {TaskInterface} from "@auto/ship/task/task";
+import {queryMarketToSell} from "@auto/ship/behaviors/atoms/query-market-to-sell";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {craftTravelTasks} from "@auto/ship/behaviors/atoms/craft-travel-tasks";
+import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
 
-export class OffloadInventoryTask implements TaskInterface<Ship> {
+export class OffloadInventoryTask extends AbstractTask {
   type = TaskType.OFFLOAD_INVENTORY;
+  expectedPosition: LocationWithWaypointSpecifier
 
-  constructor() {}
+  constructor(data: {
+    expectedPosition: LocationWithWaypointSpecifier
+  }) {
+    super(TaskType.OFFLOAD_INVENTORY, 1, data.expectedPosition)
+    this.expectedPosition = data.expectedPosition
+  }
 
   async execute(ship: Ship) {
-    for(const cargo of Object.keys(ship.currentCargo)) {
-      const tradeSymbol = cargo as TradeSymbol
+    const saleLocationsInSameSystem = await queryMarketToSell(Object.keys(ship.currentCargo), ship.currentSystemSymbol)
+    const whereToSell = await findPlaceToSellGood(saleLocationsInSameSystem, ship.currentWaypoint, ship.currentCargo)
 
-      const whereToSell = await findPlaceToSellGood(ship, tradeSymbol)
-      if (whereToSell) {
-        await ship.addTask(new TravelTask({
-          systemSymbol: whereToSell.systemSymbol,
-          waypointSymbol: whereToSell.symbol,
-        }))
-        await ship.addTask(new SellTask({
-          systemSymbol: whereToSell.systemSymbol,
-          waypointSymbol: whereToSell.symbol,
-        }, tradeSymbol, ship.currentCargo[tradeSymbol], 1))
-      } else {
-        ship.log("No place to offload " + tradeSymbol+` x${ship.currentCargo[tradeSymbol]} chucking it.`)
-        await ship.yeet(tradeSymbol, ship.currentCargo[tradeSymbol])
+    for(const location of whereToSell) {
+
+      const target = await waypointLocationFromSymbol(location.waypoint.symbol);
+
+      const travelTasks = await craftTravelTasks(this.expectedPosition, target, {
+        maxFuel: ship.maxFuel,
+        currentFuel: ship.fuel,
+        speed: ship.engineSpeed,
+      })
+      for(const task of travelTasks) {
+        await ship.addTask(task)
+      }
+      for (const good of location.goods) {
+        await ship.addTask(new SellTask(target, good.symbol, good.quantity, 1))
       }
     }
   }
 
   serialize(): string {
-    return JSON.stringify({})
+    return JSON.stringify({
+      expectedPosition: this.expectedPosition,
+    })
   }
 }

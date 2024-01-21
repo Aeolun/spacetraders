@@ -1,12 +1,18 @@
 import {loadAssets} from "@front/viewer/assets";
 import {Application, Text, Ticker} from "pixi.js";
 import {createUIElements, universeView} from "@front/viewer/UIElements";
-import {loadUniverse} from "@front/viewer/loadUniverse";
+import {
+  hideStar,
+  hideUnverseJumpGraphics,
+  loadUniverse,
+  showStar,
+  showUnverseJumpGraphics
+} from "@front/viewer/loadUniverse";
 import {loadPlayerData} from "@front/viewer/loadPlayerData";
 import {Registry} from "@front/viewer/registry";
 import {loadSystem, unloadSystem} from "@front/viewer/loadSystem";
 import {mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
-import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
+import {countShipWaypoints, positionShip, positionShips, resetShipWaypoints} from "@front/viewer/positionShips";
 import { trpc } from "@front/trpc";
 import {UniverseEntity} from "@front/viewer/universe-entity";
 import {contextMenuActions} from "@front/ui/slices/context-menu";
@@ -14,24 +20,61 @@ import {store} from "@front/ui/store";
 import {agentActions} from "@front/ui/slices/agent";
 import {shipActions} from "@front/ui/slices/ship";
 
+let mapmoveTimeout: NodeJS.Timeout | undefined
 export const handleMapMove = () => {
-  const zoom = universeView.worldScreenWidth / universeView.screenWidth
-
-  if (zoom < 40) {
-    console.log(`checking systems between x ${universeView.worldTransform.tx} and ${universeView.worldTransform.tx + universeView.worldScreenWidth}, y ${universeView.worldTransform.ty} and ${universeView.worldTransform.ty + universeView.worldScreenHeight}`)
-    Object.values(Registry.systemData).forEach(system => {
-      if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
-        loadSystem(system.symbol)
-      }
-    });
-  } else {
-    console.log(`zoomed out too far to load systems`)
-    Object.keys(Registry.transformedSystems).forEach(systemKey => {
-      if (Registry.transformedSystems[systemKey]) {
-        unloadSystem(systemKey)
-      }
-    });
+  if (mapmoveTimeout) {
+    clearTimeout(mapmoveTimeout)
   }
+  mapmoveTimeout = setTimeout(() => {
+    const zoom = universeView.worldScreenWidth / universeView.screenWidth
+
+    const startMapMove = Date.now();
+    let showDetailedSystems = false
+    let starDisplay: 'graphics' | 'textures'
+
+    if (zoom > 300) {
+      starDisplay = 'graphics'
+      showDetailedSystems = false
+    } else if (zoom <= 300 && zoom > 40) {
+      starDisplay = 'textures'
+      showDetailedSystems = false
+    } else {
+      starDisplay = 'textures'
+      showDetailedSystems = true
+    }
+
+    if (showDetailedSystems) {
+      console.log(`checking systems between x ${universeView.worldTransform.tx} and ${universeView.worldTransform.tx + universeView.worldScreenWidth}, y ${universeView.worldTransform.ty} and ${universeView.worldTransform.ty + universeView.worldScreenHeight}`)
+      for (const system of Object.values(Registry.systemData)) {
+        if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
+          hideStar(system.symbol)
+          loadSystem(system.symbol)
+        }
+      }
+      hideUnverseJumpGraphics()
+    } else {
+      console.log(`zoomed out too far to load systems, just show stars`)
+      for (const systemKey of Object.keys(Registry.transformedSystems)) {
+        if (Registry.transformedSystems[systemKey]) {
+          unloadSystem(systemKey)
+        }
+      }
+      showUnverseJumpGraphics()
+
+      for (const system of Object.values(Registry.systemData)) {
+        if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
+          showStar(system.symbol)
+          const starEntity = Registry.systems[system.symbol]
+          if (starEntity) {
+            starEntity.displaySimple = starDisplay === 'graphics'
+          }
+        } else {
+          hideStar(system.symbol)
+        }
+      }
+    }
+    console.log(`map move took ${Date.now() - startMapMove}ms`)
+  }, 100);
 }
 
 export async function initialize(app: Application) {
@@ -68,37 +111,55 @@ export async function initialize(app: Application) {
 
   // ticker to size universe objects
   app.ticker.add((dat) => {
-    const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 50), 0.3)
-    const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 0.3)
+    const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 100), 0.3)
+    const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 0.7)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
-    Object.values(loadedUniverse.systems).forEach(ref => {
-      ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
-    })
+    for (const ref of Object.values(Registry.systems)) {
+      if (ref) {
+        ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
+      }
+    }
 
-    Object.values(Registry.systemObjects).forEach(objects => {
-      objects.filter(ref => ref instanceof UniverseEntity).forEach(ref => {
+    for(const objects of Object.values(Registry.systemObjects)) {
+      for(const ref of objects.filter(ref => ref instanceof UniverseEntity)) {
         ref.scale = {x: systemSizeMultiplier, y: systemSizeMultiplier}
-      });
-    })
+      };
+    }
 
-    resetShipWaypoints()
-    Object.keys(Registry.shipData).forEach(shipKey => {
+    countShipWaypoints()
+    const shipPositions = positionShips()
+    for (const shipKey of Object.keys(Registry.shipData)) {
       const shipEntity = Registry.universeShips[shipKey]
       const shipData = Registry.shipData[shipKey]
 
       if (shipEntity) {
         shipEntity.scale = {x: shipSizeMultiplier, y: shipSizeMultiplier}
-        const newPos = positionShip(shipData)
+        const newPos = shipPositions[shipKey]
         shipEntity.position = newPos.position
         shipEntity.setAngle(newPos.navRot ?? 0)
-        if (shipData.navStatus === "IN_TRANSIT" && shipData.arrivalOn && new Date(shipData.arrivalOn).getTime() > Date.now()) {
-          shipEntity.setNavigating(true)
+        const arrivalTime = new Date(shipData.arrivalOn ?? 0).getTime()
+        const departureTime = new Date(shipData.departureOn ?? 0).getTime()
+        const now = new Date().getTime()
+        const pathProgress = (now - departureTime) / (arrivalTime - departureTime)
+        if (shipData.navStatus === "IN_TRANSIT" && shipData.arrivalOn && arrivalTime > now) {
+          shipEntity.setNavigating(true, shipData.flightMode, pathProgress)
         } else {
           shipEntity.setNavigating(false)
+          shipEntity.scale = {
+            x: Math.max(0.3 * shipSizeMultiplier, 0.3),
+            y: Math.max(0.3 * shipSizeMultiplier, 0.3)
+          }
+
+        }
+
+        if (shipData.navStatus === 'IN_ORBIT' && shipData.role === 'EXCAVATOR' && ['GAS_GIANT', 'ASTEROID'].includes(shipData.currentWaypoint.type) && shipData.objective) {
+          shipEntity.setExtracting(true, shipData.currentWaypoint.type === 'GAS_GIANT' ? 0x99ff44 : 0xff4444)
+        } else {
+          shipEntity.setExtracting(false)
         }
       }
-    });
+    }
   })
 
   universeView.on('drag-start', () => {

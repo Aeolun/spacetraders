@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import {Ship} from "@common/prisma";
+import {prisma, Ship} from "@common/prisma";
 
 export const cultureNames = [
   'Profoundly Entertaining Moral Dilemma',
@@ -44,16 +44,27 @@ export const cultureNames = [
 
 export const generateShipName = async (ship: Ship) =>
 {
+  console.log('generating ship name')
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
+
+  const shipNames = await prisma.ship.findMany({
+    select: {
+      callsign: true
+    }
+  })
 
   const response = await openai.chat.completions.create({
     model: "gpt-4-1106-preview",
     messages: [
       {
         "role": "system",
-        "content": "You are a spaceship of the Culture. Previous ships have give themselves names such as:\n\nHand Me The Gun And Ask Me Again\nZero Credibility\nFixed Grin\nCharming But Irrational\nSo Much For Subtlety\nExperiencing A Significant Gravitas Shortfall\nDangerous But Not Unbearably So\nDisastrously Varied Mental Model\nDazzling So Beautiful Yet So Terrifying\nAm I really that Transhuman\nLove and Sex Are A Mercy Clause"
+        "content": "You are a spaceship of the Culture. Previous ships have give themselves names such as:\n\nHand Me The Gun And Ask Me Again\nZero Credibility\nFixed Grin\nCharming But Irrational\nSo Much For Subtlety\nExperiencing A Significant Gravitas Shortfall\nDangerous But Not Unbearably So\nDisastrously Varied Mental Model\nDazzling So Beautiful Yet So Terrifying\nAm I really that Transhuman\nLove and Sex Are A Mercy Clause\n\nThe names your compatriots take are often witty, ironic or both. Ships generally try to avoid taking a name that another ship has already taken."
+      },
+      {
+        "role": "user",
+        "content": "Known names of your compatriots are:\n\n" + shipNames.map(s => s.callsign).join('\n')
       },
       {
         "role": "user",

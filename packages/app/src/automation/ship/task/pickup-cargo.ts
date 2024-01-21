@@ -2,22 +2,30 @@ import {TradeSymbol} from "spacetraders-sdk";
 import {prisma, TaskType, CargoState} from "@common/prisma";
 import {Ship} from "@auto/ship/ship";
 import {Orchestrator} from "@auto/strategy/orchestrator";
-import {Task, TaskInterface} from "@auto/ship/task/task";
+import {Task} from "@auto/ship/task/task";
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {Objective} from "@auto/strategy/objective/objective";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 
-export class PickupCargoTask implements TaskInterface<Ship> {
+export class PickupCargoTask extends AbstractTask {
   type = TaskType.PICKUP_CARGO;
+  expectedPosition: LocationWithWaypointSpecifier
 
-  constructor(public waypointSymbol: string, public tradeGoods?: TradeSymbol[], public waitForFullCargo?: boolean) {}
+  constructor(expectedPosition: LocationWithWaypointSpecifier, public tradeGoods?: TradeSymbol[], public waitForFullCargo?: boolean) {
+    super(TaskType.PICKUP_CARGO, 1, expectedPosition)
+    this.expectedPosition = expectedPosition
+  }
 
-  async execute(ship: Ship, orchestrator: Orchestrator<Ship, Task>) {
-    if (ship.currentWaypointSymbol !== this.waypointSymbol) {
+  async execute(ship: Ship, orchestrator: Orchestrator<Ship, Task, Objective>) {
+    if (ship.currentWaypointSymbol !== this.expectedPosition.waypoint.symbol) {
       throw new Error("Cannot pick up cargo in a place we are not")
     }
 
     do {
       const otherShipsAtCurrentWaypoint = await prisma.ship.findMany({
         where: {
-          currentWaypointSymbol: this.waypointSymbol,
+          currentWaypointSymbol: this.expectedPosition.waypoint.symbol,
           symbol: {
             not: ship.symbol
           },
@@ -35,12 +43,14 @@ export class PickupCargoTask implements TaskInterface<Ship> {
 
       const otherShipsWithCargo = otherShipsAtCurrentWaypoint.filter(s => Object.keys(s.cargo).length > 0)
 
+      ship.log(`Found ${otherShipsWithCargo.length} ships with cargo at ${this.expectedPosition.waypoint.symbol}`)
       // make all other ships give me their shit
       top:
       for(const otherShip of otherShipsWithCargo) {
         const otherShipObject = orchestrator.getExecutor(otherShip.symbol)
         if (!otherShipObject) {
-          continue;
+          ship.log("Cannot retrieve executor for "+ otherShip.symbol+', retry later')
+          break;
         }
 
         for(const cargo of Object.keys(otherShipObject.currentCargo)) {
@@ -50,20 +60,25 @@ export class PickupCargoTask implements TaskInterface<Ship> {
           }
 
           const cargoAmount = otherShipObject.currentCargo[tradeSymbol]
-          const maxLoadableUnits = Math.min(ship.cargo + cargoAmount, ship.maxCargo - ship.cargo)
+          const maxLoadableUnits = Math.min(cargoAmount, ship.maxCargo - ship.cargo)
+          ship.log(`${otherShipObject.symbol} has ${cargoAmount} ${tradeSymbol}, my max ${ship.maxCargo}, current ${ship.cargo}, free space for ${ship.maxCargo - ship.cargo}, max loadable ${maxLoadableUnits}.`)
           if (maxLoadableUnits === 0) {
             break top;
           }
 
           await otherShipObject.transferCargo(ship.symbol, tradeSymbol, maxLoadableUnits)
+          await ship.addToCargo(tradeSymbol, maxLoadableUnits)
+          ship.log(`Received ${maxLoadableUnits} ${tradeSymbol} from ${otherShipObject.symbol}`)
         }
       }
+
+      await ship.waitFor(30000, "Waiting a bit for other ships to gather cargo.")
     } while(this.waitForFullCargo && ship.cargo < ship.maxCargo)
   }
 
   serialize(): string {
     return JSON.stringify({
-      waypointSymbol: this.waypointSymbol,
+      expectedPosition: this.expectedPosition,
       tradeGoods: this.tradeGoods,
       waitForFullCargo: this.waitForFullCargo
     })

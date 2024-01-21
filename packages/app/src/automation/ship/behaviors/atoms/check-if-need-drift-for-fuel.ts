@@ -4,7 +4,6 @@ import { Ship } from "@auto/ship/ship";
 export async function checkIfNeedDriftForFuel(ship: Ship) {
   // go find a place to refuel if low, and we have fuel in the first place
   if (ship.maxFuel > 0 && (ship.fuel < 50 || ship.fuel < ship.maxFuel / 4)) {
-    await ship.setObjective("Refueling because low on fuel");
     await ship.navigateMode("DRIFT");
 
     const clostestFuel = await prisma.$queryRaw<

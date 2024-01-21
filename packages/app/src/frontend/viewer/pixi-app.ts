@@ -31,6 +31,8 @@ export const appInitPromise = app.init({
   //   click: true,
   //   wheel: false
   // }
+  textureGCActive: false,
+  // preference: 'webgl',
   antialias: true,
   roundPixels: false,
 }).then(async () => {

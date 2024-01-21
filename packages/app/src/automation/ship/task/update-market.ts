@@ -1,20 +1,24 @@
 import {Ship} from "@auto/ship/ship";
 import {prisma, TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/task";
 
-export class UpdateMarketTask implements TaskInterface<Ship> {
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+
+export class UpdateMarketTask extends AbstractTask {
   type = TaskType.UPDATE_MARKET;
-  waypointSymbol: string;
+  expectedPosition: LocationWithWaypointSpecifier
 
-  constructor(waypointSymbol: string) {
-    this.waypointSymbol = waypointSymbol;
+  constructor(waypointL: LocationWithWaypointSpecifier) {
+    super(TaskType.UPDATE_MARKET, 1, waypointL)
+    this.expectedPosition = waypointL
   }
 
   async execute(ship: Ship) {
-    if (ship.currentWaypointSymbol === this.waypointSymbol) {
+    if (ship.currentWaypointSymbol === this.expectedPosition.waypoint.symbol) {
       const waypoint = await prisma.waypoint.findUnique({
         where: {
-          symbol: this.waypointSymbol
+          symbol: this.expectedPosition.waypoint.symbol
         },
         include: {
           traits: true
@@ -45,13 +49,13 @@ export class UpdateMarketTask implements TaskInterface<Ship> {
         }
       })
     } else {
-      throw new Error(`Not at the location to update market. Need to be at ${this.waypointSymbol} but at ${ship.currentWaypointSymbol}.`)
+      throw new Error(`Not at the location to update market. Need to be at ${this.expectedPosition.waypoint.symbol} but at ${ship.currentWaypointSymbol}.`)
     }
   }
 
   serialize(): string {
     return JSON.stringify({
-      waypointSymbol: this.waypointSymbol,
+      expectedPosition: this.expectedPosition,
     });
   }
 }

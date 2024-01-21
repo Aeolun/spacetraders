@@ -22,6 +22,7 @@ import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
 import {contextMenuActions} from "@front/ui/slices/context-menu";
 import {clearMarketRoutes, displayExportMarkets, displayImportMarkets} from "@front/viewer/display-export-market";
+import {renderUniverseJumpGraphics} from "@front/viewer/loadUniverse";
 
 function createOrbitGraphics(orbit: Graphics, diameter: number, color: number = 0x111111, width = 2) {
   orbit.circle(0, 0, diameter).stroke({
@@ -66,7 +67,7 @@ function createSystemItem(data: {
   console.log('creating system item', data.waypoint.symbol, data.waypoint.type)
 
   let texture = loadedAssets.spritesheet.textures[`public/textures/planets/${data.waypoint.type}.png`]
-  if (data.waypoint.type == 'ASTEROID') {
+  if (data.waypoint.type === 'ASTEROID') {
     if (data.waypoint.traits.find(i => i.symbol === "HOLLOWED_INTERIOR")) {
       texture = loadedAssets.spritesheet.textures[`public/textures/planets/ASTEROID_HOLLOW.png`]
     }
@@ -103,6 +104,7 @@ function createSystemItem(data: {
     rotation: data.waypoint.type === 'ASTEROID' ? Math.random() * Math.PI * 2 : 0,
     position: position,
     scale: scale,
+    tint: data.waypoint.type === 'ASTEROID' && data.waypoint.modifiers.find(m => m.symbol === 'UNSTABLE') ? 0xFF8888 : 0xffffff,
     onSelect: () => {
       Registry.deselect()
       Registry.selected = {
@@ -174,7 +176,6 @@ export async function loadSystem(systemSymbol: string) {
     system: systemSymbol,
   })
   Registry.waypointsForSystem[systemSymbol] = waypoints
-
   waypoints.forEach(waypoint => {
     Registry.waypointData[waypoint.symbol] = waypoint
   })
@@ -182,6 +183,11 @@ export async function loadSystem(systemSymbol: string) {
   const starData = Registry.systemData[systemSymbol]
   if (!Registry.systemObjects[systemSymbol]) {
     Registry.systemObjects[systemSymbol] = []
+  }
+
+  if (Registry.transformedSystems[systemSymbol] === false) {
+    // unloaded while we were waiting for query to return
+    return;
   }
 
   // let texture = loadedAssets.sheet.textures[`planets/tile/${starData.type}.png`]
@@ -223,13 +229,22 @@ export async function loadSystem(systemSymbol: string) {
     })
   }
 
+  const starPos = getStarPosition(starData);
   const orbitGraphics = new Graphics();
   orbitGraphics.alpha = 0.5
   orbitGraphics.eventMode = 'none'
-  const starPos = getStarPosition(starData);
   orbitGraphics.x = starPos.x
   orbitGraphics.y = starPos.y
   orbitGraphics.zIndex = -1
+
+  const jumpGraphics = new Graphics();
+  jumpGraphics.alpha = 0.5
+  jumpGraphics.eventMode = 'none'
+  jumpGraphics.x = starPos.x
+  jumpGraphics.y = starPos.y
+  jumpGraphics.zIndex = -1
+
+
   waypoints.filter(item => !item.orbitsSymbol && item.type !== 'ASTEROID' && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
     const diameter = Math.sqrt(Math.pow(item.x, 2) + Math.pow(item.y, 2)) * mapScale
     createOrbitGraphics(orbitGraphics, diameter)
@@ -238,8 +253,38 @@ export async function loadSystem(systemSymbol: string) {
     createOrbitGraphics(orbitGraphics, (band.start+band.end)/2 * mapScale, 0x111010, (band.end - band.start) * 1.1 * mapScale)
   });
 
+  for(const item of waypoints.filter(item => item.type === 'JUMP_GATE')) {
+    // draw line from waypoint to target systems
+    for(const targetWaypoint of item.jumpConnectedTo) {
+      // add to universeJumpData
+      if (!Registry.universeJumpData[item.systemSymbol]) {
+        Registry.universeJumpData[item.systemSymbol] = []
+      }
+      Registry.universeJumpData[item.systemSymbol].push(targetWaypoint.symbol.split('-').slice(0, -1).join('-'))
+
+      const targetSystemSymbol = targetWaypoint.symbol.slice(0, targetWaypoint.symbol.lastIndexOf('-'));
+
+      const currentSystemData = Registry.systemData[item.systemSymbol]
+      const targetSystemData = Registry.systemData[targetSystemSymbol]
+      if (!targetSystemData) {
+        console.error("Cannot find target system symbol", targetSystemSymbol)
+        continue
+      }
+
+      const systemXDiff = targetSystemData.x - currentSystemData.x
+      const systemYDiff = targetSystemData.y - currentSystemData.y
+
+      jumpGraphics.stroke({
+        width: 50,
+        color: 0x555599,
+      }).moveTo(item.x*mapScale, item.y*mapScale).lineTo((systemXDiff*mapScale*systemDistanceMultiplier + targetWaypoint.x*mapScale), (systemYDiff*mapScale*systemDistanceMultiplier+targetWaypoint.y*mapScale))
+    }
+  }
+
+  starLayer.addChild(jumpGraphics)
   starLayer.addChild(orbitGraphics)
   Registry.systemObjects[systemSymbol].push(orbitGraphics)
+  Registry.systemObjects[systemSymbol].push(jumpGraphics)
 
   waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
     const itemGroup = createSystemItem({
@@ -271,6 +316,8 @@ export async function loadSystem(systemSymbol: string) {
 
     Registry.systemObjects[systemSymbol].push(itemGroup)
   })
+
+  renderUniverseJumpGraphics()
 }
 
 export async function unloadSystem(systemSymbol: string) {

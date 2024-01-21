@@ -1,4 +1,5 @@
 import ThrottledQueue from "throttled-queue";
+import {environmentVariables} from "@common/environment-variables";
 
 export type Queue = ReturnType<typeof createInstrumentedQueue>['executeFunction'];
 const createInstrumentedQueue = (maxRequestsPerInterval: number, interval: number) => {
@@ -9,13 +10,17 @@ const createInstrumentedQueue = (maxRequestsPerInterval: number, interval: numbe
     recentTotalTime: [] as number[],
     recentExecutionTimestamp: [] as number[],
     requestsPerSecond: function() {
-      const first = this.recentExecutionTimestamp[0];
-      const last = this.recentExecutionTimestamp[this.recentExecutionTimestamp.length - 1];
       return {
         last5Seconds: this.recentExecutionTimestamp.filter(t => t > Date.now() - 5000).length / 5,
         last10Seconds: this.recentExecutionTimestamp.filter(t => t > Date.now() - 10000).length / 10,
         last30Seconds: this.recentExecutionTimestamp.filter(t => t > Date.now() - 30000).length / 30,
       };
+    },
+    averageTimeToExecute: function() {
+      return this.recentTimeToExecute.reduce((total, current) => total + current, 0) / this.recentTimeToExecute.length;
+    },
+    averageTotalTime: function() {
+      return this.recentTotalTime.reduce((total, current) => total + current, 0) / this.recentTotalTime.length;
     }
   }
   return {
@@ -49,13 +54,13 @@ const createInstrumentedQueue = (maxRequestsPerInterval: number, interval: numbe
 }
 
 const instrumentedForegroundQueue = createInstrumentedQueue(process.env.FOREGROUND_RATELIMIT
-  ? parseInt(process.env.FOREGROUND_RATELIMIT)
-  : 1, 1000)
+  ? parseFloat(process.env.FOREGROUND_RATELIMIT)
+  : 2.3, 1000)
 export const foregroundQueue = instrumentedForegroundQueue.executeFunction;
 export const foregroundQueueStats = instrumentedForegroundQueue.stats;
 
-const instrumentedBackgroundQueue = createInstrumentedQueue(process.env.BACKGROUND_RATELIMIT
-  ? parseInt(process.env.BACKGROUND_RATELIMIT)
-  : 1, 1000)
+const instrumentedBackgroundQueue = createInstrumentedQueue(environmentVariables.backgroundRateLimit
+  ? parseFloat(environmentVariables.backgroundRateLimit)
+  : 0.5, 1000)
 export const backgroundQueue = instrumentedBackgroundQueue.executeFunction;
 export const backgroundQueueStats = instrumentedBackgroundQueue.stats;

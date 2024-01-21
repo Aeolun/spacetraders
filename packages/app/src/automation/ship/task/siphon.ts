@@ -1,23 +1,24 @@
 import {TradeSymbol} from "spacetraders-sdk";
 import {Ship} from "@auto/ship/ship";
 import {prisma, TaskType} from "@common/prisma";
-import {TaskInterface} from "@auto/ship/task/task";
 
-export class SiphonTask implements TaskInterface<Ship> {
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+
+export class SiphonTask extends AbstractTask {
   type = TaskType.SIPHON;
-  destination: {
-    systemSymbol: string;
-    waypointSymbol: string;
-  }
+  expectedPosition: LocationWithWaypointSpecifier
   units: number
 
-  constructor(destination: { systemSymbol: string; waypointSymbol: string }, units: number) {
-    this.destination = destination;
+  constructor(destination: LocationWithWaypointSpecifier, units: number) {
+    super(TaskType.SIPHON, 1, destination)
+    this.expectedPosition = destination
     this.units = units;
   }
 
   async execute(ship: Ship) {
-    if (ship.currentWaypointSymbol !== this.destination.waypointSymbol) {
+    if (ship.currentWaypointSymbol !== this.expectedPosition.waypoint.symbol) {
       throw new Error("Cannot siphon in a place we are not")
     }
 
@@ -36,7 +37,8 @@ export class SiphonTask implements TaskInterface<Ship> {
         if (Date.now() - emptyTime > 1000 * 60 * 240) {
           await ship.waitFor(10000, "Siphoning task timed out after 4 hours without pickup.")
           break;
-        } else if (ship.cargo >= ship.maxCargo) {
+        }
+        if (ship.cargo >= ship.maxCargo) {
           await ship.waitFor(10000, "Cargo full, wait until our cargo is picked up.")
         } else if (extracted > this.units) {
           await ship.log(`Finished siphoning ${this.units} units.`)
@@ -61,7 +63,7 @@ export class SiphonTask implements TaskInterface<Ship> {
 
   serialize(): string {
     return JSON.stringify({
-      destination: this.destination,
+      expectedPosition: this.expectedPosition,
       units: this.units,
     })
   }

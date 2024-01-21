@@ -27,6 +27,55 @@ export const columns = style({
   overflow: 'hidden'
 })
 
+
+const defaultRowStyle = style({
+  '&:nth-child(odd) td': {
+    backgroundColor: '#292929'
+  }
+});
+export const rowStyle = styleVariants({
+  default: [defaultRowStyle],
+  nonexistent: [defaultRowStyle, style({
+    color: '#aaaaaa'
+  })]
+})
+
+export const defaultCellStyle = style({
+  padding: '0.5em',
+});
+
+export const columnStyle = styleVariants({
+  default: [defaultCellStyle, style({
+    textAlign: 'left'
+  })],
+  right: [defaultCellStyle, style({
+    textAlign: 'right'
+  })],
+})
+
+export const tradeActivity = style({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '0.5em',
+});
+
+export const tradeActivityVolume = style({
+  textAlign: 'right',
+  minWidth: '50px'
+});
+export const tradeActivitySection = style({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '4px',
+  border: '1px solid #494949',
+  padding: '0.25em',
+  '& > *': {
+    width: '16px',
+    height: '16px',
+    textAlign: 'center'
+  }
+})
+
 export const link = style({
   color: 'white',
   textDecoration: 'underline',
@@ -35,6 +84,7 @@ export const link = style({
 
 export const dataTable = style({
   width: '100%',
+  borderCollapse: 'collapse',
 })
 
 export const tagList = style({
@@ -50,6 +100,16 @@ export const tag = style({
   border: '1px solid #888888',
   padding: '0.25em'
 })
+
+export const pill = style({
+  display: 'inline-block',
+  backgroundColor: 'white',
+  color: 'black',
+  border: '1px solid #888888',
+  padding: '0.25em',
+  borderRadius: '1em',
+})
+
 export const column = style({
   display: 'flex',
   flexDirection: 'column',

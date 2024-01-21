@@ -2,26 +2,32 @@ import {Ship} from "@auto/ship/ship";
 
 import {prisma, TaskType} from "@common/prisma";
 import {ShipType} from "spacetraders-sdk";
-import {TaskInterface} from "@auto/ship/task/task";
 
-export class PurchaseShipTask implements TaskInterface<Ship> {
+import {TaskInterface} from "@auto/strategy/orchestrator/types";
+import {AbstractTask} from "@auto/ship/task/abstract-task";
+import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+
+export class PurchaseShipTask extends AbstractTask {
   type = TaskType.PURCHASE_SHIP;
-  waypointSymbol: string;
+  expectedPosition: LocationWithWaypointSpecifier
   shipSymbol: ShipType;
   amount: number;
 
 
-  constructor(args: {waypointSymbol: string, shipSymbol: ShipType, amount: number}) {
-    this.waypointSymbol = args.waypointSymbol;
+  constructor(args: {expectedPosition: LocationWithWaypointSpecifier, shipSymbol: ShipType, amount: number}) {
+    super(TaskType.PURCHASE_SHIP, 1, args.expectedPosition)
+    this.expectedPosition = args.expectedPosition
     this.shipSymbol = args.shipSymbol;
     this.amount = args.amount;
   }
 
   async execute(ship: Ship) {
-    if (ship.currentWaypointSymbol === this.waypointSymbol) {
-      await ship.purchaseShip(this.shipSymbol);
+    if (ship.currentWaypointSymbol === this.expectedPosition.waypoint.symbol) {
+      for(let i = 0; i < this.amount; i++) {
+        await ship.purchaseShip(this.shipSymbol);
+      }
     } else {
-      throw new Error(`Not at the location to purchase ship. Need to be at ${this.waypointSymbol} but at ${ship.currentWaypointSymbol}.`)
+      throw new Error(`Not at the location to purchase ship. Need to be at ${this.expectedPosition.waypoint.symbol} but at ${ship.currentWaypointSymbol}.`)
     }
   }
 
@@ -29,7 +35,7 @@ export class PurchaseShipTask implements TaskInterface<Ship> {
     return JSON.stringify({
       shipSymbol: this.shipSymbol,
       amount: this.amount,
-      waypointSymbol: this.waypointSymbol,
+      expectedPosition: this.expectedPosition,
     });
   }
 }

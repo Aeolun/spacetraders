@@ -185,27 +185,22 @@ model ShipLog {
   @@index([symbol, createdAt])
 }
 
-model TradeLog {
-  id                     String   @id @default(uuid())
-  shipSymbol             String
-  tradeGoodSymbol        String
-  waypointSymbol         String
-  purchaseWaypointSymbol String?
-  sellWaypointSymbol     String?
-  purchasePrice          Int?
-  purchaseAmount         Int?
-  purchasePriceAfter     Int?
-  purchaseVolume         Int?
-  sellPrice              Int?
-  sellAmount             Int?
-  sellPriceAfter         Int?
-  sellVolume             Int?
-  tradeVolume            Int
-  fuelCost               Int?
-  supply                 String
-  supplyAfter            String
-  createdAt              DateTime @default(now())
-  parentTrade            String?
+model Ledger {
+  id                   String               @id @default(uuid())
+  shipSymbol           String
+  tradeGoodSymbol      String
+  waypointSymbol       String
+  transactionType      MarketTransationType
+  pricePerUnit         Int
+  totalPrice           Int
+  units                Int
+  tradeVolume          Int?
+  supply               String?
+  activityLevel        String?
+  credits              Int                  @default(0)
+  objectiveExecution   ObjectiveExecution?  @relation(fields: [objectiveExecutionId], references: [id], onDelete: SetNull)
+  objectiveExecutionId String?
+  createdAt            DateTime             @default(now())
 
   @@index([shipSymbol, createdAt])
   @@index([tradeGoodSymbol, createdAt])
@@ -373,6 +368,7 @@ model Survey {
   signature      String
   payload        String   @db.Text
   value          Float
+  expiration     DateTime @default(now())
   createdAt      DateTime @default(now())
 
   @@unique([signature])
@@ -523,15 +519,17 @@ enum MarketTransationType {
 }
 
 model MarketTransaction {
-  id             String               @id @default(uuid())
-  waypointSymbol String
-  shipSymbol     String
-  tradeSymbol    String
-  type           MarketTransationType
-  units          Int
-  pricePerUnit   Int
-  totalPrice     Int
-  timestamp      DateTime             @default(now())
+  id                   String               @id @default(uuid())
+  waypointSymbol       String
+  shipSymbol           String
+  tradeSymbol          String
+  type                 MarketTransationType
+  units                Int
+  pricePerUnit         Int
+  totalPrice           Int
+  timestamp            DateTime             @default(now())
+  ObjectiveExecution   ObjectiveExecution?  @relation(fields: [objectiveExecutionId], references: [id])
+  objectiveExecutionId String?
 
   @@unique([waypointSymbol, shipSymbol, tradeSymbol, timestamp])
 }
@@ -689,18 +687,22 @@ model Ship {
   engine        ShipEngine  @relation(fields: [engineSymbol], references: [symbol], onDelete: Cascade)
   engineSymbol  String
 
-  currentBehavior        ShipBehavior?
-  homeSystemSymbol       String?
-  behaviorRange          Int?
-  behaviorOnce           Boolean?
-  travelGoalSystemSymbol String?
-  overalGoal             String?
+  // this gets set with an id that uniquely identifies a given objective execution
+  objectiveExecutionId     String?
+  objectiveExecution       ObjectiveExecution? @relation(fields: [objectiveExecutionId], references: [id], onDelete: SetNull)
+  objective                String?
+  nextObjectiveExecutionId String?
+  nextObjectiveExecution   ObjectiveExecution? @relation("next", fields: [nextObjectiveExecutionId], references: [id], onDelete: SetNull)
+  nextObjective            String?
 
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt            DateTime  @default(now()) @updatedAt
+  taskStartedOn        DateTime?
+  expectedTaskDuration Int?
 
-  modules  ShipModule[]
-  mounts   ShipMount[]
-  ShipTask ShipTask[]
+  modules             ShipModule[]
+  mounts              ShipMount[]
+  shipTasks           ShipTask[]
+  objectiveExecutions ObjectiveExecution[] @relation("executions")
 
   //    crew ShipCrew
   @@index([currentSystemSymbol])
@@ -712,11 +714,39 @@ model Ship {
   @@index([engineSymbol])
 }
 
+enum ObjectiveExecutionState {
+  SCHEDULED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model ObjectiveExecution {
+  id                      String                  @id @default(uuid())
+  state                   ObjectiveExecutionState
+  name                    String
+  type                    String
+  data                    String?                 @db.Text()
+  creditDelta             Int?
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @default(now()) @updatedAt
+  creditsReserved         Int                     @default(0)
+  completedAt             DateTime?
+  marketTransactions      MarketTransaction[]
+  currentlyAssignedTo     Ship[]
+  currentlyNextAssignedTo Ship[]                  @relation("next")
+  ship                    Ship?                   @relation("executions", fields: [shipSymbol], references: [symbol])
+  shipSymbol              String?
+  ledger                  Ledger[]
+}
+
 enum TaskType {
   TRAVEL
   EXPLORE
   PURCHASE
   SELL
+  CONSTRUCT
   UPDATE_MARKET
   SIPHON
   MINE

@@ -44,6 +44,20 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
           }
         }),
       },
+      modifiers: 'modifiers' in waypoint ? {
+        connectOrCreate: waypoint.modifiers?.map(mod => {
+          return {
+            where: {
+              symbol: mod.symbol,
+            },
+            create: {
+              symbol: mod.symbol,
+              name: mod.name,
+              description: mod.description
+            }
+          }
+        }),
+      } : undefined,
       orbitals: {
         connect: waypoint.orbitals.map(orb => {
           return {
@@ -78,6 +92,9 @@ export async function storeWaypoint(waypoint: Waypoint | ScannedWaypoint) {
       },
       data: {
         traits: {
+          set: []
+        },
+        modifiers: {
           set: []
         }
       }

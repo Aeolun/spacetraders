@@ -5,7 +5,7 @@ import {Pixi} from "@front/components/Pixi";
 import * as appStyles from "@front/styles/app.css";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {SelectionDisplay} from "@front/components/SelectionDisplay";
-import {backendUrl, trpcReact} from "./trpc";
+import {backendUrl, port, trpcReact} from "./trpc";
 import {httpBatchLink} from "@trpc/client";
 import {useState} from "react";
 import {format} from "@common/lib/format";
@@ -18,6 +18,7 @@ import {Layout} from "@front/components/Layout";
 import { NotFound } from "./components/NotFound";
 import { Objectives } from "./components/Objectives";
 import { Ships } from "./components/Ships";
+import { Trades } from "./components/Trades";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: '/trades',
-                        element: <div>Trades</div>
+                        element: <Trades />
                     },
                     {
                         path: '/objectives',
@@ -68,7 +69,7 @@ const App = () => {
     const [trpcClient] = useState(() => trpcReact.createClient({
         links: [
             httpBatchLink({
-                url: backendUrl+':4001',
+                url: backendUrl+`:${port}`,
                 // You can pass any HTTP headers you wish here
                 async headers() {
                     const token = localStorage.getItem('agent-token') ?? localStorage.getItem('user-token')

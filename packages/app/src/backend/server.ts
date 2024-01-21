@@ -1,9 +1,10 @@
 import {authedProcedure, publicProcedure, router} from './trpc';
 import z from 'zod'
-import {MarketPriceHistory, prisma, ShipBehavior, TradeLog} from "@common/prisma";
+import {prisma} from "@common/prisma";
 import { sign, verify } from 'jsonwebtoken';
 import crypto from 'crypto'
 import createApi from "@common/lib/createApi";
+
 import {FactionSymbols} from "spacetraders-sdk";
 import {storeAgentToken} from "@common/lib/data-update/store-agent-token";
 import {observable} from "@trpc/server/observable";
@@ -15,6 +16,9 @@ import fs from "fs";
 import {backgroundQueue} from "@auto/lib/queue";
 import {getBackgroundAgentToken} from "@auto/setup/background-agent-token";
 import {storeWaypoint} from "@common/lib/data-update/store-waypoint";
+import {environmentVariables} from "@common/environment-variables";
+import { getBackgroundAgent } from '@auto/lib/get-background-agent';
+import axios from "axios";
 
 if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET not set')
@@ -135,7 +139,9 @@ export const appRouter = router({
                 modifiers: true,
                 jumpConnectedTo: {
                     select: {
-                        symbol: true
+                        symbol: true,
+                      x: true,
+                      y: true
                     }
                 },
                 tradeGoods: {
@@ -156,11 +162,24 @@ export const appRouter = router({
             }
         })
     }),
-    bestTrades: publicProcedure.input(z.object({})).query(async ({input}) => {
+    bestTrades: publicProcedure.query(async ({input}) => {
+        const systems = await prisma.system.findMany({
+            where: {
+              shipsInSystem: {
+                  some: {
+                      agent: environmentVariables.agentName
+                  }
+              }
+            }
+        });
+        const backgroundAgent = await getBackgroundAgent();
+        console.log("credits", backgroundAgent.credits)
+        const moneyImportance = Math.min(5_000_000 / backgroundAgent.credits, 10)
         return findTrades({
-            systemSymbols: [],
-            dbLimit: 250,
-            resultLimit: 100
+            systemSymbols: systems.map(s => s.symbol),
+            dbLimit: 500,
+            resultLimit: 200,
+            moneyImportance,
         });
     }),
     getWaypoint: publicProcedure.input(z.object({
@@ -173,9 +192,27 @@ export const appRouter = router({
             include: {
                 traits: true,
                 modifiers: true,
+                construction: {
+                    include: {
+                        materials: true
+                    }
+                },
+              system: {
+                  select: {
+                      symbol: true,
+                      x: true,
+                      y: true
+                  }
+              },
                 jumpConnectedTo: {
                     select: {
-                        symbol: true
+                        symbol: true,
+                        system: {
+                          select: {
+                            x: true,
+                            y: true
+                          }
+                        }
                     }
                 },
             }
@@ -202,6 +239,8 @@ export const appRouter = router({
 
         console.log(data.data.data)
         await storeWaypoint(data.data.data)
+
+        return data.data.data
     }),
     getWaypoints: publicProcedure.input(z.object({
         systemSymbol: z.string()
@@ -220,7 +259,9 @@ export const appRouter = router({
                 tradeGoods: true,
                 jumpConnectedTo: {
                     select: {
-                        symbol: true
+                        symbol: true,
+                        x: true,
+                        y: true
                     }
                 }
             }
@@ -236,6 +277,7 @@ export const appRouter = router({
 
                 return {
                     ...wp,
+                  jumpConnectedTo: wp.jumpConnectedTo,
                     traits: wp.traits.map(t => t.symbol),
                     tradeGoods: wp.tradeGoods.map(tg => ({
                         symbol: tg.tradeGoodSymbol,
@@ -281,7 +323,7 @@ export const appRouter = router({
                 mounts: true,
                 modules: true,
                 cargo: true,
-                ShipTask: true
+                shipTasks: true
             }
         })
     }),
@@ -302,7 +344,11 @@ export const appRouter = router({
                 mounts: true,
                 modules: true,
                 cargo: true,
-                ShipTask: true
+                shipTasks: {
+                    orderBy: {
+                        createdAt: 'asc'
+                    }
+                }
             }
         });
     }),
@@ -332,7 +378,7 @@ export const appRouter = router({
                mounts: true,
                modules: true,
                cargo: true,
-               ShipTask: true,
+               shipTasks: true,
            }
        })
     }),
@@ -381,7 +427,7 @@ export const appRouter = router({
     }),
     getObjectives: publicProcedure.query(async () => {
         try {
-            const data = fs.readFileSync('objectives.json').toString('utf8')
+            const data = fs.readFileSync(`objectives${environmentVariables.apiEndpoint.replace(/[^a-zA-Z]+/g, '-')}.json`).toString('utf8')
             const objectives = JSON.parse(data)
             objectives.objectives.sort((a: any, b: any) => {
                 return b.priority - a.priority
@@ -404,6 +450,20 @@ export const appRouter = router({
             take: 100
         })
     }),
+    cancelObjective: publicProcedure.input(z.object({
+        shipSymbol: z.string(),
+        objective: z.string()
+    })).mutation(async ({input}) => {
+        const ipcPort = process.env.PORT ? parseInt(process.env.PORT)+4 : 4005
+        const res = await axios.post(`http://localhost:${ipcPort}/cancel-objective`, {
+            shipSymbol: input.shipSymbol,
+            objective: input.objective
+        }, {
+            timeout: 30000
+        })
+        return res.data
+    }),
+
     getMarketInfoHistory: publicProcedure.input(z.object({
         waypoint: z.string(),
         tradeGood: z.string()

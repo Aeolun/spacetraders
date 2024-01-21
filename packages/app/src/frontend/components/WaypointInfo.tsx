@@ -5,6 +5,7 @@ import {Registry} from "@front/viewer/registry";
 import {trpcReact} from "@front/trpc";
 import {MarketRow} from "@front/components/MarketRow";
 import {ShipyardRow} from "@front/components/ShipyardRow";
+import {getDistance} from "@common/lib/getDistance";
 
 export const WaypointInfo = ({ symbol }: {symbol: string}) => {
   const waypointData = Registry.waypointData[symbol || '']
@@ -39,6 +40,15 @@ export const WaypointInfo = ({ symbol }: {symbol: string}) => {
         currentWaypoint.refetch()
       })
     }}>Update</button> : null }
+  {currentWaypoint.data?.construction ? <div>
+    <h2>Construction</h2>
+      <div>Completed: {currentWaypoint.data.construction.isCompleted ? 'Yes' : 'No'}</div>
+      {currentWaypoint.data.construction.materials.map(material => <div>{material.tradeGoodSymbol} {format.format(material.fulfilled)}/{format.format(material.required)}</div>)}
+    </div> : null }
+  {currentWaypoint.data?.jumpConnectedTo ? <div>
+    <h2>Jump</h2>
+    <div>Connected to {currentWaypoint.data.jumpConnectedTo.map(c => <div>{c.symbol} ({getDistance(currentWaypoint.data.system, c.system)})</div>)}</div>
+  </div> : null }
   {query.data ? <div>
     <h2>Marketplace (last update <Timeago date={currentWaypoint.data?.marketLastUpdated} />)</h2>
     <div className={marketRow.header}>
