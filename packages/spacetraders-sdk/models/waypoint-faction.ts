@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { FactionSymbols } from './faction-symbols';
+import { FactionSymbol } from './faction-symbol';
 
 /**
  * The faction that controls the waypoint.
@@ -25,10 +25,10 @@ import { FactionSymbols } from './faction-symbols';
 export interface WaypointFaction {
     /**
      * 
-     * @type {FactionSymbols}
+     * @type {FactionSymbol}
      * @memberof WaypointFaction
      */
-    'symbol': FactionSymbols;
+    'symbol': FactionSymbol;
 }
 
 

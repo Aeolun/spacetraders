@@ -19,6 +19,9 @@ import { ActivityLevel } from './activity-level';
 // May contain unused imports in some cases
 // @ts-ignore
 import { SupplyLevel } from './supply-level';
+// May contain unused imports in some cases
+// @ts-ignore
+import { TradeSymbol } from './trade-symbol';
 
 /**
  * 
@@ -27,11 +30,11 @@ import { SupplyLevel } from './supply-level';
  */
 export interface MarketTradeGood {
     /**
-     * The symbol of the trade good.
-     * @type {string}
+     * 
+     * @type {TradeSymbol}
      * @memberof MarketTradeGood
      */
-    'symbol': string;
+    'symbol': TradeSymbol;
     /**
      * The type of trade good (export, import, or exchange).
      * @type {string}

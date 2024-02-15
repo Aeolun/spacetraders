@@ -34,12 +34,6 @@ export interface ShipNavRoute {
      * @type {ShipNavRouteWaypoint}
      * @memberof ShipNavRoute
      */
-    'departure': ShipNavRouteWaypoint;
-    /**
-     * 
-     * @type {ShipNavRouteWaypoint}
-     * @memberof ShipNavRoute
-     */
     'origin': ShipNavRouteWaypoint;
     /**
      * The date time of the ship\'s departure.

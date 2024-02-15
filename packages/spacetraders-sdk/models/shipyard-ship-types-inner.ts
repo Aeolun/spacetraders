@@ -28,7 +28,7 @@ export interface ShipyardShipTypesInner {
      * @type {ShipType}
      * @memberof ShipyardShipTypesInner
      */
-    'type'?: ShipType;
+    'type': ShipType;
 }
 
 

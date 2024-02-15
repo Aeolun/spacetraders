@@ -44,7 +44,8 @@ models/extract-resources201-response-data.ts
 models/extract-resources201-response.ts
 models/extraction-yield.ts
 models/extraction.ts
-models/faction-symbols.ts
+models/faction-symbol.ts
+models/faction-trait-symbol.ts
 models/faction-trait.ts
 models/faction.ts
 models/fulfill-contract200-response.ts
@@ -159,8 +160,8 @@ models/siphon-resources201-response.ts
 models/siphon-yield.ts
 models/siphon.ts
 models/supply-construction-request.ts
-models/supply-construction200-response-data.ts
-models/supply-construction200-response.ts
+models/supply-construction201-response-data.ts
+models/supply-construction201-response.ts
 models/supply-level.ts
 models/survey-deposit.ts
 models/survey.ts
@@ -173,8 +174,10 @@ models/trade-symbol.ts
 models/transfer-cargo-request.ts
 models/transfer-cargo200-response.ts
 models/waypoint-faction.ts
+models/waypoint-modifier-symbol.ts
 models/waypoint-modifier.ts
 models/waypoint-orbital.ts
+models/waypoint-trait-symbol.ts
 models/waypoint-trait.ts
 models/waypoint-type.ts
 models/waypoint.ts

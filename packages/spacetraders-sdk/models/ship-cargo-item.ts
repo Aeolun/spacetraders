@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { TradeSymbol } from './trade-symbol';
 
 /**
  * The type of cargo item and the number of units.
@@ -21,11 +24,11 @@
  */
 export interface ShipCargoItem {
     /**
-     * The unique identifier of the cargo item type.
-     * @type {string}
+     * 
+     * @type {TradeSymbol}
      * @memberof ShipCargoItem
      */
-    'symbol': string;
+    'symbol': TradeSymbol;
     /**
      * The name of the cargo item type.
      * @type {string}
@@ -45,4 +48,6 @@ export interface ShipCargoItem {
      */
     'units': number;
 }
+
+
 

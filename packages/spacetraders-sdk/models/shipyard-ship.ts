@@ -52,7 +52,7 @@ export interface ShipyardShip {
      * @type {ShipType}
      * @memberof ShipyardShip
      */
-    'type'?: ShipType;
+    'type': ShipType;
     /**
      * 
      * @type {string}

@@ -21,7 +21,7 @@ import { ContractDeliverGood } from './contract-deliver-good';
 import { ContractPayment } from './contract-payment';
 
 /**
- * Terms of the contract needed to fulfill it.
+ * The terms to fulfill the contract.
  * @export
  * @interface ContractTerms
  */

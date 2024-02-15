@@ -30,13 +30,13 @@ import { ShipNavStatus } from './ship-nav-status';
  */
 export interface ShipNav {
     /**
-     * The system symbol of the ship\'s current location.
+     * The symbol of the system.
      * @type {string}
      * @memberof ShipNav
      */
     'systemSymbol': string;
     /**
-     * The waypoint symbol of the ship\'s current location, or if the ship is in-transit, the waypoint symbol of the ship\'s destination.
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof ShipNav
      */

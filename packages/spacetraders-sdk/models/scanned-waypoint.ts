@@ -36,7 +36,7 @@ import { WaypointType } from './waypoint-type';
  */
 export interface ScannedWaypoint {
     /**
-     * Symbol of the waypoint.
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof ScannedWaypoint
      */
@@ -48,7 +48,7 @@ export interface ScannedWaypoint {
      */
     'type': WaypointType;
     /**
-     * Symbol of the system.
+     * The symbol of the system.
      * @type {string}
      * @memberof ScannedWaypoint
      */

@@ -21,7 +21,7 @@
  */
 export interface MarketTransaction {
     /**
-     * The symbol of the waypoint where the transaction took place.
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof MarketTransaction
      */

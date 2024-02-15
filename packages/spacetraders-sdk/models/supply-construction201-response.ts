@@ -15,12 +15,19 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { WaypointTraitSymbol } from './waypoint-trait-symbol';
+import { SupplyConstruction201ResponseData } from './supply-construction201-response-data';
 
 /**
- * @type GetSystemWaypointsTraitsParameter
+ * 
  * @export
+ * @interface SupplyConstruction201Response
  */
-export type GetSystemWaypointsTraitsParameter = Array<WaypointTraitSymbol> | WaypointTraitSymbol;
-
+export interface SupplyConstruction201Response {
+    /**
+     * 
+     * @type {SupplyConstruction201ResponseData}
+     * @memberof SupplyConstruction201Response
+     */
+    'data': SupplyConstruction201ResponseData;
+}
 

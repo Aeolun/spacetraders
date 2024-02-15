@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Payments for the contract.
  * @export
  * @interface ContractPayment
  */

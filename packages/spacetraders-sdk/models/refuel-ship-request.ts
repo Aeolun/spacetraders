@@ -26,5 +26,11 @@ export interface RefuelShipRequest {
      * @memberof RefuelShipRequest
      */
     'units'?: number;
+    /**
+     * Wether to use the FUEL thats in your cargo or not. Default: false
+     * @type {boolean}
+     * @memberof RefuelShipRequest
+     */
+    'fromCargo'?: boolean;
 }
 

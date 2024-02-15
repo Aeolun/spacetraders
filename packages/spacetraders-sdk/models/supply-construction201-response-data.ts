@@ -15,12 +15,28 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { WaypointTraitSymbol } from './waypoint-trait-symbol';
+import { Construction } from './construction';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ShipCargo } from './ship-cargo';
 
 /**
- * @type GetSystemWaypointsTraitsParameter
+ * 
  * @export
+ * @interface SupplyConstruction201ResponseData
  */
-export type GetSystemWaypointsTraitsParameter = Array<WaypointTraitSymbol> | WaypointTraitSymbol;
-
+export interface SupplyConstruction201ResponseData {
+    /**
+     * 
+     * @type {Construction}
+     * @memberof SupplyConstruction201ResponseData
+     */
+    'construction': Construction;
+    /**
+     * 
+     * @type {ShipCargo}
+     * @memberof SupplyConstruction201ResponseData
+     */
+    'cargo': ShipCargo;
+}
 

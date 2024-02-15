@@ -13,14 +13,22 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import { WaypointTraitSymbol } from './waypoint-trait-symbol';
 
 /**
- * @type GetSystemWaypointsTraitsParameter
+ * The unique identifier of the modifier.
  * @export
+ * @enum {string}
  */
-export type GetSystemWaypointsTraitsParameter = Array<WaypointTraitSymbol> | WaypointTraitSymbol;
+
+export const WaypointModifierSymbol = {
+    Stripped: 'STRIPPED',
+    Unstable: 'UNSTABLE',
+    RadiationLeak: 'RADIATION_LEAK',
+    CriticalLimit: 'CRITICAL_LIMIT',
+    CivilUnrest: 'CIVIL_UNREST'
+} as const;
+
+export type WaypointModifierSymbol = typeof WaypointModifierSymbol[keyof typeof WaypointModifierSymbol];
+
 
 

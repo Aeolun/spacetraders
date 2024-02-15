@@ -36,7 +36,7 @@ export interface ShipNavRouteWaypoint {
      */
     'type': WaypointType;
     /**
-     * The symbol of the system the waypoint is in.
+     * The symbol of the system.
      * @type {string}
      * @memberof ShipNavRouteWaypoint
      */

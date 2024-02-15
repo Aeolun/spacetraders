@@ -55,6 +55,6 @@ export interface Agent {
      * @type {number}
      * @memberof Agent
      */
-    'shipCount'?: number;
+    'shipCount': number;
 }
 

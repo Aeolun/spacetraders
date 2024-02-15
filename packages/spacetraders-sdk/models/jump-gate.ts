@@ -21,6 +21,12 @@
  */
 export interface JumpGate {
     /**
+     * The symbol of the waypoint.
+     * @type {string}
+     * @memberof JumpGate
+     */
+    'symbol': string;
+    /**
      * All the gates that are connected to this waypoint.
      * @type {Array<string>}
      * @memberof JumpGate

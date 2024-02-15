@@ -21,7 +21,7 @@
  */
 export interface ShipyardTransaction {
     /**
-     * The symbol of the waypoint where the transaction took place.
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof ShipyardTransaction
      */
@@ -30,8 +30,15 @@ export interface ShipyardTransaction {
      * The symbol of the ship that was the subject of the transaction.
      * @type {string}
      * @memberof ShipyardTransaction
+     * @deprecated
      */
     'shipSymbol': string;
+    /**
+     * The symbol of the ship that was the subject of the transaction.
+     * @type {string}
+     * @memberof ShipyardTransaction
+     */
+    'shipType': string;
     /**
      * The price of the transaction.
      * @type {number}

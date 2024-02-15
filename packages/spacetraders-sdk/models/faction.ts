@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { FactionSymbols } from './faction-symbols';
+import { FactionSymbol } from './faction-symbol';
 // May contain unused imports in some cases
 // @ts-ignore
 import { FactionTrait } from './faction-trait';
@@ -28,10 +28,10 @@ import { FactionTrait } from './faction-trait';
 export interface Faction {
     /**
      * 
-     * @type {FactionSymbols}
+     * @type {FactionSymbol}
      * @memberof Faction
      */
-    'symbol': FactionSymbols;
+    'symbol': FactionSymbol;
     /**
      * Name of the faction.
      * @type {string}

@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import { WaypointModifierSymbol } from './waypoint-modifier-symbol';
 
 /**
  * 
@@ -21,11 +24,11 @@
  */
 export interface WaypointModifier {
     /**
-     * The unique identifier of the modifier.
-     * @type {string}
+     * 
+     * @type {WaypointModifierSymbol}
      * @memberof WaypointModifier
      */
-    'symbol': WaypointModifierSymbolEnum;
+    'symbol': WaypointModifierSymbol;
     /**
      * The name of the trait.
      * @type {string}
@@ -40,14 +43,5 @@ export interface WaypointModifier {
     'description': string;
 }
 
-export const WaypointModifierSymbolEnum = {
-    Stripped: 'STRIPPED',
-    Unstable: 'UNSTABLE',
-    RadiationLeak: 'RADIATION_LEAK',
-    CriticalLimit: 'CRITICAL_LIMIT',
-    CivilUnrest: 'CIVIL_UNREST'
-} as const;
-
-export type WaypointModifierSymbolEnum = typeof WaypointModifierSymbolEnum[keyof typeof WaypointModifierSymbolEnum];
 
 

@@ -15,7 +15,7 @@
 
 
 /**
- * The type of waypoint.
+ * The type of system.
  * @export
  * @enum {string}
  */

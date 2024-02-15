@@ -15,6 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { Agent } from './agent';
+// May contain unused imports in some cases
+// @ts-ignore
 import { Cooldown } from './cooldown';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -47,5 +50,11 @@ export interface JumpShip200ResponseData {
      * @memberof JumpShip200ResponseData
      */
     'transaction': MarketTransaction;
+    /**
+     * 
+     * @type {Agent}
+     * @memberof JumpShip200ResponseData
+     */
+    'agent': Agent;
 }
 

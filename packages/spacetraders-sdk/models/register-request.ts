@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { FactionSymbols } from './faction-symbols';
+import { FactionSymbol } from './faction-symbol';
 
 /**
  * 
@@ -25,10 +25,10 @@ import { FactionSymbols } from './faction-symbols';
 export interface RegisterRequest {
     /**
      * 
-     * @type {FactionSymbols}
+     * @type {FactionSymbol}
      * @memberof RegisterRequest
      */
-    'faction': FactionSymbols;
+    'faction': FactionSymbol;
     /**
      * Your desired agent symbol. This will be a unique name used to represent your agent, and will be the prefix for your ships.
      * @type {string}

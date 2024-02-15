@@ -39,7 +39,7 @@ import { WaypointType } from './waypoint-type';
  */
 export interface Waypoint {
     /**
-     * Symbol fo the waypoint.
+     * The symbol of the waypoint.
      * @type {string}
      * @memberof Waypoint
      */
@@ -51,7 +51,7 @@ export interface Waypoint {
      */
     'type': WaypointType;
     /**
-     * The symbol of the system this waypoint belongs to.
+     * The symbol of the system.
      * @type {string}
      * @memberof Waypoint
      */

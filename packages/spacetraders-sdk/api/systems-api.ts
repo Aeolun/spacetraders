@@ -40,7 +40,7 @@ import { GetSystems200Response } from '../models';
 // @ts-ignore
 import { GetWaypoint200Response } from '../models';
 // @ts-ignore
-import { SupplyConstruction200Response } from '../models';
+import { SupplyConstruction201Response } from '../models';
 // @ts-ignore
 import { SupplyConstructionRequest } from '../models';
 // @ts-ignore
@@ -564,7 +564,7 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupplyConstruction200Response>> {
+        async supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupplyConstruction201Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.supplyConstruction(systemSymbol, waypointSymbol, supplyConstructionRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -677,7 +677,7 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: any): AxiosPromise<SupplyConstruction200Response> {
+        supplyConstruction(systemSymbol: string, waypointSymbol: string, supplyConstructionRequest?: SupplyConstructionRequest, options?: any): AxiosPromise<SupplyConstruction201Response> {
             return localVarFp.supplyConstruction(systemSymbol, waypointSymbol, supplyConstructionRequest, options).then((request) => request(axios, basePath));
         },
     };
