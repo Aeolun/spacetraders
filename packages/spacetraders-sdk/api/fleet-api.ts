@@ -46,6 +46,10 @@ import { GetMyShipCargo200Response } from '../models';
 // @ts-ignore
 import { GetMyShips200Response } from '../models';
 // @ts-ignore
+import { GetRepairShip200Response } from '../models';
+// @ts-ignore
+import { GetScrapShip200Response } from '../models';
+// @ts-ignore
 import { GetShipCooldown200Response } from '../models';
 // @ts-ignore
 import { GetShipNav200Response } from '../models';
@@ -88,6 +92,10 @@ import { RemoveMount201Response } from '../models';
 // @ts-ignore
 import { RemoveMountRequest } from '../models';
 // @ts-ignore
+import { RepairShip200Response } from '../models';
+// @ts-ignore
+import { ScrapShip200Response } from '../models';
+// @ts-ignore
 import { SellCargo201Response } from '../models';
 // @ts-ignore
 import { SellCargoRequest } from '../models';
@@ -103,6 +111,8 @@ import { Survey } from '../models';
 import { TransferCargo200Response } from '../models';
 // @ts-ignore
 import { TransferCargoRequest } from '../models';
+// @ts-ignore
+import { WarpShip200Response } from '../models';
 /**
  * FleetApi - axios parameter creator
  * @export
@@ -567,6 +577,82 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get the cost of repairing a ship.
+         * @summary Get Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRepairShip: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('getRepairShip', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/repair`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get the amount of value that will be returned when scrapping a ship.
+         * @summary Get Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScrapShip: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('getScrapShip', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/scrap`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -1106,6 +1192,82 @@ export const FleetApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Repair a ship, restoring the ship to maximum condition. The ship must be docked at a waypoint that has the `Shipyard` trait in order to use this function. To preview the cost of repairing the ship, use the Get action.
+         * @summary Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        repairShip: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('repairShip', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/repair`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Scrap a ship, removing it from the game and returning a portion of the ship\'s value to the agent. The ship must be docked in a waypoint that has the `Shipyard` trait in order to use this function. To preview the amount of value that will be returned, use the Get Ship action.
+         * @summary Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scrapShip: async (shipSymbol: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'shipSymbol' is not null or undefined
+            assertParamExists('scrapShip', 'shipSymbol', shipSymbol)
+            const localVarPath = `/my/ships/{shipSymbol}/scrap`
+                .replace(`{${"shipSymbol"}}`, encodeURIComponent(String(shipSymbol)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication AgentToken required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
          * @param {string} shipSymbol Symbol of a ship.
@@ -1457,6 +1619,28 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Get the cost of repairing a ship.
+         * @summary Get Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRepairShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetRepairShip200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRepairShip(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get the amount of value that will be returned when scrapping a ship.
+         * @summary Get Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScrapShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetScrapShip200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScrapShip(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
          * @summary Get Ship Cooldown
          * @param {string} shipSymbol The symbol of the ship.
@@ -1608,6 +1792,28 @@ export const FleetApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Repair a ship, restoring the ship to maximum condition. The ship must be docked at a waypoint that has the `Shipyard` trait in order to use this function. To preview the cost of repairing the ship, use the Get action.
+         * @summary Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async repairShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RepairShip200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.repairShip(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Scrap a ship, removing it from the game and returning a portion of the ship\'s value to the agent. The ship must be docked in a waypoint that has the `Shipyard` trait in order to use this function. To preview the amount of value that will be returned, use the Get Ship action.
+         * @summary Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async scrapShip(shipSymbol: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScrapShip200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.scrapShip(shipSymbol, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
          * @param {string} shipSymbol Symbol of a ship.
@@ -1662,7 +1868,7 @@ export const FleetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async warpShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NavigateShip200Response>> {
+        async warpShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WarpShip200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.warpShip(shipSymbol, navigateShipRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1798,6 +2004,26 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          */
         getMyShips(page?: number, limit?: number, options?: any): AxiosPromise<GetMyShips200Response> {
             return localVarFp.getMyShips(page, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get the cost of repairing a ship.
+         * @summary Get Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRepairShip(shipSymbol: string, options?: any): AxiosPromise<GetRepairShip200Response> {
+            return localVarFp.getRepairShip(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get the amount of value that will be returned when scrapping a ship.
+         * @summary Get Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScrapShip(shipSymbol: string, options?: any): AxiosPromise<GetScrapShip200Response> {
+            return localVarFp.getScrapShip(shipSymbol, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieve the details of your ship\'s reactor cooldown. Some actions such as activating your jump drive, scanning, or extracting resources taxes your reactor and results in a cooldown.  Your ship cannot perform additional actions until your cooldown has expired. The duration of your cooldown is relative to the power consumption of the related modules or mounts for the action taken.  Response returns a 204 status code (no-content) when the ship has no cooldown.
@@ -1938,6 +2164,26 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.removeMount(shipSymbol, removeMountRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Repair a ship, restoring the ship to maximum condition. The ship must be docked at a waypoint that has the `Shipyard` trait in order to use this function. To preview the cost of repairing the ship, use the Get action.
+         * @summary Repair Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        repairShip(shipSymbol: string, options?: any): AxiosPromise<RepairShip200Response> {
+            return localVarFp.repairShip(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Scrap a ship, removing it from the game and returning a portion of the ship\'s value to the agent. The ship must be docked in a waypoint that has the `Shipyard` trait in order to use this function. To preview the amount of value that will be returned, use the Get Ship action.
+         * @summary Scrap Ship
+         * @param {string} shipSymbol The ship symbol.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        scrapShip(shipSymbol: string, options?: any): AxiosPromise<ScrapShip200Response> {
+            return localVarFp.scrapShip(shipSymbol, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sell cargo in your ship to a market that trades this cargo. The ship must be docked in a waypoint that has the `Marketplace` trait in order to use this function.
          * @summary Sell Cargo
          * @param {string} shipSymbol Symbol of a ship.
@@ -1988,7 +2234,7 @@ export const FleetApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        warpShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: any): AxiosPromise<NavigateShip200Response> {
+        warpShip(shipSymbol: string, navigateShipRequest?: NavigateShipRequest, options?: any): AxiosPromise<WarpShip200Response> {
             return localVarFp.warpShip(shipSymbol, navigateShipRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -2146,6 +2392,30 @@ export class FleetApi extends BaseAPI {
      */
     public getMyShips(page?: number, limit?: number, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).getMyShips(page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get the cost of repairing a ship.
+     * @summary Get Repair Ship
+     * @param {string} shipSymbol The ship symbol.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public getRepairShip(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).getRepairShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get the amount of value that will be returned when scrapping a ship.
+     * @summary Get Scrap Ship
+     * @param {string} shipSymbol The ship symbol.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public getScrapShip(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).getScrapShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2310,6 +2580,30 @@ export class FleetApi extends BaseAPI {
      */
     public removeMount(shipSymbol: string, removeMountRequest?: RemoveMountRequest, options?: AxiosRequestConfig) {
         return FleetApiFp(this.configuration).removeMount(shipSymbol, removeMountRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Repair a ship, restoring the ship to maximum condition. The ship must be docked at a waypoint that has the `Shipyard` trait in order to use this function. To preview the cost of repairing the ship, use the Get action.
+     * @summary Repair Ship
+     * @param {string} shipSymbol The ship symbol.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public repairShip(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).repairShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Scrap a ship, removing it from the game and returning a portion of the ship\'s value to the agent. The ship must be docked in a waypoint that has the `Shipyard` trait in order to use this function. To preview the amount of value that will be returned, use the Get Ship action.
+     * @summary Scrap Ship
+     * @param {string} shipSymbol The ship symbol.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FleetApi
+     */
+    public scrapShip(shipSymbol: string, options?: AxiosRequestConfig) {
+        return FleetApiFp(this.configuration).scrapShip(shipSymbol, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

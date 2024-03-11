@@ -15,37 +15,12 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { ExtractResources201ResponseDataEventsInner } from './extract-resources201-response-data-events-inner';
-// May contain unused imports in some cases
-// @ts-ignore
-import { ShipFuel } from './ship-fuel';
-// May contain unused imports in some cases
-// @ts-ignore
-import { ShipNav } from './ship-nav';
+import { ShipConditionEvent } from './ship-condition-event';
 
 /**
- * 
+ * @type ExtractResources201ResponseDataEventsInner
  * @export
- * @interface NavigateShip200ResponseData
  */
-export interface NavigateShip200ResponseData {
-    /**
-     * 
-     * @type {ShipFuel}
-     * @memberof NavigateShip200ResponseData
-     */
-    'fuel': ShipFuel;
-    /**
-     * 
-     * @type {ShipNav}
-     * @memberof NavigateShip200ResponseData
-     */
-    'nav': ShipNav;
-    /**
-     * 
-     * @type {Array<ExtractResources201ResponseDataEventsInner>}
-     * @memberof NavigateShip200ResponseData
-     */
-    'events': Array<ExtractResources201ResponseDataEventsInner>;
-}
+export type ExtractResources201ResponseDataEventsInner = ShipConditionEvent;
+
 

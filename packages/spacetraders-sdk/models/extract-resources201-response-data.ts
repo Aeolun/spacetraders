@@ -18,6 +18,9 @@
 import { Cooldown } from './cooldown';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ExtractResources201ResponseDataEventsInner } from './extract-resources201-response-data-events-inner';
+// May contain unused imports in some cases
+// @ts-ignore
 import { Extraction } from './extraction';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -47,5 +50,11 @@ export interface ExtractResources201ResponseData {
      * @memberof ExtractResources201ResponseData
      */
     'cargo': ShipCargo;
+    /**
+     * 
+     * @type {Array<ExtractResources201ResponseDataEventsInner>}
+     * @memberof ExtractResources201ResponseData
+     */
+    'events': Array<ExtractResources201ResponseDataEventsInner>;
 }
 

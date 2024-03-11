@@ -40,6 +40,7 @@ models/deliver-contract200-response-data.ts
 models/deliver-contract200-response.ts
 models/dock-ship200-response.ts
 models/extract-resources-request.ts
+models/extract-resources201-response-data-events-inner.ts
 models/extract-resources201-response-data.ts
 models/extract-resources201-response.ts
 models/extraction-yield.ts
@@ -62,6 +63,10 @@ models/get-my-agent200-response.ts
 models/get-my-ship-cargo200-response.ts
 models/get-my-ship200-response.ts
 models/get-my-ships200-response.ts
+models/get-repair-ship200-response-data.ts
+models/get-repair-ship200-response.ts
+models/get-scrap-ship200-response-data.ts
+models/get-scrap-ship200-response.ts
 models/get-ship-cooldown200-response.ts
 models/get-ship-nav200-response.ts
 models/get-shipyard200-response.ts
@@ -115,6 +120,9 @@ models/register201-response.ts
 models/remove-mount-request.ts
 models/remove-mount201-response-data.ts
 models/remove-mount201-response.ts
+models/repair-ship200-response-data.ts
+models/repair-ship200-response.ts
+models/repair-transaction.ts
 models/scanned-ship-engine.ts
 models/scanned-ship-frame.ts
 models/scanned-ship-mounts-inner.ts
@@ -122,11 +130,15 @@ models/scanned-ship-reactor.ts
 models/scanned-ship.ts
 models/scanned-system.ts
 models/scanned-waypoint.ts
+models/scrap-ship200-response-data.ts
+models/scrap-ship200-response.ts
+models/scrap-transaction.ts
 models/sell-cargo-request.ts
 models/sell-cargo201-response-data.ts
 models/sell-cargo201-response.ts
 models/ship-cargo-item.ts
 models/ship-cargo.ts
+models/ship-condition-event.ts
 models/ship-crew.ts
 models/ship-engine.ts
 models/ship-frame.ts
@@ -173,6 +185,8 @@ models/trade-good.ts
 models/trade-symbol.ts
 models/transfer-cargo-request.ts
 models/transfer-cargo200-response.ts
+models/warp-ship200-response-data.ts
+models/warp-ship200-response.ts
 models/waypoint-faction.ts
 models/waypoint-modifier-symbol.ts
 models/waypoint-modifier.ts

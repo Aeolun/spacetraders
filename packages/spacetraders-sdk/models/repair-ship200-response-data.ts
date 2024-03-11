@@ -15,37 +15,37 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { ExtractResources201ResponseDataEventsInner } from './extract-resources201-response-data-events-inner';
+import { Agent } from './agent';
 // May contain unused imports in some cases
 // @ts-ignore
-import { ShipFuel } from './ship-fuel';
+import { RepairTransaction } from './repair-transaction';
 // May contain unused imports in some cases
 // @ts-ignore
-import { ShipNav } from './ship-nav';
+import { Ship } from './ship';
 
 /**
  * 
  * @export
- * @interface NavigateShip200ResponseData
+ * @interface RepairShip200ResponseData
  */
-export interface NavigateShip200ResponseData {
+export interface RepairShip200ResponseData {
     /**
      * 
-     * @type {ShipFuel}
-     * @memberof NavigateShip200ResponseData
+     * @type {Agent}
+     * @memberof RepairShip200ResponseData
      */
-    'fuel': ShipFuel;
+    'agent': Agent;
     /**
      * 
-     * @type {ShipNav}
-     * @memberof NavigateShip200ResponseData
+     * @type {Ship}
+     * @memberof RepairShip200ResponseData
      */
-    'nav': ShipNav;
+    'ship': Ship;
     /**
      * 
-     * @type {Array<ExtractResources201ResponseDataEventsInner>}
-     * @memberof NavigateShip200ResponseData
+     * @type {RepairTransaction}
+     * @memberof RepairShip200ResponseData
      */
-    'events': Array<ExtractResources201ResponseDataEventsInner>;
+    'transaction': RepairTransaction;
 }
 

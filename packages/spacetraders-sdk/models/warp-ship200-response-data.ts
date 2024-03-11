@@ -15,9 +15,6 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { ExtractResources201ResponseDataEventsInner } from './extract-resources201-response-data-events-inner';
-// May contain unused imports in some cases
-// @ts-ignore
 import { ShipFuel } from './ship-fuel';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -26,26 +23,20 @@ import { ShipNav } from './ship-nav';
 /**
  * 
  * @export
- * @interface NavigateShip200ResponseData
+ * @interface WarpShip200ResponseData
  */
-export interface NavigateShip200ResponseData {
+export interface WarpShip200ResponseData {
     /**
      * 
      * @type {ShipFuel}
-     * @memberof NavigateShip200ResponseData
+     * @memberof WarpShip200ResponseData
      */
     'fuel': ShipFuel;
     /**
      * 
      * @type {ShipNav}
-     * @memberof NavigateShip200ResponseData
+     * @memberof WarpShip200ResponseData
      */
     'nav': ShipNav;
-    /**
-     * 
-     * @type {Array<ExtractResources201ResponseDataEventsInner>}
-     * @memberof NavigateShip200ResponseData
-     */
-    'events': Array<ExtractResources201ResponseDataEventsInner>;
 }
 

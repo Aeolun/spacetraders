@@ -13,39 +13,36 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import { ExtractResources201ResponseDataEventsInner } from './extract-resources201-response-data-events-inner';
-// May contain unused imports in some cases
-// @ts-ignore
-import { ShipFuel } from './ship-fuel';
-// May contain unused imports in some cases
-// @ts-ignore
-import { ShipNav } from './ship-nav';
 
 /**
- * 
+ * Result of a repair transaction.
  * @export
- * @interface NavigateShip200ResponseData
+ * @interface RepairTransaction
  */
-export interface NavigateShip200ResponseData {
+export interface RepairTransaction {
     /**
-     * 
-     * @type {ShipFuel}
-     * @memberof NavigateShip200ResponseData
+     * The symbol of the waypoint.
+     * @type {string}
+     * @memberof RepairTransaction
      */
-    'fuel': ShipFuel;
+    'waypointSymbol': string;
     /**
-     * 
-     * @type {ShipNav}
-     * @memberof NavigateShip200ResponseData
+     * The symbol of the ship.
+     * @type {string}
+     * @memberof RepairTransaction
      */
-    'nav': ShipNav;
+    'shipSymbol': string;
     /**
-     * 
-     * @type {Array<ExtractResources201ResponseDataEventsInner>}
-     * @memberof NavigateShip200ResponseData
+     * The total price of the transaction.
+     * @type {number}
+     * @memberof RepairTransaction
      */
-    'events': Array<ExtractResources201ResponseDataEventsInner>;
+    'totalPrice': number;
+    /**
+     * The timestamp of the transaction.
+     * @type {string}
+     * @memberof RepairTransaction
+     */
+    'timestamp': string;
 }
 
