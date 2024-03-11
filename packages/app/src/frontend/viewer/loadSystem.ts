@@ -185,7 +185,7 @@ export async function loadSystem(systemSymbol: string) {
     Registry.systemObjects[systemSymbol] = []
   }
 
-  if (Registry.transformedSystems[systemSymbol] === false) {
+  if (!Registry.transformedSystems[systemSymbol]) {
     // unloaded while we were waiting for query to return
     return;
   }
@@ -286,12 +286,13 @@ export async function loadSystem(systemSymbol: string) {
   Registry.systemObjects[systemSymbol].push(orbitGraphics)
   Registry.systemObjects[systemSymbol].push(jumpGraphics)
 
-  waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION').forEach(item => {
+  for(const item of waypoints.filter(item => !item.orbitsSymbol && item.type !== 'MOON' && item.type !== 'ORBITAL_STATION')) {
     const itemGroup = createSystemItem({
       waypoint: item,
       star: starData,
     })
-    //
+    Registry.waypoints[item.symbol] = itemGroup
+    Registry.systemObjects[systemSymbol].push(itemGroup)
     const orbitingThings = waypoints.filter(orbitingThing => orbitingThing.orbitsSymbol === item.symbol || (orbitingThing.symbol !== item.symbol && orbitingThing.x == item.x && orbitingThing.y == item.y))
     if (orbitingThings.length > 0) {
       orbitGraphics.circle(item.x*mapScale, item.y*mapScale, 48).stroke({
@@ -299,7 +300,8 @@ export async function loadSystem(systemSymbol: string) {
         color: 0x111111,
       })
     }
-    orbitingThings.forEach((orbitingThing, index) => {
+    for (let index = 0; index < orbitingThings.length; index++) {
+      const orbitingThing = orbitingThings[index]
       const orbitingGroup = createSystemItem({
         star: starData,
         waypoint: orbitingThing,
@@ -310,27 +312,28 @@ export async function loadSystem(systemSymbol: string) {
       Registry.waypoints[orbitingThing.symbol] = orbitingGroup
 
       Registry.systemObjects[systemSymbol].push(orbitingGroup)
-    })
-    //
-    Registry.waypoints[item.symbol] = itemGroup
-
-    Registry.systemObjects[systemSymbol].push(itemGroup)
-  })
-
-  renderUniverseJumpGraphics()
+    }
+  }
 }
 
-export async function unloadSystem(systemSymbol: string) {
+export function unloadSystem(systemSymbol: string) {
   if (!Registry.transformedSystems[systemSymbol]) {
     return;
   }
-  Registry.transformedSystems[systemSymbol] = false
+  delete Registry.transformedSystems[systemSymbol]
 
-  Registry.systemObjects?.[systemSymbol]?.forEach(item => {
-    if (item instanceof UniverseEntity) {
-      item.unload()
-    } else {
-      starsContainer.removeChild(item)
+  if (Registry.systemObjects[systemSymbol]) {
+    console.log(`unloading ${Registry.systemObjects[systemSymbol].length} entities`)
+    for(const item of Registry.systemObjects[systemSymbol]) {
+
+      if (item instanceof UniverseEntity) {
+        console.log('unloading universeentity')
+        item.unload()
+      } else {
+        console.log('unloading sprite', item)
+        starLayer.removeChild(item)
+      }
     }
-  });
+    Registry.systemObjects[systemSymbol] = []
+  }
 }

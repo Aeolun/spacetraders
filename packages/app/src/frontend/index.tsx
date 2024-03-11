@@ -19,6 +19,9 @@ import { NotFound } from "./components/NotFound";
 import { Objectives } from "./components/Objectives";
 import { Ships } from "./components/Ships";
 import { Trades } from "./components/Trades";
+import {SystemMarket} from "@front/components/SystemMarket";
+import { SystemList } from "./components/SystemList";
+import {SystemInfo} from "@front/components/SystemInfo";
 
 if (!localStorage.getItem('agent-token')) {
     const agentToken = prompt('Please enter your agent token')
@@ -44,12 +47,30 @@ const router = createBrowserRouter([
                         element: <Ships />
                     },
                     {
-                        path: '/waypoints',
-                        element: <div>Waypoints</div>
-                    },
-                    {
                         path: '/systems',
-                        element: <div>Systems</div>
+                        children: [
+                            {
+                                index: true,
+                                element: <SystemList />
+                            },
+                            {
+                                path: ':systemSymbol',
+                                children: [
+                                    {
+                                        index: true,
+                                        element: <SystemInfo />
+                                    },
+                                    {
+                                        path: 'market',
+                                        element: <SystemMarket />
+                                    },
+                                    {
+                                        path: 'planet/:id',
+                                        element: <div>Planet</div>
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         path: '/trades',

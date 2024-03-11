@@ -5,6 +5,15 @@ import {prisma, TaskType} from "@common/prisma";
 import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
+
+export const explorePayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  expectedDuration: z.number()
+})
+
 
 export class ExploreTask extends AbstractTask {
   expectedPosition: LocationWithWaypointSpecifier;
@@ -66,6 +75,6 @@ export class ExploreTask extends AbstractTask {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
       expectedDuration: this.expectedDuration
-    });
+    } satisfies z.output<typeof explorePayloadSchema>);
   }
 }

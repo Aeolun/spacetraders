@@ -27,6 +27,7 @@ export const Trades = (props: {}) => {
         <th className={columnStyle.right}>Safe Volume</th>
         <th className={columnStyle.right}>Reservation</th>
         <th className={columnStyle.right}>Total profit (at vol 80)</th>
+        <th className={columnStyle.right}>PPD</th>
       </tr>
       </thead>
       <tbody>
@@ -71,6 +72,7 @@ export const Trades = (props: {}) => {
           <td className={columnStyle.right}>{format.format(objective.amount)}</td>
           <td className={columnStyle.right}>₡ {format.format(objective.reservation)}</td>
           <td className={columnStyle.right}>₡ {format.format(objective.totalProfit)}</td>
+          <td className={columnStyle.right}>₡ {format.format(objective.profitPerDistance)}/d</td>
         </tr>
       }) : null}
       </tbody>

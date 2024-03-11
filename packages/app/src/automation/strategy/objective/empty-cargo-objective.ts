@@ -11,9 +11,9 @@ import {appendTravelTasks} from "@auto/ship/behaviors/atoms/append-travel-tasks"
 
 export class EmptyCargoObjective extends AbstractObjective {
   type: ObjectiveType.EMPTY_CARGO = ObjectiveType.EMPTY_CARGO;
-
-  constructor(public shipSymbol: string) {
+  constructor(public shipSymbol: string, priority = 0) {
     super(`Empty cargo for ${shipSymbol}`, 'self');
+    this.priority = priority;
   }
 
   async onStarted(ship: Ship, executionId: string): Promise<void> {}
@@ -40,12 +40,14 @@ export class EmptyCargoObjective extends AbstractObjective {
         const saleLocations = await queryMarketToSell(Object.keys(ship.currentCargo), ship.currentSystemSymbol)
         const whereToSell = await findPlaceToSellGood(saleLocations, ship.currentWaypoint, ship.currentCargo)
 
+        let lastLocation = await waypointLocationFromSymbol(ship.currentWaypoint.symbol)
         for(const location of whereToSell) {
           const sellLocation = await waypointLocationFromSymbol(location.waypoint.symbol)
-          await appendTravelTasks(ship, sellLocation)
+          await appendTravelTasks(ship, lastLocation, sellLocation)
           for (const good of location.goods) {
             await ship.addTask(new SellTask(sellLocation, good.symbol, good.quantity, 1))
           }
+          lastLocation = sellLocation
         }
       }
     }

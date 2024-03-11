@@ -1,6 +1,6 @@
 import {authedProcedure, publicProcedure, router} from './trpc';
 import z from 'zod'
-import {prisma} from "@common/prisma";
+import {MarketPriceHistory, prisma} from "@common/prisma";
 import { sign, verify } from 'jsonwebtoken';
 import crypto from 'crypto'
 import createApi from "@common/lib/createApi";
@@ -173,12 +173,11 @@ export const appRouter = router({
             }
         });
         const backgroundAgent = await getBackgroundAgent();
-        console.log("credits", backgroundAgent.credits)
-        const moneyImportance = Math.min(5_000_000 / backgroundAgent.credits, 10)
+        const moneyImportance = Math.max(Math.min(5_000_000 / backgroundAgent.credits - 1, 4), 0)
         return findTrades({
             systemSymbols: systems.map(s => s.symbol),
-            dbLimit: 500,
-            resultLimit: 200,
+            dbLimit: 250,
+            resultLimit: 100,
             moneyImportance,
         });
     }),
@@ -481,7 +480,7 @@ export const appRouter = router({
             },
             take: 192 // 2 days = 192 * 15 minutes
         })
-        const trades = await prisma.tradeLog.findMany({
+        const trades = await prisma.ledger.findMany({
             where: {
                 tradeGoodSymbol: input.tradeGood,
                 waypointSymbol: input.waypoint
@@ -508,6 +507,180 @@ export const appRouter = router({
             return b.createdAt.getTime() - a.createdAt.getTime()
         });
         return newData
+    }),
+    getSystemMarketInfoHistory: publicProcedure.input(z.object({
+        systemSymbol: z.string()
+    })).query(async ({input}) => {
+        const nrOfBuckets = 192 // 2 days = 192 * 15 minutes
+        const durationOfBucket = 900000
+        const priceHistory = await prisma.marketPriceHistory.findMany({
+            where: {
+                waypointSymbol: {
+                    startsWith: input.systemSymbol
+                },
+                createdAt: {
+                    gt: new Date(Date.now() - (nrOfBuckets * durationOfBucket))
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+        })
+        const purchases = await prisma.ledger.findMany({
+            where: {
+                waypointSymbol: {
+                    startsWith: input.systemSymbol
+                },
+                createdAt: {
+                    gt: new Date(Date.now() - (nrOfBuckets * durationOfBucket))
+                }
+            }
+        })
+
+        const series: Record<string, Record<string, {
+            avgSell: number,
+            maxSell: number,
+            minSell: number,
+            allSell: number[]
+            avgBuy: number,
+            maxBuy: number,
+            minBuy: number,
+            allBuy: number[],
+            avg: number,
+            purchased: number,
+            sold: number
+        }>> = {}
+        for (const ph of priceHistory) {
+            if (!series[ph.tradeGoodSymbol]) {
+                series[ph.tradeGoodSymbol] = {}
+            }
+            // 15 minute duration bucket
+            const bucket = Math.floor(ph.createdAt.getTime() / durationOfBucket) * durationOfBucket
+            console.log(bucket);
+            if (!series[ph.tradeGoodSymbol][bucket]) {
+                series[ph.tradeGoodSymbol][bucket] = {
+                    avgSell: 0,
+                    maxSell: 0,
+                    minSell: 999999999,
+                    allSell: [],
+                    avgBuy: 0,
+                    maxBuy: 0,
+                    minBuy: 999999999,
+                    allBuy: [],
+                    avg: 0,
+                    purchased: 0,
+                    sold: 0
+                }
+            }
+            if (!series[ph.tradeGoodSymbol][bucket].allSell) {
+                series[ph.tradeGoodSymbol][bucket].allSell = []
+            }
+            if (!series[ph.tradeGoodSymbol][bucket].allBuy) {
+                series[ph.tradeGoodSymbol][bucket].allBuy = []
+            }
+            if (ph.purchasePrice) {
+                series[ph.tradeGoodSymbol][bucket].allBuy.push(ph.purchasePrice)
+                if (ph.purchasePrice > series[ph.tradeGoodSymbol][bucket].maxBuy) {
+                    series[ph.tradeGoodSymbol][bucket].maxBuy = ph.purchasePrice
+                }
+                if (ph.purchasePrice < series[ph.tradeGoodSymbol][bucket].minBuy) {
+                    series[ph.tradeGoodSymbol][bucket].minBuy = ph.purchasePrice
+                }
+                series[ph.tradeGoodSymbol][bucket].avgBuy = series[ph.tradeGoodSymbol][bucket].allBuy.reduce((a, b) => a + b, 0) / series[ph.tradeGoodSymbol][bucket].allBuy.length
+            }
+            if (ph.sellPrice) {
+                series[ph.tradeGoodSymbol][bucket].allSell.push(ph.sellPrice)
+                if (ph.sellPrice > series[ph.tradeGoodSymbol][bucket].maxSell) {
+                    series[ph.tradeGoodSymbol][bucket].maxSell = ph.sellPrice
+                }
+                if (ph.sellPrice < series[ph.tradeGoodSymbol][bucket].minSell) {
+                    series[ph.tradeGoodSymbol][bucket].minSell = ph.sellPrice
+                }
+                series[ph.tradeGoodSymbol][bucket].avgSell = series[ph.tradeGoodSymbol][bucket].allSell.reduce((a, b) => a + b, 0) / series[ph.tradeGoodSymbol][bucket].allSell.length
+            }
+            //avg
+            series[ph.tradeGoodSymbol][bucket].avg = (series[ph.tradeGoodSymbol][bucket].avgSell + series[ph.tradeGoodSymbol][bucket].avgBuy) / 2
+
+        }
+        for(const purchase of purchases) {
+            if (!series[purchase.tradeGoodSymbol]) {
+                series[purchase.tradeGoodSymbol] = {}
+            }
+            const bucket = Math.floor(purchase.createdAt.getTime() / durationOfBucket) * durationOfBucket
+            if (!series[purchase.tradeGoodSymbol][bucket]) {
+                series[purchase.tradeGoodSymbol][bucket] = {
+                    avgSell: 0,
+                    maxSell: 0,
+                    minSell: 999999999,
+                    allSell: [],
+                    avgBuy: 0,
+                    maxBuy: 0,
+                    minBuy: 999999999,
+                    allBuy: [],
+                    avg: 0,
+                    purchased: 0,
+                    sold: 0
+                }
+            }
+            if (purchase.transactionType === 'SELL') {
+                series[purchase.tradeGoodSymbol][bucket].sold += purchase.units
+            } else {
+                series[purchase.tradeGoodSymbol][bucket].purchased += purchase.units
+            }
+        }
+
+        const startBucket = (Math.floor(Date.now() / durationOfBucket) * durationOfBucket)
+
+        const newSeries: Record<string, {
+            date: Date,
+            avgBuy: number
+            maxBuy: number
+            minBuy: number
+            avgSell: number
+            maxSell: number
+            minSell: number
+            avg: number
+            purchased: number
+            sold: number
+        }[]> = {}
+        // convert every series to an array with a date and the values
+        for (const tradeGood in series) {
+
+            const seriesData = []
+            for (let i = nrOfBuckets; i >= 0; i -= 1) {
+                const bucketIdentifier = startBucket - i * durationOfBucket
+                if (series[tradeGood][bucketIdentifier]) {
+                    seriesData.push({
+                        date: new Date(bucketIdentifier),
+                        avg: series[tradeGood][bucketIdentifier].avg,
+                        maxBuy: series[tradeGood][bucketIdentifier].maxBuy,
+                        minBuy: series[tradeGood][bucketIdentifier].minBuy,
+                        avgBuy: series[tradeGood][bucketIdentifier].avgBuy,
+                        maxSell: series[tradeGood][bucketIdentifier].maxSell,
+                        minSell: series[tradeGood][bucketIdentifier].minSell,
+                        avgSell: series[tradeGood][bucketIdentifier].avgSell,
+                        purchased: series[tradeGood][bucketIdentifier].purchased,
+                        sold: series[tradeGood][bucketIdentifier].sold
+                    })
+                } else {
+                    seriesData.push({
+                        date: new Date(bucketIdentifier),
+                        avg: undefined,
+                        maxBuy: undefined,
+                        minBuy: undefined,
+                        avgBuy: undefined,
+                        maxSell: undefined,
+                        minSell: undefined,
+                        avgSell: undefined,
+                        purchased: undefined,
+                        sold: undefined
+                    })
+                }
+            }
+            newSeries[tradeGood] = seriesData
+        }
+
+        return newSeries
     }),
     getSystemMarket: publicProcedure.input(z.object({
         system: z.string()

@@ -175,8 +175,8 @@ export class ObjectivePopulator {
           if (howMany > 0) {
             if (availableMoneyForPurchase > 0) {
               this.orchestrator.addObjectiveIfNotExists(new PurchaseShipObjective(shipType as ShipType, howMany, shipTypeData.cost))
+              availableMoneyForPurchase -= shipTypeData.cost * howMany
             }
-            availableMoneyForPurchase -= shipTypeData.cost * howMany
           }
         }
       }
@@ -184,7 +184,8 @@ export class ObjectivePopulator {
 
     // trade objectives
     if (this.allowedObjectives.includes(ObjectiveType.TRADE)) {
-      const moneyImportance = Math.min(5_000_000 / availableMoneyForPurchase, 4)
+      const moneyImportance = Math.max(Math.min(5_000_000 / agent.credits - 1, 4), 0)
+      console.log(5_000_000, ' / ', agent.credits, ' = ', moneyImportance)
 
       const trades = await findTrades({
         dbLimit: 250,
@@ -224,8 +225,8 @@ export class ObjectivePopulator {
           }
         })
         this.orchestrator.addOrUpdateObjective(new TradeObjective(fromWaypoint, toWaypoint, trade.tradeSymbol, trade.amount, {
-          maximumBuy: trade.purchasePrice*1.2,
-          minimumSell: trade.purchasePrice,
+          maximumBuy: trade.purchasePrice*1.2+20, // care less about fluctuations in cheap stuff
+          minimumSell: Math.max(trade.purchasePrice-20, 0), // care less about fluctuations in cheap stuff
           maxShips: Math.max(Math.floor(trade.amount / 160), 1),
           priority: trade.priority/10,
           creditReservation: trade.reservation
@@ -425,11 +426,18 @@ export class ObjectivePopulator {
             const waypointsToBuy = await queryMarketToBuy([key], constructionSite.system.symbol)
             const placeToBuy = await findPlaceToBuyGood(waypointsToBuy, constructionSite, { [key]: necessaryMaterials[key] })
             if (necessaryMaterials[key] > 0 && placeToBuy[0].goods[0].supply !== "SCARCE" && placeToBuy[0].goods[0].supply !== "LIMITED") {
-              console.log('adding construction objective', constructionSite.symbol, key, necessaryMaterials[key])
-              this.orchestrator.addOrUpdateObjective(new ConstructObjective(constructionSite, key as TradeSymbol, necessaryMaterials[key], {
-                maxShips: Math.max(Math.floor(necessaryMaterials[key] / 80), 1),
-                creditReservation: necessaryMaterials[key] * placeToBuy[0].goods[0].price
-              }))
+
+              const maxShipsBasedOnTradeVolume = Math.max(Math.floor(placeToBuy[0].goods[0].tradeVolume * 3 / 80), 1)
+              const maxShipsBasedOnMoneyAvailableConstruction = Math.floor(availableMoneyForPurchase  / (Math.min(necessaryMaterials[key], 80) * placeToBuy[0].goods[0].pricePerUnit))
+              if (maxShipsBasedOnMoneyAvailableConstruction > 0) {
+                console.log('adding construction objective', constructionSite.symbol, key, 'still needed', necessaryMaterials[key], 'at price', placeToBuy[0].goods[0].pricePerUnit, 'from', placeToBuy[0].waypoint.symbol)
+                this.orchestrator.addOrUpdateObjective(new ConstructObjective(constructionSite, key as TradeSymbol, necessaryMaterials[key], {
+                  maxShips: Math.min(maxShipsBasedOnMoneyAvailableConstruction, maxShipsBasedOnTradeVolume),
+                  creditReservation: Math.min(necessaryMaterials[key], 80) * placeToBuy[0].goods[0].pricePerUnit
+                }))
+              } else {
+                console.log('not enough money to construct', key, 'at', constructionSite.symbol, 'at price', placeToBuy[0].goods[0].pricePerUnit, 'from', placeToBuy[0].waypoint.symbol)
+              }
             }
           }
         }
@@ -448,7 +456,7 @@ export class ObjectivePopulator {
       }
     })
     for (const ship of ships) {
-      this.orchestrator.addObjectiveIfNotExists(new EmptyCargoObjective(ship.symbol))
+      this.orchestrator.addObjectiveIfNotExists(new EmptyCargoObjective(ship.symbol, (ship.cargoCapacity && ship.cargoCapacity >= 40) ? 5 : 0))
     }
 
 
@@ -498,6 +506,7 @@ export class ObjectivePopulator {
         creditReservation: o.creditReservation,
         priority: o.priority,
         maxShips: o.maxShips,
+        requiredShipSymbols: o.requiredShipSymbols,
         isPersistent: o.isPersistent,
         type: o.type
       })),

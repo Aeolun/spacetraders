@@ -43,8 +43,9 @@ export class UpdateMarketDataObjective extends AbstractObjective {
   async onFailed(ship: Ship, error: unknown, executionId: string): Promise<void> {}
 
   async constructTasks(ship: Ship) {
+    const currentLocation = await waypointLocationFromSymbol(ship.currentWaypoint.symbol)
     const updateMarketLocation = await waypointLocationFromSymbol(this.waypoint.symbol)
-    await appendTravelTasks(ship, updateMarketLocation)
+    await appendTravelTasks(ship, currentLocation, updateMarketLocation)
     await ship.addTask(new UpdateMarketTask(this.startingLocation))
   }
 }

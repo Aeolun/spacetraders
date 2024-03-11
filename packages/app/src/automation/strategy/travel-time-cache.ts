@@ -18,10 +18,16 @@ export const TravelTimeCache = {
       return 0
     }
 
-    const result = await defaultSystemWayfinder.findRoute(from.waypoint.symbol, to.waypoint.symbol, {
-      max: fuelCapacity,
-      current: fuelCapacity,
-    });
+    let result;
+    if (fuelCapacity === 0) {
+      result = await defaultSystemWayfinder.findRouteNoFuel(from.waypoint.symbol, to.waypoint.symbol);
+    } else {
+      result = await defaultSystemWayfinder.findRoute(from.waypoint.symbol, to.waypoint.symbol, {
+        max: fuelCapacity,
+        current: fuelCapacity,
+      });
+    }
+
 
     const time = result?.pathProperties.totalConsumed?.[`time${speed}`]
     if (time !== undefined) {

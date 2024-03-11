@@ -7,6 +7,17 @@ import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {Objective} from "@auto/strategy/objective/objective";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
+import axios from "axios";
+
+export const pickupCargoPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  tradeGoods: z.array(z.nativeEnum(TradeSymbol)).optional(),
+  waitForFullCargo: z.boolean().optional()
+})
+
 
 export class PickupCargoTask extends AbstractTask {
   type = TaskType.PICKUP_CARGO;
@@ -49,7 +60,7 @@ export class PickupCargoTask extends AbstractTask {
       for(const otherShip of otherShipsWithCargo) {
         const otherShipObject = orchestrator.getExecutor(otherShip.symbol)
         if (!otherShipObject) {
-          ship.log("Cannot retrieve executor for "+ otherShip.symbol+', retry later')
+          ship.log(`Cannot retrieve executor for ${otherShip.symbol}, retry later`)
           break;
         }
 
@@ -66,7 +77,12 @@ export class PickupCargoTask extends AbstractTask {
             break top;
           }
 
-          await otherShipObject.transferCargo(ship.symbol, tradeSymbol, maxLoadableUnits)
+          try {
+            await otherShipObject.transferCargo(ship.symbol, tradeSymbol, maxLoadableUnits)
+          } catch(e) {
+            ship.log(`Failed to transfer cargo from ${otherShipObject.symbol} to ${ship.symbol}, retry later: ${e.toString()}`, "WARN")
+            break top;
+          }
           await ship.addToCargo(tradeSymbol, maxLoadableUnits)
           ship.log(`Received ${maxLoadableUnits} ${tradeSymbol} from ${otherShipObject.symbol}`)
         }
@@ -81,6 +97,6 @@ export class PickupCargoTask extends AbstractTask {
       expectedPosition: this.expectedPosition,
       tradeGoods: this.tradeGoods,
       waitForFullCargo: this.waitForFullCargo
-    })
+    } satisfies z.output<typeof pickupCargoPayloadSchema>)
   }
 }

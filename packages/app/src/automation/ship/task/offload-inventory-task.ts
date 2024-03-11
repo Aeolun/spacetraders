@@ -9,6 +9,13 @@ import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
 import {craftTravelTasks} from "@auto/ship/behaviors/atoms/craft-travel-tasks";
 import {waypointLocationFromSymbol} from "@auto/ship/behaviors/atoms/waypoint-location-from-symbol";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
+
+export const offloadInventoryPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema
+})
 
 export class OffloadInventoryTask extends AbstractTask {
   type = TaskType.OFFLOAD_INVENTORY;
@@ -25,11 +32,12 @@ export class OffloadInventoryTask extends AbstractTask {
     const saleLocationsInSameSystem = await queryMarketToSell(Object.keys(ship.currentCargo), ship.currentSystemSymbol)
     const whereToSell = await findPlaceToSellGood(saleLocationsInSameSystem, ship.currentWaypoint, ship.currentCargo)
 
+    let lastLocation = await waypointLocationFromSymbol(ship.currentWaypoint.symbol)
     for(const location of whereToSell) {
 
       const target = await waypointLocationFromSymbol(location.waypoint.symbol);
 
-      const travelTasks = await craftTravelTasks(this.expectedPosition, target, {
+      const travelTasks = await craftTravelTasks(lastLocation, target, {
         maxFuel: ship.maxFuel,
         currentFuel: ship.fuel,
         speed: ship.engineSpeed,
@@ -40,12 +48,13 @@ export class OffloadInventoryTask extends AbstractTask {
       for (const good of location.goods) {
         await ship.addTask(new SellTask(target, good.symbol, good.quantity, 1))
       }
+      lastLocation = target
     }
   }
 
   serialize(): string {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
-    })
+    } satisfies z.output<typeof offloadInventoryPayloadSchema>)
   }
 }

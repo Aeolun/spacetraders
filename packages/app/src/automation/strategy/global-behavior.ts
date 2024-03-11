@@ -37,6 +37,8 @@ async function checkStage(agent: Agent, homeSystem: System) {
     stage = 2;
   } else if (ships.filter(s => s.frameSymbol === 'FRAME_LIGHT_FREIGHTER').length < 16) {
     stage = 3;
+  } else if (agent.credits > 20_000_000) {
+    stage = 5;
   } else {
     stage = 4;
   }
@@ -46,6 +48,11 @@ async function checkStage(agent: Agent, homeSystem: System) {
 
 export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task, Objective>, taskPopulator: ObjectivePopulator, api: APIInstance) {
   let agent = await getBackgroundAgent();
+
+  // set this to prevent ships from immediately drifting on bootup (drift automatically happens for all travel when
+  // CURRENT_CREDITS is less than 5000)
+  const availableMoneyForGoals = Math.max(agent.credits, 0);
+  StrategySettings.CURRENT_CREDITS = availableMoneyForGoals
 
   if (!agent.headquartersSymbol) {
     throw new Error("Agent does not have headquarters symbol")
@@ -66,7 +73,9 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task, 
   taskPopulator.addAllowedSystem(homeSystem.symbol)
 
   console.log("Loading route planner starting from home system")
+  const start = Date.now()
   await defaultSystemWayfinder.loadSystemFromDb(homeSystem.symbol)
+  console.log("Loaded route planner in", Date.now() - start, "ms")
   console.log("Populating first objectives")
   await taskPopulator.populateObjectives()
   console.log("Starting ship behavior")
@@ -151,6 +160,20 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task, 
       taskPopulator.addPossibleObjective(ObjectiveType.SURVEY)
       StrategySettings.MAX_HAULERS_PER_SPOT = 3
       StrategySettings.MAX_HAULERS = 26
+      StrategySettings.MULTISYSTEM = true
+    } else if (stage === 5) {
+      taskPopulator.removePossibleObjective(ObjectiveType.EXPLORE)
+      taskPopulator.addPossibleObjective(ObjectiveType.CONSTRUCT)
+      taskPopulator.addPossibleObjective(ObjectiveType.PICKUP_CARGO)
+      taskPopulator.addPossibleObjective(ObjectiveType.UPDATE_MARKET)
+      taskPopulator.addPossibleObjective(ObjectiveType.PURCHASE_SHIP)
+      taskPopulator.addPossibleObjective(ObjectiveType.TRADE);
+      taskPopulator.addPossibleObjective(ObjectiveType.MINE)
+      taskPopulator.addPossibleObjective(ObjectiveType.SIPHON)
+      taskPopulator.addPossibleObjective(ObjectiveType.SURVEY)
+      StrategySettings.MAX_HAULERS_PER_SPOT = 3
+      StrategySettings.MAX_HAULERS = 50
+
       StrategySettings.MULTISYSTEM = true
     }
 

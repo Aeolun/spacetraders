@@ -54,6 +54,7 @@ export const createUIElements = (app: Application) => {
 
     starLayer = new Container()
     starLayer.label = 'stars'
+    starLayer.enableRenderGroup()
     universeView.addChild(starLayer)
 
     shipLayer = new Container()
@@ -62,10 +63,12 @@ export const createUIElements = (app: Application) => {
 
     iconLayer = new Container()
     iconLayer.label = 'icons'
+    iconLayer.enableRenderGroup()
     universeView.addChild(iconLayer)
 
     labelLayer = new Container()
     labelLayer.label = 'labels'
+    labelLayer.enableRenderGroup()
     universeView.addChild(labelLayer)
 
     const influenceGraphics = new Graphics()

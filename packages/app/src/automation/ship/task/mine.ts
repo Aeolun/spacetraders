@@ -3,7 +3,14 @@ import {prisma, TaskType} from "@common/prisma";
 
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import { z } from "zod";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
 
+export const minePayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  units: z.number(),
+})
 export class MineTask extends AbstractTask {
   type = TaskType.MINE;
   expectedPosition: LocationWithWaypointSpecifier
@@ -94,6 +101,6 @@ export class MineTask extends AbstractTask {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
       units: this.units,
-    })
+    } satisfies z.output<typeof minePayloadSchema>)
   }
 }

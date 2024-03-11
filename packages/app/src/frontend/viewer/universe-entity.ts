@@ -1,8 +1,6 @@
 import {Container, FederatedPointerEvent, Graphics, PointData, Rectangle, Sprite, Text, Texture} from "pixi.js";
 import {loadedAssets} from "@front/viewer/assets";
 import {getCenterPivot} from "@front/viewer/lib/get-center-pivot";
-import {getSelectedEntity, Registry} from "@front/viewer/registry";
-import {getDistance} from "@common/lib/getDistance";
 import {iconLayer, labelLayer, starLayer, starsContainer} from "@front/viewer/UIElements";
 
 let traitTextures;
@@ -27,6 +25,8 @@ export class UniverseEntity {
   protected iconLayerObject = new Container()
   protected labelLayerObject = new Container()
 
+  private spriteLayer: Container
+
   __entity = 'universe-object'
   shape = 'circle'
   sprite: Sprite
@@ -37,8 +37,8 @@ export class UniverseEntity {
   scaleFactor = 1
 
   constructor(private properties: UniverseEntityProperties) {
-
-    (properties.spriteLayer ?? starLayer).addChild(this.starLayerObject)
+    this.spriteLayer = properties.spriteLayer ?? starLayer
+    this.spriteLayer.addChild(this.starLayerObject)
     iconLayer.addChild(this.iconLayerObject)
     labelLayer.addChild(this.labelLayerObject)
 
@@ -191,7 +191,7 @@ export class UniverseEntity {
   }
 
   public unload() {
-    starsContainer.removeChild(this.starLayerObject)
+    this.spriteLayer.removeChild(this.starLayerObject)
     iconLayer.removeChild(this.iconLayerObject)
     labelLayer.removeChild(this.labelLayerObject)
   }

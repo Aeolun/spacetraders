@@ -1,17 +1,17 @@
 import {loadAssets} from "@front/viewer/assets";
 import {Application, Text, Ticker} from "pixi.js";
-import {createUIElements, universeView} from "@front/viewer/UIElements";
+import {createUIElements, starLayer, universeView} from "@front/viewer/UIElements";
 import {
   hideStar,
   hideUnverseJumpGraphics,
-  loadUniverse,
+  loadUniverse, renderUniverseJumpGraphics,
   showStar,
-  showUnverseJumpGraphics
+  showUnverseJumpGraphics, universeJumpGraphics
 } from "@front/viewer/loadUniverse";
 import {loadPlayerData} from "@front/viewer/loadPlayerData";
 import {Registry} from "@front/viewer/registry";
 import {loadSystem, unloadSystem} from "@front/viewer/loadSystem";
-import {mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
+import {backgroundGraphicsScale, mapScale, systemDistanceMultiplier} from "@front/viewer/consts";
 import {countShipWaypoints, positionShip, positionShips, resetShipWaypoints} from "@front/viewer/positionShips";
 import { trpc } from "@front/trpc";
 import {UniverseEntity} from "@front/viewer/universe-entity";
@@ -21,6 +21,7 @@ import {agentActions} from "@front/ui/slices/agent";
 import {shipActions} from "@front/ui/slices/ship";
 
 let mapmoveTimeout: NodeJS.Timeout | undefined
+const windowOffset = 40
 export const handleMapMove = () => {
   if (mapmoveTimeout) {
     clearTimeout(mapmoveTimeout)
@@ -32,10 +33,10 @@ export const handleMapMove = () => {
     let showDetailedSystems = false
     let starDisplay: 'graphics' | 'textures'
 
-    if (zoom > 300) {
+    if (zoom > 3000) {
       starDisplay = 'graphics'
       showDetailedSystems = false
-    } else if (zoom <= 300 && zoom > 40) {
+    } else if (zoom <= 3000 && zoom > 40) {
       starDisplay = 'textures'
       showDetailedSystems = false
     } else {
@@ -45,10 +46,19 @@ export const handleMapMove = () => {
 
     if (showDetailedSystems) {
       console.log(`checking systems between x ${universeView.worldTransform.tx} and ${universeView.worldTransform.tx + universeView.worldScreenWidth}, y ${universeView.worldTransform.ty} and ${universeView.worldTransform.ty + universeView.worldScreenHeight}`)
+      const allInRange = []
       for (const system of Object.values(Registry.systemData)) {
-        if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
-          hideStar(system.symbol)
+        if (system.x < universeView.right / mapScale / systemDistanceMultiplier + windowOffset && system.x > universeView.left / mapScale / systemDistanceMultiplier - windowOffset && system.y < universeView.bottom / mapScale / systemDistanceMultiplier + windowOffset && system.y > universeView.top / mapScale / systemDistanceMultiplier - 800) {
+          allInRange.push(system.symbol)
+          showStar(system.symbol)
           loadSystem(system.symbol)
+        }
+      }
+      console.log("all in range", allInRange)
+      for (const systemKey of Object.keys(Registry.transformedSystems)) {
+        if (allInRange.indexOf(systemKey) === -1) {
+          console.log('supposed to unload', systemKey)
+          unloadSystem(systemKey)
         }
       }
       hideUnverseJumpGraphics()
@@ -56,18 +66,19 @@ export const handleMapMove = () => {
       console.log(`zoomed out too far to load systems, just show stars`)
       for (const systemKey of Object.keys(Registry.transformedSystems)) {
         if (Registry.transformedSystems[systemKey]) {
+          console.log('supposed to unload', systemKey)
           unloadSystem(systemKey)
         }
       }
       showUnverseJumpGraphics()
 
       for (const system of Object.values(Registry.systemData)) {
-        if (system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
+        if (starDisplay === 'textures' && system.x < universeView.right / mapScale / systemDistanceMultiplier && system.x > universeView.left / mapScale / systemDistanceMultiplier && system.y < universeView.bottom / mapScale / systemDistanceMultiplier && system.y > universeView.top / mapScale / systemDistanceMultiplier) {
           showStar(system.symbol)
-          const starEntity = Registry.systems[system.symbol]
-          if (starEntity) {
-            starEntity.displaySimple = starDisplay === 'graphics'
-          }
+          // const starEntity = Registry.systems[system.symbol]
+          // if (starEntity) {
+          //   starEntity.displaySimple = starDisplay === 'graphics'
+          // }
         } else {
           hideStar(system.symbol)
         }
@@ -85,11 +96,6 @@ export async function initialize(app: Application) {
       fill: 0xffffff
     }})
   txt.zIndex = 1000
-  app.ticker.add((ticker) => {
-    const zoom = universeView.worldScreenWidth / universeView.screenWidth
-
-    txt.text = `fps: ${ticker.FPS.toFixed(0)}, zoom: ${zoom.toFixed(2)}`
-  })
   Ticker.shared.speed = 2
   app.ticker.minFPS = 40
   app.ticker.maxFPS = 120
@@ -111,10 +117,15 @@ export async function initialize(app: Application) {
 
   // ticker to size universe objects
   app.ticker.add((dat) => {
+    const startTime = Date.now()
     const sizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 100), 0.3)
     const systemSizeMultiplier = Math.max(Math.min(universeView.worldScreenWidth / universeView.screenWidth, 5), 0.7)
     const shipSizeMultiplier = universeView.worldScreenWidth / universeView.screenWidth
 
+
+    if (universeJumpGraphics) {
+      universeJumpGraphics.scale = {x: mapScale * systemDistanceMultiplier * backgroundGraphicsScale, y: mapScale * systemDistanceMultiplier*backgroundGraphicsScale}
+    }
     for (const ref of Object.values(Registry.systems)) {
       if (ref) {
         ref.scale = {x: sizeMultiplier, y: sizeMultiplier}
@@ -160,7 +171,14 @@ export async function initialize(app: Application) {
         }
       }
     }
+    const timeRan = Date.now() - startTime
+    const zoom = universeView.worldScreenWidth / universeView.screenWidth
+
+    txt.text = `fps: ${dat.FPS.toFixed(0)}, frametime ${timeRan}, strctrobjs ${starLayer.children.length}, zoom: ${zoom.toFixed(2)}`
   })
+
+  console.log("rendering jump graphics")
+  renderUniverseJumpGraphics()
 
   universeView.on('drag-start', () => {
     store.dispatch(contextMenuActions.close())

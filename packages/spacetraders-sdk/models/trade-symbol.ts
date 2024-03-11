@@ -72,7 +72,6 @@ export const TradeSymbol = {
     Clothing: 'CLOTHING',
     Microprocessors: 'MICROPROCESSORS',
     Plastics: 'PLASTICS',
-    QuantumStabilizers: 'QUANTUM_STABILIZERS',
     Polynucleotides: 'POLYNUCLEOTIDES',
     Biocomposites: 'BIOCOMPOSITES',
     QuantumStabilizers: 'QUANTUM_STABILIZERS',

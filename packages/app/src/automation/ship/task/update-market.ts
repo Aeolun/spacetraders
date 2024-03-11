@@ -4,6 +4,13 @@ import {prisma, TaskType} from "@common/prisma";
 import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
+
+export const updateMarketPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema
+})
 
 export class UpdateMarketTask extends AbstractTask {
   type = TaskType.UPDATE_MARKET;
@@ -56,6 +63,6 @@ export class UpdateMarketTask extends AbstractTask {
   serialize(): string {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
-    });
+    } satisfies z.output<typeof updateMarketPayloadSchema>);
   }
 }

@@ -33,7 +33,7 @@ export interface Registry {
 
     // references to all the visible nodes
     transformedSystems: Record<string, boolean>
-    systemObjects: Record<string, Container[]>
+    systemObjects: Record<string, (Container | UniverseEntity)[]>
     systems: Record<string, UniverseEntity>
     universeShips: Record<string, UniverseShip>
     waypoints: Record<string, UniverseEntity>

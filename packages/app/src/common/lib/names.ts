@@ -60,7 +60,7 @@ export const generateShipName = async (ship: Ship) =>
     messages: [
       {
         "role": "system",
-        "content": "You are a spaceship of the Culture. Previous ships have give themselves names such as:\n\nHand Me The Gun And Ask Me Again\nZero Credibility\nFixed Grin\nCharming But Irrational\nSo Much For Subtlety\nExperiencing A Significant Gravitas Shortfall\nDangerous But Not Unbearably So\nDisastrously Varied Mental Model\nDazzling So Beautiful Yet So Terrifying\nAm I really that Transhuman\nLove and Sex Are A Mercy Clause\n\nThe names your compatriots take are often witty, ironic or both. Ships generally try to avoid taking a name that another ship has already taken."
+        "content": "You are a spaceship of the Culture. Previous ships have give themselves names such as:\n\n- Hand Me The Gun And Ask Me Again\n- Zero Credibility\n- Fixed Grin\n- Charming But Irrational\n- So Much For Subtlety\n- Experiencing A Significant Gravitas Shortfall\n- Dangerous But Not Unbearably So\n- Disastrously Varied Mental Model\n- Dazzling So Beautiful Yet So Terrifying\n- Am I really that Transhuman\n- Love and Sex Are A Mercy Clause\n\nThe names your compatriots take are often witty, ironic or both. Ships generally try to avoid taking a name that another ship has already taken."
       },
       {
         "role": "user",
@@ -68,7 +68,7 @@ export const generateShipName = async (ship: Ship) =>
       },
       {
         "role": "user",
-        "content": `You are asked to give your name. You are a ${ship.frameSymbol}. Your role is ${ship.role}. Please call the function with your desired name.`
+        "content": `You are asked to give your name. Your frame is a ${ship.frameSymbol}. Your role is ${ship.role}. Please call the function with your desired name, do not include your frame or role.`
       }
     ],
     tools: [{

@@ -36,8 +36,8 @@ export const MarketRow = (props: { market: MarketPrice }) => {
             <div></div>
             <div>{dateData.getDate() + ' ' + dateData.toLocaleTimeString()}</div>
             <div><img src={'textures/icons/' + history.kind + '.png'} title={history.kind} alt={history.kind}/></div>
-            <div><img src={'textures/icons/' + history.supply + '.png'} title={history.supply?.toString()}
-                      alt={history.supply?.toString()}/></div>
+            <div>{history.supply ? <img src={'textures/icons/' + history.supply + '.png'} title={history.supply?.toString()}
+                      alt={history.supply?.toString()}/> : null }</div>
             <div>{history.activityLevel ?
               <img src={'textures/icons/' + history.activityLevel + '.png'} title={history.activityLevel}
                    alt={history.activityLevel}/> : null}</div>
@@ -51,7 +51,7 @@ export const MarketRow = (props: { market: MarketPrice }) => {
             <div>{dateData.getDate() + ' ' + dateData.toLocaleTimeString()}</div>
             <div style={{
               gridColumn: '3 / span 6'
-            }}>{history.purchasePrice ? 'BUY' : "SELL"} x{history.sellVolume ?? history.purchaseVolume} @{history.purchasePrice ?? history.sellPrice}</div>
+            }}>{history.transactionType} x{history.units} @{history.pricePerUnit}</div>
           </div>
         }
       })}

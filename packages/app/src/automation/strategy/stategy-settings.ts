@@ -3,7 +3,8 @@ export class StrategySettings {
   static CURRENT_CREDITS = 0
   static USE_WARP = false
   static MAX_SATELLITES = 26
-  static MAX_HAULERS_PER_SPOT = 1
+  // max haulers of 2 means a ship can be assigned to keep transporting the same stuff back and forth
+  static MAX_HAULERS_PER_SPOT = 2
   static MAX_HAULERS = 16
   static MAX_MINING_DRONES = 16
   static MAX_SURVEYORS = 4

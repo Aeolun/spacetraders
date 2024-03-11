@@ -4,6 +4,14 @@ import {prisma, TaskType} from "@common/prisma";
 
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+
+export const constructPayloadSchema = z.object({
+  destination: LocationWithWaypointSpecifierSchema,
+  tradeSymbol: z.nativeEnum(TradeSymbol),
+  units: z.number(),
+})
 
 export class ConstructTask extends AbstractTask {
   destination: LocationWithWaypointSpecifier
@@ -36,6 +44,6 @@ export class ConstructTask extends AbstractTask {
       destination: this.destination,
       tradeSymbol: this.tradeSymbol,
       units: this.units,
-    })
+    } satisfies z.output<typeof constructPayloadSchema>)
   }
 }

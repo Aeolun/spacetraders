@@ -6,7 +6,15 @@ import {ShipType} from "spacetraders-sdk";
 import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
 
+export const purchaseShipPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  shipSymbol: z.nativeEnum(ShipType),
+  amount: z.number(),
+})
 export class PurchaseShipTask extends AbstractTask {
   type = TaskType.PURCHASE_SHIP;
   expectedPosition: LocationWithWaypointSpecifier
@@ -36,6 +44,6 @@ export class PurchaseShipTask extends AbstractTask {
       shipSymbol: this.shipSymbol,
       amount: this.amount,
       expectedPosition: this.expectedPosition,
-    });
+    } satisfies z.output<typeof purchaseShipPayloadSchema>);
   }
 }

@@ -44,6 +44,11 @@ export const defaultCellStyle = style({
   padding: '0.5em',
 });
 
+export const deadShip = style({
+  color: 'red'
+});
+
+
 export const columnStyle = styleVariants({
   default: [defaultCellStyle, style({
     textAlign: 'left'

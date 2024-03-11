@@ -27,7 +27,18 @@ export const Layout = ({ children }: PropsWithChildren) => {
             universeView.zoom(0.5, true)
             universeView.moveCenter(shipLocation.x+150, shipLocation.y)
             shipLocation.select();
-
+          }
+          const system = Registry.systems[e.currentTarget.value]
+          if (system) {
+            universeView.zoom(0.5, true)
+            universeView.moveCenter(system.x + 150, system.y)
+            system.select();
+          }
+          const waypoint = Registry.waypoints[e.currentTarget.value]
+          if (waypoint) {
+            universeView.zoom(0.5, true)
+            universeView.moveCenter(waypoint.x + 150, waypoint.y)
+            waypoint.select();
           }
         }
       }} /></div>

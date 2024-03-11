@@ -11,14 +11,18 @@ interface TickAssignmentInfo {
 		travelTime: number;
 		readyTime: number;
 	}[]>;
+	objectiveState: Record<string, 'no executors' | 'no credits' | 'ok'>
 }
+
+export type ObjectiveData = ReturnType<(typeof Orchestrator)["getObjectiveData"]>
 
 export class Orchestrator<
 	E extends TaskExecutor<TT, OT>,
 	TT extends TaskInterface<E>,
 	OT extends ObjectiveInterface,
 > {
-	private objectives: Record<string, OT> = {};
+	private availableObjectives: Record<string, OT> = {};
+	private assignedObjectives: Record<string, OT> = {};
 	private executingObjectives: string[] = [];
 	private executorsAssignedToObjective: Record<string, Set<string>> = {};
 	private executors: E[] = [];
@@ -51,7 +55,7 @@ export class Orchestrator<
 	}
 
 	getObjectiveCount() {
-		return Object.keys(this.objectives).length;
+		return Object.keys(this.availableObjectives).length;
 	}
 
 	getExecutingObjectiveCount() {
@@ -67,12 +71,13 @@ export class Orchestrator<
 	}
 
 	public getObjectives() {
-		return this.objectives;
+		return this.availableObjectives;
 	}
 
 	public getObjectiveData() {
 		return {
-			objectiveIds: Object.keys(this.objectives),
+			availableObjectives: Object.keys(this.availableObjectives),
+			assignedObjectives: Object.keys(this.assignedObjectives),
 			executingObjectives: this.executingObjectives,
 			executorsAssignedToObjective: Object.keys(
 				this.executorsAssignedToObjective,
@@ -83,16 +88,7 @@ export class Orchestrator<
 					executors: Array.from(executors),
 				};
 			}),
-			creditReservationPerObjective: this.objectiveCreditReservations.reduce(
-				(acc, cur) => {
-					if (!acc[cur.objective]) {
-						acc[cur.objective] = 0;
-					}
-					acc[cur.objective] += cur.creditReservation;
-					return acc;
-				},
-				{} as Record<string, number>,
-			),
+			creditReservationPerObjective: this.objectiveCreditReservations,
 			lastTickAssignmentInfo: this.lastTickAssignmentInfo,
 		};
 	}
@@ -106,10 +102,10 @@ export class Orchestrator<
 	}
 
 	addObjectiveIfNotExists(task: OT) {
-		if (this.objectives[task.objective] || !this.canAddObjective(task)) {
+		if (this.availableObjectives[task.objective] || !this.canAddObjective(task)) {
 			return;
 		}
-		this.objectives[task.objective] = task;
+		this.availableObjectives[task.objective] = task;
 	}
 
 	private debug(data: string) {
@@ -119,10 +115,10 @@ export class Orchestrator<
 	}
 
 	removeObjectivesOfType(type: OT["type"]) {
-		for (const objectiveKey in this.objectives) {
-			const o = this.objectives[objectiveKey];
+		for (const objectiveKey in this.availableObjectives) {
+			const o = this.availableObjectives[objectiveKey];
 			if (o.type === type) {
-				delete this.objectives[objectiveKey];
+				delete this.availableObjectives[objectiveKey];
 			}
 		}
 	}
@@ -132,7 +128,7 @@ export class Orchestrator<
 			return;
 		}
 
-		this.objectives[task.objective] = task;
+		this.availableObjectives[task.objective] = task;
 	}
 
 	getExecutor(symbol: string) {
@@ -145,7 +141,7 @@ export class Orchestrator<
 
 	public getAllSortedObjectives() {
 		const availableCredits = this.availableCredits - this.creditsReserved;
-		const shipObjectives = Object.values(this.objectives)
+		const shipObjectives = Object.values(this.availableObjectives)
 			.filter(
 				(o: OT) =>
 					!this.executorsAssignedToObjective[o.objective] ||
@@ -204,14 +200,19 @@ export class Orchestrator<
 	}
 
 	async removeObjectiveIfNecessary(newObjective: OT) {
+		// Cannot remove objectives because task creation relies on the objective being present
+		// it should not matter since the orchestrator will not assign objectives when all spots are taken anyway
+
 		if (
 			!newObjective.isPersistent &&
 			this.getExecutorsAssignedToObjective(newObjective.objective).length +
 			1 >=
 			newObjective.maxShips
 		) {
+			// store so the data on the objective does not get lost
+			this.assignedObjectives[newObjective.objective] = this.availableObjectives[newObjective.objective];
 			// remove from available objectives
-			delete this.objectives[newObjective.objective];
+			delete this.availableObjectives[newObjective.objective];
 		}
 	}
 
@@ -290,7 +291,7 @@ export class Orchestrator<
 	}
 
 	private getObjectiveFromId(objective: string) {
-		return this.objectives[objective]
+		return this.availableObjectives[objective] ?? this.assignedObjectives[objective];
 	}
 
 	public async cancelObjectiveAssignment(executorSymbol: string, objective: string) {
@@ -311,8 +312,10 @@ export class Orchestrator<
 
 	async tick() {
 		const newAssignmentInfo: TickAssignmentInfo = {
-			executorsConsideredForObjective: {}
+			executorsConsideredForObjective: {},
+			objectiveState: {}
 		}
+		let executorsConsidered = false;
 		// assign open executors to open objectives
 		const assignableObjectives = this.getAllSortedObjectives()
 		console.log(`Finding executors for ${assignableObjectives.length} assignable objectives`)
@@ -322,11 +325,14 @@ export class Orchestrator<
 			newAssignmentInfo.executorsConsideredForObjective[objective.objective] = []
 
 			if (potentialExecutors.length === 0) {
+				console.log(`No executors for ${objective.objective}, skipping`)
+				newAssignmentInfo.objectiveState[objective.objective] = 'no executors'
 				continue;
 			}
 
-			if (this.getReservedCredits() + objective.creditReservation > this.availableCredits) {
+			if (objective.creditReservation > 0 && this.getReservedCredits() + objective.creditReservation > this.availableCredits) {
 				console.log(`Not enough credits to assign ${objective.objective} (any more), skipping`)
+				newAssignmentInfo.objectiveState[objective.objective] = 'no credits'
 				continue;
 			}
 
@@ -352,6 +358,7 @@ export class Orchestrator<
 				travelTime: travelTime[e.symbol],
 				readyTime: e.getExpectedFreeTime() + travelTime[e.symbol]
 			}))
+			executorsConsidered = true
 
 			console.log(`Potential executors for ${objective.objective}: ${potentialExecutors.map(e => `${e.symbol} (${e.getExpectedFreeTime()}s till free, ${travelTime[e.symbol]}s till start)`)}`)
 
@@ -362,6 +369,7 @@ export class Orchestrator<
 				}
 
 				console.log(`Assigning ${potentialExecutor.symbol} to ${objective.objective}`)
+				newAssignmentInfo.objectiveState[objective.objective] = 'ok'
 
 				if (potentialExecutor.currentObjective) {
 					console.log(`Setting ${potentialExecutor.symbol} next objective to ${objective.objective}`)
@@ -392,20 +400,13 @@ export class Orchestrator<
 			}
 		}
 
-		this.lastTickAssignmentInfo = newAssignmentInfo;
+		if (executorsConsidered) {
+			this.lastTickAssignmentInfo = newAssignmentInfo;
+		}
 	}
 
 	async tickExecutor(executor: E) {
 		let nextTask: TT | undefined;
-		if (executor.symbol === 'PHANTASM-4A') {
-			console.log(`Tick for ${executor.symbol}`, {
-				currentObjective: executor.currentObjective,
-				currentObjectiveExecutionId: executor.currentExecutionId,
-				nextObjective: executor.nextObjective,
-				nextObjectiveExecutionId: executor.nextExecutionId,
-				taskQueueLength: executor.taskQueueLength,
-			});
-		}
 		if (executor.taskQueueLength > 0) {
 			nextTask = await executor.getNextTask();
 			if (nextTask) {
@@ -427,6 +428,7 @@ export class Orchestrator<
 					if (executor.currentObjective && executor.currentExecutionId) {
 						await executor.onObjectiveFailed(e, executor.currentExecutionId);
 					}
+					return;
 				}
 			}
 
@@ -439,10 +441,11 @@ export class Orchestrator<
 					this.removeCreditsReserved(executor.currentExecutionId);
 					await executor.onObjectiveCompleted(executor.currentExecutionId);
 				} else {
+					// the return statement in the catch block above should have prevented this
 					throw new Error("Completed objective without execution ID, stop the world!")
 				}
 			}
-		} else if (executor.currentObjective && executor.currentExecutionId && executor.taskQueueLength === 0) {
+		} else if (executor.currentObjective) {
 			// objective assigned but tasks not added yet
 			const nextObjective = this.getObjectiveFromId(executor.currentObjective);
 			if (nextObjective) {
@@ -464,26 +467,48 @@ export class Orchestrator<
 				}
 			} else {
 				this.debug(`objective ${executor.currentObjective} that executor ${executor.symbol} wants to start does not exist, and no existing tasks, clear objective`)
+				await this.removeCreditsReserved(executor.currentExecutionId);
+				if (executor.nextExecutionId) {
+					await this.removeCreditsReserved(executor.nextExecutionId);
+				}
 				await this.removeShipWorkingOnObjective(executor, 'current');
 				await this.removeShipWorkingOnObjective(executor, 'next')
+
 				await executor.clearObjectives();
 
-				await executor.onNothingToDo('objective not found');
+				await executor.onNothingToDo("objective not found");
 			}
-		} else if (!executor.currentObjective && executor.nextObjective) {
+		} else if (executor.nextObjective) {
 			// next objective assigned and just completed previous objective
+			const expectedObjective = executor.nextObjective
 			const nextObjective = this.getObjectiveFromId(executor.nextObjective);
 
 			if (!nextObjective) {
-				this.debug(`no objective for ${executor.symbol}`)
-				return;
+				this.debug(`did not find next objective for ${executor.symbol}: ${executor.nextObjective}`);
+
+				if (Object.keys(this.availableObjectives).length > 0) {
+					if (executor.currentExecutionId) {
+						await this.removeCreditsReserved(executor.currentExecutionId)
+					}
+					if (executor.nextExecutionId) {
+						await this.removeCreditsReserved(executor.nextExecutionId)
+					}
+
+					await this.removeShipWorkingOnObjective(executor, 'next')
+					await executor.clearObjectives()
+
+					await executor.onNothingToDo(`did not find next objective: ${expectedObjective}, cleared schedule`)
+				} else {
+					await executor.onNothingToDo(`did not find next objective: ${expectedObjective}`);
+				}
 			}
 
 			await executor.onStartNextObjective()
 		} else {
-			let failureMode = 'no objectives'
+			let failureMode = `no objectives cur ${executor.currentObjective} and next ${executor.nextObjective} found, no tasks in queue`
 			if (!executor.currentObjective && executor.currentExecutionId) {
-				failureMode = 'inconsistent execution id and objective'
+				failureMode = `inconsistent execution id ${executor.currentExecutionId} and objective`
+				await this.removeCreditsReserved(executor.currentExecutionId)
 				await this.removeShipWorkingOnObjective(executor, 'current')
 				await this.removeShipWorkingOnObjective(executor, 'next')
 				await executor.clearObjectives()
@@ -493,7 +518,8 @@ export class Orchestrator<
 				await this.removeShipWorkingOnObjective(executor, 'next')
 				await executor.clearObjectives()
 			} else if (!executor.nextObjective && executor.nextExecutionId) {
-				failureMode = 'inconsistent next execution id and objective'
+				failureMode = `inconsistent next execution id ${executor.nextExecutionId} and objective`
+				await this.removeCreditsReserved(executor.nextExecutionId)
 				await this.removeShipWorkingOnObjective(executor, 'current')
 				await this.removeShipWorkingOnObjective(executor, 'next')
 				await executor.clearObjectives()
@@ -569,12 +595,21 @@ export class Orchestrator<
 		}, 1000);
 		while (true) {
 			eventsInLastSecond++;
-			if (eventsInLastSecond > 3) {
+			if (eventsInLastSecond > 10) {
 				console.error(`Too many events (${eventsInLastSecond}) in last second, breaking circuit for executor ${executor.symbol}. This is a fatal error.`)
 				process.exit(1)
 			}
 
-			await this.tickExecutor(executor);
+			try {
+				await this.tickExecutor(executor);
+			} catch(error) {
+				if (error instanceof Error) {
+					await executor.onExecutorException(error)
+				} else {
+					this.debug(error?.toString() ?? "Unknown error")
+				}
+				break;
+			}
 		}
 	}
 }

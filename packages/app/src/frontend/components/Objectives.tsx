@@ -1,10 +1,11 @@
 import {trpcReact} from "@front/trpc";
 import {columnStyle, dataTable, pageColumn, rowStyle} from "@front/styles/app.css";
 import {format} from "@common/lib/format";
+import type {ObjectiveData} from "@auto/strategy/orchestrator";
 
 export const Objectives = (props: {}) => {
   const objectives = trpcReact.getObjectives.useQuery()
-  const objectiveData = objectives?.data?.objectiveData
+  const objectiveData: ObjectiveData = objectives?.data?.objectiveData
 
   let sortedObjectives: { objective: string; creditReservation: number; priority: number; isPersistent?: boolean; type?: string; maxShips?: number, exists?: boolean }[] = []
   if (objectives.data) {
@@ -45,12 +46,12 @@ export const Objectives = (props: {}) => {
         return <tr className={rowStyle[objective.exists === false ? 'nonexistent' : 'default']}>
           <td className={columnStyle.default}>{Math.round(objective.priority * 100) / 100}</td>
           <td className={columnStyle.default}>{objective.type} {objective.isPersistent ? '(P)' : ''}</td>
-          <td className={columnStyle.default}>{objective.objective}</td>
+          <td className={columnStyle.default}>{objective.objective}{objectiveData.assignedObjectives.includes(objective.objective) ? ' (can start)' : null}</td>
           <td
             className={columnStyle.default}>{objectiveData.executingObjectives.includes(objective.objective) ? 'Yes' : 'No'}</td>
           <td
             className={columnStyle.default}>{objectiveData.executorsAssignedToObjective?.find(o => o.objective === objective.objective)?.executors.length ?? 0} / {objective.maxShips ?? 1}</td>
-          <td className={columnStyle.right}>{objectiveData.lastTickAssignmentInfo.executorsConsideredForObjective[objective.objective]?.length}</td>
+          <td className={columnStyle.right}>{objectiveData.lastTickAssignmentInfo?.executorsConsideredForObjective[objective.objective]?.length}</td>
           <td className={columnStyle.right}>{objective.creditReservation ? format.format(objective.creditReservation) : undefined}</td>
           <td
             className={columnStyle.default}>{objectiveData.executorsAssignedToObjective?.find(o => o.objective === objective.objective)?.executors.join(', ')}</td>

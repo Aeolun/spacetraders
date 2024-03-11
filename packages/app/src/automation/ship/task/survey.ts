@@ -5,7 +5,14 @@ import {CargoState, prisma, TaskType} from "@common/prisma";
 import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
 
+export const surveyPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  count: z.number(),
+})
 export class SurveyTask extends AbstractTask {
   type = TaskType.SURVEY;
   expectedPosition: LocationWithWaypointSpecifier
@@ -49,6 +56,6 @@ export class SurveyTask extends AbstractTask {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
       count: this.count,
-    })
+    } satisfies z.output<typeof surveyPayloadSchema>)
   }
 }

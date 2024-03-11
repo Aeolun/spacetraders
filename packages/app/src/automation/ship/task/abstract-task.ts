@@ -16,6 +16,4 @@ export abstract class AbstractTask implements TaskInterface<Ship, LocationSpecif
   }
   abstract execute(executor: Ship, orchestrator?: Orchestrator<Ship, TaskInterface, ObjectiveInterface> | undefined): Promise<void>;
   abstract serialize(): string
-
-
 }

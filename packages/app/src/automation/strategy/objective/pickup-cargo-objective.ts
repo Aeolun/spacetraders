@@ -31,6 +31,9 @@ export class PickupCargoObjective extends AbstractObjective {
         y: waypoint.y,
       }
     });
+    if (properties?.maxShips) {
+      this.maxShips = properties.maxShips
+    }
   }
 
   async onStarted(ship: Ship, executionId: string): Promise<void> {}
@@ -42,8 +45,9 @@ export class PickupCargoObjective extends AbstractObjective {
   }
 
   async constructTasks(ship: Ship): Promise<void> {
+    const currentLocation = await waypointLocationFromSymbol(ship.currentWaypoint.symbol)
     const pickupLocation = await waypointLocationFromSymbol(this.waypoint.symbol)
-    await appendTravelTasks(ship, pickupLocation)
+    await appendTravelTasks(ship, currentLocation, pickupLocation)
     await ship.addTask(new PickupCargoTask(pickupLocation, this.properties?.tradeGoods, this.properties?.waitForFullCargo))
     await ship.addTask(new OffloadInventoryTask({
       expectedPosition: pickupLocation

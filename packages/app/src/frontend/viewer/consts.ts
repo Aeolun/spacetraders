@@ -1,6 +1,8 @@
 export const mapScale = 5;
 export const systemDistanceMultiplier = 25;
 
+export const backgroundGraphicsScale = 50
+
 export let universeCoordinates = {
     minX: 0,
     minY: 0,

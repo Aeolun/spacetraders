@@ -6,6 +6,7 @@ import selectionReducer from './slices/selection';
 import contextMenuReducer from './slices/context-menu';
 import shipReducer from './slices/ship';
 import goodsReducer from './slices/goods';
+import systemReducer from './slices/system';
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     selection: selectionReducer,
     contextMenu: contextMenuReducer,
     ship: shipReducer,
-    goods: goodsReducer
+    goods: goodsReducer,
+    system: systemReducer
   },
 })
 

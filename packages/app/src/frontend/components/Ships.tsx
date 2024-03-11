@@ -1,5 +1,5 @@
 import {trpcReact} from "@front/trpc";
-import {columnStyle, dataTable, pageColumn, rowStyle} from "@front/styles/app.css";
+import {columnStyle, dataTable, pageColumn, rowStyle, deadShip} from "@front/styles/app.css";
 import {useSelector} from "react-redux";
 import {RootState} from "@front/ui/store";
 import Timeago from "react-timeago";
@@ -29,7 +29,7 @@ export const Ships = (props: {}) => {
       }).map(ship => {
         const arrivalTime = ship.arrivalOn ? new Date(ship.arrivalOn).getTime() : null
         return <tr className={rowStyle.default}>
-          <td className={columnStyle.default}>{ship.callsign.substring(0, 40)}</td>
+          <td className={columnStyle.default}>{ship.callsign.substring(0, 40)} {ship.state === 'STUCK' ? <span className={deadShip}>DEAD</span> : null}</td>
           <td className={columnStyle.default}>{ship.symbol}</td>
           <td className={columnStyle.default}>{ship.role}</td>
           <td className={columnStyle.default}>{ship.currentWaypointSymbol}</td>

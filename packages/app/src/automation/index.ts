@@ -167,6 +167,9 @@ const init = async () => {
       return 800+getDistance(ship.currentSystem, objective.startingLocation.system)
     },
     getTravelTime: (ship, from, to) => {
+      if (to === 'self') {
+        return 0;
+      }
       if (validateEngineSpeed(ship.engineSpeed) && isLocationWithWaypoint(from) && isLocationWithWaypoint(to)) {
         return TravelTimeCache.calculate(ship.engineSpeed, ship.maxFuel, from, to)
       }
@@ -174,7 +177,10 @@ const init = async () => {
     },
     objectiveValid: (ship, objective) => {
       const isAtOwnLocation = objective.startingLocation === 'self' || objective.startingLocation.waypoint?.symbol === ship.currentWaypointSymbol
-      if (ship.fuel === 0 && !isAtOwnLocation) {
+      if (ship.fuel === 0 && ship.maxFuel > 0) {
+        if (ship.currentObjective) {
+          ship.clearObjectives()
+        }
         return false;
       }
       return true

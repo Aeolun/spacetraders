@@ -16,6 +16,7 @@ export class ConstructObjective extends AbstractObjective {
   public amount: number
   startingLocation: LocationWithWaypointSpecifier
   priority = 1;
+  isPersistent = true;
   type: ObjectiveType.CONSTRUCT = ObjectiveType.CONSTRUCT;
 
   constructor(private waypoint: Waypoint & { system: { symbol: string, x: number, y: number }}, tradeSymbol: TradeSymbol, amount: number, options: {
@@ -53,17 +54,19 @@ export class ConstructObjective extends AbstractObjective {
   async constructTasks(ship: Ship): Promise<void> {
     const purchaseLocations = await queryMarketToBuy([this.tradeSymbol], this.startingLocation.system.symbol)
     const buyLocation = await findPlaceToBuyGood(purchaseLocations, this.waypoint, {[this.tradeSymbol]: Math.min(ship.maxCargo-ship.cargo, this.amount)})
+    let lastLocation = this.startingLocation
     for(const location of buyLocation) {
       const purchaselocation = await waypointLocationFromSymbol(location.waypoint.symbol)
-      await appendTravelTasks(ship, purchaselocation)
+      await appendTravelTasks(ship, lastLocation, purchaselocation)
       for (const good of location.goods) {
         await ship.addTask(new PurchaseTask(purchaselocation, good.symbol, good.quantity, good.price * 1.4))
       }
+      lastLocation = purchaselocation
     }
 
+    const lastBuyLocation = await waypointLocationFromSymbol(buyLocation[buyLocation.length-1].waypoint.symbol)
     const selllocation = await waypointLocationFromSymbol(this.waypoint.symbol)
-    await appendTravelTasks(ship, selllocation)
+    await appendTravelTasks(ship, lastBuyLocation, selllocation)
     await ship.addTask(new ConstructTask(selllocation, this.tradeSymbol, Math.min(ship.maxCargo-ship.cargo, this.amount)))
-
   }
 }

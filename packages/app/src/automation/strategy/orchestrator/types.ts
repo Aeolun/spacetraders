@@ -32,6 +32,7 @@ export interface TaskExecutor<TaskType extends TaskInterface = TaskInterface, O 
   onObjectiveAssigned(objective: O, executionId: string, which?: 'current' | 'next'): Promise<void>;
   onObjectiveStarted(objective: O, executionId: string): Promise<void>;
   onObjectiveCancelled(which?: 'current' | 'next'): Promise<void>;
+  onExecutorException(error: Error): Promise<void>;
 
   onObjectiveCompleted(executionId: string): Promise<void>;
 

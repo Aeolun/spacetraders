@@ -1,5 +1,5 @@
 import {AbstractObjective, ObjectiveType} from "@auto/strategy/objective/abstract-objective";
-import { Waypoint } from '@common/prisma'
+import {prisma, Waypoint} from '@common/prisma'
 import {TradeSymbol} from "spacetraders-sdk";
 import {getDistance} from "@common/lib/getDistance";
 import {Ship} from "@auto/ship/ship";
@@ -71,22 +71,35 @@ export class TradeObjective extends AbstractObjective {
 
   async constructTasks(ship: Ship): Promise<void> {
     const currentCargo = ship.currentCargo[this.tradeSymbol] ?? 0;
+    const waypoint = await prisma.waypoint.findFirstOrThrow({
+      where: {
+        symbol: this.startingLocation.waypoint.symbol
+      },
+      include: {
+        tradeGoods: true
+      }
+    })
+    const hasFuel = waypoint.tradeGoods.find((tradeGood) => tradeGood.tradeGoodSymbol === 'FUEL')
+    let fuelLeftOver = hasFuel ? ship.maxFuel : ship.fuel
     if (currentCargo < this.amount) {
       const currentLocation = await waypointLocationFromSymbol(ship.currentWaypointSymbol)
+
       const travelTasks = await craftTravelTasks(currentLocation, this.startingLocation, {
         speed: ship.engineSpeed,
         maxFuel: ship.maxFuel,
-        currentFuel: ship.fuel,
+        // if there is fuel available at this waypoint, we refuel before we leave
+        currentFuel: fuelLeftOver,
       })
       for (const task of travelTasks) {
         await ship.addTask(task)
       }
       await ship.addTask(new PurchaseTask(this.startingLocation, this.tradeSymbol, Math.min(ship.maxCargo - ship.cargo, this.amount - currentCargo), this.maxBuy))
+      fuelLeftOver = travelTasks[travelTasks.length - 1]?.fuelAfter ?? ship.fuel
     }
     const tradeTravelTasks = await craftTravelTasks(this.startingLocation, this.toWaypoint, {
       speed: ship.engineSpeed,
       maxFuel: ship.maxFuel,
-      currentFuel: ship.fuel,
+      currentFuel: fuelLeftOver,
     })
     for(const task of tradeTravelTasks) {
       await ship.addTask(task)

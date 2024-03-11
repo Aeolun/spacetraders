@@ -31,5 +31,6 @@ export async function updateCredits() {
   if (agent?.credits) {
     Registry.agent = agent
     store.dispatch(agentActions.setCredits(agent.credits));
+    store.dispatch(agentActions.setHeadquarters(agent.headquartersSymbol));
   }
 }

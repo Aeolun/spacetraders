@@ -119,6 +119,7 @@ left join "JumpDistance" jd on jd."fromSystemSymbol" = s1.symbol and jd."toSyste
 where
 (m2."sellPrice" - m1."purchasePrice") * ${defaultCargoVolume} - ROUND(SQRT(POW(ABS(wp1.x - wp2.x), 2) + POW(ABS(wp1.y - wp2.y), 2))) > ${minProfit}
 and wp1."systemSymbol" IN (${data.systemSymbols.map(s => `'${s}'`).join(', ')}) and wp2."systemSymbol" IN (${data.systemSymbols.map(s => `'${s}'`).join(',')})
+and (m1."purchasePrice" < m2."sellPrice" * 0.75 OR m1."tradeGoodSymbol" LIKE '%_ORE')
 ${data.route ? `and m1."waypointSymbol" = '${data.route.fromWaypointSymbol}' and m2."waypointSymbol" = '${data.route.toWaypointSymbol}'` : ''}
 order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
   const startExecute = Date.now();
@@ -173,9 +174,13 @@ order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
 
     const tradeVolume = Math.min(safeBuyVolume, safeSellVolume)
     const totalProfit = Math.min(tradeVolume, defaultCargoVolume) * trade.perUnitProfit;
-
+    const profitPerDistance = Math.min(defaultCargoVolume, tradeVolume) * trade.perUnitProfit / trade.dis
 
     let priority = priorityLevels[trade.buySupply] + (4 - priorityLevels[trade.sellSupply])
+    // penalize trades where the sale location is restricted due to lack of imports
+    if (trade.buyActivity === 'RESTRICTED' && trade.buySupply !== 'ABUNDANT') {
+      priority = priority - 4;
+    }
     if (trade.sellActivity) {
       // if export is already strong, but missing imports, prioritize it
       const hasStrongExport = suppliedExports.some(e => e.activityLevel === 'STRONG')
@@ -194,6 +199,10 @@ order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
       // exchange market get static bonus of 1
       priority = priority + 1;
     }
+    if (trade.buySupply === "SCARCE" && trade.buyKind === 'EXCHANGE') {
+      // no pulling blood from a stone
+      priority = priority - 4;
+    }
     if (trade.tradeGoodSymbol.includes('_ORE')) {
       // static bonus to prioritize basic materials
       priority = priority + 2;
@@ -203,10 +212,9 @@ order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
     //   priority = priority - 2;
     // }
 
-    priority = priority + (totalProfit / 50000) * moneyImportance;
+    priority = priority + (profitPerDistance / 30) * moneyImportance;
 
-
-    priority -= trade.dis / 200;
+    priority -= trade.dis / 400;
 
     return {
       fromWaypointSymbol: trade.buyAt,
@@ -223,7 +231,7 @@ order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
       reservation: Math.min(trade.sellPrice, Math.round(trade.purchasePrice*1.2)) * defaultCargoVolume,
       unitProfit: trade.perUnitProfit,
       maxProfit: Math.min(defaultCargoVolume, tradeVolume) * trade.perUnitProfit,
-      profitPerDistance: Math.min(defaultCargoVolume, tradeVolume) * trade.perUnitProfit / trade.dis,
+      profitPerDistance,
       dis: trade.dis,
       priority: priority,
       amount: tradeVolume,

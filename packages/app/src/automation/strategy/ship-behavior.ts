@@ -35,7 +35,7 @@ export const startShipBehavior = async (orchestrator: Orchestrator, api: APIInst
       })
 
       orchestrator.addExecutor(ship).catch(error => {
-        console.error("Error during orchestration", error)
+        ship.log(`Error during orchestration, stopping processing for ship: ${error.message}`, "ERROR")
       })
     } else {
       //console.log("Ship already orchestrated", shipData.symbol)

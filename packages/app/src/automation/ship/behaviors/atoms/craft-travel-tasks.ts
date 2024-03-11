@@ -33,7 +33,7 @@ export const craftTravelTasks = async (from: LocationWithWaypointSpecifier, to: 
   }
   //warp to waypoint
 
-  const tasks: Task[] = []
+  const tasks: TravelTask[] = []
   let lastWaypoint: Waypoint & { system: { symbol: string, x: number, y: number }} | null = null
   for(const step of route.finalPath) {
     if (!lastWaypoint) {
@@ -77,6 +77,10 @@ export const craftTravelTasks = async (from: LocationWithWaypointSpecifier, to: 
     const travelMode = step.edge === 'jump' ? 'jump' : step.edge === 'cruise' ? ShipNavFlightMode.Cruise : step.edge === 'burn' ? ShipNavFlightMode.Burn : ShipNavFlightMode.Drift
     const expectedTravelTime = travelMode === 'jump' ? jumpCooldown(getDistance(targetWaypoint, lastWaypoint)) : travelCooldown(getDistance(targetWaypoint, lastWaypoint), travelMode, options.speed)
 
+    if (!expectedTravelTime) {
+      throw new Error(`Could not calculate travel time to ${targetWaypoint.symbol} from ${lastWaypoint.symbol}, with distance ${getDistance(targetWaypoint, lastWaypoint)}, mode ${travelMode} and speed ${options.speed}`)
+    }
+
     const travelTask = new TravelTask({
       waypoint: {
         symbol: targetWaypoint.symbol,
@@ -88,7 +92,7 @@ export const craftTravelTasks = async (from: LocationWithWaypointSpecifier, to: 
         x: targetWaypoint.system.x,
         y: targetWaypoint.system.y
       }
-    }, travelMode, expectedTravelTime)
+    }, travelMode, expectedTravelTime ?? 200, step.supplies?.fuel)
     lastWaypoint = targetWaypoint
 
     tasks.push(travelTask)

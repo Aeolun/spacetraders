@@ -59,18 +59,18 @@ export class ExploreObjective extends AbstractObjective {
     // add tasks to explore all waypoints
     const orderedWaypoints = await getExplorableWaypointsInOrder(ship, this.system)
     // output a map of the exploration route
-    const draw = new canvas.Canvas(1000, 1000)
+    const draw = new canvas.Canvas(1800, 1800)
     const ctx = draw.getContext('2d')
     ctx.fillStyle = '#000000'
-    ctx.fillRect(0, 0, 1000, 1000)
+    ctx.fillRect(0, 0, 1800, 1800)
     ctx.fillStyle = '#ffffff'
     ctx.strokeStyle = '#ffffff'
     ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.moveTo(ship.currentWaypoint.x, ship.currentWaypoint.y)
+    ctx.moveTo(ship.currentWaypoint.x + 900, ship.currentWaypoint.y + 900)
     for (const waypoint of orderedWaypoints) {
       const location = await waypointLocationFromSymbol(waypoint.symbol)
-      ctx.lineTo(location.waypoint.x / 1000, location.waypoint.y / 1000)
+      ctx.lineTo(location.waypoint.x + 900, location.waypoint.y + 900)
       ctx.stroke()
     }
     ctx.closePath()
@@ -88,13 +88,15 @@ export class ExploreObjective extends AbstractObjective {
       return;
     }
 
+    let lastLocation = await waypointLocationFromSymbol(ship.currentWaypoint.symbol)
     for (const waypoint of orderedWaypoints) {
       const exploreLocation = await waypointLocationFromSymbol(waypoint.symbol)
-      await appendTravelTasks(ship, exploreLocation)
+      await appendTravelTasks(ship, lastLocation, exploreLocation)
       await ship.addTask(new ExploreTask({
         expectedPosition: exploreLocation,
         expectedDuration: 3
       }))
+      lastLocation = exploreLocation
     }
   }
 

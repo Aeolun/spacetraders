@@ -17,7 +17,7 @@ import {
 import {
   returnShipData,
 } from "@auto/ship/getAllShips";
-import { prisma, System, TaskType, Waypoint, ObjectiveExecutionState, LogLevel } from "@common/prisma";
+import { prisma, System, TaskType, Waypoint, ObjectiveExecutionState, LogLevel, ShipState } from "@common/prisma";
 import { getDistance } from "@common/lib/getDistance";
 import { ee } from "@auto/event-emitter";
 import {storeWaypointScan} from "@common/lib/data-update/store-waypoint-scan";
@@ -88,6 +88,8 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   public taskStartedOn: Date | undefined = undefined;
   public expectedTaskDuration: number | undefined = undefined;
 
+  private lastLogWasWait = false;
+
   constructor(public symbol: string, private api: APIInstance) {
     this.queue = foregroundQueue;
   }
@@ -106,7 +108,9 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   getExpectedFreeTime(): number {
+    const durations = []
     const taskQueueDurationInSeconds = this.taskQueue.reduce((acc, cur) => {
+      durations.push({duration: cur.task.expectedDuration, task: cur.task.serialize()})
       return acc + cur.task.expectedDuration
     }, 0)
     const taskStartedTime = this.taskStartedOn?.getTime()
@@ -116,6 +120,9 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
     const result = expectedTimeForCurrentTask + taskQueueDurationInSeconds
     if (isNaN(result)) {
       console.log('SOmehow nan', {
+        shipSymbol: this.symbol,
+        executionId: this.currentExecutionId,
+        durations,
         taskQueueDurationInSeconds,
         taskStartedTime,
         currentTaskDuration,
@@ -239,7 +246,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   async onObjectiveAssigned(objective: Objective, executionId: string, which: 'current' | 'next' = 'current') {
-    this.log(`Scheduled execution of ${objective.objective}`)
+    this.log(`Scheduled execution of ${objective.objective} as ${which} objective`)
     const execution = await prisma.objectiveExecution.create({
       data: {
         id: executionId,
@@ -311,6 +318,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   async onObjectiveFailed(e: unknown, executionId: string) {
+    const failedObjectiveId = this.currentObjective
     let logMessage = e?.toString()
     if (isAxiosError(e)) {
       logMessage = JSON.stringify({
@@ -343,7 +351,19 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       type: "NAVIGATE",
       data: await returnShipData(this.symbol),
     });
-    await this.waitFor(10000, `Error while executing objective ${this.currentObjective}: ${logMessage}`, LogLevel.ERROR)
+    await this.waitFor(10000, `Error while executing objective ${failedObjectiveId}: ${logMessage}`, LogLevel.ERROR)
+  }
+
+  async onExecutorException(error: Error) {
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        state: ShipState.STUCK
+      }
+    })
+    this.log(`Executor exception: ${error.toString()}`, LogLevel.ERROR)
   }
 
   async onObjectiveCancelled(which: 'current' | 'next' = 'current') {
@@ -398,6 +418,14 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   async prepare() {
+    await prisma.ship.update({
+      where: {
+        symbol: this.symbol
+      },
+      data: {
+        state: ShipState.ORCHESTRATED
+      }
+    })
     if (this.navigationUntil && new Date(this.navigationUntil).getTime() > Date.now()) {
       console.log("Ship already navigating, waiting for completion")
       await this.waitUntil(this.navigationUntil, 'Waiting for ship to finish existing navigation before starting behavior loop')
@@ -614,6 +642,11 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   log(message: string, level: LogLevel = LogLevel.INFO) {
+    const thisLogIsWait = message.includes('Waiting')
+    if (this.lastLogWasWait && thisLogIsWait) {
+      return;
+    }
+    this.lastLogWasWait = thisLogIsWait
     logShipAction(this.symbol, message, level);
   }
 
@@ -636,7 +669,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
 
   async validateCooldowns() {
     const res = await this.queue(() => {
-      this.log(`Retrieving cooldowns, to wait for existing ones.`);
+      this.log("Retrieving cooldowns to wait for existing ones.");
       return this.api.fleet.getShipCooldown(this.symbol);
     });
 
@@ -765,7 +798,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       if (isSTApiErrorResponse(error)) {
         if (error.response?.data?.error?.code === 4203 && this.fuel > 1) {
           this.log(`Insufficient fuel for ${this.navMode} navigation to ${waypoint}. Switching to drift mode.`, LogLevel.ERROR)
-          await this.navigateMode("DRIFT");
+          await this.navigateMode("DRIFT", "Insufficient fuel for other navigation methods");
           return this.navigate(waypoint, waitForTimeout);
         }
         if (error.response?.data?.error?.code === 4204) {
@@ -873,7 +906,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
     } catch (error) {
       if (isSTApiErrorResponse(error)) {
         if (error.response?.data?.error?.code === 4203) {
-          await this.navigateMode("DRIFT");
+          await this.navigateMode("DRIFT", 'Insufficient fuel for warp navigation');
           await this.warp(waypoint, waitForTimeout);
         } else if (error.response?.data?.error?.code === 4204) {
           this.log(`Already at ${waypoint}`);
@@ -1431,12 +1464,12 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
     })
   }
 
-  async navigateMode(mode: ShipNavFlightMode) {
+  async navigateMode(mode: ShipNavFlightMode, reason?: string) {
     return this.catchAxiosCodes('navigateMode', async () => {
       if (this.navMode === mode) {
         return;
       }
-      this.log(`Setting navigate mode to ${mode}`);
+      this.log(`Setting navigate mode to ${mode}${reason ? `. ${reason}.` : ""}`);
       const res = await this.queue(async () =>
         this.api.fleet.patchShipNav(this.symbol, {
           flightMode: mode,
@@ -1576,7 +1609,8 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       const purchasePerCall = Math.min(boughtGoodBefore?.tradeVolume, quantity)
       for(let i = 0; i < quantity; i += purchasePerCall) {
         if (boughtGoodBefore?.purchasePrice && maxPrice && boughtGoodBefore.purchasePrice > maxPrice) {
-          throw new Error(`Cannot buy ${good} for more than ${maxPrice} but current price is ${boughtGoodBefore.purchasePrice}`)
+          this.log(`Cannot buy ${good} for more than ${maxPrice} but current price is ${boughtGoodBefore.purchasePrice}`, LogLevel.WARN)
+          break;
         }
         const purchaseCount = Math.min(quantity - totalBought, purchasePerCall)
         const result = await this.queue(() =>
@@ -1647,7 +1681,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
     market?: GetMarket200Response,
     minPrice?: number
   ) {
-    let leftToSell = units;
+    let leftToSell = Math.min(units, this.currentCargo[tradeGoodSymbol] ?? 0);
     return this.catchAxiosCodes('sellCargo', async () => {
       if (!this.isDocked) {
         await this.dock()
@@ -1675,11 +1709,16 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       const soldGoodBefore = market.data.tradeGoods?.find(
         (g) => g.symbol === tradeGoodSymbol
       );
-      do {
+      while(leftToSell > 0) {
         if (soldGoodBefore?.sellPrice && minPrice && soldGoodBefore.sellPrice < minPrice) {
-          throw new Error(`Cannot sell ${tradeGoodSymbol} for less than ${minPrice} but current price is ${soldGoodBefore.sellPrice}`)
+          this.log(`Cannot sell ${tradeGoodSymbol} for less than ${minPrice} but current price is ${soldGoodBefore.sellPrice}`, LogLevel.WARN)
+          break;
         }
-        const sellUnitCount = Math.min(units, tradeVolume)
+        const sellUnitCount = Math.min(units, tradeVolume, leftToSell)
+        if (sellUnitCount === 0) {
+          this.log("Can not sell any more units, sellUnitCount is 0.", LogLevel.WARN)
+          break;
+        }
         const result = await this.queue(() => {
           this.log(`Selling ${sellUnitCount} of ${tradeGoodSymbol}`);
           return this.api.fleet.sellCargo(this.symbol, {
@@ -1739,7 +1778,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
           type: "NAVIGATE",
           data: await returnShipData(this.symbol),
         });
-      } while (leftToSell > 0);
+      };
     })
   }
 

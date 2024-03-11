@@ -1,9 +1,9 @@
-import {Text, Container, Graphics, Sprite} from "pixi.js";
+import {Text, Container, Graphics, Sprite, RenderTexture} from "pixi.js";
 import {trpc} from '@front/trpc'
 // import {deselectListeners, makeInteractiveAndSelectable} from "@front/viewer/makeInteractiveAndSelectable";
 import {loadedAssets} from "@front/viewer/assets";
-import {scale, universeCoordinates,} from "@front/viewer/consts";
-import {universeView, starsContainer, overlayLayer} from "@front/viewer/UIElements";
+import {backgroundGraphicsScale, scale, systemDistanceMultiplier, universeCoordinates,} from "@front/viewer/consts";
+import {universeView, starsContainer, overlayLayer, universeGraphics} from "@front/viewer/UIElements";
 import {Registry, System, WaypointData} from "@front/viewer/registry";
 import {positionShip, resetShipWaypoints} from "@front/viewer/positionShips";
 import {getDistance} from "@common/lib/getDistance";
@@ -14,6 +14,8 @@ import {store} from "@front/ui/store";
 import {selectionActions} from "@front/ui/slices/selection";
 import {shipActions} from "@front/ui/slices/ship";
 import {systemToDisplayCoordinates} from "@front/viewer/worldCoordinateToOriginal";
+import {app} from "@front/viewer/pixi-app";
+import {systemActions} from "@front/ui/slices/system";
 // import {highlightmodes} from "@front/viewer/highlightmodes";
 
 
@@ -223,7 +225,7 @@ const createShip = (ship: any) => {
     return shipGroup
 }
 
-let universeJumpGraphics: Graphics
+export let universeJumpGraphics: Sprite
 
 export function hideUnverseJumpGraphics() {
     if (!universeJumpGraphics) {
@@ -243,39 +245,52 @@ export function renderUniverseJumpGraphics() {
     if (!universeJumpGraphics) {
         return;
     }
-    console.log("rendering universe jump graphics", Object.keys(Registry.universeJumpData))
-    universeJumpGraphics.clear()
-    for(const systemSymbol of Object.keys(Registry.universeJumpData)) {
-        const system = Registry.systemData[systemSymbol]
-        if (system) {
-            const jumpData = Registry.universeJumpData[systemSymbol]
-            console.log("target systems", jumpData)
-            const fromPos = getStarPosition({
-                x: system.x,
-                y: system.y
+    const rt = RenderTexture.create({ width: 3200, height: 3200 });
+
+    const stars = Object.values(Registry.systemData)
+    const batchSize = 2000
+    for(let i = 0; i < stars.length; i += batchSize) {
+        const graphics = new Graphics();
+        console.log("rendering universe jump graphics", Object.keys(Registry.universeJumpData))
+        graphics.clear()
+        for (const star of stars.slice(i, i+batchSize)) {
+            const x = (star.x + 80000) / backgroundGraphicsScale
+            const y = (star.y + 80000) / backgroundGraphicsScale
+
+            graphics.rect(x - 1, y - 1, 3, 3).fill({
+                color: 0x0000FF
             })
-
-            for(const targetSymbol of jumpData) {
-                universeJumpGraphics.moveTo(fromPos.x, fromPos.y)
-                const target = Registry.systemData[targetSymbol]
-
-                if (target) {
-
-                    const toPos = getStarPosition({
-                        x: target.x,
-                        y: target.y
-                    })
-                    console.log("Draw graphics from ", fromPos, " to ", toPos)
-                    universeJumpGraphics.stroke({
-                        width: 1000,
-                        color: 0x0000FF,
-                    }).lineTo(toPos.x, toPos.y)
-
-                }
-            }
         }
+        graphics.rect(0, 0, 3200, 3200).stroke({
+            width: 4,
+            color: 0xFF0000,
+        })
+        // for(const systemSymbol of Object.keys(Registry.universeJumpData)) {
+        //     const system = Registry.systemData[systemSymbol]
+        //     if (system) {
+        //         const jumpData = Registry.universeJumpData[systemSymbol]
+        //         console.log("target systems", jumpData)
+        //
+        //         for(const targetSymbol of jumpData) {
+        //             graphics.moveTo(system.x/backgroundGraphicsScale, system.y/backgroundGraphicsScale)
+        //             const target = Registry.systemData[targetSymbol]
+        //
+        //             if (target) {
+        //                 graphics.stroke({
+        //                     width: 10,
+        //                     color: 0x0000FF,
+        //                 }).lineTo(target.x/backgroundGraphicsScale, target.y/backgroundGraphicsScale)
+        //                 graphics.closePath();
+        //             }
+        //         }
+        //     }
+        // }
+        app.renderer.render({
+            container: graphics,
+            target: rt
+        })
     }
-
+    universeJumpGraphics.texture = rt
 }
 
 export const loadUniverse = async () => {
@@ -287,11 +302,13 @@ export const loadUniverse = async () => {
     for(const starData of systems) {
         Registry.systemData[starData.symbol] = starData
 
+
         if (starData.x < universeCoordinates.minX) universeCoordinates.minX = starData.x
         if (starData.x > universeCoordinates.maxX) universeCoordinates.maxX = starData.x
         if (starData.y < universeCoordinates.minY) universeCoordinates.minY = starData.y
         if (starData.y > universeCoordinates.maxY) universeCoordinates.maxY = starData.y
     }
+    store.dispatch(systemActions.setAllSystemInfo(Registry.systemData))
 
     Registry.systems = {}
 
@@ -311,8 +328,11 @@ export const loadUniverse = async () => {
     })
     // universeCuller.addList(starsCont.children)
 
-    universeJumpGraphics = new Graphics();
+    universeJumpGraphics = new Sprite();
     universeJumpGraphics.alpha = 0.5
+    universeJumpGraphics.pivot = {x: 1600, y: 1600}
+    universeJumpGraphics.width = 3200
+    universeJumpGraphics.height = 3200
     universeJumpGraphics.visible = true
     universeJumpGraphics.eventMode = 'none'
     overlayLayer.addChild(universeJumpGraphics)

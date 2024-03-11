@@ -24,6 +24,7 @@ function startListeningToEvents() {
 }
 
 export const app = new Application();
+globalThis.__PIXI_APP__ = app;
 export const appInitPromise = app.init({
   // eventFeatures: {
   //   move: true,

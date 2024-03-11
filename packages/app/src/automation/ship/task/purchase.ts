@@ -4,7 +4,16 @@ import {TaskType} from "@common/prisma";
 
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import z from "zod";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
 
+export const purchasePayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  tradeSymbol: z.nativeEnum(TradeSymbol),
+  units: z.number(),
+  maxPrice: z.number()
+})
 export class PurchaseTask extends AbstractTask {
   type = TaskType.PURCHASE;
   tradeSymbol: TradeSymbol
@@ -34,6 +43,6 @@ export class PurchaseTask extends AbstractTask {
       tradeSymbol: this.tradeSymbol,
       units: this.units,
       maxPrice: this.maxPrice,
-    })
+    } satisfies z.output<typeof purchasePayloadSchema>)
   }
 }

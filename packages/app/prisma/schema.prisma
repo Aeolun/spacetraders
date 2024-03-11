@@ -647,6 +647,11 @@ enum CargoState {
   MANAGED
 }
 
+enum ShipState {
+  ORCHESTRATED
+  STUCK
+}
+
 model Ship {
   symbol        String     @id
   callsign      String     @default("")
@@ -655,6 +660,7 @@ model Ship {
   factionSymbol String
   role          ShipRole
   cargoState    CargoState @default(MANAGED)
+  state         ShipState  @default(STUCK)
 
   currentSystemSymbol   String
   currentSystem         System   @relation("currentSystem", fields: [currentSystemSymbol], references: [symbol], onDelete: Cascade)

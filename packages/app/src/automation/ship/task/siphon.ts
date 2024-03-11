@@ -5,6 +5,14 @@ import {prisma, TaskType} from "@common/prisma";
 import {TaskInterface} from "@auto/strategy/orchestrator/types";
 import {AbstractTask} from "@auto/ship/task/abstract-task";
 import {LocationWithWaypointSpecifier} from "@auto/strategy/types";
+import {LocationWithWaypointSpecifierSchema} from "@auto/lib/schemas";
+import z from "zod";
+import {constructPayloadSchema} from "@auto/ship/task/construct";
+
+export const siphonPayloadSchema = z.object({
+  expectedPosition: LocationWithWaypointSpecifierSchema,
+  units: z.number(),
+})
 
 export class SiphonTask extends AbstractTask {
   type = TaskType.SIPHON;
@@ -65,6 +73,6 @@ export class SiphonTask extends AbstractTask {
     return JSON.stringify({
       expectedPosition: this.expectedPosition,
       units: this.units,
-    })
+    } satisfies z.output<typeof siphonPayloadSchema>)
   }
 }

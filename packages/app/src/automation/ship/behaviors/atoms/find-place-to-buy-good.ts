@@ -13,6 +13,8 @@ interface SaleLocation {
     quantity: number
     supply: string | undefined
     price: number
+    tradeVolume: number
+    pricePerUnit: number
   }[]
 }
 
@@ -20,6 +22,7 @@ export interface InputSaleLocation {
   tradeGoodSymbol: string
   purchasePrice: number | null
   supply?: string | null
+  tradeVolume: number | null
   waypoint: {
     symbol: string
     systemSymbol: string
@@ -69,7 +72,9 @@ export async function findPlaceToBuyGood(purchaseLocationsInSystem: InputSaleLoc
           symbol: cur.tradeGoodSymbol as TradeSymbol,
           supply: cur.supply ?? undefined,
           quantity: tradeSymbols[cur.tradeGoodSymbol as TradeSymbol] ?? 0,
-          price: (tradeSymbols[cur.tradeGoodSymbol as TradeSymbol] ?? 0) * (cur.purchasePrice ?? 0)
+          price: (tradeSymbols[cur.tradeGoodSymbol as TradeSymbol] ?? 0) * (cur.purchasePrice ?? 0),
+          tradeVolume: cur.tradeVolume ?? 0,
+          pricePerUnit: cur.purchasePrice ?? 0
         })
       }
       return acc
@@ -86,6 +91,8 @@ export async function findPlaceToBuyGood(purchaseLocationsInSystem: InputSaleLoc
         quantity: number
         supply: string | undefined
         price: number
+        tradeVolume: number
+        pricePerUnit: number
       }[]}>
   );
 
