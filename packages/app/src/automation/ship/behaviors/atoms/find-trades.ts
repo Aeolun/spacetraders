@@ -174,7 +174,7 @@ order by m2."sellPrice" - m1."purchasePrice" desc LIMIT ${data.dbLimit};`
 
     const tradeVolume = Math.min(safeBuyVolume, safeSellVolume)
     const totalProfit = Math.min(tradeVolume, defaultCargoVolume) * trade.perUnitProfit;
-    const profitPerDistance = Math.min(defaultCargoVolume, tradeVolume) * trade.perUnitProfit / trade.dis
+    const profitPerDistance = Math.min(defaultCargoVolume, tradeVolume) * trade.perUnitProfit / Math.max(trade.dis, 30)
 
     let priority = priorityLevels[trade.buySupply] + (4 - priorityLevels[trade.sellSupply])
     // penalize trades where the sale location is restricted due to lack of imports

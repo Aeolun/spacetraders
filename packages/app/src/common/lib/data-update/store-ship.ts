@@ -58,7 +58,7 @@ export async function processShip(ship: Ship | ScannedShip) {
       },
       departureWaypoint: {
         connect: {
-          symbol: ship.nav.route.departure.symbol,
+          symbol: ship.nav.route.origin.symbol,
         },
       },
       departureOn: ship.nav.route.departureTime,

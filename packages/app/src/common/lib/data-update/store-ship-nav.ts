@@ -7,7 +7,7 @@ export async function processNav(shipSymbol: string, nav: ShipNav) {
     currentWaypointSymbol: nav.waypointSymbol,
 
     destinationWaypointSymbol: nav.route.destination.symbol,
-    departureWaypointSymbol: nav.route.departure.symbol,
+    departureWaypointSymbol: nav.route.origin.symbol,
     departureOn: nav.route.departureTime,
     arrivalOn: nav.route.arrival,
 

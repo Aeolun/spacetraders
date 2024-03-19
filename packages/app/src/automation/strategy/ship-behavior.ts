@@ -8,15 +8,15 @@ import {getAllShips} from "@auto/ship/getAllShips";
 export const startShipBehavior = async (orchestrator: Orchestrator, api: APIInstance) => {
   const start = Date.now()
 
+  const allShips = await getAllShips(api)
+
   const ships = await prisma.ship.findMany({
     where: {
       agent: process.env.AGENT_NAME
     }
   });
 
-  const allShips = await getAllShips(api)
-
-  console.log("loading data for ships", ships.length)
+  console.log("loading data for ships", allShips.length)
   for (const shipData of ships) {
     if (!orchestrator.hasExecutor(shipData.symbol)) {
 

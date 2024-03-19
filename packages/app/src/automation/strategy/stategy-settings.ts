@@ -11,4 +11,5 @@ export class StrategySettings {
   static MAX_SIPHONERS = 8
   static FINANCIAL_BUFFER = 1_000_000
   static MIN_CAPITAL_FOR_CONSTRUCTION = 5_000_000
+  static SPEED_FACTOR = process.env.SPEED_FACTOR ? parseInt(process.env.SPEED_FACTOR) : 1
 }

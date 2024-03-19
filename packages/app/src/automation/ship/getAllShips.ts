@@ -9,6 +9,7 @@ export async function getAllShips(api: APIInstance) {
   await Promise.all(
     ships.data.data.map(async (ship) => {
       allShips.push(ship);
+      await processShip(ship)
     })
   );
   const totalPages = Math.ceil(ships.data.meta.total / 20);
@@ -18,6 +19,7 @@ export async function getAllShips(api: APIInstance) {
       await Promise.all(
         moreShips.data.data.map(async (ship) => {
           allShips.push(ship);
+          await processShip(ship)
         })
       );
     }

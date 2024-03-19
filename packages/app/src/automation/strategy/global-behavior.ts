@@ -86,7 +86,7 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task, 
   const orchestrateObjectives = async () => {
     console.log("Trying to assign open objectives to free executors")
     await orchestrator.tick();
-    setTimeout(orchestrateObjectives, 5000);
+    setTimeout(orchestrateObjectives, Math.max(5000/StrategySettings.SPEED_FACTOR, 200));
   }
   orchestrateObjectives();
 
@@ -99,7 +99,7 @@ export async function initGlobalBehavior(orchestrator: Orchestrator<Ship, Task, 
 
     console.log("Populating objectives");
     await taskPopulator.populateObjectives()
-  }, 5000);
+  }, Math.max(5000/StrategySettings.SPEED_FACTOR, 200));
 
   setInterval(() => {
     console.log("Checking for new ships")

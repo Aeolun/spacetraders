@@ -17,8 +17,9 @@
     "dev:frontend": "vite",
     "dev:routing": "poetry run python -m flask run",
     "dev": "run-p dev:*",
-    "local:dev": "SERVER=mylocal run-p dev:agent dev:backend dev:frontend",
+    "local:dev": "SERVER=mylocal run-p dev:*",
     "test": "vitest",
+    "prisma:dev": "dotenv -- pnpx prisma migrate deploy",
     "prisma:dev:local": "dotenv -e .env.mylocal -- pnpx prisma migrate deploy"
   },
   "keywords": [],

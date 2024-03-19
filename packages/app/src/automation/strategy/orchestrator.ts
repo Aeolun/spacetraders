@@ -4,6 +4,7 @@ import {
 	TaskInterface,
 } from "@auto/strategy/orchestrator/types";
 import { uuidv7 } from "uuidv7";
+import {StrategySettings} from "@auto/strategy/stategy-settings";
 
 interface TickAssignmentInfo {
 	executorsConsideredForObjective: Record<string, {
@@ -318,7 +319,7 @@ export class Orchestrator<
 		let executorsConsidered = false;
 		// assign open executors to open objectives
 		const assignableObjectives = this.getAllSortedObjectives()
-		console.log(`Finding executors for ${assignableObjectives.length} assignable objectives`)
+		console.log(`Finding executors for ${assignableObjectives.length} assignable objectives`, assignableObjectives.map(o => o.priority+': '+o.objective))
 		for(const objective of assignableObjectives) {
 			const potentialExecutors = this.executors.filter(e => objective.appropriateFor(e) && (!e.currentObjective || (!e.nextObjective && e.taskQueueLength > 0)) && this.options.objectiveValid(e, objective))
 
@@ -595,7 +596,7 @@ export class Orchestrator<
 		}, 1000);
 		while (true) {
 			eventsInLastSecond++;
-			if (eventsInLastSecond > 10) {
+			if (eventsInLastSecond > (10*StrategySettings.SPEED_FACTOR)) {
 				console.error(`Too many events (${eventsInLastSecond}) in last second, breaking circuit for executor ${executor.symbol}. This is a fatal error.`)
 				process.exit(1)
 			}

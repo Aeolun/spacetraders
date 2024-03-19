@@ -14,6 +14,15 @@ export async function processShipyard(data: Shipyard) {
         if (!configurationSymbol) {
           throw new Error("No ship type")
         }
+        for (const module of ship.modules) {
+          await storeShipModule(module)
+        }
+        for (const mount of ship.mounts) {
+          await storeShipMount(mount)
+        }
+        await storeShipEngine(ship.engine)
+        await processShipFrame(ship.frame)
+        await storeShipReactor(ship.reactor)
         await prisma.shipConfiguration.upsert({
           where: {
             symbol: configurationSymbol,
@@ -37,15 +46,8 @@ export async function processShipyard(data: Shipyard) {
             reactorSymbol: ship.reactor.symbol,
           }
         })
-        await storeShipEngine(ship.engine)
-        await processShipFrame(ship.frame)
-        await storeShipReactor(ship.reactor)
-        for (const module of ship.modules) {
-          await storeShipModule(module)
-        }
-        for (const mount of ship.mounts) {
-          await storeShipMount(mount)
-        }
+
+
         await prisma.shipConfigurationModule.deleteMany({
           where: {
             shipConfigurationSymbol: ship.type

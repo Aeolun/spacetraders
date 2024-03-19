@@ -78,7 +78,7 @@ export class ObjectivePopulator {
       const updateableWaypoints = await prisma.waypoint.findMany({
         where: {
           marketLastUpdated: {
-            lt: new Date(Date.now() - 1000 * 900)
+            lt: new Date(Date.now() - (1000 * 900 / StrategySettings.SPEED_FACTOR))
           },
           exploreStatus: ExploreStatus.EXPLORED,
           traits: {

@@ -43,6 +43,7 @@ import {storeMarketTransaction} from "@common/lib/data-update/store-market-trans
 import {EmptyCargoObjective} from "@auto/strategy/objective/empty-cargo-objective";
 import {TaskExecutor} from "@auto/strategy/orchestrator/types";
 import {LocationSpecifier} from "@auto/strategy/types";
+import {StrategySettings} from "@auto/strategy/stategy-settings";
 
 type CooldownKind = "reactor";
 
@@ -187,7 +188,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   async onTaskFailed(task: Task, e: unknown) {
-    let logMessage = e?.toString()
+    let logMessage = (e?.toString() ?? '') + (e instanceof Error ? e?.stack : '')
     if (isAxiosError(e)) {
       logMessage = JSON.stringify({
         message: e.toString(),
@@ -319,7 +320,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
 
   async onObjectiveFailed(e: unknown, executionId: string) {
     const failedObjectiveId = this.currentObjective
-    let logMessage = e?.toString()
+    let logMessage = (e?.toString() ?? '') + (e instanceof Error ? e.stack : '')
     if (isAxiosError(e)) {
       logMessage = JSON.stringify({
         message: e.toString(),
@@ -414,7 +415,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
   }
 
   async onNothingToDo(reason?: string) {
-    await this.waitFor(20000, `No task available for ship${reason ? `: ${reason}` : ''}`, LogLevel.INFO);
+    await this.waitFor(Math.max(20000/StrategySettings.SPEED_FACTOR, 400), `No task available for ship${reason ? `: ${reason}` : ''}`, LogLevel.INFO);
   }
 
   async prepare() {
@@ -751,16 +752,16 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       this.maxFuel = res.data.data.fuel.capacity;
 
       this.log(
-        `Navigating from ${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
+        `Navigating from ${res.data.data.nav.route.origin.symbol} to ${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
       );
 
       try {
         await prisma.travelLog.create({
           data: {
             shipSymbol: this.symbol,
-            fromSystemSymbol: res.data.data.nav.route.departure.systemSymbol,
+            fromSystemSymbol: res.data.data.nav.route.origin.systemSymbol,
             toSystemSymbol: res.data.data.nav.route.destination.systemSymbol,
-            fromWaypoint: res.data.data.nav.route.departure.symbol,
+            fromWaypoint: res.data.data.nav.route.origin.symbol,
             toWaypoint: res.data.data.nav.route.destination.symbol,
             method: "navigate",
             engineSpeed: this.engineSpeed,
@@ -768,7 +769,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
             flightMode: res.data.data.nav.flightMode,
             distance: Math.round(
               getDistance(
-                res.data.data.nav.route.departure,
+                res.data.data.nav.route.origin,
                 res.data.data.nav.route.destination
               )
             ),
@@ -845,7 +846,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       this.maxFuel = res.data.data.fuel.capacity;
 
       this.log(
-        `Navigating from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
+        `Navigating from ${res.data.data.nav.route.origin.systemSymbol}.${res.data.data.nav.route.origin.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol} cost ${res.data.data.fuel.consumed?.amount ?? '??'} fuel, have ${res.data.data.fuel.current}/${res.data.data.fuel.capacity} left`
       );
 
       await processFuel(this.symbol, res.data.data.fuel);
@@ -859,7 +860,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       try {
         const departureSystem = await prisma.system.findFirstOrThrow({
           where: {
-            symbol: res.data.data.nav.route.departure.systemSymbol,
+            symbol: res.data.data.nav.route.origin.systemSymbol,
           },
         });
         const destinationSystem = await prisma.system.findFirstOrThrow({
@@ -871,9 +872,9 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
         await prisma.travelLog.create({
           data: {
             shipSymbol: this.symbol,
-            fromSystemSymbol: res.data.data.nav.route.departure.systemSymbol,
+            fromSystemSymbol: res.data.data.nav.route.origin.systemSymbol,
             toSystemSymbol: res.data.data.nav.route.destination.systemSymbol,
-            fromWaypoint: res.data.data.nav.route.departure.symbol,
+            fromWaypoint: res.data.data.nav.route.origin.symbol,
             toWaypoint: res.data.data.nav.route.destination.symbol,
             method: "warp",
             engineSpeed: this.engineSpeed,
@@ -934,7 +935,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
         const res = await this.api.fleet.jumpShip(this.symbol, {
           waypointSymbol: waypointSymbol,
         });
-        `Jumping from ${res.data.data.nav.route.departure.systemSymbol}.${res.data.data.nav.route.departure.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`
+        `Jumping from ${res.data.data.nav.route.origin.systemSymbol}.${res.data.data.nav.route.origin.symbol} to ${res.data.data.nav.route.destination.systemSymbol}.${res.data.data.nav.route.destination.symbol}`
         return res
       });
 
@@ -974,7 +975,7 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
       try {
         const departureSystem = await prisma.system.findFirstOrThrow({
           where: {
-            symbol: res.data.data.nav.route.departure.systemSymbol,
+            symbol: res.data.data.nav.route.origin.systemSymbol,
           },
         });
         const destinationSystem = await prisma.system.findFirstOrThrow({
@@ -986,9 +987,9 @@ export class Ship implements TaskExecutor<Task, Objective, LocationSpecifier> {
         await prisma.travelLog.create({
           data: {
             shipSymbol: this.symbol,
-            fromSystemSymbol: res.data.data.nav.route.departure.systemSymbol,
+            fromSystemSymbol: res.data.data.nav.route.origin.systemSymbol,
             toSystemSymbol: res.data.data.nav.route.destination.systemSymbol,
-            fromWaypoint: res.data.data.nav.route.departure.symbol,
+            fromWaypoint: res.data.data.nav.route.origin.symbol,
             toWaypoint: res.data.data.nav.route.destination.symbol,
             method: "jump",
             engineSpeed: this.engineSpeed,
