@@ -1,3 +1,5 @@
 node_modules
 **/.agent-token
 packages/app/dumps
+.env.local
+.env

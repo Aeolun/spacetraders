@@ -2,7 +2,10 @@ import datetime
 
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
 from flask import Flask, request
+import os
 
+# import port from env
+port = os.getenv("PORT", 5001)
 app = Flask(__name__)
 
 @app.route("/")

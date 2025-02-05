@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noEmit": false,
+    "outDir": "compiled",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "target": "esnext",
+    "skipLibCheck": true,
+    "types": ["bun-types"],
+    "lib": ["ES2021", "dom"],
+    "paths": {
+      "@auto/*": ["src/automation/*"],
+      "@backend/*": ["src/backend/*"],
+      "@common/*": ["src/common/*"],
+      "@front/*": ["src/frontend/*"]
+    }
+  },
+  "include": ["src/**/*", "packages/app/node_modules/@pencil.js/spritesheet/src"],
+  "ts-node": {
+    // It is faster to skip typechecking.
+    "transpileOnly": true
+  },
+  "ts-node-dev": {
+    "transpileOnly": true
+  }
+}
